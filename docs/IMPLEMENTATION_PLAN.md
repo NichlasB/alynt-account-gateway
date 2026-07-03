@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: Observability complete / ready for account routing feature work
+- Current phase: Account routing and gateway screen foundation implemented; form workflows pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: Initial scaffold exists and Git repository is initialized
+- Plugin status: Initial scaffold and observability foundation committed in Git checkpoint `c0daf48`
 - Frontend output default: Disabled
 - Distribution: Private Alynt-distributed plugin with GitHub updater compatibility
 
@@ -61,33 +61,39 @@
 
 ### Phase 3 - Account Routing And Gateway Screens
 
-- [ ] Implement frontend-output master switch.
-- [ ] Route `/login` to the branded login screen.
-- [ ] Route `/account?action=lostpassword`, `/account?action=register`, `/account?action=rp`, and `/account?action=logout` to branded screens.
-- [ ] Replace public `wp-login.php` links with branded routes when frontend output is enabled.
-- [ ] Add emergency bypass URL that opens native `wp-login.php` without authenticating or bypassing 2FA/security plugins.
-- [ ] Block `wp-admin` for roles other than administrators and shop managers.
-- [ ] Remove admin toolbar for roles other than administrators and shop managers.
-- [ ] Build responsive split-screen gateway template with one global background image.
-- [ ] Add logo upload and max-width control.
-- [ ] Add color controls for primary color, accent color, button background, and button text.
-- [ ] Add per-screen instruction/welcome text.
-- [ ] Add disabled-registration and invalid/expired-link branded states.
+- [x] Implement frontend-output master switch.
+- [x] Route `/login` to the branded login screen.
+- [x] Route `/account?action=lostpassword`, `/account?action=register`, `/account?action=rp`, and `/account?action=logout` to branded screens.
+- [x] Replace public `wp-login.php` links with branded routes when frontend output is enabled.
+- [x] Add emergency bypass URL that opens native `wp-login.php` without authenticating or bypassing 2FA/security plugins.
+- [x] Block `wp-admin` for roles other than administrators and shop managers.
+- [x] Remove admin toolbar for roles other than administrators and shop managers.
+- [x] Build responsive split-screen gateway template with one global background image.
+- [x] Implement frontend templates from `docs/DESIGN_HANDOFF.md`.
+- [x] Add logo upload and max-width control.
+- [x] Add color controls for primary color, accent color, text, page background, surface, error, button background, and button text.
+- [x] Add font stack controls for heading and body typography.
+- [x] Add per-screen instruction/welcome text.
+- [x] Add disabled-registration and invalid/expired-link branded states.
 
 ### Phase 4 - Registration, Passwords, And Spam Protection
 
-- [ ] Implement pending registration records.
-- [ ] Send registration confirmation email before creating a WordPress user.
-- [ ] Create WordPress user only after confirmation link and valid password setup.
-- [ ] Store first name, last name, email, generated username, and chosen password during final account creation only.
-- [ ] Add password strength meter and matching validation.
-- [ ] Enforce minimum 12 characters, uppercase, lowercase, number, and special symbol.
-- [ ] Add terms/privacy agreement checkbox with relative URL path links.
-- [ ] Add Turnstile client and required server-side validation when enabled.
-- [ ] Add Reoon Email Verifier client and policy mapping.
-- [ ] Default Reoon policy: block invalid, disabled, disposable, and spamtrap; allow but flag catch-all, role-account, unknown, and inbox-full.
-- [ ] Add rate limits for registration, resend confirmation, login, and password reset flows.
-- [ ] Avoid account enumeration in login and password-reset messages.
+- [x] Implement pending registration records.
+- [x] Send registration confirmation email before creating a WordPress user.
+- [x] Create WordPress user only after confirmation link and valid password setup.
+- [x] Store first name, last name, email, generated username, and chosen password during final account creation only.
+- [x] Add configurable username format with unique generated username collision handling.
+- [x] Add password strength meter and matching validation.
+- [x] Enforce minimum 12 characters, uppercase, lowercase, number, and special symbol.
+- [x] Add terms/privacy agreement checkbox with relative URL path links.
+- [x] Add Turnstile client and required server-side validation when enabled.
+- [x] Add Reoon Email Verifier client and policy mapping.
+- [x] Default Reoon policy: block invalid, disabled, disposable, and spamtrap; allow but flag catch-all, role-account, unknown, and inbox-full.
+- [x] Add rate limits for registration, resend confirmation, login, and password reset flows.
+- [x] Add neutral resend-confirmation handling for invalid/expired registration links.
+- [x] Avoid account enumeration in public registration and resend-confirmation outcomes.
+- [x] Avoid account enumeration in login and password-reset request messages.
+- [x] Add branded WordPress password-reset key validation and password update flow for native reset links.
 
 ### Phase 5 - Emails And Webhooks
 
@@ -166,6 +172,9 @@
 ## Workflow Notes
 
 - Use `C:\Users\Captain\Documents\AI Workflows\Toolkits\wp-plugin-toolkit\START_HERE_MASTER_WORKFLOW.md` as the router for plugin work.
+- Scaffold/observability checkpoint commit: `c0daf48` (`Scaffold account gateway foundation`).
+- Design workflow Phase 1 has been completed using the supplied login/register/lost-password screenshots as visual references.
+- Design export received and distilled into `docs/DESIGN_HANDOFF.md`; use it as the implementation source for frontend gateway templates.
 - Next toolkit step before scaffold: use `d1-setup/windsurf-wp-config.md` Section 2 to create the scaffold master prompt.
 - After scaffold, route to `@ADD_OBSERVABILITY_TOOLING_PROMPT.md run` before heavy feature work.
 - After each major feature, run the feature review sequence: light review, bloat/structure review, UI/UX review, and security review.
@@ -180,6 +189,21 @@
 
 ### 2026-07-03
 
+- Committed scaffold and observability foundation as checkpoint `c0daf48`.
+- Added design workflow gate before account routing and gateway screen implementation.
+- Captured the Claude design export as a durable implementation handoff in `docs/DESIGN_HANDOFF.md`.
+- Clarified that the design palette and fonts are default starter values only; production output is brand-agnostic and settings-driven.
+- Implemented the first Phase 3 frontend foundation: branded route detection, native login redirect with emergency bypass, URL filters, settings-backed design tokens, responsive gateway shell, screen templates, logout confirmation handling, and password visibility toggle.
+- Added WordPress media-library controls for the brand logo and gateway background image, plus configurable instruction text for each gateway screen.
+- Added the Phase 4 pending-registration foundation: frontend registration submission handling, hashed confirmation tokens, 24-hour configurable expiry, confirmation email delivery, email-confirmed pending state, and token helper tests.
+- Added final pending-registration account creation: set-password POST handling, password confirmation/policy validation, generated username creation, WordPress user creation, profile name persistence, pending record consumption, and DB schema upgrade check.
+- Added client-side password policy UX for set-password: live strength bars, translated status text, requirement states, password-match feedback, and disabled submit until the configured v1 policy is satisfied.
+- Added server-side terms/privacy acceptance validation for registration submissions, matching the required frontend checkbox and relative path links.
+- Added Turnstile/Reoon registration protection: Turnstile widget rendering, server-side Siteverify validation, Reoon single-email verification, default OR policy when both providers are configured, and provider interpretation tests.
+- Added transient-backed rate limiting for registration, resend confirmation, login, and password reset buckets with privacy-preserving hashed keys.
+- Added expired-link recovery: invalid/expired registration links can request a new confirmation email, pending tokens are renewed without creating users, resend attempts use their own rate bucket, and public responses stay neutral when no pending registration exists.
+- Added branded auth POST handling for login and password-reset requests so failed submissions return to gateway screens with neutral public messages instead of native WordPress screens.
+- Added branded native password-reset completion: WordPress reset links with `key` and `login` now render the gateway set-password screen, validate through WordPress reset-key APIs, enforce the v1 password policy, and redirect to branded login after success.
 - Added observability tooling: diagnostics settings, structured logs, health/recent-event UI, export/clear actions, retention cleanup, and redaction tests.
 - Completed the initial scaffold, initialized Git, installed dependencies, and verified build/lint/test/audit.
 - Added scaffold master prompt artifact for the initial plugin foundation.

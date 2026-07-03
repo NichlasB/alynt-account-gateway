@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ALYNT_AG_Database {
 
-	const DB_VERSION = '0.1.0';
+	const DB_VERSION = '0.1.1';
 
 	/**
 	 * Install database tables.
@@ -35,12 +35,14 @@ class ALYNT_AG_Database {
 				email varchar(190) NOT NULL,
 				first_name varchar(100) NOT NULL DEFAULT '',
 				last_name varchar(100) NOT NULL DEFAULT '',
+				user_id bigint(20) unsigned NOT NULL DEFAULT 0,
 				token_hash varchar(255) NOT NULL,
 				status varchar(40) NOT NULL DEFAULT 'pending',
 				expires_at datetime NOT NULL,
 				created_at datetime NOT NULL,
 				confirmed_at datetime NULL,
 				PRIMARY KEY  (id),
+				KEY user_id (user_id),
 				KEY email (email),
 				KEY status (status),
 				KEY expires_at (expires_at)
@@ -121,6 +123,19 @@ class ALYNT_AG_Database {
 		}
 
 		update_option( 'alynt_ag_db_version', self::DB_VERSION );
+	}
+
+	/**
+	 * Install updates when the stored schema version is outdated.
+	 *
+	 * @return void
+	 */
+	public static function maybe_upgrade() {
+		if ( get_option( 'alynt_ag_db_version' ) === self::DB_VERSION ) {
+			return;
+		}
+
+		self::install();
 	}
 
 	/**

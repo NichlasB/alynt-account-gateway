@@ -37,6 +37,8 @@ class ALYNT_AG_Admin {
 			return;
 		}
 
+		wp_enqueue_media();
+
 		$asset_path = ALYNT_AG_PLUGIN_DIR . 'assets/dist/admin/index.css';
 		if ( file_exists( $asset_path ) ) {
 			wp_enqueue_style(
@@ -55,6 +57,15 @@ class ALYNT_AG_Admin {
 				array(),
 				filemtime( $script_path ),
 				true
+			);
+
+			wp_localize_script(
+				'alynt-ag-admin',
+				'alyntAgAdmin',
+				array(
+					'selectImage' => __( 'Select Image', 'alynt-account-gateway' ),
+					'useImage'    => __( 'Use Image', 'alynt-account-gateway' ),
+				)
 			);
 		}
 	}

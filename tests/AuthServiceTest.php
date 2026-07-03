@@ -1,0 +1,100 @@
+<?php
+/**
+ * Auth service tests.
+ *
+ * @package Alynt_Account_Gateway
+ */
+
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests branded authentication helpers.
+ */
+class AuthServiceTest extends TestCase {
+
+	protected function setUp(): void {
+		parent::setUp();
+		$GLOBALS['alynt_ag_test_transients'] = array();
+		$GLOBALS['alynt_ag_test_reset_password'] = null;
+		$_SERVER['REMOTE_ADDR'] = '203.0.113.30';
+	}
+
+	public function test_login_error_message_is_neutral() {
+		$service = new ALYNT_AG_Auth_Service();
+
+		$this->assertSame(
+			'The email address or password is incorrect.',
+			$service->get_login_error_message( 'invalid_email' )
+		);
+		$this->assertSame(
+			'The email address or password is incorrect.',
+			$service->get_login_error_message( 'incorrect_password' )
+		);
+	}
+
+	public function test_lostpassword_sent_message_is_neutral() {
+		$service = new ALYNT_AG_Auth_Service();
+
+		$this->assertStringContainsString( 'If an account can receive password reset instructions', $service->get_lostpassword_sent_message() );
+	}
+
+	public function test_login_rate_limit_uses_configured_bucket() {
+		$service = new ALYNT_AG_Auth_Service();
+		$settings = array(
+			'login_rate_limit_count'  => 1,
+			'login_rate_limit_window' => 60,
+		);
+
+		$this->assertTrue( $service->validate_rate_limit( 'login', 'damon@example.test', $settings ) );
+
+		$result = $service->validate_rate_limit( 'login', 'damon@example.test', $settings );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'alynt_ag_rate_limited', $result->get_error_code() );
+	}
+
+	public function test_lostpassword_rate_limit_uses_configured_bucket() {
+		$service = new ALYNT_AG_Auth_Service();
+		$settings = array(
+			'lostpassword_rate_limit_count'  => 1,
+			'lostpassword_rate_limit_window' => 60,
+		);
+
+		$this->assertTrue( $service->validate_rate_limit( 'lostpassword', 'damon@example.test', $settings ) );
+
+		$result = $service->validate_rate_limit( 'lostpassword', 'damon@example.test', $settings );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'alynt_ag_rate_limited', $result->get_error_code() );
+	}
+
+	public function test_password_reset_key_validation_returns_neutral_error_code() {
+		$service = new ALYNT_AG_Auth_Service();
+		$result  = $service->validate_password_reset_key( 'bad-key', 'damon@example.test' );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'invalid_or_expired_token', $result->get_error_code() );
+	}
+
+	public function test_password_reset_requires_v1_password_policy() {
+		$service = new ALYNT_AG_Auth_Service();
+		$result  = $service->complete_password_reset( 'good-key', 'damon@example.test', 'weak', 'weak' );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'alynt_ag_password_length', $result->get_error_code() );
+	}
+
+	public function test_password_reset_updates_password_when_key_and_password_are_valid() {
+		$service = new ALYNT_AG_Auth_Service();
+		$result  = $service->complete_password_reset( 'good-key', 'damon@example.test', 'StrongPassword1!', 'StrongPassword1!' );
+
+		$this->assertTrue( $result );
+		$this->assertSame(
+			array(
+				'user_login' => 'damon@example.test',
+				'password'   => 'StrongPassword1!',
+			),
+			$GLOBALS['alynt_ag_test_reset_password']
+		);
+	}
+}

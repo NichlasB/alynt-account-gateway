@@ -6,3 +6,30 @@
 	max-width: 36rem;
 	width: 100%;
 }
+
+.alynt-ag-admin .alynt-ag-textarea {
+	max-width: 46rem;
+}
+
+.alynt-ag-media-field__preview {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 180px;
+	min-height: 96px;
+	margin-bottom: 8px;
+	border: 1px solid #c3c4c7;
+	background: #fff;
+}
+
+.alynt-ag-media-field__preview:empty::before {
+	content: "No image selected";
+	color: #646970;
+	font-size: 12px;
+}
+
+.alynt-ag-media-field__preview img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}

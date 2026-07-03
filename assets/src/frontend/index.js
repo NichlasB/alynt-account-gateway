@@ -7,3 +7,102 @@
 import './style.css';
 
 document.documentElement.classList.add( 'alynt-ag-frontend-ready' );
+
+function alyntAgTogglePassword( event ) {
+	const toggle = event.target.closest( '[data-agw-password-toggle]' );
+
+	if ( ! toggle ) {
+		return;
+	}
+
+	const wrapper = toggle.closest( '.agw-password' );
+	const input   = wrapper ? wrapper.querySelector( 'input' ) : null;
+
+	if ( ! input ) {
+		return;
+	}
+
+	const shouldShow = input.type === 'password';
+	const label      = shouldShow ? 'Hide password' : 'Show password';
+
+	input.type         = shouldShow ? 'text' : 'password';
+	toggle.textContent = shouldShow ? 'Hide' : 'Show';
+	toggle.setAttribute( 'aria-label', label );
+}
+
+function alyntAgGetPasswordChecks( password, confirm ) {
+	return {
+		length: password.length >= 12,
+		uppercase: /[A-Z]/.test( password ),
+		lowercase: /[a-z]/.test( password ),
+		number: /[0-9]/.test( password ),
+		symbol: /[^A-Za-z0-9]/.test( password ),
+		match: password.length > 0 && password === confirm,
+	};
+}
+
+function alyntAgUpdatePasswordPolicy( form ) {
+	const passwordInput = form.querySelector( '[data-agw-password-input]' );
+	const confirmInput  = form.querySelector( '[data-agw-password-confirm]' );
+	const submit        = form.querySelector( '[data-agw-password-submit]' );
+	const strength      = form.querySelector( '[data-agw-strength]' );
+	const label         = form.querySelector( '[data-agw-strength-label]' );
+	const requirements  = form.querySelectorAll( '[data-agw-requirement]' );
+
+	if ( ! passwordInput || ! confirmInput || ! submit || ! strength || ! label ) {
+		return;
+	}
+
+	const password = passwordInput.value;
+	const confirm  = confirmInput.value;
+	const checks   = alyntAgGetPasswordChecks( password, confirm );
+	const coreKeys = [ 'length', 'uppercase', 'lowercase', 'number', 'symbol' ];
+	const corePass = coreKeys.filter( ( key ) => checks[ key ] ).length;
+	const isValid  = corePass === coreKeys.length && checks.match;
+	const score    = password.length === 0 ? 0 : Math.min( 4, Math.max( 1, Math.ceil( ( corePass / coreKeys.length ) * 4 ) ) );
+	const messages = {
+		empty: strength.dataset.agwMessageEmpty || '',
+		weak: strength.dataset.agwMessageWeak || '',
+		good: strength.dataset.agwMessageGood || '',
+		ready: strength.dataset.agwMessageReady || '',
+	};
+
+	for ( const item of requirements ) {
+		const key    = item.getAttribute( 'data-agw-requirement' );
+		const passed = Boolean( checks[ key ] );
+
+		item.classList.toggle( 'is-met', passed );
+		item.setAttribute( 'aria-current', passed ? 'true' : 'false' );
+	}
+
+	strength.setAttribute( 'data-agw-strength-score', String( isValid ? 4 : score ) );
+	label.textContent = isValid ? messages.ready : messages[ score <= 1 ? 'weak' : 'good' ];
+
+	if ( password.length === 0 ) {
+		label.textContent = messages.empty;
+	}
+
+	passwordInput.setAttribute( 'aria-invalid', password.length > 0 && corePass !== coreKeys.length ? 'true' : 'false' );
+	confirmInput.setAttribute( 'aria-invalid', confirm.length > 0 && ! checks.match ? 'true' : 'false' );
+	submit.disabled = ! isValid;
+}
+
+function alyntAgInitPasswordPolicy() {
+	const forms = document.querySelectorAll( '[data-agw-password-form]' );
+
+	for ( const form of forms ) {
+		const update = () => alyntAgUpdatePasswordPolicy( form );
+
+		form.addEventListener( 'input', update );
+		form.addEventListener( 'change', update );
+		update();
+	}
+}
+
+document.addEventListener( 'click', alyntAgTogglePassword );
+
+if ( document.readyState === 'loading' ) {
+	document.addEventListener( 'DOMContentLoaded', alyntAgInitPasswordPolicy );
+} else {
+	alyntAgInitPasswordPolicy();
+}

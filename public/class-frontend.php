@@ -23,6 +23,12 @@ class ALYNT_AG_Frontend {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ) );
 		add_filter( 'show_admin_bar', array( $this, 'filter_admin_bar' ) );
 		add_action( 'admin_init', array( $this, 'maybe_block_wp_admin' ) );
+		add_action( 'login_init', array( $this, 'maybe_redirect_native_login' ) );
+		add_action( 'template_redirect', array( $this, 'maybe_render_gateway' ) );
+		add_filter( 'login_url', array( $this, 'filter_login_url' ), 10, 3 );
+		add_filter( 'lostpassword_url', array( $this, 'filter_lostpassword_url' ), 10, 2 );
+		add_filter( 'register_url', array( $this, 'filter_register_url' ) );
+		add_filter( 'logout_url', array( $this, 'filter_logout_url' ), 10, 2 );
 	}
 
 	/**
@@ -33,7 +39,7 @@ class ALYNT_AG_Frontend {
 	public function enqueue_assets() {
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 
-		if ( empty( $settings['frontend_enabled'] ) ) {
+		if ( empty( $settings['frontend_enabled'] ) || ! $this->get_gateway_screen( $settings ) ) {
 			return;
 		}
 
@@ -54,6 +60,16 @@ class ALYNT_AG_Frontend {
 				ALYNT_AG_PLUGIN_URL . 'assets/dist/frontend/index.js',
 				array(),
 				filemtime( $script_path ),
+				true
+			);
+		}
+
+		if ( ! empty( $settings['turnstile_site_key'] ) && 'register' === $this->get_gateway_screen( $settings ) ) {
+			wp_enqueue_script(
+				'alynt-ag-turnstile',
+				'https://challenges.cloudflare.com/turnstile/v0/api.js',
+				array(),
+				ALYNT_AG_VERSION,
 				true
 			);
 		}
@@ -92,5 +108,914 @@ class ALYNT_AG_Frontend {
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 		wp_safe_redirect( home_url( $settings['after_login_redirect'] ) );
 		exit;
+	}
+
+	/**
+	 * Redirect native wp-login.php requests to branded routes unless the bypass key is present.
+	 *
+	 * @return void
+	 */
+	public function maybe_redirect_native_login() {
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+
+		if ( empty( $settings['frontend_enabled'] ) || $this->is_emergency_bypass( $settings ) ) {
+			return;
+		}
+
+		$request_method = isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '';
+		if ( 'POST' === strtoupper( $request_method ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only action routing.
+		$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : 'login';
+		$url    = $this->get_url_for_action( $action, $settings );
+
+		foreach ( array( 'key', 'login', 'redirect_to' ) as $param ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Preserving core login query arguments.
+			if ( isset( $_GET[ $param ] ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Preserving core login query arguments.
+				$value = sanitize_text_field( wp_unslash( $_GET[ $param ] ) );
+				$url   = add_query_arg( $param, rawurlencode( $value ), $url );
+			}
+		}
+
+		wp_safe_redirect( $url );
+		exit;
+	}
+
+	/**
+	 * Render the branded gateway when the current request matches a configured route.
+	 *
+	 * @return void
+	 */
+	public function maybe_render_gateway() {
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+
+		if ( empty( $settings['frontend_enabled'] ) ) {
+			return;
+		}
+
+		$screen = $this->get_gateway_screen( $settings );
+		if ( ! $screen ) {
+			return;
+		}
+
+		if ( 'logout' === $screen && $this->maybe_handle_confirmed_logout( $settings ) ) {
+			return;
+		}
+
+		status_header( 200 );
+		nocache_headers();
+
+		echo '<!doctype html>';
+		echo '<html ';
+		language_attributes();
+		echo '>';
+		echo '<head>';
+		echo '<meta charset="' . esc_attr( get_bloginfo( 'charset' ) ) . '">';
+		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
+		echo '<title>' . esc_html( $this->get_screen_title( $screen ) ) . '</title>';
+		wp_head();
+		echo '</head>';
+		echo '<body class="alynt-ag-body">';
+		$this->render_gateway_shell( $screen, $settings );
+		wp_footer();
+		echo '</body></html>';
+		exit;
+	}
+
+	/**
+	 * Filter the WordPress login URL.
+	 *
+	 * @param string $login_url    Native login URL.
+	 * @param string $redirect     Redirect URL.
+	 * @param bool   $force_reauth Whether to force reauthentication.
+	 * @return string
+	 */
+	public function filter_login_url( $login_url, $redirect, $force_reauth ) {
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+
+		if ( empty( $settings['frontend_enabled'] ) ) {
+			return $login_url;
+		}
+
+		$url = home_url( $settings['login_path'] );
+
+		if ( $redirect ) {
+			$url = add_query_arg( 'redirect_to', rawurlencode( $redirect ), $url );
+		}
+
+		if ( $force_reauth ) {
+			$url = add_query_arg( 'reauth', '1', $url );
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Filter the lost password URL.
+	 *
+	 * @param string $lostpassword_url Native URL.
+	 * @param string $redirect         Redirect URL.
+	 * @return string
+	 */
+	public function filter_lostpassword_url( $lostpassword_url, $redirect ) {
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+
+		if ( empty( $settings['frontend_enabled'] ) ) {
+			return $lostpassword_url;
+		}
+
+		$url = $this->get_url_for_action( 'lostpassword', $settings );
+
+		if ( $redirect ) {
+			$url = add_query_arg( 'redirect_to', rawurlencode( $redirect ), $url );
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Filter the registration URL.
+	 *
+	 * @param string $register_url Native URL.
+	 * @return string
+	 */
+	public function filter_register_url( $register_url ) {
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+
+		return empty( $settings['frontend_enabled'] ) ? $register_url : $this->get_url_for_action( 'register', $settings );
+	}
+
+	/**
+	 * Filter the logout URL.
+	 *
+	 * @param string $logout_url Native URL.
+	 * @param string $redirect   Redirect URL.
+	 * @return string
+	 */
+	public function filter_logout_url( $logout_url, $redirect ) {
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+
+		if ( empty( $settings['frontend_enabled'] ) ) {
+			return $logout_url;
+		}
+
+		$url = wp_nonce_url( $this->get_url_for_action( 'logout', $settings ), 'log-out' );
+
+		if ( $redirect ) {
+			$url = add_query_arg( 'redirect_to', rawurlencode( $redirect ), $url );
+		}
+
+		return $url;
+	}
+
+	/**
+	 * Determine whether the current request is the emergency native-login bypass.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return bool
+	 */
+	private function is_emergency_bypass( $settings ) {
+		if ( empty( $settings['emergency_bypass_key'] ) ) {
+			return false;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Emergency bypass is a read-only routing check.
+		$provided = isset( $_GET['alynt_ag_bypass'] ) ? sanitize_text_field( wp_unslash( $_GET['alynt_ag_bypass'] ) ) : '';
+
+		return $provided && hash_equals( (string) $settings['emergency_bypass_key'], $provided );
+	}
+
+	/**
+	 * Return the gateway screen for the current request.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return string
+	 */
+	private function get_gateway_screen( $settings ) {
+		$current_path = $this->get_current_relative_path();
+
+		if ( $this->paths_match( $current_path, $settings['login_path'] ) ) {
+			return 'login';
+		}
+
+		if ( ! $this->paths_match( $current_path, $settings['account_action_base'] ) ) {
+			return '';
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only screen routing.
+		$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : 'login';
+
+		switch ( $action ) {
+			case 'register':
+				return empty( $settings['registration_enabled'] ) ? 'registration_disabled' : 'register';
+			case 'lostpassword':
+				return 'lostpassword';
+			case 'rp':
+			case 'resetpass':
+			case 'setpassword':
+				return 'setpassword';
+			case 'logout':
+				return 'logout';
+			case 'invalidlink':
+				return 'invalidlink';
+			default:
+				return 'login';
+		}
+	}
+
+	/**
+	 * Build a branded gateway URL for a login action.
+	 *
+	 * @param string              $action   Login action.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return string
+	 */
+	private function get_url_for_action( $action, $settings ) {
+		if ( 'login' === $action ) {
+			return home_url( $settings['login_path'] );
+		}
+
+		$mapped_action = in_array( $action, array( 'lostpassword', 'register', 'rp', 'resetpass', 'setpassword', 'logout', 'invalidlink' ), true ) ? $action : 'login';
+
+		if ( 'login' === $mapped_action ) {
+			return home_url( $settings['login_path'] );
+		}
+
+		return add_query_arg( 'action', $mapped_action, home_url( $settings['account_action_base'] ) );
+	}
+
+	/**
+	 * Get current request path relative to home URL.
+	 *
+	 * @return string
+	 */
+	private function get_current_relative_path() {
+		$request_uri  = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
+		$request_path = wp_parse_url( $request_uri, PHP_URL_PATH );
+		$request_path = $request_path ? $request_path : '/';
+		$home_path    = wp_parse_url( home_url( '/' ), PHP_URL_PATH );
+		$home_path    = $home_path ? rtrim( $home_path, '/' ) : '';
+
+		if ( $home_path && 0 === strpos( $request_path, $home_path ) ) {
+			$request_path = substr( $request_path, strlen( $home_path ) );
+		}
+
+		return '/' . ltrim( $request_path, '/' );
+	}
+
+	/**
+	 * Compare relative paths without trailing slash sensitivity.
+	 *
+	 * @param string $left  First path.
+	 * @param string $right Second path.
+	 * @return bool
+	 */
+	private function paths_match( $left, $right ) {
+		return untrailingslashit( '/' . ltrim( $left, '/' ) ) === untrailingslashit( '/' . ltrim( $right, '/' ) );
+	}
+
+	/**
+	 * Render gateway shell.
+	 *
+	 * @param string              $screen   Screen key.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_gateway_shell( $screen, $settings ) {
+		$style = $this->get_gateway_style_attribute( $settings );
+		?>
+		<main class="alynt-ag-gateway" data-agw-screen="<?php echo esc_attr( $screen ); ?>" style="<?php echo esc_attr( $style ); ?>">
+			<section class="agw-shell" aria-labelledby="agw-screen-title">
+				<div class="agw-media" aria-hidden="true">
+					<?php $this->render_media_panel( $settings ); ?>
+				</div>
+				<div class="agw-panel">
+					<div class="agw-card">
+						<?php $this->render_brand_block( $settings ); ?>
+						<?php $this->render_screen( $screen, $settings ); ?>
+					</div>
+				</div>
+			</section>
+		</main>
+		<?php
+	}
+
+	/**
+	 * Return inline CSS custom properties for configured branding.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return string
+	 */
+	private function get_gateway_style_attribute( $settings ) {
+		$properties = array(
+			'--agw-color-text'        => $settings['text_color'],
+			'--agw-color-primary'     => $settings['primary_color'],
+			'--agw-color-background'  => $settings['page_background_color'],
+			'--agw-color-notice'      => $settings['accent_color'],
+			'--agw-color-error'       => $settings['error_color'],
+			'--agw-color-surface'     => $settings['surface_color'],
+			'--agw-button-background' => $settings['button_background_color'],
+			'--agw-button-text'       => $settings['button_text_color'],
+			'--agw-font-heading'      => $settings['heading_font_family'],
+			'--agw-font-body'         => $settings['body_font_family'],
+		);
+
+		$style = '';
+		foreach ( $properties as $property => $value ) {
+			if ( '' === $value ) {
+				continue;
+			}
+			$style .= sprintf( '%s:%s;', $property, $value );
+		}
+
+		return $style;
+	}
+
+	/**
+	 * Render the media panel.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_media_panel( $settings ) {
+		$image_url = $settings['background_image_id'] ? wp_get_attachment_image_url( (int) $settings['background_image_id'], 'full' ) : '';
+
+		if ( $image_url ) {
+			printf(
+				'<div class="agw-media__image" style="background-image:url(%s);"></div>',
+				esc_url( $image_url )
+			);
+			return;
+		}
+		?>
+		<div class="agw-media__pattern">
+			<span class="agw-leaf agw-leaf--one"></span>
+			<span class="agw-leaf agw-leaf--two"></span>
+			<span class="agw-dot agw-dot--one"></span>
+			<span class="agw-dot agw-dot--two"></span>
+			<span class="agw-dot agw-dot--three"></span>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render logo or store name.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_brand_block( $settings ) {
+		$logo_url  = $settings['brand_logo_id'] ? wp_get_attachment_image_url( (int) $settings['brand_logo_id'], 'full' ) : '';
+		$max_width = max( 80, min( 520, (int) $settings['brand_logo_max_width'] ) );
+		?>
+		<div class="agw-brand">
+			<?php if ( $logo_url ) : ?>
+				<img class="agw-brand__logo" src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" style="max-width:<?php echo esc_attr( (string) $max_width ); ?>px;">
+			<?php else : ?>
+				<div class="agw-brand__name"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></div>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render one screen inside the gateway shell.
+	 *
+	 * @param string              $screen   Screen key.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_screen( $screen, $settings ) {
+		switch ( $screen ) {
+			case 'register':
+				$this->render_register_screen( $settings );
+				break;
+			case 'lostpassword':
+				$this->render_lostpassword_screen( $settings );
+				break;
+			case 'setpassword':
+				$this->render_setpassword_screen( $settings );
+				break;
+			case 'logout':
+				$this->render_logout_screen( $settings );
+				break;
+			case 'registration_disabled':
+				$this->render_registration_disabled_screen( $settings );
+				break;
+			case 'invalidlink':
+				$this->render_invalid_link_screen( $settings );
+				break;
+			case 'login':
+			default:
+				$this->render_login_screen( $settings );
+				break;
+		}
+	}
+
+	/**
+	 * Render login screen.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_login_screen( $settings ) {
+		$auth = new ALYNT_AG_Auth_Service();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only status display.
+		$registration_complete = ! empty( $_GET['registration_complete'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only status display.
+		$password_reset = ! empty( $_GET['password_reset'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only error display.
+		$error_code = isset( $_GET['login_error'] ) ? sanitize_key( wp_unslash( $_GET['login_error'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Optional redirect target for a login attempt.
+		$redirect_to = isset( $_GET['redirect_to'] ) ? esc_url_raw( wp_unslash( $_GET['redirect_to'] ) ) : '';
+		?>
+		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Log In', 'alynt-account-gateway' ); ?></h1>
+		<?php $this->render_notice( $settings['login_intro_text'] ); ?>
+		<?php if ( $registration_complete ) : ?>
+			<div class="agw-status agw-status--success" role="status" aria-live="polite">
+				<?php esc_html_e( 'Your account has been created. You can log in now.', 'alynt-account-gateway' ); ?>
+			</div>
+		<?php endif; ?>
+		<?php if ( $password_reset ) : ?>
+			<div class="agw-status agw-status--success" role="status" aria-live="polite">
+				<?php esc_html_e( 'Your password has been updated. You can log in now.', 'alynt-account-gateway' ); ?>
+			</div>
+		<?php endif; ?>
+		<?php if ( $error_code ) : ?>
+			<div class="agw-status agw-status--error" role="alert"><?php echo esc_html( $auth->get_login_error_message( $error_code ) ); ?></div>
+		<?php endif; ?>
+		<form class="agw-form" method="post" action="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>">
+			<input type="hidden" name="alynt_ag_action" value="login">
+			<?php wp_nonce_field( 'alynt_ag_login', 'alynt_ag_auth_nonce' ); ?>
+			<?php if ( $redirect_to ) : ?>
+				<input type="hidden" name="redirect_to" value="<?php echo esc_attr( $redirect_to ); ?>">
+			<?php endif; ?>
+			<div class="agw-field">
+				<label for="agw-login-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
+				<input id="agw-login-email" name="email" type="email" autocomplete="email" required>
+			</div>
+			<div class="agw-field agw-field--password">
+				<label for="agw-login-password"><?php esc_html_e( 'Password', 'alynt-account-gateway' ); ?></label>
+				<div class="agw-password">
+					<input id="agw-login-password" name="pwd" type="password" autocomplete="current-password" required>
+					<button type="button" class="agw-password__toggle" data-agw-password-toggle aria-label="<?php esc_attr_e( 'Show password', 'alynt-account-gateway' ); ?>"><?php esc_html_e( 'Show', 'alynt-account-gateway' ); ?></button>
+				</div>
+			</div>
+			<label class="agw-checkbox">
+				<input name="rememberme" type="checkbox" value="forever">
+				<span><?php esc_html_e( 'Remember Me', 'alynt-account-gateway' ); ?></span>
+			</label>
+			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Log In', 'alynt-account-gateway' ); ?></button>
+			<div class="agw-links">
+				<a href="<?php echo esc_url( $this->get_url_for_action( 'register', $settings ) ); ?>"><?php esc_html_e( 'Create Account', 'alynt-account-gateway' ); ?></a>
+				<a href="<?php echo esc_url( $this->get_url_for_action( 'lostpassword', $settings ) ); ?>"><?php esc_html_e( 'Forgot Password?', 'alynt-account-gateway' ); ?></a>
+			</div>
+		</form>
+		<?php
+	}
+
+	/**
+	 * Render registration screen.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_register_screen( $settings ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only status display.
+		$registration_sent = ! empty( $_GET['registration_sent'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only error display.
+		$error_code = isset( $_GET['registration_error'] ) ? sanitize_key( wp_unslash( $_GET['registration_error'] ) ) : '';
+
+		if ( $registration_sent ) {
+			?>
+			<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Check Your Email', 'alynt-account-gateway' ); ?></h1>
+			<div class="agw-status agw-status--success" role="status" aria-live="polite">
+				<?php esc_html_e( 'If the details can be used, a confirmation email has been sent. Please check your inbox and spam folder.', 'alynt-account-gateway' ); ?>
+			</div>
+			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
+			<?php
+			return;
+		}
+		?>
+		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Create Account', 'alynt-account-gateway' ); ?></h1>
+		<?php $this->render_notice( $settings['register_intro_text'] ); ?>
+		<?php if ( $error_code ) : ?>
+			<div class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->get_registration_error_message( $error_code ) ); ?></div>
+		<?php endif; ?>
+		<form class="agw-form" method="post" action="<?php echo esc_url( home_url( $settings['account_action_base'] ) ); ?>">
+			<input type="hidden" name="alynt_ag_action" value="start_registration">
+			<?php wp_nonce_field( 'alynt_ag_start_registration', 'alynt_ag_registration_nonce' ); ?>
+			<div class="agw-grid agw-grid--two">
+				<div class="agw-field">
+					<label for="agw-register-first"><?php esc_html_e( 'First Name', 'alynt-account-gateway' ); ?></label>
+					<input id="agw-register-first" name="first_name" type="text" autocomplete="given-name" required>
+				</div>
+				<div class="agw-field">
+					<label for="agw-register-last"><?php esc_html_e( 'Last Name', 'alynt-account-gateway' ); ?></label>
+					<input id="agw-register-last" name="last_name" type="text" autocomplete="family-name" required>
+				</div>
+			</div>
+			<div class="agw-field">
+				<label for="agw-register-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
+				<input id="agw-register-email" name="email" type="email" autocomplete="email" required>
+			</div>
+			<label class="agw-checkbox">
+				<input name="terms" type="checkbox" required>
+				<span>
+					<?php esc_html_e( 'By creating an account, you agree to our', 'alynt-account-gateway' ); ?>
+					<a href="<?php echo esc_url( home_url( $settings['terms_path'] ) ); ?>"><?php esc_html_e( 'Terms', 'alynt-account-gateway' ); ?></a>
+					<?php esc_html_e( 'and', 'alynt-account-gateway' ); ?>
+					<a href="<?php echo esc_url( home_url( $settings['privacy_path'] ) ); ?>"><?php esc_html_e( 'Privacy Policy', 'alynt-account-gateway' ); ?></a>
+				</span>
+			</label>
+			<?php $this->render_verification_slot( $settings ); ?>
+			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Create Account', 'alynt-account-gateway' ); ?></button>
+			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
+		</form>
+		<?php
+	}
+
+	/**
+	 * Render lost password screen.
+	 *
+	 * @param array<string,mixed> $settings          Settings.
+	 * @param string              $forced_error_code Optional forced error code.
+	 * @return void
+	 */
+	private function render_lostpassword_screen( $settings, $forced_error_code = '' ) {
+		$auth = new ALYNT_AG_Auth_Service();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only status display.
+		$reset_sent = ! empty( $_GET['reset_sent'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only error display.
+		$error_code = $forced_error_code ? sanitize_key( $forced_error_code ) : ( isset( $_GET['reset_error'] ) ? sanitize_key( wp_unslash( $_GET['reset_error'] ) ) : '' );
+
+		if ( $reset_sent ) {
+			?>
+			<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Check Your Email', 'alynt-account-gateway' ); ?></h1>
+			<div class="agw-status agw-status--success" role="status" aria-live="polite">
+				<?php echo esc_html( $auth->get_lostpassword_sent_message() ); ?>
+			</div>
+			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
+			<?php
+			return;
+		}
+		?>
+		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Reset Password', 'alynt-account-gateway' ); ?></h1>
+		<?php $this->render_notice( $settings['lostpassword_intro_text'] ); ?>
+		<?php if ( $error_code ) : ?>
+			<div class="agw-status agw-status--error" role="alert"><?php echo esc_html( $auth->get_lostpassword_error_message( $error_code ) ); ?></div>
+		<?php endif; ?>
+		<form class="agw-form" method="post" action="<?php echo esc_url( $this->get_url_for_action( 'lostpassword', $settings ) ); ?>">
+			<input type="hidden" name="alynt_ag_action" value="lostpassword">
+			<?php wp_nonce_field( 'alynt_ag_lostpassword', 'alynt_ag_auth_nonce' ); ?>
+			<div class="agw-field">
+				<label for="agw-lost-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
+				<input id="agw-lost-email" name="user_login" type="email" autocomplete="email" required>
+			</div>
+			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Reset Password', 'alynt-account-gateway' ); ?></button>
+			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
+		</form>
+		<?php
+	}
+
+	/**
+	 * Render set password screen.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_setpassword_screen( $settings ) {
+		$auth         = new ALYNT_AG_Auth_Service();
+		$registration = new ALYNT_AG_Registration_Service();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Token is validated against plugin-owned pending registration storage.
+		$token = isset( $_GET['alynt_ag_token'] ) ? sanitize_text_field( wp_unslash( $_GET['alynt_ag_token'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Native reset key is validated by WordPress.
+		$key = isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Native reset login is validated by WordPress.
+		$login = isset( $_GET['login'] ) ? sanitize_user( wp_unslash( $_GET['login'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only error display.
+		$error_code = isset( $_GET['password_error'] ) ? sanitize_key( wp_unslash( $_GET['password_error'] ) ) : '';
+
+		if ( $token ) {
+			if ( is_wp_error( $registration->confirm_pending_token( $token ) ) ) {
+				$this->render_invalid_link_screen( $settings );
+				return;
+			}
+
+			$set_password_action = add_query_arg(
+				array(
+					'action'         => 'setpassword',
+					'alynt_ag_token' => rawurlencode( $token ),
+				),
+				home_url( $settings['account_action_base'] )
+			);
+
+			$this->render_password_form(
+				$settings,
+				$set_password_action,
+				'complete_registration',
+				'alynt_ag_complete_registration',
+				'alynt_ag_registration_nonce',
+				array(
+					'alynt_ag_token' => $token,
+				),
+				$error_code
+			);
+			return;
+		}
+
+		if ( $key && $login ) {
+			if ( is_wp_error( $auth->validate_password_reset_key( $key, $login ) ) ) {
+				$this->render_lostpassword_screen( $settings, 'invalid_or_expired_token' );
+				return;
+			}
+
+			$set_password_action = add_query_arg(
+				array(
+					'action' => 'setpassword',
+					'key'    => rawurlencode( $key ),
+					'login'  => rawurlencode( $login ),
+				),
+				home_url( $settings['account_action_base'] )
+			);
+
+			$this->render_password_form(
+				$settings,
+				$set_password_action,
+				'reset_password',
+				'alynt_ag_reset_password',
+				'alynt_ag_auth_nonce',
+				array(
+					'key'   => $key,
+					'login' => $login,
+				),
+				$error_code
+			);
+			return;
+		}
+
+		$this->render_invalid_link_screen( $settings );
+	}
+
+	/**
+	 * Render the shared set-password form.
+	 *
+	 * @param array<string,mixed>  $settings     Settings.
+	 * @param string               $action_url   Form action URL.
+	 * @param string               $action       Auth action.
+	 * @param string               $nonce_action Nonce action.
+	 * @param string               $nonce_name   Nonce field name.
+	 * @param array<string,string> $hidden       Hidden form fields.
+	 * @param string               $error_code   Error code.
+	 * @return void
+	 */
+	private function render_password_form( $settings, $action_url, $action, $nonce_action, $nonce_name, $hidden, $error_code ) {
+		?>
+		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Set New Password', 'alynt-account-gateway' ); ?></h1>
+		<?php $this->render_notice( $settings['setpassword_intro_text'] ); ?>
+		<?php if ( $error_code ) : ?>
+			<div class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->get_password_error_message( $error_code ) ); ?></div>
+		<?php endif; ?>
+		<form class="agw-form" method="post" action="<?php echo esc_url( $action_url ); ?>" data-agw-password-form>
+			<input type="hidden" name="alynt_ag_action" value="<?php echo esc_attr( $action ); ?>">
+			<?php wp_nonce_field( $nonce_action, $nonce_name ); ?>
+			<?php foreach ( $hidden as $name => $value ) : ?>
+				<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>">
+			<?php endforeach; ?>
+			<div class="agw-field agw-field--password">
+				<label for="agw-set-password"><?php esc_html_e( 'New Password', 'alynt-account-gateway' ); ?></label>
+				<input id="agw-set-password" name="password" type="password" autocomplete="new-password" aria-describedby="agw-password-status agw-password-requirements" data-agw-password-input required>
+			</div>
+			<div class="agw-field agw-field--password">
+				<label for="agw-set-confirm"><?php esc_html_e( 'Confirm Password', 'alynt-account-gateway' ); ?></label>
+				<input id="agw-set-confirm" name="password_confirm" type="password" autocomplete="new-password" aria-describedby="agw-password-status agw-password-requirements" data-agw-password-confirm required>
+			</div>
+			<div class="agw-strength" data-agw-strength data-agw-strength-score="0" data-agw-message-empty="<?php esc_attr_e( 'Enter a password to begin.', 'alynt-account-gateway' ); ?>" data-agw-message-weak="<?php esc_attr_e( 'Keep going.', 'alynt-account-gateway' ); ?>" data-agw-message-good="<?php esc_attr_e( 'Almost there.', 'alynt-account-gateway' ); ?>" data-agw-message-ready="<?php esc_attr_e( 'Password is ready.', 'alynt-account-gateway' ); ?>" aria-live="polite">
+				<span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+				<strong id="agw-password-status" data-agw-strength-label><?php esc_html_e( 'Enter a password to begin.', 'alynt-account-gateway' ); ?></strong>
+			</div>
+			<ul id="agw-password-requirements" class="agw-requirements" data-agw-password-requirements>
+				<li data-agw-requirement="length"><?php esc_html_e( 'At least 12 characters', 'alynt-account-gateway' ); ?></li>
+				<li data-agw-requirement="uppercase"><?php esc_html_e( 'At least one uppercase letter', 'alynt-account-gateway' ); ?></li>
+				<li data-agw-requirement="lowercase"><?php esc_html_e( 'At least one lowercase letter', 'alynt-account-gateway' ); ?></li>
+				<li data-agw-requirement="number"><?php esc_html_e( 'At least one number', 'alynt-account-gateway' ); ?></li>
+				<li data-agw-requirement="symbol"><?php esc_html_e( 'At least one special symbol', 'alynt-account-gateway' ); ?></li>
+				<li data-agw-requirement="match"><?php esc_html_e( 'Passwords match', 'alynt-account-gateway' ); ?></li>
+			</ul>
+			<button class="agw-button agw-button--primary" type="submit" data-agw-password-submit disabled><?php esc_html_e( 'Save Password', 'alynt-account-gateway' ); ?></button>
+		</form>
+		<?php
+	}
+
+	/**
+	 * Render logout confirmation.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_logout_screen( $settings ) {
+		$logout_url = wp_nonce_url(
+			add_query_arg(
+				array(
+					'action'  => 'logout',
+					'confirm' => '1',
+				),
+				home_url( $settings['account_action_base'] )
+			),
+			'log-out'
+		);
+		?>
+		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Log Out', 'alynt-account-gateway' ); ?></h1>
+		<?php $this->render_notice( $settings['logout_intro_text'] ); ?>
+		<div class="agw-actions">
+			<a class="agw-button agw-button--primary" href="<?php echo esc_url( $logout_url ); ?>"><?php esc_html_e( 'Log Out', 'alynt-account-gateway' ); ?></a>
+			<a class="agw-button agw-button--secondary" href="<?php echo esc_url( home_url( $settings['after_login_redirect'] ) ); ?>"><?php esc_html_e( 'Cancel', 'alynt-account-gateway' ); ?></a>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Handle confirmed logout requests from the branded logout screen.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return bool
+	 */
+	private function maybe_handle_confirmed_logout( $settings ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Presence check before nonce verification.
+		if ( empty( $_GET['confirm'] ) ) {
+			return false;
+		}
+
+		check_admin_referer( 'log-out' );
+		wp_logout();
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Optional redirect target after verified logout.
+		$redirect_to = isset( $_GET['redirect_to'] ) ? esc_url_raw( wp_unslash( $_GET['redirect_to'] ) ) : home_url( $settings['login_path'] );
+
+		wp_safe_redirect( $redirect_to );
+		exit;
+	}
+
+	/**
+	 * Render registration disabled screen.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_registration_disabled_screen( $settings ) {
+		?>
+		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Registration Unavailable', 'alynt-account-gateway' ); ?></h1>
+		<?php $this->render_notice( $settings['registration_disabled_text'] ); ?>
+		<a class="agw-button agw-button--primary" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
+		<?php
+	}
+
+	/**
+	 * Render invalid link screen.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_invalid_link_screen( $settings ) {
+		$resend_action = $this->get_url_for_action( 'invalidlink', $settings );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only status display.
+		$confirmation_resent = ! empty( $_GET['confirmation_resent'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only error display.
+		$error_code = isset( $_GET['resend_error'] ) ? sanitize_key( wp_unslash( $_GET['resend_error'] ) ) : '';
+		?>
+		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Link Expired', 'alynt-account-gateway' ); ?></h1>
+		<?php $this->render_notice( $settings['invalid_link_text'] ); ?>
+		<?php if ( $confirmation_resent ) : ?>
+			<div class="agw-status agw-status--success" role="status" aria-live="polite">
+				<?php esc_html_e( 'If a pending registration can be found, a new confirmation email has been sent.', 'alynt-account-gateway' ); ?>
+			</div>
+		<?php endif; ?>
+		<?php if ( $error_code ) : ?>
+			<div class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->get_resend_error_message( $error_code ) ); ?></div>
+		<?php endif; ?>
+		<form class="agw-form" method="post" action="<?php echo esc_url( $resend_action ); ?>">
+			<input type="hidden" name="alynt_ag_action" value="resend_confirmation">
+			<?php wp_nonce_field( 'alynt_ag_resend_confirmation', 'alynt_ag_registration_nonce' ); ?>
+			<div class="agw-field">
+				<label for="agw-invalid-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
+				<input id="agw-invalid-email" name="email" type="email" autocomplete="email" required>
+			</div>
+			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Send New Link', 'alynt-account-gateway' ); ?></button>
+			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
+		</form>
+		<?php
+	}
+
+	/**
+	 * Render configured registration verification area.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_verification_slot( $settings ) {
+		if ( ! empty( $settings['turnstile_site_key'] ) ) {
+			?>
+			<div class="agw-verification-slot">
+				<div class="cf-turnstile" data-sitekey="<?php echo esc_attr( $settings['turnstile_site_key'] ); ?>"></div>
+			</div>
+			<?php
+			return;
+		}
+		?>
+		<div class="agw-verification-slot"><?php esc_html_e( 'Verification will appear here when enabled.', 'alynt-account-gateway' ); ?></div>
+		<?php
+	}
+
+	/**
+	 * Get title for the document title tag.
+	 *
+	 * @param string $screen Screen key.
+	 * @return string
+	 */
+	private function get_screen_title( $screen ) {
+		$titles = array(
+			'login'                 => __( 'Log In', 'alynt-account-gateway' ),
+			'register'              => __( 'Create Account', 'alynt-account-gateway' ),
+			'lostpassword'          => __( 'Reset Password', 'alynt-account-gateway' ),
+			'setpassword'           => __( 'Set New Password', 'alynt-account-gateway' ),
+			'logout'                => __( 'Log Out', 'alynt-account-gateway' ),
+			'registration_disabled' => __( 'Registration Unavailable', 'alynt-account-gateway' ),
+			'invalidlink'           => __( 'Link Expired', 'alynt-account-gateway' ),
+		);
+
+		return isset( $titles[ $screen ] ) ? $titles[ $screen ] : $titles['login'];
+	}
+
+	/**
+	 * Get public registration error message.
+	 *
+	 * @param string $error_code Error code.
+	 * @return string
+	 */
+	private function get_registration_error_message( $error_code ) {
+		$messages = array(
+			'disabled'                    => __( 'Registration is currently unavailable.', 'alynt-account-gateway' ),
+			'missing_required_fields'     => __( 'Please complete all required fields.', 'alynt-account-gateway' ),
+			'invalid_email'               => __( 'Please enter a valid email address.', 'alynt-account-gateway' ),
+			'terms_required'              => __( 'Please accept the terms and privacy policy to continue.', 'alynt-account-gateway' ),
+			'email_unavailable'           => __( 'If this email address can be used, a confirmation email will be sent.', 'alynt-account-gateway' ),
+			'pending_registration_failed' => __( 'The registration could not be started. Please try again.', 'alynt-account-gateway' ),
+			'confirmation_email_failed'   => __( 'The confirmation email could not be sent. Please try again.', 'alynt-account-gateway' ),
+		);
+
+		return isset( $messages[ $error_code ] ) ? $messages[ $error_code ] : __( 'The registration could not be started. Please try again.', 'alynt-account-gateway' );
+	}
+
+	/**
+	 * Get public resend-confirmation error message.
+	 *
+	 * @param string $error_code Error code.
+	 * @return string
+	 */
+	private function get_resend_error_message( $error_code ) {
+		$messages = array(
+			'invalid_email'               => __( 'Please enter a valid email address.', 'alynt-account-gateway' ),
+			'alynt_ag_rate_limited'       => __( 'Too many attempts. Please wait a moment and try again.', 'alynt-account-gateway' ),
+			'pending_registration_failed' => __( 'The confirmation link could not be renewed. Please try again.', 'alynt-account-gateway' ),
+			'confirmation_email_failed'   => __( 'The confirmation email could not be sent. Please try again.', 'alynt-account-gateway' ),
+		);
+
+		return isset( $messages[ $error_code ] ) ? $messages[ $error_code ] : __( 'The confirmation email could not be sent. Please try again.', 'alynt-account-gateway' );
+	}
+
+	/**
+	 * Get public set-password error message.
+	 *
+	 * @param string $error_code Error code.
+	 * @return string
+	 */
+	private function get_password_error_message( $error_code ) {
+		$messages = array(
+			'invalid_or_expired_token'     => __( 'This link is invalid or has expired.', 'alynt-account-gateway' ),
+			'password_mismatch'            => __( 'The passwords do not match.', 'alynt-account-gateway' ),
+			'alynt_ag_password_length'     => __( 'Password must be at least 12 characters.', 'alynt-account-gateway' ),
+			'alynt_ag_password_complexity' => __( 'Password must include uppercase, lowercase, number, and symbol characters.', 'alynt-account-gateway' ),
+			'email_unavailable'            => __( 'This email address can no longer be used.', 'alynt-account-gateway' ),
+		);
+
+		return isset( $messages[ $error_code ] ) ? $messages[ $error_code ] : __( 'Your account could not be created. Please try again.', 'alynt-account-gateway' );
+	}
+
+	/**
+	 * Render configurable screen instruction text.
+	 *
+	 * @param string $copy Notice copy.
+	 * @return void
+	 */
+	private function render_notice( $copy ) {
+		if ( '' === trim( wp_strip_all_tags( (string) $copy ) ) ) {
+			return;
+		}
+		?>
+		<div class="agw-notice"><?php echo wp_kses_post( wpautop( $copy ) ); ?></div>
+		<?php
 	}
 }

@@ -171,12 +171,27 @@ class ALYNT_AG_Settings_Page {
 			return;
 		}
 
+		if ( 'attachment_id' === $field['type'] ) {
+			$this->render_media_field( $id, $name, (int) $value );
+			return;
+		}
+
 		if ( 'color' === $field['type'] ) {
 			printf(
 				'<input type="text" class="regular-text" id="%1$s" name="%2$s" value="%3$s" pattern="^#[a-fA-F0-9]{6}$">',
 				esc_attr( $id ),
 				esc_attr( $name ),
 				esc_attr( $value )
+			);
+			return;
+		}
+
+		if ( 'textarea' === $field['type'] ) {
+			printf(
+				'<textarea class="large-text alynt-ag-textarea" rows="4" id="%1$s" name="%2$s">%3$s</textarea>',
+				esc_attr( $id ),
+				esc_attr( $name ),
+				esc_textarea( $value )
 			);
 			return;
 		}
@@ -204,6 +219,32 @@ class ALYNT_AG_Settings_Page {
 			esc_attr( $name ),
 			esc_attr( $value )
 		);
+	}
+
+	/**
+	 * Render a WordPress media-library backed image field.
+	 *
+	 * @param string $id    Field ID.
+	 * @param string $name  Field name.
+	 * @param int    $value Attachment ID.
+	 * @return void
+	 */
+	private function render_media_field( $id, $name, $value ) {
+		$image_url = $value ? wp_get_attachment_image_url( $value, 'medium' ) : '';
+		?>
+		<div class="alynt-ag-media-field" data-alynt-ag-media-field>
+			<input type="hidden" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( (string) $value ); ?>" data-alynt-ag-media-input>
+			<div class="alynt-ag-media-field__preview" data-alynt-ag-media-preview>
+				<?php if ( $image_url ) : ?>
+					<img src="<?php echo esc_url( $image_url ); ?>" alt="">
+				<?php endif; ?>
+			</div>
+			<p>
+				<button type="button" class="button" data-alynt-ag-media-select><?php esc_html_e( 'Select Image', 'alynt-account-gateway' ); ?></button>
+				<button type="button" class="button" data-alynt-ag-media-remove <?php disabled( ! $value ); ?>><?php esc_html_e( 'Remove', 'alynt-account-gateway' ); ?></button>
+			</p>
+		</div>
+		<?php
 	}
 
 	/**
