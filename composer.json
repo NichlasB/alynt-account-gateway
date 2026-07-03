@@ -1,0 +1,24 @@
+{
+  "name": "alynt/alynt-account-gateway",
+  "description": "Branded WordPress account gateway plugin.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "require": {},
+  "require-dev": {
+    "brain/monkey": "^2.6",
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+    "phpcompatibility/phpcompatibility-wp": "^2.1",
+    "phpunit/phpunit": "^9.6",
+    "wp-coding-standards/wpcs": "^3.1"
+  },
+  "scripts": {
+    "lint": "php ./vendor/bin/phpcs --standard=.phpcs.xml .",
+    "lint:fix": "php ./vendor/bin/phpcbf --standard=.phpcs.xml .",
+    "test": "php ./vendor/bin/phpunit -c phpunit.xml.dist"
+  },
+  "config": {
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  }
+}

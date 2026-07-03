@@ -1,0 +1,79 @@
+name: Build Release
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install npm dependencies and build assets
+        run: |
+          if [ -f "package.json" ]; then
+            if [ -f "package-lock.json" ]; then
+              npm ci
+            else
+              npm install
+            fi
+            npm run build
+          fi
+
+      - name: Create plugin zip
+        id: package
+        run: |
+          PLUGIN_SLUG="alynt-account-gateway"
+          VERSION="${{ github.event.release.tag_name }}"
+          mkdir -p build/${PLUGIN_SLUG}
+          rsync -av --exclude='.git' \
+                    --exclude='.github' \
+                    --exclude='build' \
+                    --exclude='node_modules' \
+                    --exclude='vendor' \
+                    --exclude='tests' \
+                    --exclude='scripts' \
+                    --exclude='docs' \
+                    --exclude='coverage' \
+                    --exclude='assets/src' \
+                    --exclude='.gitignore' \
+                    --exclude='.gitattributes' \
+                    --exclude='.phpcs.xml' \
+                    --exclude='.phpunit.result.cache' \
+                    --exclude='phpunit.xml' \
+                    --exclude='phpunit.xml.dist' \
+                    --exclude='composer.phar' \
+                    --exclude='composer.json' \
+                    --exclude='composer.lock' \
+                    --exclude='package.json' \
+                    --exclude='package-lock.json' \
+                    --exclude='deploy.sh' \
+                    --exclude='deploy.example.sh' \
+                    --exclude='session-context.tmp.md' \
+                    --exclude='session-handoff.tmp.md' \
+                    --exclude='README.md' \
+                    --exclude='CHANGELOG.md' \
+                    --exclude='*.map' \
+                    ./ build/${PLUGIN_SLUG}/
+          cd build
+          zip -r ${PLUGIN_SLUG}-${VERSION}.zip ${PLUGIN_SLUG}
+          echo "zip_file=build/${PLUGIN_SLUG}-${VERSION}.zip" >> "$GITHUB_OUTPUT"
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ steps.package.outputs.zip_file }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

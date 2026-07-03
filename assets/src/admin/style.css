@@ -1,0 +1,8 @@
+.alynt-ag-admin .nav-tab-wrapper {
+	margin-top: 16px;
+}
+
+.alynt-ag-admin input.regular-text {
+	max-width: 36rem;
+	width: 100%;
+}

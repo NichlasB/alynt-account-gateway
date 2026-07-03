@@ -1,0 +1,21 @@
+.alynt-ag-gateway {
+	--alynt-ag-primary: #315642;
+	--alynt-ag-accent: #f7f4cc;
+	--alynt-ag-button-background: #315642;
+	--alynt-ag-button-text: #fff;
+}
+
+.alynt-ag-gateway * {
+	box-sizing: border-box;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.alynt-ag-gateway *,
+	.alynt-ag-gateway *::before,
+	.alynt-ag-gateway *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		scroll-behavior: auto !important;
+		transition-duration: 0.01ms !important;
+	}
+}
