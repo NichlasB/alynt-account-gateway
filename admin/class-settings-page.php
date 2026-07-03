@@ -24,6 +24,8 @@ class ALYNT_AG_Settings_Page {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_post_alynt_ag_export_diagnostics', array( $this, 'handle_export_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_clear_diagnostics', array( $this, 'handle_clear_diagnostics' ) );
+		add_action( 'admin_post_alynt_ag_preview_email', array( $this, 'handle_preview_email' ) );
+		add_action( 'admin_post_alynt_ag_test_email', array( $this, 'handle_test_email' ) );
 		add_action( 'update_option_alynt_ag_settings', array( $this, 'log_settings_change' ), 10, 2 );
 	}
 
@@ -85,6 +87,7 @@ class ALYNT_AG_Settings_Page {
 		<div class="wrap alynt-ag-admin">
 			<h1><?php esc_html_e( 'Alynt Account Gateway', 'alynt-account-gateway' ); ?></h1>
 			<hr class="wp-header-end">
+			<?php $this->render_admin_notice(); ?>
 
 			<nav class="nav-tab-wrapper" aria-label="<?php esc_attr_e( 'Settings tabs', 'alynt-account-gateway' ); ?>">
 				<?php foreach ( $tabs as $tab_key => $tab_label ) : ?>
@@ -134,6 +137,10 @@ class ALYNT_AG_Settings_Page {
 
 			<?php if ( 'advanced_tools' === $active_tab ) : ?>
 				<?php $this->render_diagnostics_tools(); ?>
+			<?php endif; ?>
+
+			<?php if ( 'emails' === $active_tab ) : ?>
+				<?php $this->render_email_tools(); ?>
 			<?php endif; ?>
 		</div>
 		<?php
@@ -196,6 +203,16 @@ class ALYNT_AG_Settings_Page {
 			return;
 		}
 
+		if ( 'email' === $field['type'] ) {
+			printf(
+				'<input type="email" class="regular-text" id="%1$s" name="%2$s" value="%3$s" autocomplete="email">',
+				esc_attr( $id ),
+				esc_attr( $name ),
+				esc_attr( $value )
+			);
+			return;
+		}
+
 		if ( 'select' === $field['type'] && 'diagnostics_min_level' === $key ) {
 			$options = ALYNT_AG_Diagnostics_Logger::levels();
 			echo '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '">';
@@ -219,6 +236,72 @@ class ALYNT_AG_Settings_Page {
 			esc_attr( $name ),
 			esc_attr( $value )
 		);
+	}
+
+	/**
+	 * Render simple admin action notices.
+	 *
+	 * @return void
+	 */
+	private function render_admin_notice() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin notice flag.
+		$notice = isset( $_GET['alynt_ag_notice'] ) ? sanitize_key( wp_unslash( $_GET['alynt_ag_notice'] ) ) : '';
+
+		if ( 'email_test_sent' === $notice ) {
+			?>
+			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Test email sent.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
+		if ( 'email_test_failed' === $notice ) {
+			?>
+			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'The test email could not be sent. Check the recipient and mail configuration.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+		}
+	}
+
+	/**
+	 * Render email preview and test-send tools.
+	 *
+	 * @return void
+	 */
+	private function render_email_tools() {
+		$email_service = new ALYNT_AG_Email_Template_Service();
+		$templates     = $email_service->templates();
+		$settings      = ALYNT_AG_Settings_Schema::get_settings();
+		?>
+		<h2><?php esc_html_e( 'Email Preview And Test Send', 'alynt-account-gateway' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'Preview or send a test using the saved template settings and sample account tokens.', 'alynt-account-gateway' ); ?>
+		</p>
+
+		<form method="get" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" target="_blank" class="alynt-ag-inline-tool">
+			<input type="hidden" name="action" value="alynt_ag_preview_email">
+			<?php wp_nonce_field( 'alynt_ag_preview_email' ); ?>
+			<label for="alynt-ag-email-preview-template"><?php esc_html_e( 'Template', 'alynt-account-gateway' ); ?></label>
+			<select id="alynt-ag-email-preview-template" name="template">
+				<?php foreach ( $templates as $template_key => $template_label ) : ?>
+					<option value="<?php echo esc_attr( $template_key ); ?>"><?php echo esc_html( $template_label ); ?></option>
+				<?php endforeach; ?>
+			</select>
+			<?php submit_button( __( 'Preview Email', 'alynt-account-gateway' ), 'secondary', 'submit', false ); ?>
+		</form>
+
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-inline-tool">
+			<input type="hidden" name="action" value="alynt_ag_test_email">
+			<?php wp_nonce_field( 'alynt_ag_test_email' ); ?>
+			<label for="alynt-ag-email-test-template"><?php esc_html_e( 'Template', 'alynt-account-gateway' ); ?></label>
+			<select id="alynt-ag-email-test-template" name="template">
+				<?php foreach ( $templates as $template_key => $template_label ) : ?>
+					<option value="<?php echo esc_attr( $template_key ); ?>"><?php echo esc_html( $template_label ); ?></option>
+				<?php endforeach; ?>
+			</select>
+			<label for="alynt-ag-email-test-recipient"><?php esc_html_e( 'Recipient', 'alynt-account-gateway' ); ?></label>
+			<input type="email" id="alynt-ag-email-test-recipient" name="recipient" class="regular-text" value="<?php echo esc_attr( $settings['email_test_recipient'] ); ?>" required>
+			<?php submit_button( __( 'Send Test Email', 'alynt-account-gateway' ), 'secondary', 'submit', false ); ?>
+		</form>
+		<?php
 	}
 
 	/**
@@ -359,6 +442,63 @@ class ALYNT_AG_Settings_Page {
 				array(
 					'page' => 'alynt-account-gateway',
 					'tab'  => 'advanced_tools',
+				),
+				admin_url( 'options-general.php' )
+			)
+		);
+		exit;
+	}
+
+	/**
+	 * Render an email template preview.
+	 *
+	 * @return void
+	 */
+	public function handle_preview_email() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to preview emails.', 'alynt-account-gateway' ) );
+		}
+
+		check_admin_referer( 'alynt_ag_preview_email' );
+
+		$email_service = new ALYNT_AG_Email_Template_Service();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce verified above.
+		$template = isset( $_GET['template'] ) ? sanitize_key( wp_unslash( $_GET['template'] ) ) : 'registration_confirmation';
+		$rendered = $email_service->render( $template, $email_service->preview_tokens(), ALYNT_AG_Settings_Schema::get_settings() );
+
+		if ( is_wp_error( $rendered ) ) {
+			wp_die( esc_html( $rendered->get_error_message() ) );
+		}
+
+		header( 'Content-Type: text/html; charset=utf-8' );
+		echo $rendered['html']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped by email renderer.
+		exit;
+	}
+
+	/**
+	 * Send a test email.
+	 *
+	 * @return void
+	 */
+	public function handle_test_email() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to send test emails.', 'alynt-account-gateway' ) );
+		}
+
+		check_admin_referer( 'alynt_ag_test_email' );
+
+		$email_service = new ALYNT_AG_Email_Template_Service();
+		$template      = isset( $_POST['template'] ) ? sanitize_key( wp_unslash( $_POST['template'] ) ) : 'registration_confirmation';
+		$recipient     = isset( $_POST['recipient'] ) ? sanitize_email( wp_unslash( $_POST['recipient'] ) ) : '';
+		$result        = $email_service->send( $template, $recipient, $email_service->preview_tokens(), ALYNT_AG_Settings_Schema::get_settings() );
+		$status        = is_wp_error( $result ) ? 'email_test_failed' : 'email_test_sent';
+
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'            => 'alynt-account-gateway',
+					'tab'             => 'emails',
+					'alynt_ag_notice' => $status,
 				),
 				admin_url( 'options-general.php' )
 			)

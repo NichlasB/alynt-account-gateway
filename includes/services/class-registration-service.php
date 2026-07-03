@@ -293,23 +293,21 @@ class ALYNT_AG_Registration_Service {
 	 */
 	public function send_confirmation_email( $pending, $settings ) {
 		$expiry_hours = max( 1, absint( $settings['registration_token_hours'] ) );
-		$subject      = sprintf(
-			/* translators: %s: site name. */
-			__( 'Confirm your account for %s', 'alynt-account-gateway' ),
-			wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES )
+		$email        = new ALYNT_AG_Email_Template_Service();
+		$sent         = $email->send(
+			'registration_confirmation',
+			$pending['email'],
+			array(
+				'first_name'       => $pending['first_name'],
+				'last_name'        => $pending['last_name'],
+				'user_email'       => $pending['email'],
+				'confirmation_url' => $pending['confirmation_url'],
+				'expiry_hours'     => (string) $expiry_hours,
+			),
+			$settings
 		);
 
-		$message = sprintf(
-			/* translators: 1: first name, 2: confirmation URL, 3: expiry hours. */
-			__( "Hi %1\$s,\n\nWelcome. Confirm your email address and choose a password using the link below:\n\n%2\$s\n\nThis link expires in %3\$d hours.", 'alynt-account-gateway' ),
-			$pending['first_name'],
-			$pending['confirmation_url'],
-			$expiry_hours
-		);
-
-		$sent = wp_mail( $pending['email'], $subject, $message );
-
-		if ( ! $sent ) {
+		if ( is_wp_error( $sent ) ) {
 			return new WP_Error( 'confirmation_email_failed', __( 'The confirmation email could not be sent. Please try again.', 'alynt-account-gateway' ) );
 		}
 
@@ -542,7 +540,84 @@ class ALYNT_AG_Registration_Service {
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
+		$welcome_sent = $this->send_account_created_welcome_email( $pending, (int) $user_id, $settings );
+		if ( is_wp_error( $welcome_sent ) ) {
+			ALYNT_AG_Diagnostics_Logger::log_event(
+				'warning',
+				'external_api',
+				'account_created_welcome_failed',
+				__( 'The account-created welcome email could not be sent.', 'alynt-account-gateway' ),
+				array(
+					'user_id' => (int) $user_id,
+					'email'   => $pending->email,
+					'error'   => $welcome_sent->get_error_code(),
+				)
+			);
+		}
+
+		$webhook_sent = $this->dispatch_account_created_webhook( (int) $user_id, $settings );
+		if ( is_wp_error( $webhook_sent ) ) {
+			ALYNT_AG_Diagnostics_Logger::log_event(
+				'warning',
+				'external_api',
+				'account_created_webhook_failed',
+				__( 'The account-created webhook could not be sent.', 'alynt-account-gateway' ),
+				array(
+					'user_id' => (int) $user_id,
+					'email'   => $pending->email,
+					'error'   => $webhook_sent->get_error_code(),
+				)
+			);
+		}
+
 		return (int) $user_id;
+	}
+
+	/**
+	 * Send the account-created welcome email unless disabled.
+	 *
+	 * @param object              $pending  Pending registration row.
+	 * @param int                 $user_id  Created user ID.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return true|WP_Error
+	 */
+	public function send_account_created_welcome_email( $pending, $user_id, $settings ) {
+		if ( ! empty( $settings['email_new_user_welcome_disabled'] ) ) {
+			return true;
+		}
+
+		$email = new ALYNT_AG_Email_Template_Service();
+		$sent  = $email->send(
+			'new_user_welcome',
+			$pending->email,
+			array(
+				'first_name'    => $pending->first_name,
+				'last_name'     => $pending->last_name,
+				'user_email'    => $pending->email,
+				'user_id'       => (string) absint( $user_id ),
+				'dashboard_url' => home_url( $settings['after_login_redirect'] ?? '/my-account/' ),
+			),
+			$settings
+		);
+
+		if ( is_wp_error( $sent ) ) {
+			return new WP_Error( 'welcome_email_failed', __( 'The welcome email could not be sent.', 'alynt-account-gateway' ) );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Dispatch the account-created webhook.
+	 *
+	 * @param int                 $user_id  Created user ID.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return true|WP_Error
+	 */
+	public function dispatch_account_created_webhook( $user_id, $settings ) {
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+
+		return $dispatcher->dispatch_account_created( $user_id, $settings );
 	}
 
 	/**

@@ -97,16 +97,20 @@
 
 ### Phase 5 - Emails And Webhooks
 
-- [ ] Add rich email template editor.
-- [ ] Add template preview and test-send.
-- [ ] Add branded HTML wrapper, logo, colors, buttons, and plain-text fallback.
-- [ ] Add templates for password reset, password changed, registration confirmation/welcome, and email-change confirmation.
-- [ ] Add disable toggles for password changed, new user welcome, and email address change confirmation emails.
-- [ ] Add account-created webhook dispatcher.
-- [ ] Send full user fields in the account-created webhook payload.
-- [ ] Store webhook response metadata by default.
-- [ ] Store full payload bodies only when debug payload logging is enabled.
-- [ ] Retain successful webhook metadata for 7 days and failed webhook metadata for 30 days by default.
+- [x] Add rich email template editor foundation.
+- [x] Add template preview and test-send.
+- [x] Add branded HTML wrapper, logo, colors, buttons, and plain-text fallback.
+- [x] Add templates for password reset, password changed, registration confirmation/welcome, and email-change confirmation.
+- [x] Wire disable toggles for password changed and email-change notification emails.
+- [x] Wire branded overrides for native password reset, password changed, and email-change notification emails.
+- [x] Wire the WordPress profile email-change request body through `new_user_email_content` as a branded plain-text template.
+- [x] Add account-created welcome email and disable-toggle behavior.
+- [ ] Evaluate a safe replacement strategy if the disable toggle must suppress the profile email-change request email itself.
+- [x] Add account-created webhook dispatcher.
+- [x] Send full user fields in the account-created webhook payload.
+- [x] Store webhook response metadata by default.
+- [x] Store full payload bodies only when debug payload logging is enabled.
+- [x] Retain successful webhook metadata for 7 days and failed webhook metadata for 30 days by default.
 
 ### Phase 6 - Dashboard And WooCommerce
 
@@ -144,7 +148,7 @@
 - [ ] Unit test username generation and collision handling.
 - [ ] Unit test Reoon policy mapping.
 - [ ] Unit test Turnstile verification handling.
-- [ ] Unit test webhook payload construction and metadata logging.
+- [x] Unit test webhook payload construction and metadata logging.
 - [ ] Unit test retention cleanup.
 - [ ] Unit test uninstall cleanup.
 - [ ] Browser/manual QA login, lost password, set password, registration, logout confirmation, disabled registration, and invalid/expired link screens.
@@ -204,6 +208,8 @@
 - Added expired-link recovery: invalid/expired registration links can request a new confirmation email, pending tokens are renewed without creating users, resend attempts use their own rate bucket, and public responses stay neutral when no pending registration exists.
 - Added branded auth POST handling for login and password-reset requests so failed submissions return to gateway screens with neutral public messages instead of native WordPress screens.
 - Added branded native password-reset completion: WordPress reset links with `key` and `login` now render the gateway set-password screen, validate through WordPress reset-key APIs, enforce the v1 password policy, and redirect to branded login after success.
+- Added Phase 5 email foundation: editable template settings for account emails, branded HTML/plain rendering, preview and test-send admin tools, and registration confirmation emails routed through the renderer.
+- Added native email overrides for WordPress password reset, password changed, and email-change notification emails, including branded HTML output, gateway reset links, and disable toggles for password/email change notifications.
 - Added observability tooling: diagnostics settings, structured logs, health/recent-event UI, export/clear actions, retention cleanup, and redaction tests.
 - Completed the initial scaffold, initialized Git, installed dependencies, and verified build/lint/test/audit.
 - Added scaffold master prompt artifact for the initial plugin foundation.

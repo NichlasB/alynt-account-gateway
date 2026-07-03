@@ -1,0 +1,167 @@
+<?php
+/**
+ * Email template service tests.
+ *
+ * @package Alynt_Account_Gateway
+ */
+
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests branded email rendering.
+ */
+class EmailTemplateServiceTest extends TestCase {
+
+	protected function setUp(): void {
+		parent::setUp();
+		$GLOBALS['alynt_ag_test_mail'] = array();
+		$GLOBALS['alynt_ag_test_options'] = array();
+	}
+
+	public function test_supported_templates_include_required_account_emails() {
+		$service = new ALYNT_AG_Email_Template_Service();
+		$templates = $service->templates();
+
+		$this->assertArrayHasKey( 'registration_confirmation', $templates );
+		$this->assertArrayHasKey( 'password_reset', $templates );
+		$this->assertArrayHasKey( 'password_changed', $templates );
+		$this->assertArrayHasKey( 'new_user_welcome', $templates );
+		$this->assertArrayHasKey( 'email_change_confirmation', $templates );
+	}
+
+	public function test_render_replaces_tokens_and_includes_branded_button() {
+		$service  = new ALYNT_AG_Email_Template_Service();
+		$settings = ALYNT_AG_Settings_Schema::defaults();
+		$rendered = $service->render(
+			'registration_confirmation',
+			array(
+				'first_name'       => 'Damon',
+				'confirmation_url' => 'https://example.test/account?action=setpassword&token=abc',
+				'expiry_hours'     => '24',
+			),
+			$settings
+		);
+
+		$this->assertIsArray( $rendered );
+		$this->assertStringContainsString( 'Example Store', $rendered['subject'] );
+		$this->assertStringContainsString( 'Damon', $rendered['html'] );
+		$this->assertStringContainsString( 'Confirm Account', $rendered['html'] );
+		$this->assertStringContainsString( 'https://example.test/account?action=setpassword&token=abc', $rendered['plain'] );
+	}
+
+	public function test_send_uses_html_mail_headers() {
+		$service = new ALYNT_AG_Email_Template_Service();
+		$result  = $service->send(
+			'password_reset',
+			'customer@example.test',
+			array(
+				'first_name' => 'Damon',
+				'reset_url'  => 'https://example.test/account?action=setpassword&key=abc',
+			),
+			ALYNT_AG_Settings_Schema::defaults()
+		);
+
+		$this->assertTrue( $result );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_mail'] );
+		$this->assertSame( 'customer@example.test', $GLOBALS['alynt_ag_test_mail'][0]['to'] );
+		$this->assertContains( 'Content-Type: text/html; charset=UTF-8', $GLOBALS['alynt_ag_test_mail'][0]['headers'] );
+	}
+
+	public function test_password_reset_notification_filter_returns_branded_email_array() {
+		$service = new ALYNT_AG_Email_Template_Service();
+		$user    = new WP_User( 'customer@example.test' );
+
+		$email = $service->filter_retrieve_password_notification_email(
+			array(
+				'to'      => 'customer@example.test',
+				'subject' => 'Core subject',
+				'message' => 'Core message',
+				'headers' => array(),
+			),
+			'reset-key',
+			'customer@example.test',
+			$user
+		);
+
+		$this->assertStringContainsString( 'Reset your password', $email['subject'] );
+		$this->assertStringContainsString( 'Damon', $email['message'] );
+		$this->assertStringContainsString( 'key=reset-key', $email['message'] );
+		$this->assertContains( 'Content-Type: text/html; charset=UTF-8', $email['headers'] );
+	}
+
+	public function test_password_changed_email_can_be_disabled() {
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'email_password_changed_disabled' => true,
+		);
+
+		$service = new ALYNT_AG_Email_Template_Service();
+
+		$this->assertFalse( $service->filter_send_password_change_email( true, new WP_User(), array() ) );
+	}
+
+	public function test_password_changed_email_filter_returns_branded_email_array() {
+		$service = new ALYNT_AG_Email_Template_Service();
+		$email   = $service->filter_password_change_email(
+			array(
+				'to'      => 'customer@example.test',
+				'subject' => 'Core subject',
+				'message' => 'Core message',
+				'headers' => array(),
+			),
+			new WP_User( 'customer@example.test' ),
+			array()
+		);
+
+		$this->assertStringContainsString( 'password was changed', $email['subject'] );
+		$this->assertStringContainsString( 'Damon', $email['message'] );
+		$this->assertContains( 'Content-Type: text/html; charset=UTF-8', $email['headers'] );
+	}
+
+	public function test_email_change_email_can_be_disabled() {
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'email_change_confirmation_disabled' => true,
+		);
+
+		$service = new ALYNT_AG_Email_Template_Service();
+
+		$this->assertFalse( $service->filter_send_email_change_email( true, new WP_User(), array() ) );
+	}
+
+	public function test_email_change_email_filter_returns_branded_email_array() {
+		$service = new ALYNT_AG_Email_Template_Service();
+		$email   = $service->filter_email_change_email(
+			array(
+				'to'      => 'customer@example.test',
+				'subject' => 'Core subject',
+				'message' => 'Core message',
+				'headers' => array(),
+			),
+			new WP_User( 'customer@example.test' ),
+			array()
+		);
+
+		$this->assertStringContainsString( 'Confirm your email address', $email['subject'] );
+		$this->assertStringContainsString( 'Damon', $email['message'] );
+		$this->assertContains( 'Content-Type: text/html; charset=UTF-8', $email['headers'] );
+	}
+
+	public function test_new_user_email_content_filter_returns_plain_branded_body_with_core_placeholder() {
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'email_change_confirmation_body' => 'Hi {{first_name}}, confirm {{user_email}} here:',
+		);
+
+		$service = new ALYNT_AG_Email_Template_Service();
+		$content = $service->filter_new_user_email_content(
+			'Core message',
+			array(
+				'hash'     => 'abc123',
+				'newemail' => 'new@example.test',
+			)
+		);
+
+		$this->assertStringContainsString( 'Damon', $content );
+		$this->assertStringContainsString( 'new@example.test', $content );
+		$this->assertStringContainsString( '###ADMIN_URL###', $content );
+		$this->assertStringNotContainsString( '<html', $content );
+	}
+}

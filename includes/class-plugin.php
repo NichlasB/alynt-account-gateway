@@ -34,6 +34,9 @@ class ALYNT_AG_Plugin {
 		$rate_limiter = new ALYNT_AG_Rate_Limiter();
 		$rate_limiter->register();
 
+		$email_templates = new ALYNT_AG_Email_Template_Service();
+		$email_templates->register();
+
 		$auth = new ALYNT_AG_Auth_Service();
 		$auth->register();
 

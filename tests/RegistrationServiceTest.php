@@ -12,6 +12,13 @@ use PHPUnit\Framework\TestCase;
  */
 class RegistrationServiceTest extends TestCase {
 
+	protected function setUp(): void {
+		parent::setUp();
+		$GLOBALS['alynt_ag_test_mail'] = array();
+		$GLOBALS['alynt_ag_test_options'] = array();
+		$GLOBALS['alynt_ag_test_transients'] = array();
+	}
+
 	public function test_confirmation_token_hash_does_not_store_raw_token() {
 		$service = new ALYNT_AG_Registration_Service();
 		$token   = 'sample-token';
@@ -147,5 +154,38 @@ class RegistrationServiceTest extends TestCase {
 		};
 
 		$this->assertTrue( $service->resend_confirmation( 'missing@example.test', array() ) );
+	}
+
+	public function test_account_created_welcome_email_sends_by_default() {
+		$service = new ALYNT_AG_Registration_Service();
+		$pending = (object) array(
+			'email'      => 'customer@example.test',
+			'first_name' => 'Damon',
+			'last_name'  => 'Paulo',
+		);
+
+		$result = $service->send_account_created_welcome_email( $pending, 123, ALYNT_AG_Settings_Schema::defaults() );
+
+		$this->assertTrue( $result );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_mail'] );
+		$this->assertSame( 'customer@example.test', $GLOBALS['alynt_ag_test_mail'][0]['to'] );
+		$this->assertStringContainsString( 'Welcome to Example Store', $GLOBALS['alynt_ag_test_mail'][0]['subject'] );
+		$this->assertStringContainsString( 'View Account', $GLOBALS['alynt_ag_test_mail'][0]['message'] );
+	}
+
+	public function test_account_created_welcome_email_can_be_disabled() {
+		$service  = new ALYNT_AG_Registration_Service();
+		$pending  = (object) array(
+			'email'      => 'customer@example.test',
+			'first_name' => 'Damon',
+			'last_name'  => 'Paulo',
+		);
+		$settings = array_merge(
+			ALYNT_AG_Settings_Schema::defaults(),
+			array( 'email_new_user_welcome_disabled' => true )
+		);
+
+		$this->assertTrue( $service->send_account_created_welcome_email( $pending, 123, $settings ) );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_mail'] );
 	}
 }

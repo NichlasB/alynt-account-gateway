@@ -55,6 +55,19 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertArrayHasKey( 'invalid_link_text', $defaults );
 	}
 
+	public function test_email_template_defaults_exist() {
+		$defaults = ALYNT_AG_Settings_Schema::defaults();
+
+		$this->assertArrayHasKey( 'email_registration_confirmation_subject', $defaults );
+		$this->assertArrayHasKey( 'email_password_reset_subject', $defaults );
+		$this->assertArrayHasKey( 'email_password_changed_subject', $defaults );
+		$this->assertArrayHasKey( 'email_new_user_welcome_subject', $defaults );
+		$this->assertArrayHasKey( 'email_change_confirmation_subject', $defaults );
+		$this->assertFalse( $defaults['email_password_changed_disabled'] );
+		$this->assertFalse( $defaults['email_new_user_welcome_disabled'] );
+		$this->assertFalse( $defaults['email_change_confirmation_disabled'] );
+	}
+
 	public function test_reoon_default_policy_blocks_expected_statuses() {
 		$client = new ALYNT_AG_Reoon_Client();
 
