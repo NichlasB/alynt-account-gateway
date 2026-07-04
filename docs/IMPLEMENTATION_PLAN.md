@@ -1,4 +1,4 @@
-﻿# Alynt Account Gateway Implementation Plan
+# Alynt Account Gateway Implementation Plan
 
 ## Status
 
@@ -243,7 +243,7 @@
 
 - [x] Scaffold plugin in the existing empty target folder.
 - [x] Initialize Git repository.
-- [x] Add `.windsurfrules`.
+- [x] Add `AI_CODING_RULES.md`.
 - [x] Add main plugin file with plugin header, version constant, text domain, and GitHub Plugin URI.
 - [x] Add loader, activator, deactivator, i18n, and core plugin bootstrap classes.
 - [x] Add Composer tooling for PHPCS/WPCS and PHPUnit/Brain Monkey.
@@ -389,7 +389,7 @@
 ### 2026-07-04
 
 - Completed pre-release review sequence `01` through `13` from the wp-plugin-toolkit.
-- Fixed release hygiene issue where `.windsurfrules` would have been included in the GitHub release zip.
+- Fixed release hygiene issue where `AI_CODING_RULES.md` would have been included in the GitHub release zip.
 - Fixed admin media preview DOM handling by replacing `innerHTML` with explicit image node creation.
 - Fixed uninstall cleanup coverage for the scheduled retention hook and transient-backed rate-limit buckets.
 - Added HTTPS enforcement for public account-created webhook URLs while allowing local development hosts (`localhost`, `127.0.0.1`, `::1`, and `.local`).
@@ -419,7 +419,7 @@
 - Scaffold/observability checkpoint commit: `c0daf48` (`Scaffold account gateway foundation`).
 - Design workflow Phase 1 has been completed using the supplied login/register/lost-password screenshots as visual references.
 - Design export received and distilled into `docs/DESIGN_HANDOFF.md`; use it as the implementation source for frontend gateway templates.
-- Next toolkit step before scaffold: use `d1-setup/windsurf-wp-config.md` Section 2 to create the scaffold master prompt.
+- Next toolkit step before scaffold: use `d1-setup/ai-plugin-setup-reference.md` Section 2 to create the scaffold master prompt.
 - After scaffold, route to `@ADD_OBSERVABILITY_TOOLING_PROMPT.md run` before heavy feature work.
 - After each major feature, run the feature review sequence: light review, bloat/structure review, UI/UX review, and security review.
 - Before release, run pre-release prompts `@01` through `@13` in filename order, keeping security last.

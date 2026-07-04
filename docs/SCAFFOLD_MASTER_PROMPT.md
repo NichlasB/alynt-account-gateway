@@ -155,7 +155,7 @@ I'm creating a WordPress plugin with the following details:
 - Keep local `deploy.sh` ignored.
 
 **Setup Instructions:**
-1. Create complete folder structure per `.windsurfrules`.
+1. Create complete folder structure per `AI_CODING_RULES.md`.
 2. Generate main plugin file with proper header:
    - `Plugin Name: Alynt Account Gateway`
    - `Version: 0.1.0`
@@ -191,6 +191,6 @@ I'm creating a WordPress plugin with the following details:
 10. Update `docs/IMPLEMENTATION_PLAN.md` Phase 1 checkboxes that are truly complete.
 11. Report remaining issues and the next recommended toolkit prompt.
 
-Follow all rules in `.windsurfrules` exactly. This is production code.
+Follow all rules in `AI_CODING_RULES.md` exactly. This is production code.
 ```
 
