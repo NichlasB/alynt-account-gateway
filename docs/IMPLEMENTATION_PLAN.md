@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.15 branch implementation checks complete
+- Current phase: v0.1.15 released and verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.14 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.15 is in branch QA preparation.
+- Plugin status: v0.1.15 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -16,7 +16,7 @@
 - [x] Extract the frontend dashboard shell and dashboard content renderer out of the large frontend renderer class without changing dashboard copy, links, logout URL behavior, WooCommerce takeover warning, endpoint content delegation, external-link accessibility text, or dashboard classes.
 - [x] Add focused test coverage around the extracted frontend dashboard screen service.
 - [x] Run branch-QA package and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.15` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.15` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -31,6 +31,9 @@
 - Removed the branch-QA zip from Plugin Tester uploads after smoke verification.
 - Bumped release-candidate metadata to `0.1.15` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 145 tests and 623 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.15-20260704-214210\alynt-account-gateway-v0.1.15.zip`; verified built frontend/admin assets and the new frontend dashboard screen service are included, dev/source/test/docs/rules/package/vendor files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.15`.
+- Published GitHub release `v0.1.15`, downloaded the public release asset, and verified the downloaded package has 53 archive entries including directories, 43 runtime file entries, no backslash archive entries, no dev/source/test/docs/rules/package/vendor files, built frontend/admin CSS/JS assets, the new frontend dashboard screen service, and `0.1.15` header/constant metadata.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.14` to `0.1.15`, then installed it through the WordPress upgrader path. Final server-side state: active `0.1.15` header/constant, `ALYNT_AG_Frontend_Dashboard_Screen` file/class loaded, dashboard shell rendering succeeds, and no remaining update offer.
+- HTTP-smoked the release-installed Plugin Tester copy at `/login`, `/account?action=invalidlink`, and `/my-account/`; public gateway routes rendered branded output with frontend JS assets and no native login shell, and logged-out dashboard access redirected to `/login?redirect_to=...`.
 
 ### Guardrails
 
@@ -42,7 +45,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates representative gateway routes after the dashboard screen extraction.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.14 Small Release Cycle
 
