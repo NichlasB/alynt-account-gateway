@@ -91,4 +91,29 @@ class WebhookDispatcherTest extends TestCase {
 		$this->assertStringContainsString( '"event":"account.created"', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['body'] );
 		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
 	}
+
+	public function test_dispatch_account_created_rejects_public_http_webhook_url() {
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+		$result     = $dispatcher->dispatch_account_created(
+			321,
+			array(
+				'account_created_webhook' => 'http://hooks.example.test/account-created',
+				'debug_payload_logging'   => false,
+			)
+		);
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'alynt_ag_webhook_insecure_url', $result->get_error_code() );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_remote_posts'] );
+	}
+
+	public function test_local_http_webhook_urls_are_allowed_for_development() {
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+
+		$this->assertTrue( $dispatcher->is_allowed_delivery_url( 'http://localhost:8080/account-created' ) );
+		$this->assertTrue( $dispatcher->is_allowed_delivery_url( 'http://127.0.0.1:8080/account-created' ) );
+		$this->assertTrue( $dispatcher->is_allowed_delivery_url( 'http://plugin-tester.local/account-created' ) );
+		$this->assertTrue( $dispatcher->is_allowed_delivery_url( 'https://hooks.example.test/account-created' ) );
+		$this->assertFalse( $dispatcher->is_allowed_delivery_url( 'http://hooks.example.test/account-created' ) );
+	}
 }

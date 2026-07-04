@@ -1,6 +1,6 @@
 <?php
 /**
- * WooCommerce integration placeholder.
+ * WooCommerce integration.
  *
  * @package Alynt_Account_Gateway
  */

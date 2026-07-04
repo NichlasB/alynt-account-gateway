@@ -1,6 +1,6 @@
 <?php
 /**
- * Cloudflare Turnstile client placeholder.
+ * Cloudflare Turnstile client.
  *
  * @package Alynt_Account_Gateway
  */

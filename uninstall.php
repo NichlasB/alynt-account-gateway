@@ -12,6 +12,8 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 delete_option( 'alynt_ag_settings' );
 delete_option( 'alynt_ag_db_version' );
 
+wp_clear_scheduled_hook( 'alynt_ag_retention_cleanup' );
+
 global $wpdb;
 
 $tables = array(
@@ -28,3 +30,13 @@ foreach ( $tables as $table ) {
 	$wpdb->query( "DROP TABLE IF EXISTS {$table}" );
 	// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 }
+
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Uninstall removes plugin-owned transient option rows.
+$wpdb->query(
+	$wpdb->prepare(
+		"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+		$wpdb->esc_like( '_transient_alynt_ag_rl_' ) . '%',
+		$wpdb->esc_like( '_transient_timeout_alynt_ag_rl_' ) . '%'
+	)
+);
+// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching

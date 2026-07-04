@@ -4,7 +4,7 @@
 
 - Current phase: Plugin Tester browser QA completed; release-readiness hardening pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: Initial scaffold and observability foundation committed in Git checkpoint `c0daf48`
+- Plugin status: Pre-release readiness pass in progress after LocalWP Plugin Tester install, WooCommerce QA, and release-style package verification.
 - Frontend output default: Disabled
 - Distribution: Private Alynt-distributed plugin with GitHub updater compatibility
 
@@ -135,7 +135,7 @@
 - [x] Ensure frontend account-gateway strings are translatable and localize frontend JS labels through WordPress.
 - [x] Generate POT file.
 - [x] Ensure RTL-safe CSS for frontend gateway surfaces.
-- [ ] Run full pre-release workflow sequence before release.
+- [x] Run pre-release workflow sequence through cleanup, structure, error handling, WP practices, database, performance, edge cases, uninstall, i18n, accessibility, code quality, documentation, and security review.
 
 ## Test Plan
 
@@ -161,19 +161,38 @@
 - [x] Verify `npm run lint`.
 - [x] Verify `npm test`.
 - [x] Verify `npm run make-pot`.
+- [x] Verify PHP syntax across runtime and test PHP files.
+- [x] Verify `npm audit --audit-level=high`.
+- [x] Verify `composer audit`.
+- [x] Verify release-style zip locally with GitHub workflow exclusions.
 - [ ] Verify generated release zip through GitHub release workflow.
 
 ## Release Gates
 
-- [ ] Frontend output remains disabled by default on fresh install.
-- [ ] Emergency bypass opens native login only and never authenticates users.
+- [x] Frontend output remains disabled by default on fresh install.
+- [x] Emergency bypass opens native login only and never authenticates users.
 - [x] No standard WordPress core account screen is exposed during normal enabled frontend use.
-- [ ] Registration creates no WordPress user until email confirmation and password setup are complete.
+- [x] Registration creates no WordPress user until email confirmation and password setup are complete.
 - [x] WooCommerce account features remain usable when the custom dashboard is enabled.
-- [ ] Accessibility acceptance criteria pass.
-- [ ] Multilingual/i18n acceptance criteria pass.
-- [ ] Privacy exporter/eraser and retention controls are present.
+- [x] Accessibility acceptance criteria pass for implemented gateway/dashboard surfaces.
+- [x] Multilingual/i18n acceptance criteria pass for implemented strings and generated POT.
+- [x] Privacy exporter/eraser and retention controls are present.
 - [ ] Alynt Plugin Updater compatibility is verified with a release asset.
+
+## Pre-Release Audit Notes
+
+### 2026-07-04
+
+- Completed pre-release review sequence `01` through `13` from the wp-plugin-toolkit.
+- Fixed release hygiene issue where `.windsurfrules` would have been included in the GitHub release zip.
+- Fixed admin media preview DOM handling by replacing `innerHTML` with explicit image node creation.
+- Fixed uninstall cleanup coverage for the scheduled retention hook and transient-backed rate-limit buckets.
+- Added HTTPS enforcement for public account-created webhook URLs while allowing local development hosts (`localhost`, `127.0.0.1`, `::1`, and `.local`).
+- Updated README, `readme.txt`, changelog, settings docs, and hooks docs to reflect the implemented feature set instead of scaffold status.
+- Regenerated `languages/alynt-account-gateway.pot` after the new webhook security string.
+- Verified local release-style zip excludes source assets, dev dependencies, tests, docs, scripts, GitHub metadata, maps, Composer/npm files, and editor rules.
+- Structural debt remains: `public/class-frontend.php`, `includes/services/class-registration-service.php`, and several admin/settings/template classes are larger than ideal. They are intentionally left intact for this release pass because splitting them now would be a high-blast-radius refactor after browser QA.
+- Remaining release decisions: choose final release version/tag, create the GitHub release asset, verify Alynt Plugin Updater against that asset, and optionally add uninstall-specific unit coverage.
 
 ## Workflow Notes
 
@@ -218,6 +237,7 @@
 - Fixed QA findings: successful login with no submitted `redirect_to` now redirects to the configured dashboard instead of preserving the underlying 404 response, and the registration submit button now remains disabled until required fields, valid email, and terms acceptance are complete.
 - Installed and activated WooCommerce on LocalWP Plugin Tester, enabled the account gateway WooCommerce takeover, and browser-tested the custom dashboard plus native Orders, Downloads, Addresses, Payment Methods, and Account Details endpoint delegation.
 - Fixed WooCommerce QA finding: required standard account facilities such as Payment Methods are restored in the custom dashboard navigation when WooCommerce omits them from its menu helper on a minimal store.
+- Completed pre-release cleanup/security/documentation/package pass: hardened webhook URL scheme policy, expanded uninstall cleanup, removed admin preview `innerHTML`, refreshed docs/readme/changelog/hooks/settings notes, regenerated POT, fixed release zip exclusions, and verified build/lint/tests/audits/package locally.
 - Completed the initial scaffold, initialized Git, installed dependencies, and verified build/lint/test/audit.
 - Added scaffold master prompt artifact for the initial plugin foundation.
 - Created initial implementation plan from approved product-planning decisions.

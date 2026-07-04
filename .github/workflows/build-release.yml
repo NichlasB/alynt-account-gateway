@@ -52,6 +52,7 @@ jobs:
                     --exclude='.gitattributes' \
                     --exclude='.phpcs.xml' \
                     --exclude='.phpunit.result.cache' \
+                    --exclude='.windsurfrules' \
                     --exclude='phpunit.xml' \
                     --exclude='phpunit.xml.dist' \
                     --exclude='composer.phar' \

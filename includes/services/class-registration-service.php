@@ -1,6 +1,6 @@
 <?php
 /**
- * Registration service placeholder.
+ * Registration service.
  *
  * @package Alynt_Account_Gateway
  */

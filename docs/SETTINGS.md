@@ -8,9 +8,12 @@ Settings are stored in the `alynt_ag_settings` option and defined in `ALYNT_AG_S
 - `login_path`: `/login`
 - `account_action_base`: `/account`
 - `after_login_redirect`: `/my-account/`
+- `emergency_bypass_key`: generated secret on activation/default creation
 - `registration_enabled`: `false`
 - `registration_token_hours`: `24`
 - `username_format`: `@User_{first_name}_{last_name}`
+- `terms_path`: `/terms/`
+- `privacy_path`: `/legal/privacy/`
 - `brand_logo_id`: `0`
 - `brand_logo_max_width`: `220`
 - `background_image_id`: `0`
@@ -92,6 +95,8 @@ Custom dashboard links are stored in `dashboard_custom_links` as a JSON array. E
 When `dashboard_enabled` and `woocommerce_takeover` are both enabled and WooCommerce is active, requests under the configured `after_login_redirect` path are rendered inside the branded dashboard. Standard WooCommerce account endpoints such as orders, downloads, addresses, account details, and payment methods are delegated to WooCommerce endpoint actions. Plugin-added account endpoints are discovered from WooCommerce account menu items and routed through the same endpoint action pattern.
 
 Registration consent is stored without IP addresses by default. Consent records include email, user ID when available, terms path, privacy path, consent context, plugin version, settings hash, and timestamp. WordPress personal data exporter/eraser callbacks cover pending registrations, consent records, email verification logs, webhook metadata, and audit entries.
+
+The emergency bypass key allows a site owner to visit `wp-login.php?alynt_ag_bypass={key}` when frontend output is enabled. It only bypasses the branded screen redirect and does not authenticate the visitor or grant admin access.
 
 ## Diagnostics
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Webhook dispatcher placeholder.
+ * Webhook dispatcher.
  *
  * @package Alynt_Account_Gateway
  */
@@ -25,6 +25,10 @@ class ALYNT_AG_Webhook_Dispatcher {
 		$url = ! empty( $settings['account_created_webhook'] ) ? esc_url_raw( $settings['account_created_webhook'] ) : '';
 		if ( ! $url ) {
 			return true;
+		}
+
+		if ( ! $this->is_allowed_delivery_url( $url ) ) {
+			return new WP_Error( 'alynt_ag_webhook_insecure_url', __( 'Webhook URLs must use HTTPS unless they point to a local development host.', 'alynt-account-gateway' ) );
 		}
 
 		$user = get_userdata( absint( $user_id ) );
@@ -57,6 +61,27 @@ class ALYNT_AG_Webhook_Dispatcher {
 		}
 
 		return is_wp_error( $log_result ) ? $log_result : true;
+	}
+
+	/**
+	 * Return whether a webhook URL is safe for delivery.
+	 *
+	 * @param string $url Webhook URL.
+	 * @return bool
+	 */
+	public function is_allowed_delivery_url( $url ) {
+		$scheme = (string) wp_parse_url( $url, PHP_URL_SCHEME );
+		$host   = strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) );
+
+		if ( 'https' === $scheme ) {
+			return true;
+		}
+
+		if ( 'http' !== $scheme ) {
+			return false;
+		}
+
+		return in_array( $host, array( 'localhost', '127.0.0.1', '::1' ), true ) || '.local' === substr( $host, -6 );
 	}
 
 	/**

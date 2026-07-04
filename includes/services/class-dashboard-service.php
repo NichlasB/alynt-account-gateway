@@ -1,6 +1,6 @@
 <?php
 /**
- * Dashboard service placeholder.
+ * Dashboard service.
  *
  * @package Alynt_Account_Gateway
  */

@@ -1,6 +1,6 @@
 <?php
 /**
- * Reoon Email Verifier client placeholder.
+ * Reoon Email Verifier client.
  *
  * @package Alynt_Account_Gateway
  */

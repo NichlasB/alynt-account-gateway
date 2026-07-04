@@ -1,6 +1,6 @@
 <?php
 /**
- * Privacy service placeholder.
+ * Privacy service.
  *
  * @package Alynt_Account_Gateway
  */

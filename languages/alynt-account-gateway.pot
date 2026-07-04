@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 08:23+0000\n"
+"POT-Creation-Date: 2026-07-04 09:38+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -50,7 +50,7 @@ msgstr ""
 
 #: includes/services/class-dashboard-service.php:32
 #: includes/services/class-woocommerce-integration.php:29
-#: includes/services/class-woocommerce-integration.php:74
+#: includes/services/class-woocommerce-integration.php:85
 msgid "Account Details"
 msgstr ""
 
@@ -71,7 +71,7 @@ msgid "Add Payment Method"
 msgstr ""
 
 #: includes/services/class-woocommerce-integration.php:28
-#: includes/services/class-woocommerce-integration.php:72
+#: includes/services/class-woocommerce-integration.php:83
 msgid "Addresses"
 msgstr ""
 
@@ -281,7 +281,7 @@ msgstr ""
 
 #: includes/class-settings-schema.php:31
 #: includes/services/class-woocommerce-integration.php:24
-#: includes/services/class-woocommerce-integration.php:69
+#: includes/services/class-woocommerce-integration.php:80
 msgid "Dashboard"
 msgstr ""
 
@@ -330,7 +330,7 @@ msgid "Disable Password Changed Email"
 msgstr ""
 
 #: includes/services/class-woocommerce-integration.php:27
-#: includes/services/class-woocommerce-integration.php:71
+#: includes/services/class-woocommerce-integration.php:82
 msgid "Downloads"
 msgstr ""
 
@@ -575,7 +575,7 @@ msgstr ""
 
 #: includes/services/class-dashboard-service.php:40
 #: includes/services/class-woocommerce-integration.php:34
-#: includes/services/class-woocommerce-integration.php:75
+#: includes/services/class-woocommerce-integration.php:86
 #: public/class-frontend.php:1063
 #: public/class-frontend.php:450
 #: public/class-frontend.php:883
@@ -650,7 +650,7 @@ msgid "Order Details"
 msgstr ""
 
 #: includes/services/class-woocommerce-integration.php:25
-#: includes/services/class-woocommerce-integration.php:70
+#: includes/services/class-woocommerce-integration.php:81
 msgid "Orders"
 msgstr ""
 
@@ -725,7 +725,7 @@ msgid "Paulo"
 msgstr ""
 
 #: includes/services/class-woocommerce-integration.php:30
-#: includes/services/class-woocommerce-integration.php:73
+#: includes/services/class-woocommerce-integration.php:84
 msgid "Payment Methods"
 msgstr ""
 
@@ -1039,15 +1039,15 @@ msgstr ""
 msgid "The test email could not be sent. Check the recipient and mail configuration."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:134
+#: includes/services/class-webhook-dispatcher.php:159
 msgid "The webhook delivery log could not be stored."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:56
+#: includes/services/class-webhook-dispatcher.php:60
 msgid "The webhook endpoint returned an unsuccessful response."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:32
+#: includes/services/class-webhook-dispatcher.php:36
 msgid "The webhook user could not be found."
 msgstr ""
 
@@ -1162,6 +1162,10 @@ msgstr ""
 
 #: includes/services/class-privacy-service.php:241
 msgid "Webhook Delivery Metadata"
+msgstr ""
+
+#: includes/services/class-webhook-dispatcher.php:31
+msgid "Webhook URLs must use HTTPS unless they point to a local development host."
 msgstr ""
 
 #: includes/class-settings-schema.php:33

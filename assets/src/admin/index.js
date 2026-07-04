@@ -33,9 +33,13 @@ function alyntAgOpenMediaFrame( field ) {
 			const attachment = frame.state().get( 'selection' ).first().toJSON();
 			const medium     = attachment.sizes && attachment.sizes.medium ? attachment.sizes.medium : null;
 			const imageUrl   = medium ? medium.url : attachment.url;
+			const image      = document.createElement( 'img' );
 
-			input.value           = attachment.id;
-			preview.innerHTML     = '<img src="' + imageUrl + '" alt="">';
+			image.src = imageUrl;
+			image.alt = '';
+
+			input.value = attachment.id;
+			preview.replaceChildren( image );
 			removeButton.disabled = false;
 		}
 	);
@@ -56,8 +60,8 @@ function alyntAgHandleMediaClick( event ) {
 		const input   = field.querySelector( '[data-alynt-ag-media-input]' );
 		const preview = field.querySelector( '[data-alynt-ag-media-preview]' );
 
-		input.value           = '0';
-		preview.innerHTML     = '';
+		input.value = '0';
+		preview.replaceChildren();
 		removeButton.disabled = true;
 	}
 }
