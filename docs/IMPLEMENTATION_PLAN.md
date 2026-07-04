@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.12 small release cycle started on branch `release/0.1.12`
+- Current phase: v0.1.12 released and verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.11 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.12 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,6 +31,9 @@
 - Removed the branch-QA zip from Plugin Tester uploads.
 - Bumped release-candidate metadata to `0.1.12` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 131 tests and 524 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.12-20260704-193759\alynt-account-gateway-v0.1.12.zip`; verified built frontend/admin assets and the new frontend login screen service are included, dev/source/test/docs/rules/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.12`.
+- Published GitHub release `v0.1.12`, downloaded the public release asset, and verified the downloaded package has 50 archive entries including directories, 40 runtime file entries, no backslash archive entries, no dev/source/test/docs/rules/package files, built frontend/admin CSS/JS assets, the new frontend login screen service, and `0.1.12` header/constant metadata.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.11` to `0.1.12`, then installed it through the WordPress Plugins screen update path. Final server-side state: active `0.1.12` header/constant, `ALYNT_AG_Frontend_Login_Screen` file/class loaded, and no remaining update offer.
+- Browser-smoked the release-installed Plugin Tester copy at `/login`, `/login?registration_complete=1&password_reset=1&redirect_to=...`, `/login?login_error=alynt_ag_rate_limited`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and preserved expected screen states.
 
 ### Guardrails
 
@@ -42,7 +45,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates representative gateway routes after the login screen extraction.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.11 Small Release Cycle
 
