@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Account routing and gateway screen foundation implemented; form workflows pending
+- Current phase: Privacy, accessibility, i18n, and release-readiness hardening in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: Initial scaffold and observability foundation committed in Git checkpoint `c0daf48`
 - Frontend output default: Disabled
@@ -130,11 +130,11 @@
 - [x] Add retention settings for verification logs, webhook logs, consent records, and audit entries.
 - [x] Store consent record with terms/privacy URLs, timestamp, and policy/version context.
 - [x] Avoid storing IP by default unless explicitly enabled.
-- [ ] Ensure visible labels, keyboard operation, focus states, inline validation, `aria-invalid`, and live-region messages.
-- [ ] Ensure responsive behavior down to 320px.
-- [ ] Ensure all user-facing strings are translatable.
-- [ ] Generate POT file.
-- [ ] Ensure RTL-safe CSS.
+- [x] Ensure visible labels, keyboard operation, focus states, inline validation, `aria-invalid`, and live-region messages.
+- [x] Add responsive CSS guardrails down to 320px.
+- [x] Ensure frontend account-gateway strings are translatable and localize frontend JS labels through WordPress.
+- [x] Generate POT file.
+- [x] Ensure RTL-safe CSS for frontend gateway surfaces.
 - [ ] Run full pre-release workflow sequence before release.
 
 ## Test Plan
@@ -157,9 +157,10 @@
 - [ ] Browser/manual QA keyboard-only flow and focus management.
 - [ ] Browser/manual QA email preview and test-send.
 - [ ] Browser/manual QA WooCommerce dashboard delegation.
-- [ ] Verify `npm run build`.
-- [ ] Verify `npm run lint`.
-- [ ] Verify `npm test`.
+- [x] Verify `npm run build`.
+- [x] Verify `npm run lint`.
+- [x] Verify `npm test`.
+- [x] Verify `npm run make-pot`.
 - [ ] Verify generated release zip through GitHub release workflow.
 
 ## Release Gates
@@ -212,6 +213,7 @@
 - Added Phase 5 email foundation: editable template settings for account emails, branded HTML/plain rendering, preview and test-send admin tools, and registration confirmation emails routed through the renderer.
 - Added native email overrides for WordPress password reset, password changed, and email-change notification emails, including branded HTML output, gateway reset links, and disable toggles for password/email change notifications.
 - Added observability tooling: diagnostics settings, structured logs, health/recent-event UI, export/clear actions, retention cleanup, and redaction tests.
+- Added frontend accessibility/i18n hardening: server error IDs and `aria-describedby` wiring, translated password-toggle JavaScript labels, new-tab screen-reader text, Turnstile/verification semantics, RTL-safe frontend CSS, 320px responsive guardrails, repeatable POT generation tooling, and regenerated the plugin POT file.
 - Completed the initial scaffold, initialized Git, installed dependencies, and verified build/lint/test/audit.
 - Added scaffold master prompt artifact for the initial plugin foundation.
 - Created initial implementation plan from approved product-planning decisions.

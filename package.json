@@ -9,6 +9,7 @@
     "dev": "node scripts/build.mjs --watch",
     "lint": "php ./vendor/bin/phpcs --standard=.phpcs.xml .",
     "lint:fix": "php ./vendor/bin/phpcbf --standard=.phpcs.xml .",
+    "make-pot": "node scripts/make-pot.mjs",
     "test": "php ./vendor/bin/phpunit -c phpunit.xml.dist"
   },
   "devDependencies": {

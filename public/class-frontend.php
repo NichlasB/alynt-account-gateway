@@ -62,6 +62,19 @@ class ALYNT_AG_Frontend {
 				filemtime( $script_path ),
 				true
 			);
+
+			wp_localize_script(
+				'alynt-ag-frontend',
+				'alyntAgFrontend',
+				array(
+					'labels' => array(
+						'showPassword' => __( 'Show password', 'alynt-account-gateway' ),
+						'hidePassword' => __( 'Hide password', 'alynt-account-gateway' ),
+						'show'         => __( 'Show', 'alynt-account-gateway' ),
+						'hide'         => __( 'Hide', 'alynt-account-gateway' ),
+					),
+				)
+			);
 		}
 
 		if ( ! empty( $settings['turnstile_site_key'] ) && 'register' === $this->get_gateway_screen( $settings ) ) {
@@ -584,9 +597,9 @@ class ALYNT_AG_Frontend {
 			</div>
 		<?php endif; ?>
 		<?php if ( $error_code ) : ?>
-			<div class="agw-status agw-status--error" role="alert"><?php echo esc_html( $auth->get_login_error_message( $error_code ) ); ?></div>
+			<div id="agw-login-error" class="agw-status agw-status--error" role="alert"><?php echo esc_html( $auth->get_login_error_message( $error_code ) ); ?></div>
 		<?php endif; ?>
-		<form class="agw-form" method="post" action="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>">
+		<form class="agw-form" method="post" action="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>" <?php echo $error_code ? 'aria-describedby="agw-login-error"' : ''; ?>>
 			<input type="hidden" name="alynt_ag_action" value="login">
 			<?php wp_nonce_field( 'alynt_ag_login', 'alynt_ag_auth_nonce' ); ?>
 			<?php if ( $redirect_to ) : ?>
@@ -594,13 +607,13 @@ class ALYNT_AG_Frontend {
 			<?php endif; ?>
 			<div class="agw-field">
 				<label for="agw-login-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-login-email" name="email" type="email" autocomplete="email" required>
+				<input id="agw-login-email" name="email" type="email" autocomplete="email" required <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-login-error"' : ''; ?>>
 			</div>
 			<div class="agw-field agw-field--password">
 				<label for="agw-login-password"><?php esc_html_e( 'Password', 'alynt-account-gateway' ); ?></label>
 				<div class="agw-password">
-					<input id="agw-login-password" name="pwd" type="password" autocomplete="current-password" required>
-					<button type="button" class="agw-password__toggle" data-agw-password-toggle aria-label="<?php esc_attr_e( 'Show password', 'alynt-account-gateway' ); ?>"><?php esc_html_e( 'Show', 'alynt-account-gateway' ); ?></button>
+					<input id="agw-login-password" name="pwd" type="password" autocomplete="current-password" required <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-login-error"' : ''; ?>>
+					<button type="button" class="agw-password__toggle" data-agw-password-toggle aria-label="<?php esc_attr_e( 'Show password', 'alynt-account-gateway' ); ?>" aria-pressed="false"><?php esc_html_e( 'Show', 'alynt-account-gateway' ); ?></button>
 				</div>
 			</div>
 			<label class="agw-checkbox">
@@ -642,27 +655,27 @@ class ALYNT_AG_Frontend {
 		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Create Account', 'alynt-account-gateway' ); ?></h1>
 		<?php $this->render_notice( $settings['register_intro_text'] ); ?>
 		<?php if ( $error_code ) : ?>
-			<div class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->get_registration_error_message( $error_code ) ); ?></div>
+			<div id="agw-register-error" class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->get_registration_error_message( $error_code ) ); ?></div>
 		<?php endif; ?>
-		<form class="agw-form" method="post" action="<?php echo esc_url( home_url( $settings['account_action_base'] ) ); ?>">
+		<form class="agw-form" method="post" action="<?php echo esc_url( home_url( $settings['account_action_base'] ) ); ?>" <?php echo $error_code ? 'aria-describedby="agw-register-error"' : ''; ?>>
 			<input type="hidden" name="alynt_ag_action" value="start_registration">
 			<?php wp_nonce_field( 'alynt_ag_start_registration', 'alynt_ag_registration_nonce' ); ?>
 			<div class="agw-grid agw-grid--two">
 				<div class="agw-field">
 					<label for="agw-register-first"><?php esc_html_e( 'First Name', 'alynt-account-gateway' ); ?></label>
-					<input id="agw-register-first" name="first_name" type="text" autocomplete="given-name" required>
+					<input id="agw-register-first" name="first_name" type="text" autocomplete="given-name" required <?php echo in_array( $error_code, array( 'missing_required_fields' ), true ) ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>
 				</div>
 				<div class="agw-field">
 					<label for="agw-register-last"><?php esc_html_e( 'Last Name', 'alynt-account-gateway' ); ?></label>
-					<input id="agw-register-last" name="last_name" type="text" autocomplete="family-name" required>
+					<input id="agw-register-last" name="last_name" type="text" autocomplete="family-name" required <?php echo in_array( $error_code, array( 'missing_required_fields' ), true ) ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>
 				</div>
 			</div>
 			<div class="agw-field">
 				<label for="agw-register-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-register-email" name="email" type="email" autocomplete="email" required>
+				<input id="agw-register-email" name="email" type="email" autocomplete="email" required <?php echo in_array( $error_code, array( 'missing_required_fields', 'invalid_email', 'email_unavailable' ), true ) ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>
 			</div>
 			<label class="agw-checkbox">
-				<input name="terms" type="checkbox" required>
+				<input id="agw-register-terms" name="terms" type="checkbox" required <?php echo 'terms_required' === $error_code ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>
 				<span>
 					<?php esc_html_e( 'By creating an account, you agree to our', 'alynt-account-gateway' ); ?>
 					<a href="<?php echo esc_url( home_url( $settings['terms_path'] ) ); ?>"><?php esc_html_e( 'Terms', 'alynt-account-gateway' ); ?></a>
@@ -705,14 +718,14 @@ class ALYNT_AG_Frontend {
 		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Reset Password', 'alynt-account-gateway' ); ?></h1>
 		<?php $this->render_notice( $settings['lostpassword_intro_text'] ); ?>
 		<?php if ( $error_code ) : ?>
-			<div class="agw-status agw-status--error" role="alert"><?php echo esc_html( $auth->get_lostpassword_error_message( $error_code ) ); ?></div>
+			<div id="agw-lostpassword-error" class="agw-status agw-status--error" role="alert"><?php echo esc_html( $auth->get_lostpassword_error_message( $error_code ) ); ?></div>
 		<?php endif; ?>
-		<form class="agw-form" method="post" action="<?php echo esc_url( $this->get_url_for_action( 'lostpassword', $settings ) ); ?>">
+		<form class="agw-form" method="post" action="<?php echo esc_url( $this->get_url_for_action( 'lostpassword', $settings ) ); ?>" <?php echo $error_code ? 'aria-describedby="agw-lostpassword-error"' : ''; ?>>
 			<input type="hidden" name="alynt_ag_action" value="lostpassword">
 			<?php wp_nonce_field( 'alynt_ag_lostpassword', 'alynt_ag_auth_nonce' ); ?>
 			<div class="agw-field">
 				<label for="agw-lost-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-lost-email" name="user_login" type="email" autocomplete="email" required>
+				<input id="agw-lost-email" name="user_login" type="email" autocomplete="email" required <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-lostpassword-error"' : ''; ?>>
 			</div>
 			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Reset Password', 'alynt-account-gateway' ); ?></button>
 			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
@@ -816,9 +829,9 @@ class ALYNT_AG_Frontend {
 		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Set New Password', 'alynt-account-gateway' ); ?></h1>
 		<?php $this->render_notice( $settings['setpassword_intro_text'] ); ?>
 		<?php if ( $error_code ) : ?>
-			<div class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->get_password_error_message( $error_code ) ); ?></div>
+			<div id="agw-password-error" class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->get_password_error_message( $error_code ) ); ?></div>
 		<?php endif; ?>
-		<form class="agw-form" method="post" action="<?php echo esc_url( $action_url ); ?>" data-agw-password-form>
+		<form class="agw-form" method="post" action="<?php echo esc_url( $action_url ); ?>" data-agw-password-form <?php echo $error_code ? 'aria-describedby="agw-password-error"' : ''; ?>>
 			<input type="hidden" name="alynt_ag_action" value="<?php echo esc_attr( $action ); ?>">
 			<?php wp_nonce_field( $nonce_action, $nonce_name ); ?>
 			<?php foreach ( $hidden as $name => $value ) : ?>
@@ -826,11 +839,11 @@ class ALYNT_AG_Frontend {
 			<?php endforeach; ?>
 			<div class="agw-field agw-field--password">
 				<label for="agw-set-password"><?php esc_html_e( 'New Password', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-set-password" name="password" type="password" autocomplete="new-password" aria-describedby="agw-password-status agw-password-requirements" data-agw-password-input required>
+				<input id="agw-set-password" name="password" type="password" autocomplete="new-password" aria-describedby="<?php echo esc_attr( $error_code ? 'agw-password-error agw-password-status agw-password-requirements' : 'agw-password-status agw-password-requirements' ); ?>" <?php echo $error_code ? 'aria-invalid="true"' : ''; ?> data-agw-password-input required>
 			</div>
 			<div class="agw-field agw-field--password">
 				<label for="agw-set-confirm"><?php esc_html_e( 'Confirm Password', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-set-confirm" name="password_confirm" type="password" autocomplete="new-password" aria-describedby="agw-password-status agw-password-requirements" data-agw-password-confirm required>
+				<input id="agw-set-confirm" name="password_confirm" type="password" autocomplete="new-password" aria-describedby="<?php echo esc_attr( $error_code ? 'agw-password-error agw-password-status agw-password-requirements' : 'agw-password-status agw-password-requirements' ); ?>" <?php echo $error_code ? 'aria-invalid="true"' : ''; ?> data-agw-password-confirm required>
 			</div>
 			<div class="agw-strength" data-agw-strength data-agw-strength-score="0" data-agw-message-empty="<?php esc_attr_e( 'Enter a password to begin.', 'alynt-account-gateway' ); ?>" data-agw-message-weak="<?php esc_attr_e( 'Keep going.', 'alynt-account-gateway' ); ?>" data-agw-message-good="<?php esc_attr_e( 'Almost there.', 'alynt-account-gateway' ); ?>" data-agw-message-ready="<?php esc_attr_e( 'Password is ready.', 'alynt-account-gateway' ); ?>" aria-live="polite">
 				<span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
@@ -933,14 +946,14 @@ class ALYNT_AG_Frontend {
 			</div>
 		<?php endif; ?>
 		<?php if ( $error_code ) : ?>
-			<div class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->get_resend_error_message( $error_code ) ); ?></div>
+			<div id="agw-resend-error" class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->get_resend_error_message( $error_code ) ); ?></div>
 		<?php endif; ?>
-		<form class="agw-form" method="post" action="<?php echo esc_url( $resend_action ); ?>">
+		<form class="agw-form" method="post" action="<?php echo esc_url( $resend_action ); ?>" <?php echo $error_code ? 'aria-describedby="agw-resend-error"' : ''; ?>>
 			<input type="hidden" name="alynt_ag_action" value="resend_confirmation">
 			<?php wp_nonce_field( 'alynt_ag_resend_confirmation', 'alynt_ag_registration_nonce' ); ?>
 			<div class="agw-field">
 				<label for="agw-invalid-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-invalid-email" name="email" type="email" autocomplete="email" required>
+				<input id="agw-invalid-email" name="email" type="email" autocomplete="email" required <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-resend-error"' : ''; ?>>
 			</div>
 			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Send New Link', 'alynt-account-gateway' ); ?></button>
 			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
@@ -979,7 +992,7 @@ class ALYNT_AG_Frontend {
 		</section>
 
 		<?php if ( ! empty( $settings['woocommerce_takeover'] ) && ! $dashboard->woocommerce_available() ) : ?>
-			<div class="agw-status agw-status--error" role="status">
+			<div class="agw-status agw-status--error" role="alert">
 				<?php esc_html_e( 'WooCommerce account takeover is enabled, but WooCommerce is not active.', 'alynt-account-gateway' ); ?>
 			</div>
 		<?php endif; ?>
@@ -991,6 +1004,9 @@ class ALYNT_AG_Frontend {
 					<a class="agw-dashboard-link" href="<?php echo esc_url( $link['url'] ); ?>" target="<?php echo esc_attr( $link['target'] ); ?>" <?php echo '_blank' === $link['target'] ? 'rel="noopener noreferrer"' : ''; ?>>
 						<span class="agw-dashboard-link__icon agw-dashboard-link__icon--<?php echo esc_attr( $link['icon'] ); ?>" aria-hidden="true"></span>
 						<span class="agw-dashboard-link__label"><?php echo esc_html( $link['label'] ); ?></span>
+						<?php if ( '_blank' === $link['target'] ) : ?>
+							<span class="screen-reader-text"><?php esc_html_e( 'opens in a new tab', 'alynt-account-gateway' ); ?></span>
+						<?php endif; ?>
 					</a>
 				<?php endforeach; ?>
 			</div>
@@ -1020,14 +1036,14 @@ class ALYNT_AG_Frontend {
 	private function render_verification_slot( $settings ) {
 		if ( ! empty( $settings['turnstile_site_key'] ) ) {
 			?>
-			<div class="agw-verification-slot">
+			<div class="agw-verification-slot" aria-label="<?php esc_attr_e( 'Account verification', 'alynt-account-gateway' ); ?>">
 				<div class="cf-turnstile" data-sitekey="<?php echo esc_attr( $settings['turnstile_site_key'] ); ?>"></div>
 			</div>
 			<?php
 			return;
 		}
 		?>
-		<div class="agw-verification-slot"><?php esc_html_e( 'Verification will appear here when enabled.', 'alynt-account-gateway' ); ?></div>
+		<div class="agw-verification-slot" role="status"><?php esc_html_e( 'Verification will appear here when enabled.', 'alynt-account-gateway' ); ?></div>
 		<?php
 	}
 

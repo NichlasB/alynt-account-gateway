@@ -19,6 +19,18 @@
 	box-sizing: border-box;
 }
 
+.alynt-ag-gateway .screen-reader-text {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+
 .alynt-ag-body {
 	margin: 0;
 	background: var(--agw-color-background, #eae4d6);
@@ -67,12 +79,12 @@
 
 .agw-leaf--one {
 	top: 12%;
-	left: 12%;
+	inset-inline-start: 12%;
 }
 
 .agw-leaf--two {
-	right: 14%;
 	bottom: 18%;
+	inset-inline-end: 14%;
 	transform: rotate(24deg);
 }
 
@@ -86,17 +98,17 @@
 
 .agw-dot--one {
 	top: 28%;
-	right: 22%;
+	inset-inline-end: 22%;
 }
 
 .agw-dot--two {
-	left: 28%;
 	bottom: 30%;
+	inset-inline-start: 28%;
 }
 
 .agw-dot--three {
-	right: 35%;
 	bottom: 42%;
+	inset-inline-end: 35%;
 }
 
 .agw-panel {
@@ -229,13 +241,13 @@
 }
 
 .agw-password input {
-	padding-right: 76px;
+	padding-inline-end: 76px;
 }
 
 .agw-password__toggle {
 	position: absolute;
 	top: 50%;
-	right: 6px;
+	inset-inline-end: 6px;
 	min-height: 40px;
 	padding: 0 10px;
 	border: 0;
@@ -372,14 +384,14 @@
 
 .agw-requirements li {
 	position: relative;
-	padding-left: 22px;
+	padding-inline-start: 22px;
 	color: color-mix(in srgb, var(--agw-color-text) 70%, transparent);
 }
 
 .agw-requirements li::before {
 	position: absolute;
 	top: 0;
-	left: 0;
+	inset-inline-start: 0;
 	color: var(--agw-color-error);
 	content: "x";
 	font-weight: 700;
@@ -522,15 +534,15 @@
 
 .agw-dashboard-link__icon--logout::before {
 	top: 9px;
-	left: 8px;
+	inset-inline-start: 8px;
 	width: 12px;
 	height: 14px;
-	border-right: 0;
+	border-inline-end: 0;
 }
 
 .agw-dashboard-link__icon--logout::after {
 	top: 15px;
-	right: 8px;
+	inset-inline-end: 8px;
 	width: 12px;
 	height: 2px;
 	background: var(--agw-color-primary);
@@ -559,7 +571,7 @@
 .agw-dashboard-content td {
 	padding: 12px;
 	border-bottom: 1px solid rgb(40 20 8 / 12%);
-	text-align: left;
+	text-align: start;
 	vertical-align: top;
 }
 
@@ -621,6 +633,35 @@
 	.agw-dashboard-content {
 		overflow-x: auto;
 		padding: 16px;
+	}
+}
+
+@media (max-width: 360px) {
+	.agw-panel,
+	.agw-dashboard {
+		padding: 16px;
+	}
+
+	.agw-card {
+		padding: 28px 18px;
+	}
+
+	.agw-title {
+		font-size: 24px;
+	}
+
+	.agw-dashboard-hero__title {
+		font-size: 28px;
+	}
+
+	.agw-links,
+	.agw-dashboard__header {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.agw-dashboard__logout {
+		align-self: flex-start;
 	}
 }
 

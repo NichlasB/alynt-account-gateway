@@ -8,6 +8,8 @@ import './style.css';
 
 document.documentElement.classList.add( 'alynt-ag-frontend-ready' );
 
+const alyntAgLabels = window.alyntAgFrontend && window.alyntAgFrontend.labels ? window.alyntAgFrontend.labels : {};
+
 function alyntAgTogglePassword( event ) {
 	const toggle = event.target.closest( '[data-agw-password-toggle]' );
 
@@ -23,11 +25,12 @@ function alyntAgTogglePassword( event ) {
 	}
 
 	const shouldShow = input.type === 'password';
-	const label      = shouldShow ? 'Hide password' : 'Show password';
+	const label      = shouldShow ? alyntAgLabels.hidePassword || 'Hide password' : alyntAgLabels.showPassword || 'Show password';
 
 	input.type         = shouldShow ? 'text' : 'password';
-	toggle.textContent = shouldShow ? 'Hide' : 'Show';
+	toggle.textContent = shouldShow ? alyntAgLabels.hide || 'Hide' : alyntAgLabels.show || 'Show';
 	toggle.setAttribute( 'aria-label', label );
+	toggle.setAttribute( 'aria-pressed', shouldShow ? 'true' : 'false' );
 }
 
 function alyntAgGetPasswordChecks( password, confirm ) {
