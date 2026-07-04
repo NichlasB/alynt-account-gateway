@@ -2,11 +2,47 @@
 
 ## Status
 
-- Current phase: v0.1.17 released and verified
+- Current phase: v0.1.18 dashboard custom link editor
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.17 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.18 Small Release Cycle
+
+### Scope
+
+- [x] Start the next product-polish slice from the released `master` baseline.
+- [x] Replace the raw custom dashboard links JSON field with a repeatable admin editor for label, URL, icon, ordering, role visibility, and open-in-new-tab behavior while preserving the existing `dashboard_custom_links` storage format.
+- [x] Add focused coverage for custom dashboard link sanitization/serialization where practical.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.18` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.18` from clean `master` after the `v0.1.17` release merge.
+- Added a repeatable Dashboard settings editor for custom dashboard links with label, URL, icon, order, open-in-new-tab, and role-visibility controls, plus a raw JSON fallback panel that preserves the existing `dashboard_custom_links` storage format.
+- Added backend sanitization for dashboard links so saved/imported JSON is normalized to known fields and incomplete rows are skipped.
+- Added focused `SettingsSchemaTest` coverage for custom dashboard link JSON sanitization.
+- Verified `php -l` for the touched PHP files; `npm.cmd run build` passes; `npm.cmd run lint` passes; full `npm.cmd test` passes with 161 tests and 665 assertions; `npm.cmd run make-pot` writes 365 strings; `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities; and `git diff --check` passes.
+- Created local branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.18-branch-qa-20260704-230747\alynt-account-gateway-v0.1.18-branch-qa.zip`; verified 46 runtime files, no backslash archive entries, no dev/source/test/docs/rules/package/vendor files, built admin assets, and `0.1.17` header/constant metadata as expected before the final release bump.
+- Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.17` header/constant, built admin asset present, settings page editor markup present, and dashboard-link schema type present.
+- Browser-tested the Dashboard settings editor in wp-admin with Playwright: added a `QA Support Portal` link through the repeatable editor, set `/support/`, `help` icon, order `12`, new-tab behavior, and `customer` role visibility, then saved successfully and confirmed the stored JSON.
+- Server-side rendered the dashboard for a temporary customer user and confirmed the custom link appears with the normalized site URL, new-tab accessible text, and `help` icon class. Removed the temporary user and restored Plugin Tester dashboard links to `[]` after QA.
+- HTTP-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=lostpassword`, and `/my-account/`; public gateway routes rendered branded output with expected screen markers, and logged-out dashboard access redirected to `/login?redirect_to=...`.
+- Removed temporary branch-QA ZIP artifacts from Plugin Tester uploads, including the duplicate-path artifact created by the temporary upload endpoint.
+
+### Guardrails
+
+- Do not change frontend dashboard link rendering, WooCommerce dashboard delegation, dashboard default links, dashboard link visibility rules, URL normalization behavior, routes, query parameters, auth flow, registration flow, email behavior, webhook behavior, provider verification behavior, frontend class names, or design-token names.
+- Keep this cycle focused on the admin editing experience and compatible dashboard-link persistence.
+- Defer final `0.1.18` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates the Dashboard settings editor and representative dashboard output after saving custom links.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.17 Small Release Cycle
 

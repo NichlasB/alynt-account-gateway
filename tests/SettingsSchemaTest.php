@@ -178,6 +178,41 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertSame( '[]', $defaults['dashboard_custom_links'] );
 	}
 
+	public function test_dashboard_custom_links_are_sanitized_to_json() {
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array(
+				'dashboard_custom_links' => wp_json_encode(
+					array(
+						array(
+							'label'   => '<strong>Support</strong>',
+							'url'     => '/support/',
+							'icon'    => 'help<script>',
+							'order'   => '-10',
+							'target'  => '_blank',
+							'roles'   => array( 'customer', '<bad>' ),
+							'unknown' => 'discarded',
+						),
+						array(
+							'label' => 'Missing URL',
+							'url'   => '',
+						),
+					)
+				),
+			)
+		);
+
+		$links = json_decode( $sanitized['dashboard_custom_links'], true );
+
+		$this->assertCount( 1, $links );
+		$this->assertSame( 'Support', $links[0]['label'] );
+		$this->assertSame( '/support/', $links[0]['url'] );
+		$this->assertSame( 'helpscript', $links[0]['icon'] );
+		$this->assertSame( 0, $links[0]['order'] );
+		$this->assertSame( '_blank', $links[0]['target'] );
+		$this->assertSame( array( 'customer', 'bad' ), $links[0]['roles'] );
+		$this->assertArrayNotHasKey( 'unknown', $links[0] );
+	}
+
 	public function test_email_template_defaults_exist() {
 		$defaults = ALYNT_AG_Settings_Schema::defaults();
 

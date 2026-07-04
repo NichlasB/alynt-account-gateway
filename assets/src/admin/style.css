@@ -33,3 +33,93 @@
 	max-width: 100%;
 	height: auto;
 }
+
+.alynt-ag-dashboard-links {
+	max-width: 62rem;
+}
+
+.alynt-ag-dashboard-links__rows {
+	display: grid;
+	gap: 12px;
+	margin: 12px 0;
+}
+
+.alynt-ag-dashboard-link-row {
+	padding: 14px;
+	border: 1px solid #c3c4c7;
+	background: #fff;
+}
+
+.alynt-ag-dashboard-link-row__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 12px;
+}
+
+.alynt-ag-dashboard-link-row__grid {
+	display: grid;
+	grid-template-columns: minmax(180px, 1fr) minmax(220px, 1.4fr) minmax(140px, 0.7fr) minmax(90px, 0.4fr);
+	gap: 12px;
+}
+
+.alynt-ag-dashboard-link-row label {
+	display: grid;
+	gap: 4px;
+	font-weight: 600;
+}
+
+.alynt-ag-dashboard-link-row input[type="text"],
+.alynt-ag-dashboard-link-row select {
+	max-width: 100%;
+	width: 100%;
+	font-weight: 400;
+}
+
+.alynt-ag-dashboard-link-row__toggle {
+	margin-top: 12px;
+}
+
+.alynt-ag-dashboard-link-row__roles {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 16px;
+	margin: 12px 0 0;
+	padding: 12px;
+	border: 1px solid #dcdcde;
+}
+
+.alynt-ag-dashboard-link-row__roles legend {
+	padding: 0 4px;
+	font-weight: 600;
+}
+
+.alynt-ag-dashboard-link-row__roles label {
+	display: inline-flex;
+	grid-template-columns: none;
+	align-items: center;
+	gap: 4px;
+	font-weight: 400;
+}
+
+.alynt-ag-dashboard-links__json {
+	margin-top: 12px;
+}
+
+.alynt-ag-dashboard-links__json summary {
+	cursor: pointer;
+	font-weight: 600;
+}
+
+@media (max-width: 960px) {
+	.alynt-ag-dashboard-link-row__grid {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media (max-width: 640px) {
+	.alynt-ag-dashboard-link-row__grid {
+		grid-template-columns: 1fr;
+	}
+}

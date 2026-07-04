@@ -423,9 +423,9 @@ class ALYNT_AG_Settings_Schema {
 			),
 			'dashboard_custom_links'                    => array(
 				'tab'     => 'dashboard',
-				'type'    => 'textarea',
+				'type'    => 'dashboard_links',
 				'default' => '[]',
-				'label'   => __( 'Custom Dashboard Links JSON', 'alynt-account-gateway' ),
+				'label'   => __( 'Custom Dashboard Links', 'alynt-account-gateway' ),
 			),
 			'woocommerce_takeover'                      => array(
 				'tab'     => 'woocommerce',
@@ -709,6 +709,8 @@ class ALYNT_AG_Settings_Schema {
 				$font_stack = sanitize_text_field( wp_unslash( $value ) );
 				$font_stack = preg_replace( '/[^a-zA-Z0-9\\s,_"\'\\-]/', '', $font_stack );
 				return $font_stack ? $font_stack : '';
+			case 'dashboard_links':
+				return self::sanitize_dashboard_links( $value );
 			case 'textarea':
 				return wp_kses_post( wp_unslash( $value ) );
 			case 'secret':
@@ -717,5 +719,53 @@ class ALYNT_AG_Settings_Schema {
 			default:
 				return sanitize_text_field( wp_unslash( $value ) );
 		}
+	}
+
+	/**
+	 * Sanitize dashboard custom links into the stored JSON format.
+	 *
+	 * @param mixed $value Raw dashboard links JSON or array.
+	 * @return string
+	 */
+	private static function sanitize_dashboard_links( $value ) {
+		if ( is_string( $value ) ) {
+			$decoded = json_decode( wp_unslash( $value ), true );
+			$value   = is_array( $decoded ) ? $decoded : array();
+		}
+
+		if ( ! is_array( $value ) ) {
+			$value = array();
+		}
+
+		$links = array();
+
+		foreach ( $value as $link ) {
+			if ( ! is_array( $link ) ) {
+				continue;
+			}
+
+			$label = sanitize_text_field( wp_strip_all_tags( wp_unslash( $link['label'] ?? '' ) ) );
+			$url   = esc_url_raw( trim( (string) wp_unslash( $link['url'] ?? '' ) ) );
+
+			if ( '' === $label || '' === $url ) {
+				continue;
+			}
+
+			$roles = isset( $link['roles'] ) && is_array( $link['roles'] ) ? $link['roles'] : array();
+			$roles = array_values( array_filter( array_map( 'sanitize_key', $roles ) ) );
+
+			$links[] = array(
+				'label'  => $label,
+				'url'    => $url,
+				'icon'   => sanitize_key( $link['icon'] ?? 'link' ),
+				'order'  => isset( $link['order'] ) ? max( 0, (int) $link['order'] ) : 100,
+				'target' => '_blank' === ( $link['target'] ?? '' ) ? '_blank' : '_self',
+				'roles'  => $roles,
+			);
+		}
+
+		$json = wp_json_encode( $links, JSON_UNESCAPED_SLASHES );
+
+		return is_string( $json ) ? $json : '[]';
 	}
 }
