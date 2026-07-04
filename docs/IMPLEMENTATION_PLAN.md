@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.17 branch implementation checks complete; branch QA package and Plugin Tester smoke are next
+- Current phase: v0.1.17 branch QA complete; final release metadata bump and public updater verification are next
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.16 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -15,7 +15,7 @@
 - [x] Start the next low-risk structural slice from the released `master` baseline.
 - [x] Extract full gateway document rendering and admin preview rendering out of the frontend hook/controller class without changing document markup, body class, page title behavior, dashboard-vs-auth shell selection, preview screen normalization, routes, redirects, logout handling, or admin preview compatibility.
 - [x] Add focused test coverage around the extracted frontend document renderer service.
-- [ ] Run branch-QA package and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run branch-QA package and Plugin Tester smoke checks before final release metadata bump.
 - [ ] Publish the final `v0.1.17` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -26,6 +26,10 @@
 - Added focused `FrontendDocumentRendererTest` coverage for full auth document output, dashboard document output with current-path propagation, unknown preview fallback, set-password preview output, renderer title lookup, and the preserved `ALYNT_AG_Frontend::get_screen_title()` wrapper used by admin preview.
 - Added test bootstrap shims for `status_header()`, `nocache_headers()`, `language_attributes()`, `wp_head()`, and `wp_footer()` so document rendering can be verified without a full WordPress runtime.
 - Verified `php -l` for the new service, test file, and frontend class; targeted `FrontendDocumentRendererTest` passes with 6 tests and 16 assertions; full `npm.cmd test` passes with 160 tests and 657 assertions; `npm.cmd run lint` passes; `npm.cmd run build` passes; `npm.cmd run make-pot` writes 344 strings with no string changes; `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities; and `git diff --check` passes.
+- Created local branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.17-branch-qa-20260704-224135\alynt-account-gateway-v0.1.17-branch-qa.zip`; verified the new frontend document renderer service, runtime plugin files, built frontend/admin assets, and WordPress-compatible archive paths are included, dev/source/test/docs/rules/package/vendor files are excluded, and the package header/constant report `0.1.16` as expected before the final release bump.
+- Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.16` header/constant, `ALYNT_AG_Frontend_Document_Renderer` file/class loaded in a fresh request, preview rendering works for login and set-password, the full document wrapper renders, and the preserved admin-preview title wrapper returns `Create Account`.
+- HTTP-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=lostpassword`, `/account?action=invalidlink`, and `/my-account/`; public gateway routes rendered branded output with the expected body class, frontend JS assets, and no native login shell, and logged-out dashboard access redirected to `/login?redirect_to=...`.
+- Removed the branch-QA zip from Plugin Tester uploads after smoke verification.
 
 ### Guardrails
 
@@ -36,7 +40,7 @@
 ### Completion Gate
 
 - [x] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates representative gateway routes after the document renderer extraction.
+- [x] Plugin Tester smoke validates representative gateway routes after the document renderer extraction.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.16 Small Release Cycle
