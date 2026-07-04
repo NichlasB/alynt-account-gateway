@@ -54,7 +54,7 @@
 
 ### Completion Gate
 
-- [ ] Build, lint, test, audit, and POT generation pass.
+- [x] Build, lint, test, audit, and POT generation pass.
 - [ ] Local release-style zip excludes source/dev files and includes built assets.
 - [ ] Plugin Tester validates email preview/test-send and the selected email-change behavior.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
@@ -256,6 +256,7 @@
 - Added focused email tooling coverage for preview-token rendering across every supported template and test-send rejection paths for invalid recipients and unknown templates. Verified `npm.cmd test` passes with 94 tests and 354 assertions.
 - Implemented the remaining profile email-change request suppression for the existing email-change disable toggle. WordPress core sends this pending request through a direct `wp_mail()` call after `new_user_email_content`, so the plugin now marks that exact request when disabled, short-circuits it through `pre_wp_mail`, and removes the pending `_new_email` marker to avoid an impossible confirmation state. Verified `npm.cmd test` passes with 96 tests and 359 assertions, and `npm.cmd run lint` passes.
 - Refreshed docs, changelog, and `languages/alynt-account-gateway.pot` after the email-change behavior update. No new translatable strings were added; POT changes were source-reference/date metadata.
+- Bumped release candidate metadata to `0.1.2` across the plugin header/constant, npm metadata, readme, sample test, changelog, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test`, `npm.cmd run make-pot`, `npm.cmd audit --audit-level=moderate`, and `git diff --check`.
 
 ## Workflow Notes
 

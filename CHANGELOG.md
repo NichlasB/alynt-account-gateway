@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+No unreleased changes.
+
+## 0.1.2 - 2026-07-04
+
 ### Added
 
 - Focused email tooling test coverage for preview rendering and test-send validation.
@@ -13,10 +17,6 @@
 ### Verified
 
 - Email preview and test-send QA on LocalWP Plugin Tester.
-
-### Planned
-
-- v0.1.2 release packaging and Alynt Plugin Updater verification.
 
 ## 0.1.1 - 2026-07-04
 
