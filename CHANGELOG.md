@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.1.16 - 2026-07-04
+
+### Changed
+
+- Extracted the generic branded gateway shell and auth screen dispatch into a dedicated gateway shell service without changing shell markup, branding output, media panel output, routes, query parameters, password preview behavior, dashboard behavior, or request handling.
+
+### Added
+
+- Focused frontend gateway shell service tests for shell output, branding/media insertion, auth screen dispatch, unknown-screen fallback, and set-password preview rendering.
+
 ## 0.1.15 - 2026-07-04
 
 ### Changed
