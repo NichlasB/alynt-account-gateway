@@ -2,13 +2,16 @@
 
 ## Unreleased
 
+### Added
+
+- Focused email tooling test coverage for preview rendering and test-send validation.
+
 ### Verified
 
 - Email preview and test-send QA on LocalWP Plugin Tester.
 
 ### Planned
 
-- Focused email tooling test coverage where practical.
 - Safe evaluation of the remaining profile email-change request suppression behavior.
 - v0.1.2 release packaging and Alynt Plugin Updater verification.
 

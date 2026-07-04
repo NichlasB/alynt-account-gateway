@@ -49,6 +49,24 @@ class EmailTemplateServiceTest extends TestCase {
 		$this->assertStringContainsString( 'https://example.test/account?action=setpassword&token=abc', $rendered['plain'] );
 	}
 
+	public function test_preview_tokens_render_every_supported_template() {
+		$service  = new ALYNT_AG_Email_Template_Service();
+		$settings = ALYNT_AG_Settings_Schema::defaults();
+
+		foreach ( array_keys( $service->templates() ) as $template ) {
+			$rendered = $service->render( $template, $service->preview_tokens(), $settings );
+
+			$this->assertIsArray( $rendered );
+			$this->assertStringContainsString( 'Example Store', $rendered['subject'] );
+			$this->assertStringContainsString( '<!doctype html>', $rendered['html'] );
+			$this->assertStringContainsString( 'Damon', $rendered['html'] );
+			$this->assertStringContainsString( $template, $rendered['html'] );
+			$this->assertStringNotContainsString( '{{', $rendered['subject'] );
+			$this->assertStringNotContainsString( '{{', $rendered['html'] );
+			$this->assertStringNotContainsString( '{{', $rendered['plain'] );
+		}
+	}
+
 	public function test_send_uses_html_mail_headers() {
 		$service = new ALYNT_AG_Email_Template_Service();
 		$result  = $service->send(
@@ -65,6 +83,34 @@ class EmailTemplateServiceTest extends TestCase {
 		$this->assertCount( 1, $GLOBALS['alynt_ag_test_mail'] );
 		$this->assertSame( 'customer@example.test', $GLOBALS['alynt_ag_test_mail'][0]['to'] );
 		$this->assertContains( 'Content-Type: text/html; charset=UTF-8', $GLOBALS['alynt_ag_test_mail'][0]['headers'] );
+	}
+
+	public function test_send_rejects_invalid_recipient_without_queuing_mail() {
+		$service = new ALYNT_AG_Email_Template_Service();
+		$result  = $service->send(
+			'password_reset',
+			'not-an-email',
+			$service->preview_tokens(),
+			ALYNT_AG_Settings_Schema::defaults()
+		);
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'alynt_ag_invalid_email_recipient', $result->get_error_code() );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_mail'] );
+	}
+
+	public function test_send_rejects_unknown_template_without_queuing_mail() {
+		$service = new ALYNT_AG_Email_Template_Service();
+		$result  = $service->send(
+			'missing_template',
+			'customer@example.test',
+			$service->preview_tokens(),
+			ALYNT_AG_Settings_Schema::defaults()
+		);
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'alynt_ag_unknown_email_template', $result->get_error_code() );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_mail'] );
 	}
 
 	public function test_password_reset_notification_filter_returns_branded_email_array() {

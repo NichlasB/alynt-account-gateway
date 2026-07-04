@@ -38,7 +38,7 @@
 ### Scope
 
 - [x] Browser/manual QA email preview and test-send on LocalWP Plugin Tester.
-- [ ] Add or refine focused test coverage around email preview/test-send handlers where practical.
+- [x] Add or refine focused test coverage around email preview/test-send handlers where practical.
 - [ ] Evaluate and, if safe, implement the remaining profile email-change request suppression strategy for the existing disable toggle.
 - [ ] Refresh docs/changelog/POT if implementation changes account email behavior or user-facing strings.
 - [ ] Re-run Plugin Tester smoke checks for email tools and a light account-gateway regression pass.
@@ -253,6 +253,7 @@
 - Installed the local `alynt-account-gateway-v0.1.1.zip` package on LocalWP Plugin Tester, verified the active plugin reports `0.1.1`, browser-smoked Advanced / Tools compatibility warnings, gateway preview mode, `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, `/my-account/`, and WooCommerce account endpoints for orders, downloads, addresses, payment methods, and account details.
 - Published GitHub release `v0.1.1`, confirmed the Build Release workflow completed successfully, downloaded and inspected `alynt-account-gateway-v0.1.1.zip`, verified the package reports `0.1.1` and excludes development/source files, then confirmed Alynt Plugin Updater detected `0.1.0` to `0.1.1` and the WordPress Plugins screen `update now` action installed the GitHub release asset. Final Plugin Tester state: active `0.1.1`, no remaining update, settings intact.
 - Started v0.1.2 email QA on LocalWP Plugin Tester. Verified the Emails tab exposes all five templates, preview renders successful branded HTML for registration confirmation, password reset, password changed, account-created welcome, and email-change confirmation, and the test-send form redirects with `email_test_sent`. SureMails was temporarily switched to simulation mode for the send test, logged `Reset your password for Plugin Tester` to `alynt-ag-v012-qa@example.test` as simulated, and was restored to its prior non-simulation setting.
+- Added focused email tooling coverage for preview-token rendering across every supported template and test-send rejection paths for invalid recipients and unknown templates. Verified `npm.cmd test` passes with 94 tests and 354 assertions.
 
 ## Workflow Notes
 
