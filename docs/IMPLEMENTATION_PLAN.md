@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.7 released and verified
+- Current phase: v0.1.8 released and verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.7 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.8 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,6 +32,44 @@
 - Email editor: Rich template editor with preview and test-send
 - Terms/privacy links: Relative URL paths configured manually, such as `/terms/` or `/legal/privacy/`
 - Multilingual support: Required for v1
+
+## v0.1.8 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Extract shared frontend notice and verification-slot rendering out of the large frontend renderer class without changing markup, copy, accessibility attributes, Turnstile site-key output, or empty-copy behavior.
+- [x] Add focused test coverage around the extracted frontend component service.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.8` release.
+
+### Progress Notes
+
+- Started `v0.1.8` from `master` after the `v0.1.7` release merge.
+- Extracted reusable notice rendering and registration verification-slot rendering into `ALYNT_AG_Frontend_Components`.
+- Kept `ALYNT_AG_Frontend` wrapper methods for internal compatibility while delegating shared component rendering to the new service.
+- Added focused `FrontendComponentsTest` coverage for empty notice suppression, paragraph formatting, default verification placeholder output, and Turnstile widget output with accessible label and configured site key.
+- Added PHPUnit bootstrap stubs for `esc_html_e()` and `esc_attr_e()` so extracted component tests can exercise WordPress-style echo escaping.
+- Verified `php -l` for the new service and test file, `npm.cmd test` passes with 119 tests and 447 assertions, `npm.cmd run lint` passes, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.8-branch-qa-20260704-175610\alynt-account-gateway-v0.1.8-branch-qa.zip`; verified built frontend assets, the new frontend components service, and the frontend branding service are included, dev/source/test/docs/rules/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.7` as expected before the final release bump.
+- Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.7` header/constant, `ALYNT_AG_Frontend_Components` file/class loaded, and verification placeholder rendering works in a fresh request.
+- Browser-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, preserved form notice output, and preserved the registration verification slot.
+- Bumped release-candidate metadata to `0.1.8` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 119 tests and 447 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.8-20260704-175944\alynt-account-gateway-v0.1.8.zip`; verified built frontend assets and the new frontend components service are included, dev/source/test/docs/rules/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.8`.
+- Published GitHub release `v0.1.8`, downloaded the public release asset, and verified the downloaded package has 36 runtime entries, no backslash archive entries, no dev/source/test/docs/rules/package files, built frontend CSS/JS assets, the new frontend components service, and `0.1.8` header/constant metadata.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.7` to `0.1.8`, then installed it through the WordPress Plugins screen update path. Final server-side state: active `0.1.8` header/constant, `ALYNT_AG_Frontend_Components` file/class loaded, and no remaining update offer.
+- Browser-smoked the release-installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, preserved form notice output, and preserved the registration verification slot.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, query parameters, redirect behavior, registration behavior, email behavior, WooCommerce dashboard behavior, asset handles/URLs, design-token names, or frontend class names.
+- Keep this cycle focused on shared frontend form components before attempting a larger screen-renderer split.
+- Defer final `0.1.8` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates representative gateway routes after the shared-component extraction.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.7 Small Release Cycle
 

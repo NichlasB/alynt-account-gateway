@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.1.8 - 2026-07-04
+
+### Changed
+
+- Extracted shared frontend notice and verification-slot rendering into a dedicated component service without changing markup, copy, accessibility attributes, Turnstile output, or empty-copy behavior.
+
+### Added
+
+- Focused frontend component service tests for empty notice suppression, formatted notice output, verification placeholder output, and Turnstile widget output.
+
 ## 0.1.7 - 2026-07-04
 
 ### Changed
