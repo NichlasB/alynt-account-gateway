@@ -5,7 +5,7 @@ const domain = 'alynt-account-gateway';
 const root = process.cwd();
 const output = path.join(root, 'languages', `${domain}.pot`);
 const includeExtensions = new Set(['.php']);
-const excludedDirs = new Set(['.git', 'assets', 'node_modules', 'tests', 'vendor']);
+const excludedDirs = new Set(['.git', 'assets', 'build', 'node_modules', 'tests', 'vendor']);
 const functions = [
 	'__',
 	'_e',
@@ -90,6 +90,9 @@ function collectStrings(source, relativePath, catalog) {
 }
 
 const catalog = new Map();
+const mainPluginFile = await readFile(path.join(root, 'alynt-account-gateway.php'), 'utf8');
+const versionMatch = mainPluginFile.match(/define\(\s*'ALYNT_AG_VERSION'\s*,\s*'([^']+)'\s*\)/);
+const version = versionMatch ? versionMatch[1] : '0.1.0';
 const files = await listFiles(root);
 
 for (const file of files) {
@@ -104,7 +107,7 @@ const header = [
 	'# This file is distributed under the GPL-2.0-or-later.',
 	'msgid ""',
 	'msgstr ""',
-	'"Project-Id-Version: Alynt Account Gateway 0.1.0\\n"',
+	`"Project-Id-Version: Alynt Account Gateway ${version}\\n"`,
 	'"Report-Msgid-Bugs-To: \\n"',
 	`"POT-Creation-Date: ${now}+0000\\n"`,
 	'"MIME-Version: 1.0\\n"',

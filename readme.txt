@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 0.1.0
+Stable tag: 0.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,11 @@ Core features include:
 4. Enable Frontend Output only after confirming the settings.
 
 == Changelog ==
+
+= 0.1.1 =
+* Added settings import/export JSON, per-tab restore defaults, and gateway preview mode.
+* Added compatibility warnings for login, registration, redirects, account pages, and WooCommerce account endpoint overlaps.
+* Added focused release-gate unit coverage for frontend routing, emergency bypass, role access, email-only login, retention, deactivation, and uninstall cleanup.
 
 = 0.1.0 =
 * Added branded account gateway screens and configurable account paths.

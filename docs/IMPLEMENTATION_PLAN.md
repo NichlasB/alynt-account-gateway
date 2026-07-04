@@ -55,8 +55,8 @@
 
 ### Completion Gate
 
-- [ ] Build, lint, test, audit, and POT generation pass.
-- [ ] Local release-style zip excludes source/dev files and includes built assets.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Local release-style zip excludes source/dev files and includes built assets.
 - [ ] Plugin Tester validates admin settings actions, preview mode, gateway routes, and WooCommerce dashboard takeover.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
