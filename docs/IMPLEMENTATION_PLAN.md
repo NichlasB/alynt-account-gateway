@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.2 released from branch `release/0.1.2`; ready to merge to `master` and start the next small release cycle.
+- Current phase: v0.1.3 small release cycle started on branch `release/0.1.3`
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.2 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -32,6 +32,32 @@
 - Email editor: Rich template editor with preview and test-send
 - Terms/privacy links: Relative URL paths configured manually, such as `/terms/` or `/legal/privacy/`
 - Multilingual support: Required for v1
+
+## v0.1.3 Small Release Cycle
+
+### Scope
+
+- [ ] Re-audit registration flow behavior against the approved confirmation-first, email-only, terms-consent, password-policy, and spam-prevention requirements.
+- [ ] Add or refine focused unit coverage around registration validation, pending-registration state, account-created webhook payload/logging, or protection-mode decisions where practical.
+- [ ] Browser/manual QA the installed Plugin Tester registration path, including disabled registration, enabled registration form gating, pending confirmation, set-password completion, and email-only login after account creation.
+- [ ] Verify account-created webhook behavior in a local-safe way without sending real customer data to an external service.
+- [ ] Refresh docs/changelog/POT if implementation changes registration, webhook, or user-facing behavior.
+- [ ] Re-run Plugin Tester smoke checks and verify Alynt Plugin Updater detects and installs `0.1.3` from the GitHub release asset.
+
+### Guardrails
+
+- Keep the cycle small and registration-focused; do not redesign the gateway screens.
+- Keep public account creation disabled by default.
+- Do not weaken the confirmation-first account creation contract.
+- Do not send real webhook payloads to third-party services during QA.
+- Preserve email-only login and generated-username behavior.
+
+### Completion Gate
+
+- [ ] Build, lint, test, audit, and POT generation pass.
+- [ ] Local release-style zip excludes source/dev files and includes built assets.
+- [ ] Plugin Tester validates the selected registration and webhook behavior.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.2 Small Release Cycle
 

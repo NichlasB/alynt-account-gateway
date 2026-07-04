@@ -2,7 +2,12 @@
 
 ## Unreleased
 
-No unreleased changes.
+### Planned
+
+- Registration flow and spam-prevention QA.
+- Focused registration/webhook unit coverage where practical.
+- Local-safe account-created webhook verification.
+- v0.1.3 release packaging and Alynt Plugin Updater verification.
 
 ## 0.1.2 - 2026-07-04
 
