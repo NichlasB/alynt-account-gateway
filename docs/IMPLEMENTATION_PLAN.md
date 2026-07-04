@@ -37,7 +37,7 @@
 
 ### Scope
 
-- [ ] Add settings import/export JSON for all plugin-owned settings.
+- [x] Add settings import/export JSON for all plugin-owned settings.
 - [ ] Add per-tab restore defaults with confirmation and diagnostics logging.
 - [ ] Add gateway screen preview mode while frontend output is disabled.
 - [ ] Add compatibility warnings for plugins that commonly modify login, registration, account pages, security redirects, or WooCommerce account endpoints.

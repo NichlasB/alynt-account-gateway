@@ -531,6 +531,68 @@ class ALYNT_AG_Settings_Schema {
 	}
 
 	/**
+	 * Create a portable settings export package.
+	 *
+	 * @return array<string,mixed>
+	 */
+	public static function export_package() {
+		return array(
+			'plugin'     => 'alynt-account-gateway',
+			'version'    => defined( 'ALYNT_AG_VERSION' ) ? ALYNT_AG_VERSION : '',
+			'exportedAt' => gmdate( 'c' ),
+			'settings'   => self::get_settings(),
+		);
+	}
+
+	/**
+	 * Parse and sanitize a settings import package.
+	 *
+	 * @param string $json Raw JSON package.
+	 * @return array<string,mixed>|WP_Error
+	 */
+	public static function import_package( $json ) {
+		$package = json_decode( (string) $json, true );
+
+		if ( ! is_array( $package ) ) {
+			return new WP_Error(
+				'alynt_ag_invalid_settings_import',
+				__( 'The selected settings file is not valid JSON.', 'alynt-account-gateway' )
+			);
+		}
+
+		$settings = isset( $package['settings'] ) && is_array( $package['settings'] ) ? $package['settings'] : $package;
+		$settings = self::filter_known_settings( $settings );
+
+		if ( empty( $settings ) ) {
+			return new WP_Error(
+				'alynt_ag_empty_settings_import',
+				__( 'The selected settings file does not contain any recognized plugin settings.', 'alynt-account-gateway' )
+			);
+		}
+
+		return self::sanitize( $settings );
+	}
+
+	/**
+	 * Keep only settings that belong to this plugin schema.
+	 *
+	 * @param array<string,mixed> $settings Candidate settings.
+	 * @return array<string,mixed>
+	 */
+	public static function filter_known_settings( $settings ) {
+		$schema = self::schema();
+		$known  = array();
+
+		foreach ( $settings as $key => $value ) {
+			if ( array_key_exists( $key, $schema ) ) {
+				$known[ $key ] = $value;
+			}
+		}
+
+		return $known;
+	}
+
+	/**
 	 * Sanitize settings.
 	 *
 	 * @param array<string,mixed> $input Raw settings.

@@ -12,6 +12,12 @@ use PHPUnit\Framework\TestCase;
  */
 class SettingsSchemaTest extends TestCase {
 
+	protected function tearDown(): void {
+		unset( $GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] );
+
+		parent::tearDown();
+	}
+
 	public function test_frontend_output_is_disabled_by_default() {
 		$defaults = ALYNT_AG_Settings_Schema::defaults();
 
@@ -51,6 +57,69 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertSame( '#B3492E', $defaults['error_color'] );
 		$this->assertSame( 'Georgia, serif', $defaults['heading_font_family'] );
 		$this->assertSame( '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', $defaults['body_font_family'] );
+	}
+
+	public function test_export_package_contains_plugin_metadata_and_settings() {
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'frontend_enabled' => true,
+			'login_path'       => '/member-login',
+		);
+
+		$package = ALYNT_AG_Settings_Schema::export_package();
+
+		$this->assertSame( 'alynt-account-gateway', $package['plugin'] );
+		$this->assertSame( ALYNT_AG_VERSION, $package['version'] );
+		$this->assertArrayHasKey( 'exportedAt', $package );
+		$this->assertTrue( $package['settings']['frontend_enabled'] );
+		$this->assertSame( '/member-login', $package['settings']['login_path'] );
+	}
+
+	public function test_import_package_sanitizes_known_settings_and_discards_unknown_keys() {
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'frontend_enabled' => false,
+			'login_path'       => '/login',
+		);
+
+		$imported = ALYNT_AG_Settings_Schema::import_package(
+			wp_json_encode(
+				array(
+					'settings' => array(
+						'frontend_enabled' => '1',
+						'login_path'       => 'members?bad=1',
+						'primary_color'    => 'not-a-color',
+						'unknown_setting'  => 'ignored',
+					),
+				)
+			)
+		);
+
+		$this->assertIsArray( $imported );
+		$this->assertTrue( $imported['frontend_enabled'] );
+		$this->assertSame( '/members', $imported['login_path'] );
+		$this->assertSame( '', $imported['primary_color'] );
+		$this->assertArrayNotHasKey( 'unknown_setting', $imported );
+	}
+
+	public function test_import_package_rejects_invalid_json() {
+		$imported = ALYNT_AG_Settings_Schema::import_package( '{invalid-json' );
+
+		$this->assertInstanceOf( WP_Error::class, $imported );
+		$this->assertSame( 'alynt_ag_invalid_settings_import', $imported->get_error_code() );
+	}
+
+	public function test_import_package_rejects_packages_without_known_settings() {
+		$imported = ALYNT_AG_Settings_Schema::import_package(
+			wp_json_encode(
+				array(
+					'settings' => array(
+						'not_ours' => 'ignored',
+					),
+				)
+			)
+		);
+
+		$this->assertInstanceOf( WP_Error::class, $imported );
+		$this->assertSame( 'alynt_ag_empty_settings_import', $imported->get_error_code() );
 	}
 
 	public function test_screen_copy_defaults_exist() {

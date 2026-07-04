@@ -2,9 +2,12 @@
 
 ## Unreleased
 
+### Added
+
+- Settings import/export JSON for all plugin-owned settings.
+
 ### Planned
 
-- Settings import/export JSON.
 - Per-tab restore defaults.
 - Gateway preview mode while frontend output is disabled.
 - Compatibility warnings for login, registration, redirect, security, and WooCommerce account endpoint conflicts.

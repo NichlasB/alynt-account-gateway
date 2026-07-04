@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 0.1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 09:38+0000\n"
+"POT-Creation-Date: 2026-07-04 10:15+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -54,7 +54,7 @@ msgstr ""
 msgid "Account Details"
 msgstr ""
 
-#: admin/class-settings-page.php:40
+#: admin/class-settings-page.php:42
 msgid "Account Gateway"
 msgstr ""
 
@@ -95,8 +95,8 @@ msgstr ""
 msgid "Almost there."
 msgstr ""
 
-#: admin/class-settings-page.php:39
-#: admin/class-settings-page.php:88
+#: admin/class-settings-page.php:41
+#: admin/class-settings-page.php:90
 #: includes/services/class-privacy-service.php:39
 #: includes/services/class-privacy-service.php:54
 #: includes/services/class-privacy-service.php:69
@@ -184,7 +184,7 @@ msgstr ""
 msgid "Card Surface Color"
 msgstr ""
 
-#: admin/class-settings-page.php:387
+#: admin/class-settings-page.php:433
 msgid "Category"
 msgstr ""
 
@@ -197,7 +197,7 @@ msgstr ""
 msgid "Choose a new password for your account."
 msgstr ""
 
-#: admin/class-settings-page.php:375
+#: admin/class-settings-page.php:421
 msgid "Clear Diagnostics Events"
 msgstr ""
 
@@ -301,11 +301,11 @@ msgstr ""
 msgid "Delete Payment Method"
 msgstr ""
 
-#: admin/class-settings-page.php:342
+#: admin/class-settings-page.php:388
 msgid "Diagnostics"
 msgstr ""
 
-#: admin/class-settings-page.php:344
+#: admin/class-settings-page.php:390
 msgid "Diagnostics are disabled by default. When enabled, structured events are stored in a plugin-owned table with sensitive fields redacted before persistence."
 msgstr ""
 
@@ -363,7 +363,7 @@ msgstr ""
 msgid "Email Change Confirmation Subject"
 msgstr ""
 
-#: admin/class-settings-page.php:274
+#: admin/class-settings-page.php:290
 msgid "Email Preview And Test Send"
 msgstr ""
 
@@ -400,7 +400,7 @@ msgstr ""
 msgid "Enable Public Account Creation"
 msgstr ""
 
-#: admin/class-settings-page.php:165
+#: admin/class-settings-page.php:167
 msgid "Enabled"
 msgstr ""
 
@@ -417,7 +417,7 @@ msgstr ""
 msgid "Error Color"
 msgstr ""
 
-#: admin/class-settings-page.php:388
+#: admin/class-settings-page.php:434
 #: includes/services/class-privacy-service.php:243
 msgid "Event"
 msgstr ""
@@ -426,8 +426,16 @@ msgstr ""
 msgid "Expires At"
 msgstr ""
 
-#: admin/class-settings-page.php:368
+#: admin/class-settings-page.php:358
+msgid "Export all plugin-owned settings as JSON, or import a JSON settings package from another site. Imported values are sanitized through the active settings schema."
+msgstr ""
+
+#: admin/class-settings-page.php:414
 msgid "Export Diagnostics CSV"
+msgstr ""
+
+#: admin/class-settings-page.php:363
+msgid "Export Settings JSON"
 msgstr ""
 
 #: includes/class-diagnostics-logger.php:41
@@ -545,6 +553,10 @@ msgstr ""
 msgid "If this email address can be used, a confirmation email will be sent."
 msgstr ""
 
+#: admin/class-settings-page.php:372
+msgid "Import Settings"
+msgstr ""
+
 #: includes/class-settings-schema.php:146
 msgid "Invalid Or Expired Link Text"
 msgstr ""
@@ -558,7 +570,7 @@ msgstr ""
 msgid "Last Name"
 msgstr ""
 
-#: admin/class-settings-page.php:386
+#: admin/class-settings-page.php:432
 msgid "Level"
 msgstr ""
 
@@ -615,7 +627,7 @@ msgstr ""
 msgid "Manage Account"
 msgstr ""
 
-#: admin/class-settings-page.php:389
+#: admin/class-settings-page.php:435
 msgid "Message"
 msgstr ""
 
@@ -631,13 +643,13 @@ msgstr ""
 msgid "New Password"
 msgstr ""
 
-#: admin/class-settings-page.php:355
+#: admin/class-settings-page.php:401
 #: includes/services/class-privacy-service.php:232
 #: includes/services/class-privacy-service.php:246
 msgid "No"
 msgstr ""
 
-#: admin/class-settings-page.php:380
+#: admin/class-settings-page.php:426
 msgid "No diagnostics events have been recorded."
 msgstr ""
 
@@ -754,11 +766,11 @@ msgstr ""
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: admin/class-settings-page.php:288
+#: admin/class-settings-page.php:304
 msgid "Preview Email"
 msgstr ""
 
-#: admin/class-settings-page.php:276
+#: admin/class-settings-page.php:292
 msgid "Preview or send a test using the saved template settings and sample account tokens."
 msgstr ""
 
@@ -786,11 +798,11 @@ msgstr ""
 msgid "Provider"
 msgstr ""
 
-#: admin/class-settings-page.php:378
+#: admin/class-settings-page.php:424
 msgid "Recent Events"
 msgstr ""
 
-#: admin/class-settings-page.php:300
+#: admin/class-settings-page.php:316
 msgid "Recipient"
 msgstr ""
 
@@ -851,7 +863,7 @@ msgstr ""
 msgid "Remember Me"
 msgstr ""
 
-#: admin/class-settings-page.php:327
+#: admin/class-settings-page.php:343
 msgid "Remove"
 msgstr ""
 
@@ -886,7 +898,7 @@ msgstr ""
 msgid "Save Password"
 msgstr ""
 
-#: admin/class-settings-page.php:135
+#: admin/class-settings-page.php:137
 msgid "Save Settings"
 msgstr ""
 
@@ -903,7 +915,7 @@ msgid "Security & Spam"
 msgstr ""
 
 #: admin/class-admin.php:66
-#: admin/class-settings-page.php:326
+#: admin/class-settings-page.php:342
 msgid "Select Image"
 msgstr ""
 
@@ -911,7 +923,7 @@ msgstr ""
 msgid "Send New Link"
 msgstr ""
 
-#: admin/class-settings-page.php:302
+#: admin/class-settings-page.php:318
 msgid "Send Test Email"
 msgstr ""
 
@@ -924,7 +936,27 @@ msgstr ""
 msgid "Set Password Instruction Text"
 msgstr ""
 
-#: admin/class-settings-page.php:92
+#: admin/class-settings-page.php:470
+msgid "Settings could not be encoded for export."
+msgstr ""
+
+#: admin/class-settings-page.php:261
+msgid "Settings could not be imported. Choose a valid Alynt Account Gateway JSON export."
+msgstr ""
+
+#: admin/class-settings-page.php:356
+msgid "Settings Import / Export"
+msgstr ""
+
+#: admin/class-settings-page.php:254
+msgid "Settings imported successfully."
+msgstr ""
+
+#: admin/class-settings-page.php:370
+msgid "Settings JSON file"
+msgstr ""
+
+#: admin/class-settings-page.php:94
 msgid "Settings tabs"
 msgstr ""
 
@@ -955,8 +987,8 @@ msgstr ""
 msgid "Take Over WooCommerce My Account"
 msgstr ""
 
-#: admin/class-settings-page.php:282
-#: admin/class-settings-page.php:294
+#: admin/class-settings-page.php:298
+#: admin/class-settings-page.php:310
 msgid "Template"
 msgstr ""
 
@@ -976,7 +1008,7 @@ msgstr ""
 msgid "Test Email Recipient"
 msgstr ""
 
-#: admin/class-settings-page.php:252
+#: admin/class-settings-page.php:268
 msgid "Test email sent."
 msgstr ""
 
@@ -1035,7 +1067,15 @@ msgstr ""
 msgid "The reset request could not be processed. Please try again."
 msgstr ""
 
-#: admin/class-settings-page.php:259
+#: includes/class-settings-schema.php:569
+msgid "The selected settings file does not contain any recognized plugin settings."
+msgstr ""
+
+#: includes/class-settings-schema.php:559
+msgid "The selected settings file is not valid JSON."
+msgstr ""
+
+#: admin/class-settings-page.php:275
 msgid "The test email could not be sent. Check the recipient and mail configuration."
 msgstr ""
 
@@ -1101,7 +1141,7 @@ msgstr ""
 msgid "This reset link is invalid or has expired. Please request a new link."
 msgstr ""
 
-#: admin/class-settings-page.php:385
+#: admin/class-settings-page.php:431
 msgid "Time"
 msgstr ""
 
@@ -1192,25 +1232,33 @@ msgstr ""
 msgid "WooCommerce account takeover is enabled, but WooCommerce is not active."
 msgstr ""
 
-#: admin/class-settings-page.php:355
+#: admin/class-settings-page.php:401
 #: includes/services/class-privacy-service.php:232
 #: includes/services/class-privacy-service.php:246
 msgid "Yes"
 msgstr ""
 
-#: admin/class-settings-page.php:434
+#: admin/class-settings-page.php:549
 msgid "You do not have permission to clear diagnostics."
 msgstr ""
 
-#: admin/class-settings-page.php:415
+#: admin/class-settings-page.php:530
 msgid "You do not have permission to export diagnostics."
 msgstr ""
 
-#: admin/class-settings-page.php:459
+#: admin/class-settings-page.php:461
+msgid "You do not have permission to export settings."
+msgstr ""
+
+#: admin/class-settings-page.php:487
+msgid "You do not have permission to import settings."
+msgstr ""
+
+#: admin/class-settings-page.php:574
 msgid "You do not have permission to preview emails."
 msgstr ""
 
-#: admin/class-settings-page.php:485
+#: admin/class-settings-page.php:600
 msgid "You do not have permission to send test emails."
 msgstr ""
 

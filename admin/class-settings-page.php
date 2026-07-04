@@ -22,6 +22,8 @@ class ALYNT_AG_Settings_Page {
 	public function register() {
 		add_action( 'admin_menu', array( $this, 'add_menu_page' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'admin_post_alynt_ag_export_settings', array( $this, 'handle_export_settings' ) );
+		add_action( 'admin_post_alynt_ag_import_settings', array( $this, 'handle_import_settings' ) );
 		add_action( 'admin_post_alynt_ag_export_diagnostics', array( $this, 'handle_export_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_clear_diagnostics', array( $this, 'handle_clear_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_preview_email', array( $this, 'handle_preview_email' ) );
@@ -247,6 +249,20 @@ class ALYNT_AG_Settings_Page {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin notice flag.
 		$notice = isset( $_GET['alynt_ag_notice'] ) ? sanitize_key( wp_unslash( $_GET['alynt_ag_notice'] ) ) : '';
 
+		if ( 'settings_imported' === $notice ) {
+			?>
+			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Settings imported successfully.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
+		if ( 'settings_import_failed' === $notice ) {
+			?>
+			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Settings could not be imported. Choose a valid Alynt Account Gateway JSON export.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
 		if ( 'email_test_sent' === $notice ) {
 			?>
 			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Test email sent.', 'alynt-account-gateway' ); ?></p></div>
@@ -331,6 +347,34 @@ class ALYNT_AG_Settings_Page {
 	}
 
 	/**
+	 * Render settings import/export tools.
+	 *
+	 * @return void
+	 */
+	private function render_settings_tools() {
+		?>
+		<h2><?php esc_html_e( 'Settings Import / Export', 'alynt-account-gateway' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'Export all plugin-owned settings as JSON, or import a JSON settings package from another site. Imported values are sanitized through the active settings schema.', 'alynt-account-gateway' ); ?>
+		</p>
+
+		<p>
+			<a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=alynt_ag_export_settings' ), 'alynt_ag_export_settings' ) ); ?>">
+				<?php esc_html_e( 'Export Settings JSON', 'alynt-account-gateway' ); ?>
+			</a>
+		</p>
+
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data" class="alynt-ag-inline-tool">
+			<input type="hidden" name="action" value="alynt_ag_import_settings">
+			<?php wp_nonce_field( 'alynt_ag_import_settings' ); ?>
+			<label for="alynt-ag-settings-import"><?php esc_html_e( 'Settings JSON file', 'alynt-account-gateway' ); ?></label>
+			<input type="file" id="alynt-ag-settings-import" name="settings_file" accept="application/json,.json" required>
+			<?php submit_button( __( 'Import Settings', 'alynt-account-gateway' ), 'secondary', 'submit', false ); ?>
+		</form>
+		<?php
+	}
+
+	/**
 	 * Render diagnostics tools.
 	 *
 	 * @return void
@@ -339,6 +383,8 @@ class ALYNT_AG_Settings_Page {
 		$health = ALYNT_AG_Diagnostics_Logger::health_summary();
 		$events = ALYNT_AG_Diagnostics_Logger::recent_events( 20 );
 		?>
+		<?php $this->render_settings_tools(); ?>
+
 		<h2><?php esc_html_e( 'Diagnostics', 'alynt-account-gateway' ); ?></h2>
 		<p class="description">
 			<?php esc_html_e( 'Diagnostics are disabled by default. When enabled, structured events are stored in a plugin-owned table with sensitive fields redacted before persistence.', 'alynt-account-gateway' ); ?>
@@ -403,6 +449,75 @@ class ALYNT_AG_Settings_Page {
 			</table>
 		<?php endif; ?>
 		<?php
+	}
+
+	/**
+	 * Export plugin settings as JSON.
+	 *
+	 * @return void
+	 */
+	public function handle_export_settings() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to export settings.', 'alynt-account-gateway' ) );
+		}
+
+		check_admin_referer( 'alynt_ag_export_settings' );
+
+		$package = ALYNT_AG_Settings_Schema::export_package();
+		$json    = wp_json_encode( $package, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+
+		if ( ! is_string( $json ) ) {
+			wp_die( esc_html__( 'Settings could not be encoded for export.', 'alynt-account-gateway' ) );
+		}
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename=alynt-account-gateway-settings.json' );
+
+		echo $json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON download generated from sanitized settings.
+		exit;
+	}
+
+	/**
+	 * Import plugin settings from JSON.
+	 *
+	 * @return void
+	 */
+	public function handle_import_settings() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to import settings.', 'alynt-account-gateway' ) );
+		}
+
+		check_admin_referer( 'alynt_ag_import_settings' );
+
+		$status = 'settings_import_failed';
+		$file   = isset( $_FILES['settings_file'] ) && is_array( $_FILES['settings_file'] ) ? $_FILES['settings_file'] : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- File metadata is validated before use.
+
+		if ( isset( $file['tmp_name'], $file['error'] ) && is_string( $file['tmp_name'] ) && UPLOAD_ERR_OK === (int) $file['error'] && is_uploaded_file( $file['tmp_name'] ) ) {
+			$json     = file_get_contents( $file['tmp_name'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading the PHP-uploaded temp file only.
+			$imported = ALYNT_AG_Settings_Schema::import_package( is_string( $json ) ? $json : '' );
+
+			if ( ! is_wp_error( $imported ) ) {
+				update_option( 'alynt_ag_settings', $imported );
+				ALYNT_AG_Diagnostics_Logger::log(
+					'settings_imported',
+					array( 'imported_keys' => array_keys( ALYNT_AG_Settings_Schema::filter_known_settings( $imported ) ) ),
+					get_current_user_id()
+				);
+				$status = 'settings_imported';
+			}
+		}
+
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'            => 'alynt-account-gateway',
+					'tab'             => 'advanced_tools',
+					'alynt_ag_notice' => $status,
+				),
+				admin_url( 'options-general.php' )
+			)
+		);
+		exit;
 	}
 
 	/**
