@@ -816,6 +816,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-lostpasswor
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-setpassword-screen.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-logout-screen.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-state-screens.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-gateway-shell.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-warnings.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'public/class-frontend.php';

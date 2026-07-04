@@ -155,7 +155,7 @@ class ALYNT_AG_Frontend {
 		if ( 'dashboard' === $screen ) {
 			$this->render_dashboard_shell( $settings );
 		} else {
-			$this->render_gateway_shell( $screen, $settings );
+			$this->gateway_shell()->render_gateway_shell( $screen, $settings );
 		}
 		wp_footer();
 		echo '</body></html>';
@@ -177,7 +177,7 @@ class ALYNT_AG_Frontend {
 		) ? $screen : 'login';
 
 		if ( 'setpassword' === $screen ) {
-			$this->render_gateway_shell_with_password_preview( $settings );
+			$this->gateway_shell()->render_gateway_shell_with_password_preview( $settings );
 			return;
 		}
 
@@ -186,7 +186,7 @@ class ALYNT_AG_Frontend {
 			return;
 		}
 
-		$this->render_gateway_shell( $screen, $settings );
+		$this->gateway_shell()->render_gateway_shell( $screen, $settings );
 	}
 
 	/**
@@ -301,17 +301,6 @@ class ALYNT_AG_Frontend {
 	}
 
 	/**
-	 * Compare relative paths without trailing slash sensitivity.
-	 *
-	 * @param string $left  First path.
-	 * @param string $right Second path.
-	 * @return bool
-	 */
-	private function paths_match( $left, $right ) {
-		return $this->routes()->paths_match( $left, $right );
-	}
-
-	/**
 	 * Frontend route helpers.
 	 *
 	 * @return ALYNT_AG_Frontend_Routes
@@ -330,75 +319,12 @@ class ALYNT_AG_Frontend {
 	}
 
 	/**
-	 * Frontend branding helpers.
+	 * Frontend gateway shell renderer.
 	 *
-	 * @return ALYNT_AG_Frontend_Branding
+	 * @return ALYNT_AG_Frontend_Gateway_Shell
 	 */
-	private function branding() {
-		return new ALYNT_AG_Frontend_Branding();
-	}
-
-	/**
-	 * Frontend shared component helpers.
-	 *
-	 * @return ALYNT_AG_Frontend_Components
-	 */
-	private function components() {
-		return new ALYNT_AG_Frontend_Components();
-	}
-
-	/**
-	 * Frontend auth state screen helpers.
-	 *
-	 * @return ALYNT_AG_Frontend_State_Screens
-	 */
-	private function state_screens() {
-		return new ALYNT_AG_Frontend_State_Screens();
-	}
-
-	/**
-	 * Frontend registration screen helper.
-	 *
-	 * @return ALYNT_AG_Frontend_Register_Screen
-	 */
-	private function register_screen() {
-		return new ALYNT_AG_Frontend_Register_Screen();
-	}
-
-	/**
-	 * Frontend logout screen helper.
-	 *
-	 * @return ALYNT_AG_Frontend_Logout_Screen
-	 */
-	private function logout_screen() {
-		return new ALYNT_AG_Frontend_Logout_Screen();
-	}
-
-	/**
-	 * Frontend lost-password screen helper.
-	 *
-	 * @return ALYNT_AG_Frontend_Lostpassword_Screen
-	 */
-	private function lostpassword_screen() {
-		return new ALYNT_AG_Frontend_Lostpassword_Screen();
-	}
-
-	/**
-	 * Frontend login screen helper.
-	 *
-	 * @return ALYNT_AG_Frontend_Login_Screen
-	 */
-	private function login_screen() {
-		return new ALYNT_AG_Frontend_Login_Screen();
-	}
-
-	/**
-	 * Frontend set-password screen helper.
-	 *
-	 * @return ALYNT_AG_Frontend_Setpassword_Screen
-	 */
-	private function setpassword_screen() {
-		return new ALYNT_AG_Frontend_Setpassword_Screen();
+	private function gateway_shell() {
+		return new ALYNT_AG_Frontend_Gateway_Shell();
 	}
 
 	/**
@@ -411,70 +337,6 @@ class ALYNT_AG_Frontend {
 	}
 
 	/**
-	 * Render gateway shell.
-	 *
-	 * @param string              $screen   Screen key.
-	 * @param array<string,mixed> $settings Settings.
-	 * @return void
-	 */
-	private function render_gateway_shell( $screen, $settings ) {
-		$style = $this->get_gateway_style_attribute( $settings );
-		?>
-		<main class="alynt-ag-gateway" data-agw-screen="<?php echo esc_attr( $screen ); ?>" style="<?php echo esc_attr( $style ); ?>">
-			<section class="agw-shell" aria-labelledby="agw-screen-title">
-				<div class="agw-media" aria-hidden="true">
-					<?php $this->render_media_panel( $settings ); ?>
-				</div>
-				<div class="agw-panel">
-					<div class="agw-card">
-						<?php $this->render_brand_block( $settings ); ?>
-						<?php $this->render_screen( $screen, $settings ); ?>
-					</div>
-				</div>
-			</section>
-		</main>
-		<?php
-	}
-
-	/**
-	 * Render the set-password shell for admin preview without requiring a live token.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return void
-	 */
-	private function render_gateway_shell_with_password_preview( $settings ) {
-		$style = $this->get_gateway_style_attribute( $settings );
-		?>
-		<main class="alynt-ag-gateway" data-agw-screen="setpassword" style="<?php echo esc_attr( $style ); ?>">
-			<section class="agw-shell" aria-labelledby="agw-screen-title">
-				<div class="agw-media" aria-hidden="true">
-					<?php $this->render_media_panel( $settings ); ?>
-				</div>
-				<div class="agw-panel">
-					<div class="agw-card">
-						<?php $this->render_brand_block( $settings ); ?>
-						<?php
-						$this->setpassword_screen()->render_password_form(
-							$settings,
-							home_url( $settings['account_action_base'] ),
-							'reset_password',
-							'alynt_ag_reset_password',
-							'alynt_ag_auth_nonce',
-							array(
-								'key'   => 'preview-key',
-								'login' => 'preview@example.test',
-							),
-							''
-						);
-						?>
-					</div>
-				</div>
-			</section>
-		</main>
-		<?php
-	}
-
-	/**
 	 * Render dashboard shell.
 	 *
 	 * @param array<string,mixed> $settings Settings.
@@ -482,121 +344,6 @@ class ALYNT_AG_Frontend {
 	 */
 	private function render_dashboard_shell( $settings ) {
 		$this->dashboard_screen()->render_dashboard_shell( $settings, $this->get_current_relative_path() );
-	}
-
-	/**
-	 * Return inline CSS custom properties for configured branding.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return string
-	 */
-	private function get_gateway_style_attribute( $settings ) {
-		return $this->branding()->style_attribute( $settings );
-	}
-
-	/**
-	 * Render the media panel.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return void
-	 */
-	private function render_media_panel( $settings ) {
-		$this->branding()->render_media_panel( $settings );
-	}
-
-	/**
-	 * Render logo or store name.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return void
-	 */
-	private function render_brand_block( $settings ) {
-		$this->branding()->render_brand_block( $settings );
-	}
-
-	/**
-	 * Render one screen inside the gateway shell.
-	 *
-	 * @param string              $screen   Screen key.
-	 * @param array<string,mixed> $settings Settings.
-	 * @return void
-	 */
-	private function render_screen( $screen, $settings ) {
-		switch ( $screen ) {
-			case 'register':
-				$this->render_register_screen( $settings );
-				break;
-			case 'lostpassword':
-				$this->render_lostpassword_screen( $settings );
-				break;
-			case 'setpassword':
-				$this->render_setpassword_screen( $settings );
-				break;
-			case 'logout':
-				$this->render_logout_screen( $settings );
-				break;
-			case 'registration_disabled':
-				$this->render_registration_disabled_screen( $settings );
-				break;
-			case 'invalidlink':
-				$this->render_invalid_link_screen( $settings );
-				break;
-			case 'login':
-			default:
-				$this->render_login_screen( $settings );
-				break;
-		}
-	}
-
-	/**
-	 * Render login screen.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return void
-	 */
-	private function render_login_screen( $settings ) {
-		$this->login_screen()->render_login_screen( $settings );
-	}
-
-	/**
-	 * Render registration screen.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return void
-	 */
-	private function render_register_screen( $settings ) {
-		$this->register_screen()->render_register_screen( $settings );
-	}
-
-	/**
-	 * Render lost password screen.
-	 *
-	 * @param array<string,mixed> $settings          Settings.
-	 * @param string              $forced_error_code Optional forced error code.
-	 * @return void
-	 */
-	private function render_lostpassword_screen( $settings, $forced_error_code = '' ) {
-		$this->lostpassword_screen()->render_lostpassword_screen( $settings, $forced_error_code );
-	}
-
-	/**
-	 * Render set password screen.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return void
-	 */
-	private function render_setpassword_screen( $settings ) {
-		$this->setpassword_screen()->render_setpassword_screen( $settings );
-	}
-
-	/**
-	 * Render logout confirmation.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return void
-	 */
-	private function render_logout_screen( $settings ) {
-		$this->logout_screen()->render_logout_screen( $settings );
 	}
 
 	/**
@@ -622,36 +369,6 @@ class ALYNT_AG_Frontend {
 	}
 
 	/**
-	 * Render registration disabled screen.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return void
-	 */
-	private function render_registration_disabled_screen( $settings ) {
-		$this->state_screens()->render_registration_disabled_screen( $settings );
-	}
-
-	/**
-	 * Render invalid link screen.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return void
-	 */
-	private function render_invalid_link_screen( $settings ) {
-		$this->state_screens()->render_invalid_link_screen( $settings );
-	}
-
-	/**
-	 * Render custom account dashboard.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return void
-	 */
-	private function render_dashboard_screen( $settings ) {
-		$this->dashboard_screen()->render_dashboard_screen( $settings, $this->get_current_relative_path() );
-	}
-
-	/**
 	 * Get title for the document title tag.
 	 *
 	 * @param string $screen Screen key.
@@ -660,16 +377,5 @@ class ALYNT_AG_Frontend {
 	public function get_screen_title( $screen ) {
 		$messages = new ALYNT_AG_Frontend_Messages();
 		return $messages->screen_title( $screen );
-	}
-
-	/**
-	 * Get public resend-confirmation error message.
-	 *
-	 * @param string $error_code Error code.
-	 * @return string
-	 */
-	private function get_resend_error_message( $error_code ) {
-		$messages = new ALYNT_AG_Frontend_Messages();
-		return $messages->resend_error( $error_code );
 	}
 }

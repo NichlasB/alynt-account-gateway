@@ -2,11 +2,42 @@
 
 ## Status
 
-- Current phase: v0.1.15 released and verified
+- Current phase: v0.1.16 branch implementation checks complete; branch QA package and Plugin Tester smoke are next
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.15 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.16 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Extract the generic branded gateway shell and auth screen dispatch out of the large frontend renderer class without changing shell markup, branding output, media panel output, screen copy, routes, query parameters, nonce/action names, password preview behavior, dashboard behavior, or request handling.
+- [x] Add focused test coverage around the extracted frontend gateway shell service.
+- [ ] Run branch-QA package and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.16` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.16` from clean `master` after the `v0.1.15` release merge.
+- Extracted the branded auth shell into `ALYNT_AG_Frontend_Gateway_Shell`, including shell wrapper markup, inline branding style output, media panel rendering, brand block rendering, auth screen dispatch, and the admin set-password preview shell.
+- Kept `ALYNT_AG_Frontend` request flow, frontend asset enqueueing, route detection, native login redirect behavior, emergency bypass handling, URL filters, logout confirmation handling, dashboard rendering, and document title behavior intact while delegating non-dashboard auth shell output to the new service.
+- Removed now-unused private frontend wrapper methods for auth screen rendering, branding helper access, path comparison, and resend-error message lookup.
+- Added focused `FrontendGatewayShellTest` coverage for shell wrapper output, branding/media insertion, screen dispatch across login/register/lost-password/set-password/logout/state fallbacks, unknown-screen fallback, and set-password preview form rendering.
+- Verified `php -l` for the new service, test file, and frontend class; targeted `FrontendGatewayShellTest` passes with 9 tests and 18 assertions; full `npm.cmd test` passes with 154 tests and 641 assertions; `npm.cmd run lint` passes; `npm.cmd run build` passes; `npm.cmd run make-pot` writes 344 strings with no string changes; `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities; and `git diff --check` passes.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, query parameters, redirect behavior, registration request handling, login/lost-password/set-password/logout behavior, email behavior, WooCommerce dashboard behavior, dashboard output, asset handles/URLs, design-token names, frontend class names, nonce names, form action names, provider verification behavior, password policy, or dashboard link normalization behavior.
+- Keep this cycle focused on generic auth shell rendering and auth screen dispatch; leave request routing, dashboard rendering, auth services, registration storage, provider verification, email delivery, webhook behavior, and WooCommerce endpoint delegation untouched.
+- Defer final `0.1.16` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates representative gateway routes after the gateway shell extraction.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.15 Small Release Cycle
 

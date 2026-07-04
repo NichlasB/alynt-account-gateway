@@ -37,6 +37,7 @@ $alynt_ag_files = array(
 	'includes/services/class-frontend-setpassword-screen.php',
 	'includes/services/class-frontend-logout-screen.php',
 	'includes/services/class-frontend-state-screens.php',
+	'includes/services/class-frontend-gateway-shell.php',
 	'includes/services/class-compatibility-warnings.php',
 	'includes/services/class-privacy-service.php',
 	'includes/services/class-frontend-messages.php',
