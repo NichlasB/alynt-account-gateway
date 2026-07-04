@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased
+
+No unreleased changes.
+
+## 0.1.2 - 2026-07-04
+
+### Added
+
+- Focused email tooling test coverage for preview rendering and test-send validation.
+
+### Fixed
+
+- The email-change disable toggle now also suppresses WordPress pending profile email-change request emails and clears the pending marker so users are not left waiting for a disabled confirmation email.
+
+### Verified
+
+- Email preview and test-send QA on LocalWP Plugin Tester.
+
 ## 0.1.1 - 2026-07-04
 
 ### Added

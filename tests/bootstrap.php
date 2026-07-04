@@ -31,6 +31,7 @@ $GLOBALS['alynt_ag_test_unscheduled_events'] = array();
 $GLOBALS['alynt_ag_test_cleared_hooks'] = array();
 $GLOBALS['alynt_ag_test_redirects'] = array();
 $GLOBALS['alynt_ag_test_signons'] = array();
+$GLOBALS['alynt_ag_test_deleted_user_meta'] = array();
 
 class ALYNT_AG_Test_WPDB {
 	public $prefix = 'wp_';
@@ -443,6 +444,17 @@ if ( ! function_exists( 'get_user_meta' ) ) {
 		);
 
 		return $values[ $key ] ?? '';
+	}
+}
+
+if ( ! function_exists( 'delete_user_meta' ) ) {
+	function delete_user_meta( $user_id, $meta_key ) {
+		$GLOBALS['alynt_ag_test_deleted_user_meta'][] = array(
+			'user_id'  => $user_id,
+			'meta_key' => $meta_key,
+		);
+
+		return true;
 	}
 }
 

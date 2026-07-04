@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Alynt Account Gateway 0.1.1\n"
+"Project-Id-Version: Alynt Account Gateway 0.1.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 11:42+0000\n"
+"POT-Creation-Date: 2026-07-04 12:32+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -27,7 +27,7 @@ msgstr ""
 msgid "Account Created Webhook URL"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:43
+#: includes/services/class-email-template-service.php:51
 msgid "Account Created Welcome"
 msgstr ""
 
@@ -217,11 +217,11 @@ msgstr ""
 msgid "Compatibility Warnings"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:414
+#: includes/services/class-email-template-service.php:486
 msgid "Confirm Account"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:422
+#: includes/services/class-email-template-service.php:494
 msgid "Confirm Email Address"
 msgstr ""
 
@@ -295,7 +295,7 @@ msgstr ""
 msgid "Custom Login Page Customizer may overlap with branded login output"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:55
+#: includes/services/class-email-template-service.php:63
 msgid "Damon"
 msgstr ""
 
@@ -372,7 +372,7 @@ msgstr ""
 msgid "Email Address"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:44
+#: includes/services/class-email-template-service.php:52
 msgid "Email Change Confirmation"
 msgstr ""
 
@@ -769,7 +769,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:42
+#: includes/services/class-email-template-service.php:50
 msgid "Password Changed"
 msgstr ""
 
@@ -799,7 +799,7 @@ msgstr ""
 msgid "Password must include uppercase, lowercase, number, and symbol characters."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:41
+#: includes/services/class-email-template-service.php:49
 msgid "Password Reset"
 msgstr ""
 
@@ -827,7 +827,7 @@ msgstr ""
 msgid "Passwords match"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:56
+#: includes/services/class-email-template-service.php:64
 msgid "Paulo"
 msgstr ""
 
@@ -930,7 +930,7 @@ msgstr ""
 msgid "Registration Attempts Per Window"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:40
+#: includes/services/class-email-template-service.php:48
 msgid "Registration Confirmation"
 msgstr ""
 
@@ -999,7 +999,7 @@ msgstr ""
 msgid "Reoon Verification Mode"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:418
+#: includes/services/class-email-template-service.php:490
 #: public/class-frontend.php:1126
 #: public/class-frontend.php:783
 #: public/class-frontend.php:795
@@ -1178,11 +1178,11 @@ msgstr ""
 msgid "The email address or password is incorrect."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:123
+#: includes/services/class-email-template-service.php:131
 msgid "The email could not be sent. Please try again."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:107
+#: includes/services/class-email-template-service.php:115
 msgid "The email recipient is invalid."
 msgstr ""
 
@@ -1249,7 +1249,7 @@ msgstr ""
 msgid "Theme My Login may overlap with gateway screens"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:396
+#: includes/services/class-email-template-service.php:468
 msgid "there"
 msgstr ""
 
@@ -1282,7 +1282,7 @@ msgstr ""
 msgid "This email address cannot be used."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:502
+#: includes/services/class-email-template-service.php:574
 msgid "This email was sent by %s."
 msgstr ""
 
@@ -1350,7 +1350,7 @@ msgstr ""
 msgid "Ultimate Member provides login, registration, and account pages that may compete with the gateway routes."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:77
+#: includes/services/class-email-template-service.php:85
 msgid "Unknown email template."
 msgstr ""
 
@@ -1378,7 +1378,7 @@ msgstr ""
 msgid "Verification will appear here when enabled."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:426
+#: includes/services/class-email-template-service.php:498
 msgid "View Account"
 msgstr ""
 

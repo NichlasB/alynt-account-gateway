@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.1 small release cycle started on branch `release/0.1.1`
+- Current phase: v0.1.2 released from branch `release/0.1.2`; ready to merge to `master` and start the next small release cycle.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.0 is the current public baseline; v0.1.1 is scoped as a small admin polish, compatibility, and test coverage release.
+- Plugin status: v0.1.2 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,6 +32,32 @@
 - Email editor: Rich template editor with preview and test-send
 - Terms/privacy links: Relative URL paths configured manually, such as `/terms/` or `/legal/privacy/`
 - Multilingual support: Required for v1
+
+## v0.1.2 Small Release Cycle
+
+### Scope
+
+- [x] Browser/manual QA email preview and test-send on LocalWP Plugin Tester.
+- [x] Add or refine focused test coverage around email preview/test-send handlers where practical.
+- [x] Evaluate and, if safe, implement the remaining profile email-change request suppression strategy for the existing disable toggle.
+- [x] Refresh docs/changelog/POT if implementation changes account email behavior or user-facing strings.
+- [x] Re-run Plugin Tester smoke checks for email tools and a light account-gateway regression pass.
+- [x] Verify Alynt Plugin Updater detects and installs `0.1.2` from the GitHub release asset.
+
+### Guardrails
+
+- Keep the cycle small; do not rework the whole email editor.
+- Keep frontend output disabled by default on fresh install.
+- Preserve the existing branded email templates, tokens, and preview/test-send UI unless a QA finding requires a narrow fix.
+- Do not suppress WordPress core security/account emails unless the behavior can be verified safely and documented clearly.
+- Keep release packaging exclusions aligned with the existing GitHub release workflow.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Local release-style zip excludes source/dev files and includes built assets.
+- [x] Plugin Tester validates email preview/test-send and the selected email-change behavior.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.1 Small Release Cycle
 
@@ -226,6 +252,15 @@
 - Remaining release decisions: optionally add uninstall-specific unit coverage before the next release.
 - Installed the local `alynt-account-gateway-v0.1.1.zip` package on LocalWP Plugin Tester, verified the active plugin reports `0.1.1`, browser-smoked Advanced / Tools compatibility warnings, gateway preview mode, `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, `/my-account/`, and WooCommerce account endpoints for orders, downloads, addresses, payment methods, and account details.
 - Published GitHub release `v0.1.1`, confirmed the Build Release workflow completed successfully, downloaded and inspected `alynt-account-gateway-v0.1.1.zip`, verified the package reports `0.1.1` and excludes development/source files, then confirmed Alynt Plugin Updater detected `0.1.0` to `0.1.1` and the WordPress Plugins screen `update now` action installed the GitHub release asset. Final Plugin Tester state: active `0.1.1`, no remaining update, settings intact.
+- Started v0.1.2 email QA on LocalWP Plugin Tester. Verified the Emails tab exposes all five templates, preview renders successful branded HTML for registration confirmation, password reset, password changed, account-created welcome, and email-change confirmation, and the test-send form redirects with `email_test_sent`. SureMails was temporarily switched to simulation mode for the send test, logged `Reset your password for Plugin Tester` to `alynt-ag-v012-qa@example.test` as simulated, and was restored to its prior non-simulation setting.
+- Added focused email tooling coverage for preview-token rendering across every supported template and test-send rejection paths for invalid recipients and unknown templates. Verified `npm.cmd test` passes with 94 tests and 354 assertions.
+- Implemented the remaining profile email-change request suppression for the existing email-change disable toggle. WordPress core sends this pending request through a direct `wp_mail()` call after `new_user_email_content`, so the plugin now marks that exact request when disabled, short-circuits it through `pre_wp_mail`, and removes the pending `_new_email` marker to avoid an impossible confirmation state. Verified `npm.cmd test` passes with 96 tests and 359 assertions, and `npm.cmd run lint` passes.
+- Refreshed docs, changelog, and `languages/alynt-account-gateway.pot` after the email-change behavior update. No new translatable strings were added; POT changes were source-reference/date metadata.
+- Bumped release candidate metadata to `0.1.2` across the plugin header/constant, npm metadata, readme, sample test, changelog, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test`, `npm.cmd run make-pot`, `npm.cmd audit --audit-level=moderate`, and `git diff --check`.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.2-20260704-143449\alynt-account-gateway-v0.1.2.zip`; verified built assets are included, dev/source/test/docs/package files are excluded, and the package header/constant report `0.1.2`.
+- Installed the local `0.1.2` package on LocalWP Plugin Tester, verified active header and loaded constant are `0.1.2`, browser-smoked `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, `/my-account/`, `/my-account/orders/`, and `/my-account/edit-account/`, and verified no native WordPress login shell appears on gateway routes.
+- Re-ran installed-copy email QA on Plugin Tester: all five admin previews returned branded HTML, test-send logged `Confirm your email address for Plugin Tester` to `alynt-ag-v012-smoke@example.test` as simulated through SureMails, SureMails simulation was restored to `no`, and the email-change suppression path returned `false` through `pre_wp_mail` while clearing `_new_email` and restoring the original setting.
+- Published GitHub release `v0.1.2`, confirmed the Build Release workflow completed successfully, and verified the attached `alynt-account-gateway-v0.1.2.zip` release asset. Downgraded LocalWP Plugin Tester to the public `v0.1.1` release asset, confirmed Alynt Plugin Updater detected `0.1.1` to `0.1.2`, used the WordPress Plugins screen `update now` path to download and install from the `v0.1.2` GitHub release asset, and verified final Plugin Tester state: active `0.1.2`, no remaining update.
 
 ## Workflow Notes
 

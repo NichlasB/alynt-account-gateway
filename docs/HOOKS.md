@@ -21,6 +21,7 @@ This document tracks public and integration-facing hooks used by Alynt Account G
 - `send_password_change_email`: Disables the password changed email when configured.
 - `send_email_change_email`: Disables the email change confirmation email when configured.
 - `new_user_email_content`: Applies the configured email-change confirmation body to WordPress pending email-change requests.
+- `pre_wp_mail`: Short-circuits WordPress pending profile email-change request emails when the email-change confirmation disable setting is enabled.
 - `woocommerce_account_menu_items`: Preserves WooCommerce account endpoints while allowing branded dashboard presentation.
 - `wp_privacy_personal_data_exporters`: Registers the account gateway personal data exporter.
 - `wp_privacy_personal_data_erasers`: Registers the account gateway personal data eraser.

@@ -15,6 +15,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ALYNT_AG_Email_Template_Service {
 
 	/**
+	 * Whether the current request should suppress the pending profile email change request.
+	 *
+	 * @var bool
+	 */
+	private $suppress_profile_email_change_request = false;
+
+	/**
 	 * Register WordPress email filters.
 	 *
 	 * @return void
@@ -28,6 +35,7 @@ class ALYNT_AG_Email_Template_Service {
 		add_filter( 'send_email_change_email', array( $this, 'filter_send_email_change_email' ), 10, 3 );
 		add_filter( 'email_change_email', array( $this, 'filter_email_change_email' ), 10, 3 );
 		add_filter( 'new_user_email_content', array( $this, 'filter_new_user_email_content' ), 10, 2 );
+		add_filter( 'pre_wp_mail', array( $this, 'filter_pre_wp_mail_for_profile_email_change' ), 10, 2 );
 	}
 
 	/**
@@ -286,8 +294,14 @@ class ALYNT_AG_Email_Template_Service {
 	 */
 	public function filter_new_user_email_content( $content, $new_user_email ) {
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
-		$user     = function_exists( 'wp_get_current_user' ) ? wp_get_current_user() : null;
-		$tokens   = is_object( $user ) ? $this->user_tokens( $user ) : array();
+
+		if ( ! empty( $settings['email_change_confirmation_disabled'] ) ) {
+			$this->suppress_profile_email_change_request = true;
+			return $content;
+		}
+
+		$user   = function_exists( 'wp_get_current_user' ) ? wp_get_current_user() : null;
+		$tokens = is_object( $user ) ? $this->user_tokens( $user ) : array();
 
 		$tokens['user_email']       = $new_user_email['newemail'] ?? ( $tokens['user_email'] ?? '' );
 		$tokens['change_email_url'] = '###ADMIN_URL###';
@@ -295,6 +309,35 @@ class ALYNT_AG_Email_Template_Service {
 		$rendered = $this->render( 'email_change_confirmation', $tokens, $settings );
 
 		return is_wp_error( $rendered ) ? $content : $rendered['plain'];
+	}
+
+	/**
+	 * Suppress the pending profile email-change request when configured.
+	 *
+	 * WordPress exposes only the pending profile email-change body through
+	 * `new_user_email_content`. The actual sender is a direct wp_mail() call, so
+	 * the disable toggle must short-circuit that specific mail after the body
+	 * filter marks the current request.
+	 *
+	 * @param null|bool           $pre  Short-circuit value.
+	 * @param array<string,mixed> $atts Mail arguments.
+	 * @return null|bool
+	 */
+	public function filter_pre_wp_mail_for_profile_email_change( $pre, $atts ) {
+		if ( null !== $pre || ! $this->suppress_profile_email_change_request ) {
+			return $pre;
+		}
+
+		$this->suppress_profile_email_change_request = false;
+
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+		if ( empty( $settings['email_change_confirmation_disabled'] ) ) {
+			return $pre;
+		}
+
+		$this->delete_pending_profile_email_change( $atts );
+
+		return false;
 	}
 
 	/**
@@ -313,6 +356,35 @@ class ALYNT_AG_Email_Template_Service {
 		}
 
 		return strtr( (string) $content, $replace );
+	}
+
+	/**
+	 * Remove the pending email-change marker created immediately before core sends mail.
+	 *
+	 * @param array<string,mixed> $atts Mail arguments.
+	 * @return void
+	 */
+	private function delete_pending_profile_email_change( $atts ) {
+		if ( ! function_exists( 'wp_get_current_user' ) || ! function_exists( 'delete_user_meta' ) ) {
+			return;
+		}
+
+		$current_user = wp_get_current_user();
+		if ( ! is_object( $current_user ) || empty( $current_user->ID ) ) {
+			return;
+		}
+
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Mirrors core profile update context after WordPress nonce validation.
+		$posted_user_id = isset( $_POST['user_id'] ) ? absint( wp_unslash( $_POST['user_id'] ) ) : 0;
+		$posted_email   = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
+		$mail_to = isset( $atts['to'] ) ? sanitize_email( is_array( $atts['to'] ) ? reset( $atts['to'] ) : $atts['to'] ) : '';
+
+		if ( (int) $current_user->ID !== $posted_user_id || '' === $posted_email || $posted_email !== $mail_to ) {
+			return;
+		}
+
+		delete_user_meta( (int) $current_user->ID, '_new_email' );
 	}
 
 	/**

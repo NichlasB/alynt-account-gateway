@@ -86,7 +86,7 @@ Secrets must never be committed to documentation. Store Turnstile, Reoon, webhoo
 
 Email templates support token placeholders such as `{{site_name}}`, `{{first_name}}`, `{{last_name}}`, `{{user_email}}`, `{{confirmation_url}}`, `{{reset_url}}`, `{{change_email_url}}`, and `{{expiry_hours}}`.
 
-The `email_change_confirmation_*` template is used for the post-change email notification and as the plain-text body for WordPress's pending profile email-change request. WordPress exposes only the body for the pending request through `new_user_email_content`, so that specific core email cannot use the branded HTML wrapper until the plugin replaces the full sender flow.
+The `email_change_confirmation_*` template is used for the post-change email notification and as the plain-text body for WordPress's pending profile email-change request. WordPress exposes only the body for the pending request through `new_user_email_content`, so that specific core email cannot use the branded HTML wrapper. When `email_change_confirmation_disabled` is enabled, the plugin suppresses both the post-change notification and the pending profile email-change request, then clears the pending `_new_email` marker so users are not left waiting for a disabled confirmation email.
 
 The `account_created_webhook` setting sends an `account.created` JSON payload after a confirmed registration creates the WordPress user. Webhook logs store destination host, HTTP status, success state, retry count, error message, and timestamp by default. Full payload bodies are stored only when `debug_payload_logging` is enabled.
 

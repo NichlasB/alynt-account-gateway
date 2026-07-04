@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -37,6 +37,11 @@ Core features include:
 4. Enable Frontend Output only after confirming the settings.
 
 == Changelog ==
+
+= 0.1.2 =
+* Verified email preview and test-send tooling on LocalWP Plugin Tester.
+* Added focused email tooling test coverage for preview rendering and test-send validation.
+* Fixed the email-change disable toggle so it also suppresses WordPress pending profile email-change request emails and clears the pending marker.
 
 = 0.1.1 =
 * Added settings import/export JSON, per-tab restore defaults, and gateway preview mode.
