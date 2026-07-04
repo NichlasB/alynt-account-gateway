@@ -2,11 +2,50 @@
 
 ## Status
 
-- Current phase: v0.1.9 released and verified
+- Current phase: v0.1.10 released and verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.9 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.10 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.10 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Extract the logout confirmation screen renderer out of the large frontend renderer class without changing copy, nonce/action names, query parameters, redirect behavior, routes, button classes, or notice behavior.
+- [x] Add focused test coverage around the extracted frontend logout-screen service.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.10` release.
+
+### Progress Notes
+
+- Started `v0.1.10` from clean `master` after the `v0.1.9` release merge.
+- Extracted logout confirmation rendering into `ALYNT_AG_Frontend_Logout_Screen`.
+- Kept `ALYNT_AG_Frontend` request handling and wrapper method intact while delegating logout confirmation markup to the new service.
+- Added focused `FrontendLogoutScreenTest` coverage for the notice, nonce-protected logout URL, cancel URL, action button classes, and empty-notice suppression.
+- Verified `php -l` for the new service and test file, targeted `FrontendLogoutScreenTest` passes with 2 tests and 11 assertions, `npm.cmd run lint` passes, and `git diff --check` passes.
+- Verified the full local gate: `npm.cmd test` passes with 124 tests and 478 assertions, `npm.cmd run lint` passes, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.10-branch-qa-20260704-183635\alynt-account-gateway-v0.1.10-branch-qa.zip`; verified built frontend/admin assets, the new frontend logout-screen service, the existing frontend state-screen service, and the frontend component service are included, dev/source/test/docs/rules/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.9` as expected before the final release bump.
+- Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.9` header/constant, `ALYNT_AG_Frontend_Logout_Screen` file/class loaded in a fresh request, and logout confirmation rendering includes the title, notice, nonce-protected confirm URL, and cancel action.
+- Browser-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=logout`, `/account?action=invalidlink`, `/account?action=lostpassword`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, and included frontend CSS/JS assets.
+- Removed the branch-QA zip from Plugin Tester uploads and cleaned up the misplaced temporary upload folder created by the failed upload-link attempt.
+- Bumped release-candidate metadata to `0.1.10` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 124 tests and 478 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.10-20260704-184128\alynt-account-gateway-v0.1.10.zip`; verified built frontend/admin assets and the new frontend logout-screen service are included, dev/source/test/docs/rules/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.10`.
+- Published GitHub release `v0.1.10`, downloaded the public release asset, and verified the downloaded package has 38 runtime entries, no backslash archive entries, no dev/source/test/docs/rules/package files, built frontend/admin CSS/JS assets, the new frontend logout-screen service, and `0.1.10` header/constant metadata.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.9` to `0.1.10`, then installed it through the WordPress Plugins screen update path. Final server-side state: active `0.1.10` header/constant, `ALYNT_AG_Frontend_Logout_Screen` file/class loaded, and no remaining update offer.
+- Browser-smoked the release-installed Plugin Tester copy at `/login`, `/account?action=logout`, `/account?action=invalidlink`, `/account?action=lostpassword`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and preserved expected screen titles.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, query parameters, redirect behavior, registration behavior, email behavior, WooCommerce dashboard behavior, asset handles/URLs, design-token names, frontend class names, nonce names, or form action names.
+- Keep this cycle focused on logout confirmation rendering; leave confirmed logout request handling inside the main frontend controller.
+- Defer final `0.1.10` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates representative gateway routes after the logout-screen extraction.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## Locked Decisions
 
