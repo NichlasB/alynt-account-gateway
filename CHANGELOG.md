@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.1.14 - 2026-07-04
+
+### Changed
+
+- Extracted set-password screen routing and shared password form rendering into a dedicated set-password screen service without changing copy, form fields, nonce/action names, query parameters, token/key validation routing, password strength markup, password requirements, or accessibility attributes.
+
+### Added
+
+- Focused frontend set-password screen service tests for default password form output, error accessibility state, pending-registration token form output, native reset-key form output, invalid registration-token fallback, and invalid native reset-key fallback.
+
 ## 0.1.13 - 2026-07-04
 
 ### Changed

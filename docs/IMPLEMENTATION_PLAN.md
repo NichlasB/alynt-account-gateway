@@ -29,6 +29,7 @@
 - Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.13` header/constant, `ALYNT_AG_Frontend_Setpassword_Screen` file/class loaded, and the new service file present in the installed plugin copy.
 - Browser-smoked the branch-QA installed Plugin Tester copy with system Chrome at `/account?action=setpassword&key=...&login=...`, `/account?action=setpassword`, and `/login`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and preserved the set-password form, invalid-link fallback, and login control route. A 390px viewport pass confirmed no horizontal overflow, hidden media panel, and stable password form/card widths.
 - Removed the temporary branch-QA reset user and uploaded branch-QA zip from Plugin Tester after smoke verification.
+- Bumped release-candidate metadata to `0.1.14` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 141 tests and 603 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 
 ### Guardrails
 
