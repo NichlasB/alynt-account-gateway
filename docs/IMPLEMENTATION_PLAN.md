@@ -4,7 +4,7 @@
 
 - Current phase: v0.1.19 webhook tools
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.18 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.19 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -17,7 +17,7 @@
 - [x] Add a recent webhook deliveries table on the Webhooks tab using plugin-owned webhook log metadata.
 - [x] Add focused coverage for test webhook dispatch behavior where practical.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.19` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.19` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -33,6 +33,8 @@
 - Regenerated `languages/alynt-account-gateway.pot` with 381 strings and `0.1.19` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 162 tests and 671 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.19-20260704-233844\alynt-account-gateway-v0.1.19.zip`; verified 46 runtime files, no backslash archive entries, no missing runtime files, no dev/source/test/docs/rules/package/vendor files, and `0.1.19` header/constant/readme/POT metadata.
 - Installed the local `0.1.19` package on LocalWP Plugin Tester; verified active header and loaded constant are `0.1.19`, webhook test method/action/table strings are present, and safe intercepted test dispatch logs `account.created.test` with HTTP `202` and success `1` without external network calls.
+- Published GitHub release `v0.1.19`, downloaded the public release asset, and verified 46 runtime files, no backslash archive entries, no dev/source/test/docs/rules/package/vendor files, and `0.1.19` header/constant/readme metadata.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.18` to `0.1.19`, then installed it through the WordPress upgrader path. Final server-side state: active `0.1.19` header/constant, webhook test method/action/table strings present, and no remaining update offer.
 
 ### Guardrails
 
@@ -44,7 +46,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates the Webhooks tab test-send and recent delivery table.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.18 Small Release Cycle
 
