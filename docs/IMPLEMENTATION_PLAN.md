@@ -43,7 +43,7 @@
 - [x] Add compatibility warnings for plugins that commonly modify login, registration, account pages, security redirects, or WooCommerce account endpoints.
 - [x] Add focused unit coverage for settings schema defaults/sanitization, frontend-output routing, emergency bypass behavior, role access/admin toolbar rules, password policy matching, retention cleanup, and uninstall cleanup where practical.
 - [x] Re-run Plugin Tester smoke checks after the release package is built.
-- [ ] Verify Alynt Plugin Updater detects and installs `0.1.1` from the GitHub release asset.
+- [x] Verify Alynt Plugin Updater detects and installs `0.1.1` from the GitHub release asset.
 
 ### Guardrails
 
@@ -58,7 +58,7 @@
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Local release-style zip excludes source/dev files and includes built assets.
 - [x] Plugin Tester validates admin settings actions, preview mode, gateway routes, and WooCommerce dashboard takeover.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## Implementation Phases
 
@@ -225,6 +225,7 @@
 - Browser-smoked the release-installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, and `/my-account/` after the updater install.
 - Remaining release decisions: optionally add uninstall-specific unit coverage before the next release.
 - Installed the local `alynt-account-gateway-v0.1.1.zip` package on LocalWP Plugin Tester, verified the active plugin reports `0.1.1`, browser-smoked Advanced / Tools compatibility warnings, gateway preview mode, `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, `/my-account/`, and WooCommerce account endpoints for orders, downloads, addresses, payment methods, and account details.
+- Published GitHub release `v0.1.1`, confirmed the Build Release workflow completed successfully, downloaded and inspected `alynt-account-gateway-v0.1.1.zip`, verified the package reports `0.1.1` and excludes development/source files, then confirmed Alynt Plugin Updater detected `0.1.0` to `0.1.1` and the WordPress Plugins screen `update now` action installed the GitHub release asset. Final Plugin Tester state: active `0.1.1`, no remaining update, settings intact.
 
 ## Workflow Notes
 
