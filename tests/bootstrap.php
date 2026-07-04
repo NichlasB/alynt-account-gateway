@@ -37,6 +37,7 @@ $GLOBALS['alynt_ag_test_user_updates'] = array();
 $GLOBALS['alynt_ag_test_enqueued_styles'] = array();
 $GLOBALS['alynt_ag_test_enqueued_scripts'] = array();
 $GLOBALS['alynt_ag_test_localized_scripts'] = array();
+$GLOBALS['alynt_ag_test_attachment_urls'] = array();
 
 class ALYNT_AG_Test_WPDB {
 	public $prefix = 'wp_';
@@ -281,6 +282,11 @@ if ( ! function_exists( 'wp_strip_all_tags' ) ) {
 
 if ( ! function_exists( 'wp_get_attachment_image_url' ) ) {
 	function wp_get_attachment_image_url( $attachment_id, $size = 'thumbnail' ) {
+		$key = (int) $attachment_id . ':' . (string) $size;
+		if ( isset( $GLOBALS['alynt_ag_test_attachment_urls'][ $key ] ) ) {
+			return $GLOBALS['alynt_ag_test_attachment_urls'][ $key ];
+		}
+
 		return '';
 	}
 }
@@ -777,6 +783,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-dashboard-service.ph
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-woocommerce-integration.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-routes.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-assets.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-branding.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-messages.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-warnings.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-service.php';

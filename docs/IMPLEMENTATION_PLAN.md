@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.6 released and verified
+- Current phase: v0.1.7 small release cycle started on branch `release/0.1.7`
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.6 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -32,6 +32,37 @@
 - Email editor: Rich template editor with preview and test-send
 - Terms/privacy links: Relative URL paths configured manually, such as `/terms/` or `/legal/privacy/`
 - Multilingual support: Required for v1
+
+## v0.1.7 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Preserve the existing `AI_CODING_RULES.md` housekeeping rename as a separate checkpoint.
+- [x] Extract frontend branding/media/style rendering out of the large frontend renderer class without changing markup, design tokens, image handling, logo sizing, or fallback store-name behavior.
+- [x] Add focused test coverage around the extracted frontend branding service.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.7` release.
+
+### Progress Notes
+
+- Started `v0.1.7` from `master` after the `v0.1.6` release merge.
+- Preserved the already-present `.windsurfrules` to `AI_CODING_RULES.md` housekeeping rename in commit `c1b0b63` before beginning the code slice.
+- Extracted inline design-token style generation, left media-panel rendering, and logo/store-name rendering into `ALYNT_AG_Frontend_Branding`.
+- Kept `ALYNT_AG_Frontend` wrapper methods for internal compatibility while delegating branding/media/style decisions to the new service.
+- Added focused `FrontendBrandingTest` coverage for configured design tokens, empty-value skipping, media pattern fallback, configured background image output, store-name fallback, logo URL output, and logo max-width clamping.
+- Verified `php -l` for the new service and test file, `npm.cmd test` passes with 115 tests and 435 assertions, `npm.cmd run lint` passes, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, query parameters, redirect behavior, registration behavior, email behavior, WooCommerce dashboard behavior, asset handles/URLs, or design-token names.
+- Keep this cycle focused on one structural extraction from the frontend renderer.
+- Defer final `0.1.7` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates representative gateway routes after the branding/media/style extraction.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.6 Small Release Cycle
 
