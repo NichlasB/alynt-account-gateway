@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.1.18 - 2026-07-04
+
+### Added
+
+- Added a repeatable custom dashboard links editor for label, URL, icon, order, role visibility, and new-tab behavior while preserving the existing JSON storage format.
+
+### Changed
+
+- Sanitized custom dashboard links into a known JSON shape so imported or hand-edited settings skip incomplete rows and discard unsupported fields.
+
 ## 0.1.17 - 2026-07-04
 
 ### Changed

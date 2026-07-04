@@ -31,6 +31,8 @@
 - Server-side rendered the dashboard for a temporary customer user and confirmed the custom link appears with the normalized site URL, new-tab accessible text, and `help` icon class. Removed the temporary user and restored Plugin Tester dashboard links to `[]` after QA.
 - HTTP-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=lostpassword`, and `/my-account/`; public gateway routes rendered branded output with expected screen markers, and logged-out dashboard access redirected to `/login?redirect_to=...`.
 - Removed temporary branch-QA ZIP artifacts from Plugin Tester uploads, including the duplicate-path artifact created by the temporary upload endpoint.
+- Bumped release-candidate metadata to `0.1.18` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 161 tests and 665 assertions, `npm.cmd run make-pot` writes 365 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.18-20260704-231643\alynt-account-gateway-v0.1.18.zip`; verified built admin assets and dashboard-link editor runtime files are included, dev/source/test/docs/rules/package/vendor files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.18`.
 
 ### Guardrails
 
