@@ -38,54 +38,9 @@ class ALYNT_AG_Frontend {
 	 */
 	public function enqueue_assets() {
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
+		$screen   = $this->get_gateway_screen( $settings );
 
-		if ( empty( $settings['frontend_enabled'] ) || ! $this->get_gateway_screen( $settings ) ) {
-			return;
-		}
-
-		$asset_path = ALYNT_AG_PLUGIN_DIR . 'assets/dist/frontend/index.css';
-		if ( file_exists( $asset_path ) ) {
-			wp_enqueue_style(
-				'alynt-ag-frontend',
-				ALYNT_AG_PLUGIN_URL . 'assets/dist/frontend/index.css',
-				array(),
-				filemtime( $asset_path )
-			);
-		}
-
-		$script_path = ALYNT_AG_PLUGIN_DIR . 'assets/dist/frontend/index.js';
-		if ( file_exists( $script_path ) ) {
-			wp_enqueue_script(
-				'alynt-ag-frontend',
-				ALYNT_AG_PLUGIN_URL . 'assets/dist/frontend/index.js',
-				array(),
-				filemtime( $script_path ),
-				true
-			);
-
-			wp_localize_script(
-				'alynt-ag-frontend',
-				'alyntAgFrontend',
-				array(
-					'labels' => array(
-						'showPassword' => __( 'Show password', 'alynt-account-gateway' ),
-						'hidePassword' => __( 'Hide password', 'alynt-account-gateway' ),
-						'show'         => __( 'Show', 'alynt-account-gateway' ),
-						'hide'         => __( 'Hide', 'alynt-account-gateway' ),
-					),
-				)
-			);
-		}
-
-		if ( ! empty( $settings['turnstile_site_key'] ) && 'register' === $this->get_gateway_screen( $settings ) ) {
-			wp_enqueue_script(
-				'alynt-ag-turnstile',
-				'https://challenges.cloudflare.com/turnstile/v0/api.js',
-				array(),
-				ALYNT_AG_VERSION,
-				true
-			);
-		}
+		$this->assets()->enqueue( $settings, $screen );
 	}
 
 	/**
@@ -363,6 +318,15 @@ class ALYNT_AG_Frontend {
 	 */
 	private function routes() {
 		return new ALYNT_AG_Frontend_Routes();
+	}
+
+	/**
+	 * Frontend asset helpers.
+	 *
+	 * @return ALYNT_AG_Frontend_Assets
+	 */
+	private function assets() {
+		return new ALYNT_AG_Frontend_Assets();
 	}
 
 	/**

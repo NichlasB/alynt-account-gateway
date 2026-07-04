@@ -34,6 +34,9 @@ $GLOBALS['alynt_ag_test_signons'] = array();
 $GLOBALS['alynt_ag_test_deleted_user_meta'] = array();
 $GLOBALS['alynt_ag_test_created_users'] = array();
 $GLOBALS['alynt_ag_test_user_updates'] = array();
+$GLOBALS['alynt_ag_test_enqueued_styles'] = array();
+$GLOBALS['alynt_ag_test_enqueued_scripts'] = array();
+$GLOBALS['alynt_ag_test_localized_scripts'] = array();
 
 class ALYNT_AG_Test_WPDB {
 	public $prefix = 'wp_';
@@ -201,6 +204,42 @@ if ( ! function_exists( 'current_time' ) ) {
 if ( ! function_exists( 'wp_json_encode' ) ) {
 	function wp_json_encode( $value, $flags = 0, $depth = 512 ) {
 		return json_encode( $value, $flags, $depth );
+	}
+}
+
+if ( ! function_exists( 'wp_enqueue_style' ) ) {
+	function wp_enqueue_style( $handle, $src = '', $deps = array(), $ver = false, $media = 'all' ) {
+		$GLOBALS['alynt_ag_test_enqueued_styles'][] = array(
+			'handle' => $handle,
+			'src'    => $src,
+			'deps'   => $deps,
+			'ver'    => $ver,
+			'media'  => $media,
+		);
+	}
+}
+
+if ( ! function_exists( 'wp_enqueue_script' ) ) {
+	function wp_enqueue_script( $handle, $src = '', $deps = array(), $ver = false, $in_footer = false ) {
+		$GLOBALS['alynt_ag_test_enqueued_scripts'][] = array(
+			'handle'    => $handle,
+			'src'       => $src,
+			'deps'      => $deps,
+			'ver'       => $ver,
+			'in_footer' => $in_footer,
+		);
+	}
+}
+
+if ( ! function_exists( 'wp_localize_script' ) ) {
+	function wp_localize_script( $handle, $object_name, $l10n ) {
+		$GLOBALS['alynt_ag_test_localized_scripts'][] = array(
+			'handle'      => $handle,
+			'object_name' => $object_name,
+			'l10n'        => $l10n,
+		);
+
+		return true;
 	}
 }
 
@@ -737,6 +776,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-webhook-dispatcher.p
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-dashboard-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-woocommerce-integration.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-routes.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-assets.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-messages.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-warnings.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-service.php';
