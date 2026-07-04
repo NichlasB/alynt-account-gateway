@@ -29,6 +29,7 @@
 - Browser-smoked the branch-QA installed Plugin Tester copy at `/account?action=register`, `/account?action=register&registration_sent=1`, and `/account?action=register&registration_error=terms_required`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and preserved expected registration default/success/error states. A 390px viewport pass confirmed the single-column layout, hidden media panel, no horizontal overflow, and stable field/button widths.
 - Removed the branch-QA zip from Plugin Tester uploads.
 - Bumped release-candidate metadata to `0.1.13` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 135 tests and 557 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.13-20260704\alynt-account-gateway-v0.1.13.zip`; verified built frontend/admin assets and the new frontend registration screen service are included, dev/source/test/docs/rules/package/vendor files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.13`.
 
 ### Guardrails
 
