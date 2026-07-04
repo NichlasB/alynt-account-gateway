@@ -28,6 +28,7 @@ $alynt_ag_files = array(
 	'includes/services/class-woocommerce-integration.php',
 	'includes/services/class-compatibility-warnings.php',
 	'includes/services/class-privacy-service.php',
+	'includes/services/class-frontend-messages.php',
 	'admin/class-admin.php',
 	'admin/class-settings-page.php',
 	'public/class-frontend.php',

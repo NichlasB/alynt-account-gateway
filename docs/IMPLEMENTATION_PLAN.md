@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.3 released and verified on LocalWP Plugin Tester
+- Current phase: v0.1.4 released and verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.3 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.4 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,6 +32,41 @@
 - Email editor: Rich template editor with preview and test-send
 - Terms/privacy links: Relative URL paths configured manually, such as `/terms/` or `/legal/privacy/`
 - Multilingual support: Required for v1
+
+## v0.1.4 Small Release Cycle
+
+### Scope
+
+- [x] Reconcile stale implementation-plan checklist items that were completed during `v0.1.2` email QA and release verification.
+- [x] Start a low-risk structural refactor by extracting frontend message/catalog lookup out of the large frontend renderer class without changing public copy or behavior.
+- [x] Add or preserve focused test coverage around the extracted message catalog.
+- [ ] Re-run build, lint, tests, POT, and package/update checks as appropriate for the final `0.1.4` release.
+
+### Progress Notes
+
+- Started `v0.1.4` from `master` after the `v0.1.3` release merge. Reconciled stale plan checkboxes: profile email-change request suppression and email preview/test-send QA were completed during the `v0.1.2` cycle and release notes.
+- Extracted frontend gateway title and error-message lookup into `ALYNT_AG_Frontend_Messages`, keeping the existing `ALYNT_AG_Frontend::get_screen_title()` public wrapper for admin preview compatibility and preserving rendered copy/fallback behavior.
+- Added focused `FrontendMessagesTest` coverage for screen-title, registration-error, resend-error, and password-error mappings and fallback messages.
+- Created local branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.4-branch-qa-20260704-155405\alynt-account-gateway-v0.1.4-branch-qa-wp.zip`; verified built frontend assets and the message catalog file are included, dev/source/test/docs/package files are excluded, and archive entries use WordPress-compatible forward-slash paths.
+- Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes after the browser upload path returned a blank update response and WP-CLI was unavailable. Verified final installed state: active `0.1.3` header/constant, `ALYNT_AG_Frontend_Messages` file/class loaded, and `register` title resolves to `Create Account`.
+- Browser-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens and avoided the native WordPress login shell.
+- Bumped release-candidate metadata to `0.1.4` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test`, `npm.cmd run make-pot`, `npm.cmd audit --audit-level=moderate`, and `git diff --check`.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.4-20260704-160614\alynt-account-gateway-v0.1.4.zip`; verified built assets and the message catalog are included, dev/source/test/docs/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.4`.
+- Published GitHub release `v0.1.4`, downloaded `alynt-account-gateway-v0.1.4.zip` from the release, and verified the public asset reports `0.1.4`, includes built assets and the message catalog, and excludes development/source files.
+- Confirmed Alynt Plugin Updater detected `0.1.3` to `0.1.4`, used the WordPress Plugins screen `update now` path to download and install from the `v0.1.4` GitHub release asset, and verified final Plugin Tester state: active `0.1.4`, no remaining update.
+- Browser-smoked the release-installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens and avoided the native WordPress login shell.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, form behavior, email behavior, registration behavior, or WooCommerce dashboard behavior.
+- Keep this cycle focused on documentation reconciliation and one small structure improvement.
+- Defer broad class splitting until the extracted seams have tests and release evidence.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates representative gateway routes after the refactor.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.3 Small Release Cycle
 
@@ -197,7 +232,7 @@
 - [x] Wire branded overrides for native password reset, password changed, and email-change notification emails.
 - [x] Wire the WordPress profile email-change request body through `new_user_email_content` as a branded plain-text template.
 - [x] Add account-created welcome email and disable-toggle behavior.
-- [ ] Evaluate a safe replacement strategy if the disable toggle must suppress the profile email-change request email itself.
+- [x] Evaluate a safe replacement strategy if the disable toggle must suppress the profile email-change request email itself.
 - [x] Add account-created webhook dispatcher.
 - [x] Send full user fields in the account-created webhook payload.
 - [x] Store webhook response metadata by default.
@@ -247,7 +282,7 @@
 - [x] Browser/manual QA login, lost password, set password, registration, logout confirmation, disabled registration, and invalid/expired link screens.
 - [x] Browser/manual QA desktop and mobile responsive behavior.
 - [x] Browser/manual QA keyboard-only flow and focus management.
-- [ ] Browser/manual QA email preview and test-send.
+- [x] Browser/manual QA email preview and test-send.
 - [x] Browser/manual QA WooCommerce dashboard delegation.
 - [x] Verify `npm run build`.
 - [x] Verify `npm run lint`.

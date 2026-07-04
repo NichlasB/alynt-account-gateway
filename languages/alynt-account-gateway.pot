@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Alynt Account Gateway 0.1.3\n"
+"Project-Id-Version: Alynt Account Gateway 0.1.4\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 13:30+0000\n"
+"POT-Creation-Date: 2026-07-04 14:05+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -43,8 +43,8 @@ msgstr ""
 msgid "Account Created Welcome Subject"
 msgstr ""
 
+#: includes/services/class-frontend-messages.php:25
 #: public/class-frontend.php:1044
-#: public/class-frontend.php:1123
 msgid "Account Dashboard"
 msgstr ""
 
@@ -265,7 +265,7 @@ msgstr ""
 msgid "Context"
 msgstr ""
 
-#: public/class-frontend.php:1125
+#: includes/services/class-frontend-messages.php:27
 #: public/class-frontend.php:690
 #: public/class-frontend.php:720
 #: public/class-frontend.php:752
@@ -579,8 +579,8 @@ msgstr ""
 msgid "If the details can be used, a confirmation email has been sent. Please check your inbox and spam folder."
 msgstr ""
 
+#: includes/services/class-frontend-messages.php:50
 #: includes/services/class-registration-service.php:145
-#: public/class-frontend.php:1148
 msgid "If this email address can be used, a confirmation email will be sent."
 msgstr ""
 
@@ -609,21 +609,21 @@ msgstr ""
 msgid "Level"
 msgstr ""
 
+#: includes/services/class-frontend-messages.php:32
 #: public/class-frontend.php:1006
-#: public/class-frontend.php:1130
 msgid "Link Expired"
 msgstr ""
 
-#: public/class-frontend.php:1124
+#: includes/services/class-frontend-messages.php:26
 #: public/class-frontend.php:652
 #: public/class-frontend.php:688
 msgid "Log In"
 msgstr ""
 
 #: includes/services/class-dashboard-service.php:40
+#: includes/services/class-frontend-messages.php:30
 #: includes/services/class-woocommerce-integration.php:34
 #: includes/services/class-woocommerce-integration.php:86
-#: public/class-frontend.php:1128
 #: public/class-frontend.php:515
 #: public/class-frontend.php:948
 #: public/class-frontend.php:951
@@ -789,13 +789,13 @@ msgstr ""
 msgid "Password is ready."
 msgstr ""
 
+#: includes/services/class-frontend-messages.php:86
 #: includes/services/class-registration-service.php:799
-#: public/class-frontend.php:1184
 msgid "Password must be at least 12 characters."
 msgstr ""
 
+#: includes/services/class-frontend-messages.php:87
 #: includes/services/class-registration-service.php:803
-#: public/class-frontend.php:1185
 msgid "Password must include uppercase, lowercase, number, and symbol characters."
 msgstr ""
 
@@ -848,20 +848,20 @@ msgstr ""
 msgid "Pending Registration Expiry Hours"
 msgstr ""
 
+#: includes/services/class-frontend-messages.php:49
 #: includes/services/class-registration-service.php:258
-#: public/class-frontend.php:1147
 msgid "Please accept the terms and privacy policy to continue."
 msgstr ""
 
+#: includes/services/class-frontend-messages.php:47
 #: includes/services/class-registration-service.php:137
-#: public/class-frontend.php:1145
 msgid "Please complete all required fields."
 msgstr ""
 
+#: includes/services/class-frontend-messages.php:48
+#: includes/services/class-frontend-messages.php:67
 #: includes/services/class-registration-service.php:141
 #: includes/services/class-registration-service.php:431
-#: public/class-frontend.php:1146
-#: public/class-frontend.php:1165
 msgid "Please enter a valid email address."
 msgstr ""
 
@@ -958,7 +958,7 @@ msgstr ""
 msgid "Registration Instruction Text"
 msgstr ""
 
-#: public/class-frontend.php:1144
+#: includes/services/class-frontend-messages.php:46
 msgid "Registration is currently unavailable."
 msgstr ""
 
@@ -970,7 +970,7 @@ msgstr ""
 msgid "Registration Rate Limit Window Minutes"
 msgstr ""
 
-#: public/class-frontend.php:1129
+#: includes/services/class-frontend-messages.php:31
 #: public/class-frontend.php:987
 msgid "Registration Unavailable"
 msgstr ""
@@ -1000,7 +1000,7 @@ msgid "Reoon Verification Mode"
 msgstr ""
 
 #: includes/services/class-email-template-service.php:490
-#: public/class-frontend.php:1126
+#: includes/services/class-frontend-messages.php:28
 #: public/class-frontend.php:783
 #: public/class-frontend.php:795
 msgid "Reset Password"
@@ -1055,7 +1055,7 @@ msgstr ""
 msgid "Send Test Email"
 msgstr ""
 
-#: public/class-frontend.php:1127
+#: includes/services/class-frontend-messages.php:29
 #: public/class-frontend.php:894
 msgid "Set New Password"
 msgstr ""
@@ -1162,15 +1162,15 @@ msgstr ""
 msgid "The account-created welcome email could not be sent."
 msgstr ""
 
+#: includes/services/class-frontend-messages.php:53
+#: includes/services/class-frontend-messages.php:70
+#: includes/services/class-frontend-messages.php:73
 #: includes/services/class-registration-service.php:316
-#: public/class-frontend.php:1151
-#: public/class-frontend.php:1168
-#: public/class-frontend.php:1171
 msgid "The confirmation email could not be sent. Please try again."
 msgstr ""
 
+#: includes/services/class-frontend-messages.php:69
 #: includes/services/class-registration-service.php:405
-#: public/class-frontend.php:1167
 msgid "The confirmation link could not be renewed. Please try again."
 msgstr ""
 
@@ -1186,8 +1186,8 @@ msgstr ""
 msgid "The email recipient is invalid."
 msgstr ""
 
+#: includes/services/class-frontend-messages.php:85
 #: includes/services/class-registration-service.php:640
-#: public/class-frontend.php:1183
 msgid "The passwords do not match."
 msgstr ""
 
@@ -1195,9 +1195,9 @@ msgstr ""
 msgid "The registration consent record could not be stored. Please try again."
 msgstr ""
 
+#: includes/services/class-frontend-messages.php:51
+#: includes/services/class-frontend-messages.php:56
 #: includes/services/class-registration-service.php:182
-#: public/class-frontend.php:1149
-#: public/class-frontend.php:1154
 msgid "The registration could not be started. Please try again."
 msgstr ""
 
@@ -1273,8 +1273,8 @@ msgstr ""
 msgid "This confirms that your account password was updated."
 msgstr ""
 
+#: includes/services/class-frontend-messages.php:88
 #: includes/services/class-registration-service.php:514
-#: public/class-frontend.php:1186
 msgid "This email address can no longer be used."
 msgstr ""
 
@@ -1286,7 +1286,7 @@ msgstr ""
 msgid "This email was sent by %s."
 msgstr ""
 
-#: public/class-frontend.php:1182
+#: includes/services/class-frontend-messages.php:84
 msgid "This link is invalid or has expired."
 msgstr ""
 
@@ -1317,7 +1317,7 @@ msgstr ""
 
 #: includes/services/class-auth-service.php:105
 #: includes/services/class-auth-service.php:91
-#: public/class-frontend.php:1166
+#: includes/services/class-frontend-messages.php:68
 msgid "Too many attempts. Please wait a moment and try again."
 msgstr ""
 
@@ -1476,7 +1476,7 @@ msgstr ""
 msgid "Your {{site_name}} password was changed"
 msgstr ""
 
-#: public/class-frontend.php:1189
+#: includes/services/class-frontend-messages.php:91
 msgid "Your account could not be created. Please try again."
 msgstr ""
 
@@ -1488,7 +1488,7 @@ msgstr ""
 msgid "Your account is ready."
 msgstr ""
 
-#: public/class-frontend.php:1150
+#: includes/services/class-frontend-messages.php:52
 msgid "Your consent record could not be saved. Please try again."
 msgstr ""
 
