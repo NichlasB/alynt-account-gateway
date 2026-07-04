@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.5 - 2026-07-04
+
 ### Changed
 
 - Extracted frontend URL and screen-routing helpers into a dedicated route service without changing public routes or query handling.
