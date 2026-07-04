@@ -2,11 +2,11 @@
 
 ## Status
 
-- Current phase: Plugin Tester browser QA completed; release-readiness hardening pending
+- Current phase: v0.1.0 release asset verified through Alynt Plugin Updater on Plugin Tester; next release planning pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: Pre-release readiness pass in progress after LocalWP Plugin Tester install, WooCommerce QA, and release-style package verification.
+- Plugin status: v0.1.0 released publicly on GitHub and installed from the release asset through Alynt Plugin Updater on LocalWP Plugin Tester.
 - Frontend output default: Disabled
-- Distribution: Private Alynt-distributed plugin with GitHub updater compatibility
+- Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
 ## Locked Decisions
 
@@ -166,6 +166,7 @@
 - [x] Verify `composer audit`.
 - [x] Verify release-style zip locally with GitHub workflow exclusions.
 - [x] Verify generated release zip through GitHub release workflow.
+- [x] Verify install/update from the GitHub release asset through Alynt Plugin Updater on LocalWP Plugin Tester.
 
 ## Release Gates
 
@@ -177,7 +178,7 @@
 - [x] Accessibility acceptance criteria pass for implemented gateway/dashboard surfaces.
 - [x] Multilingual/i18n acceptance criteria pass for implemented strings and generated POT.
 - [x] Privacy exporter/eraser and retention controls are present.
-- [x] Alynt Plugin Updater compatibility is verified with a release asset.
+- [x] Alynt Plugin Updater compatibility is verified end to end by updating the LocalWP Plugin Tester install from a GitHub release asset.
 
 ## Pre-Release Audit Notes
 
@@ -193,6 +194,8 @@
 - Verified local release-style zip excludes source assets, dev dependencies, tests, docs, scripts, GitHub metadata, maps, Composer/npm files, and editor rules.
 - Structural debt remains: `public/class-frontend.php`, `includes/services/class-registration-service.php`, and several admin/settings/template classes are larger than ideal. They are intentionally left intact for this release pass because splitting them now would be a high-blast-radius refactor after browser QA.
 - Published GitHub release `v0.1.0`, confirmed the Build Release workflow completed successfully, downloaded `alynt-account-gateway-v0.1.0.zip`, and verified the package contains the plugin runtime files and built assets while excluding development files.
+- Made the GitHub repository public for release delivery, forced the LocalWP Plugin Tester installed copy to `0.0.9`, confirmed Alynt Plugin Updater detected `0.0.9` to `0.1.0`, installed from the `alynt-account-gateway-v0.1.0.zip` release asset, and verified the active Plugin Tester copy returned to `0.1.0`.
+- Browser-smoked the release-installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, and `/my-account/` after the updater install.
 - Remaining release decisions: optionally add uninstall-specific unit coverage before the next release.
 
 ## Workflow Notes
