@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.6 - 2026-07-04
+
 ### Changed
 
 - Extracted frontend asset enqueueing into a dedicated asset service without changing asset handles, URLs, labels, or Turnstile loading rules.
