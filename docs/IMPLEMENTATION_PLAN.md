@@ -29,6 +29,8 @@
 - Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.10` header/constant, `ALYNT_AG_Frontend_Lostpassword_Screen` file/class loaded in a fresh request, and lost-password rendering includes the title, form action, nonce, email field, and back-to-login link.
 - Browser-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=lostpassword`, `/account?action=lostpassword&reset_error=alynt_ag_rate_limited`, `/account?action=lostpassword&reset_sent=1`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and preserved lost-password default/error/success states.
 - Removed the branch-QA zip from Plugin Tester uploads.
+- Bumped release-candidate metadata to `0.1.11` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 128 tests and 500 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.11-20260704-191621\alynt-account-gateway-v0.1.11.zip`; verified built frontend/admin assets and the new frontend lost-password screen service are included, dev/source/test/docs/rules/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.11`.
 
 ### Guardrails
 
