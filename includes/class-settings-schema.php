@@ -421,6 +421,12 @@ class ALYNT_AG_Settings_Schema {
 				'default' => false,
 				'label'   => __( 'Enable Custom Dashboard', 'alynt-account-gateway' ),
 			),
+			'dashboard_custom_links'                    => array(
+				'tab'     => 'dashboard',
+				'type'    => 'textarea',
+				'default' => '[]',
+				'label'   => __( 'Custom Dashboard Links JSON', 'alynt-account-gateway' ),
+			),
 			'woocommerce_takeover'                      => array(
 				'tab'     => 'woocommerce',
 				'type'    => 'boolean',

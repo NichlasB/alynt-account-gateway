@@ -64,6 +64,7 @@ Settings are stored in the `alynt_ag_settings` option and defined in `ALYNT_AG_S
 - `email_change_confirmation_body`: tokenized body for email-change notification/confirmation email
 - `email_test_recipient`: empty
 - `dashboard_enabled`: `false`
+- `dashboard_custom_links`: `[]`
 - `woocommerce_takeover`: `false`
 - `account_created_webhook`: empty
 - `debug_payload_logging`: `false`
@@ -83,6 +84,10 @@ Email templates support token placeholders such as `{{site_name}}`, `{{first_nam
 The `email_change_confirmation_*` template is used for the post-change email notification and as the plain-text body for WordPress's pending profile email-change request. WordPress exposes only the body for the pending request through `new_user_email_content`, so that specific core email cannot use the branded HTML wrapper until the plugin replaces the full sender flow.
 
 The `account_created_webhook` setting sends an `account.created` JSON payload after a confirmed registration creates the WordPress user. Webhook logs store destination host, HTTP status, success state, retry count, error message, and timestamp by default. Full payload bodies are stored only when `debug_payload_logging` is enabled.
+
+Custom dashboard links are stored in `dashboard_custom_links` as a JSON array. Each link may define `label`, `url`, `icon`, `order`, `roles`, and `target`; relative URLs are resolved from the site home URL, empty roles are visible to all account users, and `_blank` targets receive safe new-tab behavior.
+
+When `dashboard_enabled` and `woocommerce_takeover` are both enabled and WooCommerce is active, requests under the configured `after_login_redirect` path are rendered inside the branded dashboard. Standard WooCommerce account endpoints such as orders, downloads, addresses, account details, and payment methods are delegated to WooCommerce endpoint actions.
 
 ## Diagnostics
 

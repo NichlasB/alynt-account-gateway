@@ -238,7 +238,13 @@ if ( ! function_exists( 'wp_remote_retrieve_response_message' ) ) {
 }
 
 if ( ! function_exists( 'add_query_arg' ) ) {
-	function add_query_arg( $args, $url = '' ) {
+	function add_query_arg( $args, $value = '', $url = '' ) {
+		if ( is_string( $args ) ) {
+			$args = array( $args => $value );
+		} else {
+			$url = $value;
+		}
+
 		$separator = false === strpos( $url, '?' ) ? '?' : '&';
 		return $url . $separator . http_build_query( $args );
 	}
@@ -247,6 +253,26 @@ if ( ! function_exists( 'add_query_arg' ) ) {
 if ( ! function_exists( 'home_url' ) ) {
 	function home_url( $path = '' ) {
 		return 'https://example.test' . $path;
+	}
+}
+
+if ( ! function_exists( 'trailingslashit' ) ) {
+	function trailingslashit( $value ) {
+		return rtrim( (string) $value, '/' ) . '/';
+	}
+}
+
+if ( ! function_exists( 'untrailingslashit' ) ) {
+	function untrailingslashit( $value ) {
+		return rtrim( (string) $value, '/' );
+	}
+}
+
+if ( ! function_exists( 'wp_logout_url' ) ) {
+	function wp_logout_url( $redirect = '' ) {
+		$url = 'https://example.test/wp-login.php?action=logout';
+
+		return $redirect ? add_query_arg( 'redirect_to', $redirect, $url ) : $url;
 	}
 }
 
@@ -371,6 +397,15 @@ if ( ! function_exists( 'get_option' ) ) {
 	}
 }
 
+if ( ! function_exists( 'do_action' ) ) {
+	function do_action( $hook_name, ...$args ) {
+		$GLOBALS['alynt_ag_test_actions'][] = array(
+			'hook' => $hook_name,
+			'args' => $args,
+		);
+	}
+}
+
 if ( ! function_exists( 'get_transient' ) ) {
 	function get_transient( $name ) {
 		return isset( $GLOBALS['alynt_ag_test_transients'][ $name ] ) ? $GLOBALS['alynt_ag_test_transients'][ $name ]['value'] : false;
@@ -418,3 +453,5 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-registration-service
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-reoon-client.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-turnstile-client.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-webhook-dispatcher.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-dashboard-service.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-woocommerce-integration.php';

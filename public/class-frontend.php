@@ -161,6 +161,11 @@ class ALYNT_AG_Frontend {
 			return;
 		}
 
+		if ( 'dashboard' === $screen && ! is_user_logged_in() ) {
+			wp_safe_redirect( add_query_arg( 'redirect_to', rawurlencode( home_url( $settings['after_login_redirect'] ) ), home_url( $settings['login_path'] ) ) );
+			exit;
+		}
+
 		if ( 'logout' === $screen && $this->maybe_handle_confirmed_logout( $settings ) ) {
 			return;
 		}
@@ -179,7 +184,11 @@ class ALYNT_AG_Frontend {
 		wp_head();
 		echo '</head>';
 		echo '<body class="alynt-ag-body">';
-		$this->render_gateway_shell( $screen, $settings );
+		if ( 'dashboard' === $screen ) {
+			$this->render_dashboard_shell( $settings );
+		} else {
+			$this->render_gateway_shell( $screen, $settings );
+		}
 		wp_footer();
 		echo '</body></html>';
 		exit;
@@ -296,6 +305,15 @@ class ALYNT_AG_Frontend {
 	 */
 	private function get_gateway_screen( $settings ) {
 		$current_path = $this->get_current_relative_path();
+		$woocommerce  = new ALYNT_AG_WooCommerce_Integration();
+
+		if ( ! empty( $settings['dashboard_enabled'] ) && $this->paths_match( $current_path, $settings['after_login_redirect'] ) ) {
+			return 'dashboard';
+		}
+
+		if ( $woocommerce->takeover_enabled( $settings ) && $woocommerce->endpoint_from_path( $current_path, $settings )['endpoint'] ) {
+			return 'dashboard';
+		}
 
 		if ( $this->paths_match( $current_path, $settings['login_path'] ) ) {
 			return 'login';
@@ -399,6 +417,27 @@ class ALYNT_AG_Frontend {
 					</div>
 				</div>
 			</section>
+		</main>
+		<?php
+	}
+
+	/**
+	 * Render dashboard shell.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_dashboard_shell( $settings ) {
+		$style = $this->get_gateway_style_attribute( $settings );
+		?>
+		<main class="alynt-ag-gateway agw-dashboard" data-agw-screen="dashboard" style="<?php echo esc_attr( $style ); ?>">
+			<div class="agw-dashboard__inner">
+				<header class="agw-dashboard__header">
+					<?php $this->render_brand_block( $settings ); ?>
+					<a class="agw-dashboard__logout" href="<?php echo esc_url( wp_logout_url( home_url( $settings['login_path'] ) ) ); ?>"><?php esc_html_e( 'Log Out', 'alynt-account-gateway' ); ?></a>
+				</header>
+				<?php $this->render_dashboard_screen( $settings ); ?>
+			</div>
 		</main>
 		<?php
 	}
@@ -910,6 +949,69 @@ class ALYNT_AG_Frontend {
 	}
 
 	/**
+	 * Render custom account dashboard.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_dashboard_screen( $settings ) {
+		$user        = wp_get_current_user();
+		$dashboard   = new ALYNT_AG_Dashboard_Service();
+		$woocommerce = new ALYNT_AG_WooCommerce_Integration();
+		$endpoint    = $woocommerce->endpoint_from_path( $this->get_current_relative_path(), $settings );
+		$links       = $dashboard->links_for_user( $user, $settings );
+		$name        = $user->display_name ? $user->display_name : $user->user_email;
+		?>
+		<section class="agw-dashboard-hero" aria-labelledby="agw-screen-title">
+			<p class="agw-dashboard-hero__eyebrow"><?php esc_html_e( 'Account Dashboard', 'alynt-account-gateway' ); ?></p>
+			<h1 id="agw-screen-title" class="agw-dashboard-hero__title">
+				<?php
+				echo esc_html(
+					sprintf(
+						/* translators: %s: user display name. */
+						__( 'Welcome, %s', 'alynt-account-gateway' ),
+						$name
+					)
+				);
+				?>
+			</h1>
+			<p class="agw-dashboard-hero__meta"><?php echo esc_html( $user->user_email ); ?></p>
+		</section>
+
+		<?php if ( ! empty( $settings['woocommerce_takeover'] ) && ! $dashboard->woocommerce_available() ) : ?>
+			<div class="agw-status agw-status--error" role="status">
+				<?php esc_html_e( 'WooCommerce account takeover is enabled, but WooCommerce is not active.', 'alynt-account-gateway' ); ?>
+			</div>
+		<?php endif; ?>
+
+		<section class="agw-dashboard-section" aria-labelledby="agw-dashboard-links-title">
+			<h2 id="agw-dashboard-links-title"><?php esc_html_e( 'Manage Account', 'alynt-account-gateway' ); ?></h2>
+			<div class="agw-dashboard-grid">
+				<?php foreach ( $links as $link ) : ?>
+					<a class="agw-dashboard-link" href="<?php echo esc_url( $link['url'] ); ?>" target="<?php echo esc_attr( $link['target'] ); ?>" <?php echo '_blank' === $link['target'] ? 'rel="noopener noreferrer"' : ''; ?>>
+						<span class="agw-dashboard-link__icon agw-dashboard-link__icon--<?php echo esc_attr( $link['icon'] ); ?>" aria-hidden="true"></span>
+						<span class="agw-dashboard-link__label"><?php echo esc_html( $link['label'] ); ?></span>
+					</a>
+				<?php endforeach; ?>
+			</div>
+		</section>
+
+		<?php if ( ! empty( $settings['woocommerce_takeover'] ) && 'dashboard' !== $endpoint['endpoint'] ) : ?>
+			<section class="agw-dashboard-section agw-dashboard-section--content" aria-labelledby="agw-dashboard-content-title">
+				<h2 id="agw-dashboard-content-title">
+					<?php echo esc_html( $woocommerce->endpoint_labels()[ $endpoint['endpoint'] ] ?? __( 'Account', 'alynt-account-gateway' ) ); ?>
+				</h2>
+				<div class="agw-dashboard-content">
+					<?php if ( ! $woocommerce->render_endpoint( $endpoint['endpoint'], $endpoint['value'] ) ) : ?>
+						<p><?php esc_html_e( 'This account section is not available.', 'alynt-account-gateway' ); ?></p>
+					<?php endif; ?>
+				</div>
+			</section>
+		<?php endif; ?>
+		<?php
+	}
+
+	/**
 	 * Render configured registration verification area.
 	 *
 	 * @param array<string,mixed> $settings Settings.
@@ -937,6 +1039,7 @@ class ALYNT_AG_Frontend {
 	 */
 	private function get_screen_title( $screen ) {
 		$titles = array(
+			'dashboard'             => __( 'Account Dashboard', 'alynt-account-gateway' ),
 			'login'                 => __( 'Log In', 'alynt-account-gateway' ),
 			'register'              => __( 'Create Account', 'alynt-account-gateway' ),
 			'lostpassword'          => __( 'Reset Password', 'alynt-account-gateway' ),

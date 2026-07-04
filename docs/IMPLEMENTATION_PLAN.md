@@ -114,12 +114,13 @@
 
 ### Phase 6 - Dashboard And WooCommerce
 
-- [ ] Add optional custom full-page account dashboard.
-- [ ] Add custom dashboard links with icons, ordering, role visibility, and open-in-new-tab.
-- [ ] Detect WooCommerce availability.
-- [ ] Allow custom dashboard to take over WooCommerce My Account when enabled.
-- [ ] Delegate sensitive WooCommerce actions to native WooCommerce handlers/endpoints.
-- [ ] Preserve orders, downloads, addresses, payment methods, account details, logout, and discoverable plugin-added endpoints.
+- [x] Add optional custom full-page account dashboard.
+- [x] Add custom dashboard links with icons, ordering, role visibility, and open-in-new-tab.
+- [x] Detect WooCommerce availability.
+- [x] Allow custom dashboard to take over WooCommerce My Account when enabled.
+- [x] Delegate sensitive WooCommerce actions to native WooCommerce handlers/endpoints.
+- [x] Preserve orders, downloads, addresses, payment methods, account details, and logout through standard WooCommerce endpoints.
+- [ ] Discover and preserve plugin-added WooCommerce account endpoints.
 - [ ] Add compatibility warnings for plugins that also modify login, registration, account pages, security redirects, or WooCommerce account endpoints.
 
 ### Phase 7 - Privacy, Accessibility, I18n, And Release Readiness

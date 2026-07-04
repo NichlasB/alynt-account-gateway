@@ -55,6 +55,15 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertArrayHasKey( 'invalid_link_text', $defaults );
 	}
 
+	public function test_dashboard_defaults_exist() {
+		$defaults = ALYNT_AG_Settings_Schema::defaults();
+
+		$this->assertArrayHasKey( 'dashboard_enabled', $defaults );
+		$this->assertArrayHasKey( 'dashboard_custom_links', $defaults );
+		$this->assertFalse( $defaults['dashboard_enabled'] );
+		$this->assertSame( '[]', $defaults['dashboard_custom_links'] );
+	}
+
 	public function test_email_template_defaults_exist() {
 		$defaults = ALYNT_AG_Settings_Schema::defaults();
 
