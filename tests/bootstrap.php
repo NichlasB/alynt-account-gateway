@@ -433,6 +433,18 @@ if ( ! function_exists( 'wp_parse_url' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_validate_redirect' ) ) {
+	function wp_validate_redirect( $location, $fallback_url = '' ) {
+		if ( '' === (string) $location ) {
+			return $fallback_url;
+		}
+
+		$host = parse_url( $location, PHP_URL_HOST );
+
+		return in_array( $host, array( 'example.test', null ), true ) ? $location : $fallback_url;
+	}
+}
+
 if ( ! function_exists( 'wp_kses_post' ) ) {
 	function wp_kses_post( $value ) {
 		return (string) $value;

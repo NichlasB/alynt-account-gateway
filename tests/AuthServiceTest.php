@@ -53,6 +53,30 @@ class AuthServiceTest extends TestCase {
 		$this->assertSame( 'alynt_ag_rate_limited', $result->get_error_code() );
 	}
 
+	public function test_login_redirect_uses_default_when_no_redirect_is_submitted() {
+		$service  = new ALYNT_AG_Auth_Service();
+		$settings = array(
+			'after_login_redirect' => '/my-account/',
+		);
+
+		$this->assertSame(
+			'https://example.test/my-account/',
+			$service->get_login_redirect_url( '', $settings )
+		);
+	}
+
+	public function test_login_redirect_rejects_external_redirects() {
+		$service  = new ALYNT_AG_Auth_Service();
+		$settings = array(
+			'after_login_redirect' => '/my-account/',
+		);
+
+		$this->assertSame(
+			'https://example.test/my-account/',
+			$service->get_login_redirect_url( 'https://evil.example/phish', $settings )
+		);
+	}
+
 	public function test_lostpassword_rate_limit_uses_configured_bucket() {
 		$service = new ALYNT_AG_Auth_Service();
 		$settings = array(

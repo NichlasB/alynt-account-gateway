@@ -212,10 +212,26 @@ class ALYNT_AG_Auth_Service {
 		}
 
 		$redirect_to = isset( $_POST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_POST['redirect_to'] ) ) : '';
-		$default     = home_url( $settings['after_login_redirect'] );
 
-		wp_safe_redirect( wp_validate_redirect( $redirect_to, $default ) );
+		wp_safe_redirect( $this->get_login_redirect_url( $redirect_to, $settings ) );
 		exit;
+	}
+
+	/**
+	 * Return a safe login redirect URL.
+	 *
+	 * @param string              $redirect_to Submitted redirect URL.
+	 * @param array<string,mixed> $settings    Settings.
+	 * @return string
+	 */
+	public function get_login_redirect_url( $redirect_to, $settings ) {
+		$default = home_url( $settings['after_login_redirect'] );
+
+		if ( '' === (string) $redirect_to ) {
+			return $default;
+		}
+
+		return wp_validate_redirect( $redirect_to, $default );
 	}
 
 	/**

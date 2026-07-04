@@ -657,25 +657,25 @@ class ALYNT_AG_Frontend {
 		<?php if ( $error_code ) : ?>
 			<div id="agw-register-error" class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->get_registration_error_message( $error_code ) ); ?></div>
 		<?php endif; ?>
-		<form class="agw-form" method="post" action="<?php echo esc_url( home_url( $settings['account_action_base'] ) ); ?>" <?php echo $error_code ? 'aria-describedby="agw-register-error"' : ''; ?>>
+		<form class="agw-form" method="post" action="<?php echo esc_url( home_url( $settings['account_action_base'] ) ); ?>" data-agw-registration-form <?php echo $error_code ? 'aria-describedby="agw-register-error"' : ''; ?>>
 			<input type="hidden" name="alynt_ag_action" value="start_registration">
 			<?php wp_nonce_field( 'alynt_ag_start_registration', 'alynt_ag_registration_nonce' ); ?>
 			<div class="agw-grid agw-grid--two">
 				<div class="agw-field">
 					<label for="agw-register-first"><?php esc_html_e( 'First Name', 'alynt-account-gateway' ); ?></label>
-					<input id="agw-register-first" name="first_name" type="text" autocomplete="given-name" required <?php echo in_array( $error_code, array( 'missing_required_fields' ), true ) ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>
+					<input id="agw-register-first" name="first_name" type="text" autocomplete="given-name" required data-agw-registration-required <?php echo in_array( $error_code, array( 'missing_required_fields' ), true ) ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>
 				</div>
 				<div class="agw-field">
 					<label for="agw-register-last"><?php esc_html_e( 'Last Name', 'alynt-account-gateway' ); ?></label>
-					<input id="agw-register-last" name="last_name" type="text" autocomplete="family-name" required <?php echo in_array( $error_code, array( 'missing_required_fields' ), true ) ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>
+					<input id="agw-register-last" name="last_name" type="text" autocomplete="family-name" required data-agw-registration-required <?php echo in_array( $error_code, array( 'missing_required_fields' ), true ) ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>
 				</div>
 			</div>
 			<div class="agw-field">
 				<label for="agw-register-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-register-email" name="email" type="email" autocomplete="email" required <?php echo in_array( $error_code, array( 'missing_required_fields', 'invalid_email', 'email_unavailable' ), true ) ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>
+				<input id="agw-register-email" name="email" type="email" autocomplete="email" required data-agw-registration-required <?php echo in_array( $error_code, array( 'missing_required_fields', 'invalid_email', 'email_unavailable' ), true ) ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>
 			</div>
 			<label class="agw-checkbox">
-				<input id="agw-register-terms" name="terms" type="checkbox" required <?php echo 'terms_required' === $error_code ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>
+				<input id="agw-register-terms" name="terms" type="checkbox" required data-agw-registration-terms <?php echo 'terms_required' === $error_code ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>
 				<span>
 					<?php esc_html_e( 'By creating an account, you agree to our', 'alynt-account-gateway' ); ?>
 					<a href="<?php echo esc_url( home_url( $settings['terms_path'] ) ); ?>"><?php esc_html_e( 'Terms', 'alynt-account-gateway' ); ?></a>
@@ -684,7 +684,7 @@ class ALYNT_AG_Frontend {
 				</span>
 			</label>
 			<?php $this->render_verification_slot( $settings ); ?>
-			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Create Account', 'alynt-account-gateway' ); ?></button>
+			<button class="agw-button agw-button--primary" type="submit" data-agw-registration-submit disabled aria-disabled="true"><?php esc_html_e( 'Create Account', 'alynt-account-gateway' ); ?></button>
 			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
 		</form>
 		<?php
