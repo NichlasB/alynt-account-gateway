@@ -50,6 +50,8 @@
 - Created local branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.4-branch-qa-20260704-155405\alynt-account-gateway-v0.1.4-branch-qa-wp.zip`; verified built frontend assets and the message catalog file are included, dev/source/test/docs/package files are excluded, and archive entries use WordPress-compatible forward-slash paths.
 - Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes after the browser upload path returned a blank update response and WP-CLI was unavailable. Verified final installed state: active `0.1.3` header/constant, `ALYNT_AG_Frontend_Messages` file/class loaded, and `register` title resolves to `Create Account`.
 - Browser-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens and avoided the native WordPress login shell.
+- Bumped release-candidate metadata to `0.1.4` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test`, `npm.cmd run make-pot`, `npm.cmd audit --audit-level=moderate`, and `git diff --check`.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.4-20260704-160614\alynt-account-gateway-v0.1.4.zip`; verified built assets and the message catalog are included, dev/source/test/docs/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.4`.
 
 ### Guardrails
 
@@ -59,7 +61,7 @@
 
 ### Completion Gate
 
-- [ ] Build, lint, test, audit, and POT generation pass.
+- [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates representative gateway routes after the refactor.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.1.4 - 2026-07-04
+
 ### Changed
 
 - Reconciled completed implementation-plan checklist items for email preview/test-send QA and profile email-change request suppression.
