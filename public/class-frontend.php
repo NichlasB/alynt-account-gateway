@@ -402,6 +402,15 @@ class ALYNT_AG_Frontend {
 	}
 
 	/**
+	 * Frontend dashboard screen helper.
+	 *
+	 * @return ALYNT_AG_Frontend_Dashboard_Screen
+	 */
+	private function dashboard_screen() {
+		return new ALYNT_AG_Frontend_Dashboard_Screen();
+	}
+
+	/**
 	 * Render gateway shell.
 	 *
 	 * @param string              $screen   Screen key.
@@ -472,18 +481,7 @@ class ALYNT_AG_Frontend {
 	 * @return void
 	 */
 	private function render_dashboard_shell( $settings ) {
-		$style = $this->get_gateway_style_attribute( $settings );
-		?>
-		<main class="alynt-ag-gateway agw-dashboard" data-agw-screen="dashboard" style="<?php echo esc_attr( $style ); ?>">
-			<div class="agw-dashboard__inner">
-				<header class="agw-dashboard__header">
-					<?php $this->render_brand_block( $settings ); ?>
-					<a class="agw-dashboard__logout" href="<?php echo esc_url( wp_logout_url( home_url( $settings['login_path'] ) ) ); ?>"><?php esc_html_e( 'Log Out', 'alynt-account-gateway' ); ?></a>
-				</header>
-				<?php $this->render_dashboard_screen( $settings ); ?>
-			</div>
-		</main>
-		<?php
+		$this->dashboard_screen()->render_dashboard_shell( $settings, $this->get_current_relative_path() );
 	}
 
 	/**
@@ -650,63 +648,7 @@ class ALYNT_AG_Frontend {
 	 * @return void
 	 */
 	private function render_dashboard_screen( $settings ) {
-		$user        = wp_get_current_user();
-		$dashboard   = new ALYNT_AG_Dashboard_Service();
-		$woocommerce = new ALYNT_AG_WooCommerce_Integration();
-		$endpoint    = $woocommerce->endpoint_from_path( $this->get_current_relative_path(), $settings );
-		$links       = $dashboard->links_for_user( $user, $settings );
-		$name        = $user->display_name ? $user->display_name : $user->user_email;
-		?>
-		<section class="agw-dashboard-hero" aria-labelledby="agw-screen-title">
-			<p class="agw-dashboard-hero__eyebrow"><?php esc_html_e( 'Account Dashboard', 'alynt-account-gateway' ); ?></p>
-			<h1 id="agw-screen-title" class="agw-dashboard-hero__title">
-				<?php
-				echo esc_html(
-					sprintf(
-						/* translators: %s: user display name. */
-						__( 'Welcome, %s', 'alynt-account-gateway' ),
-						$name
-					)
-				);
-				?>
-			</h1>
-			<p class="agw-dashboard-hero__meta"><?php echo esc_html( $user->user_email ); ?></p>
-		</section>
-
-		<?php if ( ! empty( $settings['woocommerce_takeover'] ) && ! $dashboard->woocommerce_available() ) : ?>
-			<div class="agw-status agw-status--error" role="alert">
-				<?php esc_html_e( 'WooCommerce account takeover is enabled, but WooCommerce is not active.', 'alynt-account-gateway' ); ?>
-			</div>
-		<?php endif; ?>
-
-		<section class="agw-dashboard-section" aria-labelledby="agw-dashboard-links-title">
-			<h2 id="agw-dashboard-links-title"><?php esc_html_e( 'Manage Account', 'alynt-account-gateway' ); ?></h2>
-			<div class="agw-dashboard-grid">
-				<?php foreach ( $links as $link ) : ?>
-					<a class="agw-dashboard-link" href="<?php echo esc_url( $link['url'] ); ?>" target="<?php echo esc_attr( $link['target'] ); ?>" <?php echo '_blank' === $link['target'] ? 'rel="noopener noreferrer"' : ''; ?>>
-						<span class="agw-dashboard-link__icon agw-dashboard-link__icon--<?php echo esc_attr( $link['icon'] ); ?>" aria-hidden="true"></span>
-						<span class="agw-dashboard-link__label"><?php echo esc_html( $link['label'] ); ?></span>
-						<?php if ( '_blank' === $link['target'] ) : ?>
-							<span class="screen-reader-text"><?php esc_html_e( 'opens in a new tab', 'alynt-account-gateway' ); ?></span>
-						<?php endif; ?>
-					</a>
-				<?php endforeach; ?>
-			</div>
-		</section>
-
-		<?php if ( ! empty( $settings['woocommerce_takeover'] ) && 'dashboard' !== $endpoint['endpoint'] ) : ?>
-			<section class="agw-dashboard-section agw-dashboard-section--content" aria-labelledby="agw-dashboard-content-title">
-				<h2 id="agw-dashboard-content-title">
-					<?php echo esc_html( $woocommerce->endpoint_labels()[ $endpoint['endpoint'] ] ?? __( 'Account', 'alynt-account-gateway' ) ); ?>
-				</h2>
-				<div class="agw-dashboard-content">
-					<?php if ( ! $woocommerce->render_endpoint( $endpoint['endpoint'], $endpoint['value'] ) ) : ?>
-						<p><?php esc_html_e( 'This account section is not available.', 'alynt-account-gateway' ); ?></p>
-					<?php endif; ?>
-				</div>
-			</section>
-		<?php endif; ?>
-		<?php
+		$this->dashboard_screen()->render_dashboard_screen( $settings, $this->get_current_relative_path() );
 	}
 
 	/**

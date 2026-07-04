@@ -1,0 +1,280 @@
+<?php
+/**
+ * Frontend dashboard screen service tests.
+ *
+ * @package Alynt_Account_Gateway
+ */
+
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Test dashboard service.
+ */
+class ALYNT_AG_Test_Frontend_Dashboard_Service extends ALYNT_AG_Dashboard_Service {
+
+	/**
+	 * Links to return.
+	 *
+	 * @var array<int,array<string,mixed>>
+	 */
+	public $links = array();
+
+	/**
+	 * WooCommerce availability flag.
+	 *
+	 * @var bool
+	 */
+	public $available = false;
+
+	/**
+	 * Return configured test links.
+	 *
+	 * @param WP_User             $user     User object.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return array<int,array<string,mixed>>
+	 */
+	public function links_for_user( $user, $settings ) {
+		return $this->links;
+	}
+
+	/**
+	 * Return configured WooCommerce availability.
+	 *
+	 * @return bool
+	 */
+	public function woocommerce_available() {
+		return $this->available;
+	}
+}
+
+/**
+ * Test WooCommerce integration.
+ */
+class ALYNT_AG_Test_Frontend_Dashboard_WooCommerce extends ALYNT_AG_WooCommerce_Integration {
+
+	/**
+	 * Endpoint to return.
+	 *
+	 * @var array<string,mixed>
+	 */
+	public $endpoint = array(
+		'endpoint' => 'dashboard',
+		'value'    => '',
+	);
+
+	/**
+	 * Whether endpoint rendering succeeds.
+	 *
+	 * @var bool
+	 */
+	public $rendered = true;
+
+	/**
+	 * Return configured endpoint.
+	 *
+	 * @param string              $path     Current relative path.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return array<string,mixed>
+	 */
+	public function endpoint_from_path( $path, $settings ) {
+		return $this->endpoint;
+	}
+
+	/**
+	 * Return endpoint labels.
+	 *
+	 * @return array<string,string>
+	 */
+	public function endpoint_labels() {
+		return array(
+			'dashboard' => 'Dashboard',
+			'orders'    => 'Orders',
+		);
+	}
+
+	/**
+	 * Render configured endpoint.
+	 *
+	 * @param string $endpoint Endpoint.
+	 * @param string $value    Endpoint value.
+	 * @return bool
+	 */
+	public function render_endpoint( $endpoint, $value = '' ) {
+		if ( $this->rendered ) {
+			echo '<div class="wc-endpoint-output">' . esc_html( $endpoint . ':' . $value ) . '</div>';
+		}
+
+		return $this->rendered;
+	}
+}
+
+/**
+ * Test frontend branding helper.
+ */
+class ALYNT_AG_Test_Frontend_Dashboard_Branding extends ALYNT_AG_Frontend_Branding {
+
+	/**
+	 * Return stable style output.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return string
+	 */
+	public function style_attribute( $settings ) {
+		return '--test-color:#123;';
+	}
+
+	/**
+	 * Render stable brand output.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	public function render_brand_block( $settings ) {
+		echo '<div class="agw-brand"><div class="agw-brand__name">Test Store</div></div>';
+	}
+}
+
+/**
+ * Tests the frontend dashboard screen.
+ */
+class FrontendDashboardScreenTest extends TestCase {
+
+	/**
+	 * Test settings.
+	 *
+	 * @var array<string,mixed>
+	 */
+	private $settings;
+
+	protected function setUp(): void {
+		parent::setUp();
+
+		$this->settings = array(
+			'after_login_redirect'  => '/my-account/',
+			'login_path'            => '/login',
+			'woocommerce_takeover'  => false,
+			'dashboard_custom_links' => '[]',
+		);
+	}
+
+	public function test_render_dashboard_shell_outputs_brand_logout_hero_and_links() {
+		$dashboard = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->links = array(
+			array(
+				'label'  => 'Account Details',
+				'url'    => 'https://example.test/my-account/edit-account/',
+				'icon'   => 'user',
+				'target' => '_self',
+			),
+			array(
+				'label'  => 'Support',
+				'url'    => 'https://example.test/support/',
+				'icon'   => 'help',
+				'target' => '_blank',
+			),
+		);
+		$screen = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce(),
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+
+		ob_start();
+		$screen->render_dashboard_shell( $this->settings, '/my-account/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'class="alynt-ag-gateway agw-dashboard"', $html );
+		$this->assertStringContainsString( 'data-agw-screen="dashboard"', $html );
+		$this->assertStringContainsString( 'style="--test-color:#123;"', $html );
+		$this->assertStringContainsString( 'Test Store', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard__logout"', $html );
+		$this->assertStringContainsString( 'redirect_to=https%3A%2F%2Fexample.test%2Flogin', $html );
+		$this->assertStringContainsString( 'Account Dashboard', $html );
+		$this->assertStringContainsString( 'Welcome, Damon Paulo', $html );
+		$this->assertStringContainsString( 'damon@example.test', $html );
+		$this->assertStringContainsString( 'Account Details', $html );
+		$this->assertStringContainsString( 'Support', $html );
+		$this->assertStringContainsString( 'target="_blank" rel="noopener noreferrer"', $html );
+		$this->assertStringContainsString( 'opens in a new tab', $html );
+	}
+
+	public function test_render_dashboard_screen_outputs_woocommerce_unavailable_warning() {
+		$dashboard = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$screen    = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce(),
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array(
+				'woocommerce_takeover' => true,
+			)
+		);
+
+		ob_start();
+		$screen->render_dashboard_screen( $settings, '/my-account/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'WooCommerce account takeover is enabled, but WooCommerce is not active.', $html );
+		$this->assertStringContainsString( 'role="alert"', $html );
+	}
+
+	public function test_render_dashboard_screen_outputs_woocommerce_endpoint_content() {
+		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->available = true;
+		$woocommerce          = new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce();
+		$woocommerce->endpoint = array(
+			'endpoint' => 'orders',
+			'value'    => '2',
+		);
+		$screen = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			$woocommerce,
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array(
+				'woocommerce_takeover' => true,
+			)
+		);
+
+		ob_start();
+		$screen->render_dashboard_screen( $settings, '/my-account/orders/2/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( '<h2 id="agw-dashboard-content-title">', $html );
+		$this->assertStringContainsString( 'Orders', $html );
+		$this->assertStringContainsString( '<div class="wc-endpoint-output">orders:2</div>', $html );
+		$this->assertStringNotContainsString( 'This account section is not available.', $html );
+	}
+
+	public function test_render_dashboard_screen_outputs_endpoint_fallback_when_render_fails() {
+		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->available = true;
+		$woocommerce          = new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce();
+		$woocommerce->endpoint = array(
+			'endpoint' => 'orders',
+			'value'    => '',
+		);
+		$woocommerce->rendered = false;
+		$screen = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			$woocommerce,
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array(
+				'woocommerce_takeover' => true,
+			)
+		);
+
+		ob_start();
+		$screen->render_dashboard_screen( $settings, '/my-account/orders/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'This account section is not available.', $html );
+	}
+}
