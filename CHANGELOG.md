@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+### Planned
+
+- Email preview and test-send QA on LocalWP Plugin Tester.
+- Focused email tooling test coverage where practical.
+- Safe evaluation of the remaining profile email-change request suppression behavior.
+- v0.1.2 release packaging and Alynt Plugin Updater verification.
+
 ## 0.1.1 - 2026-07-04
 
 ### Added

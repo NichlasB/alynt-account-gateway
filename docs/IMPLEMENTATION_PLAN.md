@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.1 small release cycle started on branch `release/0.1.1`
+- Current phase: v0.1.2 small release cycle started on branch `release/0.1.2`
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.0 is the current public baseline; v0.1.1 is scoped as a small admin polish, compatibility, and test coverage release.
+- Plugin status: v0.1.1 is the current public baseline; v0.1.2 is scoped as a small email QA, email-change behavior, and release-polish cycle.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,6 +32,32 @@
 - Email editor: Rich template editor with preview and test-send
 - Terms/privacy links: Relative URL paths configured manually, such as `/terms/` or `/legal/privacy/`
 - Multilingual support: Required for v1
+
+## v0.1.2 Small Release Cycle
+
+### Scope
+
+- [ ] Browser/manual QA email preview and test-send on LocalWP Plugin Tester.
+- [ ] Add or refine focused test coverage around email preview/test-send handlers where practical.
+- [ ] Evaluate and, if safe, implement the remaining profile email-change request suppression strategy for the existing disable toggle.
+- [ ] Refresh docs/changelog/POT if implementation changes account email behavior or user-facing strings.
+- [ ] Re-run Plugin Tester smoke checks for email tools and a light account-gateway regression pass.
+- [ ] Verify Alynt Plugin Updater detects and installs `0.1.2` from the GitHub release asset.
+
+### Guardrails
+
+- Keep the cycle small; do not rework the whole email editor.
+- Keep frontend output disabled by default on fresh install.
+- Preserve the existing branded email templates, tokens, and preview/test-send UI unless a QA finding requires a narrow fix.
+- Do not suppress WordPress core security/account emails unless the behavior can be verified safely and documented clearly.
+- Keep release packaging exclusions aligned with the existing GitHub release workflow.
+
+### Completion Gate
+
+- [ ] Build, lint, test, audit, and POT generation pass.
+- [ ] Local release-style zip excludes source/dev files and includes built assets.
+- [ ] Plugin Tester validates email preview/test-send and the selected email-change behavior.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.1 Small Release Cycle
 
