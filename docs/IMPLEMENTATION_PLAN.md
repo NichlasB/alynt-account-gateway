@@ -30,6 +30,7 @@
 - HTTP-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=invalidlink`, and `/my-account/`; public gateway routes rendered branded output with frontend JS assets and no native login shell, and logged-out dashboard access redirected to `/login?redirect_to=...`.
 - Removed the branch-QA zip from Plugin Tester uploads after smoke verification.
 - Bumped release-candidate metadata to `0.1.15` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 145 tests and 623 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.15-20260704-214210\alynt-account-gateway-v0.1.15.zip`; verified built frontend/admin assets and the new frontend dashboard screen service are included, dev/source/test/docs/rules/package/vendor files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.15`.
 
 ### Guardrails
 
