@@ -30,6 +30,16 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertSame( 5, $defaults['lostpassword_rate_limit_count'] );
 	}
 
+	public function test_privacy_retention_defaults_exist() {
+		$defaults = ALYNT_AG_Settings_Schema::defaults();
+
+		$this->assertSame( 7, $defaults['success_log_retention'] );
+		$this->assertSame( 30, $defaults['failed_log_retention'] );
+		$this->assertSame( 30, $defaults['verification_log_retention'] );
+		$this->assertSame( 365, $defaults['consent_record_retention'] );
+		$this->assertSame( 180, $defaults['audit_log_retention'] );
+	}
+
 	public function test_branding_defaults_are_brand_agnostic_design_tokens() {
 		$defaults = ALYNT_AG_Settings_Schema::defaults();
 

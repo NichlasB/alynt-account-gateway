@@ -1066,6 +1066,7 @@ class ALYNT_AG_Frontend {
 			'terms_required'              => __( 'Please accept the terms and privacy policy to continue.', 'alynt-account-gateway' ),
 			'email_unavailable'           => __( 'If this email address can be used, a confirmation email will be sent.', 'alynt-account-gateway' ),
 			'pending_registration_failed' => __( 'The registration could not be started. Please try again.', 'alynt-account-gateway' ),
+			'consent_record_failed'       => __( 'Your consent record could not be saved. Please try again.', 'alynt-account-gateway' ),
 			'confirmation_email_failed'   => __( 'The confirmation email could not be sent. Please try again.', 'alynt-account-gateway' ),
 		);
 

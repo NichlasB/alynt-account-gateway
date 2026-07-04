@@ -182,6 +182,11 @@ class ALYNT_AG_Registration_Service {
 			return new WP_Error( 'pending_registration_failed', __( 'The registration could not be started. Please try again.', 'alynt-account-gateway' ) );
 		}
 
+		$privacy = new ALYNT_AG_Privacy_Service();
+		if ( ! $privacy->record_registration_consent( $email, $settings ) ) {
+			return new WP_Error( 'consent_record_failed', __( 'The registration consent record could not be stored. Please try again.', 'alynt-account-gateway' ) );
+		}
+
 		return array(
 			'id'               => (int) $wpdb->insert_id,
 			'email'            => $email,
@@ -539,6 +544,9 @@ class ALYNT_AG_Registration_Service {
 			array( '%d' )
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		$privacy = new ALYNT_AG_Privacy_Service();
+		$privacy->attach_registration_consent_to_user( $pending->email, (int) $user_id );
 
 		$welcome_sent = $this->send_account_created_welcome_email( $pending, (int) $user_id, $settings );
 		if ( is_wp_error( $welcome_sent ) ) {

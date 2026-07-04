@@ -11,6 +11,7 @@ define( 'ALYNT_AG_PLUGIN_DIR', dirname( __DIR__ ) . '/' );
 define( 'ALYNT_AG_PLUGIN_URL', 'https://example.test/wp-content/plugins/alynt-account-gateway/' );
 define( 'ALYNT_AG_PLUGIN_BASENAME', 'alynt-account-gateway/alynt-account-gateway.php' );
 define( 'ALYNT_AG_TEXT_DOMAIN', 'alynt-account-gateway' );
+define( 'ALYNT_AG_VERSION', '0.1.0' );
 define( 'HOUR_IN_SECONDS', 3600 );
 define( 'MINUTE_IN_SECONDS', 60 );
 
@@ -19,6 +20,10 @@ $GLOBALS['alynt_ag_test_mail'] = array();
 $GLOBALS['alynt_ag_test_options'] = array();
 $GLOBALS['alynt_ag_test_remote_posts'] = array();
 $GLOBALS['alynt_ag_test_db_inserts'] = array();
+$GLOBALS['alynt_ag_test_db_updates'] = array();
+$GLOBALS['alynt_ag_test_db_deletes'] = array();
+$GLOBALS['alynt_ag_test_db_results'] = array();
+$GLOBALS['alynt_ag_test_filters'] = array();
 
 class ALYNT_AG_Test_WPDB {
 	public $prefix = 'wp_';
@@ -30,6 +35,53 @@ class ALYNT_AG_Test_WPDB {
 			'data'   => $data,
 			'format' => $format,
 		);
+
+		return true;
+	}
+
+	public function update( $table, $data, $where, $format = array(), $where_format = array() ) {
+		$GLOBALS['alynt_ag_test_db_updates'][] = array(
+			'table'        => $table,
+			'data'         => $data,
+			'where'        => $where,
+			'format'       => $format,
+			'where_format' => $where_format,
+		);
+
+		return true;
+	}
+
+	public function delete( $table, $where, $where_format = array() ) {
+		$GLOBALS['alynt_ag_test_db_deletes'][] = array(
+			'table'        => $table,
+			'where'        => $where,
+			'where_format' => $where_format,
+		);
+
+		return 1;
+	}
+
+	public function get_results( $query ) {
+		foreach ( $GLOBALS['alynt_ag_test_db_results'] as $table => $rows ) {
+			if ( false !== strpos( $query, (string) $table ) ) {
+				return $rows;
+			}
+		}
+
+		return array();
+	}
+
+	public function prepare( $query, ...$args ) {
+		foreach ( $args as $arg ) {
+			$replacement = is_int( $arg ) ? (string) $arg : "'" . addslashes( (string) $arg ) . "'";
+			$query = preg_replace( '/%[sd]/', $replacement, $query, 1 );
+		}
+
+		return $query;
+	}
+
+	public function query( $query ) {
+		$GLOBALS['alynt_ag_test_db_queries'][] = $query;
 
 		return true;
 	}
@@ -406,6 +458,45 @@ if ( ! function_exists( 'do_action' ) ) {
 	}
 }
 
+if ( ! function_exists( 'add_action' ) ) {
+	function add_action( $hook_name, $callback, $priority = 10, $accepted_args = 1 ) {
+		$GLOBALS['alynt_ag_test_actions'][] = array(
+			'hook'          => $hook_name,
+			'callback'      => $callback,
+			'priority'      => $priority,
+			'accepted_args' => $accepted_args,
+		);
+
+		return true;
+	}
+}
+
+if ( ! function_exists( 'add_filter' ) ) {
+	function add_filter( $hook_name, $callback, $priority = 10, $accepted_args = 1 ) {
+		$GLOBALS['alynt_ag_test_filters'][] = array(
+			'hook'          => $hook_name,
+			'callback'      => $callback,
+			'priority'      => $priority,
+			'accepted_args' => $accepted_args,
+		);
+
+		return true;
+	}
+}
+
+if ( ! function_exists( 'get_user_by' ) ) {
+	function get_user_by( $field, $value ) {
+		if ( 'email' !== $field || ! is_email( $value ) ) {
+			return false;
+		}
+
+		$user = new WP_User( $value );
+		$user->ID = 123;
+
+		return $user;
+	}
+}
+
 if ( ! function_exists( 'get_transient' ) ) {
 	function get_transient( $name ) {
 		return isset( $GLOBALS['alynt_ag_test_transients'][ $name ] ) ? $GLOBALS['alynt_ag_test_transients'][ $name ]['value'] : false;
@@ -455,3 +546,4 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-turnstile-client.php
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-webhook-dispatcher.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-dashboard-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-woocommerce-integration.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-service.php';

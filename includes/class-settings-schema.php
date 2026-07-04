@@ -481,6 +481,18 @@ class ALYNT_AG_Settings_Schema {
 				'default' => 30,
 				'label'   => __( 'Verification Log Retention Days', 'alynt-account-gateway' ),
 			),
+			'consent_record_retention'                  => array(
+				'tab'     => 'privacy',
+				'type'    => 'integer',
+				'default' => 365,
+				'label'   => __( 'Consent Record Retention Days', 'alynt-account-gateway' ),
+			),
+			'audit_log_retention'                       => array(
+				'tab'     => 'privacy',
+				'type'    => 'integer',
+				'default' => 180,
+				'label'   => __( 'Audit Log Retention Days', 'alynt-account-gateway' ),
+			),
 		);
 	}
 

@@ -125,11 +125,11 @@
 
 ### Phase 7 - Privacy, Accessibility, I18n, And Release Readiness
 
-- [ ] Add WordPress privacy policy text.
-- [ ] Add personal data exporter and eraser support.
-- [ ] Add retention settings for pending registrations, verification logs, webhook logs, consent records, and audit entries.
-- [ ] Store consent record with terms/privacy URLs, timestamp, and policy/version context.
-- [ ] Avoid storing IP by default unless explicitly enabled.
+- [x] Add WordPress privacy policy text.
+- [x] Add personal data exporter and eraser support.
+- [x] Add retention settings for verification logs, webhook logs, consent records, and audit entries.
+- [x] Store consent record with terms/privacy URLs, timestamp, and policy/version context.
+- [x] Avoid storing IP by default unless explicitly enabled.
 - [ ] Ensure visible labels, keyboard operation, focus states, inline validation, `aria-invalid`, and live-region messages.
 - [ ] Ensure responsive behavior down to 320px.
 - [ ] Ensure all user-facing strings are translatable.

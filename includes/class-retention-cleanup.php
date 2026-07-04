@@ -47,6 +47,8 @@ class ALYNT_AG_Retention_Cleanup {
 		$webhook_failed_days  = max( 1, absint( $settings['failed_log_retention'] ) );
 		$verification_days    = max( 1, absint( $settings['verification_log_retention'] ) );
 		$diagnostics_days     = max( 1, absint( $settings['diagnostics_retention'] ) );
+		$consent_days         = max( 1, absint( $settings['consent_record_retention'] ) );
+		$audit_days           = max( 1, absint( $settings['audit_log_retention'] ) );
 
 		$wpdb->query(
 			$wpdb->prepare(
@@ -77,6 +79,22 @@ class ALYNT_AG_Retention_Cleanup {
 				"DELETE FROM {$tables['diagnostics_logs']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY)",
 				$now,
 				$diagnostics_days
+			)
+		);
+
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$tables['consent_records']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY)",
+				$now,
+				$consent_days
+			)
+		);
+
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$tables['audit_logs']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY)",
+				$now,
+				$audit_days
 			)
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
