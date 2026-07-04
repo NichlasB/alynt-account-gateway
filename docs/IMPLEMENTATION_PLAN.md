@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.4 small release cycle started on branch `release/0.1.4`
+- Current phase: v0.1.4 released and verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.3 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.4 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -52,6 +52,9 @@
 - Browser-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens and avoided the native WordPress login shell.
 - Bumped release-candidate metadata to `0.1.4` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test`, `npm.cmd run make-pot`, `npm.cmd audit --audit-level=moderate`, and `git diff --check`.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.4-20260704-160614\alynt-account-gateway-v0.1.4.zip`; verified built assets and the message catalog are included, dev/source/test/docs/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.4`.
+- Published GitHub release `v0.1.4`, downloaded `alynt-account-gateway-v0.1.4.zip` from the release, and verified the public asset reports `0.1.4`, includes built assets and the message catalog, and excludes development/source files.
+- Confirmed Alynt Plugin Updater detected `0.1.3` to `0.1.4`, used the WordPress Plugins screen `update now` path to download and install from the `v0.1.4` GitHub release asset, and verified final Plugin Tester state: active `0.1.4`, no remaining update.
+- Browser-smoked the release-installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens and avoided the native WordPress login shell.
 
 ### Guardrails
 
@@ -63,7 +66,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates representative gateway routes after the refactor.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.3 Small Release Cycle
 
