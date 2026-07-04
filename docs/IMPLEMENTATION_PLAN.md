@@ -37,12 +37,17 @@
 
 ### Scope
 
-- [ ] Re-audit registration flow behavior against the approved confirmation-first, email-only, terms-consent, password-policy, and spam-prevention requirements.
-- [ ] Add or refine focused unit coverage around registration validation, pending-registration state, account-created webhook payload/logging, or protection-mode decisions where practical.
+- [x] Re-audit registration flow behavior against the approved confirmation-first, email-only, terms-consent, password-policy, and spam-prevention requirements.
+- [x] Add or refine focused unit coverage around registration validation, pending-registration state, account-created webhook payload/logging, or protection-mode decisions where practical.
 - [ ] Browser/manual QA the installed Plugin Tester registration path, including disabled registration, enabled registration form gating, pending confirmation, set-password completion, and email-only login after account creation.
 - [ ] Verify account-created webhook behavior in a local-safe way without sending real customer data to an external service.
 - [ ] Refresh docs/changelog/POT if implementation changes registration, webhook, or user-facing behavior.
 - [ ] Re-run Plugin Tester smoke checks and verify Alynt Plugin Updater detects and installs `0.1.3` from the GitHub release asset.
+
+### Progress Notes
+
+- Registration service audit confirmed the existing flow keeps account creation behind email confirmation and password validation.
+- Added focused PHPUnit coverage for the confirmed pending-registration completion path: WordPress user creation, profile update, pending-row `account_created` status, consent attachment, welcome email hook, and account-created webhook hook.
 
 ### Guardrails
 

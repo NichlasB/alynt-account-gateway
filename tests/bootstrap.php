@@ -32,6 +32,8 @@ $GLOBALS['alynt_ag_test_cleared_hooks'] = array();
 $GLOBALS['alynt_ag_test_redirects'] = array();
 $GLOBALS['alynt_ag_test_signons'] = array();
 $GLOBALS['alynt_ag_test_deleted_user_meta'] = array();
+$GLOBALS['alynt_ag_test_created_users'] = array();
+$GLOBALS['alynt_ag_test_user_updates'] = array();
 
 class ALYNT_AG_Test_WPDB {
 	public $prefix = 'wp_';
@@ -413,6 +415,29 @@ if ( ! function_exists( 'email_exists' ) ) {
 if ( ! function_exists( 'username_exists' ) ) {
 	function username_exists( $username ) {
 		return in_array( $username, array( '@User_Damon_Paulo', 'User_Damon_Paulo' ), true ) ? 1 : false;
+	}
+}
+
+if ( ! function_exists( 'wp_create_user' ) ) {
+	function wp_create_user( $username, $password, $email ) {
+		$user_id = count( $GLOBALS['alynt_ag_test_created_users'] ) + 456;
+
+		$GLOBALS['alynt_ag_test_created_users'][] = array(
+			'ID'       => $user_id,
+			'username' => $username,
+			'password' => $password,
+			'email'    => $email,
+		);
+
+		return $user_id;
+	}
+}
+
+if ( ! function_exists( 'wp_update_user' ) ) {
+	function wp_update_user( $userdata ) {
+		$GLOBALS['alynt_ag_test_user_updates'][] = $userdata;
+
+		return isset( $userdata['ID'] ) ? (int) $userdata['ID'] : 0;
 	}
 }
 

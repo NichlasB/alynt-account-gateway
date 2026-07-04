@@ -2,10 +2,13 @@
 
 ## Unreleased
 
+### Added
+
+- Focused registration completion coverage for the confirmed pending account creation path.
+
 ### Planned
 
 - Registration flow and spam-prevention QA.
-- Focused registration/webhook unit coverage where practical.
 - Local-safe account-created webhook verification.
 - v0.1.3 release packaging and Alynt Plugin Updater verification.
 
