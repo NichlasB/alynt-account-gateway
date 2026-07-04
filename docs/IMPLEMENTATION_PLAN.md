@@ -40,7 +40,7 @@
 - [x] Start the next low-risk structural slice from the released `master` baseline.
 - [x] Extract frontend URL and screen-routing helpers out of the large frontend renderer class without changing public routes or query handling.
 - [x] Add focused test coverage around the extracted frontend route service.
-- [ ] Run installed Plugin Tester smoke checks for representative gateway routes after packaging.
+- [x] Run installed Plugin Tester smoke checks for representative gateway routes after packaging.
 - [ ] Re-run package/update checks as appropriate for the final `0.1.5` release.
 
 ### Progress Notes
@@ -50,6 +50,9 @@
 - Kept `ALYNT_AG_Frontend` wrapper methods for internal compatibility while delegating route decisions to the new service.
 - Added focused `FrontendRoutesTest` coverage for known and fallback action URLs, redirect/nonce query preservation, enabled and disabled registration screen routing, dashboard and non-gateway path routing, WooCommerce takeover endpoint routing, and trailing-slash-insensitive path matching.
 - Verified `npm.cmd test` passes with 107 tests and 402 assertions, `npm.cmd run lint` passes, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.5-branch-qa-20260704-162630\alynt-account-gateway-v0.1.5-branch-qa.zip`; verified built frontend assets, the message catalog, and the route service are included, dev/source/test/docs/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.4` as expected before the final release bump.
+- Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.4` header/constant, `ALYNT_AG_Frontend_Routes` file/class loaded, and route helpers resolve register/lost-password URLs and the register screen.
+- Browser-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens and avoided the native WordPress login shell.
 
 ### Guardrails
 
@@ -60,7 +63,7 @@
 ### Completion Gate
 
 - [x] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates representative gateway routes after the route-service extraction.
+- [x] Plugin Tester smoke validates representative gateway routes after the route-service extraction.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.4 Small Release Cycle
