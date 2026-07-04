@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.1.15 - 2026-07-04
+
+### Changed
+
+- Extracted frontend dashboard shell and dashboard content rendering into a dedicated dashboard screen service without changing dashboard copy, links, logout URL behavior, WooCommerce takeover warning, endpoint content delegation, external-link accessibility text, or dashboard classes.
+
+### Added
+
+- Focused frontend dashboard screen service tests for shell output, brand/logout rendering, dashboard hero metadata, dashboard links, WooCommerce warning, endpoint content rendering, and endpoint fallback copy.
+
 ## 0.1.14 - 2026-07-04
 
 ### Changed
