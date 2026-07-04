@@ -25,6 +25,7 @@ class ALYNT_AG_Settings_Page {
 		add_action( 'admin_post_alynt_ag_export_settings', array( $this, 'handle_export_settings' ) );
 		add_action( 'admin_post_alynt_ag_import_settings', array( $this, 'handle_import_settings' ) );
 		add_action( 'admin_post_alynt_ag_restore_tab_defaults', array( $this, 'handle_restore_tab_defaults' ) );
+		add_action( 'admin_post_alynt_ag_preview_gateway', array( $this, 'handle_preview_gateway' ) );
 		add_action( 'admin_post_alynt_ag_export_diagnostics', array( $this, 'handle_export_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_clear_diagnostics', array( $this, 'handle_clear_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_preview_email', array( $this, 'handle_preview_email' ) );
@@ -392,6 +393,56 @@ class ALYNT_AG_Settings_Page {
 	}
 
 	/**
+	 * Render gateway preview tools.
+	 *
+	 * @return void
+	 */
+	private function render_gateway_preview_tools() {
+		$screens = $this->gateway_preview_screens();
+		?>
+		<h2><?php esc_html_e( 'Gateway Screen Preview', 'alynt-account-gateway' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'Preview branded gateway screens using the saved settings, even while frontend output is disabled.', 'alynt-account-gateway' ); ?>
+		</p>
+		<div class="alynt-ag-preview-links">
+			<?php foreach ( $screens as $screen => $label ) : ?>
+				<?php
+				$preview_url = add_query_arg(
+					array(
+						'action' => 'alynt_ag_preview_gateway',
+						'screen' => $screen,
+					),
+					admin_url( 'admin-post.php' )
+				);
+				$preview_url = wp_nonce_url( $preview_url, 'alynt_ag_preview_gateway_' . $screen );
+				?>
+				<a class="button" target="_blank" rel="noopener noreferrer" href="<?php echo esc_url( $preview_url ); ?>">
+					<?php echo esc_html( $label ); ?>
+				</a>
+			<?php endforeach; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Return supported gateway preview screens.
+	 *
+	 * @return array<string,string>
+	 */
+	private function gateway_preview_screens() {
+		return array(
+			'login'                 => __( 'Login', 'alynt-account-gateway' ),
+			'register'              => __( 'Registration', 'alynt-account-gateway' ),
+			'lostpassword'          => __( 'Lost Password', 'alynt-account-gateway' ),
+			'setpassword'           => __( 'Set Password', 'alynt-account-gateway' ),
+			'logout'                => __( 'Logout Confirmation', 'alynt-account-gateway' ),
+			'registration_disabled' => __( 'Registration Disabled', 'alynt-account-gateway' ),
+			'invalidlink'           => __( 'Invalid Link', 'alynt-account-gateway' ),
+			'dashboard'             => __( 'Dashboard', 'alynt-account-gateway' ),
+		);
+	}
+
+	/**
 	 * Render restore-defaults control for the active tab.
 	 *
 	 * @param string $active_tab Active settings tab.
@@ -428,6 +479,8 @@ class ALYNT_AG_Settings_Page {
 		$health = ALYNT_AG_Diagnostics_Logger::health_summary();
 		$events = ALYNT_AG_Diagnostics_Logger::recent_events( 20 );
 		?>
+		<?php $this->render_gateway_preview_tools(); ?>
+
 		<?php $this->render_settings_tools(); ?>
 
 		<h2><?php esc_html_e( 'Diagnostics', 'alynt-account-gateway' ); ?></h2>
@@ -608,6 +661,105 @@ class ALYNT_AG_Settings_Page {
 			)
 		);
 		exit;
+	}
+
+	/**
+	 * Render a standalone gateway screen preview.
+	 *
+	 * @return void
+	 */
+	public function handle_preview_gateway() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to preview gateway screens.', 'alynt-account-gateway' ) );
+		}
+
+		$screens = $this->gateway_preview_screens();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Verified immediately below.
+		$screen = isset( $_GET['screen'] ) ? sanitize_key( wp_unslash( $_GET['screen'] ) ) : 'login';
+		$screen = isset( $screens[ $screen ] ) ? $screen : 'login';
+
+		check_admin_referer( 'alynt_ag_preview_gateway_' . $screen );
+
+		$frontend = new ALYNT_AG_Frontend();
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+
+		$this->enqueue_gateway_preview_assets( $screen, $settings );
+		show_admin_bar( false );
+		add_filter( 'show_admin_bar', '__return_false', PHP_INT_MAX );
+		remove_action( 'wp_footer', 'wp_admin_bar_render', 1000 );
+		remove_action( 'admin_footer', 'wp_admin_bar_render', 1000 );
+
+		status_header( 200 );
+		nocache_headers();
+
+		echo '<!doctype html>';
+		echo '<html ';
+		language_attributes();
+		echo '>';
+		echo '<head>';
+		echo '<meta charset="' . esc_attr( get_bloginfo( 'charset' ) ) . '">';
+		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
+		echo '<title>' . esc_html( $frontend->get_screen_title( $screen ) ) . '</title>';
+		wp_head();
+		echo '</head>';
+		echo '<body class="alynt-ag-body alynt-ag-preview-body">';
+		$frontend->render_preview( $screen, $settings );
+		wp_footer();
+		echo '</body></html>';
+		exit;
+	}
+
+	/**
+	 * Enqueue frontend assets for a standalone admin preview.
+	 *
+	 * @param string              $screen   Screen key.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function enqueue_gateway_preview_assets( $screen, $settings ) {
+		$style_path = ALYNT_AG_PLUGIN_DIR . 'assets/dist/frontend/index.css';
+		if ( file_exists( $style_path ) ) {
+			wp_enqueue_style(
+				'alynt-ag-frontend',
+				ALYNT_AG_PLUGIN_URL . 'assets/dist/frontend/index.css',
+				array(),
+				filemtime( $style_path )
+			);
+		}
+
+		$script_path = ALYNT_AG_PLUGIN_DIR . 'assets/dist/frontend/index.js';
+		if ( file_exists( $script_path ) ) {
+			wp_enqueue_script(
+				'alynt-ag-frontend',
+				ALYNT_AG_PLUGIN_URL . 'assets/dist/frontend/index.js',
+				array(),
+				filemtime( $script_path ),
+				true
+			);
+
+			wp_localize_script(
+				'alynt-ag-frontend',
+				'alyntAgFrontend',
+				array(
+					'labels' => array(
+						'showPassword' => __( 'Show password', 'alynt-account-gateway' ),
+						'hidePassword' => __( 'Hide password', 'alynt-account-gateway' ),
+						'show'         => __( 'Show', 'alynt-account-gateway' ),
+						'hide'         => __( 'Hide', 'alynt-account-gateway' ),
+					),
+				)
+			);
+		}
+
+		if ( ! empty( $settings['turnstile_site_key'] ) && 'register' === $screen ) {
+			wp_enqueue_script(
+				'alynt-ag-turnstile',
+				'https://challenges.cloudflare.com/turnstile/v0/api.js',
+				array(),
+				ALYNT_AG_VERSION,
+				true
+			);
+		}
 	}
 
 	/**

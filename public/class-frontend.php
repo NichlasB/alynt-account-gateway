@@ -208,6 +208,33 @@ class ALYNT_AG_Frontend {
 	}
 
 	/**
+	 * Render one gateway screen for admin preview.
+	 *
+	 * @param string              $screen   Screen key.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	public function render_preview( $screen, $settings ) {
+		$screen = in_array(
+			$screen,
+			array( 'dashboard', 'login', 'register', 'lostpassword', 'setpassword', 'logout', 'registration_disabled', 'invalidlink' ),
+			true
+		) ? $screen : 'login';
+
+		if ( 'setpassword' === $screen ) {
+			$this->render_gateway_shell_with_password_preview( $settings );
+			return;
+		}
+
+		if ( 'dashboard' === $screen ) {
+			$this->render_dashboard_shell( $settings );
+			return;
+		}
+
+		$this->render_gateway_shell( $screen, $settings );
+	}
+
+	/**
 	 * Filter the WordPress login URL.
 	 *
 	 * @param string $login_url    Native login URL.
@@ -427,6 +454,44 @@ class ALYNT_AG_Frontend {
 					<div class="agw-card">
 						<?php $this->render_brand_block( $settings ); ?>
 						<?php $this->render_screen( $screen, $settings ); ?>
+					</div>
+				</div>
+			</section>
+		</main>
+		<?php
+	}
+
+	/**
+	 * Render the set-password shell for admin preview without requiring a live token.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_gateway_shell_with_password_preview( $settings ) {
+		$style = $this->get_gateway_style_attribute( $settings );
+		?>
+		<main class="alynt-ag-gateway" data-agw-screen="setpassword" style="<?php echo esc_attr( $style ); ?>">
+			<section class="agw-shell" aria-labelledby="agw-screen-title">
+				<div class="agw-media" aria-hidden="true">
+					<?php $this->render_media_panel( $settings ); ?>
+				</div>
+				<div class="agw-panel">
+					<div class="agw-card">
+						<?php $this->render_brand_block( $settings ); ?>
+						<?php
+						$this->render_password_form(
+							$settings,
+							home_url( $settings['account_action_base'] ),
+							'reset_password',
+							'alynt_ag_reset_password',
+							'alynt_ag_auth_nonce',
+							array(
+								'key'   => 'preview-key',
+								'login' => 'preview@example.test',
+							),
+							''
+						);
+						?>
 					</div>
 				</div>
 			</section>
@@ -1053,7 +1118,7 @@ class ALYNT_AG_Frontend {
 	 * @param string $screen Screen key.
 	 * @return string
 	 */
-	private function get_screen_title( $screen ) {
+	public function get_screen_title( $screen ) {
 		$titles = array(
 			'dashboard'             => __( 'Account Dashboard', 'alynt-account-gateway' ),
 			'login'                 => __( 'Log In', 'alynt-account-gateway' ),
