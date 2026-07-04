@@ -135,6 +135,18 @@ if ( ! function_exists( 'esc_attr' ) ) {
 	}
 }
 
+if ( ! function_exists( 'esc_html_e' ) ) {
+	function esc_html_e( $text, $domain = 'default' ) {
+		echo esc_html( $text );
+	}
+}
+
+if ( ! function_exists( 'esc_attr_e' ) ) {
+	function esc_attr_e( $text, $domain = 'default' ) {
+		echo esc_attr( $text );
+	}
+}
+
 if ( ! function_exists( 'esc_url' ) ) {
 	function esc_url( $value ) {
 		return filter_var( $value, FILTER_SANITIZE_URL );
@@ -784,6 +796,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-woocommerce-integrat
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-routes.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-assets.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-branding.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-components.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-messages.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-warnings.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-service.php';

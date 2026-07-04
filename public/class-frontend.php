@@ -339,6 +339,15 @@ class ALYNT_AG_Frontend {
 	}
 
 	/**
+	 * Frontend shared component helpers.
+	 *
+	 * @return ALYNT_AG_Frontend_Components
+	 */
+	private function components() {
+		return new ALYNT_AG_Frontend_Components();
+	}
+
+	/**
 	 * Render gateway shell.
 	 *
 	 * @param string              $screen   Screen key.
@@ -954,17 +963,7 @@ class ALYNT_AG_Frontend {
 	 * @return void
 	 */
 	private function render_verification_slot( $settings ) {
-		if ( ! empty( $settings['turnstile_site_key'] ) ) {
-			?>
-			<div class="agw-verification-slot" aria-label="<?php esc_attr_e( 'Account verification', 'alynt-account-gateway' ); ?>">
-				<div class="cf-turnstile" data-sitekey="<?php echo esc_attr( $settings['turnstile_site_key'] ); ?>"></div>
-			</div>
-			<?php
-			return;
-		}
-		?>
-		<div class="agw-verification-slot" role="status"><?php esc_html_e( 'Verification will appear here when enabled.', 'alynt-account-gateway' ); ?></div>
-		<?php
+		$this->components()->render_verification_slot( $settings );
 	}
 
 	/**
@@ -1018,11 +1017,6 @@ class ALYNT_AG_Frontend {
 	 * @return void
 	 */
 	private function render_notice( $copy ) {
-		if ( '' === trim( wp_strip_all_tags( (string) $copy ) ) ) {
-			return;
-		}
-		?>
-		<div class="agw-notice"><?php echo wp_kses_post( wpautop( $copy ) ); ?></div>
-		<?php
+		$this->components()->render_notice( $copy );
 	}
 }
