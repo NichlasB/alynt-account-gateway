@@ -12,6 +12,12 @@ use PHPUnit\Framework\TestCase;
  */
 class SettingsSchemaTest extends TestCase {
 
+	protected function tearDown(): void {
+		unset( $GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] );
+
+		parent::tearDown();
+	}
+
 	public function test_frontend_output_is_disabled_by_default() {
 		$defaults = ALYNT_AG_Settings_Schema::defaults();
 
@@ -51,6 +57,104 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertSame( '#B3492E', $defaults['error_color'] );
 		$this->assertSame( 'Georgia, serif', $defaults['heading_font_family'] );
 		$this->assertSame( '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', $defaults['body_font_family'] );
+	}
+
+	public function test_export_package_contains_plugin_metadata_and_settings() {
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'frontend_enabled' => true,
+			'login_path'       => '/member-login',
+		);
+
+		$package = ALYNT_AG_Settings_Schema::export_package();
+
+		$this->assertSame( 'alynt-account-gateway', $package['plugin'] );
+		$this->assertSame( ALYNT_AG_VERSION, $package['version'] );
+		$this->assertArrayHasKey( 'exportedAt', $package );
+		$this->assertTrue( $package['settings']['frontend_enabled'] );
+		$this->assertSame( '/member-login', $package['settings']['login_path'] );
+	}
+
+	public function test_import_package_sanitizes_known_settings_and_discards_unknown_keys() {
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'frontend_enabled' => false,
+			'login_path'       => '/login',
+		);
+
+		$imported = ALYNT_AG_Settings_Schema::import_package(
+			wp_json_encode(
+				array(
+					'settings' => array(
+						'frontend_enabled' => '1',
+						'login_path'       => 'members?bad=1',
+						'primary_color'    => 'not-a-color',
+						'unknown_setting'  => 'ignored',
+					),
+				)
+			)
+		);
+
+		$this->assertIsArray( $imported );
+		$this->assertTrue( $imported['frontend_enabled'] );
+		$this->assertSame( '/members', $imported['login_path'] );
+		$this->assertSame( '', $imported['primary_color'] );
+		$this->assertArrayNotHasKey( 'unknown_setting', $imported );
+	}
+
+	public function test_import_package_rejects_invalid_json() {
+		$imported = ALYNT_AG_Settings_Schema::import_package( '{invalid-json' );
+
+		$this->assertInstanceOf( WP_Error::class, $imported );
+		$this->assertSame( 'alynt_ag_invalid_settings_import', $imported->get_error_code() );
+	}
+
+	public function test_import_package_rejects_packages_without_known_settings() {
+		$imported = ALYNT_AG_Settings_Schema::import_package(
+			wp_json_encode(
+				array(
+					'settings' => array(
+						'not_ours' => 'ignored',
+					),
+				)
+			)
+		);
+
+		$this->assertInstanceOf( WP_Error::class, $imported );
+		$this->assertSame( 'alynt_ag_empty_settings_import', $imported->get_error_code() );
+	}
+
+	public function test_defaults_for_tab_returns_only_tab_settings() {
+		$defaults = ALYNT_AG_Settings_Schema::defaults_for_tab( 'urls' );
+
+		$this->assertSame(
+			array( 'login_path', 'account_action_base', 'after_login_redirect' ),
+			array_keys( $defaults )
+		);
+		$this->assertSame( '/login', $defaults['login_path'] );
+		$this->assertSame( '/account', $defaults['account_action_base'] );
+	}
+
+	public function test_restore_tab_defaults_resets_only_selected_tab() {
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'frontend_enabled'     => true,
+			'login_path'           => '/custom-login',
+			'account_action_base'  => '/custom-account',
+			'primary_color'        => '#123456',
+		);
+
+		$restored = ALYNT_AG_Settings_Schema::restore_tab_defaults( 'urls' );
+
+		$this->assertIsArray( $restored );
+		$this->assertTrue( $restored['frontend_enabled'] );
+		$this->assertSame( '/login', $restored['login_path'] );
+		$this->assertSame( '/account', $restored['account_action_base'] );
+		$this->assertSame( '#123456', $restored['primary_color'] );
+	}
+
+	public function test_restore_tab_defaults_rejects_invalid_tab() {
+		$restored = ALYNT_AG_Settings_Schema::restore_tab_defaults( 'missing_tab' );
+
+		$this->assertInstanceOf( WP_Error::class, $restored );
+		$this->assertSame( 'alynt_ag_invalid_settings_tab', $restored->get_error_code() );
 	}
 
 	public function test_screen_copy_defaults_exist() {

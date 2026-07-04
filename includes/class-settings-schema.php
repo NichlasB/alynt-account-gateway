@@ -516,6 +516,69 @@ class ALYNT_AG_Settings_Schema {
 	}
 
 	/**
+	 * Return schema keys for one settings tab.
+	 *
+	 * @param string $tab Settings tab key.
+	 * @return array<int,string>
+	 */
+	public static function keys_for_tab( $tab ) {
+		$keys = array();
+
+		foreach ( self::schema() as $key => $field ) {
+			if ( isset( $field['tab'] ) && $field['tab'] === $tab ) {
+				$keys[] = $key;
+			}
+		}
+
+		return $keys;
+	}
+
+	/**
+	 * Return default values for one settings tab.
+	 *
+	 * @param string $tab Settings tab key.
+	 * @return array<string,mixed>
+	 */
+	public static function defaults_for_tab( $tab ) {
+		$defaults     = self::defaults();
+		$tab_defaults = array();
+
+		foreach ( self::keys_for_tab( $tab ) as $key ) {
+			$tab_defaults[ $key ] = $defaults[ $key ];
+		}
+
+		return $tab_defaults;
+	}
+
+	/**
+	 * Restore one settings tab to its schema defaults.
+	 *
+	 * @param string $tab Settings tab key.
+	 * @return array<string,mixed>|WP_Error
+	 */
+	public static function restore_tab_defaults( $tab ) {
+		$tabs = self::tabs();
+
+		if ( ! isset( $tabs[ $tab ] ) ) {
+			return new WP_Error(
+				'alynt_ag_invalid_settings_tab',
+				__( 'The selected settings tab is invalid.', 'alynt-account-gateway' )
+			);
+		}
+
+		$tab_defaults = self::defaults_for_tab( $tab );
+
+		if ( empty( $tab_defaults ) ) {
+			return new WP_Error(
+				'alynt_ag_empty_settings_tab',
+				__( 'The selected settings tab does not contain restorable settings.', 'alynt-account-gateway' )
+			);
+		}
+
+		return array_merge( self::get_settings(), $tab_defaults );
+	}
+
+	/**
 	 * Return settings.
 	 *
 	 * @return array<string,mixed>
@@ -528,6 +591,68 @@ class ALYNT_AG_Settings_Schema {
 		}
 
 		return array_merge( self::defaults(), $saved );
+	}
+
+	/**
+	 * Create a portable settings export package.
+	 *
+	 * @return array<string,mixed>
+	 */
+	public static function export_package() {
+		return array(
+			'plugin'     => 'alynt-account-gateway',
+			'version'    => defined( 'ALYNT_AG_VERSION' ) ? ALYNT_AG_VERSION : '',
+			'exportedAt' => gmdate( 'c' ),
+			'settings'   => self::get_settings(),
+		);
+	}
+
+	/**
+	 * Parse and sanitize a settings import package.
+	 *
+	 * @param string $json Raw JSON package.
+	 * @return array<string,mixed>|WP_Error
+	 */
+	public static function import_package( $json ) {
+		$package = json_decode( (string) $json, true );
+
+		if ( ! is_array( $package ) ) {
+			return new WP_Error(
+				'alynt_ag_invalid_settings_import',
+				__( 'The selected settings file is not valid JSON.', 'alynt-account-gateway' )
+			);
+		}
+
+		$settings = isset( $package['settings'] ) && is_array( $package['settings'] ) ? $package['settings'] : $package;
+		$settings = self::filter_known_settings( $settings );
+
+		if ( empty( $settings ) ) {
+			return new WP_Error(
+				'alynt_ag_empty_settings_import',
+				__( 'The selected settings file does not contain any recognized plugin settings.', 'alynt-account-gateway' )
+			);
+		}
+
+		return self::sanitize( $settings );
+	}
+
+	/**
+	 * Keep only settings that belong to this plugin schema.
+	 *
+	 * @param array<string,mixed> $settings Candidate settings.
+	 * @return array<string,mixed>
+	 */
+	public static function filter_known_settings( $settings ) {
+		$schema = self::schema();
+		$known  = array();
+
+		foreach ( $settings as $key => $value ) {
+			if ( array_key_exists( $key, $schema ) ) {
+				$known[ $key ] = $value;
+			}
+		}
+
+		return $known;
 	}
 
 	/**

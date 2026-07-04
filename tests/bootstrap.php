@@ -23,10 +23,18 @@ $GLOBALS['alynt_ag_test_db_inserts'] = array();
 $GLOBALS['alynt_ag_test_db_updates'] = array();
 $GLOBALS['alynt_ag_test_db_deletes'] = array();
 $GLOBALS['alynt_ag_test_db_results'] = array();
+$GLOBALS['alynt_ag_test_db_queries'] = array();
 $GLOBALS['alynt_ag_test_filters'] = array();
+$GLOBALS['alynt_ag_test_deleted_options'] = array();
+$GLOBALS['alynt_ag_test_scheduled_hooks'] = array();
+$GLOBALS['alynt_ag_test_unscheduled_events'] = array();
+$GLOBALS['alynt_ag_test_cleared_hooks'] = array();
+$GLOBALS['alynt_ag_test_redirects'] = array();
+$GLOBALS['alynt_ag_test_signons'] = array();
 
 class ALYNT_AG_Test_WPDB {
 	public $prefix = 'wp_';
+	public $options = 'wp_options';
 	public $insert_id = 1;
 
 	public function insert( $table, $data, $format = array() ) {
@@ -84,6 +92,10 @@ class ALYNT_AG_Test_WPDB {
 		$GLOBALS['alynt_ag_test_db_queries'][] = $query;
 
 		return true;
+	}
+
+	public function esc_like( $text ) {
+		return addcslashes( (string) $text, '_%\\' );
 	}
 
 	public function get_charset_collate() {
@@ -328,6 +340,69 @@ if ( ! function_exists( 'wp_logout_url' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_nonce_url' ) ) {
+	function wp_nonce_url( $actionurl, $action = -1, $name = '_wpnonce' ) {
+		return add_query_arg( $name, 'test-nonce', $actionurl );
+	}
+}
+
+if ( ! function_exists( 'wp_doing_ajax' ) ) {
+	function wp_doing_ajax() {
+		return ! empty( $GLOBALS['alynt_ag_test_doing_ajax'] );
+	}
+}
+
+if ( ! function_exists( 'is_user_logged_in' ) ) {
+	function is_user_logged_in() {
+		return ! empty( $GLOBALS['alynt_ag_test_user_logged_in'] );
+	}
+}
+
+if ( ! function_exists( 'current_user_can' ) ) {
+	function current_user_can( $capability ) {
+		return in_array( $capability, $GLOBALS['alynt_ag_test_user_caps'] ?? array(), true );
+	}
+}
+
+if ( ! function_exists( 'wp_safe_redirect' ) ) {
+	function wp_safe_redirect( $location, $status = 302, $x_redirect_by = 'WordPress' ) {
+		$GLOBALS['alynt_ag_test_redirects'][] = array(
+			'location'      => $location,
+			'status'        => $status,
+			'x_redirect_by' => $x_redirect_by,
+		);
+
+		if ( ! empty( $GLOBALS['alynt_ag_test_throw_on_redirect'] ) ) {
+			throw new RuntimeException( 'redirect:' . $location );
+		}
+
+		return true;
+	}
+}
+
+if ( ! function_exists( 'check_admin_referer' ) ) {
+	function check_admin_referer( $action = -1, $query_arg = false ) {
+		return true;
+	}
+}
+
+if ( ! function_exists( 'is_ssl' ) ) {
+	function is_ssl() {
+		return false;
+	}
+}
+
+if ( ! function_exists( 'wp_signon' ) ) {
+	function wp_signon( $credentials = array(), $secure_cookie = '' ) {
+		$GLOBALS['alynt_ag_test_signons'][] = array(
+			'credentials'   => $credentials,
+			'secure_cookie' => $secure_cookie,
+		);
+
+		return new WP_User( $credentials['user_login'] ?? 'customer@example.test' );
+	}
+}
+
 if ( ! function_exists( 'email_exists' ) ) {
 	function email_exists( $email ) {
 		return false;
@@ -461,6 +536,70 @@ if ( ! function_exists( 'get_option' ) ) {
 	}
 }
 
+if ( ! function_exists( 'update_option' ) ) {
+	function update_option( $name, $value, $autoload = null ) {
+		$GLOBALS['alynt_ag_test_options'][ $name ] = $value;
+
+		return true;
+	}
+}
+
+if ( ! function_exists( 'delete_option' ) ) {
+	function delete_option( $name ) {
+		$GLOBALS['alynt_ag_test_deleted_options'][] = $name;
+		unset( $GLOBALS['alynt_ag_test_options'][ $name ] );
+
+		return true;
+	}
+}
+
+if ( ! function_exists( 'wp_next_scheduled' ) ) {
+	function wp_next_scheduled( $hook ) {
+		return $GLOBALS['alynt_ag_test_scheduled_hooks'][ $hook ] ?? false;
+	}
+}
+
+if ( ! function_exists( 'wp_unschedule_event' ) ) {
+	function wp_unschedule_event( $timestamp, $hook ) {
+		$GLOBALS['alynt_ag_test_unscheduled_events'][] = array(
+			'timestamp' => $timestamp,
+			'hook'      => $hook,
+		);
+
+		return true;
+	}
+}
+
+if ( ! function_exists( 'wp_clear_scheduled_hook' ) ) {
+	function wp_clear_scheduled_hook( $hook ) {
+		$GLOBALS['alynt_ag_test_cleared_hooks'][] = $hook;
+
+		return 1;
+	}
+}
+
+if ( ! function_exists( 'flush_rewrite_rules' ) ) {
+	function flush_rewrite_rules() {
+		$GLOBALS['alynt_ag_test_rewrite_rules_flushed'] = true;
+	}
+}
+
+if ( ! function_exists( 'get_site_option' ) ) {
+	function get_site_option( $name, $default = false ) {
+		if ( isset( $GLOBALS['alynt_ag_test_site_options'][ $name ] ) ) {
+			return $GLOBALS['alynt_ag_test_site_options'][ $name ];
+		}
+
+		return $default;
+	}
+}
+
+if ( ! function_exists( 'is_multisite' ) ) {
+	function is_multisite() {
+		return false;
+	}
+}
+
 if ( ! function_exists( 'do_action' ) ) {
 	function do_action( $hook_name, ...$args ) {
 		$GLOBALS['alynt_ag_test_actions'][] = array(
@@ -548,7 +687,9 @@ if ( ! class_exists( 'WP_Error' ) ) {
 
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-settings-schema.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-database.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-deactivator.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-diagnostics-logger.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-retention-cleanup.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-rate-limiter.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-template-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-auth-service.php';
@@ -558,4 +699,6 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-turnstile-client.php
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-webhook-dispatcher.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-dashboard-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-woocommerce-integration.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-warnings.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-service.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'public/class-frontend.php';

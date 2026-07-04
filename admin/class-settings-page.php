@@ -22,6 +22,10 @@ class ALYNT_AG_Settings_Page {
 	public function register() {
 		add_action( 'admin_menu', array( $this, 'add_menu_page' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'admin_post_alynt_ag_export_settings', array( $this, 'handle_export_settings' ) );
+		add_action( 'admin_post_alynt_ag_import_settings', array( $this, 'handle_import_settings' ) );
+		add_action( 'admin_post_alynt_ag_restore_tab_defaults', array( $this, 'handle_restore_tab_defaults' ) );
+		add_action( 'admin_post_alynt_ag_preview_gateway', array( $this, 'handle_preview_gateway' ) );
 		add_action( 'admin_post_alynt_ag_export_diagnostics', array( $this, 'handle_export_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_clear_diagnostics', array( $this, 'handle_clear_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_preview_email', array( $this, 'handle_preview_email' ) );
@@ -135,6 +139,8 @@ class ALYNT_AG_Settings_Page {
 				<?php submit_button( __( 'Save Settings', 'alynt-account-gateway' ) ); ?>
 			</form>
 
+			<?php $this->render_restore_tab_defaults( $active_tab ); ?>
+
 			<?php if ( 'advanced_tools' === $active_tab ) : ?>
 				<?php $this->render_diagnostics_tools(); ?>
 			<?php endif; ?>
@@ -247,6 +253,34 @@ class ALYNT_AG_Settings_Page {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin notice flag.
 		$notice = isset( $_GET['alynt_ag_notice'] ) ? sanitize_key( wp_unslash( $_GET['alynt_ag_notice'] ) ) : '';
 
+		if ( 'settings_imported' === $notice ) {
+			?>
+			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Settings imported successfully.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
+		if ( 'settings_import_failed' === $notice ) {
+			?>
+			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Settings could not be imported. Choose a valid Alynt Account Gateway JSON export.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
+		if ( 'tab_defaults_restored' === $notice ) {
+			?>
+			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'This settings tab was restored to its defaults.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
+		if ( 'tab_defaults_failed' === $notice ) {
+			?>
+			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'This settings tab could not be restored.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
 		if ( 'email_test_sent' === $notice ) {
 			?>
 			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Test email sent.', 'alynt-account-gateway' ); ?></p></div>
@@ -331,6 +365,159 @@ class ALYNT_AG_Settings_Page {
 	}
 
 	/**
+	 * Render settings import/export tools.
+	 *
+	 * @return void
+	 */
+	private function render_settings_tools() {
+		?>
+		<h2><?php esc_html_e( 'Settings Import / Export', 'alynt-account-gateway' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'Export all plugin-owned settings as JSON, or import a JSON settings package from another site. Imported values are sanitized through the active settings schema.', 'alynt-account-gateway' ); ?>
+		</p>
+
+		<p>
+			<a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=alynt_ag_export_settings' ), 'alynt_ag_export_settings' ) ); ?>">
+				<?php esc_html_e( 'Export Settings JSON', 'alynt-account-gateway' ); ?>
+			</a>
+		</p>
+
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data" class="alynt-ag-inline-tool">
+			<input type="hidden" name="action" value="alynt_ag_import_settings">
+			<?php wp_nonce_field( 'alynt_ag_import_settings' ); ?>
+			<label for="alynt-ag-settings-import"><?php esc_html_e( 'Settings JSON file', 'alynt-account-gateway' ); ?></label>
+			<input type="file" id="alynt-ag-settings-import" name="settings_file" accept="application/json,.json" required>
+			<?php submit_button( __( 'Import Settings', 'alynt-account-gateway' ), 'secondary', 'submit', false ); ?>
+		</form>
+		<?php
+	}
+
+	/**
+	 * Render gateway preview tools.
+	 *
+	 * @return void
+	 */
+	private function render_gateway_preview_tools() {
+		$screens = $this->gateway_preview_screens();
+		?>
+		<h2><?php esc_html_e( 'Gateway Screen Preview', 'alynt-account-gateway' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'Preview branded gateway screens using the saved settings, even while frontend output is disabled.', 'alynt-account-gateway' ); ?>
+		</p>
+		<div class="alynt-ag-preview-links">
+			<?php foreach ( $screens as $screen => $label ) : ?>
+				<?php
+				$preview_url = add_query_arg(
+					array(
+						'action' => 'alynt_ag_preview_gateway',
+						'screen' => $screen,
+					),
+					admin_url( 'admin-post.php' )
+				);
+				$preview_url = wp_nonce_url( $preview_url, 'alynt_ag_preview_gateway_' . $screen );
+				?>
+				<a class="button" target="_blank" rel="noopener noreferrer" href="<?php echo esc_url( $preview_url ); ?>">
+					<?php echo esc_html( $label ); ?>
+				</a>
+			<?php endforeach; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render compatibility warning summary.
+	 *
+	 * @return void
+	 */
+	private function render_compatibility_warnings() {
+		$service  = new ALYNT_AG_Compatibility_Warnings();
+		$warnings = $service->warnings();
+		?>
+		<h2><?php esc_html_e( 'Compatibility Warnings', 'alynt-account-gateway' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'These checks flag active plugins and hooks that may also control login, registration, redirects, account pages, or WooCommerce account endpoints.', 'alynt-account-gateway' ); ?>
+		</p>
+
+		<?php if ( empty( $warnings ) ) : ?>
+			<div class="notice notice-success inline">
+				<p><?php esc_html_e( 'No common account-gateway compatibility overlaps were detected for the current settings.', 'alynt-account-gateway' ); ?></p>
+			</div>
+			<?php
+			return;
+		endif;
+		?>
+
+		<div class="notice notice-warning inline">
+			<p><?php esc_html_e( 'Potential compatibility overlaps were detected. Review these before enabling or troubleshooting frontend output.', 'alynt-account-gateway' ); ?></p>
+		</div>
+		<table class="widefat striped">
+			<thead>
+				<tr>
+					<th><?php esc_html_e( 'Area', 'alynt-account-gateway' ); ?></th>
+					<th><?php esc_html_e( 'Warning', 'alynt-account-gateway' ); ?></th>
+					<th><?php esc_html_e( 'Details', 'alynt-account-gateway' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $warnings as $warning ) : ?>
+					<tr>
+						<td><?php echo esc_html( ucwords( str_replace( '_', ' ', $warning['category'] ) ) ); ?></td>
+						<td><?php echo esc_html( $warning['title'] ); ?></td>
+						<td><?php echo esc_html( $warning['message'] ); ?></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php
+	}
+
+	/**
+	 * Return supported gateway preview screens.
+	 *
+	 * @return array<string,string>
+	 */
+	private function gateway_preview_screens() {
+		return array(
+			'login'                 => __( 'Login', 'alynt-account-gateway' ),
+			'register'              => __( 'Registration', 'alynt-account-gateway' ),
+			'lostpassword'          => __( 'Lost Password', 'alynt-account-gateway' ),
+			'setpassword'           => __( 'Set Password', 'alynt-account-gateway' ),
+			'logout'                => __( 'Logout Confirmation', 'alynt-account-gateway' ),
+			'registration_disabled' => __( 'Registration Disabled', 'alynt-account-gateway' ),
+			'invalidlink'           => __( 'Invalid Link', 'alynt-account-gateway' ),
+			'dashboard'             => __( 'Dashboard', 'alynt-account-gateway' ),
+		);
+	}
+
+	/**
+	 * Render restore-defaults control for the active tab.
+	 *
+	 * @param string $active_tab Active settings tab.
+	 * @return void
+	 */
+	private function render_restore_tab_defaults( $active_tab ) {
+		$tabs = ALYNT_AG_Settings_Schema::tabs();
+
+		if ( ! isset( $tabs[ $active_tab ] ) || empty( ALYNT_AG_Settings_Schema::keys_for_tab( $active_tab ) ) ) {
+			return;
+		}
+
+		$confirm = sprintf(
+			/* translators: %s: settings tab label. */
+			__( 'Restore the %s tab to its default settings? This cannot be undone automatically.', 'alynt-account-gateway' ),
+			$tabs[ $active_tab ]
+		);
+		?>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-restore-tab-defaults">
+			<input type="hidden" name="action" value="alynt_ag_restore_tab_defaults">
+			<input type="hidden" name="tab" value="<?php echo esc_attr( $active_tab ); ?>">
+			<?php wp_nonce_field( 'alynt_ag_restore_tab_defaults_' . $active_tab ); ?>
+			<?php submit_button( __( 'Restore This Tab To Defaults', 'alynt-account-gateway' ), 'secondary', 'submit', false, array( 'onclick' => 'return confirm(' . wp_json_encode( $confirm ) . ');' ) ); ?>
+		</form>
+		<?php
+	}
+
+	/**
 	 * Render diagnostics tools.
 	 *
 	 * @return void
@@ -339,6 +526,12 @@ class ALYNT_AG_Settings_Page {
 		$health = ALYNT_AG_Diagnostics_Logger::health_summary();
 		$events = ALYNT_AG_Diagnostics_Logger::recent_events( 20 );
 		?>
+		<?php $this->render_compatibility_warnings(); ?>
+
+		<?php $this->render_gateway_preview_tools(); ?>
+
+		<?php $this->render_settings_tools(); ?>
+
 		<h2><?php esc_html_e( 'Diagnostics', 'alynt-account-gateway' ); ?></h2>
 		<p class="description">
 			<?php esc_html_e( 'Diagnostics are disabled by default. When enabled, structured events are stored in a plugin-owned table with sensitive fields redacted before persistence.', 'alynt-account-gateway' ); ?>
@@ -403,6 +596,219 @@ class ALYNT_AG_Settings_Page {
 			</table>
 		<?php endif; ?>
 		<?php
+	}
+
+	/**
+	 * Export plugin settings as JSON.
+	 *
+	 * @return void
+	 */
+	public function handle_export_settings() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to export settings.', 'alynt-account-gateway' ) );
+		}
+
+		check_admin_referer( 'alynt_ag_export_settings' );
+
+		$package = ALYNT_AG_Settings_Schema::export_package();
+		$json    = wp_json_encode( $package, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
+
+		if ( ! is_string( $json ) ) {
+			wp_die( esc_html__( 'Settings could not be encoded for export.', 'alynt-account-gateway' ) );
+		}
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename=alynt-account-gateway-settings.json' );
+
+		echo $json; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON download generated from sanitized settings.
+		exit;
+	}
+
+	/**
+	 * Import plugin settings from JSON.
+	 *
+	 * @return void
+	 */
+	public function handle_import_settings() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to import settings.', 'alynt-account-gateway' ) );
+		}
+
+		check_admin_referer( 'alynt_ag_import_settings' );
+
+		$status = 'settings_import_failed';
+		$file   = isset( $_FILES['settings_file'] ) && is_array( $_FILES['settings_file'] ) ? $_FILES['settings_file'] : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- File metadata is validated before use.
+
+		if ( isset( $file['tmp_name'], $file['error'] ) && is_string( $file['tmp_name'] ) && UPLOAD_ERR_OK === (int) $file['error'] && is_uploaded_file( $file['tmp_name'] ) ) {
+			$json     = file_get_contents( $file['tmp_name'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading the PHP-uploaded temp file only.
+			$imported = ALYNT_AG_Settings_Schema::import_package( is_string( $json ) ? $json : '' );
+
+			if ( ! is_wp_error( $imported ) ) {
+				update_option( 'alynt_ag_settings', $imported );
+				ALYNT_AG_Diagnostics_Logger::log(
+					'settings_imported',
+					array( 'imported_keys' => array_keys( ALYNT_AG_Settings_Schema::filter_known_settings( $imported ) ) ),
+					get_current_user_id()
+				);
+				$status = 'settings_imported';
+			}
+		}
+
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'            => 'alynt-account-gateway',
+					'tab'             => 'advanced_tools',
+					'alynt_ag_notice' => $status,
+				),
+				admin_url( 'options-general.php' )
+			)
+		);
+		exit;
+	}
+
+	/**
+	 * Restore one settings tab to defaults.
+	 *
+	 * @return void
+	 */
+	public function handle_restore_tab_defaults() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to restore settings.', 'alynt-account-gateway' ) );
+		}
+
+		$tabs = ALYNT_AG_Settings_Schema::tabs();
+		$tab  = isset( $_POST['tab'] ) ? sanitize_key( wp_unslash( $_POST['tab'] ) ) : 'general';
+		$tab  = isset( $tabs[ $tab ] ) ? $tab : 'general';
+
+		check_admin_referer( 'alynt_ag_restore_tab_defaults_' . $tab );
+
+		$restored = ALYNT_AG_Settings_Schema::restore_tab_defaults( $tab );
+		$status   = 'tab_defaults_failed';
+
+		if ( ! is_wp_error( $restored ) ) {
+			update_option( 'alynt_ag_settings', $restored );
+			ALYNT_AG_Diagnostics_Logger::log(
+				'tab_defaults_restored',
+				array(
+					'tab'           => $tab,
+					'restored_keys' => ALYNT_AG_Settings_Schema::keys_for_tab( $tab ),
+				),
+				get_current_user_id()
+			);
+			$status = 'tab_defaults_restored';
+		}
+
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'            => 'alynt-account-gateway',
+					'tab'             => $tab,
+					'alynt_ag_notice' => $status,
+				),
+				admin_url( 'options-general.php' )
+			)
+		);
+		exit;
+	}
+
+	/**
+	 * Render a standalone gateway screen preview.
+	 *
+	 * @return void
+	 */
+	public function handle_preview_gateway() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to preview gateway screens.', 'alynt-account-gateway' ) );
+		}
+
+		$screens = $this->gateway_preview_screens();
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Verified immediately below.
+		$screen = isset( $_GET['screen'] ) ? sanitize_key( wp_unslash( $_GET['screen'] ) ) : 'login';
+		$screen = isset( $screens[ $screen ] ) ? $screen : 'login';
+
+		check_admin_referer( 'alynt_ag_preview_gateway_' . $screen );
+
+		$frontend = new ALYNT_AG_Frontend();
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+
+		$this->enqueue_gateway_preview_assets( $screen, $settings );
+		show_admin_bar( false );
+		add_filter( 'show_admin_bar', '__return_false', PHP_INT_MAX );
+		remove_action( 'wp_footer', 'wp_admin_bar_render', 1000 );
+		remove_action( 'admin_footer', 'wp_admin_bar_render', 1000 );
+
+		status_header( 200 );
+		nocache_headers();
+
+		echo '<!doctype html>';
+		echo '<html ';
+		language_attributes();
+		echo '>';
+		echo '<head>';
+		echo '<meta charset="' . esc_attr( get_bloginfo( 'charset' ) ) . '">';
+		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
+		echo '<title>' . esc_html( $frontend->get_screen_title( $screen ) ) . '</title>';
+		wp_head();
+		echo '</head>';
+		echo '<body class="alynt-ag-body alynt-ag-preview-body">';
+		$frontend->render_preview( $screen, $settings );
+		wp_footer();
+		echo '</body></html>';
+		exit;
+	}
+
+	/**
+	 * Enqueue frontend assets for a standalone admin preview.
+	 *
+	 * @param string              $screen   Screen key.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function enqueue_gateway_preview_assets( $screen, $settings ) {
+		$style_path = ALYNT_AG_PLUGIN_DIR . 'assets/dist/frontend/index.css';
+		if ( file_exists( $style_path ) ) {
+			wp_enqueue_style(
+				'alynt-ag-frontend',
+				ALYNT_AG_PLUGIN_URL . 'assets/dist/frontend/index.css',
+				array(),
+				filemtime( $style_path )
+			);
+		}
+
+		$script_path = ALYNT_AG_PLUGIN_DIR . 'assets/dist/frontend/index.js';
+		if ( file_exists( $script_path ) ) {
+			wp_enqueue_script(
+				'alynt-ag-frontend',
+				ALYNT_AG_PLUGIN_URL . 'assets/dist/frontend/index.js',
+				array(),
+				filemtime( $script_path ),
+				true
+			);
+
+			wp_localize_script(
+				'alynt-ag-frontend',
+				'alyntAgFrontend',
+				array(
+					'labels' => array(
+						'showPassword' => __( 'Show password', 'alynt-account-gateway' ),
+						'hidePassword' => __( 'Hide password', 'alynt-account-gateway' ),
+						'show'         => __( 'Show', 'alynt-account-gateway' ),
+						'hide'         => __( 'Hide', 'alynt-account-gateway' ),
+					),
+				)
+			);
+		}
+
+		if ( ! empty( $settings['turnstile_site_key'] ) && 'register' === $screen ) {
+			wp_enqueue_script(
+				'alynt-ag-turnstile',
+				'https://challenges.cloudflare.com/turnstile/v0/api.js',
+				array(),
+				ALYNT_AG_VERSION,
+				true
+			);
+		}
 	}
 
 	/**

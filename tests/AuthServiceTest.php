@@ -16,7 +16,12 @@ class AuthServiceTest extends TestCase {
 		parent::setUp();
 		$GLOBALS['alynt_ag_test_transients'] = array();
 		$GLOBALS['alynt_ag_test_reset_password'] = null;
+		$GLOBALS['alynt_ag_test_redirects'] = array();
+		$GLOBALS['alynt_ag_test_signons'] = array();
+		$GLOBALS['alynt_ag_test_throw_on_redirect'] = false;
 		$_SERVER['REMOTE_ADDR'] = '203.0.113.30';
+		$_SERVER['REQUEST_METHOD'] = 'GET';
+		$_POST = array();
 	}
 
 	public function test_login_error_message_is_neutral() {
@@ -75,6 +80,49 @@ class AuthServiceTest extends TestCase {
 			'https://example.test/my-account/',
 			$service->get_login_redirect_url( 'https://evil.example/phish', $settings )
 		);
+	}
+
+	public function test_login_submission_requires_email_identifier() {
+		$service = new ALYNT_AG_Auth_Service();
+		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_POST = array(
+			'alynt_ag_action' => 'login',
+			'email'           => 'damon',
+			'pwd'             => 'StrongPassword1!',
+		);
+
+		try {
+			$service->maybe_handle_auth_request();
+			$this->fail( 'Expected redirect exception.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame( 'redirect:https://example.test/login?login_error=failed', $exception->getMessage() );
+		}
+
+		$this->assertSame( array(), $GLOBALS['alynt_ag_test_signons'] );
+	}
+
+	public function test_login_submission_passes_email_to_wordpress_signon() {
+		$service = new ALYNT_AG_Auth_Service();
+		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_POST = array(
+			'alynt_ag_action' => 'login',
+			'email'           => 'Damon@Example.test',
+			'pwd'             => 'StrongPassword1!',
+			'rememberme'      => '1',
+		);
+
+		try {
+			$service->maybe_handle_auth_request();
+			$this->fail( 'Expected redirect exception.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame( 'redirect:https://example.test/my-account/', $exception->getMessage() );
+		}
+
+		$this->assertSame( 'damon@example.test', $GLOBALS['alynt_ag_test_signons'][0]['credentials']['user_login'] );
+		$this->assertSame( 'StrongPassword1!', $GLOBALS['alynt_ag_test_signons'][0]['credentials']['user_password'] );
+		$this->assertTrue( $GLOBALS['alynt_ag_test_signons'][0]['credentials']['remember'] );
 	}
 
 	public function test_lostpassword_rate_limit_uses_configured_bucket() {

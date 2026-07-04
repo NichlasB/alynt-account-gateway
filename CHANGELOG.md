@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.1.1 - 2026-07-04
+
+### Added
+
+- Settings import/export JSON for all plugin-owned settings.
+- Per-tab restore defaults with confirmation and diagnostics logging.
+- Gateway screen preview mode while frontend output is disabled.
+- Compatibility warnings for login, registration, redirect/security, account-page, and WooCommerce account endpoint overlaps.
+- Focused unit coverage for frontend routing, emergency bypass behavior, role/admin-bar access rules, email-only login, retention cleanup, deactivation cleanup, and uninstall cleanup.
+
 ## 0.1.0 - 2026-07-04
 
 ### Added

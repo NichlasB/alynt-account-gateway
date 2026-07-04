@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.0 release asset verified through Alynt Plugin Updater on Plugin Tester; next release planning pending
+- Current phase: v0.1.1 small release cycle started on branch `release/0.1.1`
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.0 released publicly on GitHub and installed from the release asset through Alynt Plugin Updater on LocalWP Plugin Tester.
+- Plugin status: v0.1.0 is the current public baseline; v0.1.1 is scoped as a small admin polish, compatibility, and test coverage release.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -33,6 +33,33 @@
 - Terms/privacy links: Relative URL paths configured manually, such as `/terms/` or `/legal/privacy/`
 - Multilingual support: Required for v1
 
+## v0.1.1 Small Release Cycle
+
+### Scope
+
+- [x] Add settings import/export JSON for all plugin-owned settings.
+- [x] Add per-tab restore defaults with confirmation and diagnostics logging.
+- [x] Add gateway screen preview mode while frontend output is disabled.
+- [x] Add compatibility warnings for plugins that commonly modify login, registration, account pages, security redirects, or WooCommerce account endpoints.
+- [x] Add focused unit coverage for settings schema defaults/sanitization, frontend-output routing, emergency bypass behavior, role access/admin toolbar rules, password policy matching, retention cleanup, and uninstall cleanup where practical.
+- [x] Re-run Plugin Tester smoke checks after the release package is built.
+- [x] Verify Alynt Plugin Updater detects and installs `0.1.1` from the GitHub release asset.
+
+### Guardrails
+
+- Keep frontend output disabled by default on fresh install.
+- Do not change the public registration confirmation-first contract.
+- Do not rework the dashboard architecture unless a small compatibility warning requires a narrow hook change.
+- Prefer incremental tests and admin polish over broad refactors.
+- Leave large-file refactors for a later structural release unless a v0.1.1 task directly forces a split.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Local release-style zip excludes source/dev files and includes built assets.
+- [x] Plugin Tester validates admin settings actions, preview mode, gateway routes, and WooCommerce dashboard takeover.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
+
 ## Implementation Phases
 
 ### Phase 1 - Scaffold And Baseline Tooling
@@ -52,9 +79,9 @@
 - [x] Add tabbed admin settings page.
 - [x] Add central settings schema with defaults, sanitization, and cross-tab save protection.
 - [x] Add tabs: General, URLs & Redirects, Branding & Layout, Screen Copy, Registration, Security & Spam, Emails, Dashboard, WooCommerce, Webhooks, Privacy & Data, Advanced/Tools.
-- [ ] Add import/export settings JSON.
-- [ ] Add per-tab restore defaults.
-- [ ] Add gateway screen preview mode while frontend output is disabled.
+- [x] Add import/export settings JSON.
+- [x] Add per-tab restore defaults.
+- [x] Add gateway screen preview mode while frontend output is disabled.
 - [x] Add diagnostics and privacy-conscious logs.
 - [x] Add settings-change audit entries.
 - [x] Add retention cleanup for plugin-owned logs and pending records.
@@ -121,7 +148,7 @@
 - [x] Delegate sensitive WooCommerce actions to native WooCommerce handlers/endpoints.
 - [x] Preserve orders, downloads, addresses, payment methods, account details, and logout through standard WooCommerce endpoints.
 - [x] Discover and preserve plugin-added WooCommerce account endpoints.
-- [ ] Add compatibility warnings for plugins that also modify login, registration, account pages, security redirects, or WooCommerce account endpoints.
+- [x] Add compatibility warnings for plugins that also modify login, registration, account pages, security redirects, or WooCommerce account endpoints.
 
 ### Phase 7 - Privacy, Accessibility, I18n, And Release Readiness
 
@@ -139,19 +166,19 @@
 
 ## Test Plan
 
-- [ ] Unit test settings schema, defaults, sanitization, and cross-tab save protection.
-- [ ] Unit test URL routing and frontend-output master switch.
-- [ ] Unit test emergency bypass behavior.
-- [ ] Unit test role access and admin-toolbar rules.
-- [ ] Unit test email-only login behavior.
-- [ ] Unit test pending-registration lifecycle and expiry.
-- [ ] Unit test password policy and confirmation matching.
-- [ ] Unit test username generation and collision handling.
-- [ ] Unit test Reoon policy mapping.
-- [ ] Unit test Turnstile verification handling.
+- [x] Unit test settings schema, defaults, sanitization, and cross-tab save protection.
+- [x] Unit test URL routing and frontend-output master switch.
+- [x] Unit test emergency bypass behavior.
+- [x] Unit test role access and admin-toolbar rules.
+- [x] Unit test email-only login behavior.
+- [x] Unit test pending-registration lifecycle and expiry.
+- [x] Unit test password policy and confirmation matching.
+- [x] Unit test username generation and collision handling.
+- [x] Unit test Reoon policy mapping.
+- [x] Unit test Turnstile verification handling.
 - [x] Unit test webhook payload construction and metadata logging.
-- [ ] Unit test retention cleanup.
-- [ ] Unit test uninstall cleanup.
+- [x] Unit test retention cleanup.
+- [x] Unit test uninstall cleanup.
 - [x] Browser/manual QA login, lost password, set password, registration, logout confirmation, disabled registration, and invalid/expired link screens.
 - [x] Browser/manual QA desktop and mobile responsive behavior.
 - [x] Browser/manual QA keyboard-only flow and focus management.
@@ -197,6 +224,8 @@
 - Made the GitHub repository public for release delivery, forced the LocalWP Plugin Tester installed copy to `0.0.9`, confirmed Alynt Plugin Updater detected `0.0.9` to `0.1.0`, installed from the `alynt-account-gateway-v0.1.0.zip` release asset, and verified the active Plugin Tester copy returned to `0.1.0`.
 - Browser-smoked the release-installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, and `/my-account/` after the updater install.
 - Remaining release decisions: optionally add uninstall-specific unit coverage before the next release.
+- Installed the local `alynt-account-gateway-v0.1.1.zip` package on LocalWP Plugin Tester, verified the active plugin reports `0.1.1`, browser-smoked Advanced / Tools compatibility warnings, gateway preview mode, `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, `/my-account/`, and WooCommerce account endpoints for orders, downloads, addresses, payment methods, and account details.
+- Published GitHub release `v0.1.1`, confirmed the Build Release workflow completed successfully, downloaded and inspected `alynt-account-gateway-v0.1.1.zip`, verified the package reports `0.1.1` and excludes development/source files, then confirmed Alynt Plugin Updater detected `0.1.0` to `0.1.1` and the WordPress Plugins screen `update now` action installed the GitHub release asset. Final Plugin Tester state: active `0.1.1`, no remaining update, settings intact.
 
 ## Workflow Notes
 
