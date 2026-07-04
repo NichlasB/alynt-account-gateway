@@ -33,6 +33,7 @@ $alynt_ag_files = array(
 	'includes/services/class-frontend-register-screen.php',
 	'includes/services/class-frontend-login-screen.php',
 	'includes/services/class-frontend-lostpassword-screen.php',
+	'includes/services/class-frontend-setpassword-screen.php',
 	'includes/services/class-frontend-logout-screen.php',
 	'includes/services/class-frontend-state-screens.php',
 	'includes/services/class-compatibility-warnings.php',

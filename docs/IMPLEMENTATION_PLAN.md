@@ -2,11 +2,41 @@
 
 ## Status
 
-- Current phase: v0.1.13 released and verified
+- Current phase: v0.1.14 branch implementation checks complete
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.13 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.13 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.14 is in branch QA preparation.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.14 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Extract the set-password screen renderer and shared password form out of the large frontend renderer class without changing copy, form fields, nonce/action names, query parameters, token/key validation routing, password strength markup, password requirements, or accessibility attributes.
+- [x] Add focused test coverage around the extracted frontend set-password screen service.
+- [ ] Run branch-QA package and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.14` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.14` from clean `master` after the `v0.1.13` release merge.
+- Extracted set-password routing and shared password form rendering into `ALYNT_AG_Frontend_Setpassword_Screen`.
+- Kept `ALYNT_AG_Frontend` request flow, gateway shell, and admin preview wrapper intact while delegating pending-registration token handling, native password-reset key handling, invalid-link fallback routing, lost-password fallback routing, password error display, password requirements, and password-strength markup to the new service.
+- Added focused `FrontendSetpasswordScreenTest` coverage for default password form output, error accessibility state, pending-registration token form output, native reset-key form output, invalid registration-token fallback, and invalid native reset-key fallback.
+- Verified `php -l` for the new service, test file, and frontend class; targeted `FrontendSetpasswordScreenTest` passes with 6 tests and 46 assertions; full `npm.cmd test` passes with 141 tests and 603 assertions; `npm.cmd run lint` passes; `npm.cmd run build` passes; `npm.cmd run make-pot` writes 344 strings; `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities; and `git diff --check` passes.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, query parameters, redirect behavior, registration request handling, login/lost-password behavior, email behavior, WooCommerce dashboard behavior, asset handles/URLs, design-token names, frontend class names, nonce names, form action names, provider verification behavior, password policy, or password-strength UI behavior.
+- Keep this cycle focused on set-password rendering; leave password reset request handling, pending-registration storage, email confirmation creation, Turnstile/Reoon validation, webhook behavior, and WooCommerce dashboard behavior untouched.
+- Defer final `0.1.14` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates representative gateway routes after the set-password screen extraction.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.13 Small Release Cycle
 
