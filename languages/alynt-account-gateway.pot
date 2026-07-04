@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 0.1.19\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 21:37+0000\n"
+"POT-Creation-Date: 2026-07-04 22:01+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -163,7 +163,7 @@ msgstr ""
 msgid "At least one uppercase letter"
 msgstr ""
 
-#: includes/class-settings-schema.php:494
+#: includes/class-settings-schema.php:500
 msgid "Audit Log Retention Days"
 msgstr ""
 
@@ -277,7 +277,7 @@ msgstr ""
 msgid "Confirmation Resend Rate Limit Window Minutes"
 msgstr ""
 
-#: includes/class-settings-schema.php:488
+#: includes/class-settings-schema.php:494
 msgid "Consent Record Retention Days"
 msgstr ""
 
@@ -342,7 +342,7 @@ msgstr ""
 msgid "Database"
 msgstr ""
 
-#: includes/class-settings-schema.php:446
+#: includes/class-settings-schema.php:452
 msgid "Debug Payload Logging"
 msgstr ""
 
@@ -370,11 +370,11 @@ msgstr ""
 msgid "Diagnostics are disabled by default. When enabled, structured events are stored in a plugin-owned table with sensitive fields redacted before persistence."
 msgstr ""
 
-#: includes/class-settings-schema.php:458
+#: includes/class-settings-schema.php:464
 msgid "Diagnostics Minimum Level"
 msgstr ""
 
-#: includes/class-settings-schema.php:464
+#: includes/class-settings-schema.php:470
 msgid "Diagnostics Retention Days"
 msgstr ""
 
@@ -450,7 +450,7 @@ msgstr ""
 msgid "Enable Custom Dashboard"
 msgstr ""
 
-#: includes/class-settings-schema.php:452
+#: includes/class-settings-schema.php:458
 msgid "Enable Diagnostics"
 msgstr ""
 
@@ -513,7 +513,7 @@ msgstr ""
 msgid "Failed"
 msgstr ""
 
-#: includes/class-settings-schema.php:476
+#: includes/class-settings-schema.php:482
 msgid "Failed Webhook Log Retention Days"
 msgstr ""
 
@@ -1246,7 +1246,7 @@ msgstr ""
 msgid "Success"
 msgstr ""
 
-#: includes/class-settings-schema.php:470
+#: includes/class-settings-schema.php:476
 msgid "Successful Webhook Log Retention Days"
 msgstr ""
 
@@ -1338,19 +1338,19 @@ msgstr ""
 msgid "The reset request could not be processed. Please try again."
 msgstr ""
 
-#: includes/class-settings-schema.php:632
+#: includes/class-settings-schema.php:638
 msgid "The selected settings file does not contain any recognized plugin settings."
 msgstr ""
 
-#: includes/class-settings-schema.php:622
+#: includes/class-settings-schema.php:628
 msgid "The selected settings file is not valid JSON."
 msgstr ""
 
-#: includes/class-settings-schema.php:574
+#: includes/class-settings-schema.php:580
 msgid "The selected settings tab does not contain restorable settings."
 msgstr ""
 
-#: includes/class-settings-schema.php:565
+#: includes/class-settings-schema.php:571
 msgid "The selected settings tab is invalid."
 msgstr ""
 
@@ -1362,11 +1362,11 @@ msgstr ""
 msgid "The test webhook could not be sent. Review the recent webhook deliveries table for details."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:204
+#: includes/services/class-webhook-dispatcher.php:237
 msgid "The webhook delivery log could not be stored."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:105
+#: includes/services/class-webhook-dispatcher.php:106
 msgid "The webhook endpoint returned an unsuccessful response."
 msgstr ""
 
@@ -1517,7 +1517,7 @@ msgstr ""
 msgid "User Registration may overlap with account creation"
 msgstr ""
 
-#: includes/class-settings-schema.php:482
+#: includes/class-settings-schema.php:488
 msgid "Verification Log Retention Days"
 msgstr ""
 
@@ -1535,6 +1535,10 @@ msgstr ""
 
 #: includes/services/class-privacy-service.php:241
 msgid "Webhook Delivery Metadata"
+msgstr ""
+
+#: includes/class-settings-schema.php:446
+msgid "Webhook Signing Secret"
 msgstr ""
 
 #: admin/class-settings-page.php:381

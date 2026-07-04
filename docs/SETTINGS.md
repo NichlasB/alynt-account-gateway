@@ -70,6 +70,7 @@ Settings are stored in the `alynt_ag_settings` option and defined in `ALYNT_AG_S
 - `dashboard_custom_links`: `[]`
 - `woocommerce_takeover`: `false`
 - `account_created_webhook`: empty
+- `webhook_signing_secret`: empty
 - `debug_payload_logging`: `false`
 - `diagnostics_enabled`: `false`
 - `diagnostics_min_level`: `warning`
@@ -89,6 +90,8 @@ Email templates support token placeholders such as `{{site_name}}`, `{{first_nam
 The `email_change_confirmation_*` template is used for the post-change email notification and as the plain-text body for WordPress's pending profile email-change request. WordPress exposes only the body for the pending request through `new_user_email_content`, so that specific core email cannot use the branded HTML wrapper. When `email_change_confirmation_disabled` is enabled, the plugin suppresses both the post-change notification and the pending profile email-change request, then clears the pending `_new_email` marker so users are not left waiting for a disabled confirmation email.
 
 The `account_created_webhook` setting sends an `account.created` JSON payload after a confirmed registration creates the WordPress user. Webhook logs store destination host, HTTP status, success state, retry count, error message, and timestamp by default. Full payload bodies are stored only when `debug_payload_logging` is enabled.
+
+When `webhook_signing_secret` is configured, outgoing webhooks include `X-Alynt-AG-Event`, `X-Alynt-AG-Time`, `X-Alynt-AG-Version`, and `X-Alynt-AG-Signature` headers. The signature is `sha256=` plus the HMAC-SHA256 of `{timestamp}.{event}.{json_body}` using the shared secret. Leave the secret empty to send unsigned webhooks for existing integrations.
 
 Custom dashboard links are stored in `dashboard_custom_links` as a JSON array. Each link may define `label`, `url`, `icon`, `order`, `roles`, and `target`; relative URLs are resolved from the site home URL, empty roles are visible to all account users, and `_blank` targets receive safe new-tab behavior.
 

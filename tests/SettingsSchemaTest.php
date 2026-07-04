@@ -46,6 +46,21 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertSame( 180, $defaults['audit_log_retention'] );
 	}
 
+	public function test_webhook_signing_secret_defaults_to_empty_and_sanitizes() {
+		$defaults = ALYNT_AG_Settings_Schema::defaults();
+
+		$this->assertArrayHasKey( 'webhook_signing_secret', $defaults );
+		$this->assertSame( '', $defaults['webhook_signing_secret'] );
+
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array(
+				'webhook_signing_secret' => " shared-secret \n",
+			)
+		);
+
+		$this->assertSame( 'shared-secret', $sanitized['webhook_signing_secret'] );
+	}
+
 	public function test_branding_defaults_are_brand_agnostic_design_tokens() {
 		$defaults = ALYNT_AG_Settings_Schema::defaults();
 

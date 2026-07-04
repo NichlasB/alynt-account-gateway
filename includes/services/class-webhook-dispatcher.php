@@ -82,15 +82,16 @@ class ALYNT_AG_Webhook_Dispatcher {
 	 * @return true|WP_Error
 	 */
 	private function dispatch_payload( $event_name, $url, $user_id, $payload, $settings ) {
+		$body    = wp_json_encode( $payload );
+		$body    = is_string( $body ) ? $body : '';
+		$headers = $this->build_headers( $event_name, $body, $settings );
+
 		$response = wp_remote_post(
 			$url,
 			array(
 				'timeout' => 10,
-				'headers' => array(
-					'Content-Type' => 'application/json',
-					'Accept'       => 'application/json',
-				),
-				'body'    => wp_json_encode( $payload ),
+				'headers' => $headers,
+				'body'    => $body,
 			)
 		);
 
@@ -106,6 +107,38 @@ class ALYNT_AG_Webhook_Dispatcher {
 		}
 
 		return is_wp_error( $log_result ) ? $log_result : true;
+	}
+
+	/**
+	 * Build outbound webhook headers.
+	 *
+	 * @param string              $event_name Event name.
+	 * @param string|false        $body       Encoded JSON body.
+	 * @param array<string,mixed> $settings   Settings.
+	 * @return array<string,string>
+	 */
+	public function build_headers( $event_name, $body, $settings ) {
+		$timestamp = (string) time();
+		$body      = is_string( $body ) ? $body : '';
+		$headers   = array(
+			'Content-Type'       => 'application/json',
+			'Accept'             => 'application/json',
+			'X-Alynt-AG-Event'   => sanitize_text_field( $event_name ),
+			'X-Alynt-AG-Time'    => $timestamp,
+			'X-Alynt-AG-Version' => '1',
+		);
+
+		$secret = isset( $settings['webhook_signing_secret'] ) ? trim( (string) $settings['webhook_signing_secret'] ) : '';
+		if ( '' === $secret ) {
+			return $headers;
+		}
+
+		$signed_payload = implode( '.', array( $timestamp, $event_name, $body ) );
+		$signature      = hash_hmac( 'sha256', $signed_payload, $secret );
+
+		$headers['X-Alynt-AG-Signature'] = 'sha256=' . $signature;
+
+		return $headers;
 	}
 
 	/**

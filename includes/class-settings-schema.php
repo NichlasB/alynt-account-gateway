@@ -439,6 +439,12 @@ class ALYNT_AG_Settings_Schema {
 				'default' => '',
 				'label'   => __( 'Account Created Webhook URL', 'alynt-account-gateway' ),
 			),
+			'webhook_signing_secret'                    => array(
+				'tab'     => 'webhooks',
+				'type'    => 'secret',
+				'default' => '',
+				'label'   => __( 'Webhook Signing Secret', 'alynt-account-gateway' ),
+			),
 			'debug_payload_logging'                     => array(
 				'tab'     => 'webhooks',
 				'type'    => 'boolean',

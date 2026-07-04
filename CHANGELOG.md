@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Added optional HMAC request signing headers for outgoing account-created webhooks.
+
 ## 0.1.19 - 2026-07-04
 
 ### Added

@@ -29,3 +29,10 @@ This document tracks public and integration-facing hooks used by Alynt Account G
 ## Plugin-Owned Events
 
 The account-created webhook is configured through settings rather than a PHP action. It fires an `account.created` JSON payload after a confirmed registration creates the WordPress user.
+
+When the optional webhook signing secret is configured, outgoing webhook requests include these verification headers:
+
+- `X-Alynt-AG-Event`: event name, such as `account.created` or `account.created.test`
+- `X-Alynt-AG-Time`: Unix timestamp used in the signature base string
+- `X-Alynt-AG-Version`: signature scheme version, currently `1`
+- `X-Alynt-AG-Signature`: `sha256=` followed by the HMAC-SHA256 of `{timestamp}.{event}.{json_body}`

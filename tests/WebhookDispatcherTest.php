@@ -88,8 +88,33 @@ class WebhookDispatcherTest extends TestCase {
 		$this->assertCount( 1, $GLOBALS['alynt_ag_test_remote_posts'] );
 		$this->assertSame( 'https://hooks.example.test/account-created', $GLOBALS['alynt_ag_test_remote_posts'][0]['url'] );
 		$this->assertSame( 'application/json', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['headers']['Content-Type'] );
+		$this->assertSame( 'account.created', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['headers']['X-Alynt-AG-Event'] );
+		$this->assertArrayNotHasKey( 'X-Alynt-AG-Signature', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['headers'] );
 		$this->assertStringContainsString( '"event":"account.created"', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['body'] );
 		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+	}
+
+	public function test_dispatch_account_created_signs_json_body_when_secret_is_configured() {
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+		$result     = $dispatcher->dispatch_account_created(
+			321,
+			array(
+				'account_created_webhook' => 'https://hooks.example.test/account-created',
+				'webhook_signing_secret'  => 'shared-secret',
+				'debug_payload_logging'   => false,
+			)
+		);
+
+		$this->assertTrue( $result );
+
+		$post      = $GLOBALS['alynt_ag_test_remote_posts'][0];
+		$headers   = $post['args']['headers'];
+		$timestamp = $headers['X-Alynt-AG-Time'];
+		$expected  = hash_hmac( 'sha256', $timestamp . '.account.created.' . $post['args']['body'], 'shared-secret' );
+
+		$this->assertSame( 'account.created', $headers['X-Alynt-AG-Event'] );
+		$this->assertSame( '1', $headers['X-Alynt-AG-Version'] );
+		$this->assertSame( 'sha256=' . $expected, $headers['X-Alynt-AG-Signature'] );
 	}
 
 	public function test_dispatch_account_created_test_posts_test_event_and_logs_response() {

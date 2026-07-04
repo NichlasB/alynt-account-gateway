@@ -2,11 +2,43 @@
 
 ## Status
 
-- Current phase: v0.1.19 webhook tools
+- Current phase: v0.1.20 webhook signing
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.19 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.20 Small Release Cycle
+
+### Scope
+
+- [x] Start the next integration-hardening slice from the released `master` baseline.
+- [x] Add an optional webhook signing secret setting on the Webhooks tab.
+- [x] Sign webhook request bodies with timestamped HMAC headers when a signing secret is configured.
+- [x] Add focused coverage for unsigned and signed webhook dispatch behavior.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.20` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.20` from clean `master` after the `v0.1.19` release merge.
+- Added an optional `webhook_signing_secret` setting on the Webhooks tab, defaulting to empty so existing integrations remain unsigned.
+- Added signed webhook headers when a secret is configured: `X-Alynt-AG-Event`, `X-Alynt-AG-Time`, `X-Alynt-AG-Version`, and `X-Alynt-AG-Signature` using HMAC-SHA256 over `{timestamp}.{event}.{json_body}`.
+- Added focused PHPUnit coverage for webhook signing defaults/sanitization, unsigned dispatch, and signed dispatch. Targeted `WebhookDispatcherTest|SettingsSchemaTest` passed with 27 tests and 131 assertions.
+- Verified branch checks before metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` writes 382 strings, `npm.cmd run lint`, `npm.cmd test` passes with 164 tests and 680 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.20-branch-qa-20260705-000212\alynt-account-gateway-v0.1.20-branch-qa.zip`; verified 46 runtime files, no backslash archive entries, no missing runtime files, no dev/source/test/docs/rules/package/vendor files, pre-bump `0.1.19` metadata, and signing setting/header code present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.19`; verified installed signing setting/method/header markers and safe intercepted signed test dispatch. The `account.created.test` signature matched the exact intercepted body, the log row recorded HTTP `202` success, and temporary settings/log artifacts were cleaned up.
+
+### Guardrails
+
+- Do not change the existing account-created payload shape, event names, test-send behavior, webhook URL policy, logging retention, registration flow, email behavior, frontend routes, dashboard rendering, WooCommerce delegation, or provider verification behavior.
+- Keep signing optional and disabled by default so existing webhook consumers continue working until a site owner configures a shared secret.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates signed test webhook dispatch and Webhooks tab rendering.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.19 Small Release Cycle
 

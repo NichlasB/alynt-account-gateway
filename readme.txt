@@ -25,7 +25,7 @@ Core features include:
 * Branded account emails with preview and test-send tools.
 * Optional custom dashboard and WooCommerce My Account takeover.
 * Custom dashboard links with icons, ordering, role visibility, and new-tab behavior.
-* Account-created webhook delivery.
+* Account-created webhook delivery with optional request signing.
 * Privacy exporter/eraser integration and retention cleanup.
 * Multilingual-ready strings and generated POT file.
 
