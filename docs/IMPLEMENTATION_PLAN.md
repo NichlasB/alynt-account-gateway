@@ -29,6 +29,10 @@
 - Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.19-branch-qa-20260704-233152\alynt-account-gateway-v0.1.19-branch-qa.zip`; inspected 46 packaged files, no dev/source entries, no backslash zip entries, header/constant still `0.1.18` as expected before release bump.
 - Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.18`; verified active plugin, installed method/action/table strings, and safe intercepted test dispatch logging `account.created.test` with HTTP `202`, success `1`, and no external network call.
 - Browser-smoked Plugin Tester Webhooks tab through temporary Novamira admin access: `Webhook Tools`, `Send Test Webhook`, `Recent Webhook Deliveries`, disabled send button, and missing-URL helper text rendered correctly.
+- Bumped release-candidate metadata to `0.1.19` across the plugin header/constant, npm metadata, readme, sample test, and changelog.
+- Regenerated `languages/alynt-account-gateway.pot` with 381 strings and `0.1.19` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 162 tests and 671 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.19-20260704-233844\alynt-account-gateway-v0.1.19.zip`; verified 46 runtime files, no backslash archive entries, no missing runtime files, no dev/source/test/docs/rules/package/vendor files, and `0.1.19` header/constant/readme/POT metadata.
+- Installed the local `0.1.19` package on LocalWP Plugin Tester; verified active header and loaded constant are `0.1.19`, webhook test method/action/table strings are present, and safe intercepted test dispatch logs `account.created.test` with HTTP `202` and success `1` without external network calls.
 
 ### Guardrails
 

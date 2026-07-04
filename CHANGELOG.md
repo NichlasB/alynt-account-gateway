@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.19 - 2026-07-04
+
+### Added
+
+- Added Webhooks tab tools for sending an explicit account-created test webhook and reviewing recent webhook delivery metadata.
+
 ## 0.1.18 - 2026-07-04
 
 ### Added
