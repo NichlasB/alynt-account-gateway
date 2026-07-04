@@ -40,7 +40,7 @@
 - [x] Start the next low-risk structural slice from the released `master` baseline.
 - [x] Extract frontend asset enqueue logic out of the large frontend renderer class without changing when assets load.
 - [x] Add focused test coverage around the extracted frontend asset service.
-- [ ] Run installed Plugin Tester smoke checks for representative gateway routes after packaging.
+- [x] Run installed Plugin Tester smoke checks for representative gateway routes after packaging.
 - [ ] Re-run package/update checks as appropriate for the final `0.1.6` release.
 
 ### Progress Notes
@@ -51,6 +51,9 @@
 - Added focused `FrontendAssetsTest` coverage for frontend-output/screen gating, frontend CSS/JS enqueueing, localized labels, and Turnstile loading only on configured registration screens.
 - Added lightweight PHPUnit bootstrap stubs to record enqueued styles, scripts, and localized script data.
 - Verified `npm.cmd test` passes with 110 tests and 420 assertions, `npm.cmd run lint` passes, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.6-branch-qa-20260704-165504\alynt-account-gateway-v0.1.6-branch-qa.zip`; verified built frontend assets and the frontend asset, route, and message services are included, dev/source/test/docs/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.5` as expected before the final release bump.
+- Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.5` header/constant, `ALYNT_AG_Frontend_Assets` file/class loaded, frontend style/script queue on gateway screens, and Turnstile script queues on a configured registration screen.
+- Browser-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, and included the frontend CSS/JS assets.
 
 ### Guardrails
 
@@ -61,7 +64,7 @@
 ### Completion Gate
 
 - [x] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates representative gateway routes after the asset-service extraction.
+- [x] Plugin Tester smoke validates representative gateway routes after the asset-service extraction.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.5 Small Release Cycle
