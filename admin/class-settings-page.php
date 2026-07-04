@@ -24,6 +24,7 @@ class ALYNT_AG_Settings_Page {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_post_alynt_ag_export_settings', array( $this, 'handle_export_settings' ) );
 		add_action( 'admin_post_alynt_ag_import_settings', array( $this, 'handle_import_settings' ) );
+		add_action( 'admin_post_alynt_ag_restore_tab_defaults', array( $this, 'handle_restore_tab_defaults' ) );
 		add_action( 'admin_post_alynt_ag_export_diagnostics', array( $this, 'handle_export_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_clear_diagnostics', array( $this, 'handle_clear_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_preview_email', array( $this, 'handle_preview_email' ) );
@@ -136,6 +137,8 @@ class ALYNT_AG_Settings_Page {
 
 				<?php submit_button( __( 'Save Settings', 'alynt-account-gateway' ) ); ?>
 			</form>
+
+			<?php $this->render_restore_tab_defaults( $active_tab ); ?>
 
 			<?php if ( 'advanced_tools' === $active_tab ) : ?>
 				<?php $this->render_diagnostics_tools(); ?>
@@ -263,6 +266,20 @@ class ALYNT_AG_Settings_Page {
 			return;
 		}
 
+		if ( 'tab_defaults_restored' === $notice ) {
+			?>
+			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'This settings tab was restored to its defaults.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
+		if ( 'tab_defaults_failed' === $notice ) {
+			?>
+			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'This settings tab could not be restored.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
 		if ( 'email_test_sent' === $notice ) {
 			?>
 			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Test email sent.', 'alynt-account-gateway' ); ?></p></div>
@@ -370,6 +387,34 @@ class ALYNT_AG_Settings_Page {
 			<label for="alynt-ag-settings-import"><?php esc_html_e( 'Settings JSON file', 'alynt-account-gateway' ); ?></label>
 			<input type="file" id="alynt-ag-settings-import" name="settings_file" accept="application/json,.json" required>
 			<?php submit_button( __( 'Import Settings', 'alynt-account-gateway' ), 'secondary', 'submit', false ); ?>
+		</form>
+		<?php
+	}
+
+	/**
+	 * Render restore-defaults control for the active tab.
+	 *
+	 * @param string $active_tab Active settings tab.
+	 * @return void
+	 */
+	private function render_restore_tab_defaults( $active_tab ) {
+		$tabs = ALYNT_AG_Settings_Schema::tabs();
+
+		if ( ! isset( $tabs[ $active_tab ] ) || empty( ALYNT_AG_Settings_Schema::keys_for_tab( $active_tab ) ) ) {
+			return;
+		}
+
+		$confirm = sprintf(
+			/* translators: %s: settings tab label. */
+			__( 'Restore the %s tab to its default settings? This cannot be undone automatically.', 'alynt-account-gateway' ),
+			$tabs[ $active_tab ]
+		);
+		?>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-restore-tab-defaults">
+			<input type="hidden" name="action" value="alynt_ag_restore_tab_defaults">
+			<input type="hidden" name="tab" value="<?php echo esc_attr( $active_tab ); ?>">
+			<?php wp_nonce_field( 'alynt_ag_restore_tab_defaults_' . $active_tab ); ?>
+			<?php submit_button( __( 'Restore This Tab To Defaults', 'alynt-account-gateway' ), 'secondary', 'submit', false, array( 'onclick' => 'return confirm(' . wp_json_encode( $confirm ) . ');' ) ); ?>
 		</form>
 		<?php
 	}
@@ -512,6 +557,51 @@ class ALYNT_AG_Settings_Page {
 				array(
 					'page'            => 'alynt-account-gateway',
 					'tab'             => 'advanced_tools',
+					'alynt_ag_notice' => $status,
+				),
+				admin_url( 'options-general.php' )
+			)
+		);
+		exit;
+	}
+
+	/**
+	 * Restore one settings tab to defaults.
+	 *
+	 * @return void
+	 */
+	public function handle_restore_tab_defaults() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to restore settings.', 'alynt-account-gateway' ) );
+		}
+
+		$tabs = ALYNT_AG_Settings_Schema::tabs();
+		$tab  = isset( $_POST['tab'] ) ? sanitize_key( wp_unslash( $_POST['tab'] ) ) : 'general';
+		$tab  = isset( $tabs[ $tab ] ) ? $tab : 'general';
+
+		check_admin_referer( 'alynt_ag_restore_tab_defaults_' . $tab );
+
+		$restored = ALYNT_AG_Settings_Schema::restore_tab_defaults( $tab );
+		$status   = 'tab_defaults_failed';
+
+		if ( ! is_wp_error( $restored ) ) {
+			update_option( 'alynt_ag_settings', $restored );
+			ALYNT_AG_Diagnostics_Logger::log(
+				'tab_defaults_restored',
+				array(
+					'tab'           => $tab,
+					'restored_keys' => ALYNT_AG_Settings_Schema::keys_for_tab( $tab ),
+				),
+				get_current_user_id()
+			);
+			$status = 'tab_defaults_restored';
+		}
+
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'            => 'alynt-account-gateway',
+					'tab'             => $tab,
 					'alynt_ag_notice' => $status,
 				),
 				admin_url( 'options-general.php' )

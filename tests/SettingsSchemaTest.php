@@ -122,6 +122,41 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertSame( 'alynt_ag_empty_settings_import', $imported->get_error_code() );
 	}
 
+	public function test_defaults_for_tab_returns_only_tab_settings() {
+		$defaults = ALYNT_AG_Settings_Schema::defaults_for_tab( 'urls' );
+
+		$this->assertSame(
+			array( 'login_path', 'account_action_base', 'after_login_redirect' ),
+			array_keys( $defaults )
+		);
+		$this->assertSame( '/login', $defaults['login_path'] );
+		$this->assertSame( '/account', $defaults['account_action_base'] );
+	}
+
+	public function test_restore_tab_defaults_resets_only_selected_tab() {
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'frontend_enabled'     => true,
+			'login_path'           => '/custom-login',
+			'account_action_base'  => '/custom-account',
+			'primary_color'        => '#123456',
+		);
+
+		$restored = ALYNT_AG_Settings_Schema::restore_tab_defaults( 'urls' );
+
+		$this->assertIsArray( $restored );
+		$this->assertTrue( $restored['frontend_enabled'] );
+		$this->assertSame( '/login', $restored['login_path'] );
+		$this->assertSame( '/account', $restored['account_action_base'] );
+		$this->assertSame( '#123456', $restored['primary_color'] );
+	}
+
+	public function test_restore_tab_defaults_rejects_invalid_tab() {
+		$restored = ALYNT_AG_Settings_Schema::restore_tab_defaults( 'missing_tab' );
+
+		$this->assertInstanceOf( WP_Error::class, $restored );
+		$this->assertSame( 'alynt_ag_invalid_settings_tab', $restored->get_error_code() );
+	}
+
 	public function test_screen_copy_defaults_exist() {
 		$defaults = ALYNT_AG_Settings_Schema::defaults();
 

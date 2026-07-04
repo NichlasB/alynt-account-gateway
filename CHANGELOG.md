@@ -5,10 +5,10 @@
 ### Added
 
 - Settings import/export JSON for all plugin-owned settings.
+- Per-tab restore defaults with confirmation and diagnostics logging.
 
 ### Planned
 
-- Per-tab restore defaults.
 - Gateway preview mode while frontend output is disabled.
 - Compatibility warnings for login, registration, redirect, security, and WooCommerce account endpoint conflicts.
 - Focused unit coverage for remaining account-gateway release gates.

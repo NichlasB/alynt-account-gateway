@@ -516,6 +516,69 @@ class ALYNT_AG_Settings_Schema {
 	}
 
 	/**
+	 * Return schema keys for one settings tab.
+	 *
+	 * @param string $tab Settings tab key.
+	 * @return array<int,string>
+	 */
+	public static function keys_for_tab( $tab ) {
+		$keys = array();
+
+		foreach ( self::schema() as $key => $field ) {
+			if ( isset( $field['tab'] ) && $field['tab'] === $tab ) {
+				$keys[] = $key;
+			}
+		}
+
+		return $keys;
+	}
+
+	/**
+	 * Return default values for one settings tab.
+	 *
+	 * @param string $tab Settings tab key.
+	 * @return array<string,mixed>
+	 */
+	public static function defaults_for_tab( $tab ) {
+		$defaults     = self::defaults();
+		$tab_defaults = array();
+
+		foreach ( self::keys_for_tab( $tab ) as $key ) {
+			$tab_defaults[ $key ] = $defaults[ $key ];
+		}
+
+		return $tab_defaults;
+	}
+
+	/**
+	 * Restore one settings tab to its schema defaults.
+	 *
+	 * @param string $tab Settings tab key.
+	 * @return array<string,mixed>|WP_Error
+	 */
+	public static function restore_tab_defaults( $tab ) {
+		$tabs = self::tabs();
+
+		if ( ! isset( $tabs[ $tab ] ) ) {
+			return new WP_Error(
+				'alynt_ag_invalid_settings_tab',
+				__( 'The selected settings tab is invalid.', 'alynt-account-gateway' )
+			);
+		}
+
+		$tab_defaults = self::defaults_for_tab( $tab );
+
+		if ( empty( $tab_defaults ) ) {
+			return new WP_Error(
+				'alynt_ag_empty_settings_tab',
+				__( 'The selected settings tab does not contain restorable settings.', 'alynt-account-gateway' )
+			);
+		}
+
+		return array_merge( self::get_settings(), $tab_defaults );
+	}
+
+	/**
 	 * Return settings.
 	 *
 	 * @return array<string,mixed>
