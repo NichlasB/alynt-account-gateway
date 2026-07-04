@@ -25,6 +25,10 @@
 - Added focused `FrontendLoginScreenTest` coverage for default form output, nonce field output, account links, password toggle markup, success states, redirect preservation, and login error accessibility state.
 - Verified `php -l` for the new service and test file, targeted `FrontendLoginScreenTest` passes with 3 tests and 24 assertions, `npm.cmd run lint` passes, and `git diff --check` passes.
 - Verified the full local gate: `npm.cmd test` passes with 131 tests and 524 assertions, `npm.cmd run lint` passes, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.12-branch-qa-20260704-193414\alynt-account-gateway-v0.1.12-branch-qa.zip`; verified built frontend/admin assets, the new frontend login screen service, the frontend lost-password screen service, and the frontend logout-screen service are included, dev/source/test/docs/rules/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.11` as expected before the final release bump.
+- Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.11` header/constant, `ALYNT_AG_Frontend_Login_Screen` file/class loaded in a fresh request, and login rendering includes the title, form action, nonce, email/password fields, registration link, and lost-password link.
+- Browser-smoked the branch-QA installed Plugin Tester copy at `/login`, `/login?registration_complete=1&password_reset=1&redirect_to=...`, `/login?login_error=alynt_ag_rate_limited`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and preserved login default/success/error states.
+- Removed the branch-QA zip from Plugin Tester uploads.
 
 ### Guardrails
 
@@ -35,7 +39,7 @@
 ### Completion Gate
 
 - [x] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates representative gateway routes after the login screen extraction.
+- [x] Plugin Tester smoke validates representative gateway routes after the login screen extraction.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.11 Small Release Cycle
