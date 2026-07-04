@@ -2,11 +2,41 @@
 
 ## Status
 
-- Current phase: v0.1.11 released and verified
+- Current phase: v0.1.12 small release cycle started on branch `release/0.1.12`
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.11 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.12 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Extract the login screen renderer out of the large frontend renderer class without changing copy, form fields, nonce/action names, query parameters, redirect handling, routes, password toggle markup, status handling, or accessibility attributes.
+- [x] Add focused test coverage around the extracted frontend login screen service.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.12` release.
+
+### Progress Notes
+
+- Started `v0.1.12` from clean `master` after the `v0.1.11` release merge.
+- Extracted login rendering into `ALYNT_AG_Frontend_Login_Screen`.
+- Kept `ALYNT_AG_Frontend` request flow and wrapper method intact while delegating login markup and read-only status/error display to the new service.
+- Added focused `FrontendLoginScreenTest` coverage for default form output, nonce field output, account links, password toggle markup, success states, redirect preservation, and login error accessibility state.
+- Verified `php -l` for the new service and test file, targeted `FrontendLoginScreenTest` passes with 3 tests and 24 assertions, `npm.cmd run lint` passes, and `git diff --check` passes.
+- Verified the full local gate: `npm.cmd test` passes with 131 tests and 524 assertions, `npm.cmd run lint` passes, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, query parameters, redirect behavior, registration behavior, email behavior, WooCommerce dashboard behavior, asset handles/URLs, design-token names, frontend class names, nonce names, form action names, or auth-service messages.
+- Keep this cycle focused on login screen rendering; leave login request handling and other auth screens untouched.
+- Defer final `0.1.12` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates representative gateway routes after the login screen extraction.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.11 Small Release Cycle
 
@@ -15,7 +45,7 @@
 - [x] Start the next low-risk structural slice from the released `master` baseline.
 - [x] Extract the lost-password screen renderer out of the large frontend renderer class without changing copy, form fields, nonce/action names, query parameters, redirect behavior, routes, status handling, or accessibility attributes.
 - [x] Add focused test coverage around the extracted frontend lost-password screen service.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.11` release.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.11` release.
 
 ### Progress Notes
 
