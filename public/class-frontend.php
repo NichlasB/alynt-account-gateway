@@ -393,6 +393,15 @@ class ALYNT_AG_Frontend {
 	}
 
 	/**
+	 * Frontend set-password screen helper.
+	 *
+	 * @return ALYNT_AG_Frontend_Setpassword_Screen
+	 */
+	private function setpassword_screen() {
+		return new ALYNT_AG_Frontend_Setpassword_Screen();
+	}
+
+	/**
 	 * Render gateway shell.
 	 *
 	 * @param string              $screen   Screen key.
@@ -436,7 +445,7 @@ class ALYNT_AG_Frontend {
 					<div class="agw-card">
 						<?php $this->render_brand_block( $settings ); ?>
 						<?php
-						$this->render_password_form(
+						$this->setpassword_screen()->render_password_form(
 							$settings,
 							home_url( $settings['account_action_base'] ),
 							'reset_password',
@@ -579,126 +588,7 @@ class ALYNT_AG_Frontend {
 	 * @return void
 	 */
 	private function render_setpassword_screen( $settings ) {
-		$auth         = new ALYNT_AG_Auth_Service();
-		$registration = new ALYNT_AG_Registration_Service();
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Token is validated against plugin-owned pending registration storage.
-		$token = isset( $_GET['alynt_ag_token'] ) ? sanitize_text_field( wp_unslash( $_GET['alynt_ag_token'] ) ) : '';
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Native reset key is validated by WordPress.
-		$key = isset( $_GET['key'] ) ? sanitize_text_field( wp_unslash( $_GET['key'] ) ) : '';
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Native reset login is validated by WordPress.
-		$login = isset( $_GET['login'] ) ? sanitize_user( wp_unslash( $_GET['login'] ) ) : '';
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only error display.
-		$error_code = isset( $_GET['password_error'] ) ? sanitize_key( wp_unslash( $_GET['password_error'] ) ) : '';
-
-		if ( $token ) {
-			if ( is_wp_error( $registration->confirm_pending_token( $token ) ) ) {
-				$this->render_invalid_link_screen( $settings );
-				return;
-			}
-
-			$set_password_action = add_query_arg(
-				array(
-					'action'         => 'setpassword',
-					'alynt_ag_token' => rawurlencode( $token ),
-				),
-				home_url( $settings['account_action_base'] )
-			);
-
-			$this->render_password_form(
-				$settings,
-				$set_password_action,
-				'complete_registration',
-				'alynt_ag_complete_registration',
-				'alynt_ag_registration_nonce',
-				array(
-					'alynt_ag_token' => $token,
-				),
-				$error_code
-			);
-			return;
-		}
-
-		if ( $key && $login ) {
-			if ( is_wp_error( $auth->validate_password_reset_key( $key, $login ) ) ) {
-				$this->render_lostpassword_screen( $settings, 'invalid_or_expired_token' );
-				return;
-			}
-
-			$set_password_action = add_query_arg(
-				array(
-					'action' => 'setpassword',
-					'key'    => rawurlencode( $key ),
-					'login'  => rawurlencode( $login ),
-				),
-				home_url( $settings['account_action_base'] )
-			);
-
-			$this->render_password_form(
-				$settings,
-				$set_password_action,
-				'reset_password',
-				'alynt_ag_reset_password',
-				'alynt_ag_auth_nonce',
-				array(
-					'key'   => $key,
-					'login' => $login,
-				),
-				$error_code
-			);
-			return;
-		}
-
-		$this->render_invalid_link_screen( $settings );
-	}
-
-	/**
-	 * Render the shared set-password form.
-	 *
-	 * @param array<string,mixed>  $settings     Settings.
-	 * @param string               $action_url   Form action URL.
-	 * @param string               $action       Auth action.
-	 * @param string               $nonce_action Nonce action.
-	 * @param string               $nonce_name   Nonce field name.
-	 * @param array<string,string> $hidden       Hidden form fields.
-	 * @param string               $error_code   Error code.
-	 * @return void
-	 */
-	private function render_password_form( $settings, $action_url, $action, $nonce_action, $nonce_name, $hidden, $error_code ) {
-		?>
-		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Set New Password', 'alynt-account-gateway' ); ?></h1>
-		<?php $this->render_notice( $settings['setpassword_intro_text'] ); ?>
-		<?php if ( $error_code ) : ?>
-			<div id="agw-password-error" class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->get_password_error_message( $error_code ) ); ?></div>
-		<?php endif; ?>
-		<form class="agw-form" method="post" action="<?php echo esc_url( $action_url ); ?>" data-agw-password-form <?php echo $error_code ? 'aria-describedby="agw-password-error"' : ''; ?>>
-			<input type="hidden" name="alynt_ag_action" value="<?php echo esc_attr( $action ); ?>">
-			<?php wp_nonce_field( $nonce_action, $nonce_name ); ?>
-			<?php foreach ( $hidden as $name => $value ) : ?>
-				<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>">
-			<?php endforeach; ?>
-			<div class="agw-field agw-field--password">
-				<label for="agw-set-password"><?php esc_html_e( 'New Password', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-set-password" name="password" type="password" autocomplete="new-password" aria-describedby="<?php echo esc_attr( $error_code ? 'agw-password-error agw-password-status agw-password-requirements' : 'agw-password-status agw-password-requirements' ); ?>" <?php echo $error_code ? 'aria-invalid="true"' : ''; ?> data-agw-password-input required>
-			</div>
-			<div class="agw-field agw-field--password">
-				<label for="agw-set-confirm"><?php esc_html_e( 'Confirm Password', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-set-confirm" name="password_confirm" type="password" autocomplete="new-password" aria-describedby="<?php echo esc_attr( $error_code ? 'agw-password-error agw-password-status agw-password-requirements' : 'agw-password-status agw-password-requirements' ); ?>" <?php echo $error_code ? 'aria-invalid="true"' : ''; ?> data-agw-password-confirm required>
-			</div>
-			<div class="agw-strength" data-agw-strength data-agw-strength-score="0" data-agw-message-empty="<?php esc_attr_e( 'Enter a password to begin.', 'alynt-account-gateway' ); ?>" data-agw-message-weak="<?php esc_attr_e( 'Keep going.', 'alynt-account-gateway' ); ?>" data-agw-message-good="<?php esc_attr_e( 'Almost there.', 'alynt-account-gateway' ); ?>" data-agw-message-ready="<?php esc_attr_e( 'Password is ready.', 'alynt-account-gateway' ); ?>" aria-live="polite">
-				<span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
-				<strong id="agw-password-status" data-agw-strength-label><?php esc_html_e( 'Enter a password to begin.', 'alynt-account-gateway' ); ?></strong>
-			</div>
-			<ul id="agw-password-requirements" class="agw-requirements" data-agw-password-requirements>
-				<li data-agw-requirement="length"><?php esc_html_e( 'At least 12 characters', 'alynt-account-gateway' ); ?></li>
-				<li data-agw-requirement="uppercase"><?php esc_html_e( 'At least one uppercase letter', 'alynt-account-gateway' ); ?></li>
-				<li data-agw-requirement="lowercase"><?php esc_html_e( 'At least one lowercase letter', 'alynt-account-gateway' ); ?></li>
-				<li data-agw-requirement="number"><?php esc_html_e( 'At least one number', 'alynt-account-gateway' ); ?></li>
-				<li data-agw-requirement="symbol"><?php esc_html_e( 'At least one special symbol', 'alynt-account-gateway' ); ?></li>
-				<li data-agw-requirement="match"><?php esc_html_e( 'Passwords match', 'alynt-account-gateway' ); ?></li>
-			</ul>
-			<button class="agw-button agw-button--primary" type="submit" data-agw-password-submit disabled><?php esc_html_e( 'Save Password', 'alynt-account-gateway' ); ?></button>
-		</form>
-		<?php
+		$this->setpassword_screen()->render_setpassword_screen( $settings );
 	}
 
 	/**
@@ -839,26 +729,5 @@ class ALYNT_AG_Frontend {
 	private function get_resend_error_message( $error_code ) {
 		$messages = new ALYNT_AG_Frontend_Messages();
 		return $messages->resend_error( $error_code );
-	}
-
-	/**
-	 * Get public set-password error message.
-	 *
-	 * @param string $error_code Error code.
-	 * @return string
-	 */
-	private function get_password_error_message( $error_code ) {
-		$messages = new ALYNT_AG_Frontend_Messages();
-		return $messages->password_error( $error_code );
-	}
-
-	/**
-	 * Render configurable screen instruction text.
-	 *
-	 * @param string $copy Notice copy.
-	 * @return void
-	 */
-	private function render_notice( $copy ) {
-		$this->components()->render_notice( $copy );
 	}
 }
