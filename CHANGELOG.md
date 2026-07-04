@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.1.13 - 2026-07-04
+
+### Changed
+
+- Extracted registration screen rendering into a dedicated registration screen service without changing copy, form fields, nonce/action names, query parameters, terms/privacy links, verification slot output, registration-success handling, or accessibility attributes.
+
+### Added
+
+- Focused frontend registration screen service tests for default form output, nonce field output, terms/privacy links, disabled submit state, registration-sent success state, registration error accessibility state, and Turnstile slot output.
+
 ## 0.1.12 - 2026-07-04
 
 ### Changed

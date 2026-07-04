@@ -2,11 +2,49 @@
 
 ## Status
 
-- Current phase: v0.1.12 released and verified
+- Current phase: v0.1.13 released and verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.12 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.13 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.13 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Extract the registration screen renderer out of the large frontend renderer class without changing copy, form fields, nonce/action names, query parameters, terms/privacy links, verification slot output, registration-success handling, or accessibility attributes.
+- [x] Add focused test coverage around the extracted frontend registration screen service.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.13` release.
+
+### Progress Notes
+
+- Started `v0.1.13` from clean `master` after the `v0.1.12` release merge.
+- Extracted registration rendering into `ALYNT_AG_Frontend_Register_Screen`.
+- Kept `ALYNT_AG_Frontend` request flow and wrapper method intact while delegating registration markup, read-only success/error display, terms/privacy links, and verification-slot rendering to the new service.
+- Added focused `FrontendRegisterScreenTest` coverage for default form output, nonce field output, terms/privacy links, disabled submit state, registration-sent success state, registration error accessibility state, and Turnstile slot output.
+- Verified `php -l` for the new service, test file, and frontend class; targeted `FrontendRegisterScreenTest` passes with 4 tests and 33 assertions; full `npm.cmd test` passes with 135 tests and 557 assertions; `npm.cmd run lint` passes; `npm.cmd run build` passes; `npm.cmd run make-pot` writes 344 strings; `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities; and `git diff --check` passes.
+- Created local branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.13-branch-qa-20260704\alynt-account-gateway-v0.1.13-branch-qa.zip`; verified built frontend/admin assets, the new frontend registration screen service, and the previously extracted frontend login/lost-password/logout/state services are included, dev/source/test/docs/rules/package/vendor files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.12` as expected before the final release bump.
+- Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.12` header/constant, `ALYNT_AG_Frontend_Register_Screen` file/class loaded, and registration rendering includes the default form, nonce, terms/privacy links, placeholder verification slot, registration-sent success state, registration error state, and Turnstile widget slot when a site key is configured.
+- Browser-smoked the branch-QA installed Plugin Tester copy at `/account?action=register`, `/account?action=register&registration_sent=1`, and `/account?action=register&registration_error=terms_required`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and preserved expected registration default/success/error states. A 390px viewport pass confirmed the single-column layout, hidden media panel, no horizontal overflow, and stable field/button widths.
+- Removed the branch-QA zip from Plugin Tester uploads.
+- Bumped release-candidate metadata to `0.1.13` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 135 tests and 557 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.13-20260704\alynt-account-gateway-v0.1.13.zip`; verified built frontend/admin assets and the new frontend registration screen service are included, dev/source/test/docs/rules/package/vendor files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.13`.
+- Published GitHub release `v0.1.13`, downloaded the public release asset, and verified the downloaded package has 42 runtime file entries, no backslash archive entries, no dev/source/test/docs/rules/package/vendor files, built frontend/admin CSS/JS assets, the new frontend registration screen service, and `0.1.13` header/constant metadata.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.12` to `0.1.13`, then installed it through the WordPress Plugins screen update path. Final server-side state: active `0.1.13` header/constant, `ALYNT_AG_Frontend_Register_Screen` file/class loaded, and no remaining update offer.
+- Browser-smoked the release-installed Plugin Tester copy at `/account?action=register`, `/account?action=register&registration_sent=1`, and `/account?action=register&registration_error=terms_required`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and preserved expected registration default/success/error states.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, query parameters, redirect behavior, registration request handling, email behavior, WooCommerce dashboard behavior, asset handles/URLs, design-token names, frontend class names, nonce names, form action names, or provider verification behavior.
+- Keep this cycle focused on registration screen rendering; leave pending-registration storage, email confirmation, set-password, Turnstile/Reoon validation, and resend-confirmation flows untouched.
+- Defer final `0.1.13` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates representative gateway routes after the registration screen extraction.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.12 Small Release Cycle
 

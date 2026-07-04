@@ -809,6 +809,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-assets.php'
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-branding.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-components.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-messages.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-register-screen.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-login-screen.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-lostpassword-screen.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-logout-screen.php';
