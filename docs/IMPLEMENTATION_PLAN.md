@@ -4,7 +4,7 @@
 
 - Current phase: v0.1.20 webhook signing
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.19 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.20 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -16,8 +16,8 @@
 - [x] Add an optional webhook signing secret setting on the Webhooks tab.
 - [x] Sign webhook request bodies with timestamped HMAC headers when a signing secret is configured.
 - [x] Add focused coverage for unsigned and signed webhook dispatch behavior.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.20` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Publish the final `v0.1.20` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -32,6 +32,8 @@
 - Regenerated `languages/alynt-account-gateway.pot` with 382 strings and `0.1.20` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 164 tests and 680 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.20-20260705-000519\alynt-account-gateway-v0.1.20.zip`; verified 46 runtime files, no backslash archive entries, no missing runtime files, no dev/source/test/docs/rules/package/vendor files, `0.1.20` header/constant/readme/POT metadata, and signing setting/header code present.
 - Installed the local `0.1.20` package on LocalWP Plugin Tester; verified active header and loaded constant are `0.1.20`, signing setting/header markers are present, and safe intercepted signed test dispatch produced a matching signature and HTTP `202` success log row without external network calls.
+- Published GitHub release `v0.1.20`, re-uploaded the inspected release asset to ensure `CHANGELOG.md` parity, downloaded the public release asset, and verified 46 runtime files, no backslash archive entries, no dev/source/test/docs/rules/package/vendor files, `0.1.20` header/constant/readme metadata, and signing setting/header code present.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.19` to `0.1.20`, then installed it through the WordPress upgrader path. Final server-side state: active `0.1.20` header/constant, signing setting/header markers present, and no remaining update offer.
 
 ### Guardrails
 
@@ -42,7 +44,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates signed test webhook dispatch and Webhooks tab rendering.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.19 Small Release Cycle
 
