@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Changed
+
+- Extracted frontend URL and screen-routing helpers into a dedicated route service without changing public routes or query handling.
+
+### Added
+
+- Focused frontend route service tests for action URLs, query preservation, screen routing, WooCommerce takeover routing, and path matching.
+
 ## 0.1.4 - 2026-07-04
 
 ### Changed

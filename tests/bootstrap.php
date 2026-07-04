@@ -736,6 +736,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-turnstile-client.php
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-webhook-dispatcher.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-dashboard-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-woocommerce-integration.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-routes.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-messages.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-warnings.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-service.php';

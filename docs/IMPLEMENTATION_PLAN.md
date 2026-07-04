@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.4 released and verified
+- Current phase: v0.1.5 small release cycle started on branch `release/0.1.5`
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.4 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -33,6 +33,36 @@
 - Terms/privacy links: Relative URL paths configured manually, such as `/terms/` or `/legal/privacy/`
 - Multilingual support: Required for v1
 
+## v0.1.5 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Extract frontend URL and screen-routing helpers out of the large frontend renderer class without changing public routes or query handling.
+- [x] Add focused test coverage around the extracted frontend route service.
+- [ ] Run installed Plugin Tester smoke checks for representative gateway routes after packaging.
+- [ ] Re-run package/update checks as appropriate for the final `0.1.5` release.
+
+### Progress Notes
+
+- Started `v0.1.5` from `master` after the `v0.1.4` release merge.
+- Extracted branded action URL construction, login/lost-password/register/logout URL helpers, current relative path handling, path matching, and gateway screen resolution into `ALYNT_AG_Frontend_Routes`.
+- Kept `ALYNT_AG_Frontend` wrapper methods for internal compatibility while delegating route decisions to the new service.
+- Added focused `FrontendRoutesTest` coverage for known and fallback action URLs, redirect/nonce query preservation, enabled and disabled registration screen routing, dashboard and non-gateway path routing, WooCommerce takeover endpoint routing, and trailing-slash-insensitive path matching.
+- Verified `npm.cmd test` passes with 107 tests and 402 assertions, `npm.cmd run lint` passes, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, query parameters, redirect behavior, registration behavior, email behavior, or WooCommerce dashboard behavior.
+- Keep this cycle focused on one structural extraction from the frontend renderer.
+- Defer final `0.1.5` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates representative gateway routes after the route-service extraction.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+
 ## v0.1.4 Small Release Cycle
 
 ### Scope
@@ -40,7 +70,7 @@
 - [x] Reconcile stale implementation-plan checklist items that were completed during `v0.1.2` email QA and release verification.
 - [x] Start a low-risk structural refactor by extracting frontend message/catalog lookup out of the large frontend renderer class without changing public copy or behavior.
 - [x] Add or preserve focused test coverage around the extracted message catalog.
-- [ ] Re-run build, lint, tests, POT, and package/update checks as appropriate for the final `0.1.4` release.
+- [x] Re-run build, lint, tests, POT, and package/update checks as appropriate for the final `0.1.4` release.
 
 ### Progress Notes
 

@@ -249,17 +249,7 @@ class ALYNT_AG_Frontend {
 			return $login_url;
 		}
 
-		$url = home_url( $settings['login_path'] );
-
-		if ( $redirect ) {
-			$url = add_query_arg( 'redirect_to', rawurlencode( $redirect ), $url );
-		}
-
-		if ( $force_reauth ) {
-			$url = add_query_arg( 'reauth', '1', $url );
-		}
-
-		return $url;
+		return $this->routes()->login_url( $settings, $redirect, $force_reauth );
 	}
 
 	/**
@@ -276,13 +266,7 @@ class ALYNT_AG_Frontend {
 			return $lostpassword_url;
 		}
 
-		$url = $this->get_url_for_action( 'lostpassword', $settings );
-
-		if ( $redirect ) {
-			$url = add_query_arg( 'redirect_to', rawurlencode( $redirect ), $url );
-		}
-
-		return $url;
+		return $this->routes()->lostpassword_url( $settings, $redirect );
 	}
 
 	/**
@@ -294,7 +278,7 @@ class ALYNT_AG_Frontend {
 	public function filter_register_url( $register_url ) {
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 
-		return empty( $settings['frontend_enabled'] ) ? $register_url : $this->get_url_for_action( 'register', $settings );
+		return empty( $settings['frontend_enabled'] ) ? $register_url : $this->routes()->register_url( $settings );
 	}
 
 	/**
@@ -311,13 +295,7 @@ class ALYNT_AG_Frontend {
 			return $logout_url;
 		}
 
-		$url = wp_nonce_url( $this->get_url_for_action( 'logout', $settings ), 'log-out' );
-
-		if ( $redirect ) {
-			$url = add_query_arg( 'redirect_to', rawurlencode( $redirect ), $url );
-		}
-
-		return $url;
+		return $this->routes()->logout_url( $settings, $redirect );
 	}
 
 	/**
@@ -344,44 +322,7 @@ class ALYNT_AG_Frontend {
 	 * @return string
 	 */
 	private function get_gateway_screen( $settings ) {
-		$current_path = $this->get_current_relative_path();
-		$woocommerce  = new ALYNT_AG_WooCommerce_Integration();
-
-		if ( ! empty( $settings['dashboard_enabled'] ) && $this->paths_match( $current_path, $settings['after_login_redirect'] ) ) {
-			return 'dashboard';
-		}
-
-		if ( $woocommerce->takeover_enabled( $settings ) && $woocommerce->endpoint_from_path( $current_path, $settings )['endpoint'] ) {
-			return 'dashboard';
-		}
-
-		if ( $this->paths_match( $current_path, $settings['login_path'] ) ) {
-			return 'login';
-		}
-
-		if ( ! $this->paths_match( $current_path, $settings['account_action_base'] ) ) {
-			return '';
-		}
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only screen routing.
-		$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : 'login';
-
-		switch ( $action ) {
-			case 'register':
-				return empty( $settings['registration_enabled'] ) ? 'registration_disabled' : 'register';
-			case 'lostpassword':
-				return 'lostpassword';
-			case 'rp':
-			case 'resetpass':
-			case 'setpassword':
-				return 'setpassword';
-			case 'logout':
-				return 'logout';
-			case 'invalidlink':
-				return 'invalidlink';
-			default:
-				return 'login';
-		}
+		return $this->routes()->screen( $settings );
 	}
 
 	/**
@@ -392,17 +333,7 @@ class ALYNT_AG_Frontend {
 	 * @return string
 	 */
 	private function get_url_for_action( $action, $settings ) {
-		if ( 'login' === $action ) {
-			return home_url( $settings['login_path'] );
-		}
-
-		$mapped_action = in_array( $action, array( 'lostpassword', 'register', 'rp', 'resetpass', 'setpassword', 'logout', 'invalidlink' ), true ) ? $action : 'login';
-
-		if ( 'login' === $mapped_action ) {
-			return home_url( $settings['login_path'] );
-		}
-
-		return add_query_arg( 'action', $mapped_action, home_url( $settings['account_action_base'] ) );
+		return $this->routes()->action_url( $action, $settings );
 	}
 
 	/**
@@ -411,17 +342,7 @@ class ALYNT_AG_Frontend {
 	 * @return string
 	 */
 	private function get_current_relative_path() {
-		$request_uri  = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
-		$request_path = wp_parse_url( $request_uri, PHP_URL_PATH );
-		$request_path = $request_path ? $request_path : '/';
-		$home_path    = wp_parse_url( home_url( '/' ), PHP_URL_PATH );
-		$home_path    = $home_path ? rtrim( $home_path, '/' ) : '';
-
-		if ( $home_path && 0 === strpos( $request_path, $home_path ) ) {
-			$request_path = substr( $request_path, strlen( $home_path ) );
-		}
-
-		return '/' . ltrim( $request_path, '/' );
+		return $this->routes()->current_relative_path();
 	}
 
 	/**
@@ -432,7 +353,16 @@ class ALYNT_AG_Frontend {
 	 * @return bool
 	 */
 	private function paths_match( $left, $right ) {
-		return untrailingslashit( '/' . ltrim( $left, '/' ) ) === untrailingslashit( '/' . ltrim( $right, '/' ) );
+		return $this->routes()->paths_match( $left, $right );
+	}
+
+	/**
+	 * Frontend route helpers.
+	 *
+	 * @return ALYNT_AG_Frontend_Routes
+	 */
+	private function routes() {
+		return new ALYNT_AG_Frontend_Routes();
 	}
 
 	/**
