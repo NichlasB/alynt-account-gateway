@@ -42,7 +42,7 @@
 - [x] Add gateway screen preview mode while frontend output is disabled.
 - [x] Add compatibility warnings for plugins that commonly modify login, registration, account pages, security redirects, or WooCommerce account endpoints.
 - [x] Add focused unit coverage for settings schema defaults/sanitization, frontend-output routing, emergency bypass behavior, role access/admin toolbar rules, password policy matching, retention cleanup, and uninstall cleanup where practical.
-- [ ] Re-run Plugin Tester smoke checks after the release package is built.
+- [x] Re-run Plugin Tester smoke checks after the release package is built.
 - [ ] Verify Alynt Plugin Updater detects and installs `0.1.1` from the GitHub release asset.
 
 ### Guardrails
@@ -57,7 +57,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Local release-style zip excludes source/dev files and includes built assets.
-- [ ] Plugin Tester validates admin settings actions, preview mode, gateway routes, and WooCommerce dashboard takeover.
+- [x] Plugin Tester validates admin settings actions, preview mode, gateway routes, and WooCommerce dashboard takeover.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## Implementation Phases
@@ -224,6 +224,7 @@
 - Made the GitHub repository public for release delivery, forced the LocalWP Plugin Tester installed copy to `0.0.9`, confirmed Alynt Plugin Updater detected `0.0.9` to `0.1.0`, installed from the `alynt-account-gateway-v0.1.0.zip` release asset, and verified the active Plugin Tester copy returned to `0.1.0`.
 - Browser-smoked the release-installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, and `/my-account/` after the updater install.
 - Remaining release decisions: optionally add uninstall-specific unit coverage before the next release.
+- Installed the local `alynt-account-gateway-v0.1.1.zip` package on LocalWP Plugin Tester, verified the active plugin reports `0.1.1`, browser-smoked Advanced / Tools compatibility warnings, gateway preview mode, `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, `/my-account/`, and WooCommerce account endpoints for orders, downloads, addresses, payment methods, and account details.
 
 ## Workflow Notes
 
