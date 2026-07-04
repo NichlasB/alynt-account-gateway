@@ -40,7 +40,7 @@
 - [x] Add settings import/export JSON for all plugin-owned settings.
 - [x] Add per-tab restore defaults with confirmation and diagnostics logging.
 - [x] Add gateway screen preview mode while frontend output is disabled.
-- [ ] Add compatibility warnings for plugins that commonly modify login, registration, account pages, security redirects, or WooCommerce account endpoints.
+- [x] Add compatibility warnings for plugins that commonly modify login, registration, account pages, security redirects, or WooCommerce account endpoints.
 - [ ] Add focused unit coverage for settings schema defaults/sanitization, frontend-output routing, emergency bypass behavior, role access/admin toolbar rules, password policy matching, retention cleanup, and uninstall cleanup where practical.
 - [ ] Re-run Plugin Tester smoke checks after the release package is built.
 - [ ] Verify Alynt Plugin Updater detects and installs `0.1.1` from the GitHub release asset.

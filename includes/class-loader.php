@@ -26,6 +26,7 @@ $alynt_ag_files = array(
 	'includes/services/class-webhook-dispatcher.php',
 	'includes/services/class-dashboard-service.php',
 	'includes/services/class-woocommerce-integration.php',
+	'includes/services/class-compatibility-warnings.php',
 	'includes/services/class-privacy-service.php',
 	'admin/class-admin.php',
 	'admin/class-settings-page.php',

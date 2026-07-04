@@ -425,6 +425,53 @@ class ALYNT_AG_Settings_Page {
 	}
 
 	/**
+	 * Render compatibility warning summary.
+	 *
+	 * @return void
+	 */
+	private function render_compatibility_warnings() {
+		$service  = new ALYNT_AG_Compatibility_Warnings();
+		$warnings = $service->warnings();
+		?>
+		<h2><?php esc_html_e( 'Compatibility Warnings', 'alynt-account-gateway' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'These checks flag active plugins and hooks that may also control login, registration, redirects, account pages, or WooCommerce account endpoints.', 'alynt-account-gateway' ); ?>
+		</p>
+
+		<?php if ( empty( $warnings ) ) : ?>
+			<div class="notice notice-success inline">
+				<p><?php esc_html_e( 'No common account-gateway compatibility overlaps were detected for the current settings.', 'alynt-account-gateway' ); ?></p>
+			</div>
+			<?php
+			return;
+		endif;
+		?>
+
+		<div class="notice notice-warning inline">
+			<p><?php esc_html_e( 'Potential compatibility overlaps were detected. Review these before enabling or troubleshooting frontend output.', 'alynt-account-gateway' ); ?></p>
+		</div>
+		<table class="widefat striped">
+			<thead>
+				<tr>
+					<th><?php esc_html_e( 'Area', 'alynt-account-gateway' ); ?></th>
+					<th><?php esc_html_e( 'Warning', 'alynt-account-gateway' ); ?></th>
+					<th><?php esc_html_e( 'Details', 'alynt-account-gateway' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $warnings as $warning ) : ?>
+					<tr>
+						<td><?php echo esc_html( ucwords( str_replace( '_', ' ', $warning['category'] ) ) ); ?></td>
+						<td><?php echo esc_html( $warning['title'] ); ?></td>
+						<td><?php echo esc_html( $warning['message'] ); ?></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php
+	}
+
+	/**
 	 * Return supported gateway preview screens.
 	 *
 	 * @return array<string,string>
@@ -479,6 +526,8 @@ class ALYNT_AG_Settings_Page {
 		$health = ALYNT_AG_Diagnostics_Logger::health_summary();
 		$events = ALYNT_AG_Diagnostics_Logger::recent_events( 20 );
 		?>
+		<?php $this->render_compatibility_warnings(); ?>
+
 		<?php $this->render_gateway_preview_tools(); ?>
 
 		<?php $this->render_settings_tools(); ?>

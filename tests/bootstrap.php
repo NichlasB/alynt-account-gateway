@@ -461,6 +461,22 @@ if ( ! function_exists( 'get_option' ) ) {
 	}
 }
 
+if ( ! function_exists( 'get_site_option' ) ) {
+	function get_site_option( $name, $default = false ) {
+		if ( isset( $GLOBALS['alynt_ag_test_site_options'][ $name ] ) ) {
+			return $GLOBALS['alynt_ag_test_site_options'][ $name ];
+		}
+
+		return $default;
+	}
+}
+
+if ( ! function_exists( 'is_multisite' ) ) {
+	function is_multisite() {
+		return false;
+	}
+}
+
 if ( ! function_exists( 'do_action' ) ) {
 	function do_action( $hook_name, ...$args ) {
 		$GLOBALS['alynt_ag_test_actions'][] = array(
@@ -558,4 +574,5 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-turnstile-client.php
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-webhook-dispatcher.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-dashboard-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-woocommerce-integration.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-warnings.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-service.php';
