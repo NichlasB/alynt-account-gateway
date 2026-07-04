@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.1.10 - 2026-07-04
+
+### Changed
+
+- Extracted logout confirmation screen rendering into a dedicated logout-screen service without changing copy, nonce/action names, query parameters, redirect behavior, routes, button classes, or notice behavior.
+
+### Added
+
+- Focused frontend logout-screen service tests for notice output, nonce-protected logout URL, cancel URL, action button classes, and empty-notice suppression.
+
 ## 0.1.9 - 2026-07-04
 
 ### Changed
