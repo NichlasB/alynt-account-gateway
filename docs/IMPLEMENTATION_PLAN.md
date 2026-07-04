@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.8 released and verified
+- Current phase: v0.1.9 small release cycle started on branch `release/0.1.9`
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.8 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -32,6 +32,36 @@
 - Email editor: Rich template editor with preview and test-send
 - Terms/privacy links: Relative URL paths configured manually, such as `/terms/` or `/legal/privacy/`
 - Multilingual support: Required for v1
+
+## v0.1.9 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Extract the registration-disabled and invalid-link screen renderers out of the large frontend renderer class without changing copy, form fields, nonce/action names, query handling, routes, or accessibility attributes.
+- [x] Add focused test coverage around the extracted frontend state-screen service.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.9` release.
+
+### Progress Notes
+
+- Started `v0.1.9` from `master` after the `v0.1.8` release merge.
+- Extracted registration-disabled and invalid-link screen rendering into `ALYNT_AG_Frontend_State_Screens`.
+- Kept `ALYNT_AG_Frontend` wrapper methods for internal compatibility while delegating the extracted auth-state screens to the new service.
+- Added focused `FrontendStateScreensTest` coverage for registration-disabled output, invalid-link resend form defaults, confirmation-resent success state, resend error state, nonce field output, and accessibility attributes.
+- Added a PHPUnit bootstrap stub for `wp_nonce_field()` so extracted state-screen tests can verify nonce field names without loading WordPress admin helpers.
+- Verified `php -l` for the new service and test file, `npm.cmd test` passes with 122 tests and 467 assertions, `npm.cmd run lint` passes, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, query parameters, redirect behavior, registration behavior, email behavior, WooCommerce dashboard behavior, asset handles/URLs, design-token names, frontend class names, nonce names, or form action names.
+- Keep this cycle focused on the two simplest auth-state screens before extracting larger login/register/lost-password forms.
+- Defer final `0.1.9` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates representative gateway routes after the state-screen extraction.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.8 Small Release Cycle
 

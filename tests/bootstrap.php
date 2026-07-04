@@ -406,6 +406,17 @@ if ( ! function_exists( 'wp_nonce_url' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_nonce_field' ) ) {
+	function wp_nonce_field( $action = -1, $name = '_wpnonce', $referer = true, $display = true ) {
+		$field = '<input type="hidden" name="' . esc_attr( $name ) . '" value="test-nonce">';
+		if ( $display ) {
+			echo $field;
+		}
+
+		return $field;
+	}
+}
+
 if ( ! function_exists( 'wp_doing_ajax' ) ) {
 	function wp_doing_ajax() {
 		return ! empty( $GLOBALS['alynt_ag_test_doing_ajax'] );
@@ -798,6 +809,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-assets.php'
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-branding.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-components.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-messages.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-state-screens.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-warnings.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'public/class-frontend.php';
