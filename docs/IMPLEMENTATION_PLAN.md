@@ -16,7 +16,7 @@
 - [x] Replace the raw custom dashboard links JSON field with a repeatable admin editor for label, URL, icon, ordering, role visibility, and open-in-new-tab behavior while preserving the existing `dashboard_custom_links` storage format.
 - [x] Add focused coverage for custom dashboard link sanitization/serialization where practical.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.18` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.18` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -33,6 +33,9 @@
 - Removed temporary branch-QA ZIP artifacts from Plugin Tester uploads, including the duplicate-path artifact created by the temporary upload endpoint.
 - Bumped release-candidate metadata to `0.1.18` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 161 tests and 665 assertions, `npm.cmd run make-pot` writes 365 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.18-20260704-231643\alynt-account-gateway-v0.1.18.zip`; verified built admin assets and dashboard-link editor runtime files are included, dev/source/test/docs/rules/package/vendor files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.18`.
+- Published GitHub release `v0.1.18`, verified the remote tag points to release commit `a7b2965`, downloaded the public release asset, and verified the downloaded package has 46 runtime file entries, no backslash archive entries, no dev/source/test/docs/rules/package/vendor files, built admin CSS/JS assets, dashboard-link editor runtime files, and `0.1.18` header/constant metadata.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.17` to `0.1.18`, then installed it through the WordPress upgrader path. Final server-side state: active `0.1.18` header/constant, dashboard-link editor markup/schema present, built admin JS/CSS contain the dashboard-link editor markers, custom dashboard links restored to `[]`, and no remaining update offer.
+- HTTP-smoked the release-installed Plugin Tester copy at `/login`, `/account?action=lostpassword`, and `/my-account/`; public gateway routes rendered branded output with expected screen markers, and logged-out dashboard access redirected to `/login?redirect_to=...`.
 
 ### Guardrails
 
@@ -44,7 +47,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates the Dashboard settings editor and representative dashboard output after saving custom links.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.17 Small Release Cycle
 
