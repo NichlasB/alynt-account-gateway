@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.7 small release cycle started on branch `release/0.1.7`
+- Current phase: v0.1.7 released and verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.6 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.7 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -56,6 +56,9 @@
 - Browser-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and included the brand block plus design-token style output.
 - Bumped release-candidate metadata to `0.1.7` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 115 tests and 435 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.7-20260704-174141\alynt-account-gateway-v0.1.7.zip`; verified built frontend assets and the new frontend branding service are included, dev/source/test/docs/rules/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.7`.
+- Published GitHub release `v0.1.7`, downloaded the public release asset, and verified the downloaded package has 35 runtime entries, no backslash archive entries, no dev/source/test/docs/rules/package files, built frontend CSS/JS assets, the new frontend branding service, and `0.1.7` header/constant metadata.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.6` to `0.1.7`, then installed it through the WordPress Plugins screen update path. Final server-side state: active `0.1.7` header/constant, `ALYNT_AG_Frontend_Branding` file/class loaded, and no remaining update offer.
+- Browser-smoked the release-installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and included the brand block plus design-token style output.
 
 ### Guardrails
 
@@ -67,7 +70,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates representative gateway routes after the branding/media/style extraction.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.6 Small Release Cycle
 
