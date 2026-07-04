@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.5 released and verified
+- Current phase: v0.1.6 small release cycle started on branch `release/0.1.6`
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.5 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -32,6 +32,37 @@
 - Email editor: Rich template editor with preview and test-send
 - Terms/privacy links: Relative URL paths configured manually, such as `/terms/` or `/legal/privacy/`
 - Multilingual support: Required for v1
+
+## v0.1.6 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Extract frontend asset enqueue logic out of the large frontend renderer class without changing when assets load.
+- [x] Add focused test coverage around the extracted frontend asset service.
+- [ ] Run installed Plugin Tester smoke checks for representative gateway routes after packaging.
+- [ ] Re-run package/update checks as appropriate for the final `0.1.6` release.
+
+### Progress Notes
+
+- Started `v0.1.6` from `master` after the `v0.1.5` release merge.
+- Extracted frontend stylesheet/script enqueueing, localized password-toggle labels, and Turnstile script enqueueing into `ALYNT_AG_Frontend_Assets`.
+- Kept `ALYNT_AG_Frontend::enqueue_assets()` as the public hook target while delegating asset decisions to the new service.
+- Added focused `FrontendAssetsTest` coverage for frontend-output/screen gating, frontend CSS/JS enqueueing, localized labels, and Turnstile loading only on configured registration screens.
+- Added lightweight PHPUnit bootstrap stubs to record enqueued styles, scripts, and localized script data.
+- Verified `npm.cmd test` passes with 110 tests and 420 assertions, `npm.cmd run lint` passes, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, query parameters, redirect behavior, registration behavior, email behavior, WooCommerce dashboard behavior, or asset handles/URLs.
+- Keep this cycle focused on one structural extraction from the frontend renderer.
+- Defer final `0.1.6` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates representative gateway routes after the asset-service extraction.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.5 Small Release Cycle
 

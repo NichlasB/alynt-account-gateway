@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Changed
+
+- Extracted frontend asset enqueueing into a dedicated asset service without changing asset handles, URLs, labels, or Turnstile loading rules.
+
+### Added
+
+- Focused frontend asset service tests for frontend-output gating, CSS/JS enqueueing, localized labels, and Turnstile registration-screen loading.
+
 ## 0.1.5 - 2026-07-04
 
 ### Changed
