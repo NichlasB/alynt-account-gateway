@@ -15,7 +15,7 @@
 - [x] Start the next low-risk structural slice from the released `master` baseline.
 - [x] Extract the set-password screen renderer and shared password form out of the large frontend renderer class without changing copy, form fields, nonce/action names, query parameters, token/key validation routing, password strength markup, password requirements, or accessibility attributes.
 - [x] Add focused test coverage around the extracted frontend set-password screen service.
-- [ ] Run branch-QA package and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run branch-QA package and Plugin Tester smoke checks before final release metadata bump.
 - [ ] Publish the final `v0.1.14` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -25,6 +25,10 @@
 - Kept `ALYNT_AG_Frontend` request flow, gateway shell, and admin preview wrapper intact while delegating pending-registration token handling, native password-reset key handling, invalid-link fallback routing, lost-password fallback routing, password error display, password requirements, and password-strength markup to the new service.
 - Added focused `FrontendSetpasswordScreenTest` coverage for default password form output, error accessibility state, pending-registration token form output, native reset-key form output, invalid registration-token fallback, and invalid native reset-key fallback.
 - Verified `php -l` for the new service, test file, and frontend class; targeted `FrontendSetpasswordScreenTest` passes with 6 tests and 46 assertions; full `npm.cmd test` passes with 141 tests and 603 assertions; `npm.cmd run lint` passes; `npm.cmd run build` passes; `npm.cmd run make-pot` writes 344 strings; `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities; and `git diff --check` passes.
+- Created local branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.14-branch-qa-20260704-205911\alynt-account-gateway-v0.1.14-branch-qa.zip`; verified the new frontend set-password screen service, runtime plugin files, and WordPress-compatible archive paths are included, dev/source/test/docs/rules/package/vendor files are excluded, and the package header/constant report `0.1.13` as expected before the final release bump.
+- Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.13` header/constant, `ALYNT_AG_Frontend_Setpassword_Screen` file/class loaded, and the new service file present in the installed plugin copy.
+- Browser-smoked the branch-QA installed Plugin Tester copy with system Chrome at `/account?action=setpassword&key=...&login=...`, `/account?action=setpassword`, and `/login`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and preserved the set-password form, invalid-link fallback, and login control route. A 390px viewport pass confirmed no horizontal overflow, hidden media panel, and stable password form/card widths.
+- Removed the temporary branch-QA reset user and uploaded branch-QA zip from Plugin Tester after smoke verification.
 
 ### Guardrails
 
@@ -35,7 +39,7 @@
 ### Completion Gate
 
 - [x] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates representative gateway routes after the set-password screen extraction.
+- [x] Plugin Tester smoke validates representative gateway routes after the set-password screen extraction.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.13 Small Release Cycle
