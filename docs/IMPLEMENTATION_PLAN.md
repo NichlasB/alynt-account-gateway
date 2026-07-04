@@ -2,11 +2,42 @@
 
 ## Status
 
-- Current phase: v0.1.16 released and verified
+- Current phase: v0.1.17 branch implementation checks complete; branch QA package and Plugin Tester smoke are next
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.16 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.17 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Extract full gateway document rendering and admin preview rendering out of the frontend hook/controller class without changing document markup, body class, page title behavior, dashboard-vs-auth shell selection, preview screen normalization, routes, redirects, logout handling, or admin preview compatibility.
+- [x] Add focused test coverage around the extracted frontend document renderer service.
+- [ ] Run branch-QA package and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.17` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.17` from clean `master` after the `v0.1.16` release merge.
+- Extracted full gateway document rendering into `ALYNT_AG_Frontend_Document_Renderer`, including status/no-cache headers, HTML document wrapper, document title lookup, `wp_head()`/`wp_footer()` placement, dashboard-vs-auth shell selection, admin preview screen normalization, set-password preview rendering, and screen-title lookup.
+- Kept `ALYNT_AG_Frontend` hook registration, frontend asset enqueueing, route detection, native login redirect behavior, emergency bypass handling, URL filters, wp-admin blocking, logout confirmation execution, current-path calculation, and public admin-preview title wrapper intact while delegating document/preview rendering to the new service.
+- Added focused `FrontendDocumentRendererTest` coverage for full auth document output, dashboard document output with current-path propagation, unknown preview fallback, set-password preview output, renderer title lookup, and the preserved `ALYNT_AG_Frontend::get_screen_title()` wrapper used by admin preview.
+- Added test bootstrap shims for `status_header()`, `nocache_headers()`, `language_attributes()`, `wp_head()`, and `wp_footer()` so document rendering can be verified without a full WordPress runtime.
+- Verified `php -l` for the new service, test file, and frontend class; targeted `FrontendDocumentRendererTest` passes with 6 tests and 16 assertions; full `npm.cmd test` passes with 160 tests and 657 assertions; `npm.cmd run lint` passes; `npm.cmd run build` passes; `npm.cmd run make-pot` writes 344 strings with no string changes; `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities; and `git diff --check` passes.
+
+### Guardrails
+
+- Do not change rendered gateway copy, document structure, body class, page title mapping, routes, query parameters, redirects, emergency bypass behavior, wp-admin blocking, logout behavior, registration request handling, login/lost-password/set-password behavior, email behavior, WooCommerce dashboard behavior, dashboard output, asset handles/URLs, design-token names, frontend class names, nonce names, form action names, provider verification behavior, password policy, or dashboard link normalization behavior.
+- Keep this cycle focused on document and preview rendering; leave request routing, auth services, registration storage, provider verification, email delivery, webhook behavior, and WooCommerce endpoint delegation untouched.
+- Defer final `0.1.17` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates representative gateway routes after the document renderer extraction.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.16 Small Release Cycle
 

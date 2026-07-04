@@ -138,27 +138,7 @@ class ALYNT_AG_Frontend {
 			return;
 		}
 
-		status_header( 200 );
-		nocache_headers();
-
-		echo '<!doctype html>';
-		echo '<html ';
-		language_attributes();
-		echo '>';
-		echo '<head>';
-		echo '<meta charset="' . esc_attr( get_bloginfo( 'charset' ) ) . '">';
-		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
-		echo '<title>' . esc_html( $this->get_screen_title( $screen ) ) . '</title>';
-		wp_head();
-		echo '</head>';
-		echo '<body class="alynt-ag-body">';
-		if ( 'dashboard' === $screen ) {
-			$this->render_dashboard_shell( $settings );
-		} else {
-			$this->gateway_shell()->render_gateway_shell( $screen, $settings );
-		}
-		wp_footer();
-		echo '</body></html>';
+		$this->document_renderer()->render_gateway_document( $screen, $settings, $this->get_current_relative_path() );
 		exit;
 	}
 
@@ -170,23 +150,7 @@ class ALYNT_AG_Frontend {
 	 * @return void
 	 */
 	public function render_preview( $screen, $settings ) {
-		$screen = in_array(
-			$screen,
-			array( 'dashboard', 'login', 'register', 'lostpassword', 'setpassword', 'logout', 'registration_disabled', 'invalidlink' ),
-			true
-		) ? $screen : 'login';
-
-		if ( 'setpassword' === $screen ) {
-			$this->gateway_shell()->render_gateway_shell_with_password_preview( $settings );
-			return;
-		}
-
-		if ( 'dashboard' === $screen ) {
-			$this->render_dashboard_shell( $settings );
-			return;
-		}
-
-		$this->gateway_shell()->render_gateway_shell( $screen, $settings );
+		$this->document_renderer()->render_preview( $screen, $settings, $this->get_current_relative_path() );
 	}
 
 	/**
@@ -319,31 +283,12 @@ class ALYNT_AG_Frontend {
 	}
 
 	/**
-	 * Frontend gateway shell renderer.
+	 * Frontend document renderer.
 	 *
-	 * @return ALYNT_AG_Frontend_Gateway_Shell
+	 * @return ALYNT_AG_Frontend_Document_Renderer
 	 */
-	private function gateway_shell() {
-		return new ALYNT_AG_Frontend_Gateway_Shell();
-	}
-
-	/**
-	 * Frontend dashboard screen helper.
-	 *
-	 * @return ALYNT_AG_Frontend_Dashboard_Screen
-	 */
-	private function dashboard_screen() {
-		return new ALYNT_AG_Frontend_Dashboard_Screen();
-	}
-
-	/**
-	 * Render dashboard shell.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return void
-	 */
-	private function render_dashboard_shell( $settings ) {
-		$this->dashboard_screen()->render_dashboard_shell( $settings, $this->get_current_relative_path() );
+	private function document_renderer() {
+		return new ALYNT_AG_Frontend_Document_Renderer();
 	}
 
 	/**
@@ -375,7 +320,6 @@ class ALYNT_AG_Frontend {
 	 * @return string
 	 */
 	public function get_screen_title( $screen ) {
-		$messages = new ALYNT_AG_Frontend_Messages();
-		return $messages->screen_title( $screen );
+		return $this->document_renderer()->get_screen_title( $screen );
 	}
 }

@@ -266,6 +266,36 @@ if ( ! function_exists( 'get_bloginfo' ) ) {
 	}
 }
 
+if ( ! function_exists( 'status_header' ) ) {
+	function status_header( $code ) {
+		$GLOBALS['alynt_ag_test_status_header'] = (int) $code;
+	}
+}
+
+if ( ! function_exists( 'nocache_headers' ) ) {
+	function nocache_headers() {
+		$GLOBALS['alynt_ag_test_nocache_headers'] = true;
+	}
+}
+
+if ( ! function_exists( 'language_attributes' ) ) {
+	function language_attributes() {
+		echo 'lang="en-US"';
+	}
+}
+
+if ( ! function_exists( 'wp_head' ) ) {
+	function wp_head() {
+		echo '<!-- wp_head -->';
+	}
+}
+
+if ( ! function_exists( 'wp_footer' ) ) {
+	function wp_footer() {
+		echo '<!-- wp_footer -->';
+	}
+}
+
 if ( ! function_exists( 'wp_specialchars_decode' ) ) {
 	function wp_specialchars_decode( $value, $quote_style = ENT_QUOTES ) {
 		return html_entity_decode( (string) $value, $quote_style, 'UTF-8' );
@@ -817,6 +847,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-setpassword
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-logout-screen.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-state-screens.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-gateway-shell.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-document-renderer.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-warnings.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'public/class-frontend.php';
