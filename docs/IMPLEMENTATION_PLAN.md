@@ -51,6 +51,8 @@
 - Plugin Tester QA covered disabled registration, responsive registration layout, required-field and terms gating, simulated confirmation email delivery, set-password strength/match gating, account creation, email-only login, branded dashboard redirect, no customer admin toolbar, and customer `wp-admin` redirect.
 - Account-created webhook QA used a local `pre_http_request` intercept against `http://127.0.0.1/alynt-local-webhook-capture`; no external request was sent, the payload contained full user/site fields, and a successful `202` webhook log row was written.
 - No runtime code or user-facing string changes were needed during the Plugin Tester QA pass, so POT generation was not required for this checkpoint.
+- Bumped release-candidate metadata to `0.1.3` across the plugin header/constant, database schema version, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test`, `npm.cmd run make-pot`, `npm.cmd audit --audit-level=moderate`, and `git diff --check`.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.3-20260704-153148\alynt-account-gateway-v0.1.3.zip`; verified built assets are included, dev/source/test/docs/package files are excluded, and the package header/constant report `0.1.3`.
 
 ### Guardrails
 
@@ -62,8 +64,8 @@
 
 ### Completion Gate
 
-- [ ] Build, lint, test, audit, and POT generation pass.
-- [ ] Local release-style zip excludes source/dev files and includes built assets.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Local release-style zip excludes source/dev files and includes built assets.
 - [ ] Plugin Tester validates the selected registration and webhook behavior.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 

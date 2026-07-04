@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+No unreleased changes.
+
+## 0.1.3 - 2026-07-04
+
 ### Added
 
 - Focused registration completion coverage for the confirmed pending account creation path.
@@ -10,10 +14,6 @@
 
 - Registration flow and spam-prevention QA.
 - Local-safe account-created webhook verification.
-
-### Planned
-
-- v0.1.3 release packaging and Alynt Plugin Updater verification.
 
 ## 0.1.2 - 2026-07-04
 
