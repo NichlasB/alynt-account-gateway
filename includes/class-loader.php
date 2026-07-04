@@ -30,6 +30,7 @@ $alynt_ag_files = array(
 	'includes/services/class-frontend-assets.php',
 	'includes/services/class-frontend-branding.php',
 	'includes/services/class-frontend-components.php',
+	'includes/services/class-frontend-dashboard-screen.php',
 	'includes/services/class-frontend-register-screen.php',
 	'includes/services/class-frontend-login-screen.php',
 	'includes/services/class-frontend-lostpassword-screen.php',

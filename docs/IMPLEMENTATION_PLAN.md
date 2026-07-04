@@ -2,11 +2,41 @@
 
 ## Status
 
-- Current phase: v0.1.14 released and verified
+- Current phase: v0.1.15 branch implementation checks complete
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.14 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.14 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.15 is in branch QA preparation.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.15 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Extract the frontend dashboard shell and dashboard content renderer out of the large frontend renderer class without changing dashboard copy, links, logout URL behavior, WooCommerce takeover warning, endpoint content delegation, external-link accessibility text, or dashboard classes.
+- [x] Add focused test coverage around the extracted frontend dashboard screen service.
+- [ ] Run branch-QA package and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.15` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.15` from clean `master` after the `v0.1.14` release merge.
+- Extracted dashboard shell and dashboard content rendering into `ALYNT_AG_Frontend_Dashboard_Screen`.
+- Kept `ALYNT_AG_Frontend` request flow, dashboard route detection, login-required dashboard redirect, logout handling, current-path calculation, and preview entry point intact while delegating dashboard shell markup, brand block rendering, dashboard hero output, dashboard links, WooCommerce unavailable warning, and WooCommerce endpoint content rendering to the new service.
+- Added focused `FrontendDashboardScreenTest` coverage for dashboard shell output, brand/logout rendering, dashboard hero/user metadata, dashboard links including external-link accessibility text, WooCommerce unavailable warning, WooCommerce endpoint content rendering, and endpoint fallback copy.
+- Verified `php -l` for the new service, test file, and frontend class; targeted `FrontendDashboardScreenTest` passes with 4 tests and 20 assertions; full `npm.cmd test` passes with 145 tests and 623 assertions; `npm.cmd run lint` passes; `npm.cmd run build` passes; `npm.cmd run make-pot` writes 344 strings; `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities; and `git diff --check` passes.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, query parameters, redirect behavior, registration request handling, login/lost-password/set-password behavior, email behavior, WooCommerce endpoint behavior, asset handles/URLs, design-token names, frontend class names, nonce names, form action names, provider verification behavior, password policy, or dashboard link normalization behavior.
+- Keep this cycle focused on dashboard rendering; leave dashboard data/link rules, WooCommerce endpoint routing, WooCommerce action delegation, auth flow, and admin settings untouched.
+- Defer final `0.1.15` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates representative gateway routes after the dashboard screen extraction.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.14 Small Release Cycle
 

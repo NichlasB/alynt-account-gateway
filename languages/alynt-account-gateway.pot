@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 0.1.14\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 19:06+0000\n"
+"POT-Creation-Date: 2026-07-04 19:33+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,7 +15,7 @@ msgstr ""
 msgid "Accent Color"
 msgstr ""
 
-#: public/class-frontend.php:700
+#: includes/services/class-frontend-dashboard-screen.php:126
 msgid "Account"
 msgstr ""
 
@@ -43,8 +43,8 @@ msgstr ""
 msgid "Account Created Welcome Subject"
 msgstr ""
 
+#: includes/services/class-frontend-dashboard-screen.php:87
 #: includes/services/class-frontend-messages.php:25
-#: public/class-frontend.php:661
 msgid "Account Dashboard"
 msgstr ""
 
@@ -621,12 +621,12 @@ msgid "Log In"
 msgstr ""
 
 #: includes/services/class-dashboard-service.php:40
+#: includes/services/class-frontend-dashboard-screen.php:65
 #: includes/services/class-frontend-logout-screen.php:51
 #: includes/services/class-frontend-logout-screen.php:54
 #: includes/services/class-frontend-messages.php:30
 #: includes/services/class-woocommerce-integration.php:34
 #: includes/services/class-woocommerce-integration.php:86
-#: public/class-frontend.php:481
 msgid "Log Out"
 msgstr ""
 
@@ -678,7 +678,7 @@ msgstr ""
 msgid "Lost Password Instruction Text"
 msgstr ""
 
-#: public/class-frontend.php:683
+#: includes/services/class-frontend-dashboard-screen.php:109
 msgid "Manage Account"
 msgstr ""
 
@@ -724,7 +724,7 @@ msgstr ""
 msgid "No diagnostics events have been recorded."
 msgstr ""
 
-#: public/class-frontend.php:690
+#: includes/services/class-frontend-dashboard-screen.php:116
 msgid "opens in a new tab"
 msgstr ""
 
@@ -1257,7 +1257,7 @@ msgstr ""
 msgid "These checks flag active plugins and hooks that may also control login, registration, redirects, account pages, or WooCommerce account endpoints."
 msgstr ""
 
-#: public/class-frontend.php:704
+#: includes/services/class-frontend-dashboard-screen.php:130
 msgid "This account section is not available."
 msgstr ""
 
@@ -1406,7 +1406,7 @@ msgstr ""
 msgid "Welcome to {{site_name}}"
 msgstr ""
 
-#: public/class-frontend.php:667
+#: includes/services/class-frontend-dashboard-screen.php:93
 msgid "Welcome, %s"
 msgstr ""
 
@@ -1414,7 +1414,7 @@ msgstr ""
 msgid "WooCommerce"
 msgstr ""
 
-#: public/class-frontend.php:678
+#: includes/services/class-frontend-dashboard-screen.php:104
 msgid "WooCommerce account takeover is enabled, but WooCommerce is not active."
 msgstr ""
 
