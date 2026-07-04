@@ -8,10 +8,7 @@
 - Per-tab restore defaults with confirmation and diagnostics logging.
 - Gateway screen preview mode while frontend output is disabled.
 - Compatibility warnings for login, registration, redirect/security, account-page, and WooCommerce account endpoint overlaps.
-
-### Planned
-
-- Focused unit coverage for remaining account-gateway release gates.
+- Focused unit coverage for frontend routing, emergency bypass behavior, role/admin-bar access rules, email-only login, retention cleanup, deactivation cleanup, and uninstall cleanup.
 
 ## 0.1.0 - 2026-07-04
 

@@ -41,7 +41,7 @@
 - [x] Add per-tab restore defaults with confirmation and diagnostics logging.
 - [x] Add gateway screen preview mode while frontend output is disabled.
 - [x] Add compatibility warnings for plugins that commonly modify login, registration, account pages, security redirects, or WooCommerce account endpoints.
-- [ ] Add focused unit coverage for settings schema defaults/sanitization, frontend-output routing, emergency bypass behavior, role access/admin toolbar rules, password policy matching, retention cleanup, and uninstall cleanup where practical.
+- [x] Add focused unit coverage for settings schema defaults/sanitization, frontend-output routing, emergency bypass behavior, role access/admin toolbar rules, password policy matching, retention cleanup, and uninstall cleanup where practical.
 - [ ] Re-run Plugin Tester smoke checks after the release package is built.
 - [ ] Verify Alynt Plugin Updater detects and installs `0.1.1` from the GitHub release asset.
 
@@ -79,9 +79,9 @@
 - [x] Add tabbed admin settings page.
 - [x] Add central settings schema with defaults, sanitization, and cross-tab save protection.
 - [x] Add tabs: General, URLs & Redirects, Branding & Layout, Screen Copy, Registration, Security & Spam, Emails, Dashboard, WooCommerce, Webhooks, Privacy & Data, Advanced/Tools.
-- [ ] Add import/export settings JSON.
-- [ ] Add per-tab restore defaults.
-- [ ] Add gateway screen preview mode while frontend output is disabled.
+- [x] Add import/export settings JSON.
+- [x] Add per-tab restore defaults.
+- [x] Add gateway screen preview mode while frontend output is disabled.
 - [x] Add diagnostics and privacy-conscious logs.
 - [x] Add settings-change audit entries.
 - [x] Add retention cleanup for plugin-owned logs and pending records.
@@ -148,7 +148,7 @@
 - [x] Delegate sensitive WooCommerce actions to native WooCommerce handlers/endpoints.
 - [x] Preserve orders, downloads, addresses, payment methods, account details, and logout through standard WooCommerce endpoints.
 - [x] Discover and preserve plugin-added WooCommerce account endpoints.
-- [ ] Add compatibility warnings for plugins that also modify login, registration, account pages, security redirects, or WooCommerce account endpoints.
+- [x] Add compatibility warnings for plugins that also modify login, registration, account pages, security redirects, or WooCommerce account endpoints.
 
 ### Phase 7 - Privacy, Accessibility, I18n, And Release Readiness
 
@@ -166,19 +166,19 @@
 
 ## Test Plan
 
-- [ ] Unit test settings schema, defaults, sanitization, and cross-tab save protection.
-- [ ] Unit test URL routing and frontend-output master switch.
-- [ ] Unit test emergency bypass behavior.
-- [ ] Unit test role access and admin-toolbar rules.
-- [ ] Unit test email-only login behavior.
-- [ ] Unit test pending-registration lifecycle and expiry.
-- [ ] Unit test password policy and confirmation matching.
-- [ ] Unit test username generation and collision handling.
-- [ ] Unit test Reoon policy mapping.
-- [ ] Unit test Turnstile verification handling.
+- [x] Unit test settings schema, defaults, sanitization, and cross-tab save protection.
+- [x] Unit test URL routing and frontend-output master switch.
+- [x] Unit test emergency bypass behavior.
+- [x] Unit test role access and admin-toolbar rules.
+- [x] Unit test email-only login behavior.
+- [x] Unit test pending-registration lifecycle and expiry.
+- [x] Unit test password policy and confirmation matching.
+- [x] Unit test username generation and collision handling.
+- [x] Unit test Reoon policy mapping.
+- [x] Unit test Turnstile verification handling.
 - [x] Unit test webhook payload construction and metadata logging.
-- [ ] Unit test retention cleanup.
-- [ ] Unit test uninstall cleanup.
+- [x] Unit test retention cleanup.
+- [x] Unit test uninstall cleanup.
 - [x] Browser/manual QA login, lost password, set password, registration, logout confirmation, disabled registration, and invalid/expired link screens.
 - [x] Browser/manual QA desktop and mobile responsive behavior.
 - [x] Browser/manual QA keyboard-only flow and focus management.
