@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Alynt Account Gateway 0.1.8\n"
+"Project-Id-Version: Alynt Account Gateway 0.1.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-04 15:59+0000\n"
+"POT-Creation-Date: 2026-07-04 16:20+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -15,7 +15,7 @@ msgstr ""
 msgid "Accent Color"
 msgstr ""
 
-#: public/class-frontend.php:947
+#: public/class-frontend.php:926
 msgid "Account"
 msgstr ""
 
@@ -44,7 +44,7 @@ msgid "Account Created Welcome Subject"
 msgstr ""
 
 #: includes/services/class-frontend-messages.php:25
-#: public/class-frontend.php:908
+#: public/class-frontend.php:887
 msgid "Account Dashboard"
 msgstr ""
 
@@ -91,7 +91,7 @@ msgstr ""
 msgid "AJAX"
 msgstr ""
 
-#: public/class-frontend.php:777
+#: public/class-frontend.php:786
 msgid "Almost there."
 msgstr ""
 
@@ -107,7 +107,7 @@ msgstr ""
 msgid "Alynt Account Gateway may process account registration data, email verification results, webhook delivery metadata, and consent records. Site owners should disclose configured third-party services such as Cloudflare Turnstile, Reoon Email Verifier, and outgoing webhooks."
 msgstr ""
 
-#: public/class-frontend.php:611
+#: public/class-frontend.php:620
 msgid "and"
 msgstr ""
 
@@ -119,23 +119,23 @@ msgstr ""
 msgid "Area"
 msgstr ""
 
-#: public/class-frontend.php:782
+#: public/class-frontend.php:791
 msgid "At least 12 characters"
 msgstr ""
 
-#: public/class-frontend.php:784
+#: public/class-frontend.php:793
 msgid "At least one lowercase letter"
 msgstr ""
 
-#: public/class-frontend.php:785
+#: public/class-frontend.php:794
 msgid "At least one number"
 msgstr ""
 
-#: public/class-frontend.php:786
+#: public/class-frontend.php:795
 msgid "At least one special symbol"
 msgstr ""
 
-#: public/class-frontend.php:783
+#: public/class-frontend.php:792
 msgid "At least one uppercase letter"
 msgstr ""
 
@@ -143,12 +143,12 @@ msgstr ""
 msgid "Audit Log Retention Days"
 msgstr ""
 
-#: public/class-frontend.php:579
-#: public/class-frontend.php:617
-#: public/class-frontend.php:642
-#: public/class-frontend.php:660
-#: public/class-frontend.php:853
-#: public/class-frontend.php:888
+#: includes/services/class-frontend-state-screens.php:61
+#: includes/services/class-frontend-state-screens.php:96
+#: public/class-frontend.php:588
+#: public/class-frontend.php:626
+#: public/class-frontend.php:651
+#: public/class-frontend.php:669
 msgid "Back to Login"
 msgstr ""
 
@@ -184,11 +184,11 @@ msgstr ""
 msgid "Button Text Color"
 msgstr ""
 
-#: public/class-frontend.php:609
+#: public/class-frontend.php:618
 msgid "By creating an account, you agree to our"
 msgstr ""
 
-#: public/class-frontend.php:816
+#: public/class-frontend.php:825
 msgid "Cancel"
 msgstr ""
 
@@ -200,8 +200,8 @@ msgstr ""
 msgid "Category"
 msgstr ""
 
-#: public/class-frontend.php:575
-#: public/class-frontend.php:638
+#: public/class-frontend.php:584
+#: public/class-frontend.php:647
 msgid "Check Your Email"
 msgstr ""
 
@@ -225,7 +225,7 @@ msgstr ""
 msgid "Confirm Email Address"
 msgstr ""
 
-#: public/class-frontend.php:774
+#: public/class-frontend.php:783
 msgid "Confirm Password"
 msgstr ""
 
@@ -266,9 +266,9 @@ msgid "Context"
 msgstr ""
 
 #: includes/services/class-frontend-messages.php:27
-#: public/class-frontend.php:554
-#: public/class-frontend.php:584
-#: public/class-frontend.php:616
+#: public/class-frontend.php:563
+#: public/class-frontend.php:593
+#: public/class-frontend.php:625
 msgid "Create Account"
 msgstr ""
 
@@ -365,10 +365,10 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
-#: public/class-frontend.php:538
-#: public/class-frontend.php:603
-#: public/class-frontend.php:656
-#: public/class-frontend.php:884
+#: includes/services/class-frontend-state-screens.php:92
+#: public/class-frontend.php:547
+#: public/class-frontend.php:612
+#: public/class-frontend.php:665
 msgid "Email Address"
 msgstr ""
 
@@ -429,8 +429,8 @@ msgstr ""
 msgid "Enabled"
 msgstr ""
 
-#: public/class-frontend.php:777
-#: public/class-frontend.php:779
+#: public/class-frontend.php:786
+#: public/class-frontend.php:788
 msgid "Enter a password to begin."
 msgstr ""
 
@@ -476,11 +476,11 @@ msgid "Filesystem"
 msgstr ""
 
 #: includes/services/class-privacy-service.php:215
-#: public/class-frontend.php:594
+#: public/class-frontend.php:603
 msgid "First Name"
 msgstr ""
 
-#: public/class-frontend.php:555
+#: public/class-frontend.php:564
 msgid "Forgot Password?"
 msgstr ""
 
@@ -567,7 +567,7 @@ msgstr ""
 msgid "HTTP Status"
 msgstr ""
 
-#: public/class-frontend.php:874
+#: includes/services/class-frontend-state-screens.php:82
 msgid "If a pending registration can be found, a new confirmation email has been sent."
 msgstr ""
 
@@ -575,7 +575,7 @@ msgstr ""
 msgid "If an account can receive password reset instructions, an email has been sent. Please check your inbox and spam folder."
 msgstr ""
 
-#: public/class-frontend.php:577
+#: public/class-frontend.php:586
 msgid "If the details can be used, a confirmation email has been sent. Please check your inbox and spam folder."
 msgstr ""
 
@@ -596,12 +596,12 @@ msgstr ""
 msgid "Invalid Or Expired Link Text"
 msgstr ""
 
-#: public/class-frontend.php:777
+#: public/class-frontend.php:786
 msgid "Keep going."
 msgstr ""
 
 #: includes/services/class-privacy-service.php:216
-#: public/class-frontend.php:598
+#: public/class-frontend.php:607
 msgid "Last Name"
 msgstr ""
 
@@ -610,13 +610,13 @@ msgid "Level"
 msgstr ""
 
 #: includes/services/class-frontend-messages.php:32
-#: public/class-frontend.php:870
+#: includes/services/class-frontend-state-screens.php:78
 msgid "Link Expired"
 msgstr ""
 
 #: includes/services/class-frontend-messages.php:26
-#: public/class-frontend.php:516
-#: public/class-frontend.php:552
+#: public/class-frontend.php:525
+#: public/class-frontend.php:561
 msgid "Log In"
 msgstr ""
 
@@ -624,9 +624,9 @@ msgstr ""
 #: includes/services/class-frontend-messages.php:30
 #: includes/services/class-woocommerce-integration.php:34
 #: includes/services/class-woocommerce-integration.php:86
-#: public/class-frontend.php:427
-#: public/class-frontend.php:812
-#: public/class-frontend.php:815
+#: public/class-frontend.php:436
+#: public/class-frontend.php:821
+#: public/class-frontend.php:824
 msgid "Log Out"
 msgstr ""
 
@@ -678,7 +678,7 @@ msgstr ""
 msgid "Lost Password Instruction Text"
 msgstr ""
 
-#: public/class-frontend.php:930
+#: public/class-frontend.php:909
 msgid "Manage Account"
 msgstr ""
 
@@ -706,7 +706,7 @@ msgstr ""
 msgid "New account registration is currently unavailable. Please check back later, or log in if you already have an account."
 msgstr ""
 
-#: public/class-frontend.php:770
+#: public/class-frontend.php:779
 msgid "New Password"
 msgstr ""
 
@@ -724,7 +724,7 @@ msgstr ""
 msgid "No diagnostics events have been recorded."
 msgstr ""
 
-#: public/class-frontend.php:937
+#: public/class-frontend.php:916
 msgid "opens in a new tab"
 msgstr ""
 
@@ -765,7 +765,7 @@ msgstr ""
 msgid "Paid Memberships Pro may overlap with account pages"
 msgstr ""
 
-#: public/class-frontend.php:542
+#: public/class-frontend.php:551
 msgid "Password"
 msgstr ""
 
@@ -785,7 +785,7 @@ msgstr ""
 msgid "Password Changed Subject"
 msgstr ""
 
-#: public/class-frontend.php:777
+#: public/class-frontend.php:786
 msgid "Password is ready."
 msgstr ""
 
@@ -823,7 +823,7 @@ msgstr ""
 msgid "Password Reset Subject"
 msgstr ""
 
-#: public/class-frontend.php:787
+#: public/class-frontend.php:796
 msgid "Passwords match"
 msgstr ""
 
@@ -901,7 +901,7 @@ msgstr ""
 msgid "Privacy Path"
 msgstr ""
 
-#: public/class-frontend.php:612
+#: public/class-frontend.php:621
 msgid "Privacy Policy"
 msgstr ""
 
@@ -971,7 +971,7 @@ msgid "Registration Rate Limit Window Minutes"
 msgstr ""
 
 #: includes/services/class-frontend-messages.php:31
-#: public/class-frontend.php:851
+#: includes/services/class-frontend-state-screens.php:59
 msgid "Registration Unavailable"
 msgstr ""
 
@@ -979,7 +979,7 @@ msgstr ""
 msgid "Registration verification failed. Please try again."
 msgstr ""
 
-#: public/class-frontend.php:550
+#: public/class-frontend.php:559
 msgid "Remember Me"
 msgstr ""
 
@@ -1001,8 +1001,8 @@ msgstr ""
 
 #: includes/services/class-email-template-service.php:490
 #: includes/services/class-frontend-messages.php:28
-#: public/class-frontend.php:647
-#: public/class-frontend.php:659
+#: public/class-frontend.php:656
+#: public/class-frontend.php:668
 msgid "Reset Password"
 msgstr ""
 
@@ -1022,7 +1022,7 @@ msgstr ""
 msgid "Restore This Tab To Defaults"
 msgstr ""
 
-#: public/class-frontend.php:789
+#: public/class-frontend.php:798
 msgid "Save Password"
 msgstr ""
 
@@ -1047,7 +1047,7 @@ msgstr ""
 msgid "Select Image"
 msgstr ""
 
-#: public/class-frontend.php:887
+#: includes/services/class-frontend-state-screens.php:95
 msgid "Send New Link"
 msgstr ""
 
@@ -1056,7 +1056,7 @@ msgid "Send Test Email"
 msgstr ""
 
 #: includes/services/class-frontend-messages.php:29
-#: public/class-frontend.php:758
+#: public/class-frontend.php:767
 msgid "Set New Password"
 msgstr ""
 
@@ -1094,13 +1094,13 @@ msgstr ""
 
 #: admin/class-settings-page.php:796
 #: includes/services/class-frontend-assets.php:82
-#: public/class-frontend.php:545
+#: public/class-frontend.php:554
 msgid "Show"
 msgstr ""
 
 #: admin/class-settings-page.php:794
 #: includes/services/class-frontend-assets.php:80
-#: public/class-frontend.php:545
+#: public/class-frontend.php:554
 msgid "Show password"
 msgstr ""
 
@@ -1130,7 +1130,7 @@ msgstr ""
 msgid "Template"
 msgstr ""
 
-#: public/class-frontend.php:610
+#: public/class-frontend.php:619
 msgid "Terms"
 msgstr ""
 
@@ -1257,7 +1257,7 @@ msgstr ""
 msgid "These checks flag active plugins and hooks that may also control login, registration, redirects, account pages, or WooCommerce account endpoints."
 msgstr ""
 
-#: public/class-frontend.php:951
+#: public/class-frontend.php:930
 msgid "This account section is not available."
 msgstr ""
 
@@ -1406,7 +1406,7 @@ msgstr ""
 msgid "Welcome to {{site_name}}"
 msgstr ""
 
-#: public/class-frontend.php:914
+#: public/class-frontend.php:893
 msgid "Welcome, %s"
 msgstr ""
 
@@ -1414,7 +1414,7 @@ msgstr ""
 msgid "WooCommerce"
 msgstr ""
 
-#: public/class-frontend.php:925
+#: public/class-frontend.php:904
 msgid "WooCommerce account takeover is enabled, but WooCommerce is not active."
 msgstr ""
 
@@ -1480,7 +1480,7 @@ msgstr ""
 msgid "Your account could not be created. Please try again."
 msgstr ""
 
-#: public/class-frontend.php:520
+#: public/class-frontend.php:529
 msgid "Your account has been created. You can log in now."
 msgstr ""
 
@@ -1492,6 +1492,6 @@ msgstr ""
 msgid "Your consent record could not be saved. Please try again."
 msgstr ""
 
-#: public/class-frontend.php:525
+#: public/class-frontend.php:534
 msgid "Your password has been updated. You can log in now."
 msgstr ""

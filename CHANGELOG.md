@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.1.9 - 2026-07-04
+
+### Changed
+
+- Extracted registration-disabled and invalid-link screen rendering into a dedicated state-screen service without changing copy, resend form fields, nonce/action names, query handling, routes, or accessibility attributes.
+
+### Added
+
+- Focused frontend state-screen service tests for registration-disabled output, invalid-link resend defaults, confirmation-resent status, resend error state, nonce field output, and accessibility attributes.
+
 ## 0.1.8 - 2026-07-04
 
 ### Changed

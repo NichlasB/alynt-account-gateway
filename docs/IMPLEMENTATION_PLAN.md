@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.8 released and verified
+- Current phase: v0.1.9 released and verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.8 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.9 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,6 +32,44 @@
 - Email editor: Rich template editor with preview and test-send
 - Terms/privacy links: Relative URL paths configured manually, such as `/terms/` or `/legal/privacy/`
 - Multilingual support: Required for v1
+
+## v0.1.9 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Extract the registration-disabled and invalid-link screen renderers out of the large frontend renderer class without changing copy, form fields, nonce/action names, query handling, routes, or accessibility attributes.
+- [x] Add focused test coverage around the extracted frontend state-screen service.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.9` release.
+
+### Progress Notes
+
+- Started `v0.1.9` from `master` after the `v0.1.8` release merge.
+- Extracted registration-disabled and invalid-link screen rendering into `ALYNT_AG_Frontend_State_Screens`.
+- Kept `ALYNT_AG_Frontend` wrapper methods for internal compatibility while delegating the extracted auth-state screens to the new service.
+- Added focused `FrontendStateScreensTest` coverage for registration-disabled output, invalid-link resend form defaults, confirmation-resent success state, resend error state, nonce field output, and accessibility attributes.
+- Added a PHPUnit bootstrap stub for `wp_nonce_field()` so extracted state-screen tests can verify nonce field names without loading WordPress admin helpers.
+- Verified `php -l` for the new service and test file, `npm.cmd test` passes with 122 tests and 467 assertions, `npm.cmd run lint` passes, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.9-branch-qa-20260704-181637\alynt-account-gateway-v0.1.9-branch-qa.zip`; verified built frontend assets, the new frontend state-screen service, and the frontend component service are included, dev/source/test/docs/rules/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.8` as expected before the final release bump.
+- Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.8` header/constant, `ALYNT_AG_Frontend_State_Screens` file/class loaded, and registration-disabled rendering works in a fresh request.
+- Browser-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=invalidlink`, `/account?action=invalidlink&confirmation_resent=1&resend_error=rate_limited`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and preserved invalid-link resend form/status behavior.
+- Bumped release-candidate metadata to `0.1.9` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 122 tests and 467 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.9-20260704-182053\alynt-account-gateway-v0.1.9.zip`; verified built frontend assets and the new frontend state-screen service are included, dev/source/test/docs/rules/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.9`.
+- Published GitHub release `v0.1.9`, downloaded the public release asset, and verified the downloaded package has 37 runtime entries, no backslash archive entries, no dev/source/test/docs/rules/package files, built frontend CSS/JS assets, the new frontend state-screen service, and `0.1.9` header/constant metadata.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.8` to `0.1.9`, then installed it through the WordPress Plugins screen update path. Final server-side state: active `0.1.9` header/constant, `ALYNT_AG_Frontend_State_Screens` file/class loaded, and no remaining update offer.
+- Browser-smoked the release-installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=invalidlink`, `/account?action=invalidlink&confirmation_resent=1&resend_error=rate_limited`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and preserved invalid-link resend form/status behavior.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, query parameters, redirect behavior, registration behavior, email behavior, WooCommerce dashboard behavior, asset handles/URLs, design-token names, frontend class names, nonce names, or form action names.
+- Keep this cycle focused on the two simplest auth-state screens before extracting larger login/register/lost-password forms.
+- Defer final `0.1.9` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates representative gateway routes after the state-screen extraction.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.8 Small Release Cycle
 
