@@ -28,6 +28,10 @@
 - Verified branch checks before metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` writes 382 strings, `npm.cmd run lint`, `npm.cmd test` passes with 164 tests and 680 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.20-branch-qa-20260705-000212\alynt-account-gateway-v0.1.20-branch-qa.zip`; verified 46 runtime files, no backslash archive entries, no missing runtime files, no dev/source/test/docs/rules/package/vendor files, pre-bump `0.1.19` metadata, and signing setting/header code present.
 - Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.19`; verified installed signing setting/method/header markers and safe intercepted signed test dispatch. The `account.created.test` signature matched the exact intercepted body, the log row recorded HTTP `202` success, and temporary settings/log artifacts were cleaned up.
+- Bumped release-candidate metadata to `0.1.20` across the plugin header/constant, npm metadata, readme, sample test, changelog, and POT.
+- Regenerated `languages/alynt-account-gateway.pot` with 382 strings and `0.1.20` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 164 tests and 680 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.20-20260705-000519\alynt-account-gateway-v0.1.20.zip`; verified 46 runtime files, no backslash archive entries, no missing runtime files, no dev/source/test/docs/rules/package/vendor files, `0.1.20` header/constant/readme/POT metadata, and signing setting/header code present.
+- Installed the local `0.1.20` package on LocalWP Plugin Tester; verified active header and loaded constant are `0.1.20`, signing setting/header markers are present, and safe intercepted signed test dispatch produced a matching signature and HTTP `202` success log row without external network calls.
 
 ### Guardrails
 
