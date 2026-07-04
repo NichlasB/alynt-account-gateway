@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased
+
+### Planned
+
+- Settings import/export JSON.
+- Per-tab restore defaults.
+- Gateway preview mode while frontend output is disabled.
+- Compatibility warnings for login, registration, redirect, security, and WooCommerce account endpoint conflicts.
+- Focused unit coverage for remaining account-gateway release gates.
+
 ## 0.1.0 - 2026-07-04
 
 ### Added

@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.0 release asset verified through Alynt Plugin Updater on Plugin Tester; next release planning pending
+- Current phase: v0.1.1 small release cycle started on branch `release/0.1.1`
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.0 released publicly on GitHub and installed from the release asset through Alynt Plugin Updater on LocalWP Plugin Tester.
+- Plugin status: v0.1.0 is the current public baseline; v0.1.1 is scoped as a small admin polish, compatibility, and test coverage release.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,6 +32,33 @@
 - Email editor: Rich template editor with preview and test-send
 - Terms/privacy links: Relative URL paths configured manually, such as `/terms/` or `/legal/privacy/`
 - Multilingual support: Required for v1
+
+## v0.1.1 Small Release Cycle
+
+### Scope
+
+- [ ] Add settings import/export JSON for all plugin-owned settings.
+- [ ] Add per-tab restore defaults with confirmation and diagnostics logging.
+- [ ] Add gateway screen preview mode while frontend output is disabled.
+- [ ] Add compatibility warnings for plugins that commonly modify login, registration, account pages, security redirects, or WooCommerce account endpoints.
+- [ ] Add focused unit coverage for settings schema defaults/sanitization, frontend-output routing, emergency bypass behavior, role access/admin toolbar rules, password policy matching, retention cleanup, and uninstall cleanup where practical.
+- [ ] Re-run Plugin Tester smoke checks after the release package is built.
+- [ ] Verify Alynt Plugin Updater detects and installs `0.1.1` from the GitHub release asset.
+
+### Guardrails
+
+- Keep frontend output disabled by default on fresh install.
+- Do not change the public registration confirmation-first contract.
+- Do not rework the dashboard architecture unless a small compatibility warning requires a narrow hook change.
+- Prefer incremental tests and admin polish over broad refactors.
+- Leave large-file refactors for a later structural release unless a v0.1.1 task directly forces a split.
+
+### Completion Gate
+
+- [ ] Build, lint, test, audit, and POT generation pass.
+- [ ] Local release-style zip excludes source/dev files and includes built assets.
+- [ ] Plugin Tester validates admin settings actions, preview mode, gateway routes, and WooCommerce dashboard takeover.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## Implementation Phases
 
