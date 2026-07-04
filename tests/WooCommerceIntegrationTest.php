@@ -70,9 +70,9 @@ class WooCommerceIntegrationTest extends TestCase {
 		$integration = new class() extends ALYNT_AG_WooCommerce_Integration {
 			public function account_menu_items() {
 				return array(
-					'dashboard'      => 'Dashboard',
-					'orders'         => 'Orders',
-					'loyalty-points' => 'Loyalty Points',
+					'dashboard'       => 'Dashboard',
+					'orders'          => 'Orders',
+					'loyalty-points'  => 'Loyalty Points',
 					'customer-logout' => 'Log Out',
 				);
 			}
@@ -88,6 +88,37 @@ class WooCommerceIntegrationTest extends TestCase {
 		$this->assertContains( 'Loyalty Points', $labels );
 		$this->assertSame( '/my-account/loyalty-points/', $links[2]['url'] );
 		$this->assertSame( 'link', $links[2]['icon'] );
+	}
+
+	public function test_account_menu_items_restore_required_standard_items_when_wc_omits_them() {
+		$integration = new ALYNT_AG_WooCommerce_Integration();
+		$method      = new ReflectionMethod( $integration, 'merge_standard_account_menu_items' );
+		$items = $method->invoke(
+			$integration,
+			array(
+				'dashboard'       => 'Dashboard',
+				'orders'          => 'Orders',
+				'downloads'       => 'Downloads',
+				'edit-address'    => 'Addresses',
+				'edit-account'    => 'Account details',
+				'loyalty-points'  => 'Loyalty Points',
+				'customer-logout' => 'Log out',
+			),
+			$integration->standard_account_menu_items()
+		);
+
+		$this->assertArrayHasKey( 'payment-methods', $items );
+		$this->assertSame( 'Payment Methods', $items['payment-methods'] );
+		$this->assertArrayHasKey( 'loyalty-points', $items );
+		$this->assertSame( 'Log out', $items['customer-logout'] );
+	}
+
+	public function test_default_account_menu_items_include_payment_methods() {
+		$integration = new ALYNT_AG_WooCommerce_Integration();
+		$items       = $integration->standard_account_menu_items();
+
+		$this->assertSame( 'dashboard', array_key_first( $items ) );
+		$this->assertArrayHasKey( 'payment-methods', $items );
 	}
 
 	public function test_render_endpoint_delegates_to_woocommerce_action_when_available() {

@@ -59,12 +59,23 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<string,string>
 	 */
 	public function account_menu_items() {
+		$standard_items = $this->standard_account_menu_items();
+
 		if ( function_exists( 'wc_get_account_menu_items' ) ) {
 			$items = wc_get_account_menu_items();
 
-			return is_array( $items ) ? $items : array();
+			return is_array( $items ) ? $this->merge_standard_account_menu_items( $items, $standard_items ) : $standard_items;
 		}
 
+		return $standard_items;
+	}
+
+	/**
+	 * Return standard WooCommerce account menu items required by the gateway.
+	 *
+	 * @return array<string,string>
+	 */
+	public function standard_account_menu_items() {
 		return array(
 			'dashboard'       => __( 'Dashboard', 'alynt-account-gateway' ),
 			'orders'          => __( 'Orders', 'alynt-account-gateway' ),
@@ -74,6 +85,32 @@ class ALYNT_AG_WooCommerce_Integration {
 			'edit-account'    => __( 'Account Details', 'alynt-account-gateway' ),
 			'customer-logout' => __( 'Log Out', 'alynt-account-gateway' ),
 		);
+	}
+
+	/**
+	 * Merge required standard account items into WooCommerce-provided menu items.
+	 *
+	 * @param array<string,string> $items          WooCommerce menu items.
+	 * @param array<string,string> $standard_items Standard required menu items.
+	 * @return array<string,string>
+	 */
+	private function merge_standard_account_menu_items( $items, $standard_items ) {
+		$merged = array();
+
+		foreach ( $standard_items as $endpoint => $label ) {
+			if ( 'customer-logout' === $endpoint ) {
+				foreach ( $items as $item_endpoint => $item_label ) {
+					$item_endpoint = sanitize_key( $item_endpoint );
+					if ( $item_endpoint && ! isset( $standard_items[ $item_endpoint ] ) ) {
+						$merged[ $item_endpoint ] = sanitize_text_field( $item_label );
+					}
+				}
+			}
+
+			$merged[ $endpoint ] = isset( $items[ $endpoint ] ) ? sanitize_text_field( $items[ $endpoint ] ) : $label;
+		}
+
+		return $merged;
 	}
 
 	/**

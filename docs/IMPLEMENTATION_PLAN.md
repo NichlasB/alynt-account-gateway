@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Plugin Tester browser QA in progress; release-readiness hardening pending
+- Current phase: Plugin Tester browser QA completed; release-readiness hardening pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: Initial scaffold and observability foundation committed in Git checkpoint `c0daf48`
 - Frontend output default: Disabled
@@ -156,7 +156,7 @@
 - [x] Browser/manual QA desktop and mobile responsive behavior.
 - [x] Browser/manual QA keyboard-only flow and focus management.
 - [ ] Browser/manual QA email preview and test-send.
-- [ ] Browser/manual QA WooCommerce dashboard delegation.
+- [x] Browser/manual QA WooCommerce dashboard delegation.
 - [x] Verify `npm run build`.
 - [x] Verify `npm run lint`.
 - [x] Verify `npm test`.
@@ -169,7 +169,7 @@
 - [ ] Emergency bypass opens native login only and never authenticates users.
 - [x] No standard WordPress core account screen is exposed during normal enabled frontend use.
 - [ ] Registration creates no WordPress user until email confirmation and password setup are complete.
-- [ ] WooCommerce account features remain usable when the custom dashboard is enabled.
+- [x] WooCommerce account features remain usable when the custom dashboard is enabled.
 - [ ] Accessibility acceptance criteria pass.
 - [ ] Multilingual/i18n acceptance criteria pass.
 - [ ] Privacy exporter/eraser and retention controls are present.
@@ -216,6 +216,8 @@
 - Added frontend accessibility/i18n hardening: server error IDs and `aria-describedby` wiring, translated password-toggle JavaScript labels, new-tab screen-reader text, Turnstile/verification semantics, RTL-safe frontend CSS, 320px responsive guardrails, repeatable POT generation tooling, and regenerated the plugin POT file.
 - Ran LocalWP Plugin Tester browser QA with Playwright/Chrome across public gateway routes, authenticated dashboard flow, non-admin `wp-admin` redirect, logout confirmation, native `wp-login.php` redirect, 320px responsive behavior, keyboard tab order, registration disabled state, registration submit gating, and pending-registration set-password completion.
 - Fixed QA findings: successful login with no submitted `redirect_to` now redirects to the configured dashboard instead of preserving the underlying 404 response, and the registration submit button now remains disabled until required fields, valid email, and terms acceptance are complete.
+- Installed and activated WooCommerce on LocalWP Plugin Tester, enabled the account gateway WooCommerce takeover, and browser-tested the custom dashboard plus native Orders, Downloads, Addresses, Payment Methods, and Account Details endpoint delegation.
+- Fixed WooCommerce QA finding: required standard account facilities such as Payment Methods are restored in the custom dashboard navigation when WooCommerce omits them from its menu helper on a minimal store.
 - Completed the initial scaffold, initialized Git, installed dependencies, and verified build/lint/test/audit.
 - Added scaffold master prompt artifact for the initial plugin foundation.
 - Created initial implementation plan from approved product-planning decisions.
