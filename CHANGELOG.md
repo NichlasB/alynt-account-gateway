@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.1.12 - 2026-07-04
+
+### Changed
+
+- Extracted login screen rendering into a dedicated login screen service without changing copy, form fields, nonce/action names, query parameters, redirect handling, routes, password toggle markup, status handling, or accessibility attributes.
+
+### Added
+
+- Focused frontend login screen service tests for default form output, nonce field output, account links, password toggle markup, success states, redirect preservation, and login error accessibility state.
+
 ## 0.1.11 - 2026-07-04
 
 ### Changed
