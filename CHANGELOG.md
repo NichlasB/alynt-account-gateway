@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.1.11 - 2026-07-04
+
+### Changed
+
+- Extracted lost-password screen rendering into a dedicated lost-password screen service without changing copy, form fields, nonce/action names, query parameters, redirect behavior, routes, status handling, or accessibility attributes.
+
+### Added
+
+- Focused frontend lost-password screen service tests for default form output, nonce field output, request error state, forced invalid-token error state, reset-sent success state, and back-to-login behavior.
+
 ## 0.1.10 - 2026-07-04
 
 ### Changed

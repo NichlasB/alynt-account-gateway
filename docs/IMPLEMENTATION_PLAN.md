@@ -2,11 +2,50 @@
 
 ## Status
 
-- Current phase: v0.1.10 released and verified
+- Current phase: v0.1.11 released and verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.10 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.11 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.11 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Extract the lost-password screen renderer out of the large frontend renderer class without changing copy, form fields, nonce/action names, query parameters, redirect behavior, routes, status handling, or accessibility attributes.
+- [x] Add focused test coverage around the extracted frontend lost-password screen service.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.11` release.
+
+### Progress Notes
+
+- Started `v0.1.11` from clean `master` after the `v0.1.10` release merge.
+- Extracted lost-password rendering into `ALYNT_AG_Frontend_Lostpassword_Screen`.
+- Kept `ALYNT_AG_Frontend` request flow and wrapper method intact while delegating lost-password markup and read-only status/error display to the new service.
+- Added focused `FrontendLostpasswordScreenTest` coverage for default form output, nonce field output, request error state, forced invalid-token error state, reset-sent success state, and back-to-login behavior.
+- Verified `php -l` for the new service and test file, targeted `FrontendLostpasswordScreenTest` passes with 4 tests and 22 assertions, `npm.cmd run lint` passes, and `git diff --check` passes.
+- Verified the full local gate: `npm.cmd test` passes with 128 tests and 500 assertions, `npm.cmd run lint` passes, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.11-branch-qa-20260704-191248\alynt-account-gateway-v0.1.11-branch-qa.zip`; verified built frontend/admin assets, the new frontend lost-password screen service, the frontend logout-screen service, and the frontend state-screen service are included, dev/source/test/docs/rules/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.10` as expected before the final release bump.
+- Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.10` header/constant, `ALYNT_AG_Frontend_Lostpassword_Screen` file/class loaded in a fresh request, and lost-password rendering includes the title, form action, nonce, email field, and back-to-login link.
+- Browser-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=lostpassword`, `/account?action=lostpassword&reset_error=alynt_ag_rate_limited`, `/account?action=lostpassword&reset_sent=1`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and preserved lost-password default/error/success states.
+- Removed the branch-QA zip from Plugin Tester uploads.
+- Bumped release-candidate metadata to `0.1.11` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 128 tests and 500 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.11-20260704-191621\alynt-account-gateway-v0.1.11.zip`; verified built frontend/admin assets and the new frontend lost-password screen service are included, dev/source/test/docs/rules/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.11`.
+- Published GitHub release `v0.1.11`, downloaded the public release asset, and verified the downloaded package has 49 archive entries including directories, no backslash archive entries, no dev/source/test/docs/rules/package files, built frontend/admin CSS/JS assets, the new frontend lost-password screen service, and `0.1.11` header/constant metadata.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.10` to `0.1.11`, then installed it through the WordPress Plugins screen update path. Final server-side state: active `0.1.11` header/constant, `ALYNT_AG_Frontend_Lostpassword_Screen` file/class loaded, and no remaining update offer.
+- Browser-smoked the release-installed Plugin Tester copy at `/login`, `/account?action=lostpassword`, `/account?action=lostpassword&reset_error=alynt_ag_rate_limited`, `/account?action=lostpassword&reset_sent=1`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and preserved expected screen states.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, query parameters, redirect behavior, registration behavior, email behavior, WooCommerce dashboard behavior, asset handles/URLs, design-token names, frontend class names, nonce names, form action names, or auth-service messages.
+- Keep this cycle focused on lost-password screen rendering; leave password-reset request handling and set-password flows untouched.
+- Defer final `0.1.11` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates representative gateway routes after the lost-password screen extraction.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.10 Small Release Cycle
 
@@ -15,7 +54,7 @@
 - [x] Start the next low-risk structural slice from the released `master` baseline.
 - [x] Extract the logout confirmation screen renderer out of the large frontend renderer class without changing copy, nonce/action names, query parameters, redirect behavior, routes, button classes, or notice behavior.
 - [x] Add focused test coverage around the extracted frontend logout-screen service.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.10` release.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.10` release.
 
 ### Progress Notes
 
