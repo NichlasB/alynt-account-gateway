@@ -15,11 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ALYNT_AG_WooCommerce_Integration {
 
 	/**
-	 * Account endpoint labels.
+	 * Standard account endpoint labels.
 	 *
 	 * @return array<string,string>
 	 */
-	public function endpoint_labels() {
+	public function standard_endpoint_labels() {
 		return array(
 			'dashboard'                  => __( 'Dashboard', 'alynt-account-gateway' ),
 			'orders'                     => __( 'Orders', 'alynt-account-gateway' ),
@@ -31,7 +31,81 @@ class ALYNT_AG_WooCommerce_Integration {
 			'add-payment-method'         => __( 'Add Payment Method', 'alynt-account-gateway' ),
 			'delete-payment-method'      => __( 'Delete Payment Method', 'alynt-account-gateway' ),
 			'set-default-payment-method' => __( 'Default Payment Method', 'alynt-account-gateway' ),
+			'customer-logout'            => __( 'Log Out', 'alynt-account-gateway' ),
 		);
+	}
+
+	/**
+	 * Account endpoint labels, including plugin-added WooCommerce menu items.
+	 *
+	 * @return array<string,string>
+	 */
+	public function endpoint_labels() {
+		$labels = $this->standard_endpoint_labels();
+
+		foreach ( $this->account_menu_items() as $endpoint => $label ) {
+			$endpoint = sanitize_key( $endpoint );
+			if ( $endpoint ) {
+				$labels[ $endpoint ] = sanitize_text_field( $label );
+			}
+		}
+
+		return $labels;
+	}
+
+	/**
+	 * Return WooCommerce account menu items when available.
+	 *
+	 * @return array<string,string>
+	 */
+	public function account_menu_items() {
+		if ( function_exists( 'wc_get_account_menu_items' ) ) {
+			$items = wc_get_account_menu_items();
+
+			return is_array( $items ) ? $items : array();
+		}
+
+		return array(
+			'dashboard'       => __( 'Dashboard', 'alynt-account-gateway' ),
+			'orders'          => __( 'Orders', 'alynt-account-gateway' ),
+			'downloads'       => __( 'Downloads', 'alynt-account-gateway' ),
+			'edit-address'    => __( 'Addresses', 'alynt-account-gateway' ),
+			'payment-methods' => __( 'Payment Methods', 'alynt-account-gateway' ),
+			'edit-account'    => __( 'Account Details', 'alynt-account-gateway' ),
+			'customer-logout' => __( 'Log Out', 'alynt-account-gateway' ),
+		);
+	}
+
+	/**
+	 * Build dashboard links from WooCommerce account menu items.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return array<int,array<string,mixed>>
+	 */
+	public function account_menu_links( $settings ) {
+		$base  = ! empty( $settings['after_login_redirect'] ) ? $settings['after_login_redirect'] : '/my-account/';
+		$links = array();
+		$order = 10;
+
+		foreach ( $this->account_menu_items() as $endpoint => $label ) {
+			$endpoint = sanitize_key( $endpoint );
+			if ( ! $endpoint ) {
+				continue;
+			}
+
+			$links[] = array(
+				'label'  => sanitize_text_field( $label ),
+				'url'    => $this->account_endpoint_url( $endpoint, $base, $settings ),
+				'icon'   => $this->endpoint_icon( $endpoint ),
+				'order'  => $order,
+				'target' => '_self',
+				'roles'  => array(),
+			);
+
+			$order += 10;
+		}
+
+		return $links;
 	}
 
 	/**
@@ -123,5 +197,49 @@ class ALYNT_AG_WooCommerce_Integration {
 		do_action( 'woocommerce_account_' . sanitize_key( $endpoint ) . '_endpoint', $value );
 
 		return true;
+	}
+
+	/**
+	 * Build a URL for a WooCommerce account endpoint.
+	 *
+	 * @param string              $endpoint Endpoint key.
+	 * @param string              $base     Account base path.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return string
+	 */
+	private function account_endpoint_url( $endpoint, $base, $settings ) {
+		if ( 'customer-logout' === $endpoint ) {
+			return wp_logout_url( home_url( $settings['login_path'] ?? '/login' ) );
+		}
+
+		if ( 'dashboard' === $endpoint ) {
+			return trailingslashit( $base );
+		}
+
+		return trailingslashit( $base ) . trailingslashit( $endpoint );
+	}
+
+	/**
+	 * Return a dashboard icon key for an endpoint.
+	 *
+	 * @param string $endpoint Endpoint key.
+	 * @return string
+	 */
+	private function endpoint_icon( $endpoint ) {
+		$icons = array(
+			'dashboard'                  => 'dashboard',
+			'orders'                     => 'orders',
+			'view-order'                 => 'orders',
+			'downloads'                  => 'download',
+			'edit-address'               => 'map',
+			'edit-account'               => 'user',
+			'payment-methods'            => 'card',
+			'add-payment-method'         => 'card',
+			'delete-payment-method'      => 'card',
+			'set-default-payment-method' => 'card',
+			'customer-logout'            => 'logout',
+		);
+
+		return $icons[ $endpoint ] ?? 'link';
 	}
 }

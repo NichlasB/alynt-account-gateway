@@ -120,7 +120,7 @@
 - [x] Allow custom dashboard to take over WooCommerce My Account when enabled.
 - [x] Delegate sensitive WooCommerce actions to native WooCommerce handlers/endpoints.
 - [x] Preserve orders, downloads, addresses, payment methods, account details, and logout through standard WooCommerce endpoints.
-- [ ] Discover and preserve plugin-added WooCommerce account endpoints.
+- [x] Discover and preserve plugin-added WooCommerce account endpoints.
 - [ ] Add compatibility warnings for plugins that also modify login, registration, account pages, security redirects, or WooCommerce account endpoints.
 
 ### Phase 7 - Privacy, Accessibility, I18n, And Release Readiness

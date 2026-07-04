@@ -87,7 +87,7 @@ The `account_created_webhook` setting sends an `account.created` JSON payload af
 
 Custom dashboard links are stored in `dashboard_custom_links` as a JSON array. Each link may define `label`, `url`, `icon`, `order`, `roles`, and `target`; relative URLs are resolved from the site home URL, empty roles are visible to all account users, and `_blank` targets receive safe new-tab behavior.
 
-When `dashboard_enabled` and `woocommerce_takeover` are both enabled and WooCommerce is active, requests under the configured `after_login_redirect` path are rendered inside the branded dashboard. Standard WooCommerce account endpoints such as orders, downloads, addresses, account details, and payment methods are delegated to WooCommerce endpoint actions.
+When `dashboard_enabled` and `woocommerce_takeover` are both enabled and WooCommerce is active, requests under the configured `after_login_redirect` path are rendered inside the branded dashboard. Standard WooCommerce account endpoints such as orders, downloads, addresses, account details, and payment methods are delegated to WooCommerce endpoint actions. Plugin-added account endpoints are discovered from WooCommerce account menu items and routed through the same endpoint action pattern.
 
 ## Diagnostics
 

@@ -21,6 +21,11 @@ class ALYNT_AG_Dashboard_Service {
 	 * @return array<int,array<string,mixed>>
 	 */
 	public function default_links( $settings = array() ) {
+		$woocommerce = new ALYNT_AG_WooCommerce_Integration();
+		if ( $this->woocommerce_available() ) {
+			return $woocommerce->account_menu_links( $settings );
+		}
+
 		$base  = ! empty( $settings['after_login_redirect'] ) ? $settings['after_login_redirect'] : '/my-account/';
 		$links = array(
 			array(
@@ -40,41 +45,6 @@ class ALYNT_AG_Dashboard_Service {
 				'roles'  => array(),
 			),
 		);
-
-		if ( $this->woocommerce_available() ) {
-			$links[] = array(
-				'label'  => __( 'Orders', 'alynt-account-gateway' ),
-				'url'    => trailingslashit( $base ) . 'orders/',
-				'icon'   => 'orders',
-				'order'  => 10,
-				'target' => '_self',
-				'roles'  => array(),
-			);
-			$links[] = array(
-				'label'  => __( 'Downloads', 'alynt-account-gateway' ),
-				'url'    => trailingslashit( $base ) . 'downloads/',
-				'icon'   => 'download',
-				'order'  => 30,
-				'target' => '_self',
-				'roles'  => array(),
-			);
-			$links[] = array(
-				'label'  => __( 'Addresses', 'alynt-account-gateway' ),
-				'url'    => trailingslashit( $base ) . 'edit-address/',
-				'icon'   => 'map',
-				'order'  => 40,
-				'target' => '_self',
-				'roles'  => array(),
-			);
-			$links[] = array(
-				'label'  => __( 'Payment Methods', 'alynt-account-gateway' ),
-				'url'    => trailingslashit( $base ) . 'payment-methods/',
-				'icon'   => 'card',
-				'order'  => 50,
-				'target' => '_self',
-				'roles'  => array(),
-			);
-		}
 
 		return $links;
 	}

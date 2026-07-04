@@ -49,6 +49,47 @@ class WooCommerceIntegrationTest extends TestCase {
 		$this->assertSame( '', $endpoint['endpoint'] );
 	}
 
+	public function test_endpoint_from_path_accepts_plugin_added_menu_endpoint() {
+		$integration = new class() extends ALYNT_AG_WooCommerce_Integration {
+			public function account_menu_items() {
+				return array(
+					'dashboard'      => 'Dashboard',
+					'loyalty-points' => 'Loyalty Points',
+				);
+			}
+		};
+		$endpoint = $integration->endpoint_from_path(
+			'/my-account/loyalty-points/',
+			array( 'after_login_redirect' => '/my-account/' )
+		);
+
+		$this->assertSame( 'loyalty-points', $endpoint['endpoint'] );
+	}
+
+	public function test_account_menu_links_include_plugin_added_endpoint() {
+		$integration = new class() extends ALYNT_AG_WooCommerce_Integration {
+			public function account_menu_items() {
+				return array(
+					'dashboard'      => 'Dashboard',
+					'orders'         => 'Orders',
+					'loyalty-points' => 'Loyalty Points',
+					'customer-logout' => 'Log Out',
+				);
+			}
+		};
+		$links = $integration->account_menu_links(
+			array(
+				'after_login_redirect' => '/my-account/',
+				'login_path'           => '/login',
+			)
+		);
+		$labels = array_column( $links, 'label' );
+
+		$this->assertContains( 'Loyalty Points', $labels );
+		$this->assertSame( '/my-account/loyalty-points/', $links[2]['url'] );
+		$this->assertSame( 'link', $links[2]['icon'] );
+	}
+
 	public function test_render_endpoint_delegates_to_woocommerce_action_when_available() {
 		$integration = new class() extends ALYNT_AG_WooCommerce_Integration {
 			public function detect() {
