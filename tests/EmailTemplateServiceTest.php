@@ -16,6 +16,8 @@ class EmailTemplateServiceTest extends TestCase {
 		parent::setUp();
 		$GLOBALS['alynt_ag_test_mail'] = array();
 		$GLOBALS['alynt_ag_test_options'] = array();
+		$GLOBALS['alynt_ag_test_deleted_user_meta'] = array();
+		$_POST = array();
 	}
 
 	public function test_supported_templates_include_required_account_emails() {
@@ -209,5 +211,73 @@ class EmailTemplateServiceTest extends TestCase {
 		$this->assertStringContainsString( 'new@example.test', $content );
 		$this->assertStringContainsString( '###ADMIN_URL###', $content );
 		$this->assertStringNotContainsString( '<html', $content );
+	}
+
+	public function test_pending_profile_email_change_request_is_suppressed_when_disabled() {
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'email_change_confirmation_disabled' => true,
+		);
+		$_POST['user_id'] = 123;
+		$_POST['email']   = 'new@example.test';
+
+		$service = new ALYNT_AG_Email_Template_Service();
+		$content = $service->filter_new_user_email_content(
+			'Core message',
+			array(
+				'hash'     => 'abc123',
+				'newemail' => 'new@example.test',
+			)
+		);
+
+		$this->assertSame( 'Core message', $content );
+		$this->assertFalse(
+			$service->filter_pre_wp_mail_for_profile_email_change(
+				null,
+				array(
+					'to'      => 'new@example.test',
+					'subject' => '[Example Store] Email Change Request',
+					'message' => 'Core message',
+				)
+			)
+		);
+		$this->assertSame(
+			array(
+				array(
+					'user_id'  => 123,
+					'meta_key' => '_new_email',
+				),
+			),
+			$GLOBALS['alynt_ag_test_deleted_user_meta']
+		);
+	}
+
+	public function test_pending_profile_email_change_suppression_is_single_use() {
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'email_change_confirmation_disabled' => true,
+		);
+		$_POST['user_id'] = 123;
+		$_POST['email']   = 'new@example.test';
+
+		$service = new ALYNT_AG_Email_Template_Service();
+		$service->filter_new_user_email_content(
+			'Core message',
+			array(
+				'hash'     => 'abc123',
+				'newemail' => 'new@example.test',
+			)
+		);
+
+		$this->assertFalse(
+			$service->filter_pre_wp_mail_for_profile_email_change(
+				null,
+				array( 'to' => 'new@example.test' )
+			)
+		);
+		$this->assertNull(
+			$service->filter_pre_wp_mail_for_profile_email_change(
+				null,
+				array( 'to' => 'new@example.test' )
+			)
+		);
 	}
 }

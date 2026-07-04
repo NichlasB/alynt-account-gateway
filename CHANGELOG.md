@@ -6,13 +6,16 @@
 
 - Focused email tooling test coverage for preview rendering and test-send validation.
 
+### Fixed
+
+- The email-change disable toggle now also suppresses WordPress pending profile email-change request emails and clears the pending marker so users are not left waiting for a disabled confirmation email.
+
 ### Verified
 
 - Email preview and test-send QA on LocalWP Plugin Tester.
 
 ### Planned
 
-- Safe evaluation of the remaining profile email-change request suppression behavior.
 - v0.1.2 release packaging and Alynt Plugin Updater verification.
 
 ## 0.1.1 - 2026-07-04
