@@ -1,10 +1,10 @@
-﻿# Alynt Account Gateway Implementation Plan
+# Alynt Account Gateway Implementation Plan
 
 ## Status
 
-- Current phase: v0.1.6 released and verified
+- Current phase: v0.1.7 released and verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.6 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.7 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,6 +32,45 @@
 - Email editor: Rich template editor with preview and test-send
 - Terms/privacy links: Relative URL paths configured manually, such as `/terms/` or `/legal/privacy/`
 - Multilingual support: Required for v1
+
+## v0.1.7 Small Release Cycle
+
+### Scope
+
+- [x] Start the next low-risk structural slice from the released `master` baseline.
+- [x] Preserve the existing `AI_CODING_RULES.md` housekeeping rename as a separate checkpoint.
+- [x] Extract frontend branding/media/style rendering out of the large frontend renderer class without changing markup, design tokens, image handling, logo sizing, or fallback store-name behavior.
+- [x] Add focused test coverage around the extracted frontend branding service.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.7` release.
+
+### Progress Notes
+
+- Started `v0.1.7` from `master` after the `v0.1.6` release merge.
+- Preserved the already-present `.windsurfrules` to `AI_CODING_RULES.md` housekeeping rename in commit `c1b0b63` before beginning the code slice.
+- Extracted inline design-token style generation, left media-panel rendering, and logo/store-name rendering into `ALYNT_AG_Frontend_Branding`.
+- Kept `ALYNT_AG_Frontend` wrapper methods for internal compatibility while delegating branding/media/style decisions to the new service.
+- Added focused `FrontendBrandingTest` coverage for configured design tokens, empty-value skipping, media pattern fallback, configured background image output, store-name fallback, logo URL output, and logo max-width clamping.
+- Verified `php -l` for the new service and test file, `npm.cmd test` passes with 115 tests and 435 assertions, `npm.cmd run lint` passes, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.7-branch-qa-20260704-173636\alynt-account-gateway-v0.1.7-branch-qa.zip`; verified built frontend assets, the new frontend branding service, and the frontend asset service are included, dev/source/test/docs/rules/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.6` as expected before the final release bump.
+- Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.6` header/constant, `ALYNT_AG_Frontend_Branding` file/class loaded, and style-token generation works from `ALYNT_AG_Settings_Schema::defaults()`.
+- Browser-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and included the brand block plus design-token style output.
+- Bumped release-candidate metadata to `0.1.7` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 115 tests and 435 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.7-20260704-174141\alynt-account-gateway-v0.1.7.zip`; verified built frontend assets and the new frontend branding service are included, dev/source/test/docs/rules/package files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.7`.
+- Published GitHub release `v0.1.7`, downloaded the public release asset, and verified the downloaded package has 35 runtime entries, no backslash archive entries, no dev/source/test/docs/rules/package files, built frontend CSS/JS assets, the new frontend branding service, and `0.1.7` header/constant metadata.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.6` to `0.1.7`, then installed it through the WordPress Plugins screen update path. Final server-side state: active `0.1.7` header/constant, `ALYNT_AG_Frontend_Branding` file/class loaded, and no remaining update offer.
+- Browser-smoked the release-installed Plugin Tester copy at `/login`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=logout`, and `/my-account/`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and included the brand block plus design-token style output.
+
+### Guardrails
+
+- Do not change rendered gateway copy, routes, query parameters, redirect behavior, registration behavior, email behavior, WooCommerce dashboard behavior, asset handles/URLs, or design-token names.
+- Keep this cycle focused on one structural extraction from the frontend renderer.
+- Defer final `0.1.7` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates representative gateway routes after the branding/media/style extraction.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.6 Small Release Cycle
 
@@ -243,7 +282,7 @@
 
 - [x] Scaffold plugin in the existing empty target folder.
 - [x] Initialize Git repository.
-- [x] Add `.windsurfrules`.
+- [x] Add `AI_CODING_RULES.md`.
 - [x] Add main plugin file with plugin header, version constant, text domain, and GitHub Plugin URI.
 - [x] Add loader, activator, deactivator, i18n, and core plugin bootstrap classes.
 - [x] Add Composer tooling for PHPCS/WPCS and PHPUnit/Brain Monkey.
@@ -389,7 +428,7 @@
 ### 2026-07-04
 
 - Completed pre-release review sequence `01` through `13` from the wp-plugin-toolkit.
-- Fixed release hygiene issue where `.windsurfrules` would have been included in the GitHub release zip.
+- Fixed release hygiene issue where `AI_CODING_RULES.md` would have been included in the GitHub release zip.
 - Fixed admin media preview DOM handling by replacing `innerHTML` with explicit image node creation.
 - Fixed uninstall cleanup coverage for the scheduled retention hook and transient-backed rate-limit buckets.
 - Added HTTPS enforcement for public account-created webhook URLs while allowing local development hosts (`localhost`, `127.0.0.1`, `::1`, and `.local`).
@@ -419,7 +458,7 @@
 - Scaffold/observability checkpoint commit: `c0daf48` (`Scaffold account gateway foundation`).
 - Design workflow Phase 1 has been completed using the supplied login/register/lost-password screenshots as visual references.
 - Design export received and distilled into `docs/DESIGN_HANDOFF.md`; use it as the implementation source for frontend gateway templates.
-- Next toolkit step before scaffold: use `d1-setup/windsurf-wp-config.md` Section 2 to create the scaffold master prompt.
+- Next toolkit step before scaffold: use `d1-setup/ai-plugin-setup-reference.md` Section 2 to create the scaffold master prompt.
 - After scaffold, route to `@ADD_OBSERVABILITY_TOOLING_PROMPT.md run` before heavy feature work.
 - After each major feature, run the feature review sequence: light review, bloat/structure review, UI/UX review, and security review.
 - Before release, run pre-release prompts `@01` through `@13` in filename order, keeping security last.

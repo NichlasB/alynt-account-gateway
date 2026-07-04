@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## 0.1.7 - 2026-07-04
+
+### Changed
+
+- Extracted frontend branding, media-panel, and design-token rendering into a dedicated branding service without changing rendered markup, design-token names, logo sizing, or fallback behavior.
+- Renamed the local coding-rules reference from `.windsurfrules` to `AI_CODING_RULES.md` and kept release packaging exclusions current.
+
+### Added
+
+- Focused frontend branding service tests for design tokens, media image/pattern output, store-name fallback, logo output, and logo width clamping.
+
 ## 0.1.6 - 2026-07-04
 
 ### Changed
