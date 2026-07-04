@@ -4,6 +4,17 @@
 
 No unreleased changes.
 
+## 0.1.3 - 2026-07-04
+
+### Added
+
+- Focused registration completion coverage for the confirmed pending account creation path.
+
+### Verified
+
+- Registration flow and spam-prevention QA.
+- Local-safe account-created webhook verification.
+
 ## 0.1.2 - 2026-07-04
 
 ### Added

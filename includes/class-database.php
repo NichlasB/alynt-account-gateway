@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ALYNT_AG_Database {
 
-	const DB_VERSION = '0.1.2';
+	const DB_VERSION = '0.1.3';
 
 	/**
 	 * Install database tables.
