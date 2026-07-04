@@ -165,7 +165,7 @@
 - [x] Verify `npm audit --audit-level=high`.
 - [x] Verify `composer audit`.
 - [x] Verify release-style zip locally with GitHub workflow exclusions.
-- [ ] Verify generated release zip through GitHub release workflow.
+- [x] Verify generated release zip through GitHub release workflow.
 
 ## Release Gates
 
@@ -177,7 +177,7 @@
 - [x] Accessibility acceptance criteria pass for implemented gateway/dashboard surfaces.
 - [x] Multilingual/i18n acceptance criteria pass for implemented strings and generated POT.
 - [x] Privacy exporter/eraser and retention controls are present.
-- [ ] Alynt Plugin Updater compatibility is verified with a release asset.
+- [x] Alynt Plugin Updater compatibility is verified with a release asset.
 
 ## Pre-Release Audit Notes
 
@@ -192,7 +192,8 @@
 - Regenerated `languages/alynt-account-gateway.pot` after the new webhook security string.
 - Verified local release-style zip excludes source assets, dev dependencies, tests, docs, scripts, GitHub metadata, maps, Composer/npm files, and editor rules.
 - Structural debt remains: `public/class-frontend.php`, `includes/services/class-registration-service.php`, and several admin/settings/template classes are larger than ideal. They are intentionally left intact for this release pass because splitting them now would be a high-blast-radius refactor after browser QA.
-- Remaining release decisions: choose final release version/tag, create the GitHub release asset, verify Alynt Plugin Updater against that asset, and optionally add uninstall-specific unit coverage.
+- Published GitHub release `v0.1.0`, confirmed the Build Release workflow completed successfully, downloaded `alynt-account-gateway-v0.1.0.zip`, and verified the package contains the plugin runtime files and built assets while excluding development files.
+- Remaining release decisions: optionally add uninstall-specific unit coverage before the next release.
 
 ## Workflow Notes
 
