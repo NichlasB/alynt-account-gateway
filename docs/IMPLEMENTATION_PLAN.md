@@ -30,6 +30,7 @@
 - Browser-smoked the branch-QA installed Plugin Tester copy with system Chrome at `/account?action=setpassword&key=...&login=...`, `/account?action=setpassword`, and `/login`; all selected routes rendered branded gateway screens, avoided the native WordPress login shell, included frontend CSS/JS assets, and preserved the set-password form, invalid-link fallback, and login control route. A 390px viewport pass confirmed no horizontal overflow, hidden media panel, and stable password form/card widths.
 - Removed the temporary branch-QA reset user and uploaded branch-QA zip from Plugin Tester after smoke verification.
 - Bumped release-candidate metadata to `0.1.14` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 141 tests and 603 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.14-20260704-210740\alynt-account-gateway-v0.1.14.zip`; verified built frontend/admin assets and the new frontend set-password screen service are included, dev/source/test/docs/rules/package/vendor files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.14`.
 
 ### Guardrails
 
