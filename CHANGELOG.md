@@ -2,7 +2,14 @@
 
 ## Unreleased
 
-No unreleased changes.
+### Changed
+
+- Reconciled completed implementation-plan checklist items for email preview/test-send QA and profile email-change request suppression.
+- Extracted frontend gateway title and error-message lookup into a dedicated message catalog service without changing rendered copy or behavior.
+
+### Added
+
+- Focused frontend message catalog tests for known mappings and fallback messages.
 
 ## 0.1.3 - 2026-07-04
 
