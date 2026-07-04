@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.17 branch QA complete; final release metadata bump and public updater verification are next
+- Current phase: v0.1.17 release package verified locally; public GitHub release and updater verification are next
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.16 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -30,6 +30,8 @@
 - Installed the branch-QA package on LocalWP Plugin Tester through WordPress upgrader classes. Verified final installed state: active `0.1.16` header/constant, `ALYNT_AG_Frontend_Document_Renderer` file/class loaded in a fresh request, preview rendering works for login and set-password, the full document wrapper renders, and the preserved admin-preview title wrapper returns `Create Account`.
 - HTTP-smoked the branch-QA installed Plugin Tester copy at `/login`, `/account?action=lostpassword`, `/account?action=invalidlink`, and `/my-account/`; public gateway routes rendered branded output with the expected body class, frontend JS assets, and no native login shell, and logged-out dashboard access redirected to `/login?redirect_to=...`.
 - Removed the branch-QA zip from Plugin Tester uploads after smoke verification.
+- Bumped release-candidate metadata to `0.1.17` across the plugin header/constant, npm metadata, readme, changelog, sample test, and POT. Verified `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 160 tests and 657 assertions, `npm.cmd run make-pot` writes 344 strings, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.17-20260704-224614\alynt-account-gateway-v0.1.17.zip`; verified built frontend/admin assets and the new frontend document renderer service are included, dev/source/test/docs/rules/package/vendor files are excluded, archive entries use WordPress-compatible forward-slash paths, and the package header/constant report `0.1.17`.
 
 ### Guardrails
 

@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 0.1.17 - 2026-07-04
+
+### Changed
+
+- Extracted full gateway document rendering and admin preview rendering into a dedicated document renderer service without changing document markup, body class, title behavior, dashboard-vs-auth shell selection, routes, redirects, logout handling, or admin preview compatibility.
+
+### Added
+
+- Focused frontend document renderer tests for full document output, preview normalization, set-password preview rendering, dashboard path propagation, title lookup, and the preserved admin-preview title wrapper.
+
 ## 0.1.16 - 2026-07-04
 
 ### Changed
