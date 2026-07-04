@@ -2,11 +2,45 @@
 
 ## Status
 
-- Current phase: v0.1.18 dashboard custom link editor
+- Current phase: v0.1.19 webhook tools
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.17 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.18 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.19 Small Release Cycle
+
+### Scope
+
+- [x] Start the next product-polish slice from the released `master` baseline.
+- [x] Add Webhooks tab tools for sending an admin-triggered account-created test webhook to the configured destination.
+- [x] Add a recent webhook deliveries table on the Webhooks tab using plugin-owned webhook log metadata.
+- [x] Add focused coverage for test webhook dispatch behavior where practical.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.19` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.19` from clean `master` after the `v0.1.18` release merge.
+- Added `ALYNT_AG_Webhook_Dispatcher::dispatch_account_created_test()` so admins can send an explicit `account.created.test` event through the saved account-created webhook URL without changing the normal account-created payload path.
+- Added Webhooks tab tools: a nonce-protected `Send Test Webhook` action and a recent webhook deliveries table showing event, destination host, HTTP status, result, error, and timestamp.
+- Added focused PHPUnit coverage for the test dispatch path. Verified targeted `WebhookDispatcherTest` plus full `npm.cmd test` passed with 162 tests and 671 assertions.
+- Verified branch checks before metadata bump: `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test`, `npm.cmd run make-pot`, `npm.cmd audit --audit-level=moderate`, and `git diff --check`.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.19-branch-qa-20260704-233152\alynt-account-gateway-v0.1.19-branch-qa.zip`; inspected 46 packaged files, no dev/source entries, no backslash zip entries, header/constant still `0.1.18` as expected before release bump.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.18`; verified active plugin, installed method/action/table strings, and safe intercepted test dispatch logging `account.created.test` with HTTP `202`, success `1`, and no external network call.
+- Browser-smoked Plugin Tester Webhooks tab through temporary Novamira admin access: `Webhook Tools`, `Send Test Webhook`, `Recent Webhook Deliveries`, disabled send button, and missing-URL helper text rendered correctly.
+
+### Guardrails
+
+- Do not change normal account-created webhook behavior, payload shape for real account creation events, registration flow, email behavior, frontend output, routes, dashboard rendering, WooCommerce delegation, provider verification behavior, or existing webhook retention defaults.
+- Keep this cycle focused on admin webhook observability and an explicit test-send action.
+- Defer final `0.1.19` metadata bump, release asset publication, and Alynt Plugin Updater verification until branch QA is complete.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates the Webhooks tab test-send and recent delivery table.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.18 Small Release Cycle
 

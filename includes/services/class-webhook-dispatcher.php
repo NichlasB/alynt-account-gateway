@@ -36,7 +36,52 @@ class ALYNT_AG_Webhook_Dispatcher {
 			return new WP_Error( 'alynt_ag_webhook_user_missing', __( 'The webhook user could not be found.', 'alynt-account-gateway' ) );
 		}
 
-		$payload  = $this->build_account_created_payload( $user );
+		$payload = $this->build_account_created_payload( $user );
+
+		return $this->dispatch_payload( 'account.created', $url, $user->ID, $payload, $settings );
+	}
+
+	/**
+	 * Dispatch a test account-created webhook for admin verification.
+	 *
+	 * @param int                 $user_id  User ID used for sample payload data.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return true|WP_Error
+	 */
+	public function dispatch_account_created_test( $user_id, $settings ) {
+		$url = ! empty( $settings['account_created_webhook'] ) ? esc_url_raw( $settings['account_created_webhook'] ) : '';
+		if ( ! $url ) {
+			return new WP_Error( 'alynt_ag_webhook_missing_url', __( 'Add an account-created webhook URL before sending a test.', 'alynt-account-gateway' ) );
+		}
+
+		if ( ! $this->is_allowed_delivery_url( $url ) ) {
+			return new WP_Error( 'alynt_ag_webhook_insecure_url', __( 'Webhook URLs must use HTTPS unless they point to a local development host.', 'alynt-account-gateway' ) );
+		}
+
+		$user = get_userdata( absint( $user_id ) );
+		if ( ! $user ) {
+			return new WP_Error( 'alynt_ag_webhook_user_missing', __( 'The webhook user could not be found.', 'alynt-account-gateway' ) );
+		}
+
+		$payload                 = $this->build_account_created_payload( $user );
+		$payload['event']        = 'account.created.test';
+		$payload['test']         = true;
+		$payload['triggered_by'] = 'admin';
+
+		return $this->dispatch_payload( 'account.created.test', $url, $user->ID, $payload, $settings );
+	}
+
+	/**
+	 * Dispatch a JSON payload and record the response metadata.
+	 *
+	 * @param string              $event_name Event name.
+	 * @param string              $url        Destination URL.
+	 * @param int                 $user_id    User ID.
+	 * @param array<string,mixed> $payload    Payload.
+	 * @param array<string,mixed> $settings   Settings.
+	 * @return true|WP_Error
+	 */
+	private function dispatch_payload( $event_name, $url, $user_id, $payload, $settings ) {
 		$response = wp_remote_post(
 			$url,
 			array(
@@ -49,7 +94,7 @@ class ALYNT_AG_Webhook_Dispatcher {
 			)
 		);
 
-		$log_result = $this->log_dispatch( 'account.created', $url, $user->ID, $payload, $response, $settings );
+		$log_result = $this->log_dispatch( $event_name, $url, $user_id, $payload, $response, $settings );
 
 		if ( is_wp_error( $response ) ) {
 			return $response;

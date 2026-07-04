@@ -92,6 +92,24 @@ class WebhookDispatcherTest extends TestCase {
 		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
 	}
 
+	public function test_dispatch_account_created_test_posts_test_event_and_logs_response() {
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+		$result     = $dispatcher->dispatch_account_created_test(
+			321,
+			array(
+				'account_created_webhook' => 'https://hooks.example.test/account-created',
+				'debug_payload_logging'   => false,
+			)
+		);
+
+		$this->assertTrue( $result );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_remote_posts'] );
+		$this->assertStringContainsString( '"event":"account.created.test"', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['body'] );
+		$this->assertStringContainsString( '"test":true', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['body'] );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+		$this->assertSame( 'account.created.test', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['event_name'] );
+	}
+
 	public function test_dispatch_account_created_rejects_public_http_webhook_url() {
 		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
 		$result     = $dispatcher->dispatch_account_created(

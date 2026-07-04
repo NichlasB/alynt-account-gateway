@@ -30,6 +30,7 @@ class ALYNT_AG_Settings_Page {
 		add_action( 'admin_post_alynt_ag_clear_diagnostics', array( $this, 'handle_clear_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_preview_email', array( $this, 'handle_preview_email' ) );
 		add_action( 'admin_post_alynt_ag_test_email', array( $this, 'handle_test_email' ) );
+		add_action( 'admin_post_alynt_ag_test_webhook', array( $this, 'handle_test_webhook' ) );
 		add_action( 'update_option_alynt_ag_settings', array( $this, 'log_settings_change' ), 10, 2 );
 	}
 
@@ -147,6 +148,10 @@ class ALYNT_AG_Settings_Page {
 
 			<?php if ( 'emails' === $active_tab ) : ?>
 				<?php $this->render_email_tools(); ?>
+			<?php endif; ?>
+
+			<?php if ( 'webhooks' === $active_tab ) : ?>
+				<?php $this->render_webhook_tools(); ?>
 			<?php endif; ?>
 		</div>
 		<?php
@@ -297,6 +302,27 @@ class ALYNT_AG_Settings_Page {
 			?>
 			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'The test email could not be sent. Check the recipient and mail configuration.', 'alynt-account-gateway' ); ?></p></div>
 			<?php
+			return;
+		}
+
+		if ( 'webhook_test_sent' === $notice ) {
+			?>
+			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Test webhook sent.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
+		if ( 'webhook_test_missing' === $notice ) {
+			?>
+			<div class="notice notice-warning is-dismissible"><p><?php esc_html_e( 'Add and save an account-created webhook URL before sending a test.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
+		if ( 'webhook_test_failed' === $notice ) {
+			?>
+			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'The test webhook could not be sent. Review the recent webhook deliveries table for details.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
 		}
 	}
 
@@ -341,6 +367,98 @@ class ALYNT_AG_Settings_Page {
 			<?php submit_button( __( 'Send Test Email', 'alynt-account-gateway' ), 'secondary', 'submit', false ); ?>
 		</form>
 		<?php
+	}
+
+	/**
+	 * Render webhook test and recent delivery tools.
+	 *
+	 * @return void
+	 */
+	private function render_webhook_tools() {
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+		$logs     = $this->recent_webhook_logs();
+		?>
+		<h2><?php esc_html_e( 'Webhook Tools', 'alynt-account-gateway' ); ?></h2>
+		<p class="description">
+			<?php esc_html_e( 'Send a sample account-created test event to the saved webhook URL and review recent delivery metadata.', 'alynt-account-gateway' ); ?>
+		</p>
+
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-inline-tool">
+			<input type="hidden" name="action" value="alynt_ag_test_webhook">
+			<?php wp_nonce_field( 'alynt_ag_test_webhook' ); ?>
+			<?php
+			submit_button(
+				__( 'Send Test Webhook', 'alynt-account-gateway' ),
+				'secondary',
+				'submit',
+				false,
+				array( 'disabled' => empty( $settings['account_created_webhook'] ) )
+			);
+			?>
+		</form>
+
+		<?php if ( empty( $settings['account_created_webhook'] ) ) : ?>
+			<p class="description"><?php esc_html_e( 'Save an account-created webhook URL to enable test sends.', 'alynt-account-gateway' ); ?></p>
+		<?php endif; ?>
+
+		<h3><?php esc_html_e( 'Recent Webhook Deliveries', 'alynt-account-gateway' ); ?></h3>
+		<?php if ( empty( $logs ) ) : ?>
+			<p><?php esc_html_e( 'No webhook deliveries have been recorded.', 'alynt-account-gateway' ); ?></p>
+		<?php else : ?>
+			<table class="widefat striped">
+				<thead>
+					<tr>
+						<th><?php esc_html_e( 'Time', 'alynt-account-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Event', 'alynt-account-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Destination', 'alynt-account-gateway' ); ?></th>
+						<th><?php esc_html_e( 'HTTP', 'alynt-account-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Result', 'alynt-account-gateway' ); ?></th>
+						<th><?php esc_html_e( 'Error', 'alynt-account-gateway' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $logs as $log ) : ?>
+						<tr>
+							<td><?php echo esc_html( $log->created_at ); ?></td>
+							<td><?php echo esc_html( $log->event_name ); ?></td>
+							<td><?php echo esc_html( $log->destination_host ); ?></td>
+							<td><?php echo esc_html( (string) absint( $log->http_status ) ); ?></td>
+							<td>
+								<?php
+								echo esc_html(
+									(int) $log->success
+										? __( 'Success', 'alynt-account-gateway' )
+										: __( 'Failed', 'alynt-account-gateway' )
+								);
+								?>
+							</td>
+							<td><?php echo esc_html( $log->error_message ); ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		<?php endif; ?>
+		<?php
+	}
+
+	/**
+	 * Return recent webhook log rows.
+	 *
+	 * @return array<int,object>
+	 */
+	private function recent_webhook_logs() {
+		global $wpdb;
+
+		$tables = ALYNT_AG_Database::tables();
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Admin viewer reads plugin-owned webhook log table.
+		return (array) $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT event_name, destination_host, http_status, success, error_message, created_at FROM {$tables['webhook_logs']} ORDER BY created_at DESC, id DESC LIMIT %d",
+				10
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
 	/**
@@ -1060,6 +1178,42 @@ class ALYNT_AG_Settings_Page {
 				array(
 					'page'            => 'alynt-account-gateway',
 					'tab'             => 'emails',
+					'alynt_ag_notice' => $status,
+				),
+				admin_url( 'options-general.php' )
+			)
+		);
+		exit;
+	}
+
+	/**
+	 * Send a test webhook.
+	 *
+	 * @return void
+	 */
+	public function handle_test_webhook() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to send test webhooks.', 'alynt-account-gateway' ) );
+		}
+
+		check_admin_referer( 'alynt_ag_test_webhook' );
+
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+		$status   = 'webhook_test_failed';
+
+		if ( empty( $settings['account_created_webhook'] ) ) {
+			$status = 'webhook_test_missing';
+		} else {
+			$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+			$result     = $dispatcher->dispatch_account_created_test( get_current_user_id(), $settings );
+			$status     = is_wp_error( $result ) ? 'webhook_test_failed' : 'webhook_test_sent';
+		}
+
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'            => 'alynt-account-gateway',
+					'tab'             => 'webhooks',
 					'alynt_ag_notice' => $status,
 				),
 				admin_url( 'options-general.php' )
