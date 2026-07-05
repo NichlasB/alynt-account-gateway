@@ -4,7 +4,7 @@
 
 - Current phase: v0.1.32 Pending registration visibility in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.31 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.32 is in progress on `release/0.1.32`.
+- Plugin status: v0.1.31 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.32 is in release-candidate validation on `release/0.1.32`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -42,6 +42,10 @@
 - Verified initial local checks: PHP syntax passes for touched PHP/test files, focused `SettingsPageSecurityStatusTest` passes with 6 tests and 49 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 667 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 197 tests and 948 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
 - Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.32-branch-qa-20260705-155937\alynt-account-gateway-v0.1.32-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.31` metadata, pending-registration panel PHP, built admin CSS, and POT present.
 - Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.31` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.31`, the pending-registration panel code and built admin CSS are present. Seeded two temporary pending-registration rows and authenticated HTTP smoke confirmed the Security tab returns the Recent Pending Registrations table, masked pending and expired email rows, Pending and Expired statuses, existing verification activity, admin CSS, and no fatal/critical error output. Seeded QA rows were cleaned up after QA.
+- Bumped release-candidate metadata to `0.1.32` across the plugin header/constant, npm metadata, readme, sample test, changelog, and implementation plan.
+- Regenerated `languages/alynt-account-gateway.pot` with 667 strings and `0.1.32` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 197 tests and 948 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, PHP syntax passes, and `git diff --check` passes with only line-ending warnings for generated/package metadata files.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.32-20260705-160828\alynt-account-gateway-v0.1.32.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.32` header/constant/readme/POT metadata, pending-registration panel PHP, built admin CSS, and POT present.
+- Installed the local `0.1.32` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant are `0.1.32`, the pending-registration panel code and built admin CSS are present. Seeded two temporary pending-registration rows and authenticated HTTP smoke confirmed the Security tab returns the Recent Pending Registrations table, masked pending and expired email rows, Pending and Expired statuses, existing verification activity, admin CSS, and no fatal/critical error output. Seeded QA rows were cleaned up after QA.
 
 ### Guardrails
 

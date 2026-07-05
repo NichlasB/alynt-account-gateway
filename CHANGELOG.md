@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.32 - 2026-07-05
+
+### Added
+
+- Added read-only pending registration visibility on the Security tab with masked email rows and status labels.
+
 ## 0.1.31 - 2026-07-05
 
 ### Added
