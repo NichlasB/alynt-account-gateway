@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.28 Settings field help refinement in progress
+- Current phase: v0.1.28 Settings field help refinement release candidate
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.27 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.28 is in progress on `release/0.1.28`.
+- Plugin status: v0.1.27 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.28 is in release-candidate verification on `release/0.1.28`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -43,6 +43,10 @@
 - Confirmed the built admin CSS contains the field-help styling.
 - Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.28-branch-qa-20260705-133906\alynt-account-gateway-v0.1.28-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor files, pre-bump `0.1.27` metadata, field-help PHP helpers, `aria-describedby` support, and built admin field-help CSS present.
 - Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.27` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.27`, field-help PHP and built admin CSS are present, and authenticated HTTP smoke confirmed General, URLs, Registration, and WooCommerce settings tabs return `200`, load the admin CSS asset, render expected helper text, and include linked `aria-describedby` attributes. Temporary package and curl cookie state were cleaned up after QA.
+- Bumped release-candidate metadata to `0.1.28` across the plugin header/constant, npm metadata, readme, sample test, changelog, and implementation plan.
+- Regenerated `languages/alynt-account-gateway.pot` with 592 strings and `0.1.28` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 186 tests and 832 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only POT/readme line-ending warnings.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.28-20260705-134350\alynt-account-gateway-v0.1.28.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor files, `0.1.28` header/constant/readme/POT metadata, field-help PHP helpers, `aria-describedby` support, and built admin field-help CSS present.
+- Installed the local `0.1.28` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant are `0.1.28`, field-help PHP and built admin CSS are present, and authenticated HTTP smoke confirmed General, URLs, Registration, and WooCommerce settings tabs return `200`, load the admin CSS asset, show expected helper text, include linked `aria-describedby` attributes, and show no fatal/critical error output. Temporary package and curl cookie state were cleaned up after QA.
 
 ### Guardrails
 

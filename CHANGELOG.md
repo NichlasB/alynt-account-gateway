@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.28 - 2026-07-05
+
+### Added
+
+- Added field-level help text and accessible descriptions for high-impact Account Gateway settings.
+
 ## 0.1.27 - 2026-07-05
 
 ### Added

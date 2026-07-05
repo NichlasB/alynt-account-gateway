@@ -1,6 +1,6 @@
 {
   "name": "alynt-account-gateway",
-  "version": "0.1.27",
+  "version": "0.1.28",
   "private": true,
   "description": "Alynt Account Gateway build tooling.",
   "type": "module",
