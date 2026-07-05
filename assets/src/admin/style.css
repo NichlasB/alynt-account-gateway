@@ -11,6 +11,13 @@
 	max-width: 46rem;
 }
 
+.alynt-ag-field-help {
+	max-width: 46rem;
+	margin-top: 8px;
+	color: #50575e;
+	line-height: 1.5;
+}
+
 .alynt-ag-tab-guidance {
 	display: grid;
 	grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr) auto;
