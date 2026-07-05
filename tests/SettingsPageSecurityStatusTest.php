@@ -208,6 +208,63 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( 'action', $items[3]['status'] );
 	}
 
+	public function test_security_registration_flow_signals_count_recent_activity() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper(
+			$settings_page,
+			'security_registration_flow_signal_items',
+			array(
+				array(
+					(object) array(
+						'provider' => 'registration_flow',
+						'status'   => 'terms_required',
+					),
+					(object) array(
+						'provider' => 'registration_flow',
+						'status'   => 'consent_record_failed',
+					),
+					(object) array(
+						'provider' => 'registration_flow',
+						'status'   => 'pending_registration_failed',
+					),
+					(object) array(
+						'provider' => 'registration_flow',
+						'status'   => 'confirmation_email_failed',
+					),
+					(object) array(
+						'provider' => 'registration_flow',
+						'status'   => 'password_mismatch',
+					),
+					(object) array(
+						'provider' => 'registration_flow',
+						'status'   => 'alynt_ag_password_complexity',
+					),
+					(object) array(
+						'provider' => 'registration_flow',
+						'status'   => 'confirmation_resent',
+					),
+					(object) array(
+						'provider' => 'rate_limit',
+						'status'   => 'registration_rate_limited',
+					),
+				),
+			)
+		);
+
+		$this->assertSame( 'Consent Blocks', $items[0]['label'] );
+		$this->assertSame( 2, $items[0]['count'] );
+		$this->assertSame( 'warning', $items[0]['status'] );
+		$this->assertSame( 'Registration System Failures', $items[1]['label'] );
+		$this->assertSame( 2, $items[1]['count'] );
+		$this->assertSame( 'action', $items[1]['status'] );
+		$this->assertSame( 'Password Setup Blocks', $items[2]['label'] );
+		$this->assertSame( 2, $items[2]['count'] );
+		$this->assertSame( 'warning', $items[2]['status'] );
+		$this->assertSame( 'Confirmation Resends Sent', $items[3]['label'] );
+		$this->assertSame( 1, $items[3]['count'] );
+		$this->assertSame( 'warning', $items[3]['status'] );
+	}
+
 	public function test_security_recent_verification_activity_renders_masked_rows() {
 		$tables = ALYNT_AG_Database::tables();
 		$GLOBALS['alynt_ag_test_db_results'][ $tables['verification_logs'] ] = array(
@@ -323,6 +380,20 @@ class SettingsPageSecurityStatusTest extends TestCase {
 				'blocked'    => 0,
 				'created_at' => '2026-07-05 12:40:00',
 			),
+			(object) array(
+				'email'      => 'stored@example.test',
+				'provider'   => 'registration_flow',
+				'status'     => 'pending_registration_failed',
+				'blocked'    => 1,
+				'created_at' => '2026-07-05 12:45:00',
+			),
+			(object) array(
+				'email'      => 'password@example.test',
+				'provider'   => 'registration_flow',
+				'status'     => 'password_mismatch',
+				'blocked'    => 1,
+				'created_at' => '2026-07-05 12:50:00',
+			),
 		);
 
 		$settings_page = new ALYNT_AG_Settings_Page();
@@ -342,6 +413,11 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'recent resend blocks. Repeated resends can indicate confused customers or automated retries.', $output );
 		$this->assertStringContainsString( 'recent login blocks. Repeated login blocks can indicate credential stuffing or customers stuck at login.', $output );
 		$this->assertStringContainsString( 'recent password-reset blocks. Check for repeated reset requests against the same account.', $output );
+		$this->assertStringContainsString( 'Registration Flow Signals', $output );
+		$this->assertStringContainsString( 'recent consent-related blocks. Check Terms and Privacy copy if legitimate customers are stopping here.', $output );
+		$this->assertStringContainsString( 'recent pending-record or confirmation-email failures. Review database writes and email delivery before public launch.', $output );
+		$this->assertStringContainsString( 'recent password or email-availability blocks. Review password guidance if customers struggle to complete setup.', $output );
+		$this->assertStringContainsString( 'recent successful resends. Repeated resends can point to delivery delays or unclear confirmation instructions.', $output );
 		$this->assertStringContainsString( 'd***@example.test', $output );
 		$this->assertStringContainsString( 's***@example.test', $output );
 		$this->assertStringContainsString( 'r***@example.test', $output );
@@ -370,6 +446,8 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'lostpassword_rate_limited', $output );
 		$this->assertStringContainsString( 'terms_required', $output );
 		$this->assertStringContainsString( 'confirmation_resent', $output );
+		$this->assertStringContainsString( 'pending_registration_failed', $output );
+		$this->assertStringContainsString( 'password_mismatch', $output );
 		$this->assertStringContainsString( 'Passed', $output );
 		$this->assertStringContainsString( 'Blocked', $output );
 		$this->assertStringContainsString( 'Reoon accepted this email.', $output );
@@ -388,6 +466,8 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Password reset request was blocked by the rate limit.', $output );
 		$this->assertStringContainsString( 'Registration was blocked because terms and privacy consent was not accepted.', $output );
 		$this->assertStringContainsString( 'A fresh confirmation email was sent for an existing pending registration.', $output );
+		$this->assertStringContainsString( 'The pending registration record could not be stored.', $output );
+		$this->assertStringContainsString( 'Account creation was blocked because the password confirmation did not match.', $output );
 		$this->assertStringNotContainsString( 'damon@example.test', $output );
 	}
 

@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.41 Provider health visibility shipped; next slice TBD
+- Current phase: v0.1.42 Registration flow visibility in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.41 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -20,6 +20,39 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.42 Small Release Cycle
+
+### Scope
+
+- [x] Start the next security and anti-spam hardening slice from the released `master` baseline.
+- [x] Add read-only Registration Flow Signals to the Security tab using existing verification activity rows.
+- [x] Summarize recent consent-related blocks, pending-record or confirmation-email failures, password setup blocks, and successful confirmation resends without changing public registration behavior.
+- [x] Keep changes scoped to admin visibility with no settings schema, frontend routing, provider verification policy, rate-limit enforcement, dashboard, WooCommerce, webhook, email template, privacy cleanup, or default frontend-output behavior changes.
+- [x] Add focused coverage for registration-flow signal counts and rendered admin copy.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.42` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.42` from clean `master` after the `v0.1.41` release merge.
+- Added a Registration Flow Signals summary above the Security tab verification activity table.
+- The summary derives counts from existing recent `registration_flow` rows and separates consent blocks, registration system failures, password setup blocks, and successful confirmation resends.
+- Added focused tests for registration-flow signal counts and rendered guidance copy.
+- Verified local checks before the release metadata bump: PHP syntax passes for the touched settings page, focused `SettingsPageSecurityStatusTest` passes with 10 tests and 148 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 752 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 212 tests and 1116 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.42-branch-qa-20260705-231528\alynt-account-gateway-v0.1.42-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.41` metadata, Registration Flow Signals renderer, built admin CSS, and POT strings present.
+- Copied the branch-QA runtime package into the LocalWP Plugin Tester plugin directory after Novamira MCP became unavailable and global WP-CLI was not installed. Local PHP CLI bootstrap is blocked because the CLI runtime lacks `mysqli`; web runtime smoke is pending because `plugin-tester.local` is currently unreachable with no LocalWP/nginx/PHP/MySQL processes running. Temporary smoke scripts and uploaded QA artifacts were cleaned up.
+
+### Guardrails
+
+- Do not change registration validation, confirmation email sending, password rules, pending registration storage, provider API calls, provider status interpretation, Reoon flagged-status policy, public frontend error messages, rate-limit thresholds, transient keying, login behavior, saved settings schema, dashboard rendering, WooCommerce endpoint delegation, webhook dispatch behavior, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep this cycle focused on admin-only registration-flow visibility using existing plugin-owned verification activity.
+
+### Completion Gate
+
+- [ ] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates Registration Flow Signals on the Security tab.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.41 Small Release Cycle
 

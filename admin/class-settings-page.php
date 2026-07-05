@@ -1187,6 +1187,7 @@ class ALYNT_AG_Settings_Page {
 
 			<?php $this->render_security_provider_health_signals( $logs ); ?>
 			<?php $this->render_security_rate_limit_pressure( $logs ); ?>
+			<?php $this->render_security_registration_flow_signals( $logs ); ?>
 
 			<?php if ( empty( $logs ) ) : ?>
 				<p class="alynt-ag-security-status__notice">
@@ -1224,6 +1225,89 @@ class ALYNT_AG_Settings_Page {
 			<?php endif; ?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Render registration flow summary from recent verification logs.
+	 *
+	 * @param array<int,object> $logs Recent verification logs.
+	 * @return void
+	 */
+	private function render_security_registration_flow_signals( $logs ) {
+		$items = $this->security_registration_flow_signal_items( $logs );
+		?>
+		<div class="alynt-ag-security-flow" aria-label="<?php esc_attr_e( 'Recent registration flow signals', 'alynt-account-gateway' ); ?>">
+			<h4><?php esc_html_e( 'Registration Flow Signals', 'alynt-account-gateway' ); ?></h4>
+			<div class="alynt-ag-security-status__grid">
+				<?php foreach ( $items as $item ) : ?>
+					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+						<h5><?php echo esc_html( $item['label'] ); ?></h5>
+						<p>
+							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
+							<?php echo esc_html( $item['message'] ); ?>
+						</p>
+					</section>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Return registration flow signal items from recent verification logs.
+	 *
+	 * @param array<int,object> $logs Recent verification logs.
+	 * @return array<int,array{label:string,status:string,count:int,message:string}>
+	 */
+	private function security_registration_flow_signal_items( $logs ) {
+		$consent_blocks  = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'registration_flow',
+			array( 'terms_required', 'consent_record_failed' )
+		);
+		$system_failures = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'registration_flow',
+			array( 'pending_registration_failed', 'confirmation_email_failed' )
+		);
+		$password_blocks = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'registration_flow',
+			array( 'password_mismatch', 'alynt_ag_password_length', 'alynt_ag_password_complexity', 'email_unavailable' )
+		);
+		$resends         = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'registration_flow',
+			array( 'confirmation_resent' )
+		);
+
+		return array(
+			array(
+				'label'   => __( 'Consent Blocks', 'alynt-account-gateway' ),
+				'status'  => $consent_blocks > 0 ? 'warning' : 'ready',
+				'count'   => $consent_blocks,
+				'message' => __( 'recent consent-related blocks. Check Terms and Privacy copy if legitimate customers are stopping here.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Registration System Failures', 'alynt-account-gateway' ),
+				'status'  => $system_failures > 0 ? 'action' : 'ready',
+				'count'   => $system_failures,
+				'message' => __( 'recent pending-record or confirmation-email failures. Review database writes and email delivery before public launch.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Password Setup Blocks', 'alynt-account-gateway' ),
+				'status'  => $password_blocks > 0 ? 'warning' : 'ready',
+				'count'   => $password_blocks,
+				'message' => __( 'recent password or email-availability blocks. Review password guidance if customers struggle to complete setup.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Confirmation Resends Sent', 'alynt-account-gateway' ),
+				'status'  => $resends > 0 ? 'warning' : 'ready',
+				'count'   => $resends,
+				'message' => __( 'recent successful resends. Repeated resends can point to delivery delays or unclear confirmation instructions.', 'alynt-account-gateway' ),
+			),
+		);
 	}
 
 	/**
