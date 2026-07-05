@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.38 Pending registration resend and expiry visibility release-candidate validation in progress
+- Current phase: v0.1.38 Pending registration resend and expiry visibility shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.37 is the current public baseline; v0.1.38 is in release-candidate validation.
+- Plugin status: v0.1.38 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -33,7 +33,7 @@
 - [x] Keep changes scoped to resend/expiry visibility with no settings schema, frontend route, pending-registration table schema, provider verification policy, rate-limit thresholds, dashboard, WooCommerce, webhook, email template, privacy cleanup, or default frontend-output behavior changes.
 - [x] Add focused coverage for resend messages, resend success activity, resend throttle guidance, and pending-registration next-step guidance.
 - [x] Run package and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.38` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.38` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -50,6 +50,8 @@
 - Re-ran release-candidate validation after the metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` with 713 strings, `npm.cmd run lint`, `npm.cmd audit --audit-level=moderate`, full `npm.cmd test` with 204 tests and 1045 assertions, and PHP syntax check for the main plugin file all passed.
 - Created release-candidate package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.38-20260705-194205\alynt-account-gateway-v0.1.38.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.38` header/constant/readme/POT metadata, resend throttle copy, `confirmation_resent` logging/guidance, pending-registration Next Step guidance, built assets, and POT strings present.
 - Installed the `0.1.38` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header `0.1.38`, loaded constant `0.1.38`, and the new markers are present. Runtime smoke confirmed the resend-throttle frontend message, inserted disposable `confirmation_resent` and `resend_confirmation_rate_limited` activity rows plus pending and expired pending-registration rows, authenticated admin HTML smoke confirmed the Security tab renders resend throttle guidance, confirmation resent guidance, Next Step guidance, masked pending/expired emails, and no fatal/critical error output. Temporary activity rows, pending-registration rows, and upload ZIPs were cleaned up after QA.
+- Published GitHub release `v0.1.38`: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.38`. The Build Release workflow completed successfully, and the public asset `alynt-account-gateway-v0.1.38.zip` verified with 45 runtime file entries plus 10 directory entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.38` metadata, resend throttle copy, `confirmation_resent` logging/guidance, pending-registration Next Step guidance, built assets, and POT strings present.
+- Verified the Alynt Plugin Updater path end to end on LocalWP Plugin Tester by downgrading to the public `v0.1.37` release asset, confirming runtime `0.1.37` with the new resend copy and Next Step markers absent, clearing updater caches, detecting the available `0.1.38` update from the updater-discovered GitHub package URL, installing that package through WordPress upgrader classes, confirming runtime `0.1.38` with no update remaining, and re-smoking resend throttle copy plus Security tab guidance after the updater install. Temporary activity rows, pending-registration rows, and upload artifacts were cleaned up after verification.
 
 ### Guardrails
 
@@ -60,7 +62,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates resend throttle copy, resend success activity, and pending-registration next-step guidance.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.35 Small Release Cycle
 
