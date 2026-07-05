@@ -39,6 +39,8 @@
 - Added focused `SettingsPageTabGuidanceTest` coverage for one guidance entry per registered settings tab, Registration tab guidance linking to Security, and invalid tab fallback to General guidance.
 - Verified initial local checks: PHP syntax passes for touched PHP/test files, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 544 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 182 tests and 820 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
 - Confirmed the built admin CSS contains the tab guidance styles and mobile single-column fallback.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.27-branch-qa-20260705-131253\alynt-account-gateway-v0.1.27-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor files, pre-bump `0.1.26` metadata, tab guidance PHP, and built admin guidance CSS present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.26` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.26`, tab guidance PHP and built admin CSS are present, and authenticated HTTP smoke confirmed General, Registration, WooCommerce, and Advanced / Tools tabs return `200`, render the guidance panel, load the admin CSS asset, show expected guidance copy, and show no fatal/critical error output. Temporary package and curl cookie state were cleaned up after QA.
 
 ### Guardrails
 
