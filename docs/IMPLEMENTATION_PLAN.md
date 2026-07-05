@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.39 Reoon flagged-status policy shipped; next slice TBD
+- Current phase: v0.1.40 Rate-limit pressure visibility shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.39 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.40 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,46 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.40 Small Release Cycle
+
+### Scope
+
+- [x] Start the next security and anti-spam hardening slice from the released `master` baseline.
+- [x] Add a read-only Rate Limit Pressure summary to the Security tab using existing verification activity rows.
+- [x] Summarize recent registration, confirmation resend, login, and password-reset rate-limit blocks without changing enforcement thresholds or public responses.
+- [x] Keep changes scoped to admin visibility with no settings schema, rate-limit storage, frontend routing, provider verification policy, dashboard, WooCommerce, webhook, email template, privacy cleanup, or default frontend-output behavior changes.
+- [x] Add focused coverage for pressure summary counts and rendered admin copy.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Publish the final `v0.1.40` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.40` from clean `master` after the `v0.1.39` release merge.
+- Added a Rate Limit Pressure summary above the existing Recent Registration Verification Activity table.
+- The summary derives counts from existing recent `rate_limit` verification rows and shows separate cards for Registration, Confirmation Resends, Login, and Password Reset.
+- Added small admin CSS rules for the summary heading and card headings, then rebuilt the admin asset bundle.
+- Verified focused checks: PHP syntax passes for the touched admin settings page, focused `SettingsPageSecurityStatusTest` passes with 8 tests and 110 assertions, `npm.cmd run build` passes, and `npm.cmd run lint` passes.
+- Verified broader local checks: `npm.cmd run make-pot` writes 732 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 210 tests and 1078 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.40-branch-qa-20260705-204413\alynt-account-gateway-v0.1.40-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.39` metadata, Rate Limit Pressure renderer, built admin CSS, and POT strings present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.39` through WordPress upgrader classes. Fresh runtime smoke confirmed active header and loaded constant remain pre-bump `0.1.39`, Rate Limit Pressure renderer and CSS are present, seeded registration/resend/login/password-reset rate-limit rows render the new pressure copy plus existing table rows, and temporary verification rows were cleaned up after QA.
+- Bumped release-candidate metadata to `0.1.40` across the plugin header/constant, npm metadata, readme, sample test, changelog, POT, and implementation plan.
+- Re-ran release-candidate validation after the metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` with 732 strings, `npm.cmd run lint`, `npm.cmd audit --audit-level=moderate`, full `npm.cmd test` with 210 tests and 1078 assertions, PHP syntax check for the main plugin file, and `git diff --check` all passed.
+- Created release-candidate package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.40-20260705-204748\alynt-account-gateway-v0.1.40.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.40` header/constant/readme/POT metadata, Rate Limit Pressure renderer, and built admin CSS present.
+- Installed the `0.1.40` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header `0.1.40` and loaded constant `0.1.40`. Runtime smoke confirmed Rate Limit Pressure renderer and CSS are present, seeded registration/resend/login/password-reset rate-limit rows render the new pressure copy, and temporary verification rows were cleaned up after QA.
+- Published GitHub release `v0.1.40`: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.40`. The Build Release workflow completed successfully, and the public asset `alynt-account-gateway-v0.1.40.zip` verified with 45 runtime file entries plus 10 directory entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.40` metadata, Rate Limit Pressure renderer, and built admin CSS present.
+- Verified the Alynt Plugin Updater path end to end on LocalWP Plugin Tester by downgrading to the public `v0.1.39` release asset, confirming runtime `0.1.39` with Rate Limit Pressure markers absent, clearing updater scanner/release caches, detecting the available `0.1.40` update from the updater-discovered GitHub package URL, installing that package through WordPress upgrader classes, confirming final active runtime `0.1.40` with no update remaining, and re-smoking Rate Limit Pressure output after the updater install. Temporary verification rows were cleaned up after verification.
+
+### Guardrails
+
+- Do not change rate-limit thresholds, transient keying, public frontend rate-limit messages, login or registration behavior, provider verification policy, saved settings schema, dashboard rendering, WooCommerce endpoint delegation, webhook dispatch behavior, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep this cycle focused on admin-only rate-limit visibility using existing plugin-owned verification activity.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates the Rate Limit Pressure summary on the Security tab.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.39 Small Release Cycle
 

@@ -116,6 +116,45 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( 'Limit: 4 attempts in a 45-minute window.', $items[3]['message'] );
 	}
 
+	public function test_security_rate_limit_pressure_counts_recent_activity() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper(
+			$settings_page,
+			'security_rate_limit_pressure_items',
+			array(
+				array(
+					(object) array(
+						'provider' => 'rate_limit',
+						'status'   => 'registration_rate_limited',
+					),
+					(object) array(
+						'provider' => 'rate_limit',
+						'status'   => 'registration_rate_limited',
+					),
+					(object) array(
+						'provider' => 'rate_limit',
+						'status'   => 'login_rate_limited',
+					),
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'role_account_flagged',
+					),
+				),
+			)
+		);
+
+		$this->assertSame( 'Registration', $items[0]['label'] );
+		$this->assertSame( 2, $items[0]['count'] );
+		$this->assertSame( 'warning', $items[0]['status'] );
+		$this->assertSame( 'Confirmation Resends', $items[1]['label'] );
+		$this->assertSame( 0, $items[1]['count'] );
+		$this->assertSame( 'ready', $items[1]['status'] );
+		$this->assertSame( 'Login', $items[2]['label'] );
+		$this->assertSame( 1, $items[2]['count'] );
+		$this->assertSame( 'Password Reset', $items[3]['label'] );
+		$this->assertSame( 0, $items[3]['count'] );
+	}
+
 	public function test_security_recent_verification_activity_renders_masked_rows() {
 		$tables = ALYNT_AG_Database::tables();
 		$GLOBALS['alynt_ag_test_db_results'][ $tables['verification_logs'] ] = array(
@@ -240,6 +279,11 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$output = ob_get_clean();
 
 		$this->assertStringContainsString( 'Recent Registration Verification Activity', $output );
+		$this->assertStringContainsString( 'Rate Limit Pressure', $output );
+		$this->assertStringContainsString( 'recent registration blocks. Review the limit if legitimate customers are affected.', $output );
+		$this->assertStringContainsString( 'recent resend blocks. Repeated resends can indicate confused customers or automated retries.', $output );
+		$this->assertStringContainsString( 'recent login blocks. Repeated login blocks can indicate credential stuffing or customers stuck at login.', $output );
+		$this->assertStringContainsString( 'recent password-reset blocks. Check for repeated reset requests against the same account.', $output );
 		$this->assertStringContainsString( 'd***@example.test', $output );
 		$this->assertStringContainsString( 's***@example.test', $output );
 		$this->assertStringContainsString( 'r***@example.test', $output );
