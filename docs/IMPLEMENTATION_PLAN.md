@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.33 Verification activity guidance in progress
+- Current phase: v0.1.33 Verification activity guidance shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.32 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.33 is in release-candidate validation on `release/0.1.33`.
+- Plugin status: v0.1.33 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep changes scoped to admin visibility with no schema, settings, registration flow, provider verification, rate-limit enforcement, email delivery, webhook, frontend, dashboard, WooCommerce, privacy retention, or default frontend-output behavior changes.
 - [x] Add focused coverage for rendered provider guidance.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.33` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.33` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -45,6 +45,8 @@
 - Regenerated `languages/alynt-account-gateway.pot` with 685 strings and `0.1.33` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 197 tests and 960 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, PHP syntax passes, and `git diff --check` passes with only line-ending warnings for generated/package metadata files.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.33-20260705-163414\alynt-account-gateway-v0.1.33.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.33` header/constant/readme/POT metadata, verification guidance PHP, built admin CSS, and POT present.
 - Installed the local `0.1.33` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant are `0.1.33`, the verification guidance code and built admin CSS are present. Seeded five temporary verification-log rows and authenticated HTTP smoke confirmed the Security tab returns the Guidance column, Reoon accepted/flagged/blocked explanations, Turnstile failed explanation, rate-limit explanation, masked email rows, admin CSS, and no fatal/critical error output. Seeded QA rows were cleaned up after QA.
+- Published GitHub release `v0.1.33`, confirmed the Build Release workflow completed successfully, downloaded the public release asset, and verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs files, `0.1.33` header/constant/readme/POT metadata, verification guidance PHP, built admin CSS, and POT present.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.32` to `0.1.33`, then installed it through the WordPress plugin update path from the GitHub release ZIP URL. Final fresh runtime state: active `0.1.33` header/constant, verification guidance PHP and built admin CSS present, no remaining update offer, Alynt Plugin Updater reports current/new `0.1.33`, and authenticated HTTP smoke confirmed the Security tab returns the Guidance column, Reoon accepted/flagged/blocked explanations, Turnstile failed explanation, rate-limit explanation, masked email rows, admin CSS, and no fatal/critical error output. Seeded QA rows were cleaned up after QA.
 
 ### Guardrails
 
@@ -55,7 +57,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates the Security tab renders verification guidance.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.32 Small Release Cycle
 
