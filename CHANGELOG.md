@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.25 - 2026-07-05
+
+### Added
+
+- Added branded next-step panels for WooCommerce account endpoint edge states on orders, downloads, addresses, account details, and payment-methods pages.
+
 ## 0.1.24 - 2026-07-05
 
 ### Added
