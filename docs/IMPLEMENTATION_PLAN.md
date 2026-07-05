@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.22 settings readiness UX
+- Current phase: v0.1.22 settings readiness UX shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.21 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.22 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Surface warnings for public registration without Turnstile/Reoon, missing Terms/Privacy paths, missing email test recipient, dashboard/WooCommerce takeover gaps, and webhook signing gaps where applicable.
 - [x] Add focused coverage for readiness check classification and panel output.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.22` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.22` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -46,6 +46,8 @@
 - Regenerated `languages/alynt-account-gateway.pot` with 439 strings and `0.1.22` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 172 tests and 715 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.22-20260705-103755\alynt-account-gateway-v0.1.22.zip`; verified 46 runtime files, no backslash archive entries, no missing runtime files, no dev/source/test/docs/rules/package/vendor files, `0.1.22` header/constant/readme/POT metadata, readiness panel code, and built readiness CSS present.
 - Installed the local `0.1.22` package on LocalWP Plugin Tester through the WordPress upgrader path. Fresh runtime verification confirmed active header and loaded constant are `0.1.22`, readiness panel code and built readiness CSS are present, and temporary upload artifacts were cleaned up.
+- Published GitHub release `v0.1.22`, downloaded the public release asset, and verified 46 runtime files, no backslash archive entries, no dev/source/test/docs/rules/package/vendor files, `0.1.22` header/constant/readme metadata, readiness panel code, and built readiness CSS present.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.21` to `0.1.22`, then installed it through the WordPress upgrader path. Final fresh runtime state: active `0.1.22` header/constant, readiness panel code and built readiness CSS present, checked plugin version `0.1.22`, no remaining update offer, and temporary upload artifacts cleaned up.
 
 ### Guardrails
 
@@ -54,9 +56,9 @@
 
 ### Completion Gate
 
-- [ ] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates the General tab readiness panel.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates the General tab readiness panel.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.21 Small Release Cycle
 
