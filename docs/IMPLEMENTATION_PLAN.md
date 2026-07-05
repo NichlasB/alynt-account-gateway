@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.23 WooCommerce dashboard polish
+- Current phase: v0.1.23 WooCommerce dashboard polish shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.22 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.23 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -29,8 +29,8 @@
 - [x] Add a branded WooCommerce customer overview on the base dashboard when takeover is enabled and WooCommerce is available.
 - [x] Keep WooCommerce endpoint pages delegated to WooCommerce handlers.
 - [x] Add focused coverage for overview rendering and configured endpoint URLs.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.23` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Publish the final `v0.1.23` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -45,6 +45,8 @@
 - Regenerated `languages/alynt-account-gateway.pot` with 448 strings and `0.1.23` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 174 tests and 724 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.23-20260705-110650\alynt-account-gateway-v0.1.23.zip`; verified 46 runtime files, no backslash archive entries, no dev/source/test/docs/rules/package/vendor files, `0.1.23` header/constant/readme/POT metadata, dashboard overview renderer, endpoint URL helper, built frontend overview CSS, and POT strings present.
 - Installed the local `0.1.23` package on LocalWP Plugin Tester through the WordPress upgrader path. Fresh runtime verification confirmed active header and loaded constant are `0.1.23`, dashboard overview renderer and built overview CSS are present, and temporary upload artifacts were cleaned up.
+- Published GitHub release `v0.1.23`, downloaded the public release asset, and verified 46 runtime files, no backslash archive entries, no dev/source/test/docs/rules/package/vendor files, `0.1.23` header/constant/readme metadata, dashboard overview renderer, and built frontend overview CSS present.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.22` to `0.1.23`, then installed it through the WordPress upgrader path. Final fresh runtime state: active `0.1.23` header/constant, dashboard overview renderer and built overview CSS present, checked plugin version `0.1.23`, no remaining update offer, and temporary upload artifacts cleaned up.
 
 ### Guardrails
 
@@ -53,9 +55,9 @@
 
 ### Completion Gate
 
-- [ ] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates the branded WooCommerce dashboard overview and representative endpoint delegation.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates the branded WooCommerce dashboard overview and representative endpoint delegation.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.22 Small Release Cycle
 
