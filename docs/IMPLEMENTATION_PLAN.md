@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.27 Settings UX refinement in progress
+- Current phase: v0.1.27 Settings UX refinement shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.27 release candidate is in progress on `release/0.1.27`.
+- Plugin status: v0.1.27 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -30,7 +30,7 @@
 - [x] Keep guidance advisory only with no settings storage, routing, provider, email, dashboard, WooCommerce, webhook, privacy, or frontend behavior changes.
 - [x] Add focused coverage for complete tab guidance, registration-to-security handoff, and invalid-tab fallback.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.27` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.27` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -45,6 +45,8 @@
 - Regenerated `languages/alynt-account-gateway.pot` with 544 strings and `0.1.27` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 182 tests and 820 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only POT/readme line-ending warnings.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.27-20260705-131836\alynt-account-gateway-v0.1.27.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor files, `0.1.27` header/constant/readme/POT metadata, tab guidance PHP, and built admin guidance CSS present.
 - Installed the local `0.1.27` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant are `0.1.27`, tab guidance PHP and built admin CSS are present, and authenticated HTTP smoke confirmed General, Registration, WooCommerce, and Advanced / Tools tabs return `200`, render the guidance panel, load the admin CSS asset, show expected guidance copy, and show no fatal/critical error output. Temporary package and curl cookie state were cleaned up after QA.
+- Published GitHub release `v0.1.27`, confirmed the Build Release workflow completed successfully, downloaded the public release asset, and verified 55 runtime entries, no backslash archive entries, no dev/source/test/vendor files, `0.1.27` header/constant/readme metadata, tab guidance PHP, and built admin guidance CSS present.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.26` to `0.1.27`, then installed it through the WordPress plugin update path from the GitHub release ZIP URL. Final fresh runtime state: active `0.1.27` header/constant, tab guidance PHP and built admin CSS present, no remaining update offer, and authenticated HTTP smoke confirmed General, Registration, WooCommerce, and Advanced / Tools tabs return `200`, render the guidance panel, load the admin CSS asset, show expected guidance copy, and show no fatal/critical error output.
 
 ### Guardrails
 
@@ -55,7 +57,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates representative settings tabs render the new guidance panel.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.26 Small Release Cycle
 
