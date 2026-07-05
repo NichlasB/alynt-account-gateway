@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.34 Auth rate-limit activity logging shipped; next slice TBD
+- Current phase: v0.1.35 Routing diagnostics in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.34 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -20,6 +20,37 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.35 Small Release Cycle
+
+### Scope
+
+- [x] Start the next admin observability slice from the released `master` baseline.
+- [x] Log native `wp-login.php` redirect decisions into the existing diagnostics table when diagnostics are enabled.
+- [x] Log blocked `wp-admin` access for non-privileged users into the existing diagnostics table when diagnostics are enabled.
+- [x] Keep changes scoped to diagnostics evidence with no settings schema, frontend route, redirect destination, capability, toolbar, login, registration, dashboard, WooCommerce, webhook, email, privacy cleanup, or default frontend-output behavior changes.
+- [x] Add focused coverage proving diagnostics rows are written without storing raw login or redirect query values.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.35` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.35` from clean `master` after the `v0.1.34` release merge.
+- Added diagnostics events for `native_login_redirected` and `wp_admin_access_blocked` using the existing diagnostics settings gate and custom diagnostics table.
+- Kept diagnostics context privacy-conscious by recording action, destination path, preserved query argument names, request method, and user id when available, without storing raw login, key, or redirect query values.
+- Added focused `FrontendRoutingTest` coverage for native-login redirect diagnostics and blocked wp-admin diagnostics.
+- Verified initial local checks: PHP syntax passes for touched frontend/test files, focused `FrontendRoutingTest` passes with 7 tests and 34 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 689 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 199 tests and 994 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+
+### Guardrails
+
+- Do not change saved settings schema, frontend routes, redirect destinations, emergency bypass behavior, wp-admin capability checks, toolbar behavior, login behavior, registration flow, provider verification behavior, rate-limit enforcement, dashboard rendering, WooCommerce endpoint delegation, webhook dispatch behavior, email delivery behavior, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep this cycle focused on diagnostics-only observability for account routing decisions.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates diagnostics events for native login redirects and blocked wp-admin access.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.34 Small Release Cycle
 

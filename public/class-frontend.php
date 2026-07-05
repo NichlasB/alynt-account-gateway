@@ -73,8 +73,19 @@ class ALYNT_AG_Frontend {
 			return;
 		}
 
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-		wp_safe_redirect( home_url( $settings['after_login_redirect'] ) );
+		$settings    = ALYNT_AG_Settings_Schema::get_settings();
+		$destination = home_url( $settings['after_login_redirect'] );
+
+		$this->log_routing_event(
+			'wp_admin_access_blocked',
+			__( 'Blocked wp-admin access for a non-privileged user.', 'alynt-account-gateway' ),
+			array(
+				'destination_path' => $this->path_from_url( $destination ),
+				'user_id'          => function_exists( 'get_current_user_id' ) ? absint( get_current_user_id() ) : 0,
+			)
+		);
+
+		wp_safe_redirect( $destination );
 		exit;
 	}
 
@@ -107,6 +118,17 @@ class ALYNT_AG_Frontend {
 				$url   = add_query_arg( $param, rawurlencode( $value ), $url );
 			}
 		}
+
+		$this->log_routing_event(
+			'native_login_redirected',
+			__( 'Redirected a native wp-login.php request to the branded account gateway.', 'alynt-account-gateway' ),
+			array(
+				'action'               => $action,
+				'destination_path'     => $this->path_from_url( $url ),
+				'preserved_query_keys' => $this->preserved_login_query_keys(),
+				'request_method'       => strtoupper( $request_method ),
+			)
+		);
 
 		wp_safe_redirect( $url );
 		exit;
@@ -253,6 +275,54 @@ class ALYNT_AG_Frontend {
 	 */
 	private function get_url_for_action( $action, $settings ) {
 		return $this->routes()->action_url( $action, $settings );
+	}
+
+	/**
+	 * Log a privacy-conscious frontend routing diagnostics event.
+	 *
+	 * @param string              $event_code Event code.
+	 * @param string              $message    Event message.
+	 * @param array<string,mixed> $context    Event context.
+	 * @return bool
+	 */
+	private function log_routing_event( $event_code, $message, $context ) {
+		return ALYNT_AG_Diagnostics_Logger::log_event(
+			'warning',
+			'security',
+			$event_code,
+			$message,
+			$context
+		);
+	}
+
+	/**
+	 * Return only the path portion of a URL for diagnostics.
+	 *
+	 * @param string $url URL.
+	 * @return string
+	 */
+	private function path_from_url( $url ) {
+		$path = wp_parse_url( $url, PHP_URL_PATH );
+
+		return $path ? sanitize_text_field( $path ) : '';
+	}
+
+	/**
+	 * Return preserved native-login query argument names without their values.
+	 *
+	 * @return array<int,string>
+	 */
+	private function preserved_login_query_keys() {
+		$keys = array();
+
+		foreach ( array( 'key', 'login', 'redirect_to' ) as $param ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Diagnostics records keys only, not values.
+			if ( isset( $_GET[ $param ] ) ) {
+				$keys[] = $param;
+			}
+		}
+
+		return $keys;
 	}
 
 	/**

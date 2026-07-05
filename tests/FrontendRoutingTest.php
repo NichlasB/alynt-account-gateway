@@ -25,6 +25,7 @@ class FrontendRoutingTest extends TestCase {
 			),
 		);
 		$GLOBALS['alynt_ag_test_redirects'] = array();
+		$GLOBALS['alynt_ag_test_db_inserts'] = array();
 		$GLOBALS['alynt_ag_test_throw_on_redirect'] = false;
 		$GLOBALS['alynt_ag_test_user_caps'] = array();
 		$GLOBALS['alynt_ag_test_user_logged_in'] = false;
@@ -36,6 +37,7 @@ class FrontendRoutingTest extends TestCase {
 		unset(
 			$GLOBALS['alynt_ag_test_options'],
 			$GLOBALS['alynt_ag_test_redirects'],
+			$GLOBALS['alynt_ag_test_db_inserts'],
 			$GLOBALS['alynt_ag_test_throw_on_redirect'],
 			$GLOBALS['alynt_ag_test_user_caps'],
 			$GLOBALS['alynt_ag_test_user_logged_in']
@@ -92,6 +94,42 @@ class FrontendRoutingTest extends TestCase {
 		$this->assertStringContainsString( 'redirect_to=https%253A%252F%252Fexample.test%252Fmy-account%252F', $GLOBALS['alynt_ag_test_redirects'][0]['location'] );
 	}
 
+	public function test_native_login_redirect_logs_diagnostics_without_query_values() {
+		$frontend = new ALYNT_AG_Frontend();
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings']['diagnostics_enabled'] = true;
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings']['diagnostics_min_level'] = 'debug';
+		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
+		$_GET = array(
+			'action'      => 'lostpassword',
+			'login'       => 'damon@example.test',
+			'redirect_to' => 'https://example.test/my-account/',
+		);
+
+		try {
+			$frontend->maybe_redirect_native_login();
+			$this->fail( 'Expected redirect exception.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertStringStartsWith( 'redirect:https://example.test/account?action=lostpassword', $exception->getMessage() );
+		}
+
+		$tables = ALYNT_AG_Database::tables();
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+		$this->assertSame( $tables['diagnostics_logs'], $GLOBALS['alynt_ag_test_db_inserts'][0]['table'] );
+
+		$row     = $GLOBALS['alynt_ag_test_db_inserts'][0]['data'];
+		$context = json_decode( $row['context'], true );
+
+		$this->assertSame( 'warning', $row['level'] );
+		$this->assertSame( 'security', $row['category'] );
+		$this->assertSame( 'native_login_redirected', $row['event_code'] );
+		$this->assertSame( 'lostpassword', $context['action'] );
+		$this->assertSame( '/account', $context['destination_path'] );
+		$this->assertSame( array( 'login', 'redirect_to' ), $context['preserved_query_keys'] );
+		$this->assertSame( 'GET', $context['request_method'] );
+		$this->assertStringNotContainsString( 'damon@example.test', $row['context'] );
+		$this->assertStringNotContainsString( 'my-account', $row['context'] );
+	}
+
 	public function test_emergency_bypass_keeps_native_login_available() {
 		$frontend = new ALYNT_AG_Frontend();
 		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
@@ -128,5 +166,33 @@ class FrontendRoutingTest extends TestCase {
 		}
 
 		$this->assertSame( 'https://example.test/my-account/', $GLOBALS['alynt_ag_test_redirects'][0]['location'] );
+	}
+
+	public function test_wp_admin_block_logs_diagnostics_when_enabled() {
+		$frontend = new ALYNT_AG_Frontend();
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings']['diagnostics_enabled'] = true;
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings']['diagnostics_min_level'] = 'debug';
+		$GLOBALS['alynt_ag_test_user_logged_in'] = true;
+		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
+
+		try {
+			$frontend->maybe_block_wp_admin();
+			$this->fail( 'Expected redirect exception.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame( 'redirect:https://example.test/my-account/', $exception->getMessage() );
+		}
+
+		$tables = ALYNT_AG_Database::tables();
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+		$this->assertSame( $tables['diagnostics_logs'], $GLOBALS['alynt_ag_test_db_inserts'][0]['table'] );
+
+		$row     = $GLOBALS['alynt_ag_test_db_inserts'][0]['data'];
+		$context = json_decode( $row['context'], true );
+
+		$this->assertSame( 'warning', $row['level'] );
+		$this->assertSame( 'security', $row['category'] );
+		$this->assertSame( 'wp_admin_access_blocked', $row['event_code'] );
+		$this->assertSame( '/my-account/', $context['destination_path'] );
+		$this->assertSame( 0, $context['user_id'] );
 	}
 }
