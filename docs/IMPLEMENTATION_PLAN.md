@@ -30,7 +30,7 @@
 - [x] Cover passed, flagged, blocked, Turnstile failure, and rate-limit outcomes without changing registration behavior or stored verification data.
 - [x] Keep changes scoped to admin visibility with no schema, settings, registration flow, provider verification, rate-limit enforcement, email delivery, webhook, frontend, dashboard, WooCommerce, privacy retention, or default frontend-output behavior changes.
 - [x] Add focused coverage for rendered provider guidance.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
 - [ ] Publish the final `v0.1.33` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -39,6 +39,8 @@
 - Added a Guidance column to the Security tab Recent Registration Verification Activity table. The guidance explains accepted Reoon emails, flagged Reoon statuses, Reoon policy blocks, Turnstile failures, and registration/confirmation resend rate-limit blocks.
 - Added focused `SettingsPageSecurityStatusTest` coverage for passed, flagged, blocked, Turnstile failed, and rate-limited guidance output.
 - Verified initial local checks: PHP syntax passes for touched PHP/test files, focused `SettingsPageSecurityStatusTest` passes with 6 tests and 61 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 685 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 197 tests and 960 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.33-branch-qa-20260705-162731\alynt-account-gateway-v0.1.33-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.32` metadata, verification guidance PHP, built admin CSS, and POT present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.32` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.32`, the verification guidance code and built admin CSS are present. Seeded five temporary verification-log rows and authenticated HTTP smoke confirmed the Security tab returns the Guidance column, Reoon accepted/flagged/blocked explanations, Turnstile failed explanation, rate-limit explanation, masked email rows, admin CSS, and no fatal/critical error output. Seeded QA rows were cleaned up after QA.
 
 ### Guardrails
 
@@ -48,7 +50,7 @@
 ### Completion Gate
 
 - [x] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates the Security tab renders verification guidance.
+- [x] Plugin Tester smoke validates the Security tab renders verification guidance.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.32 Small Release Cycle
