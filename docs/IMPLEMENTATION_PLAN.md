@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.33 Verification activity guidance shipped; next slice TBD
+- Current phase: v0.1.34 Auth rate-limit activity logging in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.33 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -20,6 +20,38 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.34 Small Release Cycle
+
+### Scope
+
+- [x] Start the next security and anti-spam hardening slice from the released `master` baseline.
+- [x] Log blocked login and password-reset rate-limit outcomes into the existing verification activity table.
+- [x] Add admin guidance for `login_rate_limited` and `lostpassword_rate_limited` activity rows.
+- [x] Keep changes scoped to auth-side rate-limit evidence and admin visibility with no settings schema, frontend routing, authentication success/failure behavior, reset email behavior, rate-limit thresholds, dashboard, WooCommerce, webhook, privacy cleanup, or default frontend-output behavior changes.
+- [x] Add focused coverage for auth-side rate-limit logging and rendered guidance.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.34` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.34` from clean `master` after the `v0.1.33` release merge.
+- Reused the existing plugin-owned `verification_logs` table instead of adding a schema migration.
+- Added blocked login and password-reset throttles to the shared Security tab activity stream with `rate_limit` as the provider and `login_rate_limited` / `lostpassword_rate_limited` statuses.
+- Added Guidance column messages for blocked login attempts and blocked password-reset requests.
+- Added focused `AuthServiceTest` coverage proving both auth limiter buckets write blocked activity rows, plus `SettingsPageSecurityStatusTest` coverage for the rendered Security tab guidance.
+- Verified initial local checks: PHP syntax passes for touched PHP files, focused `AuthServiceTest` passes with 11 tests and 31 assertions, focused `SettingsPageSecurityStatusTest` passes with 6 tests and 67 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 687 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 197 tests and 974 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+
+### Guardrails
+
+- Do not change saved settings schema, frontend routing, authentication success/failure behavior, password reset email behavior, registration flow, provider verification behavior, rate-limit enforcement thresholds, dashboard rendering, WooCommerce endpoint delegation, webhook dispatch behavior, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep this cycle focused on auth-side rate-limit evidence and read-only admin activity guidance only.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates the Security tab renders auth rate-limit activity guidance.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.33 Small Release Cycle
 

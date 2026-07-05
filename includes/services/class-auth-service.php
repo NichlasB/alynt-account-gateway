@@ -64,19 +64,64 @@ class ALYNT_AG_Auth_Service {
 		$limiter = new ALYNT_AG_Rate_Limiter();
 
 		if ( 'lostpassword' === $bucket ) {
-			return $limiter->check_and_increment(
+			$result = $limiter->check_and_increment(
 				'lostpassword',
 				$identifier,
 				$settings['lostpassword_rate_limit_count'],
 				$settings['lostpassword_rate_limit_window']
 			);
+
+			if ( is_wp_error( $result ) ) {
+				$this->log_rate_limit_result( $identifier, 'lostpassword_rate_limited' );
+			}
+
+			return $result;
 		}
 
-		return $limiter->check_and_increment(
+		$result = $limiter->check_and_increment(
 			'login',
 			$identifier,
 			$settings['login_rate_limit_count'],
 			$settings['login_rate_limit_window']
+		);
+
+		if ( is_wp_error( $result ) ) {
+			$this->log_rate_limit_result( $identifier, 'login_rate_limited' );
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Log an auth-side rate-limit block to the shared verification activity table.
+	 *
+	 * @param string $identifier Submitted email identifier.
+	 * @param string $status     Compact status key.
+	 * @return bool
+	 */
+	public function log_rate_limit_result( $identifier, $status ) {
+		global $wpdb;
+
+		$email  = sanitize_email( $identifier );
+		$status = sanitize_key( $status );
+
+		if ( ! $email || ! $status ) {
+			return false;
+		}
+
+		$tables = ALYNT_AG_Database::tables();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Plugin-owned verification log table.
+		return (bool) $wpdb->insert(
+			$tables['verification_logs'],
+			array(
+				'email'      => $email,
+				'provider'   => 'rate_limit',
+				'status'     => $status,
+				'blocked'    => 1,
+				'created_at' => current_time( 'mysql', true ),
+			),
+			array( '%s', '%s', '%s', '%d', '%s' )
 		);
 	}
 

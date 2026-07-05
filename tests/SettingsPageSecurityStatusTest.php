@@ -138,6 +138,20 @@ class SettingsPageSecurityStatusTest extends TestCase {
 				'blocked'    => 1,
 				'created_at' => '2026-07-05 12:20:00',
 			),
+			(object) array(
+				'email'      => 'login@example.test',
+				'provider'   => 'rate_limit',
+				'status'     => 'login_rate_limited',
+				'blocked'    => 1,
+				'created_at' => '2026-07-05 12:25:00',
+			),
+			(object) array(
+				'email'      => 'reset@example.test',
+				'provider'   => 'rate_limit',
+				'status'     => 'lostpassword_rate_limited',
+				'blocked'    => 1,
+				'created_at' => '2026-07-05 12:30:00',
+			),
 		);
 
 		$settings_page = new ALYNT_AG_Settings_Page();
@@ -152,6 +166,8 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'r***@example.test', $output );
 		$this->assertStringContainsString( 'b***@example.test', $output );
 		$this->assertStringContainsString( 'c***@example.test', $output );
+		$this->assertStringContainsString( 'l***@example.test', $output );
+		$this->assertStringContainsString( 'r***@example.test', $output );
 		$this->assertStringContainsString( 'Reoon Email Verifier', $output );
 		$this->assertStringContainsString( 'Rate Limit', $output );
 		$this->assertStringContainsString( 'Turnstile', $output );
@@ -160,6 +176,8 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'role_account_flagged', $output );
 		$this->assertStringContainsString( 'alynt_ag_reoon_blocked', $output );
 		$this->assertStringContainsString( 'alynt_ag_turnstile_failed', $output );
+		$this->assertStringContainsString( 'login_rate_limited', $output );
+		$this->assertStringContainsString( 'lostpassword_rate_limited', $output );
 		$this->assertStringContainsString( 'Passed', $output );
 		$this->assertStringContainsString( 'Blocked', $output );
 		$this->assertStringContainsString( 'Reoon accepted this email.', $output );
@@ -167,6 +185,8 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Reoon allowed this email, but the status should be reviewed.', $output );
 		$this->assertStringContainsString( 'Reoon blocked this email by policy.', $output );
 		$this->assertStringContainsString( 'Turnstile challenge failed.', $output );
+		$this->assertStringContainsString( 'Login attempt was blocked by the rate limit.', $output );
+		$this->assertStringContainsString( 'Password reset request was blocked by the rate limit.', $output );
 		$this->assertStringNotContainsString( 'damon@example.test', $output );
 	}
 

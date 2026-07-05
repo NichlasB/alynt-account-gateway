@@ -18,6 +18,7 @@ class AuthServiceTest extends TestCase {
 		$GLOBALS['alynt_ag_test_reset_password'] = null;
 		$GLOBALS['alynt_ag_test_redirects'] = array();
 		$GLOBALS['alynt_ag_test_signons'] = array();
+		$GLOBALS['alynt_ag_test_db_inserts'] = array();
 		$GLOBALS['alynt_ag_test_throw_on_redirect'] = false;
 		$_SERVER['REMOTE_ADDR'] = '203.0.113.30';
 		$_SERVER['REQUEST_METHOD'] = 'GET';
@@ -56,6 +57,10 @@ class AuthServiceTest extends TestCase {
 
 		$this->assertInstanceOf( WP_Error::class, $result );
 		$this->assertSame( 'alynt_ag_rate_limited', $result->get_error_code() );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+		$this->assertSame( 'rate_limit', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['provider'] );
+		$this->assertSame( 'login_rate_limited', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['status'] );
+		$this->assertSame( 1, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
 	}
 
 	public function test_login_redirect_uses_default_when_no_redirect_is_submitted() {
@@ -138,6 +143,10 @@ class AuthServiceTest extends TestCase {
 
 		$this->assertInstanceOf( WP_Error::class, $result );
 		$this->assertSame( 'alynt_ag_rate_limited', $result->get_error_code() );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+		$this->assertSame( 'rate_limit', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['provider'] );
+		$this->assertSame( 'lostpassword_rate_limited', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['status'] );
+		$this->assertSame( 1, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
 	}
 
 	public function test_password_reset_key_validation_returns_neutral_error_code() {

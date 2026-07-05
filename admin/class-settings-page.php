@@ -1277,6 +1277,14 @@ class ALYNT_AG_Settings_Page {
 				return __( 'Confirmation resend was blocked by the rate limit.', 'alynt-account-gateway' );
 			}
 
+			if ( 'login_rate_limited' === $status ) {
+				return __( 'Login attempt was blocked by the rate limit.', 'alynt-account-gateway' );
+			}
+
+			if ( 'lostpassword_rate_limited' === $status ) {
+				return __( 'Password reset request was blocked by the rate limit.', 'alynt-account-gateway' );
+			}
+
 			return __( 'Account action was blocked by a rate limit.', 'alynt-account-gateway' );
 		}
 
