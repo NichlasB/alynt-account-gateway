@@ -37,6 +37,10 @@
 - Started `v0.1.26` from clean `master` after the `v0.1.25` release merge.
 - Added dashboard-scoped CSS polish for WooCommerce notices, validation/error boxes, address/account form rows, fieldsets, required markers, submit buttons, and payment-method containers so delegated WooCommerce screens better match the branded dashboard shell without replacing WooCommerce logic.
 - Added focused source-level CSS coverage to keep the WooCommerce selectors scoped to `.agw-dashboard-content` and preserve the mobile single-column fallback for address/account form grids.
+- Verified initial local checks: PHP syntax passes for the new CSS source test, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 474 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 179 tests and 764 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.26-branch-qa-20260705-123438\alynt-account-gateway-v0.1.26-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, and no dev/source/test/vendor files.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.25` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.25`, built frontend CSS is present, and delegated WooCommerce CSS selectors for notices, account forms, payment methods, and mobile fallback are present.
+- Authenticated HTTP smoke confirmed `/my-account/orders/`, `/my-account/edit-address/`, `/my-account/edit-account/`, and `/my-account/payment-methods/` return `200`, render the branded dashboard and delegated content shell, load the frontend CSS asset, match expected endpoint copy, and show no fatal/critical error output. Temporary upload artifacts and curl cookie state were cleaned up after QA.
 
 ### Guardrails
 
