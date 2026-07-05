@@ -567,6 +567,8 @@ class ALYNT_AG_Registration_Service {
 		$sent = $this->send_confirmation_email( $renewed, $settings );
 		if ( is_wp_error( $sent ) ) {
 			$this->log_registration_flow_result( $email, $sent->get_error_code() );
+		} else {
+			$this->log_registration_flow_result( $email, 'confirmation_resent', false );
 		}
 
 		return $sent;

@@ -41,7 +41,7 @@ class FrontendMessagesTest extends TestCase {
 	public function test_resend_error_returns_known_message_and_neutral_fallback() {
 		$messages = new ALYNT_AG_Frontend_Messages();
 
-		$this->assertSame( 'Too many attempts. Please wait a moment and try again.', $messages->resend_error( 'alynt_ag_rate_limited' ) );
+		$this->assertSame( 'Too many confirmation email requests. Please wait a moment and try again.', $messages->resend_error( 'alynt_ag_rate_limited' ) );
 		$this->assertSame( 'The confirmation email could not be sent. Please try again.', $messages->resend_error( 'unknown' ) );
 	}
 

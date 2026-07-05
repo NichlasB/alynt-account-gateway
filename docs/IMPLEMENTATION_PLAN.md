@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.37 Provider failure feedback shipped; next slice TBD
+- Current phase: v0.1.38 Pending registration resend and expiry visibility in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.37 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -20,6 +20,43 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.38 Small Release Cycle
+
+### Scope
+
+- [x] Start the next security and anti-spam hardening slice from the released `master` baseline.
+- [x] Add clearer frontend copy for resend-confirmation throttling while keeping public resend outcomes neutral.
+- [x] Log successful confirmation resends for existing pending registrations as admin-visible `registration_flow` activity without logging missing-pending neutral outcomes.
+- [x] Add Security tab pending-registration next-step guidance for pending, email-confirmed, expired, and completed records.
+- [x] Improve Security tab guidance for resend-confirmation rate-limit blocks.
+- [x] Keep changes scoped to resend/expiry visibility with no settings schema, frontend route, pending-registration table schema, provider verification policy, rate-limit thresholds, dashboard, WooCommerce, webhook, email template, privacy cleanup, or default frontend-output behavior changes.
+- [x] Add focused coverage for resend messages, resend success activity, resend throttle guidance, and pending-registration next-step guidance.
+- [x] Run package and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.38` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.38` from clean `master` after the `v0.1.37` release merge.
+- Added frontend copy for resend throttling: "Too many confirmation email requests. Please wait a moment and try again."
+- Added admin-visible `registration_flow` / `confirmation_resent` logging only when a real pending registration is renewed and the confirmation email send succeeds.
+- Added a Next Step column to Recent Pending Registrations so admins can distinguish waiting-for-confirmation, email-confirmed password setup, expired-link resend, and completed-account states.
+- Updated Security tab guidance for `resend_confirmation_rate_limited` rows so admins know the customer should wait for the configured resend window before retrying.
+- Verified focused checks: PHP syntax passes for touched frontend, registration, and admin files; focused `FrontendMessagesTest` passes with 5 tests and 15 assertions; focused `RegistrationServiceTest` passes with 21 tests and 89 assertions; focused `SettingsPageSecurityStatusTest` passes with 6 tests and 90 assertions; and `npm.cmd run lint` passes.
+- Verified broader local checks: `npm.cmd run build` passes, `npm.cmd run make-pot` writes 713 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 204 tests and 1045 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.38-branch-qa-20260705-193210\alynt-account-gateway-v0.1.38-branch-qa-wp.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.37` metadata, resend throttle copy, `confirmation_resent` logging/guidance, pending-registration Next Step guidance, built assets, and POT strings present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.37` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.37`, and the new markers are present. Runtime smoke confirmed the resend-throttle frontend message, inserted disposable `confirmation_resent` and `resend_confirmation_rate_limited` activity rows plus pending and expired pending-registration rows, authenticated admin HTML smoke confirmed the Security tab renders resend throttle guidance, confirmation resent guidance, Next Step guidance, masked pending/expired emails, and no fatal/critical error output. Temporary activity rows, pending-registration rows, upload ZIPs, and an initial duplicated upload artifact were cleaned up after QA.
+
+### Guardrails
+
+- Do not change saved settings schema, frontend routes, pending-registration table schema, provider verification behavior, provider request payloads, Reoon/Turnstile policy decisions, rate-limit thresholds, registration success behavior, email template content, webhook dispatch behavior, dashboard rendering, WooCommerce endpoint delegation, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep public resend-confirmation success responses neutral and do not expose whether a pending registration exists.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates resend throttle copy, resend success activity, and pending-registration next-step guidance.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.35 Small Release Cycle
 

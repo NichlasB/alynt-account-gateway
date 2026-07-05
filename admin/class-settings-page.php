@@ -1208,6 +1208,7 @@ class ALYNT_AG_Settings_Page {
 							<th scope="col"><?php esc_html_e( 'Created At', 'alynt-account-gateway' ); ?></th>
 							<th scope="col"><?php esc_html_e( 'Confirmed At', 'alynt-account-gateway' ); ?></th>
 							<th scope="col"><?php esc_html_e( 'Expires At', 'alynt-account-gateway' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Next Step', 'alynt-account-gateway' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -1224,6 +1225,7 @@ class ALYNT_AG_Settings_Page {
 								<td><?php echo esc_html( $registration->created_at ?? '' ); ?></td>
 								<td><?php echo esc_html( $registration->confirmed_at ?? '' ); ?></td>
 								<td><?php echo esc_html( $registration->expires_at ?? '' ); ?></td>
+								<td class="alynt-ag-security-guidance"><?php echo esc_html( $this->security_pending_registration_guidance( $status['key'] ) ); ?></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>
@@ -1274,7 +1276,7 @@ class ALYNT_AG_Settings_Page {
 			}
 
 			if ( 'resend_confirmation_rate_limited' === $status ) {
-				return __( 'Confirmation resend was blocked by the rate limit.', 'alynt-account-gateway' );
+				return __( 'Confirmation resend was blocked by the rate limit. Ask the customer to wait for the configured resend window before trying again.', 'alynt-account-gateway' );
 			}
 
 			if ( 'login_rate_limited' === $status ) {
@@ -1347,6 +1349,10 @@ class ALYNT_AG_Settings_Page {
 
 			if ( 'confirmation_email_failed' === $status ) {
 				return __( 'The registration confirmation email could not be sent.', 'alynt-account-gateway' );
+			}
+
+			if ( 'confirmation_resent' === $status ) {
+				return __( 'A fresh confirmation email was sent for an existing pending registration.', 'alynt-account-gateway' );
 			}
 
 			if ( 'password_mismatch' === $status ) {
@@ -1450,6 +1456,30 @@ class ALYNT_AG_Settings_Page {
 			'key'   => 'pending',
 			'label' => __( 'Pending', 'alynt-account-gateway' ),
 		);
+	}
+
+	/**
+	 * Return admin guidance for a pending registration status.
+	 *
+	 * @param string $status_key Pending registration status key.
+	 * @return string
+	 */
+	private function security_pending_registration_guidance( $status_key ) {
+		$status_key = sanitize_key( $status_key );
+
+		if ( 'expired' === $status_key ) {
+			return __( 'The confirmation window has expired. The customer can request a fresh confirmation email from the invalid-link screen.', 'alynt-account-gateway' );
+		}
+
+		if ( 'email-confirmed' === $status_key ) {
+			return __( 'Email is confirmed. The customer still needs to set a password before the record expires.', 'alynt-account-gateway' );
+		}
+
+		if ( 'completed' === $status_key ) {
+			return __( 'Account creation is complete. No resend action is needed.', 'alynt-account-gateway' );
+		}
+
+		return __( 'Waiting for email confirmation. Resend requests are throttled by the configured resend-confirmation limit.', 'alynt-account-gateway' );
 	}
 
 	/**

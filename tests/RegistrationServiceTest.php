@@ -227,6 +227,28 @@ class RegistrationServiceTest extends TestCase {
 		$this->assertTrue( $service->resend_confirmation( 'missing@example.test', array() ) );
 	}
 
+	public function test_resend_confirmation_logs_success_when_pending_registration_is_renewed() {
+		$service = new class() extends ALYNT_AG_Registration_Service {
+			public function find_resendable_pending_by_email( $email ) {
+				return (object) array(
+					'id'         => 44,
+					'email'      => $email,
+					'first_name' => 'Damon',
+					'last_name'  => 'Paulo',
+				);
+			}
+		};
+
+		$settings = ALYNT_AG_Settings_Schema::defaults();
+
+		$this->assertTrue( $service->resend_confirmation( 'pending@example.test', $settings ) );
+		$this->assertNotEmpty( $GLOBALS['alynt_ag_test_mail'] );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+		$this->assertSame( 'registration_flow', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['provider'] );
+		$this->assertSame( 'confirmation_resent', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['status'] );
+		$this->assertSame( 0, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
+	}
+
 	public function test_account_created_welcome_email_sends_by_default() {
 		$service = new ALYNT_AG_Registration_Service();
 		$pending = (object) array(

@@ -118,6 +118,13 @@ class SettingsPageSecurityStatusTest extends TestCase {
 				'created_at' => '2026-07-05 12:05:00',
 			),
 			(object) array(
+				'email'      => 'resend-limit@example.test',
+				'provider'   => 'rate_limit',
+				'status'     => 'resend_confirmation_rate_limited',
+				'blocked'    => 1,
+				'created_at' => '2026-07-05 12:06:00',
+			),
+			(object) array(
 				'email'      => 'review@example.test',
 				'provider'   => 'reoon',
 				'status'     => 'role_account_flagged',
@@ -194,6 +201,13 @@ class SettingsPageSecurityStatusTest extends TestCase {
 				'blocked'    => 1,
 				'created_at' => '2026-07-05 12:35:00',
 			),
+			(object) array(
+				'email'      => 'resent@example.test',
+				'provider'   => 'registration_flow',
+				'status'     => 'confirmation_resent',
+				'blocked'    => 0,
+				'created_at' => '2026-07-05 12:40:00',
+			),
 		);
 
 		$settings_page = new ALYNT_AG_Settings_Page();
@@ -217,6 +231,7 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Registration Flow', $output );
 		$this->assertStringContainsString( 'safe', $output );
 		$this->assertStringContainsString( 'registration_rate_limited', $output );
+		$this->assertStringContainsString( 'resend_confirmation_rate_limited', $output );
 		$this->assertStringContainsString( 'role_account_flagged', $output );
 		$this->assertStringContainsString( 'alynt_ag_reoon_blocked', $output );
 		$this->assertStringContainsString( 'alynt_ag_turnstile_failed', $output );
@@ -228,10 +243,12 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'login_rate_limited', $output );
 		$this->assertStringContainsString( 'lostpassword_rate_limited', $output );
 		$this->assertStringContainsString( 'terms_required', $output );
+		$this->assertStringContainsString( 'confirmation_resent', $output );
 		$this->assertStringContainsString( 'Passed', $output );
 		$this->assertStringContainsString( 'Blocked', $output );
 		$this->assertStringContainsString( 'Reoon accepted this email.', $output );
 		$this->assertStringContainsString( 'Registration attempt was blocked by the rate limit.', $output );
+		$this->assertStringContainsString( 'Confirmation resend was blocked by the rate limit. Ask the customer to wait for the configured resend window before trying again.', $output );
 		$this->assertStringContainsString( 'Reoon allowed this email, but the status should be reviewed.', $output );
 		$this->assertStringContainsString( 'Reoon blocked this email by policy.', $output );
 		$this->assertStringContainsString( 'Reoon was not configured when verification ran. Confirm the API key before enabling public registration.', $output );
@@ -243,6 +260,7 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Login attempt was blocked by the rate limit.', $output );
 		$this->assertStringContainsString( 'Password reset request was blocked by the rate limit.', $output );
 		$this->assertStringContainsString( 'Registration was blocked because terms and privacy consent was not accepted.', $output );
+		$this->assertStringContainsString( 'A fresh confirmation email was sent for an existing pending registration.', $output );
 		$this->assertStringNotContainsString( 'damon@example.test', $output );
 	}
 
@@ -309,6 +327,11 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Email Confirmed', $output );
 		$this->assertStringContainsString( 'Completed', $output );
 		$this->assertStringContainsString( 'Expired', $output );
+		$this->assertStringContainsString( 'Next Step', $output );
+		$this->assertStringContainsString( 'Waiting for email confirmation. Resend requests are throttled by the configured resend-confirmation limit.', $output );
+		$this->assertStringContainsString( 'Email is confirmed. The customer still needs to set a password before the record expires.', $output );
+		$this->assertStringContainsString( 'Account creation is complete. No resend action is needed.', $output );
+		$this->assertStringContainsString( 'The confirmation window has expired. The customer can request a fresh confirmation email from the invalid-link screen.', $output );
 		$this->assertStringContainsString( '>123<', $output );
 		$this->assertStringNotContainsString( 'pending@example.test', $output );
 	}
