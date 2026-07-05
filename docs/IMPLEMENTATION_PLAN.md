@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.31 Registration security activity logging in progress
+- Current phase: v0.1.31 Registration security activity logging shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.30 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.31 is in progress on `release/0.1.31`.
+- Plugin status: v0.1.31 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,7 +32,7 @@
 - [x] Keep changes scoped to security evidence and admin visibility with no schema, retention, privacy exporter/eraser, registration flow, provider verification, rate-limit enforcement, frontend, dashboard, WooCommerce, webhook, or email delivery behavior changes.
 - [x] Add focused coverage for passed, blocked, flagged, and rate-limited activity plus the rendered Security tab activity table.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.31` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.31` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -49,6 +49,8 @@
 - Regenerated `languages/alynt-account-gateway.pot` with 657 strings and `0.1.31` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 195 tests and 933 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only POT/readme line-ending warnings.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.31-20260705-152211\alynt-account-gateway-v0.1.31.zip`; verified 46 runtime file entries, no backslash archive entries, no dev/source/test/vendor/build files, `0.1.31` header/constant/readme/POT metadata, registration verification logging PHP, activity panel PHP, and built admin activity CSS present.
 - Installed the local `0.1.31` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant are `0.1.31`, registration verification logging PHP, activity panel PHP, and built admin activity CSS are present. Seeded two temporary verification-log rows and authenticated HTTP smoke confirmed the Security tab returns the Recent Registration Verification Activity table, masked email rows, Reoon Email Verifier and Rate Limit labels, `safe` and `registration_rate_limited` outcomes, Passed and Blocked decisions, admin CSS, and no fatal/critical error output. Temporary package, seeded QA rows, and curl cookie state were cleaned up after QA.
+- Published GitHub release `v0.1.31`, confirmed the Build Release workflow completed successfully, downloaded the public release asset, and verified 55 runtime entries, no backslash archive entries, no dev/source/test/vendor files, `0.1.31` header/constant/readme metadata, registration verification logging PHP, activity panel PHP, and built admin activity CSS present.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.30` to `0.1.31`, then installed it through the WordPress plugin update path from the GitHub release ZIP URL. Final fresh runtime state: active `0.1.31` header/constant, registration verification logging PHP, activity panel PHP, built admin activity CSS present, no remaining update offer, and authenticated HTTP smoke confirmed the Security tab returns the Recent Registration Verification Activity table, masked email rows, Reoon Email Verifier and Rate Limit labels, `safe` and `registration_rate_limited` outcomes, Passed and Blocked decisions, admin CSS, and no fatal/critical error output.
 
 ### Guardrails
 
@@ -59,7 +61,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates the Security tab renders recent verification activity and rate-limit evidence.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.30 Small Release Cycle
 
