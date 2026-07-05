@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.37 - 2026-07-05
+
+### Added
+
+- Added frontend-safe provider failure messages and clearer Security tab guidance for Reoon and Turnstile.
+
 ## 0.1.36 - 2026-07-05
 
 ### Added
