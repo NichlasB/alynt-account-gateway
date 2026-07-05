@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.30 Security tab status guidance shipped; next slice TBD
+- Current phase: v0.1.31 Registration security activity logging in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.30 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.30 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.31 is in progress on `release/0.1.31`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,40 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.31 Small Release Cycle
+
+### Scope
+
+- [x] Start the next security and anti-spam hardening slice from the released `master` baseline.
+- [x] Log registration provider outcomes into the existing verification log table.
+- [x] Log registration and confirmation-resend rate-limit blocks into the existing verification log table.
+- [x] Add a read-only Security tab activity table for recent provider/rate-limit outcomes with masked email addresses.
+- [x] Keep changes scoped to security evidence and admin visibility with no schema, retention, privacy exporter/eraser, registration flow, provider verification, rate-limit enforcement, frontend, dashboard, WooCommerce, webhook, or email delivery behavior changes.
+- [x] Add focused coverage for passed, blocked, flagged, and rate-limited activity plus the rendered Security tab activity table.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.31` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.31` from clean `master` after the `v0.1.30` release merge.
+- Reused the existing plugin-owned `verification_logs` table instead of adding a schema migration.
+- Added registration verification logging for Turnstile and Reoon provider outcomes. Successful checks store compact statuses such as `passed`, `safe`, or `role_account_flagged`; provider errors store their sanitized error code and mark the row blocked.
+- Added blocked registration and confirmation-resend throttles to the same activity stream with `rate_limit` as the provider and bucket-specific statuses.
+- Added a Recent Registration Verification Activity table to the Security tab. The table masks email addresses, labels providers, shows outcome codes, and distinguishes Passed from Blocked decisions.
+- Added focused `RegistrationServiceTest` coverage for logged safe, blocked, flagged, and rate-limited outcomes, plus `SettingsPageSecurityStatusTest` coverage for empty and populated activity output.
+- Verified initial local checks: PHP syntax passes for touched PHP/test files, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 657 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 195 tests and 933 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+
+### Guardrails
+
+- Do not change saved settings schema, frontend routing, authentication behavior, registration flow, provider verification behavior, rate-limit enforcement, email delivery behavior, dashboard rendering, WooCommerce endpoint delegation, webhook dispatch behavior, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep this cycle focused on registration security evidence, rate-limit visibility, and read-only admin activity output only.
+
+### Completion Gate
+
+- [ ] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates the Security tab renders recent verification activity and rate-limit evidence.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.30 Small Release Cycle
 

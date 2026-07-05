@@ -14,6 +14,11 @@ require_once ALYNT_AG_PLUGIN_DIR . 'admin/class-settings-page.php';
  */
 class SettingsPageSecurityStatusTest extends TestCase {
 
+	protected function setUp(): void {
+		parent::setUp();
+		$GLOBALS['alynt_ag_test_db_results'] = array();
+	}
+
 	/**
 	 * Invoke a private settings page helper.
 	 *
@@ -46,6 +51,8 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Rate Limit Posture', $output );
 		$this->assertStringContainsString( 'Registration Attempts', $output );
 		$this->assertStringContainsString( 'Password Reset Attempts', $output );
+		$this->assertStringContainsString( 'Recent Registration Verification Activity', $output );
+		$this->assertStringContainsString( 'No verification activity has been logged yet.', $output );
 	}
 
 	public function test_security_status_panel_marks_configured_providers_and_policy() {
@@ -89,5 +96,42 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( 'Limit: 7 attempts in a 20-minute window.', $items[2]['message'] );
 		$this->assertSame( 'Password Reset Attempts', $items[3]['label'] );
 		$this->assertSame( 'Limit: 4 attempts in a 45-minute window.', $items[3]['message'] );
+	}
+
+	public function test_security_recent_verification_activity_renders_masked_rows() {
+		$tables = ALYNT_AG_Database::tables();
+		$GLOBALS['alynt_ag_test_db_results'][ $tables['verification_logs'] ] = array(
+			(object) array(
+				'email'      => 'damon@example.test',
+				'provider'   => 'reoon',
+				'status'     => 'safe',
+				'blocked'    => 0,
+				'created_at' => '2026-07-05 12:00:00',
+			),
+			(object) array(
+				'email'      => 'spam@example.test',
+				'provider'   => 'rate_limit',
+				'status'     => 'registration_rate_limited',
+				'blocked'    => 1,
+				'created_at' => '2026-07-05 12:05:00',
+			),
+		);
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		ob_start();
+		$this->invoke_helper( $settings_page, 'render_security_verification_activity' );
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( 'Recent Registration Verification Activity', $output );
+		$this->assertStringContainsString( 'd***@example.test', $output );
+		$this->assertStringContainsString( 's***@example.test', $output );
+		$this->assertStringContainsString( 'Reoon Email Verifier', $output );
+		$this->assertStringContainsString( 'Rate Limit', $output );
+		$this->assertStringContainsString( 'safe', $output );
+		$this->assertStringContainsString( 'registration_rate_limited', $output );
+		$this->assertStringContainsString( 'Passed', $output );
+		$this->assertStringContainsString( 'Blocked', $output );
+		$this->assertStringNotContainsString( 'damon@example.test', $output );
 	}
 }

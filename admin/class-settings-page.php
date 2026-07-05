@@ -986,6 +986,8 @@ class ALYNT_AG_Settings_Page {
 					</section>
 				<?php endforeach; ?>
 			</div>
+
+			<?php $this->render_security_verification_activity(); ?>
 		</section>
 		<?php
 	}
@@ -1123,6 +1125,123 @@ class ALYNT_AG_Settings_Page {
 			$count,
 			$window
 		);
+	}
+
+	/**
+	 * Render recent registration verification activity.
+	 *
+	 * @return void
+	 */
+	private function render_security_verification_activity() {
+		$logs = $this->security_recent_verification_logs( 10 );
+		?>
+		<div class="alynt-ag-security-activity">
+			<h3><?php esc_html_e( 'Recent Registration Verification Activity', 'alynt-account-gateway' ); ?></h3>
+			<p class="description">
+				<?php esc_html_e( 'Shows recent Turnstile and Reoon outcomes stored in the plugin verification log. Email addresses are masked in this admin view.', 'alynt-account-gateway' ); ?>
+			</p>
+
+			<?php if ( empty( $logs ) ) : ?>
+				<p class="alynt-ag-security-status__notice">
+					<?php esc_html_e( 'No verification activity has been logged yet.', 'alynt-account-gateway' ); ?>
+				</p>
+			<?php else : ?>
+				<table class="widefat striped alynt-ag-security-activity__table">
+					<thead>
+						<tr>
+							<th scope="col"><?php esc_html_e( 'Email', 'alynt-account-gateway' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Provider', 'alynt-account-gateway' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Outcome', 'alynt-account-gateway' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Decision', 'alynt-account-gateway' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Logged At', 'alynt-account-gateway' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ( $logs as $log ) : ?>
+							<tr>
+								<td><?php echo esc_html( $this->mask_email_for_display( $log->email ?? '' ) ); ?></td>
+								<td><?php echo esc_html( $this->security_provider_label( $log->provider ?? '' ) ); ?></td>
+								<td><code><?php echo esc_html( $log->status ?? '' ); ?></code></td>
+								<td>
+									<span class="alynt-ag-security-decision alynt-ag-security-decision--<?php echo ! empty( $log->blocked ) ? 'blocked' : 'passed'; ?>">
+										<?php echo ! empty( $log->blocked ) ? esc_html__( 'Blocked', 'alynt-account-gateway' ) : esc_html__( 'Passed', 'alynt-account-gateway' ); ?>
+									</span>
+								</td>
+								<td><?php echo esc_html( $log->created_at ?? '' ); ?></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Return recent registration verification logs.
+	 *
+	 * @param int $limit Maximum records.
+	 * @return array<int,object>
+	 */
+	private function security_recent_verification_logs( $limit = 10 ) {
+		global $wpdb;
+
+		$tables = ALYNT_AG_Database::tables();
+		$limit  = min( 25, max( 1, absint( $limit ) ) );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Admin security viewer reads plugin-owned verification log table.
+		$logs = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT email, provider, status, blocked, created_at FROM {$tables['verification_logs']} ORDER BY created_at DESC, id DESC LIMIT %d",
+				$limit
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return is_array( $logs ) ? $logs : array();
+	}
+
+	/**
+	 * Return a masked email for admin table display.
+	 *
+	 * @param string $email Email address.
+	 * @return string
+	 */
+	private function mask_email_for_display( $email ) {
+		$email = sanitize_email( $email );
+
+		if ( ! $email || false === strpos( $email, '@' ) ) {
+			return '';
+		}
+
+		list( $local, $domain ) = explode( '@', $email, 2 );
+		$first                  = '' !== $local ? substr( $local, 0, 1 ) : '*';
+
+		return $first . '***@' . $domain;
+	}
+
+	/**
+	 * Return a readable provider label.
+	 *
+	 * @param string $provider Provider key.
+	 * @return string
+	 */
+	private function security_provider_label( $provider ) {
+		$provider = sanitize_key( $provider );
+
+		if ( 'turnstile' === $provider ) {
+			return __( 'Turnstile', 'alynt-account-gateway' );
+		}
+
+		if ( 'reoon' === $provider ) {
+			return __( 'Reoon Email Verifier', 'alynt-account-gateway' );
+		}
+
+		if ( 'rate_limit' === $provider ) {
+			return __( 'Rate Limit', 'alynt-account-gateway' );
+		}
+
+		return $provider;
 	}
 
 	/**

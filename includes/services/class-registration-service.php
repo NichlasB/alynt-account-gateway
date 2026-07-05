@@ -209,15 +209,22 @@ class ALYNT_AG_Registration_Service {
 	 */
 	public function validate_registration_protection( $email, $turnstile_token, $settings ) {
 		$checks = array();
+		$email  = sanitize_email( $email );
 
 		if ( ! empty( $settings['turnstile_secret_key'] ) && ! empty( $settings['turnstile_site_key'] ) ) {
 			$turnstile = new ALYNT_AG_Turnstile_Client();
-			$checks[]  = $turnstile->verify( sanitize_text_field( $turnstile_token ), $settings['turnstile_secret_key'] );
+			$checks[]  = array(
+				'provider' => 'turnstile',
+				'result'   => $turnstile->verify( sanitize_text_field( $turnstile_token ), $settings['turnstile_secret_key'] ),
+			);
 		}
 
 		if ( ! empty( $settings['reoon_api_key'] ) && is_email( $email ) ) {
 			$reoon    = new ALYNT_AG_Reoon_Client();
-			$checks[] = $reoon->verify( sanitize_email( $email ), $settings['reoon_api_key'], $settings['reoon_mode'] ?? 'quick' );
+			$checks[] = array(
+				'provider' => 'reoon',
+				'result'   => $reoon->verify( $email, $settings['reoon_api_key'], $settings['reoon_mode'] ?? 'quick' ),
+			);
 		}
 
 		if ( empty( $checks ) ) {
@@ -229,10 +236,12 @@ class ALYNT_AG_Registration_Service {
 		$last_error   = null;
 
 		foreach ( $checks as $check ) {
-			if ( is_wp_error( $check ) ) {
-				$last_error = $check;
+			$this->log_verification_result( $email, $check['provider'], $check['result'] );
+
+			if ( is_wp_error( $check['result'] ) ) {
+				$last_error = $check['result'];
 				if ( $requires_all ) {
-					return $check;
+					return $check['result'];
 				}
 				continue;
 			}
@@ -245,6 +254,64 @@ class ALYNT_AG_Registration_Service {
 		}
 
 		return $last_error ? $last_error : new WP_Error( 'alynt_ag_registration_protection_failed', __( 'Registration verification failed. Please try again.', 'alynt-account-gateway' ) );
+	}
+
+	/**
+	 * Log a provider verification result.
+	 *
+	 * @param string                            $email    Submitted email.
+	 * @param string                            $provider Provider key.
+	 * @param true|array<string,mixed>|WP_Error $result   Verification result.
+	 * @return bool
+	 */
+	public function log_verification_result( $email, $provider, $result ) {
+		global $wpdb;
+
+		$email    = sanitize_email( $email );
+		$provider = sanitize_key( $provider );
+
+		if ( ! $email || ! $provider ) {
+			return false;
+		}
+
+		$status  = $this->verification_result_status( $result );
+		$blocked = is_wp_error( $result );
+		$tables  = ALYNT_AG_Database::tables();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Plugin-owned verification log table.
+		return (bool) $wpdb->insert(
+			$tables['verification_logs'],
+			array(
+				'email'      => $email,
+				'provider'   => $provider,
+				'status'     => $status,
+				'blocked'    => $blocked ? 1 : 0,
+				'created_at' => current_time( 'mysql', true ),
+			),
+			array( '%s', '%s', '%s', '%d', '%s' )
+		);
+	}
+
+	/**
+	 * Return a compact verification result status.
+	 *
+	 * @param true|array<string,mixed>|WP_Error $result Verification result.
+	 * @return string
+	 */
+	private function verification_result_status( $result ) {
+		if ( is_wp_error( $result ) ) {
+			return sanitize_key( $result->get_error_code() );
+		}
+
+		if ( is_array( $result ) && ! empty( $result['status'] ) ) {
+			if ( ! empty( $result['flagged'] ) ) {
+				return sanitize_key( $result['status'] . '_flagged' );
+			}
+
+			return sanitize_key( $result['status'] );
+		}
+
+		return 'passed';
 	}
 
 	/**
@@ -273,20 +340,32 @@ class ALYNT_AG_Registration_Service {
 		$limiter = new ALYNT_AG_Rate_Limiter();
 
 		if ( 'resend_confirmation' === $bucket ) {
-			return $limiter->check_and_increment(
+			$result = $limiter->check_and_increment(
 				'resend_confirmation',
 				$identifier,
 				$settings['resend_confirmation_rate_limit_count'],
 				$settings['resend_confirmation_rate_limit_window']
 			);
+
+			if ( is_wp_error( $result ) ) {
+				$this->log_verification_result( $identifier, 'rate_limit', new WP_Error( 'resend_confirmation_rate_limited', $result->get_error_message() ) );
+			}
+
+			return $result;
 		}
 
-		return $limiter->check_and_increment(
+		$result = $limiter->check_and_increment(
 			'registration',
 			$identifier,
 			$settings['registration_rate_limit_count'],
 			$settings['registration_rate_limit_window']
 		);
+
+		if ( is_wp_error( $result ) ) {
+			$this->log_verification_result( $identifier, 'rate_limit', new WP_Error( 'registration_rate_limited', $result->get_error_message() ) );
+		}
+
+		return $result;
 	}
 
 	/**

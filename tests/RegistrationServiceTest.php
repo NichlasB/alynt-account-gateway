@@ -17,6 +17,7 @@ class RegistrationServiceTest extends TestCase {
 		$GLOBALS['alynt_ag_test_mail'] = array();
 		$GLOBALS['alynt_ag_test_options'] = array();
 		$GLOBALS['alynt_ag_test_transients'] = array();
+		$GLOBALS['alynt_ag_test_db_inserts'] = array();
 		$GLOBALS['alynt_ag_test_created_users'] = array();
 		$GLOBALS['alynt_ag_test_user_updates'] = array();
 		$GLOBALS['alynt_ag_test_db_updates'] = array();
@@ -96,6 +97,48 @@ class RegistrationServiceTest extends TestCase {
 				)
 			)
 		);
+
+		$tables = ALYNT_AG_Database::tables();
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+		$this->assertSame( $tables['verification_logs'], $GLOBALS['alynt_ag_test_db_inserts'][0]['table'] );
+		$this->assertSame( 'damon@example.test', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['email'] );
+		$this->assertSame( 'reoon', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['provider'] );
+		$this->assertSame( 'safe', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['status'] );
+		$this->assertSame( 0, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
+	}
+
+	public function test_verification_log_records_blocked_provider_errors() {
+		$service = new ALYNT_AG_Registration_Service();
+		$error   = new WP_Error( 'alynt_ag_reoon_blocked', 'Blocked.' );
+
+		$this->assertTrue( $service->log_verification_result( 'spam@example.test', 'reoon', $error ) );
+
+		$tables = ALYNT_AG_Database::tables();
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+		$this->assertSame( $tables['verification_logs'], $GLOBALS['alynt_ag_test_db_inserts'][0]['table'] );
+		$this->assertSame( 'spam@example.test', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['email'] );
+		$this->assertSame( 'reoon', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['provider'] );
+		$this->assertSame( 'alynt_ag_reoon_blocked', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['status'] );
+		$this->assertSame( 1, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
+	}
+
+	public function test_verification_log_records_flagged_reoon_statuses() {
+		$service = new ALYNT_AG_Registration_Service();
+
+		$this->assertTrue(
+			$service->log_verification_result(
+				'role@example.test',
+				'reoon',
+				array(
+					'status'  => 'role_account',
+					'blocked' => false,
+					'flagged' => true,
+				)
+			)
+		);
+
+		$this->assertSame( 'role_account_flagged', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['status'] );
+		$this->assertSame( 0, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
 	}
 
 	public function test_terms_acceptance_is_required() {
@@ -122,6 +165,10 @@ class RegistrationServiceTest extends TestCase {
 
 		$this->assertInstanceOf( WP_Error::class, $result );
 		$this->assertSame( 'alynt_ag_rate_limited', $result->get_error_code() );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+		$this->assertSame( 'rate_limit', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['provider'] );
+		$this->assertSame( 'registration_rate_limited', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['status'] );
+		$this->assertSame( 1, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
 	}
 
 	public function test_resend_confirmation_rate_limit_uses_configured_bucket() {
