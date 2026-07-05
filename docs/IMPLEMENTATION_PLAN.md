@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.30 Security and anti-spam hardening in progress
+- Current phase: v0.1.30 Security tab status guidance shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.29 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.30 is in progress on `release/0.1.30`.
+- Plugin status: v0.1.30 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -30,7 +30,7 @@
 - [x] Keep changes admin-only with no registration flow, provider verification, rate-limit enforcement, settings schema, frontend, dashboard, WooCommerce, webhook, privacy, or email behavior changes.
 - [x] Add focused coverage for missing-provider guidance, configured-provider guidance, Reoon default policy wording, and configured rate-limit values.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.30` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.30` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -46,6 +46,8 @@
 - Regenerated `languages/alynt-account-gateway.pot` with 649 strings and `0.1.30` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 192 tests and 901 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only POT/readme line-ending warnings.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.30-20260705-144650\alynt-account-gateway-v0.1.30.zip`; verified 46 runtime file entries, no backslash archive entries, no dev/source/test/vendor/build files, `0.1.30` header/constant/readme/POT metadata, security status PHP, Reoon policy PHP, and built admin security CSS present.
 - Installed the local `0.1.30` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant are `0.1.30`, security status PHP and built admin CSS are present. Authenticated HTTP smoke confirmed the Security tab returns the Security And Spam Status panel, provider readiness, protection mode, Turnstile, Reoon Email Verifier, Reoon Default Policy, registration/password-reset rate-limit cards, admin CSS, and no fatal/critical error output. Temporary package and curl cookie state were cleaned up after QA.
+- Published GitHub release `v0.1.30`, confirmed the Build Release workflow completed successfully, downloaded the public release asset, and verified 55 runtime entries, no backslash archive entries, no dev/source/test/vendor files, `0.1.30` header/constant/readme metadata, security status PHP, Reoon policy PHP, and built admin security CSS present.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.29` to `0.1.30`, then installed it through the WordPress plugin update path from the GitHub release ZIP URL. Final fresh runtime state: active `0.1.30` header/constant, security status PHP and built admin CSS present, no remaining update offer, and authenticated HTTP smoke confirmed the Security tab returns the Security And Spam Status panel, provider readiness, protection mode, Turnstile, Reoon Email Verifier, Reoon Default Policy, registration/password-reset rate-limit cards, admin CSS, and no fatal/critical error output.
 
 ### Guardrails
 
@@ -56,7 +58,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates the Security tab renders provider readiness, Reoon policy visibility, and rate-limit posture.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.29 Small Release Cycle
 
