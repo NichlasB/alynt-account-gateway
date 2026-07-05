@@ -288,6 +288,38 @@
 	color: #d63638;
 }
 
+.alynt-ag-security-registration-status {
+	display: inline-flex;
+	align-items: center;
+	width: max-content;
+	max-width: 100%;
+	padding: 3px 7px;
+	border: 1px solid #dcdcde;
+	background: #f6f7f7;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.alynt-ag-security-registration-status--pending {
+	border-color: #dba617;
+	color: #7a5600;
+}
+
+.alynt-ag-security-registration-status--email-confirmed {
+	border-color: #2271b1;
+	color: #135e96;
+}
+
+.alynt-ag-security-registration-status--completed {
+	border-color: #008a20;
+	color: #008a20;
+}
+
+.alynt-ag-security-registration-status--expired {
+	border-color: #d63638;
+	color: #d63638;
+}
+
 .alynt-ag-email-tools {
 	max-width: 78rem;
 }

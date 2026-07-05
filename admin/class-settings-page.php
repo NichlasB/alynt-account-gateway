@@ -988,6 +988,7 @@ class ALYNT_AG_Settings_Page {
 			</div>
 
 			<?php $this->render_security_verification_activity(); ?>
+			<?php $this->render_security_pending_registrations(); ?>
 		</section>
 		<?php
 	}
@@ -1178,6 +1179,59 @@ class ALYNT_AG_Settings_Page {
 	}
 
 	/**
+	 * Render recent pending registration activity.
+	 *
+	 * @return void
+	 */
+	private function render_security_pending_registrations() {
+		$registrations = $this->security_recent_pending_registrations( 10 );
+		?>
+		<div class="alynt-ag-security-activity">
+			<h3><?php esc_html_e( 'Recent Pending Registrations', 'alynt-account-gateway' ); ?></h3>
+			<p class="description">
+				<?php esc_html_e( 'Shows recent email-confirmation registration records stored by the plugin. Email addresses are masked in this admin view.', 'alynt-account-gateway' ); ?>
+			</p>
+
+			<?php if ( empty( $registrations ) ) : ?>
+				<p class="alynt-ag-security-status__notice">
+					<?php esc_html_e( 'No pending registration records have been created yet.', 'alynt-account-gateway' ); ?>
+				</p>
+			<?php else : ?>
+				<table class="widefat striped alynt-ag-security-activity__table">
+					<thead>
+						<tr>
+							<th scope="col"><?php esc_html_e( 'Email', 'alynt-account-gateway' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Status', 'alynt-account-gateway' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'User ID', 'alynt-account-gateway' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Created At', 'alynt-account-gateway' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Confirmed At', 'alynt-account-gateway' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Expires At', 'alynt-account-gateway' ); ?></th>
+						</tr>
+					</thead>
+					<tbody>
+						<?php foreach ( $registrations as $registration ) : ?>
+							<?php $status = $this->security_pending_registration_status( $registration ); ?>
+							<tr>
+								<td><?php echo esc_html( $this->mask_email_for_display( $registration->email ?? '' ) ); ?></td>
+								<td>
+									<span class="alynt-ag-security-registration-status alynt-ag-security-registration-status--<?php echo esc_attr( $status['key'] ); ?>">
+										<?php echo esc_html( $status['label'] ); ?>
+									</span>
+								</td>
+								<td><?php echo ! empty( $registration->user_id ) ? esc_html( (string) absint( $registration->user_id ) ) : esc_html__( 'None', 'alynt-account-gateway' ); ?></td>
+								<td><?php echo esc_html( $registration->created_at ?? '' ); ?></td>
+								<td><?php echo esc_html( $registration->confirmed_at ?? '' ); ?></td>
+								<td><?php echo esc_html( $registration->expires_at ?? '' ); ?></td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			<?php endif; ?>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Return recent registration verification logs.
 	 *
 	 * @param int $limit Maximum records.
@@ -1199,6 +1253,68 @@ class ALYNT_AG_Settings_Page {
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		return is_array( $logs ) ? $logs : array();
+	}
+
+	/**
+	 * Return recent pending registration records.
+	 *
+	 * @param int $limit Maximum records.
+	 * @return array<int,object>
+	 */
+	private function security_recent_pending_registrations( $limit = 10 ) {
+		global $wpdb;
+
+		$tables = ALYNT_AG_Database::tables();
+		$limit  = min( 25, max( 1, absint( $limit ) ) );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Admin security viewer reads plugin-owned pending registration table.
+		$registrations = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT email, user_id, status, expires_at, created_at, confirmed_at FROM {$tables['pending_registrations']} ORDER BY created_at DESC, id DESC LIMIT %d",
+				$limit
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return is_array( $registrations ) ? $registrations : array();
+	}
+
+	/**
+	 * Return a pending registration status descriptor.
+	 *
+	 * @param object $registration Pending registration row.
+	 * @return array{key:string,label:string}
+	 */
+	private function security_pending_registration_status( $registration ) {
+		$status     = isset( $registration->status ) ? sanitize_key( $registration->status ) : 'pending';
+		$expires_at = isset( $registration->expires_at ) ? strtotime( (string) $registration->expires_at ) : false;
+		$now        = strtotime( current_time( 'mysql' ) );
+
+		if ( in_array( $status, array( 'pending', 'email_confirmed' ), true ) && $expires_at && $now && $expires_at < $now ) {
+			return array(
+				'key'   => 'expired',
+				'label' => __( 'Expired', 'alynt-account-gateway' ),
+			);
+		}
+
+		if ( 'email_confirmed' === $status ) {
+			return array(
+				'key'   => 'email-confirmed',
+				'label' => __( 'Email Confirmed', 'alynt-account-gateway' ),
+			);
+		}
+
+		if ( 'completed' === $status ) {
+			return array(
+				'key'   => 'completed',
+				'label' => __( 'Completed', 'alynt-account-gateway' ),
+			);
+		}
+
+		return array(
+			'key'   => 'pending',
+			'label' => __( 'Pending', 'alynt-account-gateway' ),
+		);
 	}
 
 	/**

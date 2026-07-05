@@ -53,6 +53,8 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Password Reset Attempts', $output );
 		$this->assertStringContainsString( 'Recent Registration Verification Activity', $output );
 		$this->assertStringContainsString( 'No verification activity has been logged yet.', $output );
+		$this->assertStringContainsString( 'Recent Pending Registrations', $output );
+		$this->assertStringContainsString( 'No pending registration records have been created yet.', $output );
 	}
 
 	public function test_security_status_panel_marks_configured_providers_and_policy() {
@@ -133,5 +135,72 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Passed', $output );
 		$this->assertStringContainsString( 'Blocked', $output );
 		$this->assertStringNotContainsString( 'damon@example.test', $output );
+	}
+
+	public function test_security_pending_registrations_render_empty_state() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		ob_start();
+		$this->invoke_helper( $settings_page, 'render_security_pending_registrations' );
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( 'Recent Pending Registrations', $output );
+		$this->assertStringContainsString( 'No pending registration records have been created yet.', $output );
+	}
+
+	public function test_security_pending_registrations_render_masked_rows_and_statuses() {
+		$tables = ALYNT_AG_Database::tables();
+		$GLOBALS['alynt_ag_test_db_results'][ $tables['pending_registrations'] ] = array(
+			(object) array(
+				'email'        => 'pending@example.test',
+				'user_id'      => 0,
+				'status'       => 'pending',
+				'created_at'   => '2026-07-03 12:00:00',
+				'confirmed_at' => null,
+				'expires_at'   => '2026-07-04 12:00:00',
+			),
+			(object) array(
+				'email'        => 'confirmed@example.test',
+				'user_id'      => 0,
+				'status'       => 'email_confirmed',
+				'created_at'   => '2026-07-02 12:00:00',
+				'confirmed_at' => '2026-07-02 12:10:00',
+				'expires_at'   => '2026-07-04 12:00:00',
+			),
+			(object) array(
+				'email'        => 'finished@example.test',
+				'user_id'      => 123,
+				'status'       => 'completed',
+				'created_at'   => '2026-07-01 12:00:00',
+				'confirmed_at' => '2026-07-01 12:10:00',
+				'expires_at'   => '2026-07-02 12:00:00',
+			),
+			(object) array(
+				'email'        => 'expired@example.test',
+				'user_id'      => 0,
+				'status'       => 'pending',
+				'created_at'   => '2026-07-01 10:00:00',
+				'confirmed_at' => null,
+				'expires_at'   => '2026-07-02 10:00:00',
+			),
+		);
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		ob_start();
+		$this->invoke_helper( $settings_page, 'render_security_pending_registrations' );
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( 'Recent Pending Registrations', $output );
+		$this->assertStringContainsString( 'p***@example.test', $output );
+		$this->assertStringContainsString( 'c***@example.test', $output );
+		$this->assertStringContainsString( 'f***@example.test', $output );
+		$this->assertStringContainsString( 'e***@example.test', $output );
+		$this->assertStringContainsString( 'Pending', $output );
+		$this->assertStringContainsString( 'Email Confirmed', $output );
+		$this->assertStringContainsString( 'Completed', $output );
+		$this->assertStringContainsString( 'Expired', $output );
+		$this->assertStringContainsString( '>123<', $output );
+		$this->assertStringNotContainsString( 'pending@example.test', $output );
 	}
 }
