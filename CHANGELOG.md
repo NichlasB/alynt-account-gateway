@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.34 - 2026-07-05
+
+### Added
+
+- Added auth-side rate-limit activity logging for blocked login and password-reset attempts on the Security tab.
+
 ## 0.1.33 - 2026-07-05
 
 ### Added
