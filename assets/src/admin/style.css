@@ -163,6 +163,90 @@
 	color: #50575e;
 }
 
+.alynt-ag-email-tools {
+	max-width: 78rem;
+}
+
+.alynt-ag-email-reference,
+.alynt-ag-email-tokens,
+.alynt-ag-email-action {
+	margin: 16px 0;
+	padding: 14px;
+	border: 1px solid #dcdcde;
+	background: #fff;
+}
+
+.alynt-ag-email-reference h3,
+.alynt-ag-email-tokens summary {
+	margin: 0 0 8px;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.alynt-ag-email-tokens summary {
+	cursor: pointer;
+}
+
+.alynt-ag-email-reference__grid,
+.alynt-ag-email-tokens__grid,
+.alynt-ag-email-actions {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 12px;
+	margin-top: 12px;
+}
+
+.alynt-ag-email-reference__item {
+	padding: 12px;
+	border: 1px solid #dcdcde;
+	background: #f6f7f7;
+}
+
+.alynt-ag-email-reference__item h4 {
+	margin: 0 0 6px;
+	font-size: 14px;
+}
+
+.alynt-ag-email-reference__item p,
+.alynt-ag-email-token span,
+.alynt-ag-email-token small {
+	color: #50575e;
+	line-height: 1.45;
+}
+
+.alynt-ag-email-reference__tokens {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	align-items: center;
+	margin-bottom: 0;
+}
+
+.alynt-ag-email-token {
+	display: grid;
+	gap: 4px;
+	padding: 10px;
+	border: 1px solid #dcdcde;
+	background: #f6f7f7;
+}
+
+.alynt-ag-email-token code,
+.alynt-ag-email-reference__tokens code {
+	width: max-content;
+	max-width: 100%;
+	white-space: normal;
+}
+
+.alynt-ag-email-action {
+	display: grid;
+	gap: 8px;
+	align-content: start;
+}
+
+.alynt-ag-email-action label {
+	font-weight: 600;
+}
+
 .alynt-ag-media-field__preview {
 	display: flex;
 	align-items: center;

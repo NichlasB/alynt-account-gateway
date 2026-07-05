@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.28 Settings field help refinement shipped; next slice TBD
+- Current phase: v0.1.29 Email template editor polish in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.28 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.28 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.29 is in progress on `release/0.1.29`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,40 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.29 Small Release Cycle
+
+### Scope
+
+- [x] Start the email template editor polish slice from the released `master` baseline.
+- [x] Add richer token browsing for all email template tokens.
+- [x] Add per-template guidance for purpose, action tokens, and disabled-email caveats.
+- [x] Improve preview/test-send ergonomics with clearer descriptions and accessible form help.
+- [x] Keep changes admin-only/read-only with no email delivery behavior, template storage, frontend, registration, provider, dashboard, WooCommerce, webhook, or privacy behavior changes.
+- [x] Add focused coverage for token reference metadata and rendered email tools.
+- [ ] Run branch-QA package and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.29` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.29` from clean `master` after the `v0.1.28` release merge.
+- Added reusable `ALYNT_AG_Email_Template_Service::token_reference()` metadata for every preview token.
+- Expanded the Emails tab tools with a Template Reference panel, Available Template Tokens panel, sample token values, plain-text/core-email caveat copy, and clearer preview/test-send descriptions.
+- Added `aria-describedby` help for preview template selection, test template selection, and the test recipient input.
+- Added focused `EmailTemplateServiceTest` coverage for token reference metadata and `SettingsPageEmailToolsTest` coverage for template action-token guidance and rendered email tools.
+- Verified initial local checks: PHP syntax passes for touched PHP/test files, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 626 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 189 tests and 879 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+- Confirmed the built admin CSS contains the new email-tool styling.
+
+### Guardrails
+
+- Do not change saved settings schema, default email copy, token replacement behavior, email delivery behavior, email disable toggles, frontend routing, registration flow, provider verification behavior, dashboard rendering, WooCommerce endpoint delegation, webhook dispatch behavior, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep this cycle focused on admin email editor guidance, token browsing, and preview/test-send ergonomics only.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates the Emails tab renders template reference, token reference, and accessible preview/test-send help.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.28 Small Release Cycle
 

@@ -73,6 +73,52 @@ class ALYNT_AG_Email_Template_Service {
 	}
 
 	/**
+	 * Return documented template tokens for admin reference.
+	 *
+	 * @return array<string,array<string,string>>
+	 */
+	public function token_reference() {
+		return array(
+			'first_name'       => array(
+				'label'       => __( 'First name', 'alynt-account-gateway' ),
+				'description' => __( 'Customer first name, with a friendly fallback when profile data is missing.', 'alynt-account-gateway' ),
+			),
+			'last_name'        => array(
+				'label'       => __( 'Last name', 'alynt-account-gateway' ),
+				'description' => __( 'Customer last name when available.', 'alynt-account-gateway' ),
+			),
+			'user_email'       => array(
+				'label'       => __( 'Email address', 'alynt-account-gateway' ),
+				'description' => __( 'Customer email address for account and confirmation context.', 'alynt-account-gateway' ),
+			),
+			'site_name'        => array(
+				'label'       => __( 'Site name', 'alynt-account-gateway' ),
+				'description' => __( 'Current WordPress site name.', 'alynt-account-gateway' ),
+			),
+			'confirmation_url' => array(
+				'label'       => __( 'Registration confirmation URL', 'alynt-account-gateway' ),
+				'description' => __( 'Email-confirmation link used before the customer sets a password.', 'alynt-account-gateway' ),
+			),
+			'reset_url'        => array(
+				'label'       => __( 'Password reset URL', 'alynt-account-gateway' ),
+				'description' => __( 'Password reset link for the branded account gateway.', 'alynt-account-gateway' ),
+			),
+			'change_email_url' => array(
+				'label'       => __( 'Email-change confirmation URL', 'alynt-account-gateway' ),
+				'description' => __( 'Confirmation link for account email address changes.', 'alynt-account-gateway' ),
+			),
+			'dashboard_url'    => array(
+				'label'       => __( 'Dashboard URL', 'alynt-account-gateway' ),
+				'description' => __( 'Destination for account dashboard or WooCommerce customer account access.', 'alynt-account-gateway' ),
+			),
+			'expiry_hours'     => array(
+				'label'       => __( 'Confirmation expiry', 'alynt-account-gateway' ),
+				'description' => __( 'Number of hours before a pending registration confirmation expires.', 'alynt-account-gateway' ),
+			),
+		);
+	}
+
+	/**
 	 * Render a template into subject, HTML, and plain text.
 	 *
 	 * @param string              $template Template key.

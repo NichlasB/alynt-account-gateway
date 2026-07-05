@@ -31,6 +31,24 @@ class EmailTemplateServiceTest extends TestCase {
 		$this->assertArrayHasKey( 'email_change_confirmation', $templates );
 	}
 
+	public function test_token_reference_documents_preview_tokens() {
+		$service        = new ALYNT_AG_Email_Template_Service();
+		$reference      = $service->token_reference();
+		$preview_tokens = $service->preview_tokens();
+
+		$this->assertSame( array_keys( $preview_tokens ), array_keys( $reference ) );
+		$this->assertArrayHasKey( 'confirmation_url', $reference );
+		$this->assertArrayHasKey( 'reset_url', $reference );
+		$this->assertArrayHasKey( 'change_email_url', $reference );
+		$this->assertArrayHasKey( 'dashboard_url', $reference );
+
+		foreach ( $reference as $token => $item ) {
+			$this->assertNotEmpty( $token );
+			$this->assertNotEmpty( $item['label'] );
+			$this->assertNotEmpty( $item['description'] );
+		}
+	}
+
 	public function test_render_replaces_tokens_and_includes_branded_button() {
 		$service  = new ALYNT_AG_Email_Template_Service();
 		$settings = ALYNT_AG_Settings_Schema::defaults();
