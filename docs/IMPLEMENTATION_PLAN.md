@@ -30,7 +30,7 @@
 - [x] Log blocked `wp-admin` access for non-privileged users into the existing diagnostics table when diagnostics are enabled.
 - [x] Keep changes scoped to diagnostics evidence with no settings schema, frontend route, redirect destination, capability, toolbar, login, registration, dashboard, WooCommerce, webhook, email, privacy cleanup, or default frontend-output behavior changes.
 - [x] Add focused coverage proving diagnostics rows are written without storing raw login or redirect query values.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
 - [ ] Publish the final `v0.1.35` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -40,6 +40,8 @@
 - Kept diagnostics context privacy-conscious by recording action, destination path, preserved query argument names, request method, and user id when available, without storing raw login, key, or redirect query values.
 - Added focused `FrontendRoutingTest` coverage for native-login redirect diagnostics and blocked wp-admin diagnostics.
 - Verified initial local checks: PHP syntax passes for touched frontend/test files, focused `FrontendRoutingTest` passes with 7 tests and 34 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 689 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 199 tests and 994 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.35-branch-qa-20260705-172521\alynt-account-gateway-v0.1.35-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.34` metadata, routing diagnostics PHP, built admin CSS, and POT strings present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.34` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.34`, and both routing diagnostics event codes are present. Runtime HTTP smoke enabled diagnostics temporarily, triggered a native `wp-login.php` redirect and blocked subscriber `wp-admin` access, confirmed `native_login_redirected` and `wp_admin_access_blocked` diagnostics rows were written without raw login email or full redirect URL values, and authenticated admin HTML smoke confirmed the Advanced / Tools diagnostics panel renders both event codes with no fatal/critical error output. Temporary settings, subscriber user, diagnostics rows, cookie state, and upload artifacts were cleaned up after QA.
 
 ### Guardrails
 
@@ -49,7 +51,7 @@
 ### Completion Gate
 
 - [x] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates diagnostics events for native login redirects and blocked wp-admin access.
+- [x] Plugin Tester smoke validates diagnostics events for native login redirects and blocked wp-admin access.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.34 Small Release Cycle
