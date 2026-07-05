@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.23 - 2026-07-05
+
+### Added
+
+- Added a branded WooCommerce customer overview on the base account dashboard with quick links for orders, addresses, and account details.
+
 ## 0.1.22 - 2026-07-05
 
 ### Added

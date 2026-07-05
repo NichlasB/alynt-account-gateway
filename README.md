@@ -18,6 +18,7 @@ This is private Alynt-distributed software. The plugin header includes `GitHub P
 - Optional Cloudflare Turnstile and Reoon Email Verifier registration protection, plus transient-backed rate limiting.
 - Branded HTML account email templates with preview and test-send tools.
 - Custom full-page dashboard with optional WooCommerce My Account takeover that delegates standard endpoints to WooCommerce.
+- Branded WooCommerce customer dashboard overview with quick links for orders, addresses, and account details.
 - Custom dashboard links with labels, icons, ordering, role visibility, and new-tab support.
 - Account-created webhook delivery with optional request signing, admin delivery summaries, metadata logging, and optional debug payload logging.
 - Privacy exporter/eraser support for plugin-owned account, consent, verification, webhook, and audit records.
