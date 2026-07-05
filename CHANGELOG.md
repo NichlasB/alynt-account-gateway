@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.40 - 2026-07-05
+
+### Added
+
+- Added Security tab Rate Limit Pressure cards for recent registration, confirmation resend, login, and password-reset blocks.
+
 ## 0.1.39 - 2026-07-05
 
 ### Added

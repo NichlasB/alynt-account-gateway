@@ -250,6 +250,20 @@
 	font-size: 14px;
 }
 
+.alynt-ag-security-card h5 {
+	margin: 0;
+	font-size: 13px;
+}
+
+.alynt-ag-security-pressure {
+	margin: 14px 0 16px;
+}
+
+.alynt-ag-security-pressure h4 {
+	margin: 0 0 10px;
+	font-size: 14px;
+}
+
 .alynt-ag-security-activity {
 	margin-top: 20px;
 }
