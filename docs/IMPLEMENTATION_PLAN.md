@@ -30,7 +30,7 @@
 - [x] Add admin guidance for `login_rate_limited` and `lostpassword_rate_limited` activity rows.
 - [x] Keep changes scoped to auth-side rate-limit evidence and admin visibility with no settings schema, frontend routing, authentication success/failure behavior, reset email behavior, rate-limit thresholds, dashboard, WooCommerce, webhook, privacy cleanup, or default frontend-output behavior changes.
 - [x] Add focused coverage for auth-side rate-limit logging and rendered guidance.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
 - [ ] Publish the final `v0.1.34` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -41,6 +41,8 @@
 - Added Guidance column messages for blocked login attempts and blocked password-reset requests.
 - Added focused `AuthServiceTest` coverage proving both auth limiter buckets write blocked activity rows, plus `SettingsPageSecurityStatusTest` coverage for the rendered Security tab guidance.
 - Verified initial local checks: PHP syntax passes for touched PHP files, focused `AuthServiceTest` passes with 11 tests and 31 assertions, focused `SettingsPageSecurityStatusTest` passes with 6 tests and 67 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 687 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 197 tests and 974 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.34-branch-qa-20260705-165919\alynt-account-gateway-v0.1.34-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.33` metadata, auth rate-limit logging PHP, Security tab guidance PHP, built admin CSS, and POT strings present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.33` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.33`, auth rate-limit logging code and Security tab guidance code are present. Runtime smoke triggered unique login and password-reset limiter blocks, confirmed `login_rate_limited` and `lostpassword_rate_limited` rows were written to the verification log table, and authenticated HTTP smoke confirmed the Security tab returns both statuses and both guidance messages with no fatal/critical error output. Temporary QA rows and upload artifacts were cleaned up after QA.
 
 ### Guardrails
 
@@ -50,7 +52,7 @@
 ### Completion Gate
 
 - [x] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates the Security tab renders auth rate-limit activity guidance.
+- [x] Plugin Tester smoke validates the Security tab renders auth rate-limit activity guidance.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.33 Small Release Cycle
