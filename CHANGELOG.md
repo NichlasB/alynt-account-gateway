@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.29 - 2026-07-05
+
+### Added
+
+- Added email template editor guidance with token browsing, per-template action notes, and clearer preview/test-send help.
+
 ## 0.1.28 - 2026-07-05
 
 ### Added

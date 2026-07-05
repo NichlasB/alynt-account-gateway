@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.29 Email template editor polish in progress
+- Current phase: v0.1.29 Email template editor polish release candidate
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.28 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.29 is in progress on `release/0.1.29`.
+- Plugin status: v0.1.28 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.29 is in release-candidate verification on `release/0.1.29`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -45,6 +45,10 @@
 - Confirmed the built admin CSS contains the new email-tool styling.
 - Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.29-branch-qa-20260705-135904\alynt-account-gateway-v0.1.29-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor files, pre-bump `0.1.28` metadata, token reference PHP, template reference PHP, email tools markup, and built admin email-tool CSS present.
 - Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.28` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.28`, token reference PHP, template reference PHP, email tools markup, and built admin CSS are present. Authenticated HTTP smoke confirmed the Emails tab returns `200`, loads the admin CSS asset, renders the Template Reference and Available Template Tokens panels, shows action-token examples, includes linked preview/test-send `aria-describedby` help, and shows no fatal/critical error output. Temporary package and curl cookie state were cleaned up after QA.
+- Bumped release-candidate metadata to `0.1.29` across the plugin header/constant, npm metadata, readme, sample test, changelog, and implementation plan.
+- Regenerated `languages/alynt-account-gateway.pot` with 626 strings and `0.1.29` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 189 tests and 879 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only POT/readme line-ending warnings.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.29-20260705-140305\alynt-account-gateway-v0.1.29.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor files, `0.1.29` header/constant/readme/POT metadata, token reference PHP, template reference PHP, email tools markup, and built admin email-tool CSS present.
+- Installed the local `0.1.29` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant are `0.1.29`, token reference PHP, template reference PHP, email tools markup, and built admin CSS are present. Authenticated HTTP smoke confirmed the Emails tab returns `200`, loads the admin CSS asset, renders the Template Reference and Available Template Tokens panels, shows action-token examples, includes linked preview/test-send `aria-describedby` help, and shows no fatal/critical error output. Temporary package and curl cookie state were cleaned up after QA.
 
 ### Guardrails
 
