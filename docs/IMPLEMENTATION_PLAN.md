@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.21 webhook delivery UX
+- Current phase: v0.1.21 webhook delivery UX shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.20 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.21 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -18,7 +18,7 @@
 - [x] Add expandable delivery metadata for recent webhook log rows without changing dispatch behavior or log retention.
 - [x] Add focused coverage where practical.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.21` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.21` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -33,6 +33,8 @@
 - Regenerated `languages/alynt-account-gateway.pot` with 398 strings and `0.1.21` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 168 tests and 696 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.21-20260705-101155\alynt-account-gateway-v0.1.21.zip`; verified 46 runtime files, no backslash archive entries, no missing runtime files, no dev/source/test/docs/rules/package/vendor files, `0.1.21` header/constant/readme/POT metadata, and webhook delivery UX strings present.
 - Installed the local `0.1.21` package on LocalWP Plugin Tester through the WordPress upgrader path. Fresh runtime verification confirmed active header and loaded constant are `0.1.21`, delivery summary/signature reference/details strings are present, and temporary upload artifacts were cleaned up.
+- Published GitHub release `v0.1.21`, downloaded the public release asset, and verified 46 runtime files, no backslash archive entries, no dev/source/test/docs/rules/package/vendor files, `0.1.21` header/constant/readme metadata, and webhook delivery UX strings present.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.20` to `0.1.21`, then installed it through the WordPress upgrader path. Final server-side state: active `0.1.21` header/constant, delivery summary/signature reference/details strings present, and no remaining update offer.
 
 ### Guardrails
 
@@ -41,9 +43,9 @@
 
 ### Completion Gate
 
-- [ ] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates Webhooks tab rendering and recent delivery metadata.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates Webhooks tab rendering and recent delivery metadata.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.20 Small Release Cycle
 
