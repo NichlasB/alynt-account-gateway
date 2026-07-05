@@ -129,6 +129,7 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 
 		<?php if ( ! empty( $settings['woocommerce_takeover'] ) && 'dashboard' !== $endpoint['endpoint'] ) : ?>
 			<?php $guidance = $this->woocommerce_endpoint_guidance( $endpoint['endpoint'] ); ?>
+			<?php $affordances = $this->woocommerce_endpoint_affordances( $endpoint['endpoint'], $settings ); ?>
 			<section class="agw-dashboard-section agw-dashboard-section--content" aria-labelledby="agw-dashboard-content-title">
 				<h2 id="agw-dashboard-content-title">
 					<?php echo esc_html( $this->woocommerce->endpoint_labels()[ $endpoint['endpoint'] ] ?? __( 'Account', 'alynt-account-gateway' ) ); ?>
@@ -137,6 +138,19 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 					<div class="agw-dashboard-guidance">
 						<span class="agw-dashboard-guidance__label"><?php echo esc_html( $guidance['label'] ); ?></span>
 						<p><?php echo esc_html( $guidance['description'] ); ?></p>
+					</div>
+				<?php endif; ?>
+				<?php if ( ! empty( $affordances ) ) : ?>
+					<div class="agw-dashboard-affordances" aria-label="<?php esc_attr_e( 'Helpful account next steps', 'alynt-account-gateway' ); ?>">
+						<?php foreach ( $affordances as $affordance ) : ?>
+							<div class="agw-dashboard-affordance">
+								<span class="agw-dashboard-affordance__title"><?php echo esc_html( $affordance['title'] ); ?></span>
+								<p><?php echo esc_html( $affordance['description'] ); ?></p>
+								<?php if ( ! empty( $affordance['url'] ) && ! empty( $affordance['label'] ) ) : ?>
+									<a href="<?php echo esc_url( $affordance['url'] ); ?>"><?php echo esc_html( $affordance['label'] ); ?></a>
+								<?php endif; ?>
+							</div>
+						<?php endforeach; ?>
 					</div>
 				<?php endif; ?>
 				<div class="agw-dashboard-content">
@@ -196,6 +210,61 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 		);
 
 		return isset( $guidance[ $endpoint ] ) ? $guidance[ $endpoint ] : array();
+	}
+
+	/**
+	 * Return contextual next-step panels for standard WooCommerce endpoints.
+	 *
+	 * @param string              $endpoint WooCommerce endpoint key.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return array<int,array<string,string>>
+	 */
+	private function woocommerce_endpoint_affordances( $endpoint, $settings ) {
+		$endpoint = sanitize_key( $endpoint );
+		$items    = array(
+			'orders'          => array(
+				array(
+					'title'       => __( 'No orders yet?', 'alynt-account-gateway' ),
+					'description' => __( 'Once you place an order, its status, details, and available actions will appear here.', 'alynt-account-gateway' ),
+					'label'       => __( 'Manage addresses', 'alynt-account-gateway' ),
+					'url'         => $this->woocommerce->endpoint_url( 'edit-address', $settings ),
+				),
+			),
+			'downloads'       => array(
+				array(
+					'title'       => __( 'No downloads available?', 'alynt-account-gateway' ),
+					'description' => __( 'Downloadable files appear here after an eligible digital purchase is connected to your account.', 'alynt-account-gateway' ),
+					'label'       => __( 'View orders', 'alynt-account-gateway' ),
+					'url'         => $this->woocommerce->endpoint_url( 'orders', $settings ),
+				),
+			),
+			'edit-address'    => array(
+				array(
+					'title'       => __( 'Keep checkout details current', 'alynt-account-gateway' ),
+					'description' => __( 'Review billing and shipping information before your next checkout so totals, tax, and delivery details stay accurate.', 'alynt-account-gateway' ),
+					'label'       => __( 'View orders', 'alynt-account-gateway' ),
+					'url'         => $this->woocommerce->endpoint_url( 'orders', $settings ),
+				),
+			),
+			'edit-account'    => array(
+				array(
+					'title'       => __( 'Account changes affect future orders', 'alynt-account-gateway' ),
+					'description' => __( 'Use a current email address so order updates, password resets, and account notices can reach you.', 'alynt-account-gateway' ),
+					'label'       => __( 'Manage addresses', 'alynt-account-gateway' ),
+					'url'         => $this->woocommerce->endpoint_url( 'edit-address', $settings ),
+				),
+			),
+			'payment-methods' => array(
+				array(
+					'title'       => __( 'No saved payment methods?', 'alynt-account-gateway' ),
+					'description' => __( 'Saved methods appear here only when the store and payment provider support secure customer payment storage.', 'alynt-account-gateway' ),
+					'label'       => __( 'Add payment method', 'alynt-account-gateway' ),
+					'url'         => $this->woocommerce->endpoint_url( 'add-payment-method', $settings ),
+				),
+			),
+		);
+
+		return isset( $items[ $endpoint ] ) ? $items[ $endpoint ] : array();
 	}
 
 	/**
