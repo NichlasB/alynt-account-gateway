@@ -237,6 +237,19 @@ class ALYNT_AG_WooCommerce_Integration {
 	}
 
 	/**
+	 * Build a URL for a WooCommerce account endpoint from settings.
+	 *
+	 * @param string              $endpoint Endpoint key.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return string
+	 */
+	public function endpoint_url( $endpoint, $settings ) {
+		$base = ! empty( $settings['after_login_redirect'] ) ? $settings['after_login_redirect'] : '/my-account/';
+
+		return $this->account_endpoint_url( $endpoint, $base, $settings );
+	}
+
+	/**
 	 * Build a URL for a WooCommerce account endpoint.
 	 *
 	 * @param string              $endpoint Endpoint key.

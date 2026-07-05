@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.22 settings readiness UX shipped; next slice TBD
+- Current phase: v0.1.23 WooCommerce dashboard polish
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.22 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -10,7 +10,7 @@
 
 ## Remaining Product Slices
 
-- [ ] Settings readiness and onboarding checks: show whether required URL, registration, protection, branding, email, dashboard, WooCommerce, webhook, privacy, and frontend-output prerequisites are ready before site owners enable public output.
+- [x] Settings readiness and onboarding checks: show whether required URL, registration, protection, branding, email, dashboard, WooCommerce, webhook, privacy, and frontend-output prerequisites are ready before site owners enable public output.
 - [ ] Real-world WooCommerce dashboard polish: improve branded empty states, endpoint affordances, customer account copy, order/address/payment-method edge states, and WooCommerce unavailable guidance.
 - [ ] Settings UX refinement: improve setup grouping, tab-level guidance, validation hints, admin notices, and safe defaults for first-time configuration.
 - [ ] Email template editor polish: add richer token browsing, per-template reset guidance, preview/test-send ergonomics, and clearer plain-text/core-email limitations.
@@ -20,6 +20,35 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.23 Small Release Cycle
+
+### Scope
+
+- [x] Start the WooCommerce dashboard polish slice from the released `master` baseline.
+- [x] Add a branded WooCommerce customer overview on the base dashboard when takeover is enabled and WooCommerce is available.
+- [x] Keep WooCommerce endpoint pages delegated to WooCommerce handlers.
+- [x] Add focused coverage for overview rendering and configured endpoint URLs.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.23` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.23` from clean `master` after the `v0.1.22` release merge.
+- Added a WooCommerce-only dashboard overview on the base account page with branded customer-account copy and quick links for orders, addresses, and account details.
+- Added a public WooCommerce endpoint URL helper so dashboard overview links follow the configured account base path.
+- Verified initial local checks: PHP syntax passes for touched PHP/test files, focused dashboard and WooCommerce tests pass, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 448 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 174 tests and 724 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+
+### Guardrails
+
+- Do not change frontend routing, authentication behavior, WooCommerce endpoint delegation, registration flow, email behavior, webhook behavior, provider verification behavior, settings storage shape, or default frontend-output disabled behavior.
+- Keep this cycle focused on customer-facing dashboard polish and small, testable WooCommerce affordances.
+
+### Completion Gate
+
+- [ ] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates the branded WooCommerce dashboard overview and representative endpoint delegation.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.22 Small Release Cycle
 

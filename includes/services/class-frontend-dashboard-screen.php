@@ -78,10 +78,13 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 	 * @return void
 	 */
 	public function render_dashboard_screen( $settings, $current_path = '' ) {
-		$user     = wp_get_current_user();
-		$endpoint = $this->woocommerce->endpoint_from_path( $current_path, $settings );
-		$links    = $this->dashboard->links_for_user( $user, $settings );
-		$name     = $user->display_name ? $user->display_name : $user->user_email;
+		$user                     = wp_get_current_user();
+		$endpoint                 = $this->woocommerce->endpoint_from_path( $current_path, $settings );
+		$links                    = $this->dashboard->links_for_user( $user, $settings );
+		$name                     = $user->display_name ? $user->display_name : $user->user_email;
+		$is_woocommerce_dashboard = ! empty( $settings['woocommerce_takeover'] )
+			&& $this->dashboard->woocommerce_available()
+			&& 'dashboard' === $endpoint['endpoint'];
 		?>
 		<section class="agw-dashboard-hero" aria-labelledby="agw-screen-title">
 			<p class="agw-dashboard-hero__eyebrow"><?php esc_html_e( 'Account Dashboard', 'alynt-account-gateway' ); ?></p>
@@ -103,6 +106,10 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 			<div class="agw-status agw-status--error" role="alert">
 				<?php esc_html_e( 'WooCommerce account takeover is enabled, but WooCommerce is not active.', 'alynt-account-gateway' ); ?>
 			</div>
+		<?php endif; ?>
+
+		<?php if ( $is_woocommerce_dashboard ) : ?>
+			<?php $this->render_woocommerce_dashboard_overview( $settings ); ?>
 		<?php endif; ?>
 
 		<section class="agw-dashboard-section" aria-labelledby="agw-dashboard-links-title">
@@ -132,6 +139,49 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 				</div>
 			</section>
 		<?php endif; ?>
+		<?php
+	}
+
+	/**
+	 * Render a customer-focused WooCommerce dashboard overview.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_woocommerce_dashboard_overview( $settings ) {
+		$actions = array(
+			array(
+				'endpoint'    => 'orders',
+				'label'       => __( 'View Orders', 'alynt-account-gateway' ),
+				'description' => __( 'Check recent purchases, order status, and order details.', 'alynt-account-gateway' ),
+			),
+			array(
+				'endpoint'    => 'edit-address',
+				'label'       => __( 'Manage Addresses', 'alynt-account-gateway' ),
+				'description' => __( 'Keep billing and shipping information ready for checkout.', 'alynt-account-gateway' ),
+			),
+			array(
+				'endpoint'    => 'edit-account',
+				'label'       => __( 'Account Details', 'alynt-account-gateway' ),
+				'description' => __( 'Update your name, email address, and account password.', 'alynt-account-gateway' ),
+			),
+		);
+		?>
+		<section class="agw-dashboard-overview" aria-labelledby="agw-dashboard-overview-title">
+			<div class="agw-dashboard-overview__copy">
+				<p class="agw-dashboard-overview__eyebrow"><?php esc_html_e( 'Customer Account', 'alynt-account-gateway' ); ?></p>
+				<h2 id="agw-dashboard-overview-title"><?php esc_html_e( 'Everything for your orders in one place', 'alynt-account-gateway' ); ?></h2>
+				<p><?php esc_html_e( 'Review purchases, manage checkout details, and keep your account information current without leaving the branded account area.', 'alynt-account-gateway' ); ?></p>
+			</div>
+			<div class="agw-dashboard-overview__actions" aria-label="<?php esc_attr_e( 'Customer account shortcuts', 'alynt-account-gateway' ); ?>">
+				<?php foreach ( $actions as $action ) : ?>
+					<a class="agw-dashboard-overview__action" href="<?php echo esc_url( $this->woocommerce->endpoint_url( $action['endpoint'], $settings ) ); ?>">
+						<span class="agw-dashboard-overview__action-label"><?php echo esc_html( $action['label'] ); ?></span>
+						<span class="agw-dashboard-overview__action-description"><?php echo esc_html( $action['description'] ); ?></span>
+					</a>
+				<?php endforeach; ?>
+			</div>
+		</section>
 		<?php
 	}
 }

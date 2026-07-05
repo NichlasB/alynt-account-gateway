@@ -121,6 +121,17 @@ class WooCommerceIntegrationTest extends TestCase {
 		$this->assertArrayHasKey( 'payment-methods', $items );
 	}
 
+	public function test_endpoint_url_uses_configured_account_base() {
+		$integration = new ALYNT_AG_WooCommerce_Integration();
+		$settings    = array(
+			'after_login_redirect' => '/customer-area/',
+			'login_path'           => '/login',
+		);
+
+		$this->assertSame( '/customer-area/orders/', $integration->endpoint_url( 'orders', $settings ) );
+		$this->assertSame( '/customer-area/', $integration->endpoint_url( 'dashboard', $settings ) );
+	}
+
 	public function test_render_endpoint_delegates_to_woocommerce_action_when_available() {
 		$integration = new class() extends ALYNT_AG_WooCommerce_Integration {
 			public function detect() {

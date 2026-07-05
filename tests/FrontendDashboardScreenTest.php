@@ -250,6 +250,35 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringNotContainsString( 'This account section is not available.', $html );
 	}
 
+	public function test_render_dashboard_screen_outputs_woocommerce_overview_on_base_dashboard() {
+		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->available = true;
+		$woocommerce          = new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce();
+		$screen               = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			$woocommerce,
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array(
+				'woocommerce_takeover' => true,
+			)
+		);
+
+		ob_start();
+		$screen->render_dashboard_screen( $settings, '/my-account/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'class="agw-dashboard-overview"', $html );
+		$this->assertStringContainsString( 'Customer Account', $html );
+		$this->assertStringContainsString( 'Everything for your orders in one place', $html );
+		$this->assertStringContainsString( 'href="/my-account/orders/"', $html );
+		$this->assertStringContainsString( 'href="/my-account/edit-address/"', $html );
+		$this->assertStringContainsString( 'href="/my-account/edit-account/"', $html );
+		$this->assertStringNotContainsString( 'class="agw-dashboard-content"', $html );
+	}
+
 	public function test_render_dashboard_screen_outputs_endpoint_fallback_when_render_fails() {
 		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
 		$dashboard->available = true;
