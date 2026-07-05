@@ -26,6 +26,18 @@ class FrontendMessagesTest extends TestCase {
 		$this->assertSame( 'The registration could not be started. Please try again.', $messages->registration_error( 'unknown' ) );
 	}
 
+	public function test_registration_error_returns_frontend_safe_provider_messages() {
+		$messages = new ALYNT_AG_Frontend_Messages();
+
+		$this->assertSame( 'This email address cannot be used for registration.', $messages->registration_error( 'alynt_ag_reoon_blocked' ) );
+		$this->assertSame( 'Email verification is not available right now. Please try again later.', $messages->registration_error( 'alynt_ag_reoon_missing' ) );
+		$this->assertSame( 'Email verification is temporarily unavailable. Please try again later.', $messages->registration_error( 'alynt_ag_reoon_request_failed' ) );
+		$this->assertSame( 'Email verification is temporarily unavailable. Please try again later.', $messages->registration_error( 'alynt_ag_reoon_invalid_response' ) );
+		$this->assertSame( 'Please complete the verification challenge and try again.', $messages->registration_error( 'alynt_ag_turnstile_failed' ) );
+		$this->assertSame( 'Verification is not available right now. Please try again later.', $messages->registration_error( 'alynt_ag_turnstile_missing' ) );
+		$this->assertSame( 'Verification is temporarily unavailable. Please try again later.', $messages->registration_error( 'alynt_ag_turnstile_request_failed' ) );
+	}
+
 	public function test_resend_error_returns_known_message_and_neutral_fallback() {
 		$messages = new ALYNT_AG_Frontend_Messages();
 

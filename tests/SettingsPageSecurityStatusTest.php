@@ -139,6 +139,41 @@ class SettingsPageSecurityStatusTest extends TestCase {
 				'created_at' => '2026-07-05 12:20:00',
 			),
 			(object) array(
+				'email'      => 'reoon-missing@example.test',
+				'provider'   => 'reoon',
+				'status'     => 'alynt_ag_reoon_missing',
+				'blocked'    => 1,
+				'created_at' => '2026-07-05 12:21:00',
+			),
+			(object) array(
+				'email'      => 'reoon-down@example.test',
+				'provider'   => 'reoon',
+				'status'     => 'alynt_ag_reoon_request_failed',
+				'blocked'    => 1,
+				'created_at' => '2026-07-05 12:22:00',
+			),
+			(object) array(
+				'email'      => 'reoon-invalid@example.test',
+				'provider'   => 'reoon',
+				'status'     => 'alynt_ag_reoon_invalid_response',
+				'blocked'    => 1,
+				'created_at' => '2026-07-05 12:23:00',
+			),
+			(object) array(
+				'email'      => 'turnstile-missing@example.test',
+				'provider'   => 'turnstile',
+				'status'     => 'alynt_ag_turnstile_missing',
+				'blocked'    => 1,
+				'created_at' => '2026-07-05 12:24:00',
+			),
+			(object) array(
+				'email'      => 'turnstile-down@example.test',
+				'provider'   => 'turnstile',
+				'status'     => 'alynt_ag_turnstile_request_failed',
+				'blocked'    => 1,
+				'created_at' => '2026-07-05 12:24:30',
+			),
+			(object) array(
 				'email'      => 'login@example.test',
 				'provider'   => 'rate_limit',
 				'status'     => 'login_rate_limited',
@@ -185,6 +220,11 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'role_account_flagged', $output );
 		$this->assertStringContainsString( 'alynt_ag_reoon_blocked', $output );
 		$this->assertStringContainsString( 'alynt_ag_turnstile_failed', $output );
+		$this->assertStringContainsString( 'alynt_ag_reoon_missing', $output );
+		$this->assertStringContainsString( 'alynt_ag_reoon_request_failed', $output );
+		$this->assertStringContainsString( 'alynt_ag_reoon_invalid_response', $output );
+		$this->assertStringContainsString( 'alynt_ag_turnstile_missing', $output );
+		$this->assertStringContainsString( 'alynt_ag_turnstile_request_failed', $output );
 		$this->assertStringContainsString( 'login_rate_limited', $output );
 		$this->assertStringContainsString( 'lostpassword_rate_limited', $output );
 		$this->assertStringContainsString( 'terms_required', $output );
@@ -194,7 +234,12 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Registration attempt was blocked by the rate limit.', $output );
 		$this->assertStringContainsString( 'Reoon allowed this email, but the status should be reviewed.', $output );
 		$this->assertStringContainsString( 'Reoon blocked this email by policy.', $output );
-		$this->assertStringContainsString( 'Turnstile challenge failed.', $output );
+		$this->assertStringContainsString( 'Reoon was not configured when verification ran. Confirm the API key before enabling public registration.', $output );
+		$this->assertStringContainsString( 'Reoon could not be reached. Check outbound HTTP connectivity, API availability, and the saved API key.', $output );
+		$this->assertStringContainsString( 'Reoon returned an unexpected response. Review provider availability and test the saved API key.', $output );
+		$this->assertStringContainsString( 'Turnstile rejected the challenge response. Ask the customer to retry and confirm the site key matches the secret key.', $output );
+		$this->assertStringContainsString( 'Turnstile was not configured when verification ran. Confirm both the site key and secret key before launch.', $output );
+		$this->assertStringContainsString( 'Turnstile verification could not reach Cloudflare. Check outbound HTTP connectivity and the saved secret key.', $output );
 		$this->assertStringContainsString( 'Login attempt was blocked by the rate limit.', $output );
 		$this->assertStringContainsString( 'Password reset request was blocked by the rate limit.', $output );
 		$this->assertStringContainsString( 'Registration was blocked because terms and privacy consent was not accepted.', $output );

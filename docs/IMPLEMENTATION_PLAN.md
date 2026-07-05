@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.36 Registration-flow activity logging shipped; next slice TBD
+- Current phase: v0.1.37 Provider failure feedback in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.36 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -99,6 +99,39 @@
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates `registration_flow` activity rows and Security tab guidance.
 - [x] GitHub release asset is installed through Alynt Plugin Updater.
+
+## v0.1.37 Small Release Cycle
+
+### Scope
+
+- [x] Start the next security and anti-spam hardening slice from the released `master` baseline.
+- [x] Add frontend-safe registration messages for Reoon and Turnstile provider failures without exposing provider internals or sensitive configuration details.
+- [x] Improve Security tab guidance so Reoon and Turnstile failures distinguish policy blocks, missing configuration, provider connectivity, invalid provider responses, and failed customer challenges.
+- [x] Keep changes scoped to copy/guidance only with no settings schema, frontend routing, registration success path, provider request payloads, provider policy decisions, rate-limit thresholds, dashboard, WooCommerce, webhook, email template, privacy cleanup, or default frontend-output behavior changes.
+- [x] Add focused coverage for frontend provider messages and Security tab provider guidance.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.37` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.37` from clean `master` after the `v0.1.36` release merge.
+- Added frontend-safe registration messages for `alynt_ag_reoon_blocked`, `alynt_ag_reoon_missing`, `alynt_ag_reoon_request_failed`, `alynt_ag_reoon_invalid_response`, `alynt_ag_turnstile_failed`, `alynt_ag_turnstile_missing`, and `alynt_ag_turnstile_request_failed`.
+- Updated Security tab provider guidance so admins get clearer next actions for missing Reoon keys, Reoon connectivity failures, unexpected Reoon responses, Turnstile challenge rejection, missing Turnstile keys, and Cloudflare verification connectivity failures.
+- Verified focused checks: PHP syntax passes for touched frontend/admin files, focused `FrontendMessagesTest` passes with 5 tests and 15 assertions, focused `SettingsPageSecurityStatusTest` passes with 6 tests and 81 assertions, and `npm.cmd run lint` passes after automatic array-alignment cleanup.
+- Verified broader local checks: `npm.cmd run build` passes, `npm.cmd run make-pot` writes 706 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 203 tests and 1030 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.37-branch-qa-20260705-184835\alynt-account-gateway-v0.1.37-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.36` metadata, frontend-safe provider messages, Security tab provider guidance, built admin CSS, and POT strings present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.36` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.36`, and the provider message/guidance markers are present. Runtime smoke confirmed frontend-safe Reoon and Turnstile registration messages through the message service, inserted disposable Reoon and Turnstile provider failure rows, and authenticated admin HTML smoke confirmed the Security tab renders the new guidance with masked emails and no fatal/critical error output. Temporary activity rows, cookie state, and upload artifact were cleaned up after QA.
+
+### Guardrails
+
+- Do not change saved settings schema, frontend routes, provider validation behavior, provider request payloads, Reoon/Turnstile policy decisions, rate-limit thresholds, registration success behavior, email template content, webhook dispatch behavior, dashboard rendering, WooCommerce endpoint delegation, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep this cycle focused on provider failure feedback and admin guidance copy.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates frontend-safe provider messages and Security tab guidance.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.34 Small Release Cycle
 

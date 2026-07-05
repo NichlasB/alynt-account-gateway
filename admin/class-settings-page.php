@@ -1298,11 +1298,15 @@ class ALYNT_AG_Settings_Page {
 			}
 
 			if ( 'alynt_ag_reoon_missing' === $status ) {
-				return __( 'Reoon was not configured when verification ran.', 'alynt-account-gateway' );
+				return __( 'Reoon was not configured when verification ran. Confirm the API key before enabling public registration.', 'alynt-account-gateway' );
 			}
 
-			if ( in_array( $status, array( 'alynt_ag_reoon_request_failed', 'alynt_ag_reoon_invalid_response' ), true ) ) {
-				return __( 'Reoon could not be reached or returned an unexpected response.', 'alynt-account-gateway' );
+			if ( 'alynt_ag_reoon_request_failed' === $status ) {
+				return __( 'Reoon could not be reached. Check outbound HTTP connectivity, API availability, and the saved API key.', 'alynt-account-gateway' );
+			}
+
+			if ( 'alynt_ag_reoon_invalid_response' === $status ) {
+				return __( 'Reoon returned an unexpected response. Review provider availability and test the saved API key.', 'alynt-account-gateway' );
 			}
 
 			return $blocked
@@ -1312,15 +1316,15 @@ class ALYNT_AG_Settings_Page {
 
 		if ( 'turnstile' === $provider ) {
 			if ( 'alynt_ag_turnstile_failed' === $status ) {
-				return __( 'Turnstile challenge failed.', 'alynt-account-gateway' );
+				return __( 'Turnstile rejected the challenge response. Ask the customer to retry and confirm the site key matches the secret key.', 'alynt-account-gateway' );
 			}
 
 			if ( 'alynt_ag_turnstile_missing' === $status ) {
-				return __( 'Turnstile was not configured when verification ran.', 'alynt-account-gateway' );
+				return __( 'Turnstile was not configured when verification ran. Confirm both the site key and secret key before launch.', 'alynt-account-gateway' );
 			}
 
 			if ( 'alynt_ag_turnstile_request_failed' === $status ) {
-				return __( 'Turnstile verification request failed.', 'alynt-account-gateway' );
+				return __( 'Turnstile verification could not reach Cloudflare. Check outbound HTTP connectivity and the saved secret key.', 'alynt-account-gateway' );
 			}
 
 			return $blocked

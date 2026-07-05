@@ -43,14 +43,21 @@ class ALYNT_AG_Frontend_Messages {
 	 */
 	public function registration_error( $error_code ) {
 		$messages = array(
-			'disabled'                    => __( 'Registration is currently unavailable.', 'alynt-account-gateway' ),
-			'missing_required_fields'     => __( 'Please complete all required fields.', 'alynt-account-gateway' ),
-			'invalid_email'               => __( 'Please enter a valid email address.', 'alynt-account-gateway' ),
-			'terms_required'              => __( 'Please accept the terms and privacy policy to continue.', 'alynt-account-gateway' ),
-			'email_unavailable'           => __( 'If this email address can be used, a confirmation email will be sent.', 'alynt-account-gateway' ),
-			'pending_registration_failed' => __( 'The registration could not be started. Please try again.', 'alynt-account-gateway' ),
-			'consent_record_failed'       => __( 'Your consent record could not be saved. Please try again.', 'alynt-account-gateway' ),
-			'confirmation_email_failed'   => __( 'The confirmation email could not be sent. Please try again.', 'alynt-account-gateway' ),
+			'disabled'                          => __( 'Registration is currently unavailable.', 'alynt-account-gateway' ),
+			'missing_required_fields'           => __( 'Please complete all required fields.', 'alynt-account-gateway' ),
+			'invalid_email'                     => __( 'Please enter a valid email address.', 'alynt-account-gateway' ),
+			'terms_required'                    => __( 'Please accept the terms and privacy policy to continue.', 'alynt-account-gateway' ),
+			'email_unavailable'                 => __( 'If this email address can be used, a confirmation email will be sent.', 'alynt-account-gateway' ),
+			'pending_registration_failed'       => __( 'The registration could not be started. Please try again.', 'alynt-account-gateway' ),
+			'consent_record_failed'             => __( 'Your consent record could not be saved. Please try again.', 'alynt-account-gateway' ),
+			'confirmation_email_failed'         => __( 'The confirmation email could not be sent. Please try again.', 'alynt-account-gateway' ),
+			'alynt_ag_reoon_blocked'            => __( 'This email address cannot be used for registration.', 'alynt-account-gateway' ),
+			'alynt_ag_reoon_missing'            => __( 'Email verification is not available right now. Please try again later.', 'alynt-account-gateway' ),
+			'alynt_ag_reoon_request_failed'     => __( 'Email verification is temporarily unavailable. Please try again later.', 'alynt-account-gateway' ),
+			'alynt_ag_reoon_invalid_response'   => __( 'Email verification is temporarily unavailable. Please try again later.', 'alynt-account-gateway' ),
+			'alynt_ag_turnstile_failed'         => __( 'Please complete the verification challenge and try again.', 'alynt-account-gateway' ),
+			'alynt_ag_turnstile_missing'        => __( 'Verification is not available right now. Please try again later.', 'alynt-account-gateway' ),
+			'alynt_ag_turnstile_request_failed' => __( 'Verification is temporarily unavailable. Please try again later.', 'alynt-account-gateway' ),
 		);
 
 		return isset( $messages[ $error_code ] ) ? $messages[ $error_code ] : __( 'The registration could not be started. Please try again.', 'alynt-account-gateway' );
