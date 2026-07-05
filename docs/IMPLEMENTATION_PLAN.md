@@ -38,6 +38,8 @@
 - Added contextual affordance panels above delegated WooCommerce endpoint content for orders, downloads, addresses, account details, and payment-methods pages. The panels point customers toward safe account next steps without taking over WooCommerce forms, tables, or endpoint handlers.
 - Added focused dashboard screen coverage for Orders edge-state affordance, Downloads edge-state affordance, Payment Methods add-method affordance, and skipping affordances for plugin-added/custom endpoints.
 - Verified initial local checks: PHP syntax passes for touched PHP/test files, focused `FrontendDashboardScreenTest` passes with 8 tests and 51 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 474 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 177 tests and 748 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.25-branch-qa-20260705-115634\alynt-account-gateway-v0.1.25-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor files, pre-bump `0.1.24` metadata, affordance renderer, and built affordance CSS present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.24` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.24`, the affordance renderer and built affordance CSS are present, and authenticated HTTP smoke confirmed `/my-account/orders/`, `/my-account/downloads/`, and `/my-account/payment-methods/` return `200` with the expected affordance panel text and no fatal output.
 
 ### Guardrails
 
