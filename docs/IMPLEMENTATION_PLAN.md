@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.25 WooCommerce endpoint edge-state affordances
+- Current phase: v0.1.25 WooCommerce endpoint edge-state affordances shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.24 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.25 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -30,7 +30,7 @@
 - [x] Keep custom/plugin-added WooCommerce endpoints free of plugin-authored affordance assumptions.
 - [x] Add focused coverage for orders, downloads, payment methods, and custom endpoint restraint.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.25` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.25` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -44,6 +44,8 @@
 - Regenerated `languages/alynt-account-gateway.pot` with 474 strings and `0.1.25` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 177 tests and 748 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.25-20260705-120515\alynt-account-gateway-v0.1.25.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor files, `0.1.25` header/constant/readme/POT metadata, affordance renderer, and built affordance CSS present.
 - Installed the local `0.1.25` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant are `0.1.25`, affordance PHP and built affordance CSS are present, and authenticated HTTP smoke confirmed `/my-account/orders/`, `/my-account/downloads/`, and `/my-account/payment-methods/` return `200` with the expected affordance panel text and no fatal output.
+- Published GitHub release `v0.1.25`, confirmed the Build Release workflow completed successfully, downloaded the public release asset, and verified 55 runtime entries, no backslash archive entries, no dev/source/test/vendor files, `0.1.25` header/constant/readme metadata, affordance renderer, and built affordance CSS present.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.24` to `0.1.25`, then installed it through the WordPress plugin update path from the GitHub release ZIP URL. Final fresh runtime state: active `0.1.25` header/constant, affordance PHP and built affordance CSS present, checked plugin version `0.1.25`, no remaining update offer, and authenticated HTTP smoke confirmed `/my-account/orders/`, `/my-account/downloads/`, and `/my-account/payment-methods/` return `200` with the expected affordance panel text and no fatal output.
 
 ### Guardrails
 
@@ -54,7 +56,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates endpoint affordance panels on representative WooCommerce endpoints.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.24 Small Release Cycle
 
