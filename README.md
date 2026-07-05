@@ -18,7 +18,7 @@ This is private Alynt-distributed software. The plugin header includes `GitHub P
 - Branded HTML account email templates with preview and test-send tools.
 - Custom full-page dashboard with optional WooCommerce My Account takeover that delegates standard endpoints to WooCommerce.
 - Custom dashboard links with labels, icons, ordering, role visibility, and new-tab support.
-- Account-created webhook delivery with optional request signing, metadata logging, and optional debug payload logging.
+- Account-created webhook delivery with optional request signing, admin delivery summaries, metadata logging, and optional debug payload logging.
 - Privacy exporter/eraser support for plugin-owned account, consent, verification, webhook, and audit records.
 - Scheduled retention cleanup for logs and diagnostics.
 - Admin diagnostics with redacted context, recent event display, CSV export, and clear controls.

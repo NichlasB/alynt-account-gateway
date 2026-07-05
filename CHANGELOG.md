@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.21 - 2026-07-05
+
+### Added
+
+- Added Webhooks tab delivery summary, signature verification guidance, and expandable delivery metadata for recent webhook logs.
+
 ## 0.1.20 - 2026-07-05
 
 ### Added

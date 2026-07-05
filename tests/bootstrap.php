@@ -141,9 +141,21 @@ if ( ! function_exists( 'esc_html_e' ) ) {
 	}
 }
 
+if ( ! function_exists( 'esc_html__' ) ) {
+	function esc_html__( $text, $domain = 'default' ) {
+		return esc_html( $text );
+	}
+}
+
 if ( ! function_exists( 'esc_attr_e' ) ) {
 	function esc_attr_e( $text, $domain = 'default' ) {
 		echo esc_attr( $text );
+	}
+}
+
+if ( ! function_exists( 'esc_attr__' ) ) {
+	function esc_attr__( $text, $domain = 'default' ) {
+		return esc_attr( $text );
 	}
 }
 
@@ -211,6 +223,12 @@ if ( ! function_exists( 'wp_generate_password' ) ) {
 if ( ! function_exists( 'current_time' ) ) {
 	function current_time( $type, $gmt = false ) {
 		return '2026-07-03 12:00:00';
+	}
+}
+
+if ( ! function_exists( 'date_i18n' ) ) {
+	function date_i18n( $format, $timestamp = false, $gmt = false ) {
+		return gmdate( (string) $format, $timestamp ? (int) $timestamp : time() );
 	}
 }
 

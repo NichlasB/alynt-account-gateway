@@ -2,11 +2,48 @@
 
 ## Status
 
-- Current phase: v0.1.20 webhook signing
+- Current phase: v0.1.21 webhook delivery UX
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.20 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.21 Small Release Cycle
+
+### Scope
+
+- [x] Start the next admin UX slice from the released `master` baseline.
+- [x] Add a Webhooks tab delivery summary based on the most recent webhook log row.
+- [x] Add signature verification guidance that reflects whether webhook signing is configured.
+- [x] Add expandable delivery metadata for recent webhook log rows without changing dispatch behavior or log retention.
+- [x] Add focused coverage where practical.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.21` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.21` from clean `master` after the `v0.1.20` release merge.
+- Added Webhooks tab delivery summary, signing status, signature verification reference, and expandable per-row delivery details without changing webhook dispatch behavior.
+- Added focused admin webhook UX coverage for summary copy, signed/unsigned guidance, expanded row metadata, and invalid timestamp fallback. Verified targeted `SettingsPageWebhookUxTest` passed with 4 tests and 16 assertions.
+- Verified branch checks before metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` writes 398 strings, `npm.cmd run lint`, `npm.cmd test` passes with 168 tests and 696 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.21-branch-qa-20260705-100422\alynt-account-gateway-v0.1.21-branch-qa.zip`; verified 46 runtime files, no backslash archive entries, no missing runtime files, no dev/source/test/docs/rules/package/vendor files, pre-bump `0.1.20` metadata, and webhook delivery UX strings present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.20` through the WordPress upgrader path. Verified active header and loaded constant remain pre-bump `0.1.20`, installed admin file includes delivery summary/signature reference/details strings, and temporary settings/uploads were cleaned up.
+- Browser-smoked Plugin Tester Webhooks tab through temporary Novamira admin access using Playwright with the system Edge channel: `Webhook Tools`, `Delivery Status:`, signing-enabled guidance, `Signature Verification Reference`, `Recent Webhook Deliveries`, `Details`, `View`, event text, and destination text rendered correctly.
+- Bumped release-candidate metadata to `0.1.21` across the plugin header/constant, npm metadata, readme, sample test, changelog, and POT.
+- Regenerated `languages/alynt-account-gateway.pot` with 398 strings and `0.1.21` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 168 tests and 696 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.21-20260705-101155\alynt-account-gateway-v0.1.21.zip`; verified 46 runtime files, no backslash archive entries, no missing runtime files, no dev/source/test/docs/rules/package/vendor files, `0.1.21` header/constant/readme/POT metadata, and webhook delivery UX strings present.
+- Installed the local `0.1.21` package on LocalWP Plugin Tester through the WordPress upgrader path. Fresh runtime verification confirmed active header and loaded constant are `0.1.21`, delivery summary/signature reference/details strings are present, and temporary upload artifacts were cleaned up.
+
+### Guardrails
+
+- Do not change webhook dispatch behavior, signing algorithm, payload shape, event names, URL policy, log retention, registration flow, email behavior, frontend routes, dashboard rendering, WooCommerce delegation, or provider verification behavior.
+- Keep the slice admin-only and read-only except for the existing test webhook action.
+
+### Completion Gate
+
+- [ ] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates Webhooks tab rendering and recent delivery metadata.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.20 Small Release Cycle
 

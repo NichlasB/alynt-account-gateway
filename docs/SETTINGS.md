@@ -93,6 +93,8 @@ The `account_created_webhook` setting sends an `account.created` JSON payload af
 
 When `webhook_signing_secret` is configured, outgoing webhooks include `X-Alynt-AG-Event`, `X-Alynt-AG-Time`, `X-Alynt-AG-Version`, and `X-Alynt-AG-Signature` headers. The signature is `sha256=` plus the HMAC-SHA256 of `{timestamp}.{event}.{json_body}` using the shared secret. Leave the secret empty to send unsigned webhooks for existing integrations.
 
+The Webhooks settings tab shows the most recent delivery status, current signing status, a signature verification reference, and expandable metadata for recent webhook delivery logs.
+
 Custom dashboard links are stored in `dashboard_custom_links` as a JSON array. Each link may define `label`, `url`, `icon`, `order`, `roles`, and `target`; relative URLs are resolved from the site home URL, empty roles are visible to all account users, and `_blank` targets receive safe new-tab behavior.
 
 When `dashboard_enabled` and `woocommerce_takeover` are both enabled and WooCommerce is active, requests under the configured `after_login_redirect` path are rendered inside the branded dashboard. Standard WooCommerce account endpoints such as orders, downloads, addresses, account details, and payment methods are delegated to WooCommerce endpoint actions. Plugin-added account endpoints are discovered from WooCommerce account menu items and routed through the same endpoint action pattern.

@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 0.1.20
+Stable tag: 0.1.21
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,7 +25,7 @@ Core features include:
 * Branded account emails with preview and test-send tools.
 * Optional custom dashboard and WooCommerce My Account takeover.
 * Custom dashboard links with icons, ordering, role visibility, and new-tab behavior.
-* Account-created webhook delivery with optional request signing.
+* Account-created webhook delivery with optional request signing and admin delivery summaries.
 * Privacy exporter/eraser integration and retention cleanup.
 * Multilingual-ready strings and generated POT file.
 
@@ -37,6 +37,10 @@ Core features include:
 4. Enable Frontend Output only after confirming the settings.
 
 == Changelog ==
+
+= 0.1.21 =
+
+* Added Webhooks tab delivery summary, signature verification guidance, and expandable delivery metadata for recent webhook logs.
 
 = 0.1.20 =
 
