@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.24 - 2026-07-05
+
+### Added
+
+- Added branded guidance copy above delegated WooCommerce account endpoint content for orders, order details, downloads, addresses, account details, and payment-method flows.
+
 ## 0.1.23 - 2026-07-05
 
 ### Added
