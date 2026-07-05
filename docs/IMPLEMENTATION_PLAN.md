@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.35 Routing diagnostics in progress
+- Current phase: v0.1.35 Routing diagnostics shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.34 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.35 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep changes scoped to diagnostics evidence with no settings schema, frontend route, redirect destination, capability, toolbar, login, registration, dashboard, WooCommerce, webhook, email, privacy cleanup, or default frontend-output behavior changes.
 - [x] Add focused coverage proving diagnostics rows are written without storing raw login or redirect query values.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.35` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.35` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -46,6 +46,8 @@
 - Re-ran release-candidate validation after the metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` with 689 strings, `npm.cmd run lint`, `npm.cmd audit --audit-level=moderate`, full `npm.cmd test` with 199 tests and 994 assertions, PHP syntax checks for the main plugin and frontend class, and `git diff --check` all passed.
 - Created release-candidate package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.35-20260705-173449\alynt-account-gateway-v0.1.35.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.35` header/constant/readme/POT metadata, routing diagnostics PHP, built admin CSS, and POT strings present.
 - Installed the `0.1.35` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header `0.1.35`, loaded constant `0.1.35`, and both diagnostics helpers present. Runtime HTTP smoke temporarily enabled diagnostics, triggered a native `wp-login.php` lost-password redirect and blocked subscriber `wp-admin` access, confirmed exactly the expected diagnostics events were written without raw login email or full redirect URL values, and authenticated admin HTML smoke confirmed the Advanced / Tools diagnostics panel renders both event codes with no fatal/critical error output. Temporary settings, subscriber user, diagnostics rows, cookie state, and upload artifacts were cleaned up after QA.
+- Published GitHub release `v0.1.35`: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.35`. The Build Release workflow completed successfully, and the public asset `alynt-account-gateway-v0.1.35.zip` verified with 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.35` metadata, routing diagnostics PHP, built admin CSS, and POT strings present.
+- Verified the Alynt Plugin Updater path end to end on LocalWP Plugin Tester by downgrading to the public `v0.1.34` release asset, confirming runtime `0.1.34` with routing diagnostics absent, clearing updater caches, detecting the available `0.1.35` update from the updater-discovered GitHub package URL, installing that package through WordPress upgrader classes, confirming runtime `0.1.35` with no update remaining, and re-smoking the two diagnostics events after the updater install. Temporary settings, subscriber user, diagnostics rows, cookie state, and uploaded downgrade artifact were cleaned up after verification.
 
 ### Guardrails
 
@@ -56,7 +58,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates diagnostics events for native login redirects and blocked wp-admin access.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.34 Small Release Cycle
 
