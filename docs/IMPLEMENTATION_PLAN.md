@@ -4,7 +4,7 @@
 
 - Current phase: v0.1.27 Settings UX refinement in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.26 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.27 is in progress on `release/0.1.27`.
+- Plugin status: v0.1.27 release candidate is in progress on `release/0.1.27`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -29,7 +29,7 @@
 - [x] Add read-only tab-level guidance panels across all settings tabs.
 - [x] Keep guidance advisory only with no settings storage, routing, provider, email, dashboard, WooCommerce, webhook, privacy, or frontend behavior changes.
 - [x] Add focused coverage for complete tab guidance, registration-to-security handoff, and invalid-tab fallback.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
 - [ ] Publish the final `v0.1.27` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -41,6 +41,10 @@
 - Confirmed the built admin CSS contains the tab guidance styles and mobile single-column fallback.
 - Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.27-branch-qa-20260705-131253\alynt-account-gateway-v0.1.27-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor files, pre-bump `0.1.26` metadata, tab guidance PHP, and built admin guidance CSS present.
 - Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.26` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.26`, tab guidance PHP and built admin CSS are present, and authenticated HTTP smoke confirmed General, Registration, WooCommerce, and Advanced / Tools tabs return `200`, render the guidance panel, load the admin CSS asset, show expected guidance copy, and show no fatal/critical error output. Temporary package and curl cookie state were cleaned up after QA.
+- Bumped release-candidate metadata to `0.1.27` across the plugin header/constant, npm metadata, readme, sample test, changelog, and implementation plan.
+- Regenerated `languages/alynt-account-gateway.pot` with 544 strings and `0.1.27` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 182 tests and 820 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only POT/readme line-ending warnings.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.27-20260705-131836\alynt-account-gateway-v0.1.27.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor files, `0.1.27` header/constant/readme/POT metadata, tab guidance PHP, and built admin guidance CSS present.
+- Installed the local `0.1.27` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant are `0.1.27`, tab guidance PHP and built admin CSS are present, and authenticated HTTP smoke confirmed General, Registration, WooCommerce, and Advanced / Tools tabs return `200`, render the guidance panel, load the admin CSS asset, show expected guidance copy, and show no fatal/critical error output. Temporary package and curl cookie state were cleaned up after QA.
 
 ### Guardrails
 
@@ -49,8 +53,8 @@
 
 ### Completion Gate
 
-- [ ] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates representative settings tabs render the new guidance panel.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates representative settings tabs render the new guidance panel.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.26 Small Release Cycle

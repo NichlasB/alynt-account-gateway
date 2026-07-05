@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.27 - 2026-07-05
+
+### Added
+
+- Added read-only settings tab guidance panels with setup prompts and related-tab actions across all Account Gateway settings tabs.
+
 ## 0.1.26 - 2026-07-05
 
 ### Added
