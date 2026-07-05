@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.25 WooCommerce endpoint edge-state affordances shipped; next slice TBD
+- Current phase: v0.1.26 WooCommerce delegated content presentation polish in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.25 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -11,7 +11,7 @@
 ## Remaining Product Slices
 
 - [x] Settings readiness and onboarding checks: show whether required URL, registration, protection, branding, email, dashboard, WooCommerce, webhook, privacy, and frontend-output prerequisites are ready before site owners enable public output.
-- [ ] Real-world WooCommerce dashboard polish: improve branded empty states, endpoint affordances, customer account copy, order/address/payment-method edge states, and WooCommerce unavailable guidance.
+- [ ] Real-world WooCommerce dashboard polish: improve branded empty states, endpoint affordances, customer account copy, delegated WooCommerce form styling, order/address/payment-method edge states, and WooCommerce unavailable guidance.
 - [ ] Settings UX refinement: improve setup grouping, tab-level guidance, validation hints, admin notices, and safe defaults for first-time configuration.
 - [ ] Email template editor polish: add richer token browsing, per-template reset guidance, preview/test-send ergonomics, and clearer plain-text/core-email limitations.
 - [ ] Security and anti-spam hardening: improve Reoon policy visibility, provider failure feedback, registration abuse logs, lockout visibility, resend throttling UX, and optional manual-review decisions.
@@ -20,6 +20,34 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.26 Small Release Cycle
+
+### Scope
+
+- [x] Start the next WooCommerce dashboard polish slice from the released `master` baseline.
+- [x] Add scoped frontend CSS for delegated WooCommerce notices, forms, fieldsets, required labels, buttons, and payment-method containers inside branded dashboard content.
+- [x] Keep changes presentation-only and preserve WooCommerce endpoint handlers, forms, submissions, and sensitive account flows.
+- [x] Add focused CSS source coverage for key scoped WooCommerce selectors and mobile single-column fallback.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.26` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.26` from clean `master` after the `v0.1.25` release merge.
+- Added dashboard-scoped CSS polish for WooCommerce notices, validation/error boxes, address/account form rows, fieldsets, required markers, submit buttons, and payment-method containers so delegated WooCommerce screens better match the branded dashboard shell without replacing WooCommerce logic.
+- Added focused source-level CSS coverage to keep the WooCommerce selectors scoped to `.agw-dashboard-content` and preserve the mobile single-column fallback for address/account form grids.
+
+### Guardrails
+
+- Do not change frontend routing, authentication behavior, WooCommerce endpoint delegation, WooCommerce form handlers, WooCommerce account data submission, registration flow, email behavior, webhook behavior, provider verification behavior, settings storage shape, or default frontend-output disabled behavior.
+- Keep this cycle focused on scoped delegated-content presentation only.
+
+### Completion Gate
+
+- [ ] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates representative delegated WooCommerce account endpoints.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.25 Small Release Cycle
 
