@@ -30,7 +30,7 @@
 - [x] Add `aria-describedby` linkage for native settings inputs that have help text.
 - [x] Keep help advisory/read-only with no settings storage, routing, provider, email, dashboard, WooCommerce, webhook, privacy, or frontend behavior changes.
 - [x] Add focused coverage for the help map, rendered help output, native input `aria-describedby`, and no-op missing help.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
 - [ ] Publish the final `v0.1.28` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -41,6 +41,8 @@
 - Added focused `SettingsPageFieldHelpTest` coverage for high-impact help text, rendered text-field help, rendered boolean-field help, and missing-setting no-op output.
 - Verified initial local checks: PHP syntax passes for touched PHP/test files, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 592 strings, `npm.cmd run lint` passes after PHPCBF alignment cleanup, full `npm.cmd test` passes with 186 tests and 832 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
 - Confirmed the built admin CSS contains the field-help styling.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.28-branch-qa-20260705-133906\alynt-account-gateway-v0.1.28-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor files, pre-bump `0.1.27` metadata, field-help PHP helpers, `aria-describedby` support, and built admin field-help CSS present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.27` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.27`, field-help PHP and built admin CSS are present, and authenticated HTTP smoke confirmed General, URLs, Registration, and WooCommerce settings tabs return `200`, load the admin CSS asset, render expected helper text, and include linked `aria-describedby` attributes. Temporary package and curl cookie state were cleaned up after QA.
 
 ### Guardrails
 
@@ -49,8 +51,8 @@
 
 ### Completion Gate
 
-- [ ] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates representative settings fields render help text and linked descriptions.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates representative settings fields render help text and linked descriptions.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.27 Small Release Cycle
