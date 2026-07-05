@@ -266,6 +266,12 @@
 	white-space: normal;
 }
 
+.alynt-ag-security-guidance {
+	max-width: 280px;
+	color: #50575e;
+	line-height: 1.45;
+}
+
 .alynt-ag-security-decision {
 	display: inline-flex;
 	align-items: center;

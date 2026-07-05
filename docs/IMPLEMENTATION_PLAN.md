@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.32 Pending registration visibility shipped; next slice TBD
+- Current phase: v0.1.33 Verification activity guidance in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.32 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.32 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.33 is in progress on `release/0.1.33`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,36 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.33 Small Release Cycle
+
+### Scope
+
+- [x] Start the next security and anti-spam hardening slice from the released `master` baseline.
+- [x] Add admin-readable guidance to Recent Registration Verification Activity rows so raw provider/status codes explain what happened.
+- [x] Cover passed, flagged, blocked, Turnstile failure, and rate-limit outcomes without changing registration behavior or stored verification data.
+- [x] Keep changes scoped to admin visibility with no schema, settings, registration flow, provider verification, rate-limit enforcement, email delivery, webhook, frontend, dashboard, WooCommerce, privacy retention, or default frontend-output behavior changes.
+- [x] Add focused coverage for rendered provider guidance.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.33` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.33` from clean `master` after the `v0.1.32` release merge.
+- Added a Guidance column to the Security tab Recent Registration Verification Activity table. The guidance explains accepted Reoon emails, flagged Reoon statuses, Reoon policy blocks, Turnstile failures, and registration/confirmation resend rate-limit blocks.
+- Added focused `SettingsPageSecurityStatusTest` coverage for passed, flagged, blocked, Turnstile failed, and rate-limited guidance output.
+- Verified initial local checks: PHP syntax passes for touched PHP/test files, focused `SettingsPageSecurityStatusTest` passes with 6 tests and 61 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 685 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 197 tests and 960 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+
+### Guardrails
+
+- Do not change saved settings schema, frontend routing, authentication behavior, registration flow, provider verification behavior, rate-limit enforcement, pending-registration persistence behavior, email delivery behavior, dashboard rendering, WooCommerce endpoint delegation, webhook dispatch behavior, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep this cycle focused on read-only provider/status guidance in the Security tab only.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates the Security tab renders verification guidance.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.32 Small Release Cycle
 

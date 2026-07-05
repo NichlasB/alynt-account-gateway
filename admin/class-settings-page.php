@@ -1154,6 +1154,7 @@ class ALYNT_AG_Settings_Page {
 							<th scope="col"><?php esc_html_e( 'Provider', 'alynt-account-gateway' ); ?></th>
 							<th scope="col"><?php esc_html_e( 'Outcome', 'alynt-account-gateway' ); ?></th>
 							<th scope="col"><?php esc_html_e( 'Decision', 'alynt-account-gateway' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Guidance', 'alynt-account-gateway' ); ?></th>
 							<th scope="col"><?php esc_html_e( 'Logged At', 'alynt-account-gateway' ); ?></th>
 						</tr>
 					</thead>
@@ -1168,6 +1169,7 @@ class ALYNT_AG_Settings_Page {
 										<?php echo ! empty( $log->blocked ) ? esc_html__( 'Blocked', 'alynt-account-gateway' ) : esc_html__( 'Passed', 'alynt-account-gateway' ); ?>
 									</span>
 								</td>
+								<td class="alynt-ag-security-guidance"><?php echo esc_html( $this->security_verification_guidance( $log ) ); ?></td>
 								<td><?php echo esc_html( $log->created_at ?? '' ); ?></td>
 							</tr>
 						<?php endforeach; ?>
@@ -1253,6 +1255,93 @@ class ALYNT_AG_Settings_Page {
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		return is_array( $logs ) ? $logs : array();
+	}
+
+	/**
+	 * Return admin guidance for a verification log row.
+	 *
+	 * @param object $log Verification log row.
+	 * @return string
+	 */
+	private function security_verification_guidance( $log ) {
+		$provider = isset( $log->provider ) ? sanitize_key( $log->provider ) : '';
+		$status   = isset( $log->status ) ? sanitize_key( $log->status ) : '';
+		$blocked  = ! empty( $log->blocked );
+
+		if ( 'rate_limit' === $provider ) {
+			if ( 'registration_rate_limited' === $status ) {
+				return __( 'Registration attempt was blocked by the rate limit.', 'alynt-account-gateway' );
+			}
+
+			if ( 'resend_confirmation_rate_limited' === $status ) {
+				return __( 'Confirmation resend was blocked by the rate limit.', 'alynt-account-gateway' );
+			}
+
+			return __( 'Account action was blocked by a rate limit.', 'alynt-account-gateway' );
+		}
+
+		if ( 'reoon' === $provider ) {
+			if ( $this->status_has_suffix( $status, '_flagged' ) ) {
+				return __( 'Reoon allowed this email, but the status should be reviewed.', 'alynt-account-gateway' );
+			}
+
+			if ( 'alynt_ag_reoon_blocked' === $status ) {
+				return __( 'Reoon blocked this email by policy.', 'alynt-account-gateway' );
+			}
+
+			if ( 'alynt_ag_reoon_missing' === $status ) {
+				return __( 'Reoon was not configured when verification ran.', 'alynt-account-gateway' );
+			}
+
+			if ( in_array( $status, array( 'alynt_ag_reoon_request_failed', 'alynt_ag_reoon_invalid_response' ), true ) ) {
+				return __( 'Reoon could not be reached or returned an unexpected response.', 'alynt-account-gateway' );
+			}
+
+			return $blocked
+				? __( 'Reoon blocked this registration.', 'alynt-account-gateway' )
+				: __( 'Reoon accepted this email.', 'alynt-account-gateway' );
+		}
+
+		if ( 'turnstile' === $provider ) {
+			if ( 'alynt_ag_turnstile_failed' === $status ) {
+				return __( 'Turnstile challenge failed.', 'alynt-account-gateway' );
+			}
+
+			if ( 'alynt_ag_turnstile_missing' === $status ) {
+				return __( 'Turnstile was not configured when verification ran.', 'alynt-account-gateway' );
+			}
+
+			if ( 'alynt_ag_turnstile_request_failed' === $status ) {
+				return __( 'Turnstile verification request failed.', 'alynt-account-gateway' );
+			}
+
+			return $blocked
+				? __( 'Turnstile blocked this registration.', 'alynt-account-gateway' )
+				: __( 'Turnstile challenge passed.', 'alynt-account-gateway' );
+		}
+
+		if ( $this->status_has_suffix( $status, '_flagged' ) ) {
+			return __( 'Verification passed, but the status should be reviewed.', 'alynt-account-gateway' );
+		}
+
+		return $blocked
+			? __( 'Verification blocked this registration.', 'alynt-account-gateway' )
+			: __( 'Verification passed.', 'alynt-account-gateway' );
+	}
+
+	/**
+	 * Return whether a status string ends with a suffix.
+	 *
+	 * @param string $status Status string.
+	 * @param string $suffix Suffix to test.
+	 * @return bool
+	 */
+	private function status_has_suffix( $status, $suffix ) {
+		if ( '' === $suffix ) {
+			return true;
+		}
+
+		return substr( $status, -strlen( $suffix ) ) === $suffix;
 	}
 
 	/**
