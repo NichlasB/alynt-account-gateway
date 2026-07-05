@@ -4,7 +4,7 @@
 
 - Current phase: v0.1.33 Verification activity guidance in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.32 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.33 is in progress on `release/0.1.33`.
+- Plugin status: v0.1.32 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.33 is in release-candidate validation on `release/0.1.33`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -41,6 +41,10 @@
 - Verified initial local checks: PHP syntax passes for touched PHP/test files, focused `SettingsPageSecurityStatusTest` passes with 6 tests and 61 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 685 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 197 tests and 960 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
 - Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.33-branch-qa-20260705-162731\alynt-account-gateway-v0.1.33-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.32` metadata, verification guidance PHP, built admin CSS, and POT present.
 - Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.32` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.32`, the verification guidance code and built admin CSS are present. Seeded five temporary verification-log rows and authenticated HTTP smoke confirmed the Security tab returns the Guidance column, Reoon accepted/flagged/blocked explanations, Turnstile failed explanation, rate-limit explanation, masked email rows, admin CSS, and no fatal/critical error output. Seeded QA rows were cleaned up after QA.
+- Bumped release-candidate metadata to `0.1.33` across the plugin header/constant, npm metadata, readme, sample test, changelog, and implementation plan.
+- Regenerated `languages/alynt-account-gateway.pot` with 685 strings and `0.1.33` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 197 tests and 960 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, PHP syntax passes, and `git diff --check` passes with only line-ending warnings for generated/package metadata files.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.33-20260705-163414\alynt-account-gateway-v0.1.33.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.33` header/constant/readme/POT metadata, verification guidance PHP, built admin CSS, and POT present.
+- Installed the local `0.1.33` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant are `0.1.33`, the verification guidance code and built admin CSS are present. Seeded five temporary verification-log rows and authenticated HTTP smoke confirmed the Security tab returns the Guidance column, Reoon accepted/flagged/blocked explanations, Turnstile failed explanation, rate-limit explanation, masked email rows, admin CSS, and no fatal/critical error output. Seeded QA rows were cleaned up after QA.
 
 ### Guardrails
 

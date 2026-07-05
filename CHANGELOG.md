@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.33 - 2026-07-05
+
+### Added
+
+- Added admin-readable guidance for recent verification activity outcomes on the Security tab.
+
 ## 0.1.32 - 2026-07-05
 
 ### Added
