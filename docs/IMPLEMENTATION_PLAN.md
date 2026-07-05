@@ -40,6 +40,8 @@
 - Added rate-limit posture cards for registration, confirmation resend, login, and password reset windows.
 - Added focused `SettingsPageSecurityStatusTest` coverage for missing providers, fully configured providers, Reoon policy wording, and configured rate-limit values.
 - Verified initial local checks: PHP syntax passes for touched PHP/test files, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 649 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 192 tests and 901 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.30-branch-qa-20260705-143958\alynt-account-gateway-v0.1.30-branch-qa.zip`; verified 46 runtime file entries, no backslash archive entries, no dev/source/test/vendor/build files, pre-bump `0.1.29` metadata, security status PHP, Reoon policy PHP, and built admin security CSS present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.29` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.29`, security status PHP and built admin CSS are present. Authenticated HTTP smoke confirmed the Security tab returns the Security And Spam Status panel, provider readiness, protection mode, Turnstile, Reoon Email Verifier, Reoon Default Policy, registration/password-reset rate-limit cards, admin CSS, and no fatal/critical error output. Temporary package and curl cookie state were cleaned up after QA.
 
 ### Guardrails
 
