@@ -30,7 +30,7 @@
 - [x] Mask email addresses in the admin panel and show compact status labels for pending, email-confirmed, completed, and expired records.
 - [x] Keep changes scoped to admin visibility with no schema, registration flow, provider verification, rate-limit enforcement, email delivery, webhook, frontend, dashboard, WooCommerce, privacy retention, or default frontend-output behavior changes.
 - [x] Add focused coverage for empty and populated pending-registration output.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
 - [ ] Publish the final `v0.1.32` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -40,6 +40,8 @@
 - Added derived Expired status output for pending or email-confirmed rows whose expiry timestamp has passed, without mutating stored registration records.
 - Added focused `SettingsPageSecurityStatusTest` coverage for empty pending-registration output plus masked pending, email-confirmed, completed, and expired rows.
 - Verified initial local checks: PHP syntax passes for touched PHP/test files, focused `SettingsPageSecurityStatusTest` passes with 6 tests and 49 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 667 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 197 tests and 948 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.32-branch-qa-20260705-155937\alynt-account-gateway-v0.1.32-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.31` metadata, pending-registration panel PHP, built admin CSS, and POT present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.31` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.31`, the pending-registration panel code and built admin CSS are present. Seeded two temporary pending-registration rows and authenticated HTTP smoke confirmed the Security tab returns the Recent Pending Registrations table, masked pending and expired email rows, Pending and Expired statuses, existing verification activity, admin CSS, and no fatal/critical error output. Seeded QA rows were cleaned up after QA.
 
 ### Guardrails
 
@@ -49,7 +51,7 @@
 ### Completion Gate
 
 - [x] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates the Security tab renders pending-registration visibility.
+- [x] Plugin Tester smoke validates the Security tab renders pending-registration visibility.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.31 Small Release Cycle
