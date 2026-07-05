@@ -228,6 +228,10 @@ class ALYNT_AG_Settings_Schema {
 				'type'    => 'select',
 				'default' => 'turnstile_or_reoon',
 				'label'   => __( 'Registration Protection Mode', 'alynt-account-gateway' ),
+				'options' => array(
+					'turnstile_or_reoon'  => __( 'Either configured provider can pass', 'alynt-account-gateway' ),
+					'turnstile_and_reoon' => __( 'Every configured provider must pass', 'alynt-account-gateway' ),
+				),
 			),
 			'turnstile_site_key'                        => array(
 				'tab'     => 'security',
@@ -252,6 +256,20 @@ class ALYNT_AG_Settings_Schema {
 				'type'    => 'select',
 				'default' => 'quick',
 				'label'   => __( 'Reoon Verification Mode', 'alynt-account-gateway' ),
+				'options' => array(
+					'quick' => __( 'Quick', 'alynt-account-gateway' ),
+					'power' => __( 'Power', 'alynt-account-gateway' ),
+				),
+			),
+			'reoon_flagged_policy'                      => array(
+				'tab'     => 'security',
+				'type'    => 'select',
+				'default' => 'allow',
+				'label'   => __( 'Reoon Flagged Status Policy', 'alynt-account-gateway' ),
+				'options' => array(
+					'allow' => __( 'Allow and log flagged statuses', 'alynt-account-gateway' ),
+					'block' => __( 'Block flagged statuses', 'alynt-account-gateway' ),
+				),
 			),
 			'registration_rate_limit_count'             => array(
 				'tab'     => 'security',
@@ -681,7 +699,7 @@ class ALYNT_AG_Settings_Schema {
 				continue;
 			}
 
-			$sanitized[ $key ] = self::sanitize_value( $input[ $key ], $field['type'] );
+			$sanitized[ $key ] = self::sanitize_value( $input[ $key ], $field );
 		}
 
 		return $sanitized;
@@ -690,11 +708,13 @@ class ALYNT_AG_Settings_Schema {
 	/**
 	 * Sanitize one value by schema type.
 	 *
-	 * @param mixed  $value Raw value.
-	 * @param string $type  Field type.
+	 * @param mixed               $value Raw value.
+	 * @param array<string,mixed> $field Field schema.
 	 * @return mixed
 	 */
-	private static function sanitize_value( $value, $type ) {
+	private static function sanitize_value( $value, $field ) {
+		$type = isset( $field['type'] ) ? (string) $field['type'] : 'string';
+
 		switch ( $type ) {
 			case 'boolean':
 				return (bool) $value;
@@ -719,8 +739,15 @@ class ALYNT_AG_Settings_Schema {
 				return self::sanitize_dashboard_links( $value );
 			case 'textarea':
 				return wp_kses_post( wp_unslash( $value ) );
-			case 'secret':
 			case 'select':
+				$value = sanitize_key( wp_unslash( $value ) );
+
+				if ( ! empty( $field['options'] ) && is_array( $field['options'] ) ) {
+					return array_key_exists( $value, $field['options'] ) ? $value : $field['default'];
+				}
+
+				return $value;
+			case 'secret':
 			case 'string':
 			default:
 				return sanitize_text_field( wp_unslash( $value ) );

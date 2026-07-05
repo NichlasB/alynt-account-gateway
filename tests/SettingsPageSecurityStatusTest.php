@@ -47,7 +47,8 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Protection Mode', $output );
 		$this->assertStringContainsString( 'Turnstile', $output );
 		$this->assertStringContainsString( 'Reoon Email Verifier', $output );
-		$this->assertStringContainsString( 'Reoon Default Policy', $output );
+		$this->assertStringContainsString( 'Reoon Blocked Statuses', $output );
+		$this->assertStringContainsString( 'Reoon Flagged Statuses', $output );
 		$this->assertStringContainsString( 'Rate Limit Posture', $output );
 		$this->assertStringContainsString( 'Registration Attempts', $output );
 		$this->assertStringContainsString( 'Password Reset Attempts', $output );
@@ -74,8 +75,23 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Every configured provider must pass registration.', $output );
 		$this->assertStringContainsString( 'Server-side verification can run', $output );
 		$this->assertStringContainsString( 'Email quality verification can run', $output );
-		$this->assertStringContainsString( 'Blocks invalid, disabled, disposable, and spamtrap statuses.', $output );
-		$this->assertStringContainsString( 'Allows but flags catch-all, role account, unknown, and inbox-full statuses.', $output );
+		$this->assertStringContainsString( 'Always blocks invalid, disabled, disposable, and spamtrap statuses.', $output );
+		$this->assertStringContainsString( 'Allows but logs catch-all, role account, unknown, and inbox-full statuses for admin review.', $output );
+	}
+
+	public function test_security_status_panel_describes_blocking_flagged_reoon_policy() {
+		$settings                          = ALYNT_AG_Settings_Schema::defaults();
+		$settings['reoon_api_key']         = 'reoon-key';
+		$settings['reoon_flagged_policy']  = 'block';
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		ob_start();
+		$this->invoke_helper( $settings_page, 'render_security_status_panel', array( $settings ) );
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( 'Reoon Flagged Statuses', $output );
+		$this->assertStringContainsString( 'Blocks catch-all, role account, unknown, and inbox-full statuses before account creation.', $output );
 	}
 
 	public function test_security_rate_limit_items_use_configured_values() {
@@ -130,6 +146,13 @@ class SettingsPageSecurityStatusTest extends TestCase {
 				'status'     => 'role_account_flagged',
 				'blocked'    => 0,
 				'created_at' => '2026-07-05 12:10:00',
+			),
+			(object) array(
+				'email'      => 'strict@example.test',
+				'provider'   => 'reoon',
+				'status'     => 'role_account_flagged_blocked',
+				'blocked'    => 1,
+				'created_at' => '2026-07-05 12:12:00',
 			),
 			(object) array(
 				'email'      => 'blocked@example.test',
@@ -233,6 +256,7 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'registration_rate_limited', $output );
 		$this->assertStringContainsString( 'resend_confirmation_rate_limited', $output );
 		$this->assertStringContainsString( 'role_account_flagged', $output );
+		$this->assertStringContainsString( 'role_account_flagged_blocked', $output );
 		$this->assertStringContainsString( 'alynt_ag_reoon_blocked', $output );
 		$this->assertStringContainsString( 'alynt_ag_turnstile_failed', $output );
 		$this->assertStringContainsString( 'alynt_ag_reoon_missing', $output );
@@ -250,6 +274,7 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Registration attempt was blocked by the rate limit.', $output );
 		$this->assertStringContainsString( 'Confirmation resend was blocked by the rate limit. Ask the customer to wait for the configured resend window before trying again.', $output );
 		$this->assertStringContainsString( 'Reoon allowed this email, but the status should be reviewed.', $output );
+		$this->assertStringContainsString( 'Reoon blocked this flagged email because the flagged-status policy is set to block.', $output );
 		$this->assertStringContainsString( 'Reoon blocked this email by policy.', $output );
 		$this->assertStringContainsString( 'Reoon was not configured when verification ran. Confirm the API key before enabling public registration.', $output );
 		$this->assertStringContainsString( 'Reoon could not be reached. Check outbound HTTP connectivity, API availability, and the saved API key.', $output );
