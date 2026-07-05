@@ -29,7 +29,7 @@
 - [x] Add branded guidance copy above delegated WooCommerce endpoint content for standard account areas.
 - [x] Keep custom/plugin-added WooCommerce endpoints free of plugin-authored guidance assumptions.
 - [x] Add focused coverage for endpoint guidance and custom endpoint restraint.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
 - [ ] Publish the final `v0.1.24` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -38,6 +38,9 @@
 - Added endpoint-specific guidance for WooCommerce orders, order details, downloads, addresses, account details, and payment-method flows while preserving WooCommerce endpoint delegation.
 - Added focused dashboard screen coverage for Orders guidance, Payment Methods guidance, and skipping guidance for plugin-added/custom endpoints.
 - Verified initial local checks: PHP syntax passes for touched PHP/test files, focused `FrontendDashboardScreenTest` passes with 7 tests and 37 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 460 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 176 tests and 734 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.24-branch-qa-20260705-112041\alynt-account-gateway-v0.1.24-branch-qa.zip`; verified the main plugin file and built frontend assets are included, and dev/source/test/vendor files are excluded.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.23` by replacing the local-only plugin files from the verified package after WP-CLI was unavailable. Verified the active plugin remains pre-bump `0.1.23`, installed files include endpoint guidance PHP and built CSS, and Plugin Tester settings already have frontend output, dashboard, and WooCommerce takeover enabled.
+- Smoked Plugin Tester through WordPress rendering and authenticated HTTP checks: `/my-account/orders/` and `/my-account/payment-methods/` returned `200` and rendered the expected guidance text; direct renderer checks confirmed Orders guidance, Payment Methods guidance, delegated content shells, and no plugin-authored guidance for a custom endpoint.
 
 ### Guardrails
 
@@ -46,8 +49,8 @@
 
 ### Completion Gate
 
-- [ ] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates endpoint guidance on representative WooCommerce endpoints.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates endpoint guidance on representative WooCommerce endpoints.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.23 Small Release Cycle
