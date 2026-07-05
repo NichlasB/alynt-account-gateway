@@ -11,6 +11,64 @@
 	max-width: 46rem;
 }
 
+.alynt-ag-tab-guidance {
+	display: grid;
+	grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr) auto;
+	gap: 18px;
+	align-items: start;
+	max-width: 78rem;
+	margin: 16px 0 20px;
+	padding: 16px 18px;
+	border: 1px solid #c3c4c7;
+	border-left: 4px solid #3858e9;
+	background: #fff;
+}
+
+.alynt-ag-tab-guidance__eyebrow {
+	margin: 0 0 4px;
+	color: #3858e9;
+	font-size: 12px;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.alynt-ag-tab-guidance h2 {
+	margin: 0 0 6px;
+	font-size: 18px;
+	line-height: 1.35;
+}
+
+.alynt-ag-tab-guidance p {
+	margin: 0;
+	color: #50575e;
+	line-height: 1.5;
+}
+
+.alynt-ag-tab-guidance__steps {
+	display: grid;
+	gap: 7px;
+	margin: 0;
+	padding: 0;
+	color: #1d2327;
+	list-style: none;
+}
+
+.alynt-ag-tab-guidance__steps li {
+	position: relative;
+	margin: 0;
+	padding-left: 18px;
+	line-height: 1.45;
+}
+
+.alynt-ag-tab-guidance__steps li::before {
+	position: absolute;
+	top: 0;
+	left: 0;
+	color: #3858e9;
+	content: "\2022";
+	font-weight: 700;
+}
+
 .alynt-ag-readiness {
 	max-width: 78rem;
 	margin: 16px 0 24px;
@@ -200,6 +258,10 @@
 }
 
 @media (max-width: 960px) {
+	.alynt-ag-tab-guidance {
+		grid-template-columns: 1fr;
+	}
+
 	.alynt-ag-dashboard-link-row__grid {
 		grid-template-columns: 1fr 1fr;
 	}

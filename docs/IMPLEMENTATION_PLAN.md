@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.26 WooCommerce delegated content presentation polish shipped; next slice TBD
+- Current phase: v0.1.27 Settings UX refinement in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.26 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.26 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.27 is in progress on `release/0.1.27`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,36 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.27 Small Release Cycle
+
+### Scope
+
+- [x] Start the next settings UX refinement slice from the released `master` baseline.
+- [x] Add read-only tab-level guidance panels across all settings tabs.
+- [x] Keep guidance advisory only with no settings storage, routing, provider, email, dashboard, WooCommerce, webhook, privacy, or frontend behavior changes.
+- [x] Add focused coverage for complete tab guidance, registration-to-security handoff, and invalid-tab fallback.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.27` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.27` from clean `master` after the `v0.1.26` release merge.
+- Added a read-only settings guidance panel beneath the tab navigation. Each tab now shows a concise focus statement, three setup prompts, and an optional related-tab action for the next natural configuration area.
+- Added focused `SettingsPageTabGuidanceTest` coverage for one guidance entry per registered settings tab, Registration tab guidance linking to Security, and invalid tab fallback to General guidance.
+- Verified initial local checks: PHP syntax passes for touched PHP/test files, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 544 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 182 tests and 820 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+- Confirmed the built admin CSS contains the tab guidance styles and mobile single-column fallback.
+
+### Guardrails
+
+- Do not change frontend routing, authentication behavior, registration flow, provider verification behavior, email delivery behavior, dashboard rendering, WooCommerce endpoint delegation, webhook dispatch behavior, privacy cleanup behavior, settings storage shape, or default frontend-output disabled behavior.
+- Keep this cycle focused on read-only admin setup guidance and styling only.
+
+### Completion Gate
+
+- [ ] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates representative settings tabs render the new guidance panel.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.26 Small Release Cycle
 
