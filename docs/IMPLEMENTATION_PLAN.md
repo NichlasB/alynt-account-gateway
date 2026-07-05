@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.37 Provider failure feedback in progress
+- Current phase: v0.1.37 Provider failure feedback shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.36 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.37 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -110,7 +110,7 @@
 - [x] Keep changes scoped to copy/guidance only with no settings schema, frontend routing, registration success path, provider request payloads, provider policy decisions, rate-limit thresholds, dashboard, WooCommerce, webhook, email template, privacy cleanup, or default frontend-output behavior changes.
 - [x] Add focused coverage for frontend provider messages and Security tab provider guidance.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.37` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.37` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -125,6 +125,8 @@
 - Re-ran release-candidate validation after the metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` with 706 strings, `npm.cmd run lint`, `npm.cmd audit --audit-level=moderate`, full `npm.cmd test` with 203 tests and 1030 assertions, PHP syntax checks for the main plugin, frontend messages, and admin settings page, and `git diff --check` all passed.
 - Created release-candidate package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.37-20260705-185509\alynt-account-gateway-v0.1.37.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.37` header/constant/readme/POT metadata, frontend-safe provider messages, Security tab provider guidance, built admin CSS, and POT strings present.
 - Installed the `0.1.37` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header `0.1.37`, loaded constant `0.1.37`, and the provider message/guidance markers are present. Runtime smoke confirmed frontend-safe Reoon and Turnstile registration messages through the message service, inserted disposable Reoon and Turnstile provider failure rows, and authenticated admin HTML smoke confirmed the Security tab renders the new guidance with masked emails and no fatal/critical error output. Temporary activity rows, cookie state, and upload artifact were cleaned up after QA.
+- Published GitHub release `v0.1.37`: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.37`. The Build Release workflow completed successfully, and the public asset `alynt-account-gateway-v0.1.37.zip` verified with 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.37` metadata, frontend-safe provider messages, Security tab provider guidance, built admin CSS, and POT strings present.
+- Verified the Alynt Plugin Updater path end to end on LocalWP Plugin Tester by downgrading to the public `v0.1.36` release asset, confirming runtime `0.1.36` with the new provider message markers absent, clearing updater caches, detecting the available `0.1.37` update from the updater-discovered GitHub package URL, installing that package through WordPress upgrader classes, confirming runtime `0.1.37` with no update remaining, and re-smoking frontend-safe provider messages plus Security tab guidance after the updater install. Temporary activity rows, cookie state, and uploaded downgrade artifact were cleaned up after verification.
 
 ### Guardrails
 
@@ -135,7 +137,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates frontend-safe provider messages and Security tab guidance.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.34 Small Release Cycle
 
