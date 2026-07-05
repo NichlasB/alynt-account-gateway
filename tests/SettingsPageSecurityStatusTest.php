@@ -155,6 +155,59 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( 0, $items[3]['count'] );
 	}
 
+	public function test_security_provider_health_signals_count_recent_activity() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper(
+			$settings_page,
+			'security_provider_health_signal_items',
+			array(
+				array(
+					(object) array(
+						'provider' => 'turnstile',
+						'status'   => 'alynt_ag_turnstile_failed',
+					),
+					(object) array(
+						'provider' => 'turnstile',
+						'status'   => 'alynt_ag_turnstile_missing',
+					),
+					(object) array(
+						'provider' => 'turnstile',
+						'status'   => 'alynt_ag_turnstile_request_failed',
+					),
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'alynt_ag_reoon_blocked',
+					),
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'role_account_flagged_blocked',
+					),
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'alynt_ag_reoon_request_failed',
+					),
+					(object) array(
+						'provider' => 'rate_limit',
+						'status'   => 'registration_rate_limited',
+					),
+				),
+			)
+		);
+
+		$this->assertSame( 'Turnstile Challenges', $items[0]['label'] );
+		$this->assertSame( 1, $items[0]['count'] );
+		$this->assertSame( 'warning', $items[0]['status'] );
+		$this->assertSame( 'Turnstile Connectivity', $items[1]['label'] );
+		$this->assertSame( 2, $items[1]['count'] );
+		$this->assertSame( 'action', $items[1]['status'] );
+		$this->assertSame( 'Reoon Email Blocks', $items[2]['label'] );
+		$this->assertSame( 2, $items[2]['count'] );
+		$this->assertSame( 'warning', $items[2]['status'] );
+		$this->assertSame( 'Reoon Provider Failures', $items[3]['label'] );
+		$this->assertSame( 1, $items[3]['count'] );
+		$this->assertSame( 'action', $items[3]['status'] );
+	}
+
 	public function test_security_recent_verification_activity_renders_masked_rows() {
 		$tables = ALYNT_AG_Database::tables();
 		$GLOBALS['alynt_ag_test_db_results'][ $tables['verification_logs'] ] = array(
@@ -279,6 +332,11 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$output = ob_get_clean();
 
 		$this->assertStringContainsString( 'Recent Registration Verification Activity', $output );
+		$this->assertStringContainsString( 'Provider Health Signals', $output );
+		$this->assertStringContainsString( 'recent challenge rejections. Confirm the site key matches the secret key and watch for bot traffic if this rises.', $output );
+		$this->assertStringContainsString( 'recent configuration or network failures. Check both Turnstile keys and outbound HTTP connectivity.', $output );
+		$this->assertStringContainsString( 'recent email-quality blocks. Review the policy if legitimate customers are affected.', $output );
+		$this->assertStringContainsString( 'recent configuration, connectivity, or response failures. Test the API key and outbound HTTP connectivity.', $output );
 		$this->assertStringContainsString( 'Rate Limit Pressure', $output );
 		$this->assertStringContainsString( 'recent registration blocks. Review the limit if legitimate customers are affected.', $output );
 		$this->assertStringContainsString( 'recent resend blocks. Repeated resends can indicate confused customers or automated retries.', $output );

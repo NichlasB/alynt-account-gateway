@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.40 Rate-limit pressure visibility shipped; next slice TBD
+- Current phase: v0.1.41 Provider health visibility shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.40 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.41 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,45 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.41 Small Release Cycle
+
+### Scope
+
+- [x] Start the next security and anti-spam hardening slice from the released `master` baseline.
+- [x] Add read-only Provider Health Signals to the Security tab using existing verification activity rows.
+- [x] Summarize recent Turnstile challenge rejections, Turnstile configuration/connectivity failures, Reoon email-quality blocks, and Reoon provider failures without changing provider policy or public responses.
+- [x] Keep changes scoped to admin visibility with no settings schema, frontend routing, provider verification policy, rate-limit enforcement, dashboard, WooCommerce, webhook, email template, privacy cleanup, or default frontend-output behavior changes.
+- [x] Add focused coverage for provider-health counts and rendered admin copy.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Publish the final `v0.1.41` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.41` from clean `master` after the `v0.1.40` release merge.
+- Added a Provider Health Signals summary above the Security tab verification activity table.
+- The summary derives counts from existing recent verification rows and separates Turnstile challenge rejections, Turnstile configuration/connectivity failures, Reoon email-quality blocks, and Reoon provider failures.
+- Added focused tests for provider-health item counts and rendered guidance copy.
+- Verified local checks before the release metadata bump: PHP syntax passes for the touched settings page, focused `SettingsPageSecurityStatusTest` passes with 9 tests and 127 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 742 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 211 tests and 1095 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.41-branch-qa-20260705-222244\alynt-account-gateway-v0.1.41-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.40` metadata, Provider Health Signals renderer, built admin CSS, and POT strings present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.40` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.40`, Provider Health Signals renderer and CSS are present, seeded Turnstile/Reoon provider-health rows render the new health copy plus Rate Limit Pressure, temporary verification rows were cleaned up after QA, and uploaded QA artifacts were removed from the LocalWP filesystem.
+- Bumped release-candidate metadata to `0.1.41` across the plugin header/constant, npm metadata, readme, sample test, changelog, and implementation plan.
+- Re-ran release-candidate validation after the metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` with 742 strings, PHP syntax checks for the main plugin file and touched settings page, `npm.cmd run lint`, `npm.cmd audit --audit-level=moderate`, full `npm.cmd test` with 211 tests and 1095 assertions, and `git diff --check` all passed.
+- Created release-candidate package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.41-20260705-222832\alynt-account-gateway-v0.1.41.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.41` header/constant/readme/POT metadata, Provider Health Signals renderer, and built admin CSS present.
+- Installed the `0.1.41` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header `0.1.41` and loaded constant `0.1.41`. Runtime smoke confirmed Provider Health Signals render with Turnstile/Reoon challenge, connectivity, email-block, and provider-failure cards; temporary verification rows were cleaned up after QA, and uploaded QA artifacts were removed from the LocalWP filesystem.
+- Published GitHub release `v0.1.41`: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.41`. The Build Release workflow completed successfully, and the public asset `alynt-account-gateway-v0.1.41.zip` verified with 45 runtime file entries plus 10 directory entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.41` metadata, Provider Health Signals renderer, and built admin CSS present.
+- Verified the Alynt Plugin Updater path end to end on LocalWP Plugin Tester by downgrading to the public `v0.1.40` release asset, confirming runtime `0.1.40` with Provider Health Signals markers absent, clearing updater scanner/release caches, running a fresh Alynt Plugin Updater check to discover `0.1.41`, confirming the updater-discovered GitHub package URL, installing that package through WordPress upgrader classes, confirming final active runtime `0.1.41` with no update remaining, and re-smoking Provider Health Signals output after the updater install. Temporary verification rows and uploaded QA artifacts were cleaned up after verification.
+
+### Guardrails
+
+- Do not change provider API calls, provider status interpretation, Reoon flagged-status policy, public frontend error messages, rate-limit thresholds, transient keying, login or registration behavior, saved settings schema, dashboard rendering, WooCommerce endpoint delegation, webhook dispatch behavior, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep this cycle focused on admin-only provider-health visibility using existing plugin-owned verification activity.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates Provider Health Signals on the Security tab.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.40 Small Release Cycle
 

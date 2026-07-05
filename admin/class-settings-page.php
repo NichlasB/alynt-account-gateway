@@ -1185,6 +1185,7 @@ class ALYNT_AG_Settings_Page {
 				<?php esc_html_e( 'Shows recent Turnstile and Reoon outcomes stored in the plugin verification log. Email addresses are masked in this admin view.', 'alynt-account-gateway' ); ?>
 			</p>
 
+			<?php $this->render_security_provider_health_signals( $logs ); ?>
 			<?php $this->render_security_rate_limit_pressure( $logs ); ?>
 
 			<?php if ( empty( $logs ) ) : ?>
@@ -1223,6 +1224,129 @@ class ALYNT_AG_Settings_Page {
 			<?php endif; ?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Render provider health summary from recent verification logs.
+	 *
+	 * @param array<int,object> $logs Recent verification logs.
+	 * @return void
+	 */
+	private function render_security_provider_health_signals( $logs ) {
+		$items = $this->security_provider_health_signal_items( $logs );
+		?>
+		<div class="alynt-ag-security-signal" aria-label="<?php esc_attr_e( 'Recent provider health signals', 'alynt-account-gateway' ); ?>">
+			<h4><?php esc_html_e( 'Provider Health Signals', 'alynt-account-gateway' ); ?></h4>
+			<div class="alynt-ag-security-status__grid">
+				<?php foreach ( $items as $item ) : ?>
+					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+						<h5><?php echo esc_html( $item['label'] ); ?></h5>
+						<p>
+							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
+							<?php echo esc_html( $item['message'] ); ?>
+						</p>
+					</section>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Return provider health signal items from recent verification logs.
+	 *
+	 * @param array<int,object> $logs Recent verification logs.
+	 * @return array<int,array{label:string,status:string,count:int,message:string}>
+	 */
+	private function security_provider_health_signal_items( $logs ) {
+		$turnstile_challenges = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'turnstile',
+			array( 'alynt_ag_turnstile_failed' )
+		);
+		$turnstile_failures   = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'turnstile',
+			array( 'alynt_ag_turnstile_missing', 'alynt_ag_turnstile_request_failed' )
+		);
+		$reoon_blocks         = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'reoon',
+			array( 'alynt_ag_reoon_blocked' ),
+			array( '_flagged_blocked' )
+		);
+		$reoon_failures       = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'reoon',
+			array( 'alynt_ag_reoon_missing', 'alynt_ag_reoon_request_failed', 'alynt_ag_reoon_invalid_response' )
+		);
+
+		return array(
+			array(
+				'label'   => __( 'Turnstile Challenges', 'alynt-account-gateway' ),
+				'status'  => $turnstile_challenges > 0 ? 'warning' : 'ready',
+				'count'   => $turnstile_challenges,
+				'message' => __( 'recent challenge rejections. Confirm the site key matches the secret key and watch for bot traffic if this rises.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Turnstile Connectivity', 'alynt-account-gateway' ),
+				'status'  => $turnstile_failures > 0 ? 'action' : 'ready',
+				'count'   => $turnstile_failures,
+				'message' => __( 'recent configuration or network failures. Check both Turnstile keys and outbound HTTP connectivity.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Reoon Email Blocks', 'alynt-account-gateway' ),
+				'status'  => $reoon_blocks > 0 ? 'warning' : 'ready',
+				'count'   => $reoon_blocks,
+				'message' => __( 'recent email-quality blocks. Review the policy if legitimate customers are affected.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Reoon Provider Failures', 'alynt-account-gateway' ),
+				'status'  => $reoon_failures > 0 ? 'action' : 'ready',
+				'count'   => $reoon_failures,
+				'message' => __( 'recent configuration, connectivity, or response failures. Test the API key and outbound HTTP connectivity.', 'alynt-account-gateway' ),
+			),
+		);
+	}
+
+	/**
+	 * Count matching security log rows.
+	 *
+	 * @param array<int,object> $logs            Recent verification logs.
+	 * @param string            $provider        Provider key.
+	 * @param array<int,string> $statuses        Exact status keys.
+	 * @param array<int,string> $status_suffixes Status suffixes.
+	 * @return int
+	 */
+	private function count_security_logs_by_provider_statuses( $logs, $provider, $statuses, $status_suffixes = array() ) {
+		$count           = 0;
+		$provider        = sanitize_key( $provider );
+		$statuses        = array_map( 'sanitize_key', $statuses );
+		$status_suffixes = array_map( 'sanitize_key', $status_suffixes );
+
+		foreach ( $logs as $log ) {
+			$log_provider = isset( $log->provider ) ? sanitize_key( $log->provider ) : '';
+			$status       = isset( $log->status ) ? sanitize_key( $log->status ) : '';
+
+			if ( $provider !== $log_provider || '' === $status ) {
+				continue;
+			}
+
+			if ( in_array( $status, $statuses, true ) ) {
+				++$count;
+				continue;
+			}
+
+			foreach ( $status_suffixes as $suffix ) {
+				if ( $this->status_has_suffix( $status, $suffix ) ) {
+					++$count;
+					break;
+				}
+			}
+		}
+
+		return $count;
 	}
 
 	/**

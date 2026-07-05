@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.41 - 2026-07-05
+
+### Added
+
+- Added Security tab Provider Health Signals for recent Turnstile and Reoon challenge, connectivity, configuration, response, and email-quality blocks.
+
 ## 0.1.40 - 2026-07-05
 
 ### Added
