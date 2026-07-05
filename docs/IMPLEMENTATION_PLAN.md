@@ -2,11 +2,61 @@
 
 ## Status
 
-- Current phase: v0.1.21 webhook delivery UX shipped; next slice TBD
+- Current phase: v0.1.22 settings readiness UX
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.21 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## Remaining Product Slices
+
+- [ ] Settings readiness and onboarding checks: show whether required URL, registration, protection, branding, email, dashboard, WooCommerce, webhook, privacy, and frontend-output prerequisites are ready before site owners enable public output.
+- [ ] Real-world WooCommerce dashboard polish: improve branded empty states, endpoint affordances, customer account copy, order/address/payment-method edge states, and WooCommerce unavailable guidance.
+- [ ] Settings UX refinement: improve setup grouping, tab-level guidance, validation hints, admin notices, and safe defaults for first-time configuration.
+- [ ] Email template editor polish: add richer token browsing, per-template reset guidance, preview/test-send ergonomics, and clearer plain-text/core-email limitations.
+- [ ] Security and anti-spam hardening: improve Reoon policy visibility, provider failure feedback, registration abuse logs, lockout visibility, resend throttling UX, and optional manual-review decisions.
+- [ ] Accessibility, RTL, and multilingual QA pass: verify keyboard flow, focus states, ARIA messaging, contrast resilience, RTL layout behavior, and translation coverage across frontend/admin screens.
+- [ ] Frontend visual QA and theme compatibility: smoke common themes, mobile/desktop breakpoints, high-contrast settings, and CSS interference around the gateway shell.
+- [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
+- [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
+- [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.22 Small Release Cycle
+
+### Scope
+
+- [x] Start the next settings UX slice from the released `master` baseline.
+- [x] Add a read-only setup readiness panel on the General tab.
+- [x] Summarize critical setup checks before frontend output is enabled.
+- [x] Surface warnings for public registration without Turnstile/Reoon, missing Terms/Privacy paths, missing email test recipient, dashboard/WooCommerce takeover gaps, and webhook signing gaps where applicable.
+- [x] Add focused coverage for readiness check classification and panel output.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.22` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.22` from clean `master` after the `v0.1.21` release merge.
+- Added a read-only General tab Setup Readiness panel with action/review/ready counts and tab links for frontend output, gateway URLs, emergency access, branding, public registration, email testing, dashboard, WooCommerce takeover, webhook signing, and privacy retention checks.
+- Added focused `SettingsPageReadinessTest` coverage for safe default classification, public registration without provider warning, WooCommerce takeover dependency, and rendered panel summary/link output.
+- Verified branch checks before metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` writes 439 strings, `npm.cmd run lint`, `npm.cmd test` passes with 172 tests and 715 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.22-branch-qa-20260705-103309\alynt-account-gateway-v0.1.22-branch-qa.zip`; verified 46 runtime files, no backslash archive entries, no missing runtime files, no dev/source/test/docs/rules/package/vendor files, pre-bump `0.1.21` metadata, readiness panel code, built admin CSS, and POT strings present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.21` through the WordPress upgrader path. Verified active header and loaded constant remain pre-bump `0.1.21`, installed admin file includes readiness panel/check code, and built admin CSS contains readiness styles.
+- Browser-smoked Plugin Tester General tab through temporary Novamira admin access using Playwright with the system Edge channel: one setup readiness panel, ten check rows, action/review/ready summary text, key check labels, and `Open Setting` links rendered correctly.
+- Bumped release-candidate metadata to `0.1.22` across the plugin header/constant, npm metadata, readme, sample test, changelog, and POT.
+- Regenerated `languages/alynt-account-gateway.pot` with 439 strings and `0.1.22` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 172 tests and 715 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.22-20260705-103755\alynt-account-gateway-v0.1.22.zip`; verified 46 runtime files, no backslash archive entries, no missing runtime files, no dev/source/test/docs/rules/package/vendor files, `0.1.22` header/constant/readme/POT metadata, readiness panel code, and built readiness CSS present.
+- Installed the local `0.1.22` package on LocalWP Plugin Tester through the WordPress upgrader path. Fresh runtime verification confirmed active header and loaded constant are `0.1.22`, readiness panel code and built readiness CSS are present, and temporary upload artifacts were cleaned up.
+
+### Guardrails
+
+- Do not change frontend routing, authentication behavior, registration flow, email delivery behavior, provider verification behavior, WooCommerce endpoint delegation, webhook dispatch behavior, settings storage shape, or default frontend-output disabled behavior.
+- Keep readiness checks advisory/read-only and admin-only.
+
+### Completion Gate
+
+- [ ] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates the General tab readiness panel.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.21 Small Release Cycle
 

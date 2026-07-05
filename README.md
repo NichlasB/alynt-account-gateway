@@ -9,6 +9,7 @@ This is private Alynt-distributed software. The plugin header includes `GitHub P
 - Branded replacements for login, registration, lost password, reset password, set password, and logout confirmation screens.
 - Configurable login path, account action base, after-login redirect, and emergency bypass key for direct `wp-login.php` access.
 - Frontend output disabled by default so site owners can configure settings before public changes appear.
+- Setup readiness checks that summarize critical configuration before public frontend output is enabled.
 - Brand controls for logo, logo max width, background image, colors, button colors, and font stacks.
 - Screen-specific instruction copy for account gateway forms and states.
 - Confirmation-first registration flow that creates a WordPress user only after the visitor confirms email and sets a valid password.

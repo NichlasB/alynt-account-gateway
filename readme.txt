@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 0.1.21
+Stable tag: 0.1.22
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,6 +19,7 @@ Core features include:
 
 * Branded login, registration, lost password, reset password, set password, and logout confirmation screens.
 * Configurable login path, account action base, after-login redirect, and emergency bypass key.
+* Setup readiness checks before public frontend output is enabled.
 * Confirmation-first registration that creates the WordPress user only after email confirmation and password setup.
 * Optional Cloudflare Turnstile and Reoon Email Verifier support.
 * Rate limiting for account gateway actions.
@@ -37,6 +38,10 @@ Core features include:
 4. Enable Frontend Output only after confirming the settings.
 
 == Changelog ==
+
+= 0.1.22 =
+
+* Added a General tab setup readiness panel with advisory checks before enabling public frontend output.
 
 = 0.1.21 =
 

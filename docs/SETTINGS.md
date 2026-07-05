@@ -85,6 +85,8 @@ Settings are stored in the `alynt_ag_settings` option and defined in `ALYNT_AG_S
 
 Secrets must never be committed to documentation. Store Turnstile, Reoon, webhook, and bypass secrets only in plugin settings.
 
+The General tab includes a read-only Setup Readiness panel. It summarizes whether frontend output, gateway URLs, emergency access, branding, public registration, email testing, dashboard configuration, WooCommerce takeover, webhook signing, and retention windows are ready, need review, or need action before public launch.
+
 Email templates support token placeholders such as `{{site_name}}`, `{{first_name}}`, `{{last_name}}`, `{{user_email}}`, `{{confirmation_url}}`, `{{reset_url}}`, `{{change_email_url}}`, and `{{expiry_hours}}`.
 
 The `email_change_confirmation_*` template is used for the post-change email notification and as the plain-text body for WordPress's pending profile email-change request. WordPress exposes only the body for the pending request through `new_user_email_content`, so that specific core email cannot use the branded HTML wrapper. When `email_change_confirmation_disabled` is enabled, the plugin suppresses both the post-change notification and the pending profile email-change request, then clears the pending `_new_email` marker so users are not left waiting for a disabled confirmation email.

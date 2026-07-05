@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.22 - 2026-07-05
+
+### Added
+
+- Added a General tab setup readiness panel with advisory checks before enabling public frontend output.
+
 ## 0.1.21 - 2026-07-05
 
 ### Added
