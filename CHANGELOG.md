@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.38 - 2026-07-05
+
+### Added
+
+- Added pending-registration resend and expiry visibility with clearer resend throttling copy, confirmation resent activity logging, and Security tab next-step guidance.
+
 ## 0.1.37 - 2026-07-05
 
 ### Added

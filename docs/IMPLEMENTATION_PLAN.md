@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.38 Pending registration resend and expiry visibility in progress
+- Current phase: v0.1.38 Pending registration resend and expiry visibility release-candidate validation in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.37 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.37 is the current public baseline; v0.1.38 is in release-candidate validation.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -46,6 +46,10 @@
 - Verified broader local checks: `npm.cmd run build` passes, `npm.cmd run make-pot` writes 713 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 204 tests and 1045 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.38-branch-qa-20260705-193210\alynt-account-gateway-v0.1.38-branch-qa-wp.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.37` metadata, resend throttle copy, `confirmation_resent` logging/guidance, pending-registration Next Step guidance, built assets, and POT strings present.
 - Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.37` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.37`, and the new markers are present. Runtime smoke confirmed the resend-throttle frontend message, inserted disposable `confirmation_resent` and `resend_confirmation_rate_limited` activity rows plus pending and expired pending-registration rows, authenticated admin HTML smoke confirmed the Security tab renders resend throttle guidance, confirmation resent guidance, Next Step guidance, masked pending/expired emails, and no fatal/critical error output. Temporary activity rows, pending-registration rows, upload ZIPs, and an initial duplicated upload artifact were cleaned up after QA.
+- Bumped release-candidate metadata to `0.1.38` across the plugin header/constant, npm metadata, readme, sample test, changelog, and implementation plan.
+- Re-ran release-candidate validation after the metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` with 713 strings, `npm.cmd run lint`, `npm.cmd audit --audit-level=moderate`, full `npm.cmd test` with 204 tests and 1045 assertions, and PHP syntax check for the main plugin file all passed.
+- Created release-candidate package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.38-20260705-194205\alynt-account-gateway-v0.1.38.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.38` header/constant/readme/POT metadata, resend throttle copy, `confirmation_resent` logging/guidance, pending-registration Next Step guidance, built assets, and POT strings present.
+- Installed the `0.1.38` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header `0.1.38`, loaded constant `0.1.38`, and the new markers are present. Runtime smoke confirmed the resend-throttle frontend message, inserted disposable `confirmation_resent` and `resend_confirmation_rate_limited` activity rows plus pending and expired pending-registration rows, authenticated admin HTML smoke confirmed the Security tab renders resend throttle guidance, confirmation resent guidance, Next Step guidance, masked pending/expired emails, and no fatal/critical error output. Temporary activity rows, pending-registration rows, and upload ZIPs were cleaned up after QA.
 
 ### Guardrails
 
