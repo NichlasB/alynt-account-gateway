@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.39 Reoon flagged-status policy in progress
+- Current phase: v0.1.39 Reoon flagged-status policy shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.38 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.39 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,8 +31,8 @@
 - [x] Update the Security tab policy cards and activity guidance so admins can distinguish always-blocked Reoon statuses from configurable flagged statuses.
 - [x] Add frontend-safe customer messaging for blocked flagged Reoon statuses without exposing provider internals.
 - [x] Add focused coverage for setting defaults/sanitization, flagged-policy behavior, frontend messages, and Security tab guidance.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.39` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Publish the final `v0.1.39` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -50,6 +50,8 @@
 - Re-ran release-candidate validation after the metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` with 725 strings, `npm.cmd run lint`, `npm.cmd audit --audit-level=moderate`, full `npm.cmd test` with 209 tests and 1063 assertions, PHP syntax check for the main plugin file, and `git diff --check` all passed.
 - Created release-candidate package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.39-20260705-202439\alynt-account-gateway-v0.1.39.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.39` header/constant/readme/POT metadata, Reoon flagged-policy setting, blocked flagged status handling, Security tab policy cards, frontend-safe blocked message, and built assets present.
 - Installed the `0.1.39` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header `0.1.39` and loaded constant `0.1.39`. Runtime smoke confirmed default flagged policy `allow`, select sanitization for `block` and invalid values, frontend-safe blocked flagged message, simulated Reoon `role_account` blocking with `alynt_ag_reoon_flagged_blocked`, verification activity status `role_account_flagged_blocked`, Security tab blocked-policy copy, and `*_flagged_blocked` admin guidance. Temporary verification rows were cleaned up after QA.
+- Published GitHub release `v0.1.39`: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.39`. The Build Release workflow completed successfully, and the public asset `alynt-account-gateway-v0.1.39.zip` verified with 45 runtime file entries plus 10 directory entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.39` metadata, Reoon flagged-policy setting, blocked flagged status handling, Security tab policy cards, frontend-safe blocked message, and built assets present.
+- Verified the Alynt Plugin Updater path end to end on LocalWP Plugin Tester by downgrading to the public `v0.1.38` release asset, confirming runtime `0.1.38` with Reoon flagged-policy markers absent, clearing updater scanner/release caches, detecting the available `0.1.39` update from the updater-discovered GitHub package URL, installing that package through WordPress upgrader classes, confirming final active runtime `0.1.39` with no update remaining, and re-smoking blocked flagged Reoon behavior plus Security tab guidance after the updater install. Temporary verification rows were cleaned up after verification.
 
 ### Guardrails
 
@@ -60,7 +62,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates flagged-policy settings, blocked flagged status logging, frontend-safe copy, and Security tab guidance.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.38 Small Release Cycle
 
