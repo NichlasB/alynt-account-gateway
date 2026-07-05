@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.30 - 2026-07-05
+
+### Added
+
+- Added Security tab status guidance for anti-spam provider readiness, Reoon policy visibility, and rate-limit posture.
+
 ## 0.1.29 - 2026-07-05
 
 ### Added
