@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.36 - 2026-07-05
+
+### Added
+
+- Added Security tab activity logging and guidance for blocked registration-flow outcomes.
+
 ## 0.1.35 - 2026-07-05
 
 ### Added
