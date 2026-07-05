@@ -149,6 +149,10 @@ class ALYNT_AG_Settings_Page {
 
 			<?php $this->render_restore_tab_defaults( $active_tab ); ?>
 
+			<?php if ( 'security' === $active_tab ) : ?>
+				<?php $this->render_security_status_panel( $settings ); ?>
+			<?php endif; ?>
+
 			<?php if ( 'advanced_tools' === $active_tab ) : ?>
 				<?php $this->render_diagnostics_tools(); ?>
 			<?php endif; ?>
@@ -928,6 +932,196 @@ class ALYNT_AG_Settings_Page {
 				'tab'  => sanitize_key( $tab ),
 			),
 			admin_url( 'options-general.php' )
+		);
+	}
+
+	/**
+	 * Render security provider and rate-limit status guidance.
+	 *
+	 * @param array<string,mixed> $settings Current settings.
+	 * @return void
+	 */
+	private function render_security_status_panel( $settings ) {
+		$providers       = $this->security_provider_status_items( $settings );
+		$rate_limits     = $this->security_rate_limit_items( $settings );
+		$provider_counts = $this->setup_readiness_counts( $providers );
+		?>
+		<section class="alynt-ag-security-status" aria-labelledby="alynt-ag-security-status-title">
+			<div class="alynt-ag-security-status__header">
+				<div>
+					<h2 id="alynt-ag-security-status-title"><?php esc_html_e( 'Security And Spam Status', 'alynt-account-gateway' ); ?></h2>
+					<p><?php esc_html_e( 'Review configured anti-spam providers, Reoon policy handling, and rate limits before enabling public registration.', 'alynt-account-gateway' ); ?></p>
+				</div>
+				<div class="alynt-ag-readiness__summary" aria-label="<?php esc_attr_e( 'Security provider summary', 'alynt-account-gateway' ); ?>">
+					<span><strong><?php echo esc_html( (string) $provider_counts['action'] ); ?></strong> <?php esc_html_e( 'Action Needed', 'alynt-account-gateway' ); ?></span>
+					<span><strong><?php echo esc_html( (string) $provider_counts['warning'] ); ?></strong> <?php esc_html_e( 'Review', 'alynt-account-gateway' ); ?></span>
+					<span><strong><?php echo esc_html( (string) $provider_counts['ready'] ); ?></strong> <?php esc_html_e( 'Ready', 'alynt-account-gateway' ); ?></span>
+				</div>
+			</div>
+
+			<?php if ( 0 === $this->security_configured_provider_count( $settings ) ) : ?>
+				<p class="alynt-ag-security-status__notice">
+					<?php esc_html_e( 'No anti-spam provider is fully configured. Keep registration disabled or configure Turnstile or Reoon before going public.', 'alynt-account-gateway' ); ?>
+				</p>
+			<?php endif; ?>
+
+			<h3><?php esc_html_e( 'Provider Readiness', 'alynt-account-gateway' ); ?></h3>
+			<div class="alynt-ag-security-status__grid">
+				<?php foreach ( $providers as $item ) : ?>
+					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+						<h4><?php echo esc_html( $item['label'] ); ?></h4>
+						<p><?php echo esc_html( $item['message'] ); ?></p>
+					</section>
+				<?php endforeach; ?>
+			</div>
+
+			<h3><?php esc_html_e( 'Rate Limit Posture', 'alynt-account-gateway' ); ?></h3>
+			<div class="alynt-ag-security-status__grid">
+				<?php foreach ( $rate_limits as $item ) : ?>
+					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+						<h4><?php echo esc_html( $item['label'] ); ?></h4>
+						<p><?php echo esc_html( $item['message'] ); ?></p>
+					</section>
+				<?php endforeach; ?>
+			</div>
+		</section>
+		<?php
+	}
+
+	/**
+	 * Return security provider status items.
+	 *
+	 * @param array<string,mixed> $settings Current settings.
+	 * @return array<int,array{label:string,status:string,message:string}>
+	 */
+	private function security_provider_status_items( $settings ) {
+		$has_turnstile_site   = ! empty( $settings['turnstile_site_key'] );
+		$has_turnstile_secret = ! empty( $settings['turnstile_secret_key'] );
+		$has_turnstile        = $has_turnstile_site && $has_turnstile_secret;
+		$has_reoon            = ! empty( $settings['reoon_api_key'] );
+
+		$turnstile_status  = $has_turnstile ? 'ready' : 'action';
+		$turnstile_message = __( 'Turnstile is not configured. Add both keys or use Reoon before enabling public registration.', 'alynt-account-gateway' );
+
+		if ( $has_turnstile ) {
+			$turnstile_message = __( 'Server-side verification can run when the registration form sends a Turnstile token.', 'alynt-account-gateway' );
+		} elseif ( $has_turnstile_site || $has_turnstile_secret ) {
+			$turnstile_status  = 'warning';
+			$turnstile_message = __( 'Turnstile is partially configured. Add both the site key and secret key before relying on it.', 'alynt-account-gateway' );
+		}
+
+		$mode = ! empty( $settings['protection_mode'] ) ? sanitize_key( $settings['protection_mode'] ) : 'turnstile_or_reoon';
+
+		return array(
+			array(
+				'label'   => __( 'Protection Mode', 'alynt-account-gateway' ),
+				'status'  => $this->security_configured_provider_count( $settings ) > 0 ? 'ready' : 'warning',
+				'message' => $this->security_protection_mode_message( $mode ),
+			),
+			array(
+				'label'   => __( 'Turnstile', 'alynt-account-gateway' ),
+				'status'  => $turnstile_status,
+				'message' => $turnstile_message,
+			),
+			array(
+				'label'   => __( 'Reoon Email Verifier', 'alynt-account-gateway' ),
+				'status'  => $has_reoon ? 'ready' : 'action',
+				'message' => $has_reoon
+					? __( 'Email quality verification can run using the configured Reoon API key.', 'alynt-account-gateway' )
+					: __( 'Reoon is not configured. Add an API key or use Turnstile before enabling public registration.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Reoon Default Policy', 'alynt-account-gateway' ),
+				'status'  => 'ready',
+				'message' => __( 'Blocks invalid, disabled, disposable, and spamtrap statuses. Allows but flags catch-all, role account, unknown, and inbox-full statuses.', 'alynt-account-gateway' ),
+			),
+		);
+	}
+
+	/**
+	 * Return configured security provider count.
+	 *
+	 * @param array<string,mixed> $settings Current settings.
+	 * @return int
+	 */
+	private function security_configured_provider_count( $settings ) {
+		$count = 0;
+
+		if ( ! empty( $settings['turnstile_site_key'] ) && ! empty( $settings['turnstile_secret_key'] ) ) {
+			++$count;
+		}
+
+		if ( ! empty( $settings['reoon_api_key'] ) ) {
+			++$count;
+		}
+
+		return $count;
+	}
+
+	/**
+	 * Return the human-readable protection mode message.
+	 *
+	 * @param string $mode Protection mode.
+	 * @return string
+	 */
+	private function security_protection_mode_message( $mode ) {
+		if ( 'turnstile_and_reoon' === $mode ) {
+			return __( 'Every configured provider must pass registration. Configure both Turnstile and Reoon when the site needs two independent checks.', 'alynt-account-gateway' );
+		}
+
+		return __( 'Either configured provider can pass registration. This is the recommended default for most sites.', 'alynt-account-gateway' );
+	}
+
+	/**
+	 * Return security rate-limit status items.
+	 *
+	 * @param array<string,mixed> $settings Current settings.
+	 * @return array<int,array{label:string,status:string,message:string}>
+	 */
+	private function security_rate_limit_items( $settings ) {
+		return array(
+			array(
+				'label'   => __( 'Registration Attempts', 'alynt-account-gateway' ),
+				'status'  => 'ready',
+				'message' => $this->security_rate_limit_message( $settings, 'registration_rate_limit_count', 'registration_rate_limit_window' ),
+			),
+			array(
+				'label'   => __( 'Confirmation Resend Attempts', 'alynt-account-gateway' ),
+				'status'  => 'ready',
+				'message' => $this->security_rate_limit_message( $settings, 'resend_confirmation_rate_limit_count', 'resend_confirmation_rate_limit_window' ),
+			),
+			array(
+				'label'   => __( 'Login Attempts', 'alynt-account-gateway' ),
+				'status'  => 'ready',
+				'message' => $this->security_rate_limit_message( $settings, 'login_rate_limit_count', 'login_rate_limit_window' ),
+			),
+			array(
+				'label'   => __( 'Password Reset Attempts', 'alynt-account-gateway' ),
+				'status'  => 'ready',
+				'message' => $this->security_rate_limit_message( $settings, 'lostpassword_rate_limit_count', 'lostpassword_rate_limit_window' ),
+			),
+		);
+	}
+
+	/**
+	 * Return a rate-limit message.
+	 *
+	 * @param array<string,mixed> $settings   Current settings.
+	 * @param string              $count_key  Count setting key.
+	 * @param string              $window_key Window setting key.
+	 * @return string
+	 */
+	private function security_rate_limit_message( $settings, $count_key, $window_key ) {
+		$count  = isset( $settings[ $count_key ] ) ? max( 1, absint( $settings[ $count_key ] ) ) : 1;
+		$window = isset( $settings[ $window_key ] ) ? max( 1, absint( $settings[ $window_key ] ) ) : 1;
+
+		return sprintf(
+			/* translators: 1: attempt count, 2: window length in minutes. */
+			__( 'Limit: %1$d attempts in a %2$d-minute window.', 'alynt-account-gateway' ),
+			$count,
+			$window
 		);
 	}
 

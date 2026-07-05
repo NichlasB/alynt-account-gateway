@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.29 Email template editor polish shipped; next slice TBD
+- Current phase: v0.1.30 Security and anti-spam hardening in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.29 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.29 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.30 is in progress on `release/0.1.30`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -12,14 +12,45 @@
 
 - [x] Settings readiness and onboarding checks: show whether required URL, registration, protection, branding, email, dashboard, WooCommerce, webhook, privacy, and frontend-output prerequisites are ready before site owners enable public output.
 - [ ] Real-world WooCommerce dashboard polish: improve branded empty states, endpoint affordances, customer account copy, delegated WooCommerce form styling, order/address/payment-method edge states, and WooCommerce unavailable guidance.
-- [ ] Settings UX refinement: improve setup grouping, tab-level guidance, validation hints, admin notices, and safe defaults for first-time configuration.
-- [ ] Email template editor polish: add richer token browsing, per-template reset guidance, preview/test-send ergonomics, and clearer plain-text/core-email limitations.
+- [x] Settings UX refinement: improve setup grouping, tab-level guidance, validation hints, admin notices, and safe defaults for first-time configuration.
+- [x] Email template editor polish: add richer token browsing, per-template reset guidance, preview/test-send ergonomics, and clearer plain-text/core-email limitations.
 - [ ] Security and anti-spam hardening: improve Reoon policy visibility, provider failure feedback, registration abuse logs, lockout visibility, resend throttling UX, and optional manual-review decisions.
 - [ ] Accessibility, RTL, and multilingual QA pass: verify keyboard flow, focus states, ARIA messaging, contrast resilience, RTL layout behavior, and translation coverage across frontend/admin screens.
 - [ ] Frontend visual QA and theme compatibility: smoke common themes, mobile/desktop breakpoints, high-contrast settings, and CSS interference around the gateway shell.
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.30 Small Release Cycle
+
+### Scope
+
+- [x] Start the security and anti-spam hardening slice from the released `master` baseline.
+- [x] Add a read-only Security tab status panel for provider readiness, Reoon policy visibility, and rate-limit posture.
+- [x] Keep changes admin-only with no registration flow, provider verification, rate-limit enforcement, settings schema, frontend, dashboard, WooCommerce, webhook, privacy, or email behavior changes.
+- [x] Add focused coverage for missing-provider guidance, configured-provider guidance, Reoon default policy wording, and configured rate-limit values.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.30` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.30` from clean `master` after the `v0.1.29` release merge.
+- Added a Security And Spam Status panel on the Security tab after the settings form so saved provider fields remain the primary editing surface.
+- Added provider readiness cards for protection mode, Turnstile, Reoon Email Verifier, and the default Reoon policy. The policy message documents that invalid, disabled, disposable, and spamtrap statuses are blocked while catch-all, role account, unknown, and inbox-full statuses are allowed but flagged.
+- Added rate-limit posture cards for registration, confirmation resend, login, and password reset windows.
+- Added focused `SettingsPageSecurityStatusTest` coverage for missing providers, fully configured providers, Reoon policy wording, and configured rate-limit values.
+- Verified initial local checks: PHP syntax passes for touched PHP/test files, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 649 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 192 tests and 901 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+
+### Guardrails
+
+- Do not change saved settings schema, frontend routing, authentication behavior, registration flow, provider verification behavior, rate-limit enforcement, email delivery behavior, dashboard rendering, WooCommerce endpoint delegation, webhook dispatch behavior, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep this cycle focused on read-only Security tab status guidance and styling only.
+
+### Completion Gate
+
+- [ ] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates the Security tab renders provider readiness, Reoon policy visibility, and rate-limit posture.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.29 Small Release Cycle
 
