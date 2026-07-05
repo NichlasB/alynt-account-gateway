@@ -31,7 +31,7 @@
 - [x] Improve preview/test-send ergonomics with clearer descriptions and accessible form help.
 - [x] Keep changes admin-only/read-only with no email delivery behavior, template storage, frontend, registration, provider, dashboard, WooCommerce, webhook, or privacy behavior changes.
 - [x] Add focused coverage for token reference metadata and rendered email tools.
-- [ ] Run branch-QA package and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run branch-QA package and Plugin Tester smoke checks before final release metadata bump.
 - [ ] Publish the final `v0.1.29` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -43,6 +43,8 @@
 - Added focused `EmailTemplateServiceTest` coverage for token reference metadata and `SettingsPageEmailToolsTest` coverage for template action-token guidance and rendered email tools.
 - Verified initial local checks: PHP syntax passes for touched PHP/test files, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 626 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 189 tests and 879 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
 - Confirmed the built admin CSS contains the new email-tool styling.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.29-branch-qa-20260705-135904\alynt-account-gateway-v0.1.29-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor files, pre-bump `0.1.28` metadata, token reference PHP, template reference PHP, email tools markup, and built admin email-tool CSS present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.28` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.28`, token reference PHP, template reference PHP, email tools markup, and built admin CSS are present. Authenticated HTTP smoke confirmed the Emails tab returns `200`, loads the admin CSS asset, renders the Template Reference and Available Template Tokens panels, shows action-token examples, includes linked preview/test-send `aria-describedby` help, and shows no fatal/critical error output. Temporary package and curl cookie state were cleaned up after QA.
 
 ### Guardrails
 
@@ -52,7 +54,7 @@
 ### Completion Gate
 
 - [x] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates the Emails tab renders template reference, token reference, and accessible preview/test-send help.
+- [x] Plugin Tester smoke validates the Emails tab renders template reference, token reference, and accessible preview/test-send help.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.28 Small Release Cycle
