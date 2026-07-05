@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.38 Pending registration resend and expiry visibility shipped; next slice TBD
+- Current phase: v0.1.39 Reoon flagged-status policy in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.38 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -20,6 +20,47 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.39 Small Release Cycle
+
+### Scope
+
+- [x] Start the next security and anti-spam hardening slice from the released `master` baseline.
+- [x] Add a configurable Reoon flagged-status policy with a safe default that continues to allow and log catch-all, role account, unknown, and inbox-full statuses.
+- [x] Allow stricter sites to block flagged Reoon statuses before account creation while preserving the original Reoon status in admin-visible activity logs.
+- [x] Update the Security tab policy cards and activity guidance so admins can distinguish always-blocked Reoon statuses from configurable flagged statuses.
+- [x] Add frontend-safe customer messaging for blocked flagged Reoon statuses without exposing provider internals.
+- [x] Add focused coverage for setting defaults/sanitization, flagged-policy behavior, frontend messages, and Security tab guidance.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.39` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.39` from clean `master` after the `v0.1.38` release merge.
+- Added `reoon_flagged_policy` on the Security tab with `allow` as the default and `block` as the stricter option.
+- Added generic schema-backed select rendering and option sanitization while preserving normal secret/API-key sanitization.
+- Added strict flagged-status blocking through the registration protection service, returning `alynt_ag_reoon_flagged_blocked` and logging compact statuses such as `role_account_flagged_blocked`.
+- Split the Security tab Reoon policy visibility into `Reoon Blocked Statuses` and `Reoon Flagged Statuses`, with guidance that changes based on the configured flagged-status policy.
+- Added frontend-safe copy for blocked flagged Reoon statuses and admin guidance for `*_flagged_blocked` verification activity rows.
+- Verified focused checks: PHP syntax passes for touched settings, admin, registration, and frontend message files; focused `SettingsSchemaTest` passes with 20 tests and 90 assertions; focused `RegistrationServiceTest` passes with 24 tests and 98 assertions; focused `FrontendMessagesTest` passes with 5 tests and 16 assertions; focused `SettingsPageSecurityStatusTest` passes with 7 tests and 95 assertions; and `npm.cmd run lint` passes.
+- Verified broader local checks: `npm.cmd run build` passes, `npm.cmd run make-pot` writes 725 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 209 tests and 1063 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.39-branch-qa-20260705-201831\alynt-account-gateway-v0.1.39-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.38` metadata, Reoon flagged-policy setting, blocked flagged status handling, Security tab policy cards, frontend-safe blocked message, built assets, and POT strings present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.38` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.38`. Runtime smoke confirmed default flagged policy `allow`, select sanitization for `block` and invalid values, frontend-safe blocked flagged message, simulated Reoon `role_account` blocking with `alynt_ag_reoon_flagged_blocked`, verification activity status `role_account_flagged_blocked`, Security tab blocked-policy copy, and `*_flagged_blocked` admin guidance. Temporary verification rows and uploaded ZIPs were cleaned up after QA.
+- Bumped release-candidate metadata to `0.1.39` across the plugin header/constant, npm metadata, readme, sample test, changelog, POT, and implementation plan.
+- Re-ran release-candidate validation after the metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` with 725 strings, `npm.cmd run lint`, `npm.cmd audit --audit-level=moderate`, full `npm.cmd test` with 209 tests and 1063 assertions, PHP syntax check for the main plugin file, and `git diff --check` all passed.
+- Created release-candidate package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.39-20260705-202439\alynt-account-gateway-v0.1.39.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.39` header/constant/readme/POT metadata, Reoon flagged-policy setting, blocked flagged status handling, Security tab policy cards, frontend-safe blocked message, and built assets present.
+- Installed the `0.1.39` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header `0.1.39` and loaded constant `0.1.39`. Runtime smoke confirmed default flagged policy `allow`, select sanitization for `block` and invalid values, frontend-safe blocked flagged message, simulated Reoon `role_account` blocking with `alynt_ag_reoon_flagged_blocked`, verification activity status `role_account_flagged_blocked`, Security tab blocked-policy copy, and `*_flagged_blocked` admin guidance. Temporary verification rows were cleaned up after QA.
+
+### Guardrails
+
+- Do not change frontend routes, Reoon request payloads, Turnstile behavior, rate-limit thresholds, registration success behavior, email template content, webhook dispatch behavior, dashboard rendering, WooCommerce endpoint delegation, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep the default Reoon flagged-status behavior permissive and admin-visible: allow flagged statuses unless the site explicitly changes the new setting to block.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates flagged-policy settings, blocked flagged status logging, frontend-safe copy, and Security tab guidance.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.38 Small Release Cycle
 

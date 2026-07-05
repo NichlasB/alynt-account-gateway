@@ -52,6 +52,7 @@ class ALYNT_AG_Frontend_Messages {
 			'consent_record_failed'             => __( 'Your consent record could not be saved. Please try again.', 'alynt-account-gateway' ),
 			'confirmation_email_failed'         => __( 'The confirmation email could not be sent. Please try again.', 'alynt-account-gateway' ),
 			'alynt_ag_reoon_blocked'            => __( 'This email address cannot be used for registration.', 'alynt-account-gateway' ),
+			'alynt_ag_reoon_flagged_blocked'    => __( 'This email address cannot be used for registration.', 'alynt-account-gateway' ),
 			'alynt_ag_reoon_missing'            => __( 'Email verification is not available right now. Please try again later.', 'alynt-account-gateway' ),
 			'alynt_ag_reoon_request_failed'     => __( 'Email verification is temporarily unavailable. Please try again later.', 'alynt-account-gateway' ),
 			'alynt_ag_reoon_invalid_response'   => __( 'Email verification is temporarily unavailable. Please try again later.', 'alynt-account-gateway' ),

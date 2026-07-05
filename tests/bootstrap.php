@@ -387,6 +387,10 @@ if ( ! function_exists( 'wp_remote_post' ) ) {
 
 if ( ! function_exists( 'wp_remote_get' ) ) {
 	function wp_remote_get( $url, $args = array() ) {
+		if ( isset( $GLOBALS['alynt_ag_test_remote_get_response'] ) ) {
+			return $GLOBALS['alynt_ag_test_remote_get_response'];
+		}
+
 		return array( 'body' => '{"status":"safe"}' );
 	}
 }
@@ -828,10 +832,12 @@ if ( ! class_exists( 'WP_Error' ) ) {
 	class WP_Error {
 		public $code;
 		public $message;
+		public $data;
 
-		public function __construct( $code = '', $message = '' ) {
+		public function __construct( $code = '', $message = '', $data = '' ) {
 			$this->code    = $code;
 			$this->message = $message;
+			$this->data    = $data;
 		}
 
 		public function get_error_code() {
@@ -840,6 +846,10 @@ if ( ! class_exists( 'WP_Error' ) ) {
 
 		public function get_error_message() {
 			return $this->message;
+		}
+
+		public function get_error_data() {
+			return $this->data;
 		}
 	}
 }

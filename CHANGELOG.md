@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.39 - 2026-07-05
+
+### Added
+
+- Added configurable Reoon flagged-status policy with Security tab guidance and stricter blocking support for catch-all, role account, unknown, and inbox-full statuses.
+
 ## 0.1.38 - 2026-07-05
 
 ### Added

@@ -21,6 +21,7 @@ class RegistrationServiceTest extends TestCase {
 		$GLOBALS['alynt_ag_test_created_users'] = array();
 		$GLOBALS['alynt_ag_test_user_updates'] = array();
 		$GLOBALS['alynt_ag_test_db_updates'] = array();
+		unset( $GLOBALS['alynt_ag_test_remote_get_response'] );
 	}
 
 	public function test_confirmation_token_hash_does_not_store_raw_token() {
@@ -139,6 +140,58 @@ class RegistrationServiceTest extends TestCase {
 
 		$this->assertSame( 'role_account_flagged', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['status'] );
 		$this->assertSame( 0, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
+	}
+
+	public function test_reoon_flagged_policy_allows_flagged_status_by_default() {
+		$service = new ALYNT_AG_Registration_Service();
+		$result  = $service->apply_reoon_flagged_policy(
+			array(
+				'status'  => 'role_account',
+				'blocked' => false,
+				'flagged' => true,
+			),
+			array()
+		);
+
+		$this->assertIsArray( $result );
+		$this->assertSame( 'role_account', $result['status'] );
+	}
+
+	public function test_reoon_flagged_policy_can_block_flagged_status() {
+		$service = new ALYNT_AG_Registration_Service();
+		$result  = $service->apply_reoon_flagged_policy(
+			array(
+				'status'  => 'role_account',
+				'blocked' => false,
+				'flagged' => true,
+			),
+			array( 'reoon_flagged_policy' => 'block' )
+		);
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'alynt_ag_reoon_flagged_blocked', $result->get_error_code() );
+	}
+
+	public function test_registration_protection_blocks_flagged_reoon_status_when_policy_requires_it() {
+		$GLOBALS['alynt_ag_test_remote_get_response'] = array( 'body' => '{"status":"role_account"}' );
+
+		$service = new ALYNT_AG_Registration_Service();
+		$result  = $service->validate_registration_protection(
+			'role@example.test',
+			'',
+			array(
+				'reoon_api_key'         => 'key',
+				'reoon_mode'            => 'quick',
+				'protection_mode'       => 'turnstile_or_reoon',
+				'reoon_flagged_policy'  => 'block',
+			)
+		);
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'alynt_ag_reoon_flagged_blocked', $result->get_error_code() );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+		$this->assertSame( 'role_account_flagged_blocked', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['status'] );
+		$this->assertSame( 1, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
 	}
 
 	public function test_registration_flow_log_records_blocked_form_outcomes() {

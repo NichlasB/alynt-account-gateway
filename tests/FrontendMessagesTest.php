@@ -30,6 +30,7 @@ class FrontendMessagesTest extends TestCase {
 		$messages = new ALYNT_AG_Frontend_Messages();
 
 		$this->assertSame( 'This email address cannot be used for registration.', $messages->registration_error( 'alynt_ag_reoon_blocked' ) );
+		$this->assertSame( 'This email address cannot be used for registration.', $messages->registration_error( 'alynt_ag_reoon_flagged_blocked' ) );
 		$this->assertSame( 'Email verification is not available right now. Please try again later.', $messages->registration_error( 'alynt_ag_reoon_missing' ) );
 		$this->assertSame( 'Email verification is temporarily unavailable. Please try again later.', $messages->registration_error( 'alynt_ag_reoon_request_failed' ) );
 		$this->assertSame( 'Email verification is temporarily unavailable. Please try again later.', $messages->registration_error( 'alynt_ag_reoon_invalid_response' ) );

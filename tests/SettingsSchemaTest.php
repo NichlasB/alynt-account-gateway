@@ -34,6 +34,25 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertSame( 5, $defaults['registration_rate_limit_count'] );
 		$this->assertSame( 10, $defaults['login_rate_limit_count'] );
 		$this->assertSame( 5, $defaults['lostpassword_rate_limit_count'] );
+		$this->assertSame( 'allow', $defaults['reoon_flagged_policy'] );
+	}
+
+	public function test_reoon_flagged_policy_sanitizes_to_known_options() {
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array(
+				'reoon_flagged_policy' => 'block',
+			)
+		);
+
+		$this->assertSame( 'block', $sanitized['reoon_flagged_policy'] );
+
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array(
+				'reoon_flagged_policy' => 'unexpected',
+			)
+		);
+
+		$this->assertSame( 'allow', $sanitized['reoon_flagged_policy'] );
 	}
 
 	public function test_privacy_retention_defaults_exist() {

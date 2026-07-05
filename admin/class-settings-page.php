@@ -245,16 +245,17 @@ class ALYNT_AG_Settings_Page {
 			return;
 		}
 
-		if ( 'select' === $field['type'] && 'diagnostics_min_level' === $key ) {
-			$options = ALYNT_AG_Diagnostics_Logger::levels();
+		if ( 'select' === $field['type'] ) {
+			$options = $this->field_select_options( $key, $field );
+
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $aria is escaped by field_describedby_attribute().
 			echo '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"' . $aria . '>';
-			foreach ( array_keys( $options ) as $option ) {
+			foreach ( $options as $option => $label ) {
 				printf(
 					'<option value="%1$s" %2$s>%3$s</option>',
 					esc_attr( $option ),
 					selected( $value, $option, false ),
-					esc_html( ucfirst( $option ) )
+					esc_html( $label )
 				);
 			}
 			echo '</select>';
@@ -270,6 +271,27 @@ class ALYNT_AG_Settings_Page {
 			esc_attr( $value ),
 			$aria // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute().
 		);
+	}
+
+	/**
+	 * Return select options for a field.
+	 *
+	 * @param string              $key   Field key.
+	 * @param array<string,mixed> $field Field schema.
+	 * @return array<string,string>
+	 */
+	private function field_select_options( $key, $field ) {
+		if ( 'diagnostics_min_level' === $key ) {
+			$options = array();
+
+			foreach ( array_keys( ALYNT_AG_Diagnostics_Logger::levels() ) as $level ) {
+				$options[ $level ] = ucfirst( $level );
+			}
+
+			return $options;
+		}
+
+		return ! empty( $field['options'] ) && is_array( $field['options'] ) ? $field['options'] : array();
 	}
 
 	/**
@@ -348,6 +370,7 @@ class ALYNT_AG_Settings_Page {
 			'turnstile_secret_key'               => __( 'Keep this private. The plugin uses it server-side to verify Turnstile tokens during registration.', 'alynt-account-gateway' ),
 			'reoon_api_key'                      => __( 'Used to verify registration email quality. Treat uncertain results according to the selected protection policy.', 'alynt-account-gateway' ),
 			'reoon_mode'                         => __( 'Quick mode is faster for most sites; stricter modes may take longer but can provide deeper mailbox checks.', 'alynt-account-gateway' ),
+			'reoon_flagged_policy'               => __( 'Default keeps uncertain Reoon statuses usable while logging them for review. Use blocking only when the site prefers fewer signups over more false positives.', 'alynt-account-gateway' ),
 			'registration_rate_limit_count'      => __( 'Maximum registration attempts allowed from the same source during the rate-limit window.', 'alynt-account-gateway' ),
 			'registration_rate_limit_window'     => __( 'Length of the registration rate-limit window in minutes.', 'alynt-account-gateway' ),
 			'login_rate_limit_count'             => __( 'Maximum login attempts allowed from the same source during the rate-limit window.', 'alynt-account-gateway' ),
@@ -1015,7 +1038,8 @@ class ALYNT_AG_Settings_Page {
 			$turnstile_message = __( 'Turnstile is partially configured. Add both the site key and secret key before relying on it.', 'alynt-account-gateway' );
 		}
 
-		$mode = ! empty( $settings['protection_mode'] ) ? sanitize_key( $settings['protection_mode'] ) : 'turnstile_or_reoon';
+		$mode                 = ! empty( $settings['protection_mode'] ) ? sanitize_key( $settings['protection_mode'] ) : 'turnstile_or_reoon';
+		$reoon_flagged_policy = ! empty( $settings['reoon_flagged_policy'] ) ? sanitize_key( $settings['reoon_flagged_policy'] ) : 'allow';
 
 		return array(
 			array(
@@ -1036,11 +1060,30 @@ class ALYNT_AG_Settings_Page {
 					: __( 'Reoon is not configured. Add an API key or use Turnstile before enabling public registration.', 'alynt-account-gateway' ),
 			),
 			array(
-				'label'   => __( 'Reoon Default Policy', 'alynt-account-gateway' ),
+				'label'   => __( 'Reoon Blocked Statuses', 'alynt-account-gateway' ),
 				'status'  => 'ready',
-				'message' => __( 'Blocks invalid, disabled, disposable, and spamtrap statuses. Allows but flags catch-all, role account, unknown, and inbox-full statuses.', 'alynt-account-gateway' ),
+				'message' => __( 'Always blocks invalid, disabled, disposable, and spamtrap statuses.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Reoon Flagged Statuses', 'alynt-account-gateway' ),
+				'status'  => 'block' === $reoon_flagged_policy ? 'ready' : 'warning',
+				'message' => $this->security_reoon_flagged_policy_message( $reoon_flagged_policy ),
 			),
 		);
+	}
+
+	/**
+	 * Return the human-readable Reoon flagged-status policy message.
+	 *
+	 * @param string $policy Reoon flagged-status policy.
+	 * @return string
+	 */
+	private function security_reoon_flagged_policy_message( $policy ) {
+		if ( 'block' === $policy ) {
+			return __( 'Blocks catch-all, role account, unknown, and inbox-full statuses before account creation.', 'alynt-account-gateway' );
+		}
+
+		return __( 'Allows but logs catch-all, role account, unknown, and inbox-full statuses for admin review.', 'alynt-account-gateway' );
 	}
 
 	/**
@@ -1291,6 +1334,10 @@ class ALYNT_AG_Settings_Page {
 		}
 
 		if ( 'reoon' === $provider ) {
+			if ( $this->status_has_suffix( $status, '_flagged_blocked' ) ) {
+				return __( 'Reoon blocked this flagged email because the flagged-status policy is set to block.', 'alynt-account-gateway' );
+			}
+
 			if ( $this->status_has_suffix( $status, '_flagged' ) ) {
 				return __( 'Reoon allowed this email, but the status should be reviewed.', 'alynt-account-gateway' );
 			}

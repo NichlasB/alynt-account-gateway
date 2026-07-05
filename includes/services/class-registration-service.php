@@ -226,9 +226,10 @@ class ALYNT_AG_Registration_Service {
 
 		if ( ! empty( $settings['reoon_api_key'] ) && is_email( $email ) ) {
 			$reoon    = new ALYNT_AG_Reoon_Client();
+			$result   = $reoon->verify( $email, $settings['reoon_api_key'], $settings['reoon_mode'] ?? 'quick' );
 			$checks[] = array(
 				'provider' => 'reoon',
-				'result'   => $reoon->verify( $email, $settings['reoon_api_key'], $settings['reoon_mode'] ?? 'quick' ),
+				'result'   => $this->apply_reoon_flagged_policy( $result, $settings ),
 			);
 		}
 
@@ -332,6 +333,35 @@ class ALYNT_AG_Registration_Service {
 	}
 
 	/**
+	 * Apply the configured policy for Reoon flagged statuses.
+	 *
+	 * @param true|array<string,mixed>|WP_Error $result   Reoon verification result.
+	 * @param array<string,mixed>               $settings Settings.
+	 * @return true|array<string,mixed>|WP_Error
+	 */
+	public function apply_reoon_flagged_policy( $result, $settings ) {
+		if ( is_wp_error( $result ) || ! is_array( $result ) || empty( $result['flagged'] ) ) {
+			return $result;
+		}
+
+		$policy = ! empty( $settings['reoon_flagged_policy'] ) ? sanitize_key( $settings['reoon_flagged_policy'] ) : 'allow';
+		if ( 'block' !== $policy ) {
+			return $result;
+		}
+
+		$status = ! empty( $result['status'] ) ? sanitize_key( $result['status'] ) : 'unknown';
+
+		return new WP_Error(
+			'alynt_ag_reoon_flagged_blocked',
+			__( 'This email address cannot be used.', 'alynt-account-gateway' ),
+			array(
+				'status'  => $status,
+				'flagged' => true,
+			)
+		);
+	}
+
+	/**
 	 * Return a compact verification result status.
 	 *
 	 * @param true|array<string,mixed>|WP_Error $result Verification result.
@@ -339,6 +369,13 @@ class ALYNT_AG_Registration_Service {
 	 */
 	private function verification_result_status( $result ) {
 		if ( is_wp_error( $result ) ) {
+			if ( 'alynt_ag_reoon_flagged_blocked' === $result->get_error_code() ) {
+				$data = $result->get_error_data();
+				if ( is_array( $data ) && ! empty( $data['status'] ) ) {
+					return sanitize_key( $data['status'] . '_flagged_blocked' );
+				}
+			}
+
 			return sanitize_key( $result->get_error_code() );
 		}
 
