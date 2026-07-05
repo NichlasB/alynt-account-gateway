@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.34 Auth rate-limit activity logging in progress
+- Current phase: v0.1.34 Auth rate-limit activity logging shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.33 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.34 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep changes scoped to auth-side rate-limit evidence and admin visibility with no settings schema, frontend routing, authentication success/failure behavior, reset email behavior, rate-limit thresholds, dashboard, WooCommerce, webhook, privacy cleanup, or default frontend-output behavior changes.
 - [x] Add focused coverage for auth-side rate-limit logging and rendered guidance.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.34` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.34` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -47,6 +47,8 @@
 - Regenerated `languages/alynt-account-gateway.pot` with 687 strings and `0.1.34` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 197 tests and 974 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, PHP syntax passes, and `git diff --check` passes with only line-ending warnings for generated/package metadata files.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.34-20260705-170558\alynt-account-gateway-v0.1.34.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.34` header/constant/readme/POT metadata, auth rate-limit logging PHP, Security tab guidance PHP, built admin CSS, and POT present.
 - Installed the local `0.1.34` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant are `0.1.34`, auth rate-limit logging code and Security tab guidance code are present. Runtime smoke triggered unique login and password-reset limiter blocks, confirmed `login_rate_limited` and `lostpassword_rate_limited` rows were written to the verification log table, and authenticated HTTP smoke confirmed the Security tab returns both statuses and both guidance messages with no fatal/critical error output. Temporary QA rows and staged upload ZIP were cleaned up after QA.
+- Published GitHub release `v0.1.34`, confirmed the Build Release workflow completed successfully, downloaded the public release asset, and verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs files, `0.1.34` header/constant/readme/POT metadata, auth rate-limit logging PHP, Security tab guidance PHP, built admin CSS, and POT present.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.33` to `0.1.34`, then installed it through the WordPress plugin update path using the updater-discovered GitHub release ZIP URL. Final fresh runtime state: active `0.1.34` header/constant, auth rate-limit logging PHP and Security tab guidance PHP present, Alynt Plugin Updater reports current/new `0.1.34` with no update available, and authenticated HTTP smoke confirmed the Security tab returns `login_rate_limited`, `lostpassword_rate_limited`, both guidance messages, and no fatal/critical error output. Temporary QA rows and staged upload ZIP were cleaned up after QA.
 
 ### Guardrails
 
@@ -57,7 +59,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates the Security tab renders auth rate-limit activity guidance.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.33 Small Release Cycle
 
