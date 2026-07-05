@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.35 Routing diagnostics shipped; next slice TBD
+- Current phase: v0.1.36 Registration-flow activity logging in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.35 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -59,6 +59,40 @@
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates diagnostics events for native login redirects and blocked wp-admin access.
 - [x] GitHub release asset is installed through Alynt Plugin Updater.
+
+## v0.1.36 Small Release Cycle
+
+### Scope
+
+- [x] Start the next security and anti-spam hardening slice from the released `master` baseline.
+- [x] Log registration-flow failures into the existing verification activity table with `registration_flow` as the provider.
+- [x] Add Security tab guidance for registration-flow failures such as missing terms consent, pending-registration storage failure, consent-record storage failure, confirmation-email failure, password mismatch, password-strength failure, and email becoming unavailable during account creation.
+- [x] Keep changes scoped to admin-visible activity evidence with no settings schema, frontend routing, registration success path, provider verification policy, rate-limit thresholds, dashboard, WooCommerce, webhook, email template, privacy cleanup, or default frontend-output behavior changes.
+- [x] Add focused coverage for registration-flow activity rows and Security tab guidance.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.36` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.36` from clean `master` after the `v0.1.35` release merge.
+- Added reusable `registration_flow` activity logging to the existing plugin-owned verification log table.
+- Added logging at blocked or failed registration-flow outcomes where a valid submitted email is available, including terms consent, pending registration storage, consent storage, confirmation email delivery, password validation, email availability during account creation, and user creation errors.
+- Added Security tab provider labeling and guidance for `registration_flow` rows.
+- Verified focused checks: PHP syntax passes for touched registration/admin files, focused `RegistrationServiceTest` passes with 20 tests and 83 assertions, and focused `SettingsPageSecurityStatusTest` passes with 6 tests and 71 assertions.
+- Verified broader local checks: `npm.cmd run build` passes, `npm.cmd run make-pot` writes 699 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 202 tests and 1013 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only the existing POT line-ending warning.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.36-branch-qa-20260705-182425\alynt-account-gateway-v0.1.36-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.35` metadata, registration-flow logging PHP, Security tab guidance PHP, built admin CSS, and POT strings present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.35` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.35`, and the registration-flow logger and Security tab guidance are present. Runtime smoke wrote a disposable `registration_flow` / `terms_required` activity row through the service, authenticated admin HTML smoke confirmed the Security tab renders the masked email, `Registration Flow` provider label, `terms_required` status, and terms-consent guidance with no fatal/critical error output. Temporary activity row, cookie state, and upload artifact were cleaned up after QA.
+
+### Guardrails
+
+- Do not change saved settings schema, frontend routes, registration success behavior, provider policy decisions, rate-limit thresholds, email template content, webhook dispatch behavior, dashboard rendering, WooCommerce endpoint delegation, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep this cycle focused on admin-visible registration-flow activity evidence.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates `registration_flow` activity rows and Security tab guidance.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.34 Small Release Cycle
 

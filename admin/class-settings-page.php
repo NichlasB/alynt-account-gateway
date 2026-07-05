@@ -1328,6 +1328,40 @@ class ALYNT_AG_Settings_Page {
 				: __( 'Turnstile challenge passed.', 'alynt-account-gateway' );
 		}
 
+		if ( 'registration_flow' === $provider ) {
+			if ( 'terms_required' === $status ) {
+				return __( 'Registration was blocked because terms and privacy consent was not accepted.', 'alynt-account-gateway' );
+			}
+
+			if ( 'pending_registration_failed' === $status ) {
+				return __( 'The pending registration record could not be stored.', 'alynt-account-gateway' );
+			}
+
+			if ( 'consent_record_failed' === $status ) {
+				return __( 'Registration consent evidence could not be stored.', 'alynt-account-gateway' );
+			}
+
+			if ( 'confirmation_email_failed' === $status ) {
+				return __( 'The registration confirmation email could not be sent.', 'alynt-account-gateway' );
+			}
+
+			if ( 'password_mismatch' === $status ) {
+				return __( 'Account creation was blocked because the password confirmation did not match.', 'alynt-account-gateway' );
+			}
+
+			if ( in_array( $status, array( 'alynt_ag_password_length', 'alynt_ag_password_complexity' ), true ) ) {
+				return __( 'Account creation was blocked because the password did not meet the strength rules.', 'alynt-account-gateway' );
+			}
+
+			if ( 'email_unavailable' === $status ) {
+				return __( 'Account creation was blocked because the email address became unavailable.', 'alynt-account-gateway' );
+			}
+
+			return $blocked
+				? __( 'Registration flow blocked this account action.', 'alynt-account-gateway' )
+				: __( 'Registration flow recorded this account action.', 'alynt-account-gateway' );
+		}
+
 		if ( $this->status_has_suffix( $status, '_flagged' ) ) {
 			return __( 'Verification passed, but the status should be reviewed.', 'alynt-account-gateway' );
 		}
@@ -1452,6 +1486,10 @@ class ALYNT_AG_Settings_Page {
 
 		if ( 'rate_limit' === $provider ) {
 			return __( 'Rate Limit', 'alynt-account-gateway' );
+		}
+
+		if ( 'registration_flow' === $provider ) {
+			return __( 'Registration Flow', 'alynt-account-gateway' );
 		}
 
 		return $provider;

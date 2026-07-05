@@ -141,6 +141,27 @@ class RegistrationServiceTest extends TestCase {
 		$this->assertSame( 0, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
 	}
 
+	public function test_registration_flow_log_records_blocked_form_outcomes() {
+		$service = new ALYNT_AG_Registration_Service();
+
+		$this->assertTrue( $service->log_registration_flow_result( 'customer@example.test', 'terms_required' ) );
+
+		$tables = ALYNT_AG_Database::tables();
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+		$this->assertSame( $tables['verification_logs'], $GLOBALS['alynt_ag_test_db_inserts'][0]['table'] );
+		$this->assertSame( 'customer@example.test', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['email'] );
+		$this->assertSame( 'registration_flow', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['provider'] );
+		$this->assertSame( 'terms_required', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['status'] );
+		$this->assertSame( 1, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
+	}
+
+	public function test_registration_flow_log_rejects_invalid_email_identifiers() {
+		$service = new ALYNT_AG_Registration_Service();
+
+		$this->assertFalse( $service->log_registration_flow_result( 'not-an-email', 'invalid_email' ) );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_db_inserts'] );
+	}
+
 	public function test_terms_acceptance_is_required() {
 		$service = new ALYNT_AG_Registration_Service();
 		$result  = $service->validate_terms_acceptance( '' );
@@ -318,5 +339,28 @@ class RegistrationServiceTest extends TestCase {
 		$this->assertSame( 456, $service->welcome_calls[0]['user_id'] );
 		$this->assertCount( 1, $service->webhook_calls );
 		$this->assertSame( 456, $service->webhook_calls[0]['user_id'] );
+	}
+
+	public function test_complete_pending_registration_logs_password_validation_failures() {
+		$service = new class() extends ALYNT_AG_Registration_Service {
+			public function confirm_pending_token( $token ) {
+				return (object) array(
+					'id'         => 77,
+					'email'      => 'customer@example.test',
+					'first_name' => 'Damon',
+					'last_name'  => 'Paulo',
+					'status'     => 'email_confirmed',
+				);
+			}
+		};
+
+		$result = $service->complete_pending_registration( 'confirmed-token', 'StrongPassword1!', 'DifferentPassword1!', ALYNT_AG_Settings_Schema::defaults() );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'password_mismatch', $result->get_error_code() );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+		$this->assertSame( 'registration_flow', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['provider'] );
+		$this->assertSame( 'password_mismatch', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['status'] );
+		$this->assertSame( 1, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
 	}
 }

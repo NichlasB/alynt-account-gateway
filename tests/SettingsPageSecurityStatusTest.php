@@ -152,6 +152,13 @@ class SettingsPageSecurityStatusTest extends TestCase {
 				'blocked'    => 1,
 				'created_at' => '2026-07-05 12:30:00',
 			),
+			(object) array(
+				'email'      => 'terms@example.test',
+				'provider'   => 'registration_flow',
+				'status'     => 'terms_required',
+				'blocked'    => 1,
+				'created_at' => '2026-07-05 12:35:00',
+			),
 		);
 
 		$settings_page = new ALYNT_AG_Settings_Page();
@@ -168,9 +175,11 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'c***@example.test', $output );
 		$this->assertStringContainsString( 'l***@example.test', $output );
 		$this->assertStringContainsString( 'r***@example.test', $output );
+		$this->assertStringContainsString( 't***@example.test', $output );
 		$this->assertStringContainsString( 'Reoon Email Verifier', $output );
 		$this->assertStringContainsString( 'Rate Limit', $output );
 		$this->assertStringContainsString( 'Turnstile', $output );
+		$this->assertStringContainsString( 'Registration Flow', $output );
 		$this->assertStringContainsString( 'safe', $output );
 		$this->assertStringContainsString( 'registration_rate_limited', $output );
 		$this->assertStringContainsString( 'role_account_flagged', $output );
@@ -178,6 +187,7 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'alynt_ag_turnstile_failed', $output );
 		$this->assertStringContainsString( 'login_rate_limited', $output );
 		$this->assertStringContainsString( 'lostpassword_rate_limited', $output );
+		$this->assertStringContainsString( 'terms_required', $output );
 		$this->assertStringContainsString( 'Passed', $output );
 		$this->assertStringContainsString( 'Blocked', $output );
 		$this->assertStringContainsString( 'Reoon accepted this email.', $output );
@@ -187,6 +197,7 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Turnstile challenge failed.', $output );
 		$this->assertStringContainsString( 'Login attempt was blocked by the rate limit.', $output );
 		$this->assertStringContainsString( 'Password reset request was blocked by the rate limit.', $output );
+		$this->assertStringContainsString( 'Registration was blocked because terms and privacy consent was not accepted.', $output );
 		$this->assertStringNotContainsString( 'damon@example.test', $output );
 	}
 

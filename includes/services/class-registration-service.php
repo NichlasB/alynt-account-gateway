@@ -84,6 +84,7 @@ class ALYNT_AG_Registration_Service {
 		$terms_value = isset( $_POST['terms'] ) ? sanitize_text_field( wp_unslash( $_POST['terms'] ) ) : '';
 		$terms       = $this->validate_terms_acceptance( $terms_value );
 		if ( is_wp_error( $terms ) ) {
+			$this->log_registration_flow_result( $email, $terms->get_error_code() );
 			wp_safe_redirect( add_query_arg( 'registration_error', $terms->get_error_code(), $base_url ) );
 			exit;
 		}
@@ -103,12 +104,14 @@ class ALYNT_AG_Registration_Service {
 				exit;
 			}
 
+			$this->log_registration_flow_result( $email, $result->get_error_code() );
 			wp_safe_redirect( add_query_arg( 'registration_error', $result->get_error_code(), $base_url ) );
 			exit;
 		}
 
 		$email_sent = $this->send_confirmation_email( $result, $settings );
 		if ( is_wp_error( $email_sent ) ) {
+			$this->log_registration_flow_result( $email, $email_sent->get_error_code() );
 			wp_safe_redirect( add_query_arg( 'registration_error', $email_sent->get_error_code(), $base_url ) );
 			exit;
 		}
@@ -179,11 +182,13 @@ class ALYNT_AG_Registration_Service {
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		if ( ! $inserted ) {
+			$this->log_registration_flow_result( $email, 'pending_registration_failed' );
 			return new WP_Error( 'pending_registration_failed', __( 'The registration could not be started. Please try again.', 'alynt-account-gateway' ) );
 		}
 
 		$privacy = new ALYNT_AG_Privacy_Service();
 		if ( ! $privacy->record_registration_consent( $email, $settings ) ) {
+			$this->log_registration_flow_result( $email, 'consent_record_failed' );
 			return new WP_Error( 'consent_record_failed', __( 'The registration consent record could not be stored. Please try again.', 'alynt-account-gateway' ) );
 		}
 
@@ -284,6 +289,40 @@ class ALYNT_AG_Registration_Service {
 			array(
 				'email'      => $email,
 				'provider'   => $provider,
+				'status'     => $status,
+				'blocked'    => $blocked ? 1 : 0,
+				'created_at' => current_time( 'mysql', true ),
+			),
+			array( '%s', '%s', '%s', '%d', '%s' )
+		);
+	}
+
+	/**
+	 * Log a registration-flow outcome to the security activity stream.
+	 *
+	 * @param string $email   Submitted email.
+	 * @param string $status  Compact status code.
+	 * @param bool   $blocked Whether the flow was blocked.
+	 * @return bool
+	 */
+	public function log_registration_flow_result( $email, $status, $blocked = true ) {
+		global $wpdb;
+
+		$email  = sanitize_email( $email );
+		$status = sanitize_key( $status );
+
+		if ( ! is_email( $email ) || ! $status ) {
+			return false;
+		}
+
+		$tables = ALYNT_AG_Database::tables();
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Plugin-owned verification log table.
+		return (bool) $wpdb->insert(
+			$tables['verification_logs'],
+			array(
+				'email'      => $email,
+				'provider'   => 'registration_flow',
 				'status'     => $status,
 				'blocked'    => $blocked ? 1 : 0,
 				'created_at' => current_time( 'mysql', true ),
@@ -521,10 +560,16 @@ class ALYNT_AG_Registration_Service {
 
 		$renewed = $this->renew_pending_confirmation( $pending, $settings );
 		if ( is_wp_error( $renewed ) ) {
+			$this->log_registration_flow_result( $email, $renewed->get_error_code() );
 			return $renewed;
 		}
 
-		return $this->send_confirmation_email( $renewed, $settings );
+		$sent = $this->send_confirmation_email( $renewed, $settings );
+		if ( is_wp_error( $sent ) ) {
+			$this->log_registration_flow_result( $email, $sent->get_error_code() );
+		}
+
+		return $sent;
 	}
 
 	/**
@@ -586,10 +631,12 @@ class ALYNT_AG_Registration_Service {
 
 		$password_valid = $this->validate_password_pair( $password, $password_confirm );
 		if ( is_wp_error( $password_valid ) ) {
+			$this->log_registration_flow_result( $pending->email, $password_valid->get_error_code() );
 			return $password_valid;
 		}
 
 		if ( email_exists( $pending->email ) ) {
+			$this->log_registration_flow_result( $pending->email, 'email_unavailable' );
 			return new WP_Error( 'email_unavailable', __( 'This email address can no longer be used.', 'alynt-account-gateway' ) );
 		}
 
@@ -597,6 +644,7 @@ class ALYNT_AG_Registration_Service {
 		$user_id  = wp_create_user( $username, $password, $pending->email );
 
 		if ( is_wp_error( $user_id ) ) {
+			$this->log_registration_flow_result( $pending->email, $user_id->get_error_code() );
 			return $user_id;
 		}
 
