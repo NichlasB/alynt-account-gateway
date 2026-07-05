@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.29 Email template editor polish release candidate
+- Current phase: v0.1.29 Email template editor polish shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.28 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.29 is in release-candidate verification on `release/0.1.29`.
+- Plugin status: v0.1.29 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,7 +32,7 @@
 - [x] Keep changes admin-only/read-only with no email delivery behavior, template storage, frontend, registration, provider, dashboard, WooCommerce, webhook, or privacy behavior changes.
 - [x] Add focused coverage for token reference metadata and rendered email tools.
 - [x] Run branch-QA package and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.29` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.29` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -49,6 +49,8 @@
 - Regenerated `languages/alynt-account-gateway.pot` with 626 strings and `0.1.29` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 189 tests and 879 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only POT/readme line-ending warnings.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.29-20260705-140305\alynt-account-gateway-v0.1.29.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor files, `0.1.29` header/constant/readme/POT metadata, token reference PHP, template reference PHP, email tools markup, and built admin email-tool CSS present.
 - Installed the local `0.1.29` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant are `0.1.29`, token reference PHP, template reference PHP, email tools markup, and built admin CSS are present. Authenticated HTTP smoke confirmed the Emails tab returns `200`, loads the admin CSS asset, renders the Template Reference and Available Template Tokens panels, shows action-token examples, includes linked preview/test-send `aria-describedby` help, and shows no fatal/critical error output. Temporary package and curl cookie state were cleaned up after QA.
+- Published GitHub release `v0.1.29`, confirmed the Build Release workflow completed successfully, downloaded the public release asset, and verified 55 runtime entries, no backslash archive entries, no dev/source/test/vendor files, `0.1.29` header/constant/readme metadata, token reference PHP, template reference PHP, email tools markup, and built admin email-tool CSS present.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.28` to `0.1.29`, then installed it through the WordPress plugin update path from the GitHub release ZIP URL. Final fresh runtime state: active `0.1.29` header/constant, token reference PHP, template reference PHP, email tools markup, built admin CSS present, no remaining update offer, and authenticated HTTP smoke confirmed the Emails tab returns `200`, loads the admin CSS asset, renders the Template Reference and Available Template Tokens panels, shows action-token examples, includes linked preview/test-send `aria-describedby` help, and shows no fatal/critical error output.
 
 ### Guardrails
 
@@ -59,7 +61,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates the Emails tab renders template reference, token reference, and accessible preview/test-send help.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.28 Small Release Cycle
 
