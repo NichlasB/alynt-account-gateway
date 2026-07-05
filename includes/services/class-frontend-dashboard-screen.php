@@ -128,10 +128,17 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 		</section>
 
 		<?php if ( ! empty( $settings['woocommerce_takeover'] ) && 'dashboard' !== $endpoint['endpoint'] ) : ?>
+			<?php $guidance = $this->woocommerce_endpoint_guidance( $endpoint['endpoint'] ); ?>
 			<section class="agw-dashboard-section agw-dashboard-section--content" aria-labelledby="agw-dashboard-content-title">
 				<h2 id="agw-dashboard-content-title">
 					<?php echo esc_html( $this->woocommerce->endpoint_labels()[ $endpoint['endpoint'] ] ?? __( 'Account', 'alynt-account-gateway' ) ); ?>
 				</h2>
+				<?php if ( ! empty( $guidance ) ) : ?>
+					<div class="agw-dashboard-guidance">
+						<span class="agw-dashboard-guidance__label"><?php echo esc_html( $guidance['label'] ); ?></span>
+						<p><?php echo esc_html( $guidance['description'] ); ?></p>
+					</div>
+				<?php endif; ?>
 				<div class="agw-dashboard-content">
 					<?php if ( ! $this->woocommerce->render_endpoint( $endpoint['endpoint'], $endpoint['value'] ) ) : ?>
 						<p><?php esc_html_e( 'This account section is not available.', 'alynt-account-gateway' ); ?></p>
@@ -140,6 +147,55 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 			</section>
 		<?php endif; ?>
 		<?php
+	}
+
+	/**
+	 * Return endpoint guidance copy for standard WooCommerce account endpoints.
+	 *
+	 * @param string $endpoint WooCommerce endpoint key.
+	 * @return array<string,string>
+	 */
+	private function woocommerce_endpoint_guidance( $endpoint ) {
+		$guidance = array(
+			'orders'                     => array(
+				'label'       => __( 'Order History', 'alynt-account-gateway' ),
+				'description' => __( 'Track purchase status, review order details, and open individual orders for more information.', 'alynt-account-gateway' ),
+			),
+			'view-order'                 => array(
+				'label'       => __( 'Order Details', 'alynt-account-gateway' ),
+				'description' => __( 'Review the selected order, including status, line items, totals, and available order actions.', 'alynt-account-gateway' ),
+			),
+			'downloads'                  => array(
+				'label'       => __( 'Downloads', 'alynt-account-gateway' ),
+				'description' => __( 'Access available digital purchases and download files connected to your account.', 'alynt-account-gateway' ),
+			),
+			'edit-address'               => array(
+				'label'       => __( 'Billing and Shipping Addresses', 'alynt-account-gateway' ),
+				'description' => __( 'Keep your billing and shipping details current so future checkouts stay quick and accurate.', 'alynt-account-gateway' ),
+			),
+			'edit-account'               => array(
+				'label'       => __( 'Account Details', 'alynt-account-gateway' ),
+				'description' => __( 'Update your name, email address, and password using WooCommerce account controls.', 'alynt-account-gateway' ),
+			),
+			'payment-methods'            => array(
+				'label'       => __( 'Saved Payment Methods', 'alynt-account-gateway' ),
+				'description' => __( 'Manage saved payment methods when your store supports secure payment method storage.', 'alynt-account-gateway' ),
+			),
+			'add-payment-method'         => array(
+				'label'       => __( 'Add Payment Method', 'alynt-account-gateway' ),
+				'description' => __( 'Add a new saved payment method through WooCommerce and the connected payment provider.', 'alynt-account-gateway' ),
+			),
+			'delete-payment-method'      => array(
+				'label'       => __( 'Delete Payment Method', 'alynt-account-gateway' ),
+				'description' => __( 'Confirm removal of a saved payment method from your customer account.', 'alynt-account-gateway' ),
+			),
+			'set-default-payment-method' => array(
+				'label'       => __( 'Default Payment Method', 'alynt-account-gateway' ),
+				'description' => __( 'Choose which saved payment method should be used first when the store supports defaults.', 'alynt-account-gateway' ),
+			),
+		);
+
+		return isset( $guidance[ $endpoint ] ) ? $guidance[ $endpoint ] : array();
 	}
 
 	/**

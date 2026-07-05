@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 0.1.23\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-05 09:06+0000\n"
+"POT-Creation-Date: 2026-07-05 09:17+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -31,7 +31,11 @@ msgstr ""
 msgid "Accent Color"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:133
+#: includes/services/class-frontend-dashboard-screen.php:170
+msgid "Access available digital purchases and download files connected to your account."
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:134
 msgid "Account"
 msgstr ""
 
@@ -65,7 +69,8 @@ msgid "Account Dashboard"
 msgstr ""
 
 #: includes/services/class-dashboard-service.php:32
-#: includes/services/class-frontend-dashboard-screen.php:165
+#: includes/services/class-frontend-dashboard-screen.php:177
+#: includes/services/class-frontend-dashboard-screen.php:221
 #: includes/services/class-woocommerce-integration.php:29
 #: includes/services/class-woocommerce-integration.php:85
 msgid "Account Details"
@@ -92,6 +97,10 @@ msgstr ""
 msgid "Action Needed"
 msgstr ""
 
+#: includes/services/class-frontend-dashboard-screen.php:186
+msgid "Add a new saved payment method through WooCommerce and the connected payment provider."
+msgstr ""
+
 #: admin/class-settings-page.php:435
 msgid "Add a test recipient and send representative account emails before inviting users."
 msgstr ""
@@ -112,6 +121,7 @@ msgstr ""
 msgid "Add optional dashboard links. Leave role visibility empty to show a link to every logged-in user."
 msgstr ""
 
+#: includes/services/class-frontend-dashboard-screen.php:185
 #: includes/services/class-woocommerce-integration.php:31
 msgid "Add Payment Method"
 msgstr ""
@@ -210,6 +220,10 @@ msgstr ""
 msgid "Back to Login"
 msgstr ""
 
+#: includes/services/class-frontend-dashboard-screen.php:173
+msgid "Billing and Shipping Addresses"
+msgstr ""
+
 #: includes/services/class-privacy-service.php:232
 msgid "Blocked"
 msgstr ""
@@ -262,7 +276,7 @@ msgstr ""
 msgid "Category"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:156
+#: includes/services/class-frontend-dashboard-screen.php:212
 msgid "Check recent purchases, order status, and order details."
 msgstr ""
 
@@ -273,6 +287,10 @@ msgstr ""
 
 #: includes/class-settings-schema.php:127
 msgid "Choose a new password for your account."
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:194
+msgid "Choose which saved payment method should be used first when the store supports defaults."
 msgstr ""
 
 #: admin/class-settings-page.php:1260
@@ -293,6 +311,10 @@ msgstr ""
 
 #: includes/services/class-frontend-setpassword-screen.php:185
 msgid "Confirm Password"
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:190
+msgid "Confirm removal of a saved payment method from your customer account."
 msgstr ""
 
 #: includes/class-settings-schema.php:403
@@ -369,11 +391,11 @@ msgstr ""
 msgid "Customer"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:172
+#: includes/services/class-frontend-dashboard-screen.php:228
 msgid "Customer Account"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:176
+#: includes/services/class-frontend-dashboard-screen.php:232
 msgid "Customer account shortcuts"
 msgstr ""
 
@@ -401,10 +423,12 @@ msgstr ""
 msgid "Debug Payload Logging"
 msgstr ""
 
+#: includes/services/class-frontend-dashboard-screen.php:193
 #: includes/services/class-woocommerce-integration.php:33
 msgid "Default Payment Method"
 msgstr ""
 
+#: includes/services/class-frontend-dashboard-screen.php:189
 #: includes/services/class-woocommerce-integration.php:32
 msgid "Delete Payment Method"
 msgstr ""
@@ -459,6 +483,7 @@ msgid "Disabled. Add a webhook signing secret to send verification headers."
 msgstr ""
 
 #: admin/class-settings-page.php:1023
+#: includes/services/class-frontend-dashboard-screen.php:169
 #: includes/services/class-woocommerce-integration.php:27
 #: includes/services/class-woocommerce-integration.php:82
 msgid "Downloads"
@@ -577,7 +602,7 @@ msgstr ""
 msgid "Event:"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:173
+#: includes/services/class-frontend-dashboard-screen.php:229
 msgid "Everything for your orders in one place"
 msgstr ""
 
@@ -770,12 +795,16 @@ msgstr ""
 msgid "Invalid Or Expired Link Text"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:161
+#: includes/services/class-frontend-dashboard-screen.php:217
 msgid "Keep billing and shipping information ready for checkout."
 msgstr ""
 
 #: includes/services/class-frontend-setpassword-screen.php:188
 msgid "Keep going."
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:174
+msgid "Keep your billing and shipping details current so future checkouts stay quick and accurate."
 msgstr ""
 
 #: admin/class-settings-page.php:976
@@ -876,8 +905,12 @@ msgstr ""
 msgid "Manage Account"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:160
+#: includes/services/class-frontend-dashboard-screen.php:216
 msgid "Manage Addresses"
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:182
+msgid "Manage saved payment methods when your store supports secure payment method storage."
 msgstr ""
 
 #: includes/services/class-compatibility-warnings.php:176
@@ -954,8 +987,13 @@ msgstr ""
 msgid "Order"
 msgstr ""
 
+#: includes/services/class-frontend-dashboard-screen.php:165
 #: includes/services/class-woocommerce-integration.php:26
 msgid "Order Details"
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:161
+msgid "Order History"
 msgstr ""
 
 #: admin/class-settings-page.php:1022
@@ -1315,8 +1353,12 @@ msgstr ""
 msgid "Review"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:174
+#: includes/services/class-frontend-dashboard-screen.php:230
 msgid "Review purchases, manage checkout details, and keep your account information current without leaving the branded account area."
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:166
+msgid "Review the selected order, including status, line items, totals, and available order actions."
 msgstr ""
 
 #: admin/class-settings-page.php:347
@@ -1337,6 +1379,10 @@ msgstr ""
 
 #: admin/class-settings-page.php:144
 msgid "Save Settings"
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:181
+msgid "Saved Payment Methods"
 msgstr ""
 
 #: includes/class-settings-schema.php:27
@@ -1628,7 +1674,7 @@ msgstr ""
 msgid "These checks flag active plugins and hooks that may also control login, registration, redirects, account pages, or WooCommerce account endpoints."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:137
+#: includes/services/class-frontend-dashboard-screen.php:144
 msgid "This account section is not available."
 msgstr ""
 
@@ -1697,6 +1743,10 @@ msgstr ""
 msgid "Too many attempts. Please wait and try again."
 msgstr ""
 
+#: includes/services/class-frontend-dashboard-screen.php:162
+msgid "Track purchase status, review order details, and open individual orders for more information."
+msgstr ""
+
 #: includes/class-settings-schema.php:242
 msgid "Turnstile Secret Key"
 msgstr ""
@@ -1726,8 +1776,12 @@ msgstr ""
 msgid "Unknown email template."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:166
+#: includes/services/class-frontend-dashboard-screen.php:222
 msgid "Update your name, email address, and account password."
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:178
+msgid "Update your name, email address, and password using WooCommerce account controls."
 msgstr ""
 
 #: admin/class-settings-page.php:980
@@ -1774,7 +1828,7 @@ msgstr ""
 msgid "View Account"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:155
+#: includes/services/class-frontend-dashboard-screen.php:211
 msgid "View Orders"
 msgstr ""
 

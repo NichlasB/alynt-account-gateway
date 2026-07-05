@@ -87,8 +87,10 @@ class ALYNT_AG_Test_Frontend_Dashboard_WooCommerce extends ALYNT_AG_WooCommerce_
 	 */
 	public function endpoint_labels() {
 		return array(
-			'dashboard' => 'Dashboard',
-			'orders'    => 'Orders',
+			'dashboard'       => 'Dashboard',
+			'orders'          => 'Orders',
+			'payment-methods' => 'Payment Methods',
+			'loyalty-points'  => 'Loyalty Points',
 		);
 	}
 
@@ -246,8 +248,70 @@ class FrontendDashboardScreenTest extends TestCase {
 
 		$this->assertStringContainsString( '<h2 id="agw-dashboard-content-title">', $html );
 		$this->assertStringContainsString( 'Orders', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-guidance"', $html );
+		$this->assertStringContainsString( 'Order History', $html );
+		$this->assertStringContainsString( 'Track purchase status', $html );
 		$this->assertStringContainsString( '<div class="wc-endpoint-output">orders:2</div>', $html );
 		$this->assertStringNotContainsString( 'This account section is not available.', $html );
+	}
+
+	public function test_render_dashboard_screen_outputs_payment_methods_guidance() {
+		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->available = true;
+		$woocommerce          = new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce();
+		$woocommerce->endpoint = array(
+			'endpoint' => 'payment-methods',
+			'value'    => '',
+		);
+		$screen = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			$woocommerce,
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array(
+				'woocommerce_takeover' => true,
+			)
+		);
+
+		ob_start();
+		$screen->render_dashboard_screen( $settings, '/my-account/payment-methods/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'Payment Methods', $html );
+		$this->assertStringContainsString( 'Saved Payment Methods', $html );
+		$this->assertStringContainsString( 'Manage saved payment methods', $html );
+		$this->assertStringContainsString( '<div class="wc-endpoint-output">payment-methods:</div>', $html );
+	}
+
+	public function test_render_dashboard_screen_skips_guidance_for_custom_endpoint() {
+		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->available = true;
+		$woocommerce          = new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce();
+		$woocommerce->endpoint = array(
+			'endpoint' => 'loyalty-points',
+			'value'    => '',
+		);
+		$screen = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			$woocommerce,
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array(
+				'woocommerce_takeover' => true,
+			)
+		);
+
+		ob_start();
+		$screen->render_dashboard_screen( $settings, '/my-account/loyalty-points/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'Loyalty Points', $html );
+		$this->assertStringNotContainsString( 'class="agw-dashboard-guidance"', $html );
+		$this->assertStringContainsString( '<div class="wc-endpoint-output">loyalty-points:</div>', $html );
 	}
 
 	public function test_render_dashboard_screen_outputs_woocommerce_overview_on_base_dashboard() {

@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.23 WooCommerce dashboard polish shipped; next slice TBD
+- Current phase: v0.1.24 WooCommerce endpoint guidance
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.23 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -20,6 +20,35 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.24 Small Release Cycle
+
+### Scope
+
+- [x] Start the next WooCommerce dashboard polish slice from the released `master` baseline.
+- [x] Add branded guidance copy above delegated WooCommerce endpoint content for standard account areas.
+- [x] Keep custom/plugin-added WooCommerce endpoints free of plugin-authored guidance assumptions.
+- [x] Add focused coverage for endpoint guidance and custom endpoint restraint.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.24` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.24` from clean `master` after the `v0.1.23` release merge.
+- Added endpoint-specific guidance for WooCommerce orders, order details, downloads, addresses, account details, and payment-method flows while preserving WooCommerce endpoint delegation.
+- Added focused dashboard screen coverage for Orders guidance, Payment Methods guidance, and skipping guidance for plugin-added/custom endpoints.
+- Verified initial local checks: PHP syntax passes for touched PHP/test files, focused `FrontendDashboardScreenTest` passes with 7 tests and 37 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 460 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 176 tests and 734 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+
+### Guardrails
+
+- Do not change frontend routing, authentication behavior, WooCommerce endpoint delegation, WooCommerce menu/link generation, registration flow, email behavior, webhook behavior, provider verification behavior, settings storage shape, or default frontend-output disabled behavior.
+- Keep this cycle focused on endpoint affordance copy and presentation only.
+
+### Completion Gate
+
+- [ ] Build, lint, test, audit, and POT generation pass.
+- [ ] Plugin Tester smoke validates endpoint guidance on representative WooCommerce endpoints.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.23 Small Release Cycle
 
