@@ -4,7 +4,7 @@
 
 - Current phase: v0.1.26 WooCommerce delegated content presentation polish in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.25 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.26 release candidate is in progress on `release/0.1.26`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -29,7 +29,7 @@
 - [x] Add scoped frontend CSS for delegated WooCommerce notices, forms, fieldsets, required labels, buttons, and payment-method containers inside branded dashboard content.
 - [x] Keep changes presentation-only and preserve WooCommerce endpoint handlers, forms, submissions, and sensitive account flows.
 - [x] Add focused CSS source coverage for key scoped WooCommerce selectors and mobile single-column fallback.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
 - [ ] Publish the final `v0.1.26` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -41,6 +41,10 @@
 - Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.26-branch-qa-20260705-123438\alynt-account-gateway-v0.1.26-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, and no dev/source/test/vendor files.
 - Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.25` through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant remain pre-bump `0.1.25`, built frontend CSS is present, and delegated WooCommerce CSS selectors for notices, account forms, payment methods, and mobile fallback are present.
 - Authenticated HTTP smoke confirmed `/my-account/orders/`, `/my-account/edit-address/`, `/my-account/edit-account/`, and `/my-account/payment-methods/` return `200`, render the branded dashboard and delegated content shell, load the frontend CSS asset, match expected endpoint copy, and show no fatal/critical error output. Temporary upload artifacts and curl cookie state were cleaned up after QA.
+- Bumped release-candidate metadata to `0.1.26` across the plugin header/constant, npm metadata, readme, sample test, changelog, and implementation plan.
+- Regenerated `languages/alynt-account-gateway.pot` with 474 strings and `0.1.26` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 179 tests and 764 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes with only POT/readme line-ending warnings.
+- Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.26-20260705-124007\alynt-account-gateway-v0.1.26.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor files, `0.1.26` header/constant/readme/POT metadata, and built delegated WooCommerce CSS present.
+- Installed the local `0.1.26` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant are `0.1.26`, built delegated WooCommerce CSS selectors are present, and authenticated HTTP smoke confirmed `/my-account/orders/`, `/my-account/edit-address/`, `/my-account/edit-account/`, and `/my-account/payment-methods/` return `200`, render the branded dashboard and delegated content shell, load the frontend CSS asset, match expected endpoint copy, and show no fatal/critical error output. Temporary upload artifacts and curl cookie state were cleaned up after QA.
 
 ### Guardrails
 
@@ -49,8 +53,8 @@
 
 ### Completion Gate
 
-- [ ] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates representative delegated WooCommerce account endpoints.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates representative delegated WooCommerce account endpoints.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.25 Small Release Cycle

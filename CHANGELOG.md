@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.26 - 2026-07-05
+
+### Added
+
+- Added scoped presentation polish for delegated WooCommerce account notices, forms, fieldsets, buttons, and payment-method containers inside the branded dashboard.
+
 ## 0.1.25 - 2026-07-05
 
 ### Added
