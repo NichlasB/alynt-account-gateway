@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.35 - 2026-07-05
+
+### Added
+
+- Added diagnostics events for native login redirects and blocked wp-admin access when diagnostics are enabled.
+
 ## 0.1.34 - 2026-07-05
 
 ### Added
