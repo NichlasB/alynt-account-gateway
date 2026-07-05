@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.36 Registration-flow activity logging in progress
+- Current phase: v0.1.36 Registration-flow activity logging shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.35 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.36 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -70,7 +70,7 @@
 - [x] Keep changes scoped to admin-visible activity evidence with no settings schema, frontend routing, registration success path, provider verification policy, rate-limit thresholds, dashboard, WooCommerce, webhook, email template, privacy cleanup, or default frontend-output behavior changes.
 - [x] Add focused coverage for registration-flow activity rows and Security tab guidance.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.36` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.36` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -86,6 +86,8 @@
 - Re-ran release-candidate validation after the metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` with 699 strings, `npm.cmd run lint`, `npm.cmd audit --audit-level=moderate`, full `npm.cmd test` with 202 tests and 1013 assertions, PHP syntax checks for the main plugin, registration service, and admin settings page, and `git diff --check` all passed.
 - Created release-candidate package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.36-20260705-182920\alynt-account-gateway-v0.1.36.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.36` header/constant/readme/POT metadata, registration-flow logging PHP, Security tab guidance PHP, built admin CSS, and POT strings present.
 - Installed the `0.1.36` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header `0.1.36`, loaded constant `0.1.36`, and the registration-flow logger and Security tab guidance are present. Runtime smoke wrote a disposable `registration_flow` / `terms_required` activity row through the service, authenticated admin HTML smoke confirmed the Security tab renders the masked email, `Registration Flow` provider label, `terms_required` status, and terms-consent guidance with no fatal/critical error output. Temporary activity row, cookie state, and upload artifact were cleaned up after QA.
+- Published GitHub release `v0.1.36`: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.36`. The Build Release workflow completed successfully, and the public asset `alynt-account-gateway-v0.1.36.zip` verified with 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.36` metadata, registration-flow logging PHP, Security tab guidance PHP, built admin CSS, and POT strings present.
+- Verified the Alynt Plugin Updater path end to end on LocalWP Plugin Tester by downgrading to the public `v0.1.35` release asset, confirming runtime `0.1.35` with registration-flow logging absent, clearing updater caches, detecting the available `0.1.36` update from the updater-discovered GitHub package URL, installing that package through WordPress upgrader classes, confirming runtime `0.1.36` with no update remaining, and re-smoking the `registration_flow` activity row plus Security tab guidance after the updater install. Temporary activity row, cookie state, and uploaded downgrade artifact were cleaned up after verification.
 
 ### Guardrails
 
@@ -96,7 +98,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates `registration_flow` activity rows and Security tab guidance.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.34 Small Release Cycle
 
