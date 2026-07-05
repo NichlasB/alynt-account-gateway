@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.31 - 2026-07-05
+
+### Added
+
+- Added registration security activity logging for provider outcomes and rate-limit blocks, plus a masked recent activity table on the Security tab.
+
 ## 0.1.30 - 2026-07-05
 
 ### Added
