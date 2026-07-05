@@ -38,6 +38,9 @@
 - Added a WooCommerce-only dashboard overview on the base account page with branded customer-account copy and quick links for orders, addresses, and account details.
 - Added a public WooCommerce endpoint URL helper so dashboard overview links follow the configured account base path.
 - Verified initial local checks: PHP syntax passes for touched PHP/test files, focused dashboard and WooCommerce tests pass, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 448 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 174 tests and 724 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.23-branch-qa-20260705-105241\alynt-account-gateway-v0.1.23-branch-qa.zip`; verified 46 runtime files, no backslash archive entries, no dev/source/test/docs/rules/package/vendor files, pre-bump `0.1.22` metadata, dashboard overview renderer, WooCommerce endpoint URL helper, built frontend overview CSS, and POT strings present.
+- Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.22` through the WordPress upgrader path. Verified active header and loaded constant remain pre-bump `0.1.22`, installed files include the dashboard overview renderer and endpoint URL helper, and built frontend CSS contains overview styles.
+- Authenticated-smoked Plugin Tester with a temporary Novamira admin access session and curl cookie jar after the Playwright MCP browser backend closed: `/my-account/` rendered the branded dashboard overview, customer copy, orders/addresses/account quick links, and no endpoint content shell; `/my-account/orders/` rendered the branded dashboard shell, no overview, the delegated endpoint content shell, and the Orders content title. Restored the previous Plugin Tester settings and cleaned temporary upload artifacts after QA.
 
 ### Guardrails
 
