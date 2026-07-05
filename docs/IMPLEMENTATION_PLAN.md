@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.32 Pending registration visibility in progress
+- Current phase: v0.1.32 Pending registration visibility shipped; next slice TBD
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.31 is the current public baseline after GitHub release and Alynt Plugin Updater verification; v0.1.32 is in release-candidate validation on `release/0.1.32`.
+- Plugin status: v0.1.32 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep changes scoped to admin visibility with no schema, registration flow, provider verification, rate-limit enforcement, email delivery, webhook, frontend, dashboard, WooCommerce, privacy retention, or default frontend-output behavior changes.
 - [x] Add focused coverage for empty and populated pending-registration output.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.32` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.32` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -46,6 +46,8 @@
 - Regenerated `languages/alynt-account-gateway.pot` with 667 strings and `0.1.32` project metadata. Verified release-candidate `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` passes with 197 tests and 948 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, PHP syntax passes, and `git diff --check` passes with only line-ending warnings for generated/package metadata files.
 - Created local release-style package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.32-20260705-160828\alynt-account-gateway-v0.1.32.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, `0.1.32` header/constant/readme/POT metadata, pending-registration panel PHP, built admin CSS, and POT present.
 - Installed the local `0.1.32` package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime verification confirmed active header and loaded constant are `0.1.32`, the pending-registration panel code and built admin CSS are present. Seeded two temporary pending-registration rows and authenticated HTTP smoke confirmed the Security tab returns the Recent Pending Registrations table, masked pending and expired email rows, Pending and Expired statuses, existing verification activity, admin CSS, and no fatal/critical error output. Seeded QA rows were cleaned up after QA.
+- Published GitHub release `v0.1.32`, confirmed the Build Release workflow completed successfully, downloaded the public release asset, and verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs files, `0.1.32` header/constant/readme/POT metadata, pending-registration panel PHP, built admin CSS, and POT present.
+- Verified Alynt Plugin Updater on LocalWP Plugin Tester detected the public GitHub release asset as an update from installed `0.1.31` to `0.1.32`, then installed it through the WordPress plugin update path from the GitHub release ZIP URL. Final fresh runtime state: active `0.1.32` header/constant, pending-registration panel PHP and built admin CSS present, no remaining update offer, Alynt Plugin Updater reports current/new `0.1.32`, and authenticated HTTP smoke confirmed the Security tab returns the Recent Pending Registrations table, masked pending/expired email rows, Pending and Expired statuses, existing verification activity, admin CSS, and no fatal/critical error output. Seeded QA rows were cleaned up after QA.
 
 ### Guardrails
 
@@ -56,7 +58,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates the Security tab renders pending-registration visibility.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.31 Small Release Cycle
 
