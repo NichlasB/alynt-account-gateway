@@ -30,7 +30,7 @@
 - [x] Summarize recent consent-related blocks, pending-record or confirmation-email failures, password setup blocks, and successful confirmation resends without changing public registration behavior.
 - [x] Keep changes scoped to admin visibility with no settings schema, frontend routing, provider verification policy, rate-limit enforcement, dashboard, WooCommerce, webhook, email template, privacy cleanup, or default frontend-output behavior changes.
 - [x] Add focused coverage for registration-flow signal counts and rendered admin copy.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
 - [ ] Publish the final `v0.1.42` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -41,7 +41,10 @@
 - Added focused tests for registration-flow signal counts and rendered guidance copy.
 - Verified local checks before the release metadata bump: PHP syntax passes for the touched settings page, focused `SettingsPageSecurityStatusTest` passes with 10 tests and 148 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 752 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 212 tests and 1116 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.42-branch-qa-20260705-231528\alynt-account-gateway-v0.1.42-branch-qa.zip`; verified 45 runtime file entries, no backslash archive entries, no dev/source/test/vendor/docs/build files, pre-bump `0.1.41` metadata, Registration Flow Signals renderer, built admin CSS, and POT strings present.
-- Copied the branch-QA runtime package into the LocalWP Plugin Tester plugin directory after Novamira MCP became unavailable and global WP-CLI was not installed. Local PHP CLI bootstrap is blocked because the CLI runtime lacks `mysqli`; web runtime smoke is pending because `plugin-tester.local` is currently unreachable with no LocalWP/nginx/PHP/MySQL processes running. Temporary smoke scripts and uploaded QA artifacts were cleaned up.
+- Installed the branch-QA runtime package into the LocalWP Plugin Tester plugin directory over active `0.1.41`. Fresh runtime smoke confirmed active pre-bump header `0.1.41` and loaded constant `0.1.41`, Registration Flow Signals renderer and CSS are present, seeded consent/system/password/resend registration-flow rows render the new flow copy alongside Provider Health Signals and Rate Limit Pressure, and temporary verification rows were cleaned up after QA.
+- Bumped release-candidate metadata to `0.1.42` across the plugin header/constant, npm metadata, readme, sample test, changelog, and implementation plan.
+- Re-ran release-candidate validation after the metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` with 752 strings, PHP syntax checks for the main plugin file and touched settings page, `npm.cmd run lint`, `npm.cmd audit --audit-level=moderate`, full `npm.cmd test` with 212 tests and 1116 assertions, and `git diff --check` all passed.
+- Created final local package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.42-20260706-114930\alynt-account-gateway-v0.1.42.zip`; verified 45 runtime file entries, no directory entries, no backslash entries, no dev entries, `0.1.42` plugin/readme/POT metadata, and Registration Flow Signals markers present. Installed the final package on LocalWP Plugin Tester through WordPress upgrader classes and confirmed active header `0.1.42`, loaded constant `0.1.42`, Registration Flow Signals rendering, Provider Health Signals, Rate Limit Pressure, and zero temporary QA rows remaining after cleanup.
 
 ### Guardrails
 
@@ -50,8 +53,8 @@
 
 ### Completion Gate
 
-- [ ] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates Registration Flow Signals on the Security tab.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates Registration Flow Signals on the Security tab.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.41 Small Release Cycle
