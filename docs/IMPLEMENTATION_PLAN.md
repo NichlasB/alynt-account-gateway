@@ -29,7 +29,7 @@
 - [x] Replace the bare unavailable WooCommerce endpoint message with a branded dashboard fallback panel.
 - [x] Include practical recovery links back to the account dashboard and account details.
 - [x] Keep changes scoped to frontend presentation when WooCommerce does not render endpoint content; do not change endpoint routing, WooCommerce action delegation, dashboard settings, saved data, auth, registration, emails, updater behavior, or default frontend-output disabled behavior.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks through final release package validation.
 - [ ] Publish the final `v0.1.48` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -41,6 +41,10 @@
 - Verified branch implementation checks before the release metadata bump: PHP syntax passes for the touched dashboard screen, focused `FrontendDashboardScreenTest` passes with 8 tests and 60 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 801 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 217 tests and 1198 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` reports only the expected POT line-ending normalization warning.
 - Created wrapped branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.48-branch-qa-20260706-150425\alynt-account-gateway-v0.1.48-branch-qa.zip`; verified 45 runtime file entries, no directory entries, no backslash archive entries, no dev/source/test/docs/build-tooling files, pre-bump `0.1.47` metadata, WooCommerce endpoint fallback renderer, built frontend CSS, and POT strings present.
 - Installed the branch-QA package on LocalWP Plugin Tester over active `0.1.47` through WordPress upgrader classes. Fresh runtime smoke confirmed active pre-bump header `0.1.47` and loaded constant `0.1.47`, rendered a WooCommerce delegated endpoint with no WooCommerce output, validated the fallback panel class, status role, endpoint-specific copy, dashboard/account recovery links, old bare fallback removal, and built CSS presence, then removed uploaded QA artifacts from the LocalWP filesystem.
+- Bumped release metadata to `0.1.48` in the plugin header, version constant, package metadata, readme stable tag/changelog, CHANGELOG, sample version assertion, and POT metadata.
+- Verified release-candidate checks after the metadata bump: PHP syntax passes for `alynt-account-gateway.php` and the touched dashboard screen, `npm.cmd run build` passes, `npm.cmd run lint` passes, full `npm.cmd test` passes with 217 tests and 1198 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` reports only expected line-ending normalization warnings for CHANGELOG/POT.
+- Created final wrapped package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.48-20260706-150945\alynt-account-gateway-v0.1.48.zip`; verified 45 runtime file entries, no directory entries, no backslash archive entries, no dev/source/test/docs/build-tooling files, no root-level plugin main file, wrapped `0.1.48` plugin header/constant/readme/POT metadata, WooCommerce endpoint fallback renderer, built frontend CSS, and POT strings present.
+- Installed the final package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime smoke confirmed active header `0.1.48` and loaded constant `0.1.48`, rendered a WooCommerce delegated endpoint with no WooCommerce output, validated the fallback panel class, status role, endpoint-specific copy, dashboard/account recovery links, old bare fallback removal, and built CSS presence, then removed uploaded final package artifacts from the LocalWP filesystem.
 
 ### Guardrails
 
@@ -49,8 +53,8 @@
 
 ### Completion Gate
 
-- [ ] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates the WooCommerce endpoint fallback panel.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates the WooCommerce endpoint fallback panel.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.47 Small Release Cycle
