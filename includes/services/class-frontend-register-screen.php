@@ -82,7 +82,7 @@ class ALYNT_AG_Frontend_Register_Screen {
 			</div>
 			<div class="agw-field">
 				<label for="agw-register-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-register-email" name="email" type="email" autocomplete="email" required data-agw-registration-required <?php echo in_array( $error_code, array( 'missing_required_fields', 'invalid_email', 'email_unavailable' ), true ) ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>
+				<input id="agw-register-email" name="email" type="email" autocomplete="email" dir="ltr" required data-agw-registration-required <?php echo in_array( $error_code, array( 'missing_required_fields', 'invalid_email', 'email_unavailable' ), true ) ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>
 			</div>
 			<label class="agw-checkbox">
 				<input id="agw-register-terms" name="terms" type="checkbox" required data-agw-registration-terms <?php echo 'terms_required' === $error_code ? 'aria-invalid="true" aria-describedby="agw-register-error"' : ''; ?>>

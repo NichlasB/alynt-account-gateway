@@ -60,6 +60,7 @@ class FrontendRegisterScreenTest extends TestCase {
 		$this->assertStringContainsString( 'name="last_name"', $html );
 		$this->assertStringContainsString( 'id="agw-register-email"', $html );
 		$this->assertStringContainsString( 'name="email"', $html );
+		$this->assertStringContainsString( 'type="email" autocomplete="email" dir="ltr"', $html );
 		$this->assertStringContainsString( 'id="agw-register-terms"', $html );
 		$this->assertStringContainsString( 'href="https://example.test/terms/"', $html );
 		$this->assertStringContainsString( 'href="https://example.test/legal/privacy/"', $html );

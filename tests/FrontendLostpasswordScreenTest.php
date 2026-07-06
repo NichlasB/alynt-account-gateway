@@ -52,7 +52,7 @@ class FrontendLostpasswordScreenTest extends TestCase {
 		$this->assertStringContainsString( 'name="alynt_ag_auth_nonce" value="test-nonce"', $html );
 		$this->assertStringContainsString( 'id="agw-lost-email"', $html );
 		$this->assertStringContainsString( 'name="user_login"', $html );
-		$this->assertStringContainsString( 'autocomplete="email"', $html );
+		$this->assertStringContainsString( 'type="email" autocomplete="email" dir="ltr"', $html );
 		$this->assertStringContainsString( 'Back to Login', $html );
 		$this->assertStringNotContainsString( 'agw-lostpassword-error', $html );
 	}

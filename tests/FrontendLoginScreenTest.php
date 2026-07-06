@@ -52,6 +52,7 @@ class FrontendLoginScreenTest extends TestCase {
 		$this->assertStringContainsString( 'name="alynt_ag_auth_nonce" value="test-nonce"', $html );
 		$this->assertStringContainsString( 'id="agw-login-email"', $html );
 		$this->assertStringContainsString( 'name="email"', $html );
+		$this->assertStringContainsString( 'type="email" autocomplete="email" dir="ltr"', $html );
 		$this->assertStringContainsString( 'id="agw-login-password"', $html );
 		$this->assertStringContainsString( 'name="pwd"', $html );
 		$this->assertStringContainsString( 'data-agw-password-toggle', $html );
