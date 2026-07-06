@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.47 Pending registration lifecycle visibility release prep in progress
+- Current phase: v0.1.47 Pending registration lifecycle visibility shipped; next small release slice ready
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.46 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.47 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep changes scoped to admin visibility with no pending registration storage, token expiry, resend behavior, account creation, email sending, saved settings schema, dashboard, WooCommerce, privacy cleanup, or default frontend-output behavior changes.
 - [x] Add focused coverage for lifecycle signal counts and rendered admin copy.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks through final release package validation.
-- [ ] Publish the final `v0.1.47` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.47` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -46,6 +46,9 @@
 - Corrected the final release ZIP to use the standard WordPress plugin-folder wrapper after local upgrader testing showed rootless packages can update subfolders while leaving the active main plugin file behind. Final wrapped package: `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.47-wrapped-20260706-144422\alynt-account-gateway-v0.1.47.zip`.
 - Verified the wrapped final package has 45 runtime file entries, no directory entries, no backslash archive entries, no dev/source/test/docs/build-tooling files, no root-level plugin main file, wrapped `0.1.47` plugin header/constant/readme/POT metadata, Pending Registration Lifecycle Signals renderer, built admin CSS, and POT strings present.
 - Installed the wrapped final package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime smoke confirmed active header `0.1.47` and loaded constant `0.1.47`, inserted 4 temporary pending registration rows, validated lifecycle counts/copy, table status labels, next-step copy, masked email output, deleted all 4 temporary rows, confirmed 0 remaining QA rows, and removed uploaded package artifacts from the LocalWP filesystem.
+- Published GitHub release `v0.1.47`; release workflow `28792707446` completed successfully. The workflow emitted a non-blocking Node 20 deprecation warning for `softprops/action-gh-release@v2` while GitHub forced Node 24.
+- Downloaded and inspected public release asset `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.47-public\alynt-account-gateway-v0.1.47.zip`; verified 45 runtime file entries, 10 harmless directory entries, no backslash archive entries, no dev/source/test/docs/build-tooling files, wrapped plugin main file, `0.1.47` plugin header/constant/readme/POT metadata, Pending Registration Lifecycle Signals renderer, built admin CSS, and POT strings present.
+- Verified Alynt Plugin Updater end to end on LocalWP Plugin Tester: downgraded to public `0.1.46`, confirmed lifecycle renderer absent and prior Registration Abuse Signals present, force-refreshed updater data to detect public `0.1.47` from `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.47/alynt-account-gateway-v0.1.47.zip`, upgraded through WordPress `Plugin_Upgrader`, reactivated ACG after the programmatic upgrade, confirmed active `0.1.47`, confirmed no update remains available, reran the lifecycle smoke with 4 temporary pending registration rows, deleted all 4 rows, confirmed 0 remaining QA rows, and removed uploaded downgrade artifacts.
 
 ### Guardrails
 
@@ -56,7 +59,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates Pending Registration Lifecycle Signals on the Security tab.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.46 Small Release Cycle
 
