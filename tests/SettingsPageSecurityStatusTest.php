@@ -49,6 +49,7 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Reoon Email Verifier', $output );
 		$this->assertStringContainsString( 'Reoon Blocked Statuses', $output );
 		$this->assertStringContainsString( 'Reoon Flagged Statuses', $output );
+		$this->assertStringContainsString( 'Reoon Flagged Status Guidance', $output );
 		$this->assertStringContainsString( 'Rate Limit Posture', $output );
 		$this->assertStringContainsString( 'Registration Attempts', $output );
 		$this->assertStringContainsString( 'Password Reset Attempts', $output );
@@ -77,6 +78,10 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Email quality verification can run', $output );
 		$this->assertStringContainsString( 'Always blocks invalid, disabled, disposable, and spamtrap statuses.', $output );
 		$this->assertStringContainsString( 'Allows but logs catch-all, role account, unknown, and inbox-full statuses for admin review.', $output );
+		$this->assertStringContainsString( 'Current policy: Allow and log flagged statuses.', $output );
+		$this->assertStringContainsString( 'For most stores, allow and log flagged statuses first.', $output );
+		$this->assertStringContainsString( 'Catch-all domains, role accounts, unknown results, and full inboxes can include legitimate customers', $output );
+		$this->assertStringContainsString( 'Use Recent Registration Verification Activity below to review allowed flagged results and blocked Reoon decisions', $output );
 	}
 
 	public function test_security_status_panel_describes_blocking_flagged_reoon_policy() {
@@ -92,6 +97,8 @@ class SettingsPageSecurityStatusTest extends TestCase {
 
 		$this->assertStringContainsString( 'Reoon Flagged Statuses', $output );
 		$this->assertStringContainsString( 'Blocks catch-all, role account, unknown, and inbox-full statuses before account creation.', $output );
+		$this->assertStringContainsString( 'Current policy: Block flagged statuses.', $output );
+		$this->assertStringContainsString( 'Switch to blocking when support volume, spam pressure, or fraud risk matters more', $output );
 	}
 
 	public function test_security_rate_limit_items_use_configured_values() {

@@ -255,6 +255,39 @@
 	font-size: 13px;
 }
 
+.alynt-ag-reoon-policy-guide {
+	display: grid;
+	gap: 12px;
+	margin: 18px 0 16px;
+	padding: 14px;
+	border: 1px solid #dcdcde;
+	border-left: 4px solid #2271b1;
+	background: #f6f7f7;
+}
+
+.alynt-ag-reoon-policy-guide h3,
+.alynt-ag-reoon-policy-guide h4 {
+	margin: 0;
+}
+
+.alynt-ag-reoon-policy-guide p {
+	margin: 4px 0 0;
+	color: #50575e;
+	line-height: 1.5;
+}
+
+.alynt-ag-reoon-policy-guide__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 12px;
+}
+
+.alynt-ag-reoon-policy-guide__grid section {
+	padding: 12px;
+	border: 1px solid #dcdcde;
+	background: #fff;
+}
+
 .alynt-ag-security-signal,
 .alynt-ag-security-pressure,
 .alynt-ag-security-abuse,

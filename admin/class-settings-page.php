@@ -999,6 +999,8 @@ class ALYNT_AG_Settings_Page {
 				<?php endforeach; ?>
 			</div>
 
+			<?php $this->render_security_reoon_policy_guide( $settings ); ?>
+
 			<h3><?php esc_html_e( 'Rate Limit Posture', 'alynt-account-gateway' ); ?></h3>
 			<div class="alynt-ag-security-status__grid">
 				<?php foreach ( $rate_limits as $item ) : ?>
@@ -1070,6 +1072,51 @@ class ALYNT_AG_Settings_Page {
 				'message' => $this->security_reoon_flagged_policy_message( $reoon_flagged_policy ),
 			),
 		);
+	}
+
+	/**
+	 * Render Reoon policy guidance for flagged email-quality statuses.
+	 *
+	 * @param array<string,mixed> $settings Current settings.
+	 * @return void
+	 */
+	private function render_security_reoon_policy_guide( $settings ) {
+		$policy       = ! empty( $settings['reoon_flagged_policy'] ) ? sanitize_key( $settings['reoon_flagged_policy'] ) : 'allow';
+		$policy_label = 'block' === $policy
+			? __( 'Block flagged statuses', 'alynt-account-gateway' )
+			: __( 'Allow and log flagged statuses', 'alynt-account-gateway' );
+		?>
+		<div class="alynt-ag-reoon-policy-guide">
+			<div>
+				<h3><?php esc_html_e( 'Reoon Flagged Status Guidance', 'alynt-account-gateway' ); ?></h3>
+				<p>
+					<?php
+					echo esc_html(
+						sprintf(
+							/* translators: %s: selected Reoon flagged-status policy label. */
+							__( 'Current policy: %s.', 'alynt-account-gateway' ),
+							$policy_label
+						)
+					);
+					?>
+				</p>
+			</div>
+			<div class="alynt-ag-reoon-policy-guide__grid">
+				<section>
+					<h4><?php esc_html_e( 'Recommended default', 'alynt-account-gateway' ); ?></h4>
+					<p><?php esc_html_e( 'For most stores, allow and log flagged statuses first. Catch-all domains, role accounts, unknown results, and full inboxes can include legitimate customers, so reviewing activity before blocking reduces false positives.', 'alynt-account-gateway' ); ?></p>
+				</section>
+				<section>
+					<h4><?php esc_html_e( 'When to block', 'alynt-account-gateway' ); ?></h4>
+					<p><?php esc_html_e( 'Switch to blocking when support volume, spam pressure, or fraud risk matters more than occasional manual recovery for legitimate customers.', 'alynt-account-gateway' ); ?></p>
+				</section>
+				<section>
+					<h4><?php esc_html_e( 'Where to review', 'alynt-account-gateway' ); ?></h4>
+					<p><?php esc_html_e( 'Use Recent Registration Verification Activity below to review allowed flagged results and blocked Reoon decisions with masked email addresses.', 'alynt-account-gateway' ); ?></p>
+				</section>
+			</div>
+		</div>
+		<?php
 	}
 
 	/**
