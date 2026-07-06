@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.53 resend throttling UX shipped; next small release slice ready
+- Current phase: v0.1.54 diagnostics-dependent security signals local release package smoke complete; commit/tag/publish approval next
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.53 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.52 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
@@ -21,13 +21,48 @@
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
 
+## v0.1.54 Small Release Cycle
+
+### Scope
+
+- [x] Start the next admin observability/security hardening slice from the released `master` baseline.
+- [x] Clarify that access-control, gateway-routing, welcome-email failure, and webhook-dispatch security signals depend on diagnostics being enabled.
+- [x] Keep this slice scoped to admin guidance and tests; do not change diagnostics logging, retention, security counters, rate-limit enforcement, provider decisions, registration flow, email delivery, webhooks, dashboard rendering, WooCommerce behavior, privacy cleanup, updater behavior, or default frontend-output disabled behavior.
+- [x] Run build, lint, focused settings tests, full tests, audit, and POT generation.
+- [x] Package and run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.54` from clean `master` after the updater-verified `v0.1.53` release merge.
+- Added a diagnostics-disabled note above the diagnostics-dependent Security tab signal groups. The note explains that access-control, gateway-routing, welcome-email failure, and webhook-dispatch signals only show complete evidence while diagnostics are enabled in Advanced Tools.
+- Added focused settings-page coverage for the diagnostics-disabled notice and the diagnostics-enabled omission path. Initial validation passed: PHP syntax for the settings page and focused `SettingsPageSecurityStatusTest` (`17 tests, 259 assertions`).
+- Branch implementation validation passed: build, POT generation (`834 strings`), PHP syntax for the settings page, lint, focused `SettingsPageSecurityStatusTest` (`17 tests, 259 assertions`), full tests (`221 tests, 1256 assertions`), npm audit, and whitespace check. The only diff-check note was the expected POT line-ending normalization warning.
+- Branch-QA package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.54-branch-qa-20260706-164658\alynt-account-gateway-v0.1.54-branch-qa.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, pre-bump `0.1.53` header/constant, exactly one updater header, and diagnostics notice renderer/built admin CSS/POT strings present.
+- Plugin Tester branch smoke passed on the local-only `plugin-tester.local` site: installed package active with pre-bump `0.1.53` header/constant, diagnostics notice renderer/built admin CSS/POT strings present, diagnostics-disabled render showed the new note while keeping Access Control, Gateway Routing, and Account Delivery sections visible, diagnostics-enabled render omitted the note, and uploaded test artifacts were cleaned.
+- Release metadata bumped to `0.1.54`, POT regenerated (`834 strings`), and release validation passed: PHP syntax for the main plugin and settings page, build, lint, full tests (`221 tests, 1256 assertions`), npm audit, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
+- Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.54-20260706-165032\alynt-account-gateway-v0.1.54.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.54` header/constant/stable tag, exactly one updater header, and diagnostics notice renderer/built admin CSS/POT strings present.
+- Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.54` header/constant, diagnostics-disabled render showed the new note while keeping Access Control, Gateway Routing, and Account Delivery sections visible, diagnostics-enabled render omitted the note, and uploaded test artifacts were cleaned.
+
+### Guardrails
+
+- Do not alter diagnostics capture, log retention, event schemas, rate-limit behavior, provider API behavior, registration storage, token expiry, email delivery, webhook dispatch, dashboard/WooCommerce rendering, saved settings keys, privacy cleanup, or updater metadata in this slice.
+- Keep this release focused on making existing admin signal limitations visible when diagnostics are disabled.
+
+### Completion Gate
+
+- [x] Admin settings tests cover disabled/enabled diagnostics notice behavior.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates the installed-package diagnostics notice.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
+
 ## v0.1.53 Small Release Cycle
 
 ### Scope
 
 - [x] Start the next security and anti-spam hardening slice from the released `master` baseline.
 - [x] Improve invalid-link resend throttling UX so customers understand the cooldown, newest-link behavior, and inbox checks when confirmation email resend requests are rate-limited.
-- [ ] Keep this slice scoped to frontend resend guidance and tests; do not change rate-limit enforcement, token expiry, resend email delivery, registration storage, provider enforcement, dashboard output, WooCommerce behavior, webhooks, privacy cleanup, updater behavior, or default frontend-output disabled behavior.
+- [x] Keep this slice scoped to frontend resend guidance and tests; do not change rate-limit enforcement, token expiry, resend email delivery, registration storage, provider enforcement, dashboard output, WooCommerce behavior, webhooks, privacy cleanup, updater behavior, or default frontend-output disabled behavior.
 - [x] Run focused frontend state screen tests, build, lint, full tests, audit, and POT generation.
 - [x] Package and run Plugin Tester smoke.
 - [x] Publish release and complete updater verification.

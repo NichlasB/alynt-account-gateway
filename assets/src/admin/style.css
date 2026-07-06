@@ -202,6 +202,20 @@
 	background: #fcf9e8;
 }
 
+.alynt-ag-security-diagnostics-note {
+	margin: 18px 0 12px;
+	padding: 10px 12px;
+	border: 1px solid #dcdcde;
+	border-left: 4px solid #2271b1;
+	background: #f6f7f7;
+	color: #50575e;
+	line-height: 1.5;
+}
+
+.alynt-ag-security-diagnostics-note strong {
+	color: #1d2327;
+}
+
 .alynt-ag-security-status h3 {
 	margin: 18px 0 10px;
 	font-size: 16px;

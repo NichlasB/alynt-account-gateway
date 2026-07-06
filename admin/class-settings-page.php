@@ -1228,6 +1228,7 @@ class ALYNT_AG_Settings_Page {
 		$diagnostic_events = $this->security_recent_diagnostics_events( 25 );
 		$external_events   = $this->security_recent_external_diagnostics_events( 25 );
 		$webhook_logs      = $this->recent_webhook_logs();
+		$settings          = ALYNT_AG_Settings_Schema::get_settings();
 		?>
 		<div class="alynt-ag-security-activity">
 			<h3><?php esc_html_e( 'Recent Registration Verification Activity', 'alynt-account-gateway' ); ?></h3>
@@ -1239,6 +1240,7 @@ class ALYNT_AG_Settings_Page {
 			<?php $this->render_security_provider_failure_triage( $logs ); ?>
 			<?php $this->render_security_rate_limit_pressure( $logs ); ?>
 			<?php $this->render_security_registration_abuse_signals( $logs ); ?>
+			<?php $this->render_security_diagnostics_dependency_notice( $settings ); ?>
 			<?php $this->render_security_access_control_signals( $logs, $diagnostic_events ); ?>
 			<?php $this->render_security_auth_redirect_signals( $diagnostic_events ); ?>
 			<?php $this->render_security_registration_flow_signals( $logs ); ?>
@@ -1278,6 +1280,25 @@ class ALYNT_AG_Settings_Page {
 					</tbody>
 				</table>
 			<?php endif; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render notice for security signals that depend on diagnostics logs.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_security_diagnostics_dependency_notice( $settings ) {
+		if ( ! empty( $settings['diagnostics_enabled'] ) ) {
+			return;
+		}
+
+		?>
+		<div class="alynt-ag-security-diagnostics-note" role="note">
+			<strong><?php esc_html_e( 'Diagnostics are disabled.', 'alynt-account-gateway' ); ?></strong>
+			<?php esc_html_e( 'Access control, gateway routing, welcome-email failure, and webhook-dispatch signals only show complete evidence while diagnostics are enabled in Advanced Tools.', 'alynt-account-gateway' ); ?>
 		</div>
 		<?php
 	}
