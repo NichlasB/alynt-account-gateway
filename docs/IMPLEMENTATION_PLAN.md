@@ -29,7 +29,8 @@
 - [x] Close the completed WooCommerce polish product slice in the plan based on shipped overview, delegated CSS, endpoint guidance, next-step affordances, unavailable fallback, shortcut actions, and updater-verified release evidence.
 - [x] Improve Reoon flagged email policy visibility in the Security & Spam admin tab so site owners understand the recommended stance for catch-all, role-account, and unknown email verdicts.
 - [x] Keep this slice scoped to admin guidance/visibility; do not change provider enforcement, registration flow, saved settings schema, account creation, email sending, webhooks, dashboard rendering, WooCommerce endpoint delegation, privacy cleanup, updater behavior, or default frontend-output disabled behavior.
-- [ ] Run build, lint, test, audit, POT, package, Plugin Tester smoke, release, and updater verification.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -38,6 +39,9 @@
 - Added a Reoon Flagged Status Guidance panel to the Security & Spam status area. The panel shows the current flagged-status policy, recommends allow-and-log for most stores, explains when blocking is appropriate, and points owners to Recent Registration Verification Activity for masked review.
 - Added focused settings-page coverage for the new allow-and-log and blocking policy guidance, plus scoped admin CSS for the guide panel.
 - Branch implementation validation passed: PHP syntax for the settings page, focused `SettingsPageSecurityStatusTest` (`15 tests, 228 assertions`), build, POT generation (`814 strings`), lint, full tests (`218 tests, 1219 assertions`), npm audit, and whitespace check. The only diff-check note was the expected POT LF-to-CRLF normalization warning.
+- Release metadata bumped to `0.1.51`, POT regenerated (`814 strings`), and release validation passed: PHP syntax for the main plugin and settings page, build, lint, full tests (`218 tests, 1219 assertions`), npm audit, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
+- Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.51-20260706-160415\alynt-account-gateway-v0.1.51.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.51` header/constant/stable tag/POT metadata, exactly one `GitHub Plugin URI: NichlasB/alynt-account-gateway` header, and Reoon guide renderer/CSS/POT strings present.
+- Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.51` header/constant, GitHub updater header, allow-and-log Reoon guide, block-policy Reoon guide, and compiled admin CSS validated. Uploaded test artifact was cleaned from the Novamira doubled-path upload location.
 
 ### Guardrails
 
@@ -48,7 +52,7 @@
 
 - [x] Admin settings tests cover the new Reoon policy guidance.
 - [x] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates the Security & Spam guidance in the installed package.
+- [x] Plugin Tester smoke validates the Security & Spam guidance in the installed package.
 - [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.50 Small Release Cycle

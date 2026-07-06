@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.51 - 2026-07-06
+
+### Added
+
+- Added Security & Spam guidance for Reoon flagged-status policy decisions.
+
 ## 0.1.50 - 2026-07-06
 
 ### Added
