@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.51 Reoon policy visibility slice in progress
+- Current phase: v0.1.51 Reoon policy visibility shipped; next small release slice ready
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.50 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.49 was published but superseded because updater verification found the package was missing the `GitHub Plugin URI` header required by Alynt Plugin Updater discovery.
+- Plugin status: v0.1.51 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.50 remains the header-bearing fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -30,7 +30,7 @@
 - [x] Improve Reoon flagged email policy visibility in the Security & Spam admin tab so site owners understand the recommended stance for catch-all, role-account, and unknown email verdicts.
 - [x] Keep this slice scoped to admin guidance/visibility; do not change provider enforcement, registration flow, saved settings schema, account creation, email sending, webhooks, dashboard rendering, WooCommerce endpoint delegation, privacy cleanup, updater behavior, or default frontend-output disabled behavior.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -42,6 +42,9 @@
 - Release metadata bumped to `0.1.51`, POT regenerated (`814 strings`), and release validation passed: PHP syntax for the main plugin and settings page, build, lint, full tests (`218 tests, 1219 assertions`), npm audit, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
 - Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.51-20260706-160415\alynt-account-gateway-v0.1.51.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.51` header/constant/stable tag/POT metadata, exactly one `GitHub Plugin URI: NichlasB/alynt-account-gateway` header, and Reoon guide renderer/CSS/POT strings present.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.51` header/constant, GitHub updater header, allow-and-log Reoon guide, block-policy Reoon guide, and compiled admin CSS validated. Uploaded test artifact was cleaned from the Novamira doubled-path upload location.
+- GitHub `v0.1.51` release was created at `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.51`; release workflow `28797680641` passed with only the non-blocking Node.js 20 deprecation annotation from `softprops/action-gh-release@v2`.
+- Public `v0.1.51` asset downloaded to `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.51-public\alynt-account-gateway-v0.1.51.zip` and inspected as 45 runtime files, wrapped main file, no backslash entries, no dev entries, `0.1.51` header/constant/stable tag/POT metadata, exactly one updater header, and Reoon guide renderer/CSS/POT strings present.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site from public `v0.1.50`: updater found `0.1.51`, update response used `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.51/alynt-account-gateway-v0.1.51.zip`, `Plugin_Upgrader->upgrade()` installed successfully, fresh runtime showed active `0.1.51`, no update remained pending, the Reoon guidance and compiled CSS rendered, and uploaded test artifacts were cleaned.
 
 ### Guardrails
 
@@ -53,7 +56,7 @@
 - [x] Admin settings tests cover the new Reoon policy guidance.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates the Security & Spam guidance in the installed package.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.50 Small Release Cycle
 
