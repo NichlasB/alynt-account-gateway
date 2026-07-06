@@ -79,4 +79,12 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertStringContainsString( 'color: LinkText;', $css );
 		$this->assertStringContainsString( 'outline: 3px solid Highlight;', $css );
 	}
+
+	public function test_frontend_css_uses_logical_resend_guidance_indentation() {
+		$css = $this->get_frontend_css();
+
+		$this->assertStringContainsString( '.agw-resend-guidance ul', $css );
+		$this->assertStringContainsString( 'padding-inline-start: 20px;', $css );
+		$this->assertStringNotContainsString( 'padding-left: 20px;', $css );
+	}
 }

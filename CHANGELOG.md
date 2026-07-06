@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.62 - 2026-07-06
+
+### Changed
+
+- Replaced the remaining left-specific frontend resend-guidance indentation with RTL-safe logical CSS.
+
 ## 0.1.61 - 2026-07-06
 
 ### Changed

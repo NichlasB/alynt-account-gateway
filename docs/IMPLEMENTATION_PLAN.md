@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.61 released and updater-verified; ready for next small product slice
+- Current phase: v0.1.62 frontend RTL/accessibility CSS hardening slice packaged and smoke-tested; awaiting release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.61 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.60 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
@@ -20,6 +20,39 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.62 Small Release Cycle
+
+### Scope
+
+- [x] Start the next accessibility, RTL, and multilingual QA sub-slice from the released `v0.1.61` baseline.
+- [x] Convert the remaining frontend left-specific resend-guidance list indentation to a logical inline-start property so the gateway helper text behaves correctly in RTL languages.
+- [x] Add focused frontend CSS source coverage for the logical resend-guidance indentation guardrail.
+- [x] Keep the slice visual/frontend-CSS-only: do not change settings schema, saved values, authentication, registration, provider verification, diagnostics logging, admin UI behavior, WooCommerce behavior, privacy cleanup, or updater behavior.
+- [x] Run build, focused frontend CSS tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Package and run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.62` from clean `master` after the updater-verified `v0.1.61` release.
+- Converted `.agw-resend-guidance ul` from `padding-left: 20px` to `padding-inline-start: 20px` so helper-list indentation follows writing direction.
+- Added focused `FrontendCssSourceTest` coverage for the logical resend-guidance indentation and absence of the old left-specific padding. Initial validation passed: PHP syntax for the updated test, focused `FrontendCssSourceTest` (`5 tests, 37 assertions`), and `npm run build`.
+- Release validation passed: `npm run build`, PHP syntax for the main plugin and updated frontend CSS test, focused `FrontendCssSourceTest` (`5 tests, 37 assertions`), `npm run lint`, `npm test -- --do-not-cache-result` (`236 tests, 1384 assertions`), `npm audit --audit-level=moderate`, `npm run make-pot` (`874 strings`), and whitespace check. The only diff-check notes were expected line-ending normalization warnings on the POT and readme files.
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.62-20260706-222325\alynt-account-gateway-v0.1.62.zip` and inspected as 46 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.62` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, frontend RTL resend-guidance logical CSS marker present, old left-specific resend-guidance marker absent, source CSS excluded, and SHA-256 `8079AE312A660C7CE92B35DDDCAA7FA10716F42DF52D9C18FB101606C14251FC`.
+- Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.62` header/constant, exactly one `GitHub Plugin URI` updater header, compiled frontend CSS includes `padding-inline-start`, old `padding-left` resend-guidance indentation is absent, source CSS is excluded from the installed package, and uploaded sandbox artifacts were cleaned.
+
+### Guardrails
+
+- Do not alter PHP runtime behavior, translated strings outside necessary metadata/plan changes, frontend route handling, saved setting keys, diagnostics event names, provider API behavior, data retention, privacy cleanup, or updater metadata in this slice.
+- Keep the CSS change scoped to frontend gateway resend-guidance RTL resilience.
+
+### Completion Gate
+
+- [x] Frontend CSS tests cover logical inline-start indentation for resend guidance.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates the installed-package frontend CSS marker.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.61 Small Release Cycle
 
@@ -54,7 +87,7 @@
 - [x] Admin CSS tests cover logical inline-start guardrails for guidance cards, readiness cards, security notices/cards, and Reoon policy guidance.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates the installed-package admin CSS markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.60 Small Release Cycle
 
