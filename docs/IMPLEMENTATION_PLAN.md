@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.57 uninstall/data cleanup coverage slice in progress
+- Current phase: v0.1.57 uninstall/data cleanup coverage slice released and updater-verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.56 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.55 remains the fallback baseline for updater checks.
+- Plugin status: v0.1.57 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.56 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -19,7 +19,7 @@
 - [ ] Frontend visual QA and theme compatibility: smoke common themes, mobile/desktop breakpoints, high-contrast settings, and CSS interference around the gateway shell.
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
-- [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+- [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
 
 ## v0.1.57 Small Release Cycle
 
@@ -32,7 +32,7 @@
 - [x] Add readme uninstall policy copy that clarifies plugin-owned data is removed while WordPress users, WooCommerce orders, media-library files, and non-plugin data are preserved.
 - [x] Run build, lint, focused cleanup tests, full tests, audit, POT generation, and package inspection.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -44,6 +44,8 @@
 - Release validation passed: `npm run build`, `npm run make-pot` (`842 strings`), PHP syntax for the main plugin and uninstall file, `npm run lint`, `npm test -- --do-not-cache-result` (`225 tests, 1274 assertions`), `npm audit --audit-level=moderate`, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
 - Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.57-20260706-181945\alynt-account-gateway-v0.1.57.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.57` header/constant/stable tag, exactly one updater header, uninstall registry cleanup present, readme uninstall policy present, and SHA-256 `1F842B96823DA32641496130A6566686DCB267D84AB22CE96A9C03EDFF083AA8`.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.57` header/constant, readme uninstall policy present, uninstall registry cleanup present, uninstall fallback present, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.57`, confirmed the Build Release workflow completed successfully, downloaded and inspected `alynt-account-gateway-v0.1.57.zip` as 55 entries with no dev entries, `0.1.57` header/constant/stable tag, uninstall registry cleanup present, readme uninstall policy present, and SHA-256 `D616A8340435FA3ABEE54F1A44A652DD317265AF813618D2CF7CC07BB7FC2E0C`.
+- Verified Alynt Plugin Updater end to end on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.56` release asset, confirming updater detection for `0.1.56` to `0.1.57`, running the WordPress plugin upgrader against the public `v0.1.57` asset, and confirming final active state `0.1.57` with no remaining update.
 
 ### Guardrails
 
@@ -55,7 +57,7 @@
 - [x] Cleanup lifecycle tests cover registry-matched table drops and rate-limit transient timeout cleanup.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package metadata and cleanup policy presence.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.56 Maintenance Release Cycle
 
