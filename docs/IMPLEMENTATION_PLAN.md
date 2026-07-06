@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.50 updater metadata correction in progress after v0.1.49 exposed an updater-discovery gap
+- Current phase: v0.1.50 updater metadata correction shipped; next small release slice ready
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.49 is published, but final updater verification found the plugin package was missing the `GitHub Plugin URI` header required by Alynt Plugin Updater discovery; v0.1.50 is the corrective release in progress.
+- Plugin status: v0.1.50 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.49 was published but superseded because updater verification found the package was missing the `GitHub Plugin URI` header required by Alynt Plugin Updater discovery.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -28,8 +28,8 @@
 - [x] Add the required `GitHub Plugin URI` plugin header so Alynt Plugin Updater can discover Alynt Account Gateway.
 - [x] Keep the correction limited to updater metadata and release bookkeeping.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke.
-- [ ] Complete updater verification.
-- [ ] Publish the final `v0.1.50` release asset and verify the Alynt Plugin Updater path end to end from a header-bearing installed baseline.
+- [x] Complete updater verification.
+- [x] Publish the final `v0.1.50` release asset and verify the Alynt Plugin Updater path end to end from a header-bearing installed baseline.
 
 ### Progress Notes
 
@@ -38,6 +38,9 @@
 - Release validation passed: PHP syntax for the main plugin and dashboard screen, build, POT generation (`806 strings`), lint, full tests (`218 tests, 1212 assertions`), npm audit, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
 - Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.50-20260706-154323\alynt-account-gateway-v0.1.50.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.50` header/constant/stable tag/POT metadata, exactly one `GitHub Plugin URI: NichlasB/alynt-account-gateway` header, and shortcut code/CSS/strings present.
 - Plugin Tester local package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.50` header/constant, GitHub updater header, order-detail shortcuts, compiled CSS, and delegated endpoint output validated. Uploaded test artifact was cleaned from the Novamira doubled-path upload location.
+- GitHub `v0.1.50` release was created at `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.50`; the release workflow passed with only the non-blocking Node.js 20 deprecation annotation from `softprops/action-gh-release@v2`.
+- Public `v0.1.50` asset downloaded to `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.50-public\alynt-account-gateway-v0.1.50.zip` and inspected as 45 runtime files, wrapped main file, no backslash entries, no dev entries, `0.1.50` header/constant/stable tag/POT metadata, exactly one updater header, and shortcut code/CSS present.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site from a controlled header-bearing `0.1.49` test baseline: updater scanner found `NichlasB/alynt-account-gateway`, forced release check found `0.1.50`, update response used `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.50/alynt-account-gateway-v0.1.50.zip`, `Plugin_Upgrader->upgrade()` installed successfully, fresh runtime showed active `0.1.50`, no update remained pending, shortcut UI still rendered, and uploaded test artifacts were cleaned.
 
 ### Guardrails
 
@@ -47,7 +50,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates `0.1.50` installs with updater metadata present.
-- [ ] Alynt Plugin Updater discovers and installs the public `v0.1.50` asset from GitHub.
+- [x] Alynt Plugin Updater discovers and installs the public `v0.1.50` asset from GitHub.
 
 ## v0.1.49 Small Release Cycle
 
