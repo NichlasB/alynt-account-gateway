@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.43 - 2026-07-06
+
+### Added
+
+- Added Security tab Access Control Signals for recent login lockouts, password-reset lockouts, and blocked wp-admin access diagnostics.
+
 ## 0.1.42 - 2026-07-06
 
 ### Added
