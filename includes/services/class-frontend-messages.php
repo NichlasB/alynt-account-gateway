@@ -73,7 +73,7 @@ class ALYNT_AG_Frontend_Messages {
 	public function resend_error( $error_code ) {
 		$messages = array(
 			'invalid_email'               => __( 'Please enter a valid email address.', 'alynt-account-gateway' ),
-			'alynt_ag_rate_limited'       => __( 'Too many confirmation email requests. Please wait a moment and try again.', 'alynt-account-gateway' ),
+			'alynt_ag_rate_limited'       => __( 'Too many confirmation email requests. Please wait for the resend window before trying again.', 'alynt-account-gateway' ),
 			'pending_registration_failed' => __( 'The confirmation link could not be renewed. Please try again.', 'alynt-account-gateway' ),
 			'confirmation_email_failed'   => __( 'The confirmation email could not be sent. Please try again.', 'alynt-account-gateway' ),
 		);

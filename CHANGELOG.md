@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.53 - 2026-07-06
+
+### Added
+
+- Added clearer invalid-link resend throttling guidance for confirmation email cooldowns.
+
 ## 0.1.52 - 2026-07-06
 
 ### Added
