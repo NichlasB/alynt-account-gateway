@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.60 branded auth diagnostics observability slice in progress
+- Current phase: v0.1.60 released and updater-verified; ready for next small product slice
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.59 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.58 remains the fallback baseline for updater checks.
+- Plugin status: v0.1.60 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.59 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep the slice observational only: do not change authentication decisions, reset-token validation, redirect destinations, email templates, registration behavior, WooCommerce behavior, provider verification, saved settings, privacy cleanup, or updater behavior.
 - [x] Run build, lint, focused auth/settings tests, full tests, audit, POT generation, and package inspection.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -42,6 +42,8 @@
 - Release validation passed: `npm run build`, `npm run make-pot` (`874 strings`), PHP syntax for the main plugin and edited runtime files, `npm run lint`, `npm test -- --do-not-cache-result` (`233 tests, 1365 assertions`), `npm audit --audit-level=moderate`, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
 - Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.60-20260706-211701\alynt-account-gateway-v0.1.60.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.60` header/constant/stable tag, exactly one updater header, branded login/reset diagnostics present, Gateway Auth Signals panel present, grouped diagnostics counter present, and SHA-256 `8C5FC10EFB9AB0E45EC34B11917E9ADB8CF42E5F1D3AA061080B346899633D59`.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.60` header/constant, branded login success/failure diagnostics present, branded password-reset request/completion diagnostics present, Gateway Auth Signals panel present, grouped diagnostics counter present, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.60`, confirmed the Build Release workflow completed successfully, downloaded and inspected `alynt-account-gateway-v0.1.60.zip` as 55 entries with no dev entries, `0.1.60` header/constant/stable tag, exactly one updater header, branded login/reset diagnostics present, Gateway Auth Signals panel present, grouped diagnostics counter present, and SHA-256 `F9A83462E3113190CDD87600137437C8E9ACBA697A3A4BCD260A9795461D1532`.
+- Verified Alynt Plugin Updater end to end on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.59` release asset, forcing a fresh updater check that detected `0.1.59` to `0.1.60`, running the WordPress plugin upgrader against the public `v0.1.60` asset, and confirming final active state `0.1.60` with no remaining update.
 
 ### Guardrails
 
@@ -53,7 +55,7 @@
 - [x] Focused tests cover branded auth diagnostics and Security tab auth signal counts.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package diagnostics markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.59 Small Release Cycle
 
