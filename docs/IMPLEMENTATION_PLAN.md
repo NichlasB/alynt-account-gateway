@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.42 Registration flow visibility shipped; selecting next slice
+- Current phase: v0.1.43 Access control visibility in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.42 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -20,6 +20,39 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.43 Small Release Cycle
+
+### Scope
+
+- [x] Start the next security and anti-spam hardening slice from the released `master` baseline.
+- [x] Add read-only Access Control Signals to the Security tab using existing verification and diagnostics activity rows.
+- [x] Summarize recent login lockouts, password-reset lockouts, and blocked `wp-admin` access without changing public login, password-reset, admin redirect, role access, diagnostics, rate-limit, or toolbar behavior.
+- [x] Keep changes scoped to admin visibility with no settings schema, frontend routing, login/auth handling, rate-limit enforcement, dashboard, WooCommerce, webhook, email template, privacy cleanup, or default frontend-output behavior changes.
+- [x] Add focused coverage for access-control signal counts and rendered admin copy.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.43` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.43` from clean `master` after the `v0.1.42` release merge.
+- Added an Access Control Signals summary above the Security tab verification activity table.
+- The summary derives login and password-reset lockout counts from existing `rate_limit` verification rows and blocked `wp-admin` access counts from existing security diagnostics events.
+- Added focused tests for access-control signal counts and rendered guidance copy. PHP syntax checks pass for the touched settings page and focused `SettingsPageSecurityStatusTest` passes with 11 tests and 161 assertions.
+- Verified local checks before the release metadata bump: `npm.cmd run build` passes, `npm.cmd run make-pot` writes 760 strings, `npm.cmd run lint` passes after assignment-alignment cleanup, full `npm.cmd test` passes with 213 tests and 1129 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.43-branch-qa-20260706-122725\alynt-account-gateway-v0.1.43-branch-qa.zip`; verified 45 runtime file entries, no directory entries, no backslash archive entries, no dev/source/test/docs/build files, pre-bump `0.1.42` metadata, Access Control Signals renderer, built admin CSS, and POT strings present.
+- Installed the branch-QA runtime package on LocalWP Plugin Tester over active `0.1.42` through WordPress upgrader classes. Fresh runtime smoke confirmed active pre-bump header `0.1.42` and loaded constant `0.1.42`, Access Control Signals render with login lockout, password-reset lockout, and blocked-admin-access guidance alongside Rate Limit Pressure and Registration Flow Signals, temporary verification/diagnostics rows were cleaned up after QA, and uploaded QA artifacts were removed from the LocalWP filesystem.
+
+### Guardrails
+
+- Do not change authentication, login redirect, password reset, blocked admin access, role/capability, diagnostics logging, rate-limit threshold, transient keying, saved settings schema, dashboard rendering, WooCommerce endpoint delegation, webhook dispatch behavior, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep this cycle focused on admin-only access-control visibility using existing plugin-owned verification and diagnostics activity.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates Access Control Signals on the Security tab.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.42 Small Release Cycle
 

@@ -1177,7 +1177,8 @@ class ALYNT_AG_Settings_Page {
 	 * @return void
 	 */
 	private function render_security_verification_activity() {
-		$logs = $this->security_recent_verification_logs( 10 );
+		$logs              = $this->security_recent_verification_logs( 10 );
+		$diagnostic_events = $this->security_recent_diagnostics_events( 25 );
 		?>
 		<div class="alynt-ag-security-activity">
 			<h3><?php esc_html_e( 'Recent Registration Verification Activity', 'alynt-account-gateway' ); ?></h3>
@@ -1187,6 +1188,7 @@ class ALYNT_AG_Settings_Page {
 
 			<?php $this->render_security_provider_health_signals( $logs ); ?>
 			<?php $this->render_security_rate_limit_pressure( $logs ); ?>
+			<?php $this->render_security_access_control_signals( $logs, $diagnostic_events ); ?>
 			<?php $this->render_security_registration_flow_signals( $logs ); ?>
 
 			<?php if ( empty( $logs ) ) : ?>
@@ -1225,6 +1227,76 @@ class ALYNT_AG_Settings_Page {
 			<?php endif; ?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Render access-control summary from recent verification and diagnostics logs.
+	 *
+	 * @param array<int,object> $logs              Recent verification logs.
+	 * @param array<int,object> $diagnostic_events Recent diagnostics events.
+	 * @return void
+	 */
+	private function render_security_access_control_signals( $logs, $diagnostic_events ) {
+		$items = $this->security_access_control_signal_items( $logs, $diagnostic_events );
+		?>
+		<div class="alynt-ag-security-access" aria-label="<?php esc_attr_e( 'Recent access control signals', 'alynt-account-gateway' ); ?>">
+			<h4><?php esc_html_e( 'Access Control Signals', 'alynt-account-gateway' ); ?></h4>
+			<div class="alynt-ag-security-status__grid">
+				<?php foreach ( $items as $item ) : ?>
+					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+						<h5><?php echo esc_html( $item['label'] ); ?></h5>
+						<p>
+							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
+							<?php echo esc_html( $item['message'] ); ?>
+						</p>
+					</section>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Return access-control signal items from recent verification and diagnostics logs.
+	 *
+	 * @param array<int,object> $logs              Recent verification logs.
+	 * @param array<int,object> $diagnostic_events Recent diagnostics events.
+	 * @return array<int,array{label:string,status:string,count:int,message:string}>
+	 */
+	private function security_access_control_signal_items( $logs, $diagnostic_events ) {
+		$login_lockouts          = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'rate_limit',
+			array( 'login_rate_limited' )
+		);
+		$password_reset_lockouts = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'rate_limit',
+			array( 'lostpassword_rate_limited' )
+		);
+		$admin_blocks            = $this->count_diagnostics_events_by_code( $diagnostic_events, 'wp_admin_access_blocked' );
+
+		return array(
+			array(
+				'label'   => __( 'Login Lockouts', 'alynt-account-gateway' ),
+				'status'  => $login_lockouts > 0 ? 'warning' : 'ready',
+				'count'   => $login_lockouts,
+				'message' => __( 'recent login rate-limit blocks. Review for credential stuffing or customers stuck at login.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Password Reset Lockouts', 'alynt-account-gateway' ),
+				'status'  => $password_reset_lockouts > 0 ? 'warning' : 'ready',
+				'count'   => $password_reset_lockouts,
+				'message' => __( 'recent password-reset rate-limit blocks. Watch for repeated reset requests against the same account.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Blocked Admin Access', 'alynt-account-gateway' ),
+				'status'  => $admin_blocks > 0 ? 'warning' : 'ready',
+				'count'   => $admin_blocks,
+				'message' => __( 'recent wp-admin redirects recorded by diagnostics. Repeated blocks can mean customers are following admin links or a role rule needs review.', 'alynt-account-gateway' ),
+			),
+		);
 	}
 
 	/**
@@ -1434,6 +1506,28 @@ class ALYNT_AG_Settings_Page {
 	}
 
 	/**
+	 * Count matching diagnostics event rows.
+	 *
+	 * @param array<int,object> $events     Recent diagnostics events.
+	 * @param string            $event_code Event code.
+	 * @return int
+	 */
+	private function count_diagnostics_events_by_code( $events, $event_code ) {
+		$count      = 0;
+		$event_code = sanitize_key( $event_code );
+
+		foreach ( $events as $event ) {
+			$code = isset( $event->event_code ) ? sanitize_key( $event->event_code ) : '';
+
+			if ( $event_code === $code ) {
+				++$count;
+			}
+		}
+
+		return $count;
+	}
+
+	/**
 	 * Render rate-limit pressure summary from recent verification logs.
 	 *
 	 * @param array<int,object> $logs Recent verification logs.
@@ -1588,6 +1682,31 @@ class ALYNT_AG_Settings_Page {
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		return is_array( $logs ) ? $logs : array();
+	}
+
+	/**
+	 * Return recent security diagnostics events.
+	 *
+	 * @param int $limit Maximum records.
+	 * @return array<int,object>
+	 */
+	private function security_recent_diagnostics_events( $limit = 25 ) {
+		global $wpdb;
+
+		$tables = ALYNT_AG_Database::tables();
+		$limit  = min( 50, max( 1, absint( $limit ) ) );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Admin security viewer reads plugin-owned diagnostics log table.
+		$events = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT event_code, created_at FROM {$tables['diagnostics_logs']} WHERE category = %s ORDER BY created_at DESC, id DESC LIMIT %d",
+				'security',
+				$limit
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return is_array( $events ) ? $events : array();
 	}
 
 	/**
