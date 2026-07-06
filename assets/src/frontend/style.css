@@ -894,8 +894,14 @@
 	font: inherit;
 }
 
+.agw-dashboard-content input,
+.agw-dashboard-content textarea {
+	appearance: none;
+}
+
 .agw-dashboard-content input[type="checkbox"],
 .agw-dashboard-content input[type="radio"] {
+	appearance: auto;
 	width: auto;
 	min-height: 0;
 	padding: 0;
@@ -967,10 +973,12 @@
 .agw-dashboard-content .button,
 .agw-dashboard-content button,
 .agw-dashboard-content input[type="submit"] {
+	appearance: none;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
 	width: auto;
+	max-width: 100%;
 	min-height: 42px;
 	padding: 10px 16px;
 	border: 1px solid var(--agw-button-background);
