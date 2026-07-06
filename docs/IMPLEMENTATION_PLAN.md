@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.66 auth email-field RTL resilience slice packaged and smoke-tested; awaiting release approval
+- Current phase: v0.1.66 released and updater-verified; next slice selection pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.65 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.66 is packaged and smoke-tested locally but not released.
+- Plugin status: v0.1.66 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.65 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,7 +32,7 @@
 - [x] Keep the slice markup-only: do not change authentication decisions, submitted field names, validation, registration creation, provider verification, rate-limit enforcement, diagnostics logging, saved settings, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater behavior.
 - [x] Run build, focused frontend screen tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -42,6 +42,8 @@
 - Release validation passed: `npm run build`, PHP syntax for the main plugin and four edited frontend screen renderers, focused frontend screen tests (`15 tests, 109 assertions`), `npm run lint`, `npm test -- --do-not-cache-result` (`238 tests, 1402 assertions`), `npm audit --audit-level=moderate`, `npm run make-pot` (`874 strings`), and whitespace check. The only diff-check notes were expected line-ending normalization warnings on generated/metadata files.
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.66-20260706-234844\alynt-account-gateway-v0.1.66.zip` and inspected as 46 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.66` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, login/register/lost-password/invalid-link email `dir="ltr"` markers present, source assets excluded, and SHA-256 `7E1BE217922C9F7472274D85BAF754D0EF074D7857C537B33954B75A3BB249C9`.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.66` header/constant, exactly one `GitHub Plugin URI` updater header, login/register/lost-password/invalid-link email `dir="ltr"` markers present, source assets excluded, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.66`, confirmed the Build Release workflow completed successfully, downloaded and inspected the public asset as 55 entries with no dev entries, `0.1.66` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, login/register/lost-password/invalid-link email `dir="ltr"` markers present, source assets excluded, and SHA-256 `4CAA38860D721A2B24F8602457983C9F03E79542A218C4DEC2662ED23484735D`.
+- Verified Alynt Plugin Updater end to end on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.65` release asset, forcing a fresh updater check that detected `0.1.65` to `0.1.66`, running the WordPress plugin upgrader against the public `v0.1.66` asset, and confirming final active state `0.1.66` with no remaining update.
 
 ### Guardrails
 
@@ -53,7 +55,7 @@
 - [x] Frontend screen tests cover LTR direction hints on branded auth email fields.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package markup markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.65 Small Release Cycle
 
