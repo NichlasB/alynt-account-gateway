@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.58 - 2026-07-06
+
+### Added
+
+- Added a Security tab Manual Review Queue for Reoon flagged registration results.
+
 ## 0.1.57 - 2026-07-06
 
 ### Changed
