@@ -416,9 +416,49 @@ class ALYNT_AG_Settings_Page {
 			return;
 		}
 
+		if ( 'settings_imported_with_ignored_keys' === $notice ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin notice flag.
+			$ignored_count = isset( $_GET['alynt_ag_import_ignored'] ) ? absint( wp_unslash( $_GET['alynt_ag_import_ignored'] ) ) : 0;
+			?>
+			<div class="notice notice-warning is-dismissible">
+				<p>
+					<?php
+					printf(
+						/* translators: %d: ignored settings key count. */
+						esc_html__( 'Settings imported successfully. Unrecognized setting keys ignored: %d.', 'alynt-account-gateway' ),
+						esc_html( (string) $ignored_count )
+					);
+					?>
+				</p>
+			</div>
+			<?php
+			return;
+		}
+
 		if ( 'settings_import_failed' === $notice ) {
 			?>
 			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Settings could not be imported. Choose a valid Alynt Account Gateway JSON export.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
+		if ( 'settings_import_invalid_json' === $notice ) {
+			?>
+			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Settings could not be imported because the selected file is not valid JSON.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
+		if ( 'settings_import_empty' === $notice ) {
+			?>
+			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Settings could not be imported because the file does not contain recognized Alynt Account Gateway settings.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
+		if ( 'settings_import_upload_failed' === $notice ) {
+			?>
+			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Settings could not be imported because the uploaded file could not be read.', 'alynt-account-gateway' ); ?></p></div>
 			<?php
 			return;
 		}
@@ -3115,6 +3155,14 @@ class ALYNT_AG_Settings_Page {
 		<p class="description">
 			<?php esc_html_e( 'Export all plugin-owned settings as JSON, or import a JSON settings package from another site. Imported values are sanitized through the active settings schema.', 'alynt-account-gateway' ); ?>
 		</p>
+		<div class="notice notice-info inline">
+			<p><strong><?php esc_html_e( 'Configuration portability notes', 'alynt-account-gateway' ); ?></strong></p>
+			<ul class="ul-disc">
+				<li><?php esc_html_e( 'Exports include saved plugin settings only. Media-library files, pending registrations, diagnostics, webhook delivery logs, and WordPress users are not included.', 'alynt-account-gateway' ); ?></li>
+				<li><?php esc_html_e( 'Imports validate JSON before saving, keep recognized settings, sanitize each value, and ignore settings that do not belong to the current schema.', 'alynt-account-gateway' ); ?></li>
+				<li><?php esc_html_e( 'Use the restore button at the bottom of each tab when you only want to reset that tab instead of replacing the full configuration.', 'alynt-account-gateway' ); ?></li>
+			</ul>
+		</div>
 
 		<p>
 			<a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=alynt_ag_export_settings' ), 'alynt_ag_export_settings' ) ); ?>">
@@ -3376,30 +3424,47 @@ class ALYNT_AG_Settings_Page {
 
 		check_admin_referer( 'alynt_ag_import_settings' );
 
-		$status = 'settings_import_failed';
-		$file   = isset( $_FILES['settings_file'] ) && is_array( $_FILES['settings_file'] ) ? $_FILES['settings_file'] : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- File metadata is validated before use.
+		$status        = 'settings_import_upload_failed';
+		$ignored_count = 0;
+		$file          = isset( $_FILES['settings_file'] ) && is_array( $_FILES['settings_file'] ) ? $_FILES['settings_file'] : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- File metadata is validated before use.
 
 		if ( isset( $file['tmp_name'], $file['error'] ) && is_string( $file['tmp_name'] ) && UPLOAD_ERR_OK === (int) $file['error'] && is_uploaded_file( $file['tmp_name'] ) ) {
-			$json     = file_get_contents( $file['tmp_name'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading the PHP-uploaded temp file only.
-			$imported = ALYNT_AG_Settings_Schema::import_package( is_string( $json ) ? $json : '' );
+			$json       = file_get_contents( $file['tmp_name'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading the PHP-uploaded temp file only.
+			$json       = is_string( $json ) ? $json : '';
+			$inspection = ALYNT_AG_Settings_Schema::inspect_import_package( $json );
+			$imported   = is_wp_error( $inspection ) ? $inspection : ALYNT_AG_Settings_Schema::import_package( $json );
 
 			if ( ! is_wp_error( $imported ) ) {
+				$ignored_count = isset( $inspection['unknown_count'] ) ? absint( $inspection['unknown_count'] ) : 0;
 				update_option( 'alynt_ag_settings', $imported );
 				ALYNT_AG_Diagnostics_Logger::log(
 					'settings_imported',
-					array( 'imported_keys' => array_keys( ALYNT_AG_Settings_Schema::filter_known_settings( $imported ) ) ),
+					array(
+						'imported_keys'  => isset( $inspection['known_keys'] ) ? $inspection['known_keys'] : array_keys( ALYNT_AG_Settings_Schema::filter_known_settings( $imported ) ),
+						'ignored_keys'   => isset( $inspection['unknown_keys'] ) ? $inspection['unknown_keys'] : array(),
+						'source_plugin'  => isset( $inspection['plugin'] ) ? $inspection['plugin'] : '',
+						'source_version' => isset( $inspection['version'] ) ? $inspection['version'] : '',
+						'exported_at'    => isset( $inspection['exported_at'] ) ? $inspection['exported_at'] : '',
+					),
 					get_current_user_id()
 				);
-				$status = 'settings_imported';
+				$status = $ignored_count > 0 ? 'settings_imported_with_ignored_keys' : 'settings_imported';
+			} elseif ( 'alynt_ag_invalid_settings_import' === $imported->get_error_code() ) {
+				$status = 'settings_import_invalid_json';
+			} elseif ( 'alynt_ag_empty_settings_import' === $imported->get_error_code() ) {
+				$status = 'settings_import_empty';
+			} else {
+				$status = 'settings_import_failed';
 			}
 		}
 
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page'            => 'alynt-account-gateway',
-					'tab'             => 'advanced_tools',
-					'alynt_ag_notice' => $status,
+					'page'                    => 'alynt-account-gateway',
+					'tab'                     => 'advanced_tools',
+					'alynt_ag_notice'         => $status,
+					'alynt_ag_import_ignored' => $ignored_count,
 				),
 				admin_url( 'options-general.php' )
 			)

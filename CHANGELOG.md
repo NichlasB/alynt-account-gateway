@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.55 - 2026-07-06
+
+### Added
+
+- Added safer settings import validation, clearer import notices, and configuration portability guidance.
+
 ## 0.1.54 - 2026-07-06
 
 ### Added

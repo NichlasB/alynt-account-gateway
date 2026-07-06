@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.54 diagnostics-dependent security signals shipped; next small release slice ready
+- Current phase: v0.1.55 import/export/reset experience slice in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.54 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.53 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
@@ -20,6 +20,45 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.55 Small Release Cycle
+
+### Scope
+
+- [x] Start the import/export/reset experience slice from the released `v0.1.54` baseline.
+- [x] Add dry-run settings import inspection so JSON files can be validated before saving.
+- [x] Improve admin import outcomes for invalid JSON, missing recognized settings, unreadable uploads, and imports with ignored unknown keys.
+- [x] Add configuration portability guidance that explains what settings exports include, what they do not include, and when tab-level restore is the safer option.
+- [x] Run build, lint, focused settings tests, full tests, audit, and POT generation.
+- [x] Package and run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.55` from clean `master` after the updater-verified `v0.1.54` release merge.
+- Added `ALYNT_AG_Settings_Schema::inspect_import_package()` to report source metadata, recognized setting keys, ignored unknown keys, and clear validation errors without saving options.
+- Updated the settings import handler to use the import inspection before saving, log recognized/ignored key metadata, and redirect to specific admin notices for invalid JSON, empty imports, unreadable uploads, and imports with ignored keys.
+- Added Advanced Tools portability guidance covering settings-only exports, excluded media/users/diagnostics/webhook logs/pending registrations, JSON validation, schema sanitization, ignored unknown keys, and tab-level restore use.
+- Initial validation passed: PHP syntax for touched PHP files, focused `SettingsSchemaTest` plus `SettingsPageSettingsToolsTest` (`22 tests, 100 assertions`), full tests (`224 tests, 1272 assertions`), lint, and whitespace check.
+- Release-script validation passed: `npm run build`, `npm run make-pot` (`842 strings`), `npm run lint`, `npm test -- --do-not-cache-result` (`224 tests, 1272 assertions`), `npm audit --audit-level=moderate`, and whitespace check. The only diff-check note was the expected POT line-ending normalization warning.
+- Branch-QA package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.55-branch-qa-20260706-173314\alynt-account-gateway-v0.1.55-branch-qa.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, pre-bump `0.1.54` header/constant, exactly one updater header, and import inspector/admin notice/portability guidance/POT strings present.
+- Plugin Tester branch smoke passed on the local-only `plugin-tester.local` site: installed package active with pre-bump `0.1.54` header/constant, import inspector and ignored-key notice present in installed files, Advanced Tools settings import/export guidance rendered, export/import controls rendered, POT included the guidance string, dry-run import inspection reported one recognized and one ignored smoke key, and uploaded sandbox artifacts were cleaned.
+- Release metadata bumped to `0.1.55`, POT regenerated (`842 strings`), and release validation passed: PHP syntax for the main plugin and settings page, build, lint, full tests (`224 tests, 1272 assertions`), npm audit, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
+- Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.55-20260706-174103\alynt-account-gateway-v0.1.55.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.55` header/constant/stable tag, exactly one updater header, and import inspector/admin notice/portability guidance/POT strings present.
+- Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.55` header/constant, Advanced Tools settings import/export guidance rendered, export/import controls rendered, POT included the guidance string, dry-run import inspection reported one recognized and one ignored smoke key, and uploaded sandbox artifacts were cleaned.
+
+### Guardrails
+
+- Do not change exported setting keys, importer sanitization behavior, saved option names, media handling, pending registration storage, diagnostics retention, webhook logs, WordPress users, frontend output, authentication flow, WooCommerce behavior, or updater behavior in this slice.
+- Keep this release focused on making existing configuration portability safer and more explainable.
+
+### Completion Gate
+
+- [x] Schema tests cover dry-run import inspection and invalid JSON handling.
+- [x] Admin settings tools tests cover portability guidance.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package import/export/reset guidance.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.54 Small Release Cycle
 

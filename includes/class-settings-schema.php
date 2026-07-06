@@ -632,12 +632,12 @@ class ALYNT_AG_Settings_Schema {
 	}
 
 	/**
-	 * Parse and sanitize a settings import package.
+	 * Inspect a settings import package without saving it.
 	 *
 	 * @param string $json Raw JSON package.
 	 * @return array<string,mixed>|WP_Error
 	 */
-	public static function import_package( $json ) {
+	public static function inspect_import_package( $json ) {
 		$package = json_decode( (string) $json, true );
 
 		if ( ! is_array( $package ) ) {
@@ -648,14 +648,52 @@ class ALYNT_AG_Settings_Schema {
 		}
 
 		$settings = isset( $package['settings'] ) && is_array( $package['settings'] ) ? $package['settings'] : $package;
-		$settings = self::filter_known_settings( $settings );
+		$known    = self::filter_known_settings( $settings );
+		$unknown  = array();
 
-		if ( empty( $settings ) ) {
+		foreach ( $settings as $key => $value ) {
+			unset( $value );
+
+			if ( ! array_key_exists( $key, $known ) ) {
+				$unknown[] = (string) $key;
+			}
+		}
+
+		if ( empty( $known ) ) {
 			return new WP_Error(
 				'alynt_ag_empty_settings_import',
 				__( 'The selected settings file does not contain any recognized plugin settings.', 'alynt-account-gateway' )
 			);
 		}
+
+		return array(
+			'plugin'        => isset( $package['plugin'] ) && is_scalar( $package['plugin'] ) ? sanitize_text_field( (string) $package['plugin'] ) : '',
+			'version'       => isset( $package['version'] ) && is_scalar( $package['version'] ) ? sanitize_text_field( (string) $package['version'] ) : '',
+			'exported_at'   => isset( $package['exportedAt'] ) && is_scalar( $package['exportedAt'] ) ? sanitize_text_field( (string) $package['exportedAt'] ) : '',
+			'known_keys'    => array_keys( $known ),
+			'unknown_keys'  => $unknown,
+			'known_count'   => count( $known ),
+			'unknown_count' => count( $unknown ),
+		);
+	}
+
+	/**
+	 * Parse and sanitize a settings import package.
+	 *
+	 * @param string $json Raw JSON package.
+	 * @return array<string,mixed>|WP_Error
+	 */
+	public static function import_package( $json ) {
+		$inspection = self::inspect_import_package( $json );
+
+		if ( is_wp_error( $inspection ) ) {
+			return $inspection;
+		}
+
+		$package = json_decode( (string) $json, true );
+
+		$settings = isset( $package['settings'] ) && is_array( $package['settings'] ) ? $package['settings'] : $package;
+		$settings = self::filter_known_settings( $settings );
 
 		return self::sanitize( $settings );
 	}
