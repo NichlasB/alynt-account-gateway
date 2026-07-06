@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.54 - 2026-07-06
+
+### Added
+
+- Added Security tab guidance for diagnostics-dependent access, routing, email, and webhook signals.
+
 ## 0.1.53 - 2026-07-06
 
 ### Added

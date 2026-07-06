@@ -17,6 +17,7 @@ class SettingsPageSecurityStatusTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$GLOBALS['alynt_ag_test_db_results'] = array();
+		unset( $GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] );
 	}
 
 	/**
@@ -767,6 +768,8 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'recent confirmation resend attempts blocked by throttling. Repeated blocks can indicate inbox delivery delays or automated retries.', $output );
 		$this->assertStringContainsString( 'recent Reoon policy blocks for low-quality or flagged addresses. Review if legitimate business domains appear in support tickets.', $output );
 		$this->assertStringContainsString( 'recent password or email-availability blocks during account setup. Improve form guidance if legitimate customers abandon setup here.', $output );
+		$this->assertStringContainsString( 'Diagnostics are disabled.', $output );
+		$this->assertStringContainsString( 'Access control, gateway routing, welcome-email failure, and webhook-dispatch signals only show complete evidence while diagnostics are enabled in Advanced Tools.', $output );
 		$this->assertStringContainsString( 'Access Control Signals', $output );
 		$this->assertStringContainsString( 'recent login rate-limit blocks. Review for credential stuffing or customers stuck at login.', $output );
 		$this->assertStringContainsString( 'recent password-reset rate-limit blocks. Watch for repeated reset requests against the same account.', $output );
@@ -835,6 +838,22 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'The pending registration record could not be stored.', $output );
 		$this->assertStringContainsString( 'Account creation was blocked because the password confirmation did not match.', $output );
 		$this->assertStringNotContainsString( 'damon@example.test', $output );
+	}
+
+	public function test_security_activity_omits_diagnostics_dependency_notice_when_enabled() {
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'diagnostics_enabled' => true,
+		);
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		ob_start();
+		$this->invoke_helper( $settings_page, 'render_security_verification_activity' );
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( 'Access Control Signals', $output );
+		$this->assertStringNotContainsString( 'Diagnostics are disabled.', $output );
+		$this->assertStringNotContainsString( 'only show complete evidence while diagnostics are enabled', $output );
 	}
 
 	public function test_security_pending_registrations_render_empty_state() {
