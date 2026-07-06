@@ -2,16 +2,16 @@
 
 ## Status
 
-- Current phase: v0.1.50 updater metadata correction shipped; next small release slice ready
+- Current phase: v0.1.51 Reoon policy visibility shipped; next small release slice ready
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.50 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.49 was published but superseded because updater verification found the package was missing the `GitHub Plugin URI` header required by Alynt Plugin Updater discovery.
+- Plugin status: v0.1.51 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.50 remains the header-bearing fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
 ## Remaining Product Slices
 
 - [x] Settings readiness and onboarding checks: show whether required URL, registration, protection, branding, email, dashboard, WooCommerce, webhook, privacy, and frontend-output prerequisites are ready before site owners enable public output.
-- [ ] Real-world WooCommerce dashboard polish: improve branded empty states, endpoint affordances, customer account copy, delegated WooCommerce form styling, order/address/payment-method edge states, and WooCommerce unavailable guidance.
+- [x] Real-world WooCommerce dashboard polish: improve branded empty states, endpoint affordances, customer account copy, delegated WooCommerce form styling, order/address/payment-method edge states, and WooCommerce unavailable guidance.
 - [x] Settings UX refinement: improve setup grouping, tab-level guidance, validation hints, admin notices, and safe defaults for first-time configuration.
 - [x] Email template editor polish: add richer token browsing, per-template reset guidance, preview/test-send ergonomics, and clearer plain-text/core-email limitations.
 - [ ] Security and anti-spam hardening: improve Reoon policy visibility, provider failure feedback, registration abuse logs, lockout visibility, resend throttling UX, and optional manual-review decisions.
@@ -20,6 +20,43 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.51 Small Release Cycle
+
+### Scope
+
+- [x] Start the next security and anti-spam hardening slice from the released `master` baseline.
+- [x] Close the completed WooCommerce polish product slice in the plan based on shipped overview, delegated CSS, endpoint guidance, next-step affordances, unavailable fallback, shortcut actions, and updater-verified release evidence.
+- [x] Improve Reoon flagged email policy visibility in the Security & Spam admin tab so site owners understand the recommended stance for catch-all, role-account, and unknown email verdicts.
+- [x] Keep this slice scoped to admin guidance/visibility; do not change provider enforcement, registration flow, saved settings schema, account creation, email sending, webhooks, dashboard rendering, WooCommerce endpoint delegation, privacy cleanup, updater behavior, or default frontend-output disabled behavior.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke.
+- [x] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.51` from clean `master` after the `v0.1.50` release merge.
+- Marked the broad WooCommerce dashboard polish product slice complete because the remaining listed outcomes have shipped across the WooCommerce overview, delegated form styling, endpoint guidance, edge-state affordance panels, unavailable fallback, endpoint shortcut actions, and final updater-verified baseline.
+- Added a Reoon Flagged Status Guidance panel to the Security & Spam status area. The panel shows the current flagged-status policy, recommends allow-and-log for most stores, explains when blocking is appropriate, and points owners to Recent Registration Verification Activity for masked review.
+- Added focused settings-page coverage for the new allow-and-log and blocking policy guidance, plus scoped admin CSS for the guide panel.
+- Branch implementation validation passed: PHP syntax for the settings page, focused `SettingsPageSecurityStatusTest` (`15 tests, 228 assertions`), build, POT generation (`814 strings`), lint, full tests (`218 tests, 1219 assertions`), npm audit, and whitespace check. The only diff-check note was the expected POT LF-to-CRLF normalization warning.
+- Release metadata bumped to `0.1.51`, POT regenerated (`814 strings`), and release validation passed: PHP syntax for the main plugin and settings page, build, lint, full tests (`218 tests, 1219 assertions`), npm audit, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
+- Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.51-20260706-160415\alynt-account-gateway-v0.1.51.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.51` header/constant/stable tag/POT metadata, exactly one `GitHub Plugin URI: NichlasB/alynt-account-gateway` header, and Reoon guide renderer/CSS/POT strings present.
+- Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.51` header/constant, GitHub updater header, allow-and-log Reoon guide, block-policy Reoon guide, and compiled admin CSS validated. Uploaded test artifact was cleaned from the Novamira doubled-path upload location.
+- GitHub `v0.1.51` release was created at `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.51`; release workflow `28797680641` passed with only the non-blocking Node.js 20 deprecation annotation from `softprops/action-gh-release@v2`.
+- Public `v0.1.51` asset downloaded to `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.51-public\alynt-account-gateway-v0.1.51.zip` and inspected as 45 runtime files, wrapped main file, no backslash entries, no dev entries, `0.1.51` header/constant/stable tag/POT metadata, exactly one updater header, and Reoon guide renderer/CSS/POT strings present.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site from public `v0.1.50`: updater found `0.1.51`, update response used `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.51/alynt-account-gateway-v0.1.51.zip`, `Plugin_Upgrader->upgrade()` installed successfully, fresh runtime showed active `0.1.51`, no update remained pending, the Reoon guidance and compiled CSS rendered, and uploaded test artifacts were cleaned.
+
+### Guardrails
+
+- Do not alter Reoon API calls, provider pass/block decisions, rate-limit enforcement, registration storage, token expiry, resend behavior, auth routes, frontend copy, dashboard output, WooCommerce behavior, email delivery, webhook dispatch, saved settings keys, privacy cleanup, or updater metadata in this slice.
+- Keep this release focused on clearer admin visibility and recommended operating guidance for existing Reoon policy settings.
+
+### Completion Gate
+
+- [x] Admin settings tests cover the new Reoon policy guidance.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates the Security & Spam guidance in the installed package.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.50 Small Release Cycle
 
