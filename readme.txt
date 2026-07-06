@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 0.1.51
+Stable tag: 0.1.52
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +39,10 @@ Core features include:
 4. Enable Frontend Output only after confirming the settings.
 
 == Changelog ==
+
+= 0.1.52 =
+
+* Added Security & Spam Provider Failure Triage guidance for Turnstile and Reoon configuration, connectivity, challenge, and response issues.
 
 = 0.1.51 =
 
