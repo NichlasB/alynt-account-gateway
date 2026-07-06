@@ -134,11 +134,44 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertArrayNotHasKey( 'unknown_setting', $imported );
 	}
 
+	public function test_inspect_import_package_reports_known_and_unknown_settings() {
+		$inspection = ALYNT_AG_Settings_Schema::inspect_import_package(
+			wp_json_encode(
+				array(
+					'plugin'     => 'alynt-account-gateway',
+					'version'    => '0.1.54',
+					'exportedAt' => '2026-07-06T12:00:00+00:00',
+					'settings'   => array(
+						'frontend_enabled' => '1',
+						'login_path'       => '/members',
+						'unknown_setting'  => 'ignored',
+					),
+				)
+			)
+		);
+
+		$this->assertIsArray( $inspection );
+		$this->assertSame( 'alynt-account-gateway', $inspection['plugin'] );
+		$this->assertSame( '0.1.54', $inspection['version'] );
+		$this->assertSame( '2026-07-06T12:00:00+00:00', $inspection['exported_at'] );
+		$this->assertSame( array( 'frontend_enabled', 'login_path' ), $inspection['known_keys'] );
+		$this->assertSame( array( 'unknown_setting' ), $inspection['unknown_keys'] );
+		$this->assertSame( 2, $inspection['known_count'] );
+		$this->assertSame( 1, $inspection['unknown_count'] );
+	}
+
 	public function test_import_package_rejects_invalid_json() {
 		$imported = ALYNT_AG_Settings_Schema::import_package( '{invalid-json' );
 
 		$this->assertInstanceOf( WP_Error::class, $imported );
 		$this->assertSame( 'alynt_ag_invalid_settings_import', $imported->get_error_code() );
+	}
+
+	public function test_inspect_import_package_rejects_invalid_json() {
+		$inspection = ALYNT_AG_Settings_Schema::inspect_import_package( '{invalid-json' );
+
+		$this->assertInstanceOf( WP_Error::class, $inspection );
+		$this->assertSame( 'alynt_ag_invalid_settings_import', $inspection->get_error_code() );
 	}
 
 	public function test_import_package_rejects_packages_without_known_settings() {
