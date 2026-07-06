@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.54 diagnostics-dependent security signals local release package smoke complete; commit/tag/publish approval next
+- Current phase: v0.1.54 diagnostics-dependent security signals shipped; next small release slice ready
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.53 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.52 remains the fallback baseline for updater checks.
+- Plugin status: v0.1.54 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.53 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -30,7 +30,7 @@
 - [x] Keep this slice scoped to admin guidance and tests; do not change diagnostics logging, retention, security counters, rate-limit enforcement, provider decisions, registration flow, email delivery, webhooks, dashboard rendering, WooCommerce behavior, privacy cleanup, updater behavior, or default frontend-output disabled behavior.
 - [x] Run build, lint, focused settings tests, full tests, audit, and POT generation.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -43,6 +43,9 @@
 - Release metadata bumped to `0.1.54`, POT regenerated (`834 strings`), and release validation passed: PHP syntax for the main plugin and settings page, build, lint, full tests (`221 tests, 1256 assertions`), npm audit, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
 - Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.54-20260706-165032\alynt-account-gateway-v0.1.54.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.54` header/constant/stable tag, exactly one updater header, and diagnostics notice renderer/built admin CSS/POT strings present.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.54` header/constant, diagnostics-disabled render showed the new note while keeping Access Control, Gateway Routing, and Account Delivery sections visible, diagnostics-enabled render omitted the note, and uploaded test artifacts were cleaned.
+- GitHub `v0.1.54` release was created at `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.54`; release workflow `28809614194` passed with only the non-blocking Node.js 20 deprecation annotation from `softprops/action-gh-release@v2`.
+- Public `v0.1.54` asset downloaded to `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.54-public\alynt-account-gateway-v0.1.54.zip` and inspected as 55 runtime entries, wrapped main file, no backslash entries, no dev entries, `0.1.54` header/constant/stable tag, exactly one updater header, and diagnostics notice renderer/built admin CSS/POT strings present. Public asset SHA-256: `52FBF7A6FA57B73582BD15A6FD5EB3EAD1ED6DCE07CF458F34CDB140EDBCBF11`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site from public `0.1.53`: updater found `0.1.54`, update response used `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.54/alynt-account-gateway-v0.1.54.zip`, `Plugin_Upgrader->upgrade()` installed successfully, fresh runtime showed active `0.1.54`, no update remained pending, diagnostics-disabled render showed the new note, diagnostics-enabled render omitted it, and uploaded test artifacts were cleaned.
 
 ### Guardrails
 
@@ -54,7 +57,7 @@
 - [x] Admin settings tests cover disabled/enabled diagnostics notice behavior.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates the installed-package diagnostics notice.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.53 Small Release Cycle
 
