@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.43 Access control visibility shipped; selecting next slice
+- Current phase: v0.1.44 Gateway routing visibility shipped; selecting next slice
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.43 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.44 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,43 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.44 Small Release Cycle
+
+### Scope
+
+- [x] Start the next admin observability slice from the released `master` baseline.
+- [x] Add read-only Gateway Routing Signals to the Security tab using existing security diagnostics rows.
+- [x] Summarize recent native `wp-login.php` redirects, reset-link redirects where `key` and `login` were preserved, and redirects where `redirect_to` was preserved.
+- [x] Keep changes scoped to admin visibility with no public login routing, password reset, redirect preservation, diagnostics logging, role access, toolbar, saved settings schema, dashboard, WooCommerce, webhook, email template, privacy cleanup, or default frontend-output behavior changes.
+- [x] Add focused coverage for routing signal counts and rendered admin copy.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Publish the final `v0.1.44` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.44` from clean `master` after the `v0.1.43` release merge.
+- Added a Gateway Routing Signals summary above the Security tab verification activity table.
+- The summary derives counts from existing `native_login_redirected` diagnostics rows and the stored `preserved_query_keys` context.
+- Added focused tests for routing signal counts and rendered guidance copy.
+- Verified local checks before the release metadata bump: PHP syntax passes for the touched settings page, focused `SettingsPageSecurityStatusTest` passes with 12 tests and 174 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 768 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 214 tests and 1142 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.44-branch-qa-20260706-130719\alynt-account-gateway-v0.1.44-branch-qa.zip`; verified 45 runtime file entries, no directory entries, no backslash archive entries, no dev/source/test/docs/build-tooling files, pre-bump `0.1.43` metadata, Gateway Routing Signals renderer, built admin CSS, and POT strings present.
+- Installed the branch-QA runtime package on LocalWP Plugin Tester over active `0.1.43` through WordPress upgrader classes. Fresh runtime smoke confirmed active pre-bump header `0.1.43` and loaded constant `0.1.43`, Gateway Routing Signals render with native login redirect, reset-link redirect, and redirect-to preserved guidance alongside Access Control Signals, temporary diagnostics rows were cleaned up after QA, and uploaded QA artifacts were removed from the LocalWP filesystem.
+- Bumped release-candidate metadata to `0.1.44` across the plugin header/constant, npm metadata, readme, sample test, changelog, and POT.
+- Re-ran release-candidate validation after the metadata bump: `npm.cmd run make-pot` with 768 strings, PHP syntax checks for the main plugin file and touched settings page, `npm.cmd run build`, `npm.cmd run lint`, full `npm.cmd test` with 214 tests and 1142 assertions, `npm.cmd audit --audit-level=moderate`, and `git diff --check` all passed.
+- Created final local package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.44-20260706-131227\alynt-account-gateway-v0.1.44.zip`; verified 45 runtime file entries, no directory entries, no backslash entries, no dev entries, `0.1.44` plugin/readme/POT metadata, and Gateway Routing Signals markers present. Installed the final package on LocalWP Plugin Tester through WordPress upgrader classes and confirmed fresh runtime active header `0.1.44`, loaded constant `0.1.44`, Gateway Routing Signals rendering, Access Control Signals still rendering, and zero temporary diagnostics rows remaining after cleanup.
+- Published GitHub release `v0.1.44`, confirmed the Build Release workflow completed successfully, downloaded and inspected the public `alynt-account-gateway-v0.1.44.zip` asset, verified runtime-only packaging and `0.1.44` metadata, downgraded LocalWP Plugin Tester to the public `v0.1.43` asset, confirmed Alynt Plugin Updater detected `0.1.43` to `0.1.44`, upgraded from the `v0.1.44` GitHub release asset, and verified final Plugin Tester state: active `0.1.44`, no remaining update, Gateway Routing Signals render after upgrade, and zero temporary diagnostics rows remaining.
+
+### Guardrails
+
+- Do not change authentication, login redirect, native `wp-login.php` redirect handling, password reset key handling, redirect destination preservation, blocked admin access, role/capability, toolbar, diagnostics logging, rate-limit threshold, transient keying, saved settings schema, dashboard rendering, WooCommerce endpoint delegation, webhook dispatch behavior, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep this cycle focused on admin-only gateway routing visibility using existing plugin-owned diagnostics activity.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates Gateway Routing Signals on the Security tab.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.43 Small Release Cycle
 
