@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.44 - 2026-07-06
+
+### Added
+
+- Added Security tab Gateway Routing Signals for recent native login redirects, reset-link redirects, and preserved redirect destinations.
+
 ## 0.1.43 - 2026-07-06
 
 ### Added
