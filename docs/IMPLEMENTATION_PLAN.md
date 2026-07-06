@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.48 WooCommerce endpoint fallback polish shipped; next small release slice ready
+- Current phase: v0.1.49 WooCommerce endpoint shortcut polish in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.48 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -20,6 +20,38 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.49 Small Release Cycle
+
+### Scope
+
+- [x] Start the next WooCommerce dashboard polish slice from the released `master` baseline.
+- [x] Add compact account section shortcut actions for standard WooCommerce endpoints.
+- [x] Cover orders, order details, downloads, addresses, account details, saved payment methods, add payment method, delete payment method, and set-default payment method flows.
+- [x] Keep changes scoped to frontend navigation affordances; do not change endpoint routing, WooCommerce action delegation, dashboard settings, saved data, auth, registration, emails, updater behavior, or default frontend-output disabled behavior.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.49` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.49` from clean `master` after the `v0.1.48` release merge.
+- Added a compact WooCommerce account section shortcut nav above endpoint guidance so customers can move between related account tasks without returning to the dashboard grid.
+- Added frontend styling for the shortcut row using existing dashboard colors, focus treatment, compact sizing, and wrapping behavior.
+- Added focused dashboard renderer coverage for orders, payment methods, order-details shortcuts, and custom endpoint exclusion.
+- Branch implementation validation passed: PHP syntax for the dashboard screen, focused dashboard tests (`9 tests, 73 assertions`), build, POT generation (`806 strings`), lint, full tests (`218 tests, 1211 assertions`), npm audit, and whitespace check. The only diff-check note was the expected POT LF-to-CRLF normalization warning.
+- Branch-QA package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.49-branch-qa-20260706-152637\alynt-account-gateway-v0.1.49-branch-qa.zip` and inspected as wrapped, dev-free, backslash-free, pre-bump `0.1.48` metadata, with endpoint actions, shortcut aria label, shortcut CSS, and translated action strings present.
+- Plugin Tester branch smoke passed on the local-only `plugin-tester.local` site: installed package active, pre-bump `0.1.48` header/constant confirmed, order-detail shortcuts, payment-method shortcuts, compiled CSS, delegated endpoint output, and custom endpoint no-shortcut behavior validated. Uploaded test artifact was cleaned from the Novamira doubled-path upload location.
+
+### Guardrails
+
+- Do not change WooCommerce endpoint resolution, WooCommerce action names, account menu links, dashboard settings, saved settings schema, account creation, auth routing, email sending, webhook behavior, privacy cleanup, or default frontend-output disabled behavior.
+- Keep this cycle focused on lightweight account section navigation affordances for delegated WooCommerce endpoints.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates WooCommerce endpoint shortcut actions.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.48 Small Release Cycle
 

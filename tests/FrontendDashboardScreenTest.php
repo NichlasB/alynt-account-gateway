@@ -87,11 +87,15 @@ class ALYNT_AG_Test_Frontend_Dashboard_WooCommerce extends ALYNT_AG_WooCommerce_
 	 */
 	public function endpoint_labels() {
 		return array(
-			'dashboard'       => 'Dashboard',
-			'orders'          => 'Orders',
-			'downloads'       => 'Downloads',
-			'payment-methods' => 'Payment Methods',
-			'loyalty-points'  => 'Loyalty Points',
+			'dashboard'           => 'Dashboard',
+			'orders'              => 'Orders',
+			'view-order'          => 'Order Details',
+			'downloads'           => 'Downloads',
+			'edit-address'        => 'Addresses',
+			'edit-account'        => 'Account Details',
+			'payment-methods'     => 'Payment Methods',
+			'add-payment-method' => 'Add Payment Method',
+			'loyalty-points'      => 'Loyalty Points',
 		);
 	}
 
@@ -249,6 +253,9 @@ class FrontendDashboardScreenTest extends TestCase {
 
 		$this->assertStringContainsString( '<h2 id="agw-dashboard-content-title">', $html );
 		$this->assertStringContainsString( 'Orders', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-section-actions"', $html );
+		$this->assertStringContainsString( 'href="/my-account/edit-address/"', $html );
+		$this->assertStringContainsString( 'href="/my-account/edit-account/"', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard-guidance"', $html );
 		$this->assertStringContainsString( 'Order History', $html );
 		$this->assertStringContainsString( 'Track purchase status', $html );
@@ -286,12 +293,47 @@ class FrontendDashboardScreenTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( 'Payment Methods', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-section-actions"', $html );
 		$this->assertStringContainsString( 'Saved Payment Methods', $html );
 		$this->assertStringContainsString( 'Manage saved payment methods', $html );
 		$this->assertStringContainsString( 'No saved payment methods?', $html );
 		$this->assertStringContainsString( 'Add payment method', $html );
 		$this->assertStringContainsString( 'href="/my-account/add-payment-method/"', $html );
+		$this->assertStringContainsString( 'href="/my-account/edit-account/"', $html );
 		$this->assertStringContainsString( '<div class="wc-endpoint-output">payment-methods:</div>', $html );
+	}
+
+	public function test_render_dashboard_screen_outputs_view_order_section_actions() {
+		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->available = true;
+		$woocommerce          = new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce();
+		$woocommerce->endpoint = array(
+			'endpoint' => 'view-order',
+			'value'    => '1001',
+		);
+		$screen = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			$woocommerce,
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array(
+				'woocommerce_takeover' => true,
+			)
+		);
+
+		ob_start();
+		$screen->render_dashboard_screen( $settings, '/my-account/view-order/1001/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'Order Details', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-section-actions"', $html );
+		$this->assertStringContainsString( 'Back to orders', $html );
+		$this->assertStringContainsString( 'href="/my-account/orders/"', $html );
+		$this->assertStringContainsString( 'Manage addresses', $html );
+		$this->assertStringContainsString( 'href="/my-account/edit-address/"', $html );
+		$this->assertStringContainsString( '<div class="wc-endpoint-output">view-order:1001</div>', $html );
 	}
 
 	public function test_render_dashboard_screen_outputs_downloads_edge_state_affordance() {
@@ -350,6 +392,7 @@ class FrontendDashboardScreenTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( 'Loyalty Points', $html );
+		$this->assertStringNotContainsString( 'class="agw-dashboard-section-actions"', $html );
 		$this->assertStringNotContainsString( 'class="agw-dashboard-guidance"', $html );
 		$this->assertStringNotContainsString( 'class="agw-dashboard-affordances"', $html );
 		$this->assertStringContainsString( '<div class="wc-endpoint-output">loyalty-points:</div>', $html );

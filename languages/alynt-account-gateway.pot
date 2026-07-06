@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 0.1.48\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 13:09+0000\n"
+"POT-Creation-Date: 2026-07-06 13:26+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -35,7 +35,7 @@ msgstr ""
 msgid "Accent Color"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:184
+#: includes/services/class-frontend-dashboard-screen.php:192
 msgid "Access available digital purchases and download files connected to your account."
 msgstr ""
 
@@ -43,7 +43,7 @@ msgstr ""
 msgid "Access Control Signals"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:135
+#: includes/services/class-frontend-dashboard-screen.php:136
 msgid "Account"
 msgstr ""
 
@@ -55,7 +55,7 @@ msgstr ""
 msgid "Account action was blocked by a rate limit."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:251
+#: includes/services/class-frontend-dashboard-screen.php:356
 msgid "Account changes affect future orders"
 msgstr ""
 
@@ -104,9 +104,17 @@ msgstr ""
 msgid "Account Delivery Signals"
 msgstr ""
 
+#: includes/services/class-frontend-dashboard-screen.php:239
+#: includes/services/class-frontend-dashboard-screen.php:259
+#: includes/services/class-frontend-dashboard-screen.php:269
+#: includes/services/class-frontend-dashboard-screen.php:289
+#: includes/services/class-frontend-dashboard-screen.php:299
+msgid "Account details"
+msgstr ""
+
 #: includes/services/class-dashboard-service.php:32
-#: includes/services/class-frontend-dashboard-screen.php:191
-#: includes/services/class-frontend-dashboard-screen.php:327
+#: includes/services/class-frontend-dashboard-screen.php:199
+#: includes/services/class-frontend-dashboard-screen.php:432
 #: includes/services/class-woocommerce-integration.php:29
 #: includes/services/class-woocommerce-integration.php:85
 msgid "Account Details"
@@ -120,11 +128,15 @@ msgstr ""
 msgid "Account Gateway Consent"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:279
+#: includes/services/class-frontend-dashboard-screen.php:384
 msgid "Account section"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:282
+#: includes/services/class-frontend-dashboard-screen.php:139
+msgid "Account section shortcuts"
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:387
 msgid "Account section unavailable"
 msgstr ""
 
@@ -151,7 +163,7 @@ msgstr ""
 msgid "Action tokens:"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:200
+#: includes/services/class-frontend-dashboard-screen.php:208
 msgid "Add a new saved payment method through WooCommerce and the connected payment provider."
 msgstr ""
 
@@ -187,11 +199,12 @@ msgstr ""
 msgid "Add optional dashboard links. Leave role visibility empty to show a link to every logged-in user."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:261
+#: includes/services/class-frontend-dashboard-screen.php:285
+#: includes/services/class-frontend-dashboard-screen.php:366
 msgid "Add payment method"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:199
+#: includes/services/class-frontend-dashboard-screen.php:207
 #: includes/services/class-woocommerce-integration.php:31
 msgid "Add Payment Method"
 msgstr ""
@@ -309,7 +322,7 @@ msgstr ""
 msgid "Avoid brand-specific claims in reusable defaults; save those for site-specific configuration."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:297
+#: includes/services/class-frontend-dashboard-screen.php:402
 msgid "Back to dashboard"
 msgstr ""
 
@@ -322,7 +335,11 @@ msgstr ""
 msgid "Back to Login"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:187
+#: includes/services/class-frontend-dashboard-screen.php:245
+msgid "Back to orders"
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:195
 msgid "Billing and Shipping Addresses"
 msgstr ""
 
@@ -399,7 +416,7 @@ msgstr ""
 msgid "Check button background and text colors together for readable contrast."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:318
+#: includes/services/class-frontend-dashboard-screen.php:423
 msgid "Check recent purchases, order status, and order details."
 msgstr ""
 
@@ -416,7 +433,7 @@ msgstr ""
 msgid "Choose a new password for your account."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:208
+#: includes/services/class-frontend-dashboard-screen.php:216
 msgid "Choose which saved payment method should be used first when the store supports defaults."
 msgstr ""
 
@@ -456,7 +473,7 @@ msgstr ""
 msgid "Confirm Password"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:204
+#: includes/services/class-frontend-dashboard-screen.php:212
 msgid "Confirm removal of a saved payment method from your customer account."
 msgstr ""
 
@@ -615,11 +632,11 @@ msgstr ""
 msgid "Customer"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:334
+#: includes/services/class-frontend-dashboard-screen.php:439
 msgid "Customer Account"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:338
+#: includes/services/class-frontend-dashboard-screen.php:443
 msgid "Customer account shortcuts"
 msgstr ""
 
@@ -679,12 +696,12 @@ msgstr ""
 msgid "Default keeps uncertain Reoon statuses usable while logging them for review. Use blocking only when the site prefers fewer signups over more false positives."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:207
+#: includes/services/class-frontend-dashboard-screen.php:215
 #: includes/services/class-woocommerce-integration.php:33
 msgid "Default Payment Method"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:203
+#: includes/services/class-frontend-dashboard-screen.php:211
 #: includes/services/class-woocommerce-integration.php:32
 msgid "Delete Payment Method"
 msgstr ""
@@ -754,12 +771,12 @@ msgstr ""
 msgid "Disabled. Add a webhook signing secret to send verification headers."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:236
+#: includes/services/class-frontend-dashboard-screen.php:341
 msgid "Downloadable files appear here after an eligible digital purchase is connected to your account."
 msgstr ""
 
 #: admin/class-settings-page.php:2896
-#: includes/services/class-frontend-dashboard-screen.php:183
+#: includes/services/class-frontend-dashboard-screen.php:191
 #: includes/services/class-woocommerce-integration.php:27
 #: includes/services/class-woocommerce-integration.php:82
 msgid "Downloads"
@@ -957,7 +974,7 @@ msgstr ""
 msgid "Every configured provider must pass registration. Configure both Turnstile and Reoon when the site needs two independent checks."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:335
+#: includes/services/class-frontend-dashboard-screen.php:440
 msgid "Everything for your orders in one place"
 msgstr ""
 
@@ -1083,7 +1100,7 @@ msgstr ""
 msgid "Help"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:144
+#: includes/services/class-frontend-dashboard-screen.php:152
 msgid "Helpful account next steps"
 msgstr ""
 
@@ -1195,11 +1212,11 @@ msgstr ""
 msgid "Keep account creation intentional."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:323
+#: includes/services/class-frontend-dashboard-screen.php:428
 msgid "Keep billing and shipping information ready for checkout."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:243
+#: includes/services/class-frontend-dashboard-screen.php:348
 msgid "Keep checkout details current"
 msgstr ""
 
@@ -1243,7 +1260,7 @@ msgstr ""
 msgid "Keep this private. The plugin uses it server-side to verify Turnstile tokens during registration."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:188
+#: includes/services/class-frontend-dashboard-screen.php:196
 msgid "Keep your billing and shipping details current so future checkouts stay quick and accurate."
 msgstr ""
 
@@ -1402,20 +1419,23 @@ msgstr ""
 msgid "Manage Account"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:300
+#: includes/services/class-frontend-dashboard-screen.php:405
 msgid "Manage account details"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:229
-#: includes/services/class-frontend-dashboard-screen.php:253
+#: includes/services/class-frontend-dashboard-screen.php:235
+#: includes/services/class-frontend-dashboard-screen.php:249
+#: includes/services/class-frontend-dashboard-screen.php:275
+#: includes/services/class-frontend-dashboard-screen.php:334
+#: includes/services/class-frontend-dashboard-screen.php:358
 msgid "Manage addresses"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:322
+#: includes/services/class-frontend-dashboard-screen.php:427
 msgid "Manage Addresses"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:196
+#: includes/services/class-frontend-dashboard-screen.php:204
 msgid "Manage saved payment methods when your store supports secure payment method storage."
 msgstr ""
 
@@ -1501,11 +1521,11 @@ msgstr ""
 msgid "No diagnostics events have been recorded."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:235
+#: includes/services/class-frontend-dashboard-screen.php:340
 msgid "No downloads available?"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:227
+#: includes/services/class-frontend-dashboard-screen.php:332
 msgid "No orders yet?"
 msgstr ""
 
@@ -1513,7 +1533,7 @@ msgstr ""
 msgid "No pending registration records have been created yet."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:259
+#: includes/services/class-frontend-dashboard-screen.php:364
 msgid "No saved payment methods?"
 msgstr ""
 
@@ -1541,7 +1561,7 @@ msgstr ""
 msgid "Number of hours before a pending registration confirmation expires."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:228
+#: includes/services/class-frontend-dashboard-screen.php:333
 msgid "Once you place an order, its status, details, and available actions will appear here."
 msgstr ""
 
@@ -1569,12 +1589,12 @@ msgstr ""
 msgid "Order"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:179
+#: includes/services/class-frontend-dashboard-screen.php:187
 #: includes/services/class-woocommerce-integration.php:26
 msgid "Order Details"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:175
+#: includes/services/class-frontend-dashboard-screen.php:183
 msgid "Order History"
 msgstr ""
 
@@ -1721,6 +1741,10 @@ msgstr ""
 
 #: includes/services/class-compatibility-warnings.php:194
 msgid "Payment method screens are delegated to WooCommerce. Verify saved-payment management after dashboard takeover."
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:279
+msgid "Payment methods"
 msgstr ""
 
 #: includes/services/class-woocommerce-integration.php:30
@@ -2337,7 +2361,7 @@ msgstr ""
 msgid "Review"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:244
+#: includes/services/class-frontend-dashboard-screen.php:349
 msgid "Review billing and shipping information before your next checkout so totals, tax, and delivery details stay accurate."
 msgstr ""
 
@@ -2354,7 +2378,7 @@ msgstr ""
 msgid "Review Dashboard"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:336
+#: includes/services/class-frontend-dashboard-screen.php:441
 msgid "Review purchases, manage checkout details, and keep your account information current without leaving the branded account area."
 msgstr ""
 
@@ -2375,7 +2399,7 @@ msgstr ""
 msgid "Review Security"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:180
+#: includes/services/class-frontend-dashboard-screen.php:188
 msgid "Review the selected order, including status, line items, totals, and available order actions."
 msgstr ""
 
@@ -2423,11 +2447,17 @@ msgstr ""
 msgid "Save the emergency bypass key somewhere private before replacing public login screens."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:260
+#: includes/services/class-frontend-dashboard-screen.php:365
 msgid "Saved methods appear here only when the store and payment provider support secure customer payment storage."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:195
+#: includes/services/class-frontend-dashboard-screen.php:295
+#: includes/services/class-frontend-dashboard-screen.php:305
+#: includes/services/class-frontend-dashboard-screen.php:311
+msgid "Saved payment methods"
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:203
 msgid "Saved Payment Methods"
 msgstr ""
 
@@ -2844,7 +2874,7 @@ msgstr ""
 msgid "These paths decide where login, account actions, and post-login redirects send users."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:283
+#: includes/services/class-frontend-dashboard-screen.php:388
 msgid "This area is not ready yet"
 msgstr ""
 
@@ -2926,7 +2956,7 @@ msgstr ""
 msgid "Too many confirmation email requests. Please wait a moment and try again."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:176
+#: includes/services/class-frontend-dashboard-screen.php:184
 msgid "Track purchase status, review order details, and open individual orders for more information."
 msgstr ""
 
@@ -3008,11 +3038,11 @@ msgstr ""
 msgid "Unknown email template."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:328
+#: includes/services/class-frontend-dashboard-screen.php:433
 msgid "Update your name, email address, and account password."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:192
+#: includes/services/class-frontend-dashboard-screen.php:200
 msgid "Update your name, email address, and password using WooCommerce account controls."
 msgstr ""
 
@@ -3036,7 +3066,7 @@ msgstr ""
 msgid "Use a CSS font stack that is available on the site. Keep heading fonts readable at form-card sizes."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:252
+#: includes/services/class-frontend-dashboard-screen.php:357
 msgid "Use a current email address so order updates, password resets, and account notices can reach you."
 msgstr ""
 
@@ -3184,12 +3214,14 @@ msgstr ""
 msgid "View Account"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:237
-#: includes/services/class-frontend-dashboard-screen.php:245
+#: includes/services/class-frontend-dashboard-screen.php:255
+#: includes/services/class-frontend-dashboard-screen.php:265
+#: includes/services/class-frontend-dashboard-screen.php:342
+#: includes/services/class-frontend-dashboard-screen.php:350
 msgid "View orders"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:317
+#: includes/services/class-frontend-dashboard-screen.php:422
 msgid "View Orders"
 msgstr ""
 
@@ -3262,7 +3294,7 @@ msgstr ""
 msgid "WooCommerce account takeover is enabled, but WooCommerce is not active."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:289
+#: includes/services/class-frontend-dashboard-screen.php:394
 msgid "WooCommerce did not return content for %s. Try another account area or come back after the store has finished configuring this section."
 msgstr ""
 

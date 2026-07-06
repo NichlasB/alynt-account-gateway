@@ -128,12 +128,20 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 		</section>
 
 		<?php if ( ! empty( $settings['woocommerce_takeover'] ) && 'dashboard' !== $endpoint['endpoint'] ) : ?>
+			<?php $actions = $this->woocommerce_endpoint_actions( $endpoint['endpoint'], $settings ); ?>
 			<?php $guidance = $this->woocommerce_endpoint_guidance( $endpoint['endpoint'] ); ?>
 			<?php $affordances = $this->woocommerce_endpoint_affordances( $endpoint['endpoint'], $settings ); ?>
 			<section class="agw-dashboard-section agw-dashboard-section--content" aria-labelledby="agw-dashboard-content-title">
 				<h2 id="agw-dashboard-content-title">
 					<?php echo esc_html( $this->woocommerce->endpoint_labels()[ $endpoint['endpoint'] ] ?? __( 'Account', 'alynt-account-gateway' ) ); ?>
 				</h2>
+				<?php if ( ! empty( $actions ) ) : ?>
+					<nav class="agw-dashboard-section-actions" aria-label="<?php esc_attr_e( 'Account section shortcuts', 'alynt-account-gateway' ); ?>">
+						<?php foreach ( $actions as $action ) : ?>
+							<a href="<?php echo esc_url( $action['url'] ); ?>"><?php echo esc_html( $action['label'] ); ?></a>
+						<?php endforeach; ?>
+					</nav>
+				<?php endif; ?>
 				<?php if ( ! empty( $guidance ) ) : ?>
 					<div class="agw-dashboard-guidance">
 						<span class="agw-dashboard-guidance__label"><?php echo esc_html( $guidance['label'] ); ?></span>
@@ -210,6 +218,103 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 		);
 
 		return isset( $guidance[ $endpoint ] ) ? $guidance[ $endpoint ] : array();
+	}
+
+	/**
+	 * Return compact navigation actions for standard WooCommerce endpoints.
+	 *
+	 * @param string              $endpoint WooCommerce endpoint key.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return array<int,array<string,string>>
+	 */
+	private function woocommerce_endpoint_actions( $endpoint, $settings ) {
+		$endpoint = sanitize_key( $endpoint );
+		$actions  = array(
+			'orders'                     => array(
+				array(
+					'label' => __( 'Manage addresses', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'edit-address', $settings ),
+				),
+				array(
+					'label' => __( 'Account details', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'edit-account', $settings ),
+				),
+			),
+			'view-order'                 => array(
+				array(
+					'label' => __( 'Back to orders', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'orders', $settings ),
+				),
+				array(
+					'label' => __( 'Manage addresses', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'edit-address', $settings ),
+				),
+			),
+			'downloads'                  => array(
+				array(
+					'label' => __( 'View orders', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'orders', $settings ),
+				),
+				array(
+					'label' => __( 'Account details', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'edit-account', $settings ),
+				),
+			),
+			'edit-address'               => array(
+				array(
+					'label' => __( 'View orders', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'orders', $settings ),
+				),
+				array(
+					'label' => __( 'Account details', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'edit-account', $settings ),
+				),
+			),
+			'edit-account'               => array(
+				array(
+					'label' => __( 'Manage addresses', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'edit-address', $settings ),
+				),
+				array(
+					'label' => __( 'Payment methods', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'payment-methods', $settings ),
+				),
+			),
+			'payment-methods'            => array(
+				array(
+					'label' => __( 'Add payment method', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'add-payment-method', $settings ),
+				),
+				array(
+					'label' => __( 'Account details', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'edit-account', $settings ),
+				),
+			),
+			'add-payment-method'         => array(
+				array(
+					'label' => __( 'Saved payment methods', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'payment-methods', $settings ),
+				),
+				array(
+					'label' => __( 'Account details', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'edit-account', $settings ),
+				),
+			),
+			'delete-payment-method'      => array(
+				array(
+					'label' => __( 'Saved payment methods', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'payment-methods', $settings ),
+				),
+			),
+			'set-default-payment-method' => array(
+				array(
+					'label' => __( 'Saved payment methods', 'alynt-account-gateway' ),
+					'url'   => $this->woocommerce->endpoint_url( 'payment-methods', $settings ),
+				),
+			),
+		);
+
+		return isset( $actions[ $endpoint ] ) ? $actions[ $endpoint ] : array();
 	}
 
 	/**
