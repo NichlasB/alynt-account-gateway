@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.56 GitHub Actions maintenance release in progress
+- Current phase: v0.1.56 GitHub Actions maintenance release shipped; next small release slice ready
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.55 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.54 remains the fallback baseline for updater checks.
+- Plugin status: v0.1.56 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.55 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -30,8 +30,8 @@
 - [x] Verify the `softprops/action-gh-release@v3` tag exists before publishing.
 - [x] Bump release metadata to `0.1.56` so Alynt Plugin Updater can offer the maintenance release.
 - [x] Run build, lint, tests, audit, POT generation, and package inspection.
-- [ ] Publish release and verify the workflow warning is gone.
-- [ ] Complete public asset and Alynt Plugin Updater verification.
+- [x] Publish release and verify the workflow warning is gone.
+- [x] Complete public asset and Alynt Plugin Updater verification.
 
 ### Progress Notes
 
@@ -40,6 +40,9 @@
 - Bumped release metadata to `0.1.56` across the plugin header/constant, npm metadata, readme, changelog, and sample test.
 - Release validation passed: PHP syntax for the main plugin and settings page, `npm run build`, `npm run make-pot` (`842 strings`), `npm run lint`, `npm test -- --do-not-cache-result` (`224 tests, 1272 assertions`), `npm audit --audit-level=moderate`, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
 - Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.56-20260706-180423\alynt-account-gateway-v0.1.56.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.56` header/constant/stable tag, exactly one updater header, and SHA-256 `45974A425515008E295E32473191722E98FC89401A4D30DABFB2E488E4206843`.
+- GitHub `v0.1.56` release was created at `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.56`; release workflow `28812730329` passed, and the previous Node.js 20 deprecation annotation was absent from the workflow watch output after switching to `softprops/action-gh-release@v3`.
+- Public `v0.1.56` asset downloaded to `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.56-public\alynt-account-gateway-v0.1.56.zip` and inspected as 55 runtime entries, wrapped main file, no backslash entries, no dev entries, `0.1.56` header/constant/stable tag, and exactly one updater header. Public asset SHA-256: `432408242B808B1602D60B40237C3957DFA69C55673E11221D8DC2E15B826980`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site from public `0.1.55`: fresh updater check found `0.1.56`, update response used `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.56/alynt-account-gateway-v0.1.56.zip`, WordPress `Plugin_Upgrader` installed the public release asset successfully, a fresh final check showed active `0.1.56`, no update remained pending, and uploaded test artifacts were cleaned. As in the prior non-browser verification, the direct upgrader skin left the plugin inactive immediately after update, so the installed copy was reactivated before the final active/no-update check.
 
 ### Guardrails
 
@@ -49,9 +52,9 @@
 ### Completion Gate
 
 - [x] Workflow references `softprops/action-gh-release@v3`.
-- [ ] Release workflow completes without the prior Node.js 20 deprecation annotation.
+- [x] Release workflow completes without the prior Node.js 20 deprecation annotation.
 - [x] Build, lint, test, audit, and POT generation pass.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.55 Small Release Cycle
 
