@@ -208,6 +208,63 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( 'action', $items[3]['status'] );
 	}
 
+	public function test_security_registration_abuse_signals_count_recent_activity() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper(
+			$settings_page,
+			'security_registration_abuse_signal_items',
+			array(
+				array(
+					(object) array(
+						'provider' => 'rate_limit',
+						'status'   => 'registration_rate_limited',
+					),
+					(object) array(
+						'provider' => 'rate_limit',
+						'status'   => 'registration_rate_limited',
+					),
+					(object) array(
+						'provider' => 'rate_limit',
+						'status'   => 'resend_confirmation_rate_limited',
+					),
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'role_account_flagged_blocked',
+					),
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'alynt_ag_reoon_blocked',
+					),
+					(object) array(
+						'provider' => 'registration_flow',
+						'status'   => 'password_mismatch',
+					),
+					(object) array(
+						'provider' => 'registration_flow',
+						'status'   => 'email_unavailable',
+					),
+					(object) array(
+						'provider' => 'turnstile',
+						'status'   => 'alynt_ag_turnstile_failed',
+					),
+				),
+			)
+		);
+
+		$this->assertSame( 'Registration Rate Limits', $items[0]['label'] );
+		$this->assertSame( 2, $items[0]['count'] );
+		$this->assertSame( 'warning', $items[0]['status'] );
+		$this->assertSame( 'Resend Rate Limits', $items[1]['label'] );
+		$this->assertSame( 1, $items[1]['count'] );
+		$this->assertSame( 'warning', $items[1]['status'] );
+		$this->assertSame( 'Flagged Email Blocks', $items[2]['label'] );
+		$this->assertSame( 2, $items[2]['count'] );
+		$this->assertSame( 'warning', $items[2]['status'] );
+		$this->assertSame( 'Setup Friction Blocks', $items[3]['label'] );
+		$this->assertSame( 2, $items[3]['count'] );
+		$this->assertSame( 'warning', $items[3]['status'] );
+	}
+
 	public function test_security_registration_flow_signals_count_recent_activity() {
 		$settings_page = new ALYNT_AG_Settings_Page();
 		$items         = $this->invoke_helper(
@@ -631,6 +688,11 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'recent resend blocks. Repeated resends can indicate confused customers or automated retries.', $output );
 		$this->assertStringContainsString( 'recent login blocks. Repeated login blocks can indicate credential stuffing or customers stuck at login.', $output );
 		$this->assertStringContainsString( 'recent password-reset blocks. Check for repeated reset requests against the same account.', $output );
+		$this->assertStringContainsString( 'Registration Abuse Signals', $output );
+		$this->assertStringContainsString( 'recent registration attempts blocked before verification. Watch for bursts from the same campaign or customer support reports.', $output );
+		$this->assertStringContainsString( 'recent confirmation resend attempts blocked by throttling. Repeated blocks can indicate inbox delivery delays or automated retries.', $output );
+		$this->assertStringContainsString( 'recent Reoon policy blocks for low-quality or flagged addresses. Review if legitimate business domains appear in support tickets.', $output );
+		$this->assertStringContainsString( 'recent password or email-availability blocks during account setup. Improve form guidance if legitimate customers abandon setup here.', $output );
 		$this->assertStringContainsString( 'Access Control Signals', $output );
 		$this->assertStringContainsString( 'recent login rate-limit blocks. Review for credential stuffing or customers stuck at login.', $output );
 		$this->assertStringContainsString( 'recent password-reset rate-limit blocks. Watch for repeated reset requests against the same account.', $output );

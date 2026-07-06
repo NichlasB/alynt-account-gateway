@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.46 - 2026-07-06
+
+### Added
+
+- Added Security tab Registration Abuse Signals for recent registration throttles, resend throttles, flagged email blocks, and account setup friction.
+
 ## 0.1.45 - 2026-07-06
 
 ### Added
