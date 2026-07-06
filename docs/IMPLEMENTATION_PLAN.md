@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.45 Account delivery visibility shipped; next small release slice ready
+- Current phase: v0.1.46 Registration abuse visibility in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.45 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -20,6 +20,38 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.46 Small Release Cycle
+
+### Scope
+
+- [x] Start the next admin observability and security-hardening slice from the released `master` baseline.
+- [x] Add read-only Registration Abuse Signals to the Security tab using existing verification log rows.
+- [x] Summarize recent registration rate-limit blocks, confirmation resend rate-limit blocks, Reoon flagged email blocks, and account setup friction blocks.
+- [x] Keep changes scoped to admin visibility with no registration flow, provider verification, rate-limit enforcement, diagnostics logging, saved settings schema, dashboard, WooCommerce, privacy cleanup, or default frontend-output behavior changes.
+- [x] Add focused coverage for abuse signal counts and rendered admin copy.
+- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [ ] Publish the final `v0.1.46` release asset and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Started `v0.1.46` from clean `master` after the `v0.1.45` release merge.
+- Added a Registration Abuse Signals summary above the Security tab verification activity table.
+- The summary derives abuse and friction counts from existing `verification_logs` rows without introducing new tables, settings, logging events, or behavior changes.
+- Verified local checks before the release metadata bump: PHP syntax passes for the touched settings page, focused `SettingsPageSecurityStatusTest` passes with 14 tests and 204 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 786 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 216 tests and 1172 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
+- Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.46-branch-qa-20260706-135635\alynt-account-gateway-v0.1.46-branch-qa.zip`; verified 45 runtime file entries, no directory entries, no backslash archive entries, no dev/source/test/docs/build-tooling files, pre-bump `0.1.45` metadata, Registration Abuse Signals renderer, built admin CSS, and POT strings present.
+- Installed the branch-QA runtime package on LocalWP Plugin Tester over active `0.1.45` through WordPress upgrader classes. Fresh runtime smoke confirmed active pre-bump header `0.1.45` and loaded constant `0.1.45`, inserted 5 temporary verification rows, validated Registration Abuse Signals render with registration rate-limit, resend rate-limit, flagged email block, and setup friction guidance, cleaned up all 5 temporary rows, confirmed 0 remaining QA rows, and removed uploaded QA artifacts from the LocalWP filesystem.
+
+### Guardrails
+
+- Do not change account creation, provider verification, rate-limit enforcement, email sending, webhook dispatch, diagnostics log writes, verification log writes, saved settings schema, dashboard rendering, WooCommerce endpoint delegation, privacy cleanup behavior, or default frontend-output disabled behavior.
+- Keep this cycle focused on admin-only visibility using existing plugin-owned verification activity.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates Registration Abuse Signals on the Security tab.
+- [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.45 Small Release Cycle
 

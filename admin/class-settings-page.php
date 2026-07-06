@@ -1190,6 +1190,7 @@ class ALYNT_AG_Settings_Page {
 
 			<?php $this->render_security_provider_health_signals( $logs ); ?>
 			<?php $this->render_security_rate_limit_pressure( $logs ); ?>
+			<?php $this->render_security_registration_abuse_signals( $logs ); ?>
 			<?php $this->render_security_access_control_signals( $logs, $diagnostic_events ); ?>
 			<?php $this->render_security_auth_redirect_signals( $diagnostic_events ); ?>
 			<?php $this->render_security_registration_flow_signals( $logs ); ?>
@@ -1231,6 +1232,90 @@ class ALYNT_AG_Settings_Page {
 			<?php endif; ?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Render registration abuse summary from recent verification logs.
+	 *
+	 * @param array<int,object> $logs Recent verification logs.
+	 * @return void
+	 */
+	private function render_security_registration_abuse_signals( $logs ) {
+		$items = $this->security_registration_abuse_signal_items( $logs );
+		?>
+		<div class="alynt-ag-security-abuse" aria-label="<?php esc_attr_e( 'Recent registration abuse signals', 'alynt-account-gateway' ); ?>">
+			<h4><?php esc_html_e( 'Registration Abuse Signals', 'alynt-account-gateway' ); ?></h4>
+			<div class="alynt-ag-security-status__grid">
+				<?php foreach ( $items as $item ) : ?>
+					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+						<h5><?php echo esc_html( $item['label'] ); ?></h5>
+						<p>
+							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
+							<?php echo esc_html( $item['message'] ); ?>
+						</p>
+					</section>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Return registration abuse signal items from recent verification logs.
+	 *
+	 * @param array<int,object> $logs Recent verification logs.
+	 * @return array<int,array{label:string,status:string,count:int,message:string}>
+	 */
+	private function security_registration_abuse_signal_items( $logs ) {
+		$registration_limits = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'rate_limit',
+			array( 'registration_rate_limited' )
+		);
+		$resend_limits       = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'rate_limit',
+			array( 'resend_confirmation_rate_limited' )
+		);
+		$flagged_blocks      = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'reoon',
+			array( 'alynt_ag_reoon_blocked' ),
+			array( '_flagged_blocked' )
+		);
+		$setup_friction      = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'registration_flow',
+			array( 'password_mismatch', 'alynt_ag_password_length', 'alynt_ag_password_complexity', 'email_unavailable' )
+		);
+
+		return array(
+			array(
+				'label'   => __( 'Registration Rate Limits', 'alynt-account-gateway' ),
+				'status'  => $registration_limits > 0 ? 'warning' : 'ready',
+				'count'   => $registration_limits,
+				'message' => __( 'recent registration attempts blocked before verification. Watch for bursts from the same campaign or customer support reports.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Resend Rate Limits', 'alynt-account-gateway' ),
+				'status'  => $resend_limits > 0 ? 'warning' : 'ready',
+				'count'   => $resend_limits,
+				'message' => __( 'recent confirmation resend attempts blocked by throttling. Repeated blocks can indicate inbox delivery delays or automated retries.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Flagged Email Blocks', 'alynt-account-gateway' ),
+				'status'  => $flagged_blocks > 0 ? 'warning' : 'ready',
+				'count'   => $flagged_blocks,
+				'message' => __( 'recent Reoon policy blocks for low-quality or flagged addresses. Review if legitimate business domains appear in support tickets.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Setup Friction Blocks', 'alynt-account-gateway' ),
+				'status'  => $setup_friction > 0 ? 'warning' : 'ready',
+				'count'   => $setup_friction,
+				'message' => __( 'recent password or email-availability blocks during account setup. Improve form guidance if legitimate customers abandon setup here.', 'alynt-account-gateway' ),
+			),
+		);
 	}
 
 	/**
