@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.49 - 2026-07-06
+
+### Added
+
+- Added WooCommerce account endpoint shortcut actions for related customer account tasks.
+
 ## 0.1.48 - 2026-07-06
 
 ### Added
