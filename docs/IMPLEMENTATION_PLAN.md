@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.42 Registration flow visibility in progress
+- Current phase: v0.1.42 Registration flow visibility shipped; selecting next slice
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.41 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.42 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep changes scoped to admin visibility with no settings schema, frontend routing, provider verification policy, rate-limit enforcement, dashboard, WooCommerce, webhook, email template, privacy cleanup, or default frontend-output behavior changes.
 - [x] Add focused coverage for registration-flow signal counts and rendered admin copy.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.42` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.42` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -45,6 +45,7 @@
 - Bumped release-candidate metadata to `0.1.42` across the plugin header/constant, npm metadata, readme, sample test, changelog, and implementation plan.
 - Re-ran release-candidate validation after the metadata bump: `npm.cmd run build`, `npm.cmd run make-pot` with 752 strings, PHP syntax checks for the main plugin file and touched settings page, `npm.cmd run lint`, `npm.cmd audit --audit-level=moderate`, full `npm.cmd test` with 212 tests and 1116 assertions, and `git diff --check` all passed.
 - Created final local package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.42-20260706-114930\alynt-account-gateway-v0.1.42.zip`; verified 45 runtime file entries, no directory entries, no backslash entries, no dev entries, `0.1.42` plugin/readme/POT metadata, and Registration Flow Signals markers present. Installed the final package on LocalWP Plugin Tester through WordPress upgrader classes and confirmed active header `0.1.42`, loaded constant `0.1.42`, Registration Flow Signals rendering, Provider Health Signals, Rate Limit Pressure, and zero temporary QA rows remaining after cleanup.
+- Published GitHub release `v0.1.42`, confirmed the Build Release workflow completed successfully, downloaded and inspected the public `alynt-account-gateway-v0.1.42.zip` asset, verified runtime-only packaging and `0.1.42` metadata, downgraded LocalWP Plugin Tester to the public `v0.1.41` asset, confirmed Alynt Plugin Updater detected `0.1.41` to `0.1.42`, upgraded from the `v0.1.42` GitHub release asset, and verified final Plugin Tester state: active `0.1.42`, no remaining update, Registration Flow Signals render after upgrade, and zero temporary QA rows remaining.
 
 ### Guardrails
 
@@ -55,7 +56,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates Registration Flow Signals on the Security tab.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.41 Small Release Cycle
 
