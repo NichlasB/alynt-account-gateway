@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.47 Pending registration lifecycle visibility in progress
+- Current phase: v0.1.47 Pending registration lifecycle visibility release prep in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.46 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -30,7 +30,7 @@
 - [x] Summarize recent pending, email-confirmed-but-not-completed, expired, and completed pending registration records.
 - [x] Keep changes scoped to admin visibility with no pending registration storage, token expiry, resend behavior, account creation, email sending, saved settings schema, dashboard, WooCommerce, privacy cleanup, or default frontend-output behavior changes.
 - [x] Add focused coverage for lifecycle signal counts and rendered admin copy.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks through final release package validation.
 - [ ] Publish the final `v0.1.47` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -41,6 +41,11 @@
 - Verified local checks before the release metadata bump: PHP syntax passes for the touched settings page, focused `SettingsPageSecurityStatusTest` passes with 15 tests and 221 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 796 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 217 tests and 1189 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.47-branch-qa-20260706-143540\alynt-account-gateway-v0.1.47-branch-qa.zip`; verified 45 runtime file entries, no directory entries, no backslash archive entries, no dev/source/test/docs/build-tooling files, pre-bump `0.1.46` metadata, Pending Registration Lifecycle Signals renderer, built admin CSS, and POT strings present.
 - Installed the branch-QA runtime package on LocalWP Plugin Tester over active `0.1.46` through WordPress upgrader classes. Fresh runtime smoke confirmed active pre-bump header `0.1.46` and loaded constant `0.1.46`, inserted 4 temporary pending registration rows, validated Pending Registration Lifecycle Signals render with pending, email-confirmed, expired, and completed guidance, validated table statuses, cleaned up all 4 temporary rows, confirmed 0 remaining QA rows, and removed uploaded QA artifacts from the LocalWP filesystem.
+- Bumped release metadata to `0.1.47` in the plugin header, version constant, package metadata, readme stable tag/changelog, CHANGELOG, sample version assertion, and POT metadata.
+- Verified final release checks after the metadata bump: PHP syntax passes for `alynt-account-gateway.php` and `admin/class-settings-page.php`, `npm.cmd run build` passes, `npm.cmd run lint` passes, full `npm.cmd test` passes with 217 tests and 1189 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` reports only expected line-ending normalization warnings for CHANGELOG/POT.
+- Corrected the final release ZIP to use the standard WordPress plugin-folder wrapper after local upgrader testing showed rootless packages can update subfolders while leaving the active main plugin file behind. Final wrapped package: `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.47-wrapped-20260706-144422\alynt-account-gateway-v0.1.47.zip`.
+- Verified the wrapped final package has 45 runtime file entries, no directory entries, no backslash archive entries, no dev/source/test/docs/build-tooling files, no root-level plugin main file, wrapped `0.1.47` plugin header/constant/readme/POT metadata, Pending Registration Lifecycle Signals renderer, built admin CSS, and POT strings present.
+- Installed the wrapped final package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime smoke confirmed active header `0.1.47` and loaded constant `0.1.47`, inserted 4 temporary pending registration rows, validated lifecycle counts/copy, table status labels, next-step copy, masked email output, deleted all 4 temporary rows, confirmed 0 remaining QA rows, and removed uploaded package artifacts from the LocalWP filesystem.
 
 ### Guardrails
 

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.47 - 2026-07-06
+
+### Added
+
+- Added Security tab Pending Registration Lifecycle Signals for pending, confirmed, expired, and completed registration records.
+
 ## 0.1.46 - 2026-07-06
 
 ### Added
