@@ -16,14 +16,24 @@ wp_clear_scheduled_hook( 'alynt_ag_retention_cleanup' );
 
 global $wpdb;
 
-$tables = array(
-	$wpdb->prefix . 'alynt_ag_pending_registrations',
-	$wpdb->prefix . 'alynt_ag_webhook_logs',
-	$wpdb->prefix . 'alynt_ag_verification_logs',
-	$wpdb->prefix . 'alynt_ag_consent_records',
-	$wpdb->prefix . 'alynt_ag_audit_logs',
-	$wpdb->prefix . 'alynt_ag_diagnostics_logs',
-);
+$database_file = __DIR__ . '/includes/class-database.php';
+if ( ! class_exists( 'ALYNT_AG_Database' ) && file_exists( $database_file ) ) {
+	require_once $database_file;
+}
+
+if ( class_exists( 'ALYNT_AG_Database' ) ) {
+	$tables = array_values( ALYNT_AG_Database::tables() );
+} else {
+	// Keep uninstall self-contained if the database registry file is unavailable.
+	$tables = array(
+		$wpdb->prefix . 'alynt_ag_pending_registrations',
+		$wpdb->prefix . 'alynt_ag_webhook_logs',
+		$wpdb->prefix . 'alynt_ag_verification_logs',
+		$wpdb->prefix . 'alynt_ag_consent_records',
+		$wpdb->prefix . 'alynt_ag_audit_logs',
+		$wpdb->prefix . 'alynt_ag_diagnostics_logs',
+	);
+}
 
 foreach ( $tables as $table ) {
 	// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.SchemaChange, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Uninstall removes plugin-owned tables.

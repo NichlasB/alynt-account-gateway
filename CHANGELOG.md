@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.57 - 2026-07-06
+
+### Changed
+
+- Strengthened uninstall cleanup coverage and documented the plugin-owned data cleanup policy.
+
 ## 0.1.56 - 2026-07-06
 
 ### Changed
