@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.61 admin RTL/accessibility CSS hardening slice in progress
+- Current phase: v0.1.61 released and updater-verified; ready for next small product slice
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.60 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.59 remains the fallback baseline for updater checks.
+- Plugin status: v0.1.61 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.60 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep the slice visual/admin-CSS-only: do not change settings schema, saved values, authentication, registration, provider verification, diagnostics logging, frontend output, WooCommerce behavior, privacy cleanup, or updater behavior.
 - [x] Run build, focused admin CSS tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -41,6 +41,8 @@
 - Release validation passed: `npm run build`, focused `AdminCssSourceTest` (`2 tests, 15 assertions`), PHP syntax for the main plugin and new test file, `npm run lint`, `npm test -- --do-not-cache-result` (`235 tests, 1380 assertions`), `npm audit --audit-level=moderate`, `npm run make-pot` (`874 strings`), and whitespace check. The only diff-check notes were expected line-ending normalization warnings on the implementation plan and POT files.
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.61-20260706-215727\alynt-account-gateway-v0.1.61.zip` and inspected as 46 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.61` header/constant/stable tag, exactly one updater header, admin RTL logical CSS markers present, old left panel accents absent, and SHA-256 `D18B58580497B9D3AAA20E7995B57C9322311E933FD7CBB20A66B48DE0634C95`.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.61` header/constant, compiled admin CSS includes `border-inline-start`, `border-inline-start-width`, and `inset-inline-start`, old left panel accents are absent, source CSS is excluded from the installed package, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.61`, confirmed the Build Release workflow completed successfully, downloaded and inspected `alynt-account-gateway-v0.1.61.zip` as 55 entries with no dev entries, `0.1.61` header/constant/stable tag, exactly one updater header, admin RTL logical CSS markers present, old left panel accents absent, and SHA-256 `27E25E99F597FC010C099CA723E9280F94F1E0C8EFDF84F98C97529B4EAD99F4`.
+- Verified Alynt Plugin Updater end to end on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.60` release asset, forcing a fresh updater check that detected `0.1.60` to `0.1.61`, running the WordPress plugin upgrader against the public `v0.1.61` asset, and confirming final active state `0.1.61` with no remaining update.
 
 ### Guardrails
 
