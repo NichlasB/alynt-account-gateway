@@ -1284,6 +1284,7 @@ class ALYNT_AG_Settings_Page {
 			<?php $this->render_security_diagnostics_dependency_notice( $settings ); ?>
 			<?php $this->render_security_access_control_signals( $logs, $diagnostic_events ); ?>
 			<?php $this->render_security_auth_redirect_signals( $diagnostic_events ); ?>
+			<?php $this->render_security_branded_auth_signals( $diagnostic_events ); ?>
 			<?php $this->render_security_registration_flow_signals( $logs ); ?>
 			<?php $this->render_security_delivery_signals( $external_events, $webhook_logs ); ?>
 
@@ -1554,6 +1555,86 @@ class ALYNT_AG_Settings_Page {
 				'status'  => $target_redirects > 0 ? 'warning' : 'ready',
 				'count'   => $target_redirects,
 				'message' => __( 'recent login redirects preserved a destination. Review protected-page links if customers seem bounced through login often.', 'alynt-account-gateway' ),
+			),
+		);
+	}
+
+	/**
+	 * Render branded authentication summary from recent diagnostics logs.
+	 *
+	 * @param array<int,object> $diagnostic_events Recent diagnostics events.
+	 * @return void
+	 */
+	private function render_security_branded_auth_signals( $diagnostic_events ) {
+		$items = $this->security_branded_auth_signal_items( $diagnostic_events );
+		?>
+		<div class="alynt-ag-security-auth" aria-label="<?php esc_attr_e( 'Recent branded authentication signals', 'alynt-account-gateway' ); ?>">
+			<h4><?php esc_html_e( 'Gateway Auth Signals', 'alynt-account-gateway' ); ?></h4>
+			<div class="alynt-ag-security-status__grid">
+				<?php foreach ( $items as $item ) : ?>
+					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+						<h5><?php echo esc_html( $item['label'] ); ?></h5>
+						<p>
+							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
+							<?php echo esc_html( $item['message'] ); ?>
+						</p>
+					</section>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Return branded authentication signal items from recent diagnostics logs.
+	 *
+	 * @param array<int,object> $diagnostic_events Recent diagnostics events.
+	 * @return array<int,array{label:string,status:string,count:int,message:string}>
+	 */
+	private function security_branded_auth_signal_items( $diagnostic_events ) {
+		$login_failures  = $this->count_diagnostics_events_by_codes(
+			$diagnostic_events,
+			array( 'branded_login_failed', 'branded_login_rate_limited' )
+		);
+		$login_successes = $this->count_diagnostics_events_by_code( $diagnostic_events, 'branded_login_succeeded' );
+		$reset_requests  = $this->count_diagnostics_events_by_code( $diagnostic_events, 'branded_password_reset_requested' );
+		$reset_issues    = $this->count_diagnostics_events_by_codes(
+			$diagnostic_events,
+			array( 'branded_password_reset_failed', 'branded_password_reset_email_failed', 'branded_password_reset_rate_limited' )
+		);
+		$reset_completed = $this->count_diagnostics_events_by_code( $diagnostic_events, 'branded_password_reset_completed' );
+
+		return array(
+			array(
+				'label'   => __( 'Gateway Login Failures', 'alynt-account-gateway' ),
+				'status'  => $login_failures > 0 ? 'warning' : 'ready',
+				'count'   => $login_failures,
+				'message' => __( 'recent branded login failures or rate-limit blocks. Review if customers report login trouble or if the count rises suddenly.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Gateway Login Successes', 'alynt-account-gateway' ),
+				'status'  => 'ready',
+				'count'   => $login_successes,
+				'message' => __( 'recent successful branded login completions recorded by diagnostics.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Password Reset Requests', 'alynt-account-gateway' ),
+				'status'  => $reset_requests > 0 ? 'warning' : 'ready',
+				'count'   => $reset_requests,
+				'message' => __( 'recent neutral branded password-reset requests. Watch for spikes against customer accounts or delivery support reports.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Password Reset Issues', 'alynt-account-gateway' ),
+				'status'  => $reset_issues > 0 ? 'action' : 'ready',
+				'count'   => $reset_issues,
+				'message' => __( 'recent reset completion, email delivery, or rate-limit issues. Check reset email delivery and customer password guidance.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Password Reset Completions', 'alynt-account-gateway' ),
+				'status'  => 'ready',
+				'count'   => $reset_completed,
+				'message' => __( 'recent successful branded password-reset completions recorded by diagnostics.', 'alynt-account-gateway' ),
 			),
 		);
 	}
@@ -2058,6 +2139,28 @@ class ALYNT_AG_Settings_Page {
 			$code = isset( $event->event_code ) ? sanitize_key( $event->event_code ) : '';
 
 			if ( $event_code === $code ) {
+				++$count;
+			}
+		}
+
+		return $count;
+	}
+
+	/**
+	 * Count matching diagnostics event rows across multiple event codes.
+	 *
+	 * @param array<int,object> $events      Recent diagnostics events.
+	 * @param array<int,string> $event_codes Event codes.
+	 * @return int
+	 */
+	private function count_diagnostics_events_by_codes( $events, $event_codes ) {
+		$count       = 0;
+		$event_codes = array_values( array_filter( array_map( 'sanitize_key', $event_codes ) ) );
+
+		foreach ( $events as $event ) {
+			$code = isset( $event->event_code ) ? sanitize_key( $event->event_code ) : '';
+
+			if ( in_array( $code, $event_codes, true ) ) {
 				++$count;
 			}
 		}

@@ -534,7 +534,23 @@ if ( ! function_exists( 'wp_signon' ) ) {
 
 if ( ! function_exists( 'email_exists' ) ) {
 	function email_exists( $email ) {
+		if ( isset( $GLOBALS['alynt_ag_test_existing_emails'] ) && in_array( $email, $GLOBALS['alynt_ag_test_existing_emails'], true ) ) {
+			return 123;
+		}
+
 		return false;
+	}
+}
+
+if ( ! function_exists( 'retrieve_password' ) ) {
+	function retrieve_password( $user_login = null ) {
+		$GLOBALS['alynt_ag_test_retrieve_passwords'][] = $user_login;
+
+		if ( isset( $GLOBALS['alynt_ag_test_retrieve_password_result'] ) ) {
+			return $GLOBALS['alynt_ag_test_retrieve_password_result'];
+		}
+
+		return true;
 	}
 }
 

@@ -549,6 +549,61 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( 'warning', $items[2]['status'] );
 	}
 
+	public function test_security_branded_auth_signals_count_recent_activity() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper(
+			$settings_page,
+			'security_branded_auth_signal_items',
+			array(
+				array(
+					(object) array(
+						'event_code' => 'branded_login_failed',
+					),
+					(object) array(
+						'event_code' => 'branded_login_rate_limited',
+					),
+					(object) array(
+						'event_code' => 'branded_login_succeeded',
+					),
+					(object) array(
+						'event_code' => 'branded_password_reset_requested',
+					),
+					(object) array(
+						'event_code' => 'branded_password_reset_failed',
+					),
+					(object) array(
+						'event_code' => 'branded_password_reset_email_failed',
+					),
+					(object) array(
+						'event_code' => 'branded_password_reset_rate_limited',
+					),
+					(object) array(
+						'event_code' => 'branded_password_reset_completed',
+					),
+					(object) array(
+						'event_code' => 'native_login_redirected',
+					),
+				),
+			)
+		);
+
+		$this->assertSame( 'Gateway Login Failures', $items[0]['label'] );
+		$this->assertSame( 2, $items[0]['count'] );
+		$this->assertSame( 'warning', $items[0]['status'] );
+		$this->assertSame( 'Gateway Login Successes', $items[1]['label'] );
+		$this->assertSame( 1, $items[1]['count'] );
+		$this->assertSame( 'ready', $items[1]['status'] );
+		$this->assertSame( 'Password Reset Requests', $items[2]['label'] );
+		$this->assertSame( 1, $items[2]['count'] );
+		$this->assertSame( 'warning', $items[2]['status'] );
+		$this->assertSame( 'Password Reset Issues', $items[3]['label'] );
+		$this->assertSame( 3, $items[3]['count'] );
+		$this->assertSame( 'action', $items[3]['status'] );
+		$this->assertSame( 'Password Reset Completions', $items[4]['label'] );
+		$this->assertSame( 1, $items[4]['count'] );
+		$this->assertSame( 'ready', $items[4]['status'] );
+	}
+
 	public function test_security_delivery_signals_count_recent_activity() {
 		$settings_page = new ALYNT_AG_Settings_Page();
 		$items         = $this->invoke_helper(
@@ -750,6 +805,51 @@ class SettingsPageSecurityStatusTest extends TestCase {
 				'created_at' => '2026-07-05 12:56:00',
 			),
 			(object) array(
+				'event_code' => 'branded_login_failed',
+				'context'    => wp_json_encode(
+					array(
+						'reason' => 'invalid_request',
+					)
+				),
+				'created_at' => '2026-07-05 12:56:10',
+			),
+			(object) array(
+				'event_code' => 'branded_login_succeeded',
+				'context'    => wp_json_encode(
+					array(
+						'destination_path' => '/my-account/',
+					)
+				),
+				'created_at' => '2026-07-05 12:56:20',
+			),
+			(object) array(
+				'event_code' => 'branded_password_reset_requested',
+				'context'    => wp_json_encode(
+					array(
+						'delivery_attempted' => true,
+					)
+				),
+				'created_at' => '2026-07-05 12:56:30',
+			),
+			(object) array(
+				'event_code' => 'branded_password_reset_failed',
+				'context'    => wp_json_encode(
+					array(
+						'reason' => 'invalid_or_expired_token',
+					)
+				),
+				'created_at' => '2026-07-05 12:56:40',
+			),
+			(object) array(
+				'event_code' => 'branded_password_reset_completed',
+				'context'    => wp_json_encode(
+					array(
+						'user_id' => 42,
+					)
+				),
+				'created_at' => '2026-07-05 12:56:50',
+			),
+			(object) array(
 				'event_code' => 'account_created_welcome_failed',
 				'context'    => wp_json_encode(
 					array(
@@ -837,6 +937,12 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'recent native wp-login.php redirects. If this rises, update menus, emails, and third-party links to use branded account routes.', $output );
 		$this->assertStringContainsString( 'recent reset-link redirects preserved password setup keys. Confirm branded set-password handling stays healthy.', $output );
 		$this->assertStringContainsString( 'recent login redirects preserved a destination. Review protected-page links if customers seem bounced through login often.', $output );
+		$this->assertStringContainsString( 'Gateway Auth Signals', $output );
+		$this->assertStringContainsString( 'recent branded login failures or rate-limit blocks. Review if customers report login trouble or if the count rises suddenly.', $output );
+		$this->assertStringContainsString( 'recent successful branded login completions recorded by diagnostics.', $output );
+		$this->assertStringContainsString( 'recent neutral branded password-reset requests. Watch for spikes against customer accounts or delivery support reports.', $output );
+		$this->assertStringContainsString( 'recent reset completion, email delivery, or rate-limit issues. Check reset email delivery and customer password guidance.', $output );
+		$this->assertStringContainsString( 'recent successful branded password-reset completions recorded by diagnostics.', $output );
 		$this->assertStringContainsString( 'Registration Flow Signals', $output );
 		$this->assertStringContainsString( 'recent consent-related blocks. Check Terms and Privacy copy if legitimate customers are stopping here.', $output );
 		$this->assertStringContainsString( 'recent pending-record or confirmation-email failures. Review database writes and email delivery before public launch.', $output );

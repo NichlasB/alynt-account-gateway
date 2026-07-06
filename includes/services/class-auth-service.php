@@ -126,6 +126,25 @@ class ALYNT_AG_Auth_Service {
 	}
 
 	/**
+	 * Log a privacy-conscious branded authentication diagnostics event.
+	 *
+	 * @param string              $level      Severity level.
+	 * @param string              $event_code Event code.
+	 * @param string              $message    Event message.
+	 * @param array<string,mixed> $context    Event context.
+	 * @return bool
+	 */
+	public function log_auth_event( $level, $event_code, $message, $context = array() ) {
+		return ALYNT_AG_Diagnostics_Logger::log_event(
+			$level,
+			'security',
+			$event_code,
+			$message,
+			$context
+		);
+	}
+
+	/**
 	 * Get a public login error message.
 	 *
 	 * @param string $error_code Error code.
@@ -202,16 +221,45 @@ class ALYNT_AG_Auth_Service {
 	public function complete_password_reset( $key, $login, $password, $password_confirm ) {
 		$user = $this->validate_password_reset_key( $key, $login );
 		if ( is_wp_error( $user ) ) {
+			$this->log_auth_event(
+				'warning',
+				'branded_password_reset_failed',
+				__( 'Rejected a branded password-reset completion attempt.', 'alynt-account-gateway' ),
+				array(
+					'reason'        => $user->get_error_code(),
+					'key_present'   => '' !== (string) $key,
+					'login_present' => '' !== (string) $login,
+				)
+			);
 			return $user;
 		}
 
 		$registration = new ALYNT_AG_Registration_Service();
 		$valid        = $registration->validate_password_pair( $password, $password_confirm );
 		if ( is_wp_error( $valid ) ) {
+			$this->log_auth_event(
+				'warning',
+				'branded_password_reset_failed',
+				__( 'Rejected a branded password-reset completion attempt.', 'alynt-account-gateway' ),
+				array(
+					'reason'        => $valid->get_error_code(),
+					'key_present'   => '' !== (string) $key,
+					'login_present' => '' !== (string) $login,
+				)
+			);
 			return $valid;
 		}
 
 		reset_password( $user, $password );
+
+		$this->log_auth_event(
+			'info',
+			'branded_password_reset_completed',
+			__( 'Completed a branded password-reset request.', 'alynt-account-gateway' ),
+			array(
+				'user_id' => isset( $user->ID ) ? absint( $user->ID ) : 0,
+			)
+		);
 
 		return true;
 	}
@@ -233,11 +281,29 @@ class ALYNT_AG_Auth_Service {
 
 		$rate_limit = $this->validate_rate_limit( 'login', $email, $settings );
 		if ( is_wp_error( $rate_limit ) ) {
+			$this->log_auth_event(
+				'warning',
+				'branded_login_rate_limited',
+				__( 'Blocked a branded login attempt by rate limit.', 'alynt-account-gateway' ),
+				array(
+					'has_email' => '' !== $email,
+				)
+			);
 			wp_safe_redirect( add_query_arg( 'login_error', $rate_limit->get_error_code(), $base_url ) );
 			exit;
 		}
 
 		if ( ! is_email( $email ) || '' === (string) $password ) {
+			$this->log_auth_event(
+				'warning',
+				'branded_login_failed',
+				__( 'Rejected a branded login attempt before WordPress authentication.', 'alynt-account-gateway' ),
+				array(
+					'reason'       => 'invalid_request',
+					'has_email'    => '' !== $email,
+					'has_password' => '' !== (string) $password,
+				)
+			);
 			wp_safe_redirect( add_query_arg( 'login_error', 'failed', $base_url ) );
 			exit;
 		}
@@ -252,13 +318,34 @@ class ALYNT_AG_Auth_Service {
 		);
 
 		if ( is_wp_error( $user ) ) {
+			$this->log_auth_event(
+				'warning',
+				'branded_login_failed',
+				__( 'WordPress rejected a branded login attempt.', 'alynt-account-gateway' ),
+				array(
+					'reason'     => 'wp_signon_failed',
+					'error_code' => $user->get_error_code(),
+				)
+			);
 			wp_safe_redirect( add_query_arg( 'login_error', 'failed', $base_url ) );
 			exit;
 		}
 
 		$redirect_to = isset( $_POST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_POST['redirect_to'] ) ) : '';
+		$destination = $this->get_login_redirect_url( $redirect_to, $settings );
 
-		wp_safe_redirect( $this->get_login_redirect_url( $redirect_to, $settings ) );
+		$this->log_auth_event(
+			'info',
+			'branded_login_succeeded',
+			__( 'Completed a branded login request.', 'alynt-account-gateway' ),
+			array(
+				'destination_path'     => $this->path_from_url( $destination ),
+				'redirect_to_present'  => '' !== (string) $redirect_to,
+				'redirect_to_accepted' => '' !== (string) $redirect_to && $destination === $redirect_to,
+			)
+		);
+
+		wp_safe_redirect( $destination );
 		exit;
 	}
 
@@ -293,13 +380,45 @@ class ALYNT_AG_Auth_Service {
 
 		$rate_limit = $this->validate_rate_limit( 'lostpassword', $email, $settings );
 		if ( is_wp_error( $rate_limit ) ) {
+			$this->log_auth_event(
+				'warning',
+				'branded_password_reset_rate_limited',
+				__( 'Blocked a branded password-reset request by rate limit.', 'alynt-account-gateway' ),
+				array(
+					'has_email' => '' !== $email,
+				)
+			);
 			wp_safe_redirect( add_query_arg( 'reset_error', $rate_limit->get_error_code(), $base_url ) );
 			exit;
 		}
 
-		if ( is_email( $email ) && email_exists( $email ) ) {
-			retrieve_password( $email );
+		$matched_account = is_email( $email ) && email_exists( $email );
+		$email_result    = null;
+
+		if ( $matched_account ) {
+			$email_result = retrieve_password( $email );
 		}
+
+		if ( is_wp_error( $email_result ) ) {
+			$this->log_auth_event(
+				'error',
+				'branded_password_reset_email_failed',
+				__( 'A branded password-reset email could not be sent.', 'alynt-account-gateway' ),
+				array(
+					'error_code' => $email_result->get_error_code(),
+				)
+			);
+		}
+
+		$this->log_auth_event(
+			'info',
+			'branded_password_reset_requested',
+			__( 'Processed a branded password-reset request with a neutral public response.', 'alynt-account-gateway' ),
+			array(
+				'has_valid_email'    => is_email( $email ),
+				'delivery_attempted' => $matched_account,
+			)
+		);
 
 		wp_safe_redirect( add_query_arg( 'reset_sent', '1', $base_url ) );
 		exit;
@@ -339,5 +458,17 @@ class ALYNT_AG_Auth_Service {
 
 		wp_safe_redirect( add_query_arg( 'password_reset', '1', home_url( $settings['login_path'] ) ) );
 		exit;
+	}
+
+	/**
+	 * Return only the path portion of a URL for diagnostics.
+	 *
+	 * @param string $url URL.
+	 * @return string
+	 */
+	private function path_from_url( $url ) {
+		$path = wp_parse_url( $url, PHP_URL_PATH );
+
+		return $path ? sanitize_text_field( $path ) : '';
 	}
 }
