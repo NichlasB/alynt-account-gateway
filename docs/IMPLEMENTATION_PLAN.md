@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.68 password strength live-region accessibility slice packaged and smoke-tested; awaiting release approval
+- Current phase: v0.1.68 released and updater-verified; ready for the next small product slice
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.67 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.68 is packaged and smoke-tested locally, but not released.
+- Plugin status: v0.1.68 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep the slice markup-only: do not change authentication decisions, submitted field names, validation, password policy, password visibility JavaScript, registration creation, provider verification, rate-limit enforcement, diagnostics logging, saved settings, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater behavior.
 - [x] Run build, focused frontend screen tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -41,6 +41,8 @@
 - Release validation passed: `npm run build`, PHP syntax for the main plugin and edited set-password renderer, focused `FrontendSetpasswordScreenTest` (`6 tests, 53 assertions`), `npm run lint`, `npm test -- --do-not-cache-result` (`238 tests, 1406 assertions`), `npm audit --audit-level=moderate`, `npm run make-pot` (`874 strings`), and whitespace check. The only diff-check notes were expected line-ending normalization warnings on generated/metadata files.
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.68-20260707-002935\alynt-account-gateway-v0.1.68.zip` and inspected as 46 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.68` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, password strength `role="status" aria-live="polite" aria-atomic="true"` marker present, source assets excluded, and SHA-256 `7D556F4B02F85ABCD2A0C6044D7453C609645E9FC4E27FE58441E797BB742FA1`.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.68` header/constant, exactly one `GitHub Plugin URI` updater header, password strength live-region marker present, source assets excluded, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.68`, confirmed the Build Release workflow completed successfully, downloaded and inspected the public asset as 55 entries with no dev entries, `0.1.68` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, password strength live-region marker present, source assets excluded, and SHA-256 `7E11A2018610F9170C09E570AC682ECBFFE9F353F2C19B888AD576B6EA7BB7A6`.
+- Verified Alynt Plugin Updater end to end on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.67` release asset, forcing Alynt Plugin Updater to detect `0.1.67` to `0.1.68`, running the WordPress plugin upgrader against the public `v0.1.68` asset URL, and confirming final active state `0.1.68` with no remaining update.
 
 ### Guardrails
 
@@ -52,7 +54,7 @@
 - [x] Frontend screen tests cover password strength live-region status semantics.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package markup markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.67 Small Release Cycle
 
