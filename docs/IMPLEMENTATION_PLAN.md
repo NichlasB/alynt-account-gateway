@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.58 security/manual-review queue slice in progress
+- Current phase: v0.1.58 security/manual-review queue slice released and updater-verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.57 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.56 remains the fallback baseline for updater checks.
+- Plugin status: v0.1.58 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.57 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep the slice informational only: do not change registration flow, Reoon provider decisions, rate-limit enforcement, provider API calls, data retention, frontend output, WooCommerce behavior, privacy cleanup, or updater behavior.
 - [x] Run build, lint, focused security settings tests, full tests, audit, POT generation, and package inspection.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -42,6 +42,8 @@
 - Release validation passed: `npm run build`, `npm run make-pot` (`853 strings`), PHP syntax for the main plugin and settings page, `npm run lint`, `npm test -- --do-not-cache-result` (`226 tests, 1290 assertions`), `npm audit --audit-level=moderate`, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
 - Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.58-20260706-203912\alynt-account-gateway-v0.1.58.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.58` header/constant/stable tag, exactly one updater header, Manual Review Queue renderer present, helper present, and SHA-256 `D906690852CF62E3AEECAA7C0203C032EC7C733A2B759D6FD5033A8D11809B4B`.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.58` header/constant, Manual Review Queue renderer/helper present, synthetic review counts matched expected allowed flagged, role-account, catch-all/unknown, and blocked flagged buckets, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.58`, confirmed the Build Release workflow completed successfully, downloaded and inspected `alynt-account-gateway-v0.1.58.zip` as 55 entries with no dev entries, `0.1.58` header/constant/stable tag, exactly one updater header, Manual Review Queue renderer present, helper present, and SHA-256 `1D9E496332F1F5C8ABC5AD39657948A75136539FE5A8BD631AB1095281D30E46`.
+- Verified Alynt Plugin Updater end to end on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.57` release asset, confirming updater detection for `0.1.57` to `0.1.58`, running the WordPress plugin upgrader against the public `v0.1.58` asset, and confirming final active state `0.1.58` with no remaining update.
 
 ### Guardrails
 
@@ -53,7 +55,7 @@
 - [x] Security settings tests cover the Manual Review Queue counts and rendered guidance.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates the installed-package Manual Review Queue.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.57 Small Release Cycle
 
