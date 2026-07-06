@@ -409,6 +409,15 @@ class FrontendDashboardScreenTest extends TestCase {
 		$screen->render_dashboard_screen( $settings, '/my-account/orders/' );
 		$html = ob_get_clean();
 
-		$this->assertStringContainsString( 'This account section is not available.', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-empty"', $html );
+		$this->assertStringContainsString( 'role="status"', $html );
+		$this->assertStringContainsString( 'Account section unavailable', $html );
+		$this->assertStringContainsString( 'This area is not ready yet', $html );
+		$this->assertStringContainsString( 'WooCommerce did not return content for Orders.', $html );
+		$this->assertStringContainsString( 'Back to dashboard', $html );
+		$this->assertStringContainsString( 'href="/my-account/"', $html );
+		$this->assertStringContainsString( 'Manage account details', $html );
+		$this->assertStringContainsString( 'href="/my-account/edit-account/"', $html );
+		$this->assertStringNotContainsString( 'This account section is not available.', $html );
 	}
 }

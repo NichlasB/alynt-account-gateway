@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.48 - 2026-07-06
+
+### Added
+
+- Added a branded WooCommerce endpoint unavailable fallback panel with recovery links for delegated account sections.
+
 ## 0.1.47 - 2026-07-06
 
 ### Added
