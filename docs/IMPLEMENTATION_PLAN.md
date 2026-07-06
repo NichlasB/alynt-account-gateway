@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.43 Access control visibility in progress
+- Current phase: v0.1.43 Access control visibility shipped; selecting next slice
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.42 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.43 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep changes scoped to admin visibility with no settings schema, frontend routing, login/auth handling, rate-limit enforcement, dashboard, WooCommerce, webhook, email template, privacy cleanup, or default frontend-output behavior changes.
 - [x] Add focused coverage for access-control signal counts and rendered admin copy.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.43` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.43` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -45,6 +45,7 @@
 - Bumped release-candidate metadata to `0.1.43` across the plugin header/constant, npm metadata, readme, sample test, changelog, and POT.
 - Re-ran release-candidate validation after the metadata bump: `npm.cmd run make-pot` with 760 strings, PHP syntax checks for the main plugin file and touched settings page, `npm.cmd run build`, `npm.cmd run lint`, full `npm.cmd test` with 213 tests and 1129 assertions, `npm.cmd audit --audit-level=moderate`, and `git diff --check` all passed.
 - Created final local package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.43-20260706-123355\alynt-account-gateway-v0.1.43.zip`; verified 45 runtime file entries, no directory entries, no backslash entries, no dev entries, `0.1.43` plugin/readme/POT metadata, and Access Control Signals markers present. Installed the final package on LocalWP Plugin Tester through WordPress upgrader classes and confirmed active header `0.1.43`, loaded constant `0.1.43`, Access Control Signals rendering, and zero temporary verification/diagnostics rows remaining after cleanup.
+- Published GitHub release `v0.1.43`, confirmed the Build Release workflow completed successfully, downloaded and inspected the public `alynt-account-gateway-v0.1.43.zip` asset, verified runtime-only packaging and `0.1.43` metadata, downgraded LocalWP Plugin Tester to the public `v0.1.42` asset, confirmed Alynt Plugin Updater detected `0.1.42` to `0.1.43`, upgraded from the `v0.1.43` GitHub release asset, and verified final Plugin Tester state: active `0.1.43`, no remaining update, Access Control Signals render after upgrade, and zero temporary verification/diagnostics rows remaining.
 
 ### Guardrails
 
@@ -55,7 +56,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates Access Control Signals on the Security tab.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.42 Small Release Cycle
 
