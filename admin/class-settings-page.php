@@ -1926,6 +1926,8 @@ class ALYNT_AG_Settings_Page {
 				<?php esc_html_e( 'Shows recent email-confirmation registration records stored by the plugin. Email addresses are masked in this admin view.', 'alynt-account-gateway' ); ?>
 			</p>
 
+			<?php $this->render_security_pending_registration_lifecycle_signals( $registrations ); ?>
+
 			<?php if ( empty( $registrations ) ) : ?>
 				<p class="alynt-ag-security-status__notice">
 					<?php esc_html_e( 'No pending registration records have been created yet.', 'alynt-account-gateway' ); ?>
@@ -1965,6 +1967,84 @@ class ALYNT_AG_Settings_Page {
 			<?php endif; ?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Render pending registration lifecycle summary.
+	 *
+	 * @param array<int,object> $registrations Recent pending registration rows.
+	 * @return void
+	 */
+	private function render_security_pending_registration_lifecycle_signals( $registrations ) {
+		$items = $this->security_pending_registration_lifecycle_signal_items( $registrations );
+		?>
+		<div class="alynt-ag-security-lifecycle" aria-label="<?php esc_attr_e( 'Recent pending registration lifecycle signals', 'alynt-account-gateway' ); ?>">
+			<h4><?php esc_html_e( 'Pending Registration Lifecycle Signals', 'alynt-account-gateway' ); ?></h4>
+			<div class="alynt-ag-security-status__grid">
+				<?php foreach ( $items as $item ) : ?>
+					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+						<h5><?php echo esc_html( $item['label'] ); ?></h5>
+						<p>
+							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
+							<?php echo esc_html( $item['message'] ); ?>
+						</p>
+					</section>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Return pending registration lifecycle signal items.
+	 *
+	 * @param array<int,object> $registrations Recent pending registration rows.
+	 * @return array<int,array{label:string,status:string,count:int,message:string}>
+	 */
+	private function security_pending_registration_lifecycle_signal_items( $registrations ) {
+		$counts = array(
+			'pending'         => 0,
+			'email-confirmed' => 0,
+			'expired'         => 0,
+			'completed'       => 0,
+		);
+
+		foreach ( $registrations as $registration ) {
+			$status = $this->security_pending_registration_status( $registration );
+			$key    = isset( $status['key'] ) ? sanitize_key( $status['key'] ) : 'pending';
+
+			if ( isset( $counts[ $key ] ) ) {
+				++$counts[ $key ];
+			}
+		}
+
+		return array(
+			array(
+				'label'   => __( 'Waiting For Confirmation', 'alynt-account-gateway' ),
+				'status'  => $counts['pending'] > 0 ? 'warning' : 'ready',
+				'count'   => $counts['pending'],
+				'message' => __( 'recent pending records still waiting for email confirmation. Watch resend activity and inbox-delivery support requests.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Confirmed, Not Completed', 'alynt-account-gateway' ),
+				'status'  => $counts['email-confirmed'] > 0 ? 'warning' : 'ready',
+				'count'   => $counts['email-confirmed'],
+				'message' => __( 'recent records where email is confirmed but password setup is unfinished. Customers may need clearer next-step copy.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Expired Pending Records', 'alynt-account-gateway' ),
+				'status'  => $counts['expired'] > 0 ? 'action' : 'ready',
+				'count'   => $counts['expired'],
+				'message' => __( 'recent pending records past their confirmation window. High counts can indicate missed emails or confusing confirmation instructions.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Completed Pending Records', 'alynt-account-gateway' ),
+				'status'  => 'ready',
+				'count'   => $counts['completed'],
+				'message' => __( 'recent pending records that reached account creation. This helps compare completed registrations against stalled ones.', 'alynt-account-gateway' ),
+			),
+		);
 	}
 
 	/**
