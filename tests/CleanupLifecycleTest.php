@@ -102,5 +102,32 @@ class CleanupLifecycleTest extends TestCase {
 		$this->assertStringContainsString( 'DROP TABLE IF EXISTS wp_alynt_ag_diagnostics_logs', $queries );
 		$this->assertStringContainsString( 'DELETE FROM wp_options WHERE option_name LIKE', $queries );
 		$this->assertStringContainsString( '\\_transient\\_alynt\\_ag\\_rl\\_', $queries );
+		$this->assertStringContainsString( '\\_transient\\_timeout\\_alynt\\_ag\\_rl\\_', $queries );
+	}
+
+	public function test_uninstall_drops_the_database_registry_tables_only() {
+		if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+			define( 'WP_UNINSTALL_PLUGIN', true );
+		}
+
+		include ALYNT_AG_PLUGIN_DIR . 'uninstall.php';
+
+		$drop_queries = array_values(
+			array_filter(
+				$GLOBALS['alynt_ag_test_db_queries'],
+				static function ( $query ) {
+					return 0 === strpos( $query, 'DROP TABLE IF EXISTS ' );
+				}
+			)
+		);
+
+		$expected = array_map(
+			static function ( $table ) {
+				return 'DROP TABLE IF EXISTS ' . $table;
+			},
+			array_values( ALYNT_AG_Database::tables() )
+		);
+
+		$this->assertSame( $expected, $drop_queries );
 	}
 }

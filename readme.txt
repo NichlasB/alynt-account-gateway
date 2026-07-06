@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 0.1.56
+Stable tag: 0.1.57
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,7 +38,15 @@ Core features include:
 3. Configure Settings -> Account Gateway.
 4. Enable Frontend Output only after confirming the settings.
 
+== Uninstall ==
+
+Uninstalling the plugin removes plugin-owned settings, the stored database schema version, the retention cleanup schedule, rate-limit transients, and plugin-owned account gateway tables. WordPress users, WooCommerce orders, media-library files, and non-plugin data are not removed.
+
 == Changelog ==
+
+= 0.1.57 =
+
+* Strengthened uninstall cleanup coverage and documented the plugin-owned data cleanup policy.
 
 = 0.1.56 =
 
