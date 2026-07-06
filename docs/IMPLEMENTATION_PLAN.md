@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.64 frontend theme-compatibility CSS guardrail slice packaged and smoke-tested; awaiting release approval
+- Current phase: v0.1.64 released and updater-verified; next slice selection pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.63 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.62 remains the fallback baseline for updater checks.
+- Plugin status: v0.1.64 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.63 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep the slice CSS-only: do not change markup, JavaScript behavior, authentication decisions, password policy validation, registration creation, provider verification, saved settings, diagnostics logging, admin UI behavior, WooCommerce delegated form behavior, privacy cleanup, or updater behavior.
 - [x] Run build, focused frontend CSS tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -41,6 +41,8 @@
 - Release validation passed: `npm run build`, PHP syntax for the main plugin and updated frontend CSS test, focused `FrontendCssSourceTest` (`6 tests, 42 assertions`), `npm run lint`, `npm test -- --do-not-cache-result` (`237 tests, 1394 assertions`), `npm audit --audit-level=moderate`, `npm run make-pot` (`874 strings`), and whitespace check. The only diff-check notes were expected line-ending normalization warnings on generated/metadata files.
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.64-20260706-230345\alynt-account-gateway-v0.1.64.zip` and inspected as 46 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.64` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, compiled frontend CSS form-control guardrails present, source CSS excluded, and SHA-256 `4879E3F4E5230F00B066C3133076BC2DCF4147863FF520DD78075CD35564F603`.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.64` header/constant, exactly one `GitHub Plugin URI` updater header, compiled frontend CSS includes `appearance:none` guardrails for gateway inputs, password toggles, and buttons, gateway input `max-width:100%` is present, source CSS is excluded, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.64`, confirmed the Build Release workflow completed successfully, downloaded and inspected the public asset as 55 entries with no dev entries, `0.1.64` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, compiled frontend CSS form-control guardrails present, source CSS excluded, and SHA-256 `3B2F91EB4881415BE14125FBE7310BEC4D27C6734CC104819A2A8E6F5F4C8F32`.
+- Verified Alynt Plugin Updater end to end on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.63` release asset, forcing a fresh updater check that detected `0.1.63` to `0.1.64`, running the WordPress plugin upgrader against the public `v0.1.64` asset, and confirming final active state `0.1.64` with no remaining update.
 
 ### Guardrails
 
@@ -52,7 +54,7 @@
 - [x] Frontend CSS tests cover scoped form-control theme-compatibility guardrails.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package CSS markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.63 Small Release Cycle
 
