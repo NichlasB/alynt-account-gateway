@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.45 - 2026-07-06
+
+### Added
+
+- Added Security tab Account Delivery Signals for recent welcome email failures, account webhook failures, and failed webhook deliveries.
+
 ## 0.1.44 - 2026-07-06
 
 ### Added

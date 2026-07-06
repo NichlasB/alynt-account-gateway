@@ -30,7 +30,7 @@
 - [x] Summarize recent account-created welcome email failures, account-created webhook dispatch failures, and failed webhook delivery rows.
 - [x] Keep changes scoped to admin visibility with no mail sending, webhook dispatch, webhook signing, delivery logging, diagnostics logging, saved settings schema, dashboard, WooCommerce, privacy cleanup, or default frontend-output behavior changes.
 - [x] Add focused coverage for delivery signal counts and rendered admin copy.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
 - [ ] Publish the final `v0.1.45` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
@@ -42,6 +42,9 @@
 - Verified local checks before the release metadata bump: PHP syntax passes for the touched settings page, focused `SettingsPageSecurityStatusTest` passes with 13 tests and 187 assertions, `npm.cmd run build` passes, `npm.cmd run make-pot` writes 776 strings, `npm.cmd run lint` passes, full `npm.cmd test` passes with 215 tests and 1155 assertions, `npm.cmd audit --audit-level=moderate` reports 0 vulnerabilities, and `git diff --check` passes.
 - Created branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.45-branch-qa-20260706-132412\alynt-account-gateway-v0.1.45-branch-qa.zip`; verified 45 runtime file entries, no directory entries, no backslash archive entries, no dev/source/test/docs/build-tooling files, pre-bump `0.1.44` metadata, Account Delivery Signals renderer, built admin CSS, and POT strings present.
 - Installed the branch-QA runtime package on LocalWP Plugin Tester over active `0.1.44` through WordPress upgrader classes. Fresh runtime smoke confirmed active pre-bump header `0.1.44` and loaded constant `0.1.44`, Account Delivery Signals render with welcome email, account webhook, and failed webhook delivery guidance, temporary diagnostics and webhook log rows were cleaned up after QA, and uploaded QA artifacts were removed from the LocalWP filesystem.
+- Bumped release metadata to `0.1.45`, regenerated POT output with 776 strings, and re-ran release-candidate checks: PHP syntax for the plugin header and settings page, `npm.cmd run build`, `npm.cmd run lint`, full `npm.cmd test` with 215 tests and 1155 assertions, `npm.cmd audit --audit-level=moderate` with 0 vulnerabilities, and `git diff --check` with only expected Windows line-ending warnings.
+- Created final local package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.45-20260706-133053\alynt-account-gateway-v0.1.45.zip`; verified 45 runtime file entries, no directory entries, no backslash archive entries, no dev/source/test/docs/build-tooling files, header/constant/readme/POT metadata at `0.1.45`, Account Delivery Signals renderer, built admin CSS, and POT strings present.
+- Installed the final local package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime smoke confirmed active header `0.1.45` and loaded constant `0.1.45`, Account Delivery Signals render with welcome email, account webhook, and failed webhook delivery guidance, temporary diagnostics and webhook log rows were cleaned up after QA, and uploaded QA artifacts were removed from the LocalWP filesystem.
 
 ### Guardrails
 
@@ -50,8 +53,8 @@
 
 ### Completion Gate
 
-- [ ] Build, lint, test, audit, and POT generation pass.
-- [ ] Plugin Tester smoke validates Account Delivery Signals on the Security tab.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates Account Delivery Signals on the Security tab.
 - [ ] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.44 Small Release Cycle
