@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.57 uninstall/data cleanup coverage slice released and updater-verified
+- Current phase: v0.1.58 security/manual-review queue slice in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.57 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.56 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
@@ -20,6 +20,40 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.58 Small Release Cycle
+
+### Scope
+
+- [x] Start the next security and anti-spam hardening sub-slice from the released `v0.1.57` baseline.
+- [x] Add a Security tab Manual Review Queue that summarizes Reoon flagged results allowed by policy.
+- [x] Separate allowed flagged results, role-account reviews, catch-all/unknown/inbox-full reviews, and blocked flagged results.
+- [x] Keep the slice informational only: do not change registration flow, Reoon provider decisions, rate-limit enforcement, provider API calls, data retention, frontend output, WooCommerce behavior, privacy cleanup, or updater behavior.
+- [x] Run build, lint, focused security settings tests, full tests, audit, POT generation, and package inspection.
+- [x] Package and run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.58` from clean `master` after the updater-verified `v0.1.57` release.
+- Added a Manual Review Queue to Recent Registration Verification Activity so allowed-but-flagged Reoon statuses are visible before the detailed masked log table.
+- Added focused helper coverage for allowed flagged results, role-account reviews, catch-all/unknown/inbox-full reviews, and blocked flagged results.
+- Initial validation passed: PHP syntax for the settings page and focused `SettingsPageSecurityStatusTest` (`18 tests, 275 assertions`).
+- Release validation passed: `npm run build`, `npm run make-pot` (`853 strings`), PHP syntax for the main plugin and settings page, `npm run lint`, `npm test -- --do-not-cache-result` (`226 tests, 1290 assertions`), `npm audit --audit-level=moderate`, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
+- Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.58-20260706-203912\alynt-account-gateway-v0.1.58.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.58` header/constant/stable tag, exactly one updater header, Manual Review Queue renderer present, helper present, and SHA-256 `D906690852CF62E3AEECAA7C0203C032EC7C733A2B759D6FD5033A8D11809B4B`.
+- Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.58` header/constant, Manual Review Queue renderer/helper present, synthetic review counts matched expected allowed flagged, role-account, catch-all/unknown, and blocked flagged buckets, and uploaded sandbox artifacts were cleaned.
+
+### Guardrails
+
+- Do not alter saved setting keys, registration account creation, pending-registration storage, Reoon/Turnstile API behavior, rate-limit buckets, diagnostics retention, webhook dispatch, dashboard/WooCommerce rendering, privacy cleanup, or updater metadata in this slice.
+- Keep this release focused on admin visibility for existing Reoon manual-review evidence.
+
+### Completion Gate
+
+- [x] Security settings tests cover the Manual Review Queue counts and rendered guidance.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates the installed-package Manual Review Queue.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.57 Small Release Cycle
 

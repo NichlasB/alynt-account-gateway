@@ -216,6 +216,59 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( 'action', $items[3]['status'] );
 	}
 
+	public function test_security_manual_review_queue_counts_allowed_and_blocked_reoon_flags() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper(
+			$settings_page,
+			'security_manual_review_queue_items',
+			array(
+				array(
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'role_account_flagged',
+						'blocked'  => 0,
+					),
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'catch_all_flagged',
+						'blocked'  => 0,
+					),
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'unknown_flagged',
+						'blocked'  => 0,
+					),
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'role_account_flagged_blocked',
+						'blocked'  => 1,
+					),
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'alynt_ag_reoon_blocked',
+						'blocked'  => 1,
+					),
+					(object) array(
+						'provider' => 'rate_limit',
+						'status'   => 'registration_rate_limited',
+						'blocked'  => 1,
+					),
+				),
+			)
+		);
+
+		$this->assertSame( 'Allowed Flagged Results', $items[0]['label'] );
+		$this->assertSame( 3, $items[0]['count'] );
+		$this->assertSame( 'warning', $items[0]['status'] );
+		$this->assertSame( 'Role Account Reviews', $items[1]['label'] );
+		$this->assertSame( 1, $items[1]['count'] );
+		$this->assertSame( 'Catch-All And Unknown Reviews', $items[2]['label'] );
+		$this->assertSame( 2, $items[2]['count'] );
+		$this->assertSame( 'Blocked Flagged Results', $items[3]['label'] );
+		$this->assertSame( 1, $items[3]['count'] );
+		$this->assertSame( 'warning', $items[3]['status'] );
+	}
+
 	public function test_security_provider_failure_triage_items_count_specific_failures() {
 		$settings_page = new ALYNT_AG_Settings_Page();
 		$items         = $this->invoke_helper(
@@ -750,6 +803,12 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'recent configuration or network failures. Check both Turnstile keys and outbound HTTP connectivity.', $output );
 		$this->assertStringContainsString( 'recent email-quality blocks. Review the policy if legitimate customers are affected.', $output );
 		$this->assertStringContainsString( 'recent configuration, connectivity, or response failures. Test the API key and outbound HTTP connectivity.', $output );
+		$this->assertStringContainsString( 'Manual Review Queue', $output );
+		$this->assertStringContainsString( 'Highlights Reoon flagged results that were allowed by policy', $output );
+		$this->assertStringContainsString( 'recent Reoon flagged results allowed by policy. Review the masked rows below before deciding whether to block flagged statuses.', $output );
+		$this->assertStringContainsString( 'recent role-account emails allowed for review. Confirm whether shared inboxes are acceptable for this site.', $output );
+		$this->assertStringContainsString( 'recent catch-all, unknown, or inbox-full results allowed for review. Watch for repeated domains before tightening policy.', $output );
+		$this->assertStringContainsString( 'recent Reoon flagged results blocked by strict policy. Check support tickets for legitimate customers who may need help.', $output );
 		$this->assertStringContainsString( 'Provider Failure Triage', $output );
 		$this->assertStringContainsString( 'Use these focused checks when provider errors appear.', $output );
 		$this->assertStringContainsString( 'recent missing-token or key configuration failures. Confirm both keys are saved and belong to the same Cloudflare Turnstile site.', $output );

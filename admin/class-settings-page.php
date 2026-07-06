@@ -1277,6 +1277,7 @@ class ALYNT_AG_Settings_Page {
 			</p>
 
 			<?php $this->render_security_provider_health_signals( $logs ); ?>
+			<?php $this->render_security_manual_review_queue( $logs ); ?>
 			<?php $this->render_security_provider_failure_triage( $logs ); ?>
 			<?php $this->render_security_rate_limit_pressure( $logs ); ?>
 			<?php $this->render_security_registration_abuse_signals( $logs ); ?>
@@ -1784,6 +1785,117 @@ class ALYNT_AG_Settings_Page {
 				'message' => __( 'recent configuration, connectivity, or response failures. Test the API key and outbound HTTP connectivity.', 'alynt-account-gateway' ),
 			),
 		);
+	}
+
+	/**
+	 * Render manual-review queue guidance from recent verification logs.
+	 *
+	 * @param array<int,object> $logs Recent verification logs.
+	 * @return void
+	 */
+	private function render_security_manual_review_queue( $logs ) {
+		$items = $this->security_manual_review_queue_items( $logs );
+		?>
+		<div class="alynt-ag-security-manual-review" aria-label="<?php esc_attr_e( 'Manual review queue', 'alynt-account-gateway' ); ?>">
+			<h4><?php esc_html_e( 'Manual Review Queue', 'alynt-account-gateway' ); ?></h4>
+			<p class="description"><?php esc_html_e( 'Highlights Reoon flagged results that were allowed by policy so support teams can review legitimate-risk signups without changing the public registration flow.', 'alynt-account-gateway' ); ?></p>
+			<div class="alynt-ag-security-status__grid">
+				<?php foreach ( $items as $item ) : ?>
+					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+						<h5><?php echo esc_html( $item['label'] ); ?></h5>
+						<p>
+							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
+							<?php echo esc_html( $item['message'] ); ?>
+						</p>
+					</section>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Return manual-review queue items from recent verification logs.
+	 *
+	 * @param array<int,object> $logs Recent verification logs.
+	 * @return array<int,array{label:string,status:string,count:int,message:string}>
+	 */
+	private function security_manual_review_queue_items( $logs ) {
+		$allowed_flagged = $this->count_reoon_review_logs( $logs, array(), array( '_flagged' ), false );
+		$role_accounts   = $this->count_reoon_review_logs( $logs, array( 'role_account_flagged' ), array(), false );
+		$risky_domains   = $this->count_reoon_review_logs( $logs, array( 'catch_all_flagged', 'unknown_flagged', 'inbox_full_flagged' ), array(), false );
+		$blocked_flagged = $this->count_reoon_review_logs( $logs, array(), array( '_flagged_blocked' ), true );
+
+		return array(
+			array(
+				'label'   => __( 'Allowed Flagged Results', 'alynt-account-gateway' ),
+				'status'  => $allowed_flagged > 0 ? 'warning' : 'ready',
+				'count'   => $allowed_flagged,
+				'message' => __( 'recent Reoon flagged results allowed by policy. Review the masked rows below before deciding whether to block flagged statuses.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Role Account Reviews', 'alynt-account-gateway' ),
+				'status'  => $role_accounts > 0 ? 'warning' : 'ready',
+				'count'   => $role_accounts,
+				'message' => __( 'recent role-account emails allowed for review. Confirm whether shared inboxes are acceptable for this site.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Catch-All And Unknown Reviews', 'alynt-account-gateway' ),
+				'status'  => $risky_domains > 0 ? 'warning' : 'ready',
+				'count'   => $risky_domains,
+				'message' => __( 'recent catch-all, unknown, or inbox-full results allowed for review. Watch for repeated domains before tightening policy.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Blocked Flagged Results', 'alynt-account-gateway' ),
+				'status'  => $blocked_flagged > 0 ? 'warning' : 'ready',
+				'count'   => $blocked_flagged,
+				'message' => __( 'recent Reoon flagged results blocked by strict policy. Check support tickets for legitimate customers who may need help.', 'alynt-account-gateway' ),
+			),
+		);
+	}
+
+	/**
+	 * Count Reoon logs that should appear in manual-review summaries.
+	 *
+	 * @param array<int,object> $logs            Recent verification logs.
+	 * @param array<int,string> $statuses        Exact status keys.
+	 * @param array<int,string> $status_suffixes Status suffixes.
+	 * @param bool|null         $blocked         Required blocked state, or null for any state.
+	 * @return int
+	 */
+	private function count_reoon_review_logs( $logs, $statuses, $status_suffixes, $blocked = null ) {
+		$count           = 0;
+		$statuses        = array_map( 'sanitize_key', $statuses );
+		$status_suffixes = array_map( 'sanitize_key', $status_suffixes );
+
+		foreach ( $logs as $log ) {
+			$provider = isset( $log->provider ) ? sanitize_key( $log->provider ) : '';
+			$status   = isset( $log->status ) ? sanitize_key( $log->status ) : '';
+
+			if ( 'reoon' !== $provider || '' === $status ) {
+				continue;
+			}
+
+			$log_blocked = ! empty( $log->blocked );
+			if ( null !== $blocked && $log_blocked !== (bool) $blocked ) {
+				continue;
+			}
+
+			if ( in_array( $status, $statuses, true ) ) {
+				++$count;
+				continue;
+			}
+
+			foreach ( $status_suffixes as $suffix ) {
+				if ( $this->status_has_suffix( $status, $suffix ) ) {
+					++$count;
+					break;
+				}
+			}
+		}
+
+		return $count;
 	}
 
 	/**
