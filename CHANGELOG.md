@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.60 - 2026-07-06
+
+### Added
+
+- Added privacy-conscious branded auth diagnostics and Security tab Gateway Auth Signals.
+
 ## 0.1.59 - 2026-07-06
 
 ### Added

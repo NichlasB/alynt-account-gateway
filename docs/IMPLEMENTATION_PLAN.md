@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.59 released and updater-verified; ready for next small product slice
+- Current phase: v0.1.60 released and updater-verified; ready for next small product slice
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.59 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.58 remains the fallback baseline for updater checks.
+- Plugin status: v0.1.60 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.59 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -17,9 +17,45 @@
 - [ ] Security and anti-spam hardening: improve Reoon policy visibility, provider failure feedback, registration abuse logs, lockout visibility, resend throttling UX, and optional manual-review decisions.
 - [ ] Accessibility, RTL, and multilingual QA pass: verify keyboard flow, focus states, ARIA messaging, contrast resilience, RTL layout behavior, and translation coverage across frontend/admin screens.
 - [ ] Frontend visual QA and theme compatibility: smoke common themes, mobile/desktop breakpoints, high-contrast settings, and CSS interference around the gateway shell.
-- [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
+- [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.60 Small Release Cycle
+
+### Scope
+
+- [x] Start the next admin-observability sub-slice from the released `v0.1.59` baseline.
+- [x] Add privacy-conscious diagnostics events for branded login success/failure, login rate-limit blocks, neutral password-reset requests, password-reset delivery failures, reset completion failures, and reset completions.
+- [x] Add a Security tab Gateway Auth Signals panel that summarizes recent branded login and password-reset outcomes from diagnostics logs.
+- [x] Keep the slice observational only: do not change authentication decisions, reset-token validation, redirect destinations, email templates, registration behavior, WooCommerce behavior, provider verification, saved settings, privacy cleanup, or updater behavior.
+- [x] Run build, lint, focused auth/settings tests, full tests, audit, POT generation, and package inspection.
+- [x] Package and run Plugin Tester smoke.
+- [x] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.60` from clean `master` after the updater-verified `v0.1.59` release.
+- Added branded auth diagnostics that store event codes, reasons, booleans, destination paths, and user IDs where appropriate while avoiding submitted email and password values.
+- Added Gateway Auth Signals to the Security tab so administrators can see recent branded login failures/successes and password-reset pressure/issues without reading raw diagnostics rows.
+- Added focused auth-service and settings-page coverage. Initial validation passed: PHP syntax for edited runtime files and focused `AuthServiceTest` plus `SettingsPageSecurityStatusTest` (`15 tests, 68 assertions`).
+- Release validation passed: `npm run build`, `npm run make-pot` (`874 strings`), PHP syntax for the main plugin and edited runtime files, `npm run lint`, `npm test -- --do-not-cache-result` (`233 tests, 1365 assertions`), `npm audit --audit-level=moderate`, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
+- Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.60-20260706-211701\alynt-account-gateway-v0.1.60.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.60` header/constant/stable tag, exactly one updater header, branded login/reset diagnostics present, Gateway Auth Signals panel present, grouped diagnostics counter present, and SHA-256 `8C5FC10EFB9AB0E45EC34B11917E9ADB8CF42E5F1D3AA061080B346899633D59`.
+- Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.60` header/constant, branded login success/failure diagnostics present, branded password-reset request/completion diagnostics present, Gateway Auth Signals panel present, grouped diagnostics counter present, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.60`, confirmed the Build Release workflow completed successfully, downloaded and inspected `alynt-account-gateway-v0.1.60.zip` as 55 entries with no dev entries, `0.1.60` header/constant/stable tag, exactly one updater header, branded login/reset diagnostics present, Gateway Auth Signals panel present, grouped diagnostics counter present, and SHA-256 `F9A83462E3113190CDD87600137437C8E9ACBA697A3A4BCD260A9795461D1532`.
+- Verified Alynt Plugin Updater end to end on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.59` release asset, forcing a fresh updater check that detected `0.1.59` to `0.1.60`, running the WordPress plugin upgrader against the public `v0.1.60` asset, and confirming final active state `0.1.60` with no remaining update.
+
+### Guardrails
+
+- Do not alter login credentials, password-reset tokens, neutral reset responses, account creation, email rendering, Reoon/Turnstile checks, rate-limit thresholds, dashboard/WooCommerce rendering, data retention, or updater metadata in this slice.
+- Keep diagnostics privacy-conscious: do not store submitted passwords, submitted email addresses, raw reset keys, cookies, nonces, or provider secrets.
+
+### Completion Gate
+
+- [x] Focused tests cover branded auth diagnostics and Security tab auth signal counts.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package diagnostics markers.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.59 Small Release Cycle
 
