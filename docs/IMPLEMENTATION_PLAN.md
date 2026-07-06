@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.55 import/export/reset experience slice in progress
+- Current phase: v0.1.55 import/export/reset experience shipped; next small release slice ready
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.54 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.53 remains the fallback baseline for updater checks.
+- Plugin status: v0.1.55 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.54 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -18,7 +18,7 @@
 - [ ] Accessibility, RTL, and multilingual QA pass: verify keyboard flow, focus states, ARIA messaging, contrast resilience, RTL layout behavior, and translation coverage across frontend/admin screens.
 - [ ] Frontend visual QA and theme compatibility: smoke common themes, mobile/desktop breakpoints, high-contrast settings, and CSS interference around the gateway shell.
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
-- [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
+- [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
 
 ## v0.1.55 Small Release Cycle
@@ -31,7 +31,7 @@
 - [x] Add configuration portability guidance that explains what settings exports include, what they do not include, and when tab-level restore is the safer option.
 - [x] Run build, lint, focused settings tests, full tests, audit, and POT generation.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -46,6 +46,9 @@
 - Release metadata bumped to `0.1.55`, POT regenerated (`842 strings`), and release validation passed: PHP syntax for the main plugin and settings page, build, lint, full tests (`224 tests, 1272 assertions`), npm audit, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
 - Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.55-20260706-174103\alynt-account-gateway-v0.1.55.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.55` header/constant/stable tag, exactly one updater header, and import inspector/admin notice/portability guidance/POT strings present.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.55` header/constant, Advanced Tools settings import/export guidance rendered, export/import controls rendered, POT included the guidance string, dry-run import inspection reported one recognized and one ignored smoke key, and uploaded sandbox artifacts were cleaned.
+- GitHub `v0.1.55` release was created at `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.55`; release workflow `28811631216` passed with the known non-blocking Node.js 20 deprecation annotation from `softprops/action-gh-release@v2`.
+- Public `v0.1.55` asset downloaded to `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.55-public\alynt-account-gateway-v0.1.55.zip` and inspected as 55 runtime entries, wrapped main file, no backslash entries, no dev entries, `0.1.55` header/constant/stable tag, exactly one updater header, and import inspector/admin notice/portability guidance/POT strings present. Public asset SHA-256: `A11B738EC8C478B6BB1D67BE9494D7F545766BFD1D9DF6B78AE554A1DE9E370A`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site from public `0.1.54`: fresh updater check found `0.1.55`, update response used `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.55/alynt-account-gateway-v0.1.55.zip`, WordPress `Plugin_Upgrader` installed the public release asset successfully, a fresh final check showed active `0.1.55`, no update remained pending, and uploaded test artifacts were cleaned. The non-browser upgrader skin used during verification left the plugin inactive immediately after update, so the installed copy was reactivated before the final active/no-update check.
 
 ### Guardrails
 
@@ -58,7 +61,7 @@
 - [x] Admin settings tools tests cover portability guidance.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package import/export/reset guidance.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.54 Small Release Cycle
 
