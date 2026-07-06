@@ -1236,6 +1236,7 @@ class ALYNT_AG_Settings_Page {
 			</p>
 
 			<?php $this->render_security_provider_health_signals( $logs ); ?>
+			<?php $this->render_security_provider_failure_triage( $logs ); ?>
 			<?php $this->render_security_rate_limit_pressure( $logs ); ?>
 			<?php $this->render_security_registration_abuse_signals( $logs ); ?>
 			<?php $this->render_security_access_control_signals( $logs, $diagnostic_events ); ?>
@@ -1720,6 +1721,112 @@ class ALYNT_AG_Settings_Page {
 				'status'  => $reoon_failures > 0 ? 'action' : 'ready',
 				'count'   => $reoon_failures,
 				'message' => __( 'recent configuration, connectivity, or response failures. Test the API key and outbound HTTP connectivity.', 'alynt-account-gateway' ),
+			),
+		);
+	}
+
+	/**
+	 * Render provider failure triage guidance from recent verification logs.
+	 *
+	 * @param array<int,object> $logs Recent verification logs.
+	 * @return void
+	 */
+	private function render_security_provider_failure_triage( $logs ) {
+		$items = $this->security_provider_failure_triage_items( $logs );
+		?>
+		<div class="alynt-ag-security-triage" aria-label="<?php esc_attr_e( 'Provider failure triage', 'alynt-account-gateway' ); ?>">
+			<h4><?php esc_html_e( 'Provider Failure Triage', 'alynt-account-gateway' ); ?></h4>
+			<p class="description"><?php esc_html_e( 'Use these focused checks when provider errors appear. They separate configuration gaps from connectivity problems and policy decisions.', 'alynt-account-gateway' ); ?></p>
+			<div class="alynt-ag-security-status__grid">
+				<?php foreach ( $items as $item ) : ?>
+					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+						<h5><?php echo esc_html( $item['label'] ); ?></h5>
+						<p>
+							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
+							<?php echo esc_html( $item['message'] ); ?>
+						</p>
+					</section>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Return provider failure triage items from recent verification logs.
+	 *
+	 * @param array<int,object> $logs Recent verification logs.
+	 * @return array<int,array{label:string,status:string,count:int,message:string}>
+	 */
+	private function security_provider_failure_triage_items( $logs ) {
+		$turnstile_missing  = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'turnstile',
+			array( 'alynt_ag_turnstile_missing' )
+		);
+		$turnstile_network  = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'turnstile',
+			array( 'alynt_ag_turnstile_request_failed' )
+		);
+		$turnstile_rejected = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'turnstile',
+			array( 'alynt_ag_turnstile_failed' )
+		);
+		$reoon_missing      = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'reoon',
+			array( 'alynt_ag_reoon_missing' )
+		);
+		$reoon_network      = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'reoon',
+			array( 'alynt_ag_reoon_request_failed' )
+		);
+		$reoon_unexpected   = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'reoon',
+			array( 'alynt_ag_reoon_invalid_response' )
+		);
+
+		return array(
+			array(
+				'label'   => __( 'Turnstile Configuration', 'alynt-account-gateway' ),
+				'status'  => $turnstile_missing > 0 ? 'action' : 'ready',
+				'count'   => $turnstile_missing,
+				'message' => __( 'recent missing-token or key configuration failures. Confirm both keys are saved and belong to the same Cloudflare Turnstile site.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Turnstile Connectivity', 'alynt-account-gateway' ),
+				'status'  => $turnstile_network > 0 ? 'action' : 'ready',
+				'count'   => $turnstile_network,
+				'message' => __( 'recent Cloudflare Siteverify connection failures. Check outbound HTTP, DNS, firewall rules, and the saved secret key.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Turnstile Challenge Rejections', 'alynt-account-gateway' ),
+				'status'  => $turnstile_rejected > 0 ? 'warning' : 'ready',
+				'count'   => $turnstile_rejected,
+				'message' => __( 'recent rejected challenges. Confirm the registration domain is allowed in Cloudflare and compare with bot traffic before changing policy.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Reoon Configuration', 'alynt-account-gateway' ),
+				'status'  => $reoon_missing > 0 ? 'action' : 'ready',
+				'count'   => $reoon_missing,
+				'message' => __( 'recent missing API-key failures. Confirm the Reoon key is saved before registration relies on email verification.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Reoon Connectivity', 'alynt-account-gateway' ),
+				'status'  => $reoon_network > 0 ? 'action' : 'ready',
+				'count'   => $reoon_network,
+				'message' => __( 'recent Reoon API connection failures. Check outbound HTTP, DNS, provider availability, and key permissions.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Reoon Unexpected Responses', 'alynt-account-gateway' ),
+				'status'  => $reoon_unexpected > 0 ? 'action' : 'ready',
+				'count'   => $reoon_unexpected,
+				'message' => __( 'recent malformed or unexpected Reoon responses. Test the key in Reoon and review provider availability before enabling stricter blocking.', 'alynt-account-gateway' ),
 			),
 		);
 	}

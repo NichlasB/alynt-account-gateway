@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.51 Reoon policy visibility shipped; next small release slice ready
+- Current phase: v0.1.52 provider failure feedback slice in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.51 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.50 remains the header-bearing fallback baseline for updater checks.
 - Frontend output default: Disabled
@@ -20,6 +20,38 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.52 Small Release Cycle
+
+### Scope
+
+- [x] Start the next security and anti-spam hardening slice from the released `master` baseline.
+- [x] Improve provider failure feedback in the Security & Spam admin tab by separating configuration gaps, connectivity failures, unexpected provider responses, and Turnstile challenge rejections.
+- [x] Keep this slice scoped to admin observability/guidance; do not change provider enforcement, registration flow, saved settings schema, account creation, email sending, webhooks, dashboard rendering, WooCommerce endpoint delegation, privacy cleanup, updater behavior, or default frontend-output disabled behavior.
+- [x] Run build, lint, test, audit, and POT generation.
+- [x] Package and run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.52` from clean `master` after the updater-verified `v0.1.51` release merge.
+- Added a Provider Failure Triage section under Recent Registration Verification Activity. The section breaks recent Turnstile/Reoon provider errors into concrete next-check cards for Turnstile configuration, Turnstile connectivity, Turnstile challenge rejections, Reoon configuration, Reoon connectivity, and unexpected Reoon responses.
+- Added focused settings-page coverage for the new triage counts/statuses and rendered guidance. Initial validation passed: PHP syntax for the settings page and focused `SettingsPageSecurityStatusTest` (`16 tests, 254 assertions`).
+- Branch implementation validation passed: build, POT generation (`828 strings`), PHP syntax for the settings page, lint, focused `SettingsPageSecurityStatusTest` (`16 tests, 254 assertions`), full tests (`219 tests, 1245 assertions`), npm audit, and whitespace check. The only diff-check note was the expected POT line-ending normalization warning.
+- Branch-QA package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.52-branch-qa-20260706-154547\alynt-account-gateway-v0.1.52-branch-qa.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, pre-bump `0.1.51` header/constant/stable tag/POT metadata, exactly one updater header, and Provider Failure Triage renderer/CSS/POT strings present.
+- Plugin Tester branch smoke passed on the local-only `plugin-tester.local` site: installed package active, pre-bump `0.1.51` header/constant confirmed, Provider Failure Triage rendered from the installed package, per-provider action/warning counts were correct for synthetic Turnstile/Reoon failures, compiled admin CSS and POT strings were present, and uploaded test artifacts were cleaned.
+
+### Guardrails
+
+- Do not alter Turnstile or Reoon API calls, provider pass/block decisions, rate-limit enforcement, registration storage, token expiry, resend behavior, auth routes, frontend copy, dashboard output, WooCommerce behavior, email delivery, webhook dispatch, saved settings keys, privacy cleanup, or updater metadata in this slice.
+- Keep this release focused on clearer admin diagnosis when configured anti-spam providers fail, reject, or return unexpected results.
+
+### Completion Gate
+
+- [x] Admin settings tests cover provider failure triage.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates the Provider Failure Triage guidance in the installed package.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.51 Small Release Cycle
 

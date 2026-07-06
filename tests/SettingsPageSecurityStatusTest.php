@@ -215,6 +215,65 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( 'action', $items[3]['status'] );
 	}
 
+	public function test_security_provider_failure_triage_items_count_specific_failures() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper(
+			$settings_page,
+			'security_provider_failure_triage_items',
+			array(
+				array(
+					(object) array(
+						'provider' => 'turnstile',
+						'status'   => 'alynt_ag_turnstile_missing',
+					),
+					(object) array(
+						'provider' => 'turnstile',
+						'status'   => 'alynt_ag_turnstile_request_failed',
+					),
+					(object) array(
+						'provider' => 'turnstile',
+						'status'   => 'alynt_ag_turnstile_failed',
+					),
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'alynt_ag_reoon_missing',
+					),
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'alynt_ag_reoon_request_failed',
+					),
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'alynt_ag_reoon_invalid_response',
+					),
+					(object) array(
+						'provider' => 'reoon',
+						'status'   => 'alynt_ag_reoon_blocked',
+					),
+				),
+			)
+		);
+
+		$this->assertSame( 'Turnstile Configuration', $items[0]['label'] );
+		$this->assertSame( 1, $items[0]['count'] );
+		$this->assertSame( 'action', $items[0]['status'] );
+		$this->assertSame( 'Turnstile Connectivity', $items[1]['label'] );
+		$this->assertSame( 1, $items[1]['count'] );
+		$this->assertSame( 'action', $items[1]['status'] );
+		$this->assertSame( 'Turnstile Challenge Rejections', $items[2]['label'] );
+		$this->assertSame( 1, $items[2]['count'] );
+		$this->assertSame( 'warning', $items[2]['status'] );
+		$this->assertSame( 'Reoon Configuration', $items[3]['label'] );
+		$this->assertSame( 1, $items[3]['count'] );
+		$this->assertSame( 'action', $items[3]['status'] );
+		$this->assertSame( 'Reoon Connectivity', $items[4]['label'] );
+		$this->assertSame( 1, $items[4]['count'] );
+		$this->assertSame( 'action', $items[4]['status'] );
+		$this->assertSame( 'Reoon Unexpected Responses', $items[5]['label'] );
+		$this->assertSame( 1, $items[5]['count'] );
+		$this->assertSame( 'action', $items[5]['status'] );
+	}
+
 	public function test_security_registration_abuse_signals_count_recent_activity() {
 		$settings_page = new ALYNT_AG_Settings_Page();
 		$items         = $this->invoke_helper(
@@ -690,6 +749,14 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'recent configuration or network failures. Check both Turnstile keys and outbound HTTP connectivity.', $output );
 		$this->assertStringContainsString( 'recent email-quality blocks. Review the policy if legitimate customers are affected.', $output );
 		$this->assertStringContainsString( 'recent configuration, connectivity, or response failures. Test the API key and outbound HTTP connectivity.', $output );
+		$this->assertStringContainsString( 'Provider Failure Triage', $output );
+		$this->assertStringContainsString( 'Use these focused checks when provider errors appear.', $output );
+		$this->assertStringContainsString( 'recent missing-token or key configuration failures. Confirm both keys are saved and belong to the same Cloudflare Turnstile site.', $output );
+		$this->assertStringContainsString( 'recent Cloudflare Siteverify connection failures. Check outbound HTTP, DNS, firewall rules, and the saved secret key.', $output );
+		$this->assertStringContainsString( 'recent rejected challenges. Confirm the registration domain is allowed in Cloudflare and compare with bot traffic before changing policy.', $output );
+		$this->assertStringContainsString( 'recent missing API-key failures. Confirm the Reoon key is saved before registration relies on email verification.', $output );
+		$this->assertStringContainsString( 'recent Reoon API connection failures. Check outbound HTTP, DNS, provider availability, and key permissions.', $output );
+		$this->assertStringContainsString( 'recent malformed or unexpected Reoon responses. Test the key in Reoon and review provider availability before enabling stricter blocking.', $output );
 		$this->assertStringContainsString( 'Rate Limit Pressure', $output );
 		$this->assertStringContainsString( 'recent registration blocks. Review the limit if legitimate customers are affected.', $output );
 		$this->assertStringContainsString( 'recent resend blocks. Repeated resends can indicate confused customers or automated retries.', $output );
