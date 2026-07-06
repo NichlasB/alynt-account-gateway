@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.52 provider failure feedback slice in progress
+- Current phase: v0.1.52 provider failure feedback shipped; next small release slice ready
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.51 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.50 remains the header-bearing fallback baseline for updater checks.
+- Plugin status: v0.1.52 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.51 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -30,7 +30,7 @@
 - [x] Keep this slice scoped to admin observability/guidance; do not change provider enforcement, registration flow, saved settings schema, account creation, email sending, webhooks, dashboard rendering, WooCommerce endpoint delegation, privacy cleanup, updater behavior, or default frontend-output disabled behavior.
 - [x] Run build, lint, test, audit, and POT generation.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -43,6 +43,9 @@
 - Release metadata bumped to `0.1.52`, POT regenerated (`828 strings`), and release validation passed: PHP syntax for the main plugin and settings page, build, lint, full tests (`219 tests, 1245 assertions`), npm audit, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
 - Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.52-20260706-155035\alynt-account-gateway-v0.1.52.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.52` header/constant/stable tag/POT metadata, exactly one updater header, and Provider Failure Triage renderer/CSS/POT strings present.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.52` header/constant, GitHub updater header, Provider Failure Triage rendered from the installed package, per-provider action/warning counts were correct for synthetic Turnstile/Reoon failures, compiled admin CSS and POT strings were present, and uploaded test artifacts were cleaned.
+- GitHub `v0.1.52` release was created at `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.52`; release workflow `28804664511` passed with only the non-blocking Node.js 20 deprecation annotation from `softprops/action-gh-release@v2`.
+- Public `v0.1.52` asset downloaded to `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.52-public\alynt-account-gateway-v0.1.52.zip` and inspected as 45 runtime files, wrapped main file, no backslash entries, no dev entries, `0.1.52` header/constant/stable tag/POT metadata, exactly one updater header, and Provider Failure Triage renderer/CSS/POT strings present.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site from public `v0.1.51`: updater found `0.1.52`, update response used `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.52/alynt-account-gateway-v0.1.52.zip`, `Plugin_Upgrader->upgrade()` installed successfully, fresh runtime showed active `0.1.52`, no update remained pending, Provider Failure Triage rendered, compiled admin CSS was present, and uploaded test artifacts were cleaned.
 
 ### Guardrails
 
@@ -54,7 +57,7 @@
 - [x] Admin settings tests cover provider failure triage.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates the Provider Failure Triage guidance in the installed package.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.51 Small Release Cycle
 
