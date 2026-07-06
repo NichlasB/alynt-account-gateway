@@ -97,8 +97,10 @@ class FrontendSetpasswordScreenTest extends TestCase {
 		$this->assertStringContainsString( 'name="login" value="customer@example.test"', $html );
 		$this->assertStringContainsString( 'id="agw-set-password"', $html );
 		$this->assertStringContainsString( 'name="password"', $html );
+		$this->assertStringContainsString( 'name="password" type="password" autocomplete="new-password" dir="ltr"', $html );
 		$this->assertStringContainsString( 'id="agw-set-confirm"', $html );
 		$this->assertStringContainsString( 'name="password_confirm"', $html );
+		$this->assertStringContainsString( 'name="password_confirm" type="password" autocomplete="new-password" dir="ltr"', $html );
 		$this->assertStringContainsString( 'aria-controls="agw-set-password"', $html );
 		$this->assertStringContainsString( 'aria-controls="agw-set-confirm"', $html );
 		$this->assertSame( 2, substr_count( $html, 'data-agw-password-toggle' ) );

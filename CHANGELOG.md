@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.67 - 2026-07-07
+
+### Changed
+
+- Added LTR direction hints to branded password fields for RTL language resilience.
+
 ## 0.1.66 - 2026-07-06
 
 ### Changed
