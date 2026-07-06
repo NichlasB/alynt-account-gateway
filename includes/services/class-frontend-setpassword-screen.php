@@ -179,11 +179,17 @@ class ALYNT_AG_Frontend_Setpassword_Screen {
 			<?php endforeach; ?>
 			<div class="agw-field agw-field--password">
 				<label for="agw-set-password"><?php esc_html_e( 'New Password', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-set-password" name="password" type="password" autocomplete="new-password" aria-describedby="<?php echo esc_attr( $error_code ? 'agw-password-error agw-password-status agw-password-requirements' : 'agw-password-status agw-password-requirements' ); ?>" <?php echo $error_code ? 'aria-invalid="true"' : ''; ?> data-agw-password-input required>
+				<div class="agw-password">
+					<input id="agw-set-password" name="password" type="password" autocomplete="new-password" aria-describedby="<?php echo esc_attr( $error_code ? 'agw-password-error agw-password-status agw-password-requirements' : 'agw-password-status agw-password-requirements' ); ?>" <?php echo $error_code ? 'aria-invalid="true"' : ''; ?> data-agw-password-input required>
+					<button type="button" class="agw-password__toggle" data-agw-password-toggle aria-controls="agw-set-password" aria-label="<?php esc_attr_e( 'Show password', 'alynt-account-gateway' ); ?>" aria-pressed="false"><?php esc_html_e( 'Show', 'alynt-account-gateway' ); ?></button>
+				</div>
 			</div>
 			<div class="agw-field agw-field--password">
 				<label for="agw-set-confirm"><?php esc_html_e( 'Confirm Password', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-set-confirm" name="password_confirm" type="password" autocomplete="new-password" aria-describedby="<?php echo esc_attr( $error_code ? 'agw-password-error agw-password-status agw-password-requirements' : 'agw-password-status agw-password-requirements' ); ?>" <?php echo $error_code ? 'aria-invalid="true"' : ''; ?> data-agw-password-confirm required>
+				<div class="agw-password">
+					<input id="agw-set-confirm" name="password_confirm" type="password" autocomplete="new-password" aria-describedby="<?php echo esc_attr( $error_code ? 'agw-password-error agw-password-status agw-password-requirements' : 'agw-password-status agw-password-requirements' ); ?>" <?php echo $error_code ? 'aria-invalid="true"' : ''; ?> data-agw-password-confirm required>
+					<button type="button" class="agw-password__toggle" data-agw-password-toggle aria-controls="agw-set-confirm" aria-label="<?php esc_attr_e( 'Show password', 'alynt-account-gateway' ); ?>" aria-pressed="false"><?php esc_html_e( 'Show', 'alynt-account-gateway' ); ?></button>
+				</div>
 			</div>
 			<div class="agw-strength" data-agw-strength data-agw-strength-score="0" data-agw-message-empty="<?php esc_attr_e( 'Enter a password to begin.', 'alynt-account-gateway' ); ?>" data-agw-message-weak="<?php esc_attr_e( 'Keep going.', 'alynt-account-gateway' ); ?>" data-agw-message-good="<?php esc_attr_e( 'Almost there.', 'alynt-account-gateway' ); ?>" data-agw-message-ready="<?php esc_attr_e( 'Password is ready.', 'alynt-account-gateway' ); ?>" aria-live="polite">
 				<span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>

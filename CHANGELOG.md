@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.63 - 2026-07-06
+
+### Changed
+
+- Added accessible password visibility controls to set-password fields and explicit controlled-field relationships for password toggles.
+
 ## 0.1.62 - 2026-07-06
 
 ### Changed
