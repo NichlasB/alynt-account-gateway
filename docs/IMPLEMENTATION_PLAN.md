@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.46 Registration abuse visibility in progress
+- Current phase: v0.1.46 Registration abuse visibility shipped; next small release slice ready
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.45 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.46 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep changes scoped to admin visibility with no registration flow, provider verification, rate-limit enforcement, diagnostics logging, saved settings schema, dashboard, WooCommerce, privacy cleanup, or default frontend-output behavior changes.
 - [x] Add focused coverage for abuse signal counts and rendered admin copy.
 - [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.46` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.46` release asset and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -44,6 +44,10 @@
 - Bumped release metadata to `0.1.46`, regenerated POT output with 786 strings, and re-ran release-candidate checks: PHP syntax for the plugin header and settings page, `npm.cmd run build`, `npm.cmd run lint`, full `npm.cmd test` with 216 tests and 1172 assertions, `npm.cmd audit --audit-level=moderate` with 0 vulnerabilities, and `git diff --check` with only expected Windows line-ending warnings.
 - Created final local package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.46-20260706-140154\alynt-account-gateway-v0.1.46.zip`; verified 45 runtime file entries, no directory entries, no backslash archive entries, no dev/source/test/docs/build-tooling files, header/constant/readme/POT metadata at `0.1.46`, Registration Abuse Signals renderer, built admin CSS, and POT strings present.
 - Installed the final local package on LocalWP Plugin Tester through WordPress upgrader classes. Fresh runtime smoke confirmed active header `0.1.46` and loaded constant `0.1.46`, inserted 4 temporary verification rows, validated Registration Abuse Signals render with registration rate-limit, resend rate-limit, flagged email block, and setup friction guidance, cleaned up all 4 temporary rows, confirmed 0 remaining QA rows, and removed uploaded QA artifacts from the LocalWP filesystem.
+- Published GitHub release `v0.1.46`; release workflow `28790175619` passed and uploaded `alynt-account-gateway-v0.1.46.zip`.
+- Downloaded the public `v0.1.46` release asset to `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.46-public\alynt-account-gateway-v0.1.46.zip`; verified 45 runtime file entries, 10 directory entries from the workflow-built archive, no backslash archive entries, no dev/source/test/docs/build-tooling files, header/constant/readme/POT metadata at `0.1.46`, Registration Abuse Signals renderer, built admin CSS, and POT strings present.
+- Downgraded LocalWP Plugin Tester to the public `v0.1.45` asset, confirmed active header and loaded constant `0.1.45`, confirmed Registration Abuse Signals absent and Account Delivery Signals still present, then verified Alynt Plugin Updater detected `0.1.46` from `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.46/alynt-account-gateway-v0.1.46.zip`.
+- Upgraded LocalWP Plugin Tester through Alynt Plugin Updater from `0.1.45` to `0.1.46`. Fresh runtime smoke confirmed active header `0.1.46`, loaded constant `0.1.46`, no remaining update available, inserted 4 temporary verification rows, validated Registration Abuse Signals render with registration rate-limit, resend rate-limit, flagged email block, and setup friction guidance, cleaned up all 4 temporary rows, confirmed 0 remaining QA rows, and removed uploaded downgrade artifacts from the LocalWP filesystem.
 
 ### Guardrails
 
@@ -54,7 +58,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates Registration Abuse Signals on the Security tab.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.45 Small Release Cycle
 
