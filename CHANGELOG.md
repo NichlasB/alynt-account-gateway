@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.56 - 2026-07-06
+
+### Changed
+
+- Updated the GitHub release workflow to use `softprops/action-gh-release@v3`.
+
 ## 0.1.55 - 2026-07-06
 
 ### Added
