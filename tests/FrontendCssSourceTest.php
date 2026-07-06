@@ -54,4 +54,29 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertStringContainsString( '.agw-dashboard-content .woocommerce-EditAccountForm', $css );
 		$this->assertStringContainsString( 'grid-template-columns: 1fr;', $css );
 	}
+
+	public function test_frontend_css_includes_focus_visible_guardrails() {
+		$css = $this->get_frontend_css();
+
+		$this->assertStringContainsString( '.agw-field input:focus-visible', $css );
+		$this->assertStringContainsString( '.agw-password__toggle:focus-visible', $css );
+		$this->assertStringContainsString( '.agw-dashboard-link:focus-visible', $css );
+		$this->assertStringContainsString( '.agw-dashboard-content input[type="submit"]:focus-visible', $css );
+		$this->assertStringContainsString( 'outline: 3px solid var(--agw-color-primary);', $css );
+		$this->assertStringContainsString( 'outline-offset: 3px;', $css );
+	}
+
+	public function test_frontend_css_includes_forced_colors_support() {
+		$css = $this->get_frontend_css();
+
+		$this->assertStringContainsString( '@media (forced-colors: active)', $css );
+		$this->assertStringContainsString( '--agw-color-text: CanvasText;', $css );
+		$this->assertStringContainsString( '--agw-color-background: Canvas;', $css );
+		$this->assertStringContainsString( '--agw-button-background: ButtonFace;', $css );
+		$this->assertStringContainsString( 'forced-color-adjust: auto;', $css );
+		$this->assertStringContainsString( 'border: 1px solid CanvasText;', $css );
+		$this->assertStringContainsString( 'background: Field;', $css );
+		$this->assertStringContainsString( 'color: LinkText;', $css );
+		$this->assertStringContainsString( 'outline: 3px solid Highlight;', $css );
+	}
 }

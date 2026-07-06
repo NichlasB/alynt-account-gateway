@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.59 - 2026-07-06
+
+### Added
+
+- Added frontend focus-visible and high-contrast forced-colors CSS guardrails.
+
 ## 0.1.58 - 2026-07-06
 
 ### Added

@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.58 security/manual-review queue slice released and updater-verified
+- Current phase: v0.1.59 accessibility/forced-colors resilience slice at release approval gate
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.58 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.57 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
@@ -20,6 +20,40 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.59 Small Release Cycle
+
+### Scope
+
+- [x] Start the next accessibility, RTL, and multilingual QA sub-slice from the released `v0.1.58` baseline.
+- [x] Add frontend `:focus-visible` guardrails for gateway forms, password toggles, links, dashboard cards, dashboard actions, and delegated WooCommerce controls.
+- [x] Add forced-colors/high-contrast CSS support so gateway and dashboard surfaces use OS system colors in high-contrast mode.
+- [x] Keep the slice visual/accessibility-only: do not change authentication, registration, dashboard routing, WooCommerce endpoint delegation, settings schema, provider behavior, diagnostics logging, privacy cleanup, or updater behavior.
+- [x] Run build, lint, focused frontend CSS tests, full tests, audit, POT generation, and package inspection.
+- [x] Package and run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.59` from clean `master` after the updater-verified `v0.1.58` release.
+- Added explicit `:focus-visible` outlines for public gateway controls and dashboard/WooCommerce delegated controls.
+- Added a `forced-colors: active` media block that maps frontend gateway colors to system colors such as `Canvas`, `CanvasText`, `ButtonFace`, `ButtonText`, `Field`, `FieldText`, `LinkText`, and `Highlight`.
+- Added frontend CSS source coverage for focus-visible selectors and forced-colors system-color guardrails. Initial validation passed: focused `FrontendCssSourceTest` (`4 tests, 33 assertions`) and `npm run build`.
+- Release validation passed: `npm run build`, `npm run make-pot` (`853 strings`), PHP syntax for the main plugin, `npm run lint`, `npm test -- --do-not-cache-result` (`228 tests, 1307 assertions`), `npm audit --audit-level=moderate`, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
+- Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.59-20260706-205216\alynt-account-gateway-v0.1.59.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.59` header/constant/stable tag, exactly one updater header, forced-colors CSS present, focus-visible CSS present, system colors present, and SHA-256 `9CE54EADCC0B5B86DB0F195BFCAF842CA3E4E57FD25390EF559718741AE35CDB`.
+- Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.59` header/constant, compiled frontend CSS includes focus-visible selectors, forced-colors media support, and system color markers (`CanvasText`, `ButtonFace`, `Highlight`), and uploaded sandbox artifacts were cleaned.
+
+### Guardrails
+
+- Do not alter frontend routes, form POST handling, account creation, Reoon/Turnstile verification, rate-limit enforcement, dashboard endpoint delegation, saved setting keys, diagnostics/event logging, data retention, privacy cleanup, or updater metadata in this slice.
+- Keep this release focused on contrast resilience and keyboard-focus visibility in the existing frontend CSS.
+
+### Completion Gate
+
+- [x] Frontend CSS tests cover focus-visible and forced-colors guardrails.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates the installed-package CSS markers.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.58 Small Release Cycle
 
