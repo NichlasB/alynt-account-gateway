@@ -259,6 +259,7 @@
 .alynt-ag-security-pressure,
 .alynt-ag-security-access,
 .alynt-ag-security-routing,
+.alynt-ag-security-delivery,
 .alynt-ag-security-flow {
 	margin: 14px 0 16px;
 }
@@ -267,6 +268,7 @@
 .alynt-ag-security-pressure h4,
 .alynt-ag-security-access h4,
 .alynt-ag-security-routing h4,
+.alynt-ag-security-delivery h4,
 .alynt-ag-security-flow h4 {
 	margin: 0 0 10px;
 	font-size: 14px;
