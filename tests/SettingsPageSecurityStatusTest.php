@@ -265,6 +265,55 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( 'warning', $items[3]['status'] );
 	}
 
+	public function test_security_access_control_signals_count_recent_activity() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper(
+			$settings_page,
+			'security_access_control_signal_items',
+			array(
+				array(
+					(object) array(
+						'provider' => 'rate_limit',
+						'status'   => 'login_rate_limited',
+					),
+					(object) array(
+						'provider' => 'rate_limit',
+						'status'   => 'lostpassword_rate_limited',
+					),
+					(object) array(
+						'provider' => 'rate_limit',
+						'status'   => 'lostpassword_rate_limited',
+					),
+					(object) array(
+						'provider' => 'registration_flow',
+						'status'   => 'password_mismatch',
+					),
+				),
+				array(
+					(object) array(
+						'event_code' => 'wp_admin_access_blocked',
+					),
+					(object) array(
+						'event_code' => 'wp_admin_access_blocked',
+					),
+					(object) array(
+						'event_code' => 'native_login_redirected',
+					),
+				),
+			)
+		);
+
+		$this->assertSame( 'Login Lockouts', $items[0]['label'] );
+		$this->assertSame( 1, $items[0]['count'] );
+		$this->assertSame( 'warning', $items[0]['status'] );
+		$this->assertSame( 'Password Reset Lockouts', $items[1]['label'] );
+		$this->assertSame( 2, $items[1]['count'] );
+		$this->assertSame( 'warning', $items[1]['status'] );
+		$this->assertSame( 'Blocked Admin Access', $items[2]['label'] );
+		$this->assertSame( 2, $items[2]['count'] );
+		$this->assertSame( 'warning', $items[2]['status'] );
+	}
+
 	public function test_security_recent_verification_activity_renders_masked_rows() {
 		$tables = ALYNT_AG_Database::tables();
 		$GLOBALS['alynt_ag_test_db_results'][ $tables['verification_logs'] ] = array(
@@ -395,6 +444,16 @@ class SettingsPageSecurityStatusTest extends TestCase {
 				'created_at' => '2026-07-05 12:50:00',
 			),
 		);
+		$GLOBALS['alynt_ag_test_db_results'][ $tables['diagnostics_logs'] ] = array(
+			(object) array(
+				'event_code' => 'wp_admin_access_blocked',
+				'created_at' => '2026-07-05 12:55:00',
+			),
+			(object) array(
+				'event_code' => 'native_login_redirected',
+				'created_at' => '2026-07-05 12:56:00',
+			),
+		);
 
 		$settings_page = new ALYNT_AG_Settings_Page();
 
@@ -413,6 +472,10 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'recent resend blocks. Repeated resends can indicate confused customers or automated retries.', $output );
 		$this->assertStringContainsString( 'recent login blocks. Repeated login blocks can indicate credential stuffing or customers stuck at login.', $output );
 		$this->assertStringContainsString( 'recent password-reset blocks. Check for repeated reset requests against the same account.', $output );
+		$this->assertStringContainsString( 'Access Control Signals', $output );
+		$this->assertStringContainsString( 'recent login rate-limit blocks. Review for credential stuffing or customers stuck at login.', $output );
+		$this->assertStringContainsString( 'recent password-reset rate-limit blocks. Watch for repeated reset requests against the same account.', $output );
+		$this->assertStringContainsString( 'recent wp-admin redirects recorded by diagnostics. Repeated blocks can mean customers are following admin links or a role rule needs review.', $output );
 		$this->assertStringContainsString( 'Registration Flow Signals', $output );
 		$this->assertStringContainsString( 'recent consent-related blocks. Check Terms and Privacy copy if legitimate customers are stopping here.', $output );
 		$this->assertStringContainsString( 'recent pending-record or confirmation-email failures. Review database writes and email delivery before public launch.', $output );
