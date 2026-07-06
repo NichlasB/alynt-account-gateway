@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.55 import/export/reset experience shipped; next small release slice ready
+- Current phase: v0.1.56 GitHub Actions maintenance release in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.55 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.54 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
@@ -20,6 +20,38 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.56 Maintenance Release Cycle
+
+### Scope
+
+- [x] Start a tiny maintenance release from the released `v0.1.55` baseline.
+- [x] Update the GitHub release workflow from `softprops/action-gh-release@v2` to `softprops/action-gh-release@v3`.
+- [x] Verify the `softprops/action-gh-release@v3` tag exists before publishing.
+- [x] Bump release metadata to `0.1.56` so Alynt Plugin Updater can offer the maintenance release.
+- [x] Run build, lint, tests, audit, POT generation, and package inspection.
+- [ ] Publish release and verify the workflow warning is gone.
+- [ ] Complete public asset and Alynt Plugin Updater verification.
+
+### Progress Notes
+
+- Started `v0.1.56` from `master` after the updater-verified `v0.1.55` release. The only pre-existing local diff was the intended release workflow change from `softprops/action-gh-release@v2` to `softprops/action-gh-release@v3`.
+- Verified `softprops/action-gh-release@v3` exists through the GitHub API before keeping the workflow change.
+- Bumped release metadata to `0.1.56` across the plugin header/constant, npm metadata, readme, changelog, and sample test.
+- Release validation passed: PHP syntax for the main plugin and settings page, `npm run build`, `npm run make-pot` (`842 strings`), `npm run lint`, `npm test -- --do-not-cache-result` (`224 tests, 1272 assertions`), `npm audit --audit-level=moderate`, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
+- Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.56-20260706-180423\alynt-account-gateway-v0.1.56.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.56` header/constant/stable tag, exactly one updater header, and SHA-256 `45974A425515008E295E32473191722E98FC89401A4D30DABFB2E488E4206843`.
+
+### Guardrails
+
+- Do not change plugin runtime behavior, settings, frontend output, authentication flow, WooCommerce behavior, updater metadata shape, package exclusions, or product features in this maintenance release.
+- Keep this release focused on removing the GitHub Actions Node.js 20 deprecation annotation from future release builds.
+
+### Completion Gate
+
+- [x] Workflow references `softprops/action-gh-release@v3`.
+- [ ] Release workflow completes without the prior Node.js 20 deprecation annotation.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.55 Small Release Cycle
 
