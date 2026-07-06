@@ -774,6 +774,55 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'No pending registration records have been created yet.', $output );
 	}
 
+	public function test_security_pending_registration_lifecycle_signals_count_recent_activity() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper(
+			$settings_page,
+			'security_pending_registration_lifecycle_signal_items',
+			array(
+				array(
+					(object) array(
+						'status'       => 'pending',
+						'expires_at'   => '2099-07-04 12:00:00',
+						'confirmed_at' => null,
+						'user_id'      => 0,
+					),
+					(object) array(
+						'status'       => 'email_confirmed',
+						'expires_at'   => '2099-07-04 12:00:00',
+						'confirmed_at' => '2026-07-04 12:05:00',
+						'user_id'      => 0,
+					),
+					(object) array(
+						'status'       => 'pending',
+						'expires_at'   => '2000-07-04 12:00:00',
+						'confirmed_at' => null,
+						'user_id'      => 0,
+					),
+					(object) array(
+						'status'       => 'completed',
+						'expires_at'   => '2000-07-04 12:00:00',
+						'confirmed_at' => '2026-07-04 12:05:00',
+						'user_id'      => 123,
+					),
+				),
+			)
+		);
+
+		$this->assertSame( 'Waiting For Confirmation', $items[0]['label'] );
+		$this->assertSame( 1, $items[0]['count'] );
+		$this->assertSame( 'warning', $items[0]['status'] );
+		$this->assertSame( 'Confirmed, Not Completed', $items[1]['label'] );
+		$this->assertSame( 1, $items[1]['count'] );
+		$this->assertSame( 'warning', $items[1]['status'] );
+		$this->assertSame( 'Expired Pending Records', $items[2]['label'] );
+		$this->assertSame( 1, $items[2]['count'] );
+		$this->assertSame( 'action', $items[2]['status'] );
+		$this->assertSame( 'Completed Pending Records', $items[3]['label'] );
+		$this->assertSame( 1, $items[3]['count'] );
+		$this->assertSame( 'ready', $items[3]['status'] );
+	}
+
 	public function test_security_pending_registrations_render_masked_rows_and_statuses() {
 		$tables = ALYNT_AG_Database::tables();
 		$GLOBALS['alynt_ag_test_db_results'][ $tables['pending_registrations'] ] = array(
@@ -783,7 +832,7 @@ class SettingsPageSecurityStatusTest extends TestCase {
 				'status'       => 'pending',
 				'created_at'   => '2026-07-03 12:00:00',
 				'confirmed_at' => null,
-				'expires_at'   => '2026-07-04 12:00:00',
+				'expires_at'   => '2099-07-04 12:00:00',
 			),
 			(object) array(
 				'email'        => 'confirmed@example.test',
@@ -791,7 +840,7 @@ class SettingsPageSecurityStatusTest extends TestCase {
 				'status'       => 'email_confirmed',
 				'created_at'   => '2026-07-02 12:00:00',
 				'confirmed_at' => '2026-07-02 12:10:00',
-				'expires_at'   => '2026-07-04 12:00:00',
+				'expires_at'   => '2099-07-04 12:00:00',
 			),
 			(object) array(
 				'email'        => 'finished@example.test',
@@ -818,6 +867,11 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$output = ob_get_clean();
 
 		$this->assertStringContainsString( 'Recent Pending Registrations', $output );
+		$this->assertStringContainsString( 'Pending Registration Lifecycle Signals', $output );
+		$this->assertStringContainsString( 'recent pending records still waiting for email confirmation. Watch resend activity and inbox-delivery support requests.', $output );
+		$this->assertStringContainsString( 'recent records where email is confirmed but password setup is unfinished. Customers may need clearer next-step copy.', $output );
+		$this->assertStringContainsString( 'recent pending records past their confirmation window. High counts can indicate missed emails or confusing confirmation instructions.', $output );
+		$this->assertStringContainsString( 'recent pending records that reached account creation. This helps compare completed registrations against stalled ones.', $output );
 		$this->assertStringContainsString( 'p***@example.test', $output );
 		$this->assertStringContainsString( 'c***@example.test', $output );
 		$this->assertStringContainsString( 'f***@example.test', $output );
