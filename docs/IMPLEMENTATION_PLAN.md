@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.49 WooCommerce endpoint shortcut polish in progress
+- Current phase: v0.1.50 updater metadata correction in progress after v0.1.49 exposed an updater-discovery gap
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.48 is the current public baseline after GitHub release and Alynt Plugin Updater verification.
+- Plugin status: v0.1.49 is published, but final updater verification found the plugin package was missing the `GitHub Plugin URI` header required by Alynt Plugin Updater discovery; v0.1.50 is the corrective release in progress.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -21,6 +21,34 @@
 - [ ] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [ ] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
 
+## v0.1.50 Small Release Cycle
+
+### Scope
+
+- [x] Add the required `GitHub Plugin URI` plugin header so Alynt Plugin Updater can discover Alynt Account Gateway.
+- [x] Keep the correction limited to updater metadata and release bookkeeping.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke.
+- [ ] Complete updater verification.
+- [ ] Publish the final `v0.1.50` release asset and verify the Alynt Plugin Updater path end to end from a header-bearing installed baseline.
+
+### Progress Notes
+
+- Started `v0.1.50` after `v0.1.49` public release creation when Plugin Tester updater verification showed Alynt Plugin Updater could not discover the installed ACG package without the `GitHub Plugin URI` header.
+- Added `GitHub Plugin URI: NichlasB/alynt-account-gateway` to the main plugin header and bumped release metadata to `0.1.50`.
+- Release validation passed: PHP syntax for the main plugin and dashboard screen, build, POT generation (`806 strings`), lint, full tests (`218 tests, 1212 assertions`), npm audit, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
+- Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.50-20260706-154323\alynt-account-gateway-v0.1.50.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.50` header/constant/stable tag/POT metadata, exactly one `GitHub Plugin URI: NichlasB/alynt-account-gateway` header, and shortcut code/CSS/strings present.
+- Plugin Tester local package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.50` header/constant, GitHub updater header, order-detail shortcuts, compiled CSS, and delegated endpoint output validated. Uploaded test artifact was cleaned from the Novamira doubled-path upload location.
+
+### Guardrails
+
+- Do not change dashboard UI behavior, WooCommerce endpoint handling, auth, registration, emails, settings schema, saved data, privacy cleanup, or frontend-output defaults in this corrective release.
+
+### Completion Gate
+
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates `0.1.50` installs with updater metadata present.
+- [ ] Alynt Plugin Updater discovers and installs the public `v0.1.50` asset from GitHub.
+
 ## v0.1.49 Small Release Cycle
 
 ### Scope
@@ -30,7 +58,8 @@
 - [x] Cover orders, order details, downloads, addresses, account details, saved payment methods, add payment method, delete payment method, and set-default payment method flows.
 - [x] Keep changes scoped to frontend navigation affordances; do not change endpoint routing, WooCommerce action delegation, dashboard settings, saved data, auth, registration, emails, updater behavior, or default frontend-output disabled behavior.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
-- [ ] Publish the final `v0.1.49` release asset and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the final `v0.1.49` release asset.
+- [ ] Verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -44,6 +73,7 @@
 - Release metadata bumped to `0.1.49`, POT regenerated (`806 strings`), and release validation passed: PHP syntax for the main plugin and dashboard screen, build, lint, full tests (`218 tests, 1211 assertions`), npm audit, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
 - Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.49-20260706-153426\alynt-account-gateway-v0.1.49.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.49` header/constant/stable tag/POT metadata, and shortcut code/CSS/strings present.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.49` header/constant, order-detail shortcuts, payment-method shortcuts, compiled CSS, delegated endpoint output, and custom endpoint no-shortcut behavior validated. Uploaded test artifact was cleaned from the Novamira doubled-path upload location.
+- GitHub `v0.1.49` release was created and the release workflow passed. Public asset inspection passed, but final updater verification exposed that the ACG package lacked the `GitHub Plugin URI` header required by Alynt Plugin Updater's scanner, so updater discovery could not find the installed plugin. This is being corrected in `v0.1.50`.
 
 ### Guardrails
 
