@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.63 released and updater-verified; next slice selection pending
+- Current phase: v0.1.64 frontend theme-compatibility CSS guardrail slice packaged and smoke-tested; awaiting release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.63 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.62 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
@@ -20,6 +20,39 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.64 Small Release Cycle
+
+### Scope
+
+- [x] Start the frontend visual QA and theme compatibility sub-slice from the released `v0.1.63` baseline.
+- [x] Add scoped gateway form-control CSS guardrails that reduce browser/theme interference with branded auth fields and buttons.
+- [x] Add focused frontend CSS source coverage for the guardrails.
+- [x] Keep the slice CSS-only: do not change markup, JavaScript behavior, authentication decisions, password policy validation, registration creation, provider verification, saved settings, diagnostics logging, admin UI behavior, WooCommerce delegated form behavior, privacy cleanup, or updater behavior.
+- [x] Run build, focused frontend CSS tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Package and run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.64` from clean `master` after the updater-verified `v0.1.63` release.
+- Added `appearance: none` to branded gateway text inputs, password-toggle buttons, and gateway buttons, plus a `max-width: 100%` guardrail on gateway text inputs, so native browser or theme form-control styling is less likely to distort gateway forms.
+- Added focused `FrontendCssSourceTest` coverage for the new scoped form-control guardrails. Initial validation passed: focused `FrontendCssSourceTest` (`6 tests, 42 assertions`) and `npm run build`.
+- Release validation passed: `npm run build`, PHP syntax for the main plugin and updated frontend CSS test, focused `FrontendCssSourceTest` (`6 tests, 42 assertions`), `npm run lint`, `npm test -- --do-not-cache-result` (`237 tests, 1394 assertions`), `npm audit --audit-level=moderate`, `npm run make-pot` (`874 strings`), and whitespace check. The only diff-check notes were expected line-ending normalization warnings on generated/metadata files.
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.64-20260706-230345\alynt-account-gateway-v0.1.64.zip` and inspected as 46 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.64` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, compiled frontend CSS form-control guardrails present, source CSS excluded, and SHA-256 `4879E3F4E5230F00B066C3133076BC2DCF4147863FF520DD78075CD35564F603`.
+- Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.64` header/constant, exactly one `GitHub Plugin URI` updater header, compiled frontend CSS includes `appearance:none` guardrails for gateway inputs, password toggles, and buttons, gateway input `max-width:100%` is present, source CSS is excluded, and uploaded sandbox artifacts were cleaned.
+
+### Guardrails
+
+- Do not alter PHP runtime behavior, translated strings outside necessary metadata/plan changes, frontend route handling, saved setting keys, diagnostics event names, provider API behavior, data retention, privacy cleanup, WooCommerce delegated forms, or updater metadata in this slice.
+- Keep the CSS changes scoped to branded gateway auth form controls and buttons.
+
+### Completion Gate
+
+- [x] Frontend CSS tests cover scoped form-control theme-compatibility guardrails.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package CSS markers.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.63 Small Release Cycle
 

@@ -87,4 +87,13 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertStringContainsString( 'padding-inline-start: 20px;', $css );
 		$this->assertStringNotContainsString( 'padding-left: 20px;', $css );
 	}
+
+	public function test_frontend_css_normalizes_gateway_form_controls_against_theme_styles() {
+		$css = $this->get_frontend_css();
+
+		$this->assertStringContainsString( ".agw-field input {\n\tappearance: none;", $css );
+		$this->assertStringContainsString( "\tmax-width: 100%;\n\tmin-height: 48px;", $css );
+		$this->assertStringContainsString( ".agw-password__toggle {\n\tappearance: none;", $css );
+		$this->assertStringContainsString( ".agw-button {\n\tappearance: none;", $css );
+	}
 }
