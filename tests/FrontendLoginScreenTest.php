@@ -55,6 +55,7 @@ class FrontendLoginScreenTest extends TestCase {
 		$this->assertStringContainsString( 'id="agw-login-password"', $html );
 		$this->assertStringContainsString( 'name="pwd"', $html );
 		$this->assertStringContainsString( 'data-agw-password-toggle', $html );
+		$this->assertStringContainsString( 'aria-controls="agw-login-password"', $html );
 		$this->assertStringContainsString( 'aria-label="Show password"', $html );
 		$this->assertStringContainsString( 'name="rememberme"', $html );
 		$this->assertStringContainsString( 'href="https://example.test/account?action=register"', $html );

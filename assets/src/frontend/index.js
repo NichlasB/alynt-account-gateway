@@ -17,8 +17,10 @@ function alyntAgTogglePassword( event ) {
 		return;
 	}
 
-	const wrapper = toggle.closest( '.agw-password' );
-	const input   = wrapper ? wrapper.querySelector( 'input' ) : null;
+	const controlledId = toggle.getAttribute( 'aria-controls' );
+	const controlled   = controlledId ? document.getElementById( controlledId ) : null;
+	const wrapper      = toggle.closest( '.agw-password' );
+	const input        = controlled || ( wrapper ? wrapper.querySelector( 'input' ) : null );
 
 	if ( ! input ) {
 		return;
