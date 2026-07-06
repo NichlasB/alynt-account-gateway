@@ -155,7 +155,7 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 				<?php endif; ?>
 				<div class="agw-dashboard-content">
 					<?php if ( ! $this->woocommerce->render_endpoint( $endpoint['endpoint'], $endpoint['value'] ) ) : ?>
-						<p><?php esc_html_e( 'This account section is not available.', 'alynt-account-gateway' ); ?></p>
+						<?php $this->render_woocommerce_endpoint_unavailable( $endpoint['endpoint'], $settings ); ?>
 					<?php endif; ?>
 				</div>
 			</section>
@@ -265,6 +265,43 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 		);
 
 		return isset( $items[ $endpoint ] ) ? $items[ $endpoint ] : array();
+	}
+
+	/**
+	 * Render a branded fallback when WooCommerce does not output endpoint content.
+	 *
+	 * @param string              $endpoint Endpoint key.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_woocommerce_endpoint_unavailable( $endpoint, $settings ) {
+		$labels = $this->woocommerce->endpoint_labels();
+		$title  = $labels[ $endpoint ] ?? __( 'Account section', 'alynt-account-gateway' );
+		?>
+		<div class="agw-dashboard-empty" role="status">
+			<span class="agw-dashboard-empty__eyebrow"><?php esc_html_e( 'Account section unavailable', 'alynt-account-gateway' ); ?></span>
+			<h3><?php esc_html_e( 'This area is not ready yet', 'alynt-account-gateway' ); ?></h3>
+			<p>
+				<?php
+				echo esc_html(
+					sprintf(
+						/* translators: %s: WooCommerce account endpoint label. */
+						__( 'WooCommerce did not return content for %s. Try another account area or come back after the store has finished configuring this section.', 'alynt-account-gateway' ),
+						$title
+					)
+				);
+				?>
+			</p>
+			<div class="agw-dashboard-empty__actions">
+				<a class="agw-button agw-button--secondary" href="<?php echo esc_url( $this->woocommerce->endpoint_url( 'dashboard', $settings ) ); ?>">
+					<?php esc_html_e( 'Back to dashboard', 'alynt-account-gateway' ); ?>
+				</a>
+				<a class="agw-button agw-button--primary" href="<?php echo esc_url( $this->woocommerce->endpoint_url( 'edit-account', $settings ) ); ?>">
+					<?php esc_html_e( 'Manage account details', 'alynt-account-gateway' ); ?>
+				</a>
+			</div>
+		</div>
+		<?php
 	}
 
 	/**

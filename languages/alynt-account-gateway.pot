@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 0.1.47\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-06 12:40+0000\n"
+"POT-Creation-Date: 2026-07-06 13:03+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -106,7 +106,7 @@ msgstr ""
 
 #: includes/services/class-dashboard-service.php:32
 #: includes/services/class-frontend-dashboard-screen.php:191
-#: includes/services/class-frontend-dashboard-screen.php:290
+#: includes/services/class-frontend-dashboard-screen.php:327
 #: includes/services/class-woocommerce-integration.php:29
 #: includes/services/class-woocommerce-integration.php:85
 msgid "Account Details"
@@ -118,6 +118,14 @@ msgstr ""
 
 #: includes/services/class-privacy-service.php:197
 msgid "Account Gateway Consent"
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:279
+msgid "Account section"
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:282
+msgid "Account section unavailable"
 msgstr ""
 
 #: includes/services/class-frontend-components.php:26
@@ -301,6 +309,10 @@ msgstr ""
 msgid "Avoid brand-specific claims in reusable defaults; save those for site-specific configuration."
 msgstr ""
 
+#: includes/services/class-frontend-dashboard-screen.php:297
+msgid "Back to dashboard"
+msgstr ""
+
 #: includes/services/class-frontend-lostpassword-screen.php:70
 #: includes/services/class-frontend-lostpassword-screen.php:88
 #: includes/services/class-frontend-register-screen.php:60
@@ -387,7 +399,7 @@ msgstr ""
 msgid "Check button background and text colors together for readable contrast."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:281
+#: includes/services/class-frontend-dashboard-screen.php:318
 msgid "Check recent purchases, order status, and order details."
 msgstr ""
 
@@ -603,11 +615,11 @@ msgstr ""
 msgid "Customer"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:297
+#: includes/services/class-frontend-dashboard-screen.php:334
 msgid "Customer Account"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:301
+#: includes/services/class-frontend-dashboard-screen.php:338
 msgid "Customer account shortcuts"
 msgstr ""
 
@@ -945,7 +957,7 @@ msgstr ""
 msgid "Every configured provider must pass registration. Configure both Turnstile and Reoon when the site needs two independent checks."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:298
+#: includes/services/class-frontend-dashboard-screen.php:335
 msgid "Everything for your orders in one place"
 msgstr ""
 
@@ -1183,7 +1195,7 @@ msgstr ""
 msgid "Keep account creation intentional."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:286
+#: includes/services/class-frontend-dashboard-screen.php:323
 msgid "Keep billing and shipping information ready for checkout."
 msgstr ""
 
@@ -1390,12 +1402,16 @@ msgstr ""
 msgid "Manage Account"
 msgstr ""
 
+#: includes/services/class-frontend-dashboard-screen.php:300
+msgid "Manage account details"
+msgstr ""
+
 #: includes/services/class-frontend-dashboard-screen.php:229
 #: includes/services/class-frontend-dashboard-screen.php:253
 msgid "Manage addresses"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:285
+#: includes/services/class-frontend-dashboard-screen.php:322
 msgid "Manage Addresses"
 msgstr ""
 
@@ -2338,7 +2354,7 @@ msgstr ""
 msgid "Review Dashboard"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:299
+#: includes/services/class-frontend-dashboard-screen.php:336
 msgid "Review purchases, manage checkout details, and keep your account information current without leaving the branded account area."
 msgstr ""
 
@@ -2828,8 +2844,8 @@ msgstr ""
 msgid "These paths decide where login, account actions, and post-login redirects send users."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:158
-msgid "This account section is not available."
+#: includes/services/class-frontend-dashboard-screen.php:283
+msgid "This area is not ready yet"
 msgstr ""
 
 #: includes/services/class-registration-service.php:625
@@ -2992,7 +3008,7 @@ msgstr ""
 msgid "Unknown email template."
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:291
+#: includes/services/class-frontend-dashboard-screen.php:328
 msgid "Update your name, email address, and account password."
 msgstr ""
 
@@ -3173,7 +3189,7 @@ msgstr ""
 msgid "View orders"
 msgstr ""
 
-#: includes/services/class-frontend-dashboard-screen.php:280
+#: includes/services/class-frontend-dashboard-screen.php:317
 msgid "View Orders"
 msgstr ""
 
@@ -3244,6 +3260,10 @@ msgstr ""
 
 #: includes/services/class-frontend-dashboard-screen.php:107
 msgid "WooCommerce account takeover is enabled, but WooCommerce is not active."
+msgstr ""
+
+#: includes/services/class-frontend-dashboard-screen.php:289
+msgid "WooCommerce did not return content for %s. Try another account area or come back after the store has finished configuring this section."
 msgstr ""
 
 #: includes/services/class-compatibility-warnings.php:181

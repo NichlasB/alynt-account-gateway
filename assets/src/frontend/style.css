@@ -714,6 +714,47 @@
 	box-shadow: 0 1px 2px rgb(40 20 8 / 5%);
 }
 
+.agw-dashboard-empty {
+	display: grid;
+	gap: 12px;
+	padding: 18px;
+	border: 1px solid color-mix(in srgb, var(--agw-color-primary) 24%, transparent);
+	border-radius: 8px;
+	background: color-mix(in srgb, var(--agw-color-primary) 6%, var(--agw-color-surface));
+}
+
+.agw-dashboard-empty__eyebrow {
+	color: var(--agw-color-primary);
+	font-size: 13px;
+	font-weight: 800;
+	line-height: 1.4;
+	text-transform: uppercase;
+}
+
+.agw-dashboard-empty h3 {
+	margin: 0;
+	color: var(--agw-color-text);
+	font-family: var(--agw-font-heading);
+	font-size: 22px;
+	font-weight: 600;
+	line-height: 1.2;
+	letter-spacing: 0;
+}
+
+.agw-dashboard-empty p {
+	max-width: 720px;
+	margin: 0;
+	color: color-mix(in srgb, var(--agw-color-text) 78%, var(--agw-color-surface));
+	line-height: 1.55;
+}
+
+.agw-dashboard-empty__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 4px;
+}
+
 .agw-dashboard-content > :first-child,
 .agw-dashboard-content .woocommerce-notices-wrapper > :first-child {
 	margin-top: 0;
