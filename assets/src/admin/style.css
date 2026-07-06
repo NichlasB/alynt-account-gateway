@@ -27,7 +27,7 @@
 	margin: 16px 0 20px;
 	padding: 16px 18px;
 	border: 1px solid #c3c4c7;
-	border-left: 4px solid #3858e9;
+	border-inline-start: 4px solid #3858e9;
 	background: #fff;
 }
 
@@ -63,14 +63,14 @@
 .alynt-ag-tab-guidance__steps li {
 	position: relative;
 	margin: 0;
-	padding-left: 18px;
+	padding-inline-start: 18px;
 	line-height: 1.45;
 }
 
 .alynt-ag-tab-guidance__steps li::before {
 	position: absolute;
 	top: 0;
-	left: 0;
+	inset-inline-start: 0;
 	color: #3858e9;
 	content: "\2022";
 	font-weight: 700;
@@ -130,20 +130,20 @@
 	margin: 0;
 	padding: 12px;
 	border: 1px solid #dcdcde;
-	border-left-width: 4px;
+	border-inline-start-width: 4px;
 	background: #fff;
 }
 
 .alynt-ag-readiness__item--ready {
-	border-left-color: #008a20;
+	border-inline-start-color: #008a20;
 }
 
 .alynt-ag-readiness__item--warning {
-	border-left-color: #dba617;
+	border-inline-start-color: #dba617;
 }
 
 .alynt-ag-readiness__item--action {
-	border-left-color: #d63638;
+	border-inline-start-color: #d63638;
 }
 
 .alynt-ag-readiness__badge {
@@ -198,7 +198,7 @@
 .alynt-ag-security-status__notice {
 	margin: 0 0 16px;
 	padding: 10px 12px;
-	border-left: 4px solid #dba617;
+	border-inline-start: 4px solid #dba617;
 	background: #fcf9e8;
 }
 
@@ -206,7 +206,7 @@
 	margin: 18px 0 12px;
 	padding: 10px 12px;
 	border: 1px solid #dcdcde;
-	border-left: 4px solid #2271b1;
+	border-inline-start: 4px solid #2271b1;
 	background: #f6f7f7;
 	color: #50575e;
 	line-height: 1.5;
@@ -233,20 +233,20 @@
 	align-content: start;
 	padding: 12px;
 	border: 1px solid #dcdcde;
-	border-left-width: 4px;
+	border-inline-start-width: 4px;
 	background: #fff;
 }
 
 .alynt-ag-security-card--ready {
-	border-left-color: #008a20;
+	border-inline-start-color: #008a20;
 }
 
 .alynt-ag-security-card--warning {
-	border-left-color: #dba617;
+	border-inline-start-color: #dba617;
 }
 
 .alynt-ag-security-card--action {
-	border-left-color: #d63638;
+	border-inline-start-color: #d63638;
 }
 
 .alynt-ag-security-card__badge {
@@ -275,7 +275,7 @@
 	margin: 18px 0 16px;
 	padding: 14px;
 	border: 1px solid #dcdcde;
-	border-left: 4px solid #2271b1;
+	border-inline-start: 4px solid #2271b1;
 	background: #f6f7f7;
 }
 

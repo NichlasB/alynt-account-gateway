@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.61 - 2026-07-06
+
+### Changed
+
+- Replaced left-specific admin panel accents with RTL-safe logical inline-start CSS.
+
 ## 0.1.60 - 2026-07-06
 
 ### Added
