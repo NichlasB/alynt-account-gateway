@@ -478,6 +478,33 @@
 	letter-spacing: 0;
 }
 
+.agw-dashboard-section-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin: -4px 0 16px;
+}
+
+.agw-dashboard-section-actions a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 38px;
+	padding: 8px 12px;
+	border: 1px solid color-mix(in srgb, var(--agw-color-primary) 28%, transparent);
+	border-radius: 6px;
+	background: color-mix(in srgb, var(--agw-color-primary) 6%, var(--agw-color-surface));
+	color: var(--agw-color-primary);
+	font-size: 14px;
+	font-weight: 700;
+	line-height: 1.2;
+	text-decoration: none;
+}
+
+.agw-dashboard-section-actions a:focus {
+	outline: 2px solid var(--agw-color-primary);
+	outline-offset: 2px;
+}
+
 .agw-dashboard-overview {
 	display: grid;
 	grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);

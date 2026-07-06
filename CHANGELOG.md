@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+## 0.1.50 - 2026-07-06
+
+### Added
+
+- Added GitHub updater metadata so Alynt Plugin Updater can discover the plugin.
+
+## 0.1.49 - 2026-07-06
+
+### Added
+
+- Added WooCommerce account endpoint shortcut actions for related customer account tasks.
+
 ## 0.1.48 - 2026-07-06
 
 ### Added
