@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.67 password-field RTL resilience slice packaged and smoke-tested; awaiting release approval
+- Current phase: v0.1.67 released and updater-verified; next slice selection pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.66 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.67 is packaged and smoke-tested locally but not released.
+- Plugin status: v0.1.67 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.66 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,7 +32,7 @@
 - [x] Keep the slice markup-only: do not change authentication decisions, submitted field names, validation, password policy, password visibility JavaScript, registration creation, provider verification, rate-limit enforcement, diagnostics logging, saved settings, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater behavior.
 - [x] Run build, focused frontend screen tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -42,6 +42,8 @@
 - Release validation passed: `npm run build`, PHP syntax for the main plugin and two edited frontend screen renderers, focused frontend screen tests (`9 tests, 79 assertions`), `npm run lint`, `npm test -- --do-not-cache-result` (`238 tests, 1405 assertions`), `npm audit --audit-level=moderate`, `npm run make-pot` (`874 strings`), and whitespace check. The only diff-check notes were expected line-ending normalization warnings on generated/metadata files.
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.67-20260707-001250\alynt-account-gateway-v0.1.67.zip` and inspected as 46 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.67` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, login/set-password/confirm-password `dir="ltr"` markers present, source assets excluded, and SHA-256 `B878F25377939B2C08BD18299E2FBE5073D5907D8058C467837DF2BA9E67F466`.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.67` header/constant, exactly one `GitHub Plugin URI` updater header, login/set-password/confirm-password `dir="ltr"` markers present, source assets excluded, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.67`, confirmed the Build Release workflow completed successfully, downloaded and inspected the public asset as 55 entries with no dev entries, `0.1.67` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, login/set-password/confirm-password `dir="ltr"` markers present, source assets excluded, and SHA-256 `7073930FB374DDB650D1AFF9B139B9FE9D259BE6B1D14F154B50CFB0C9C0840B`.
+- Verified Alynt Plugin Updater end to end on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.66` release asset, forcing a fresh updater check that detected `0.1.66` to `0.1.67`, running the WordPress plugin upgrader against the public `v0.1.67` asset, and confirming final active state `0.1.67` with no remaining update.
 
 ### Guardrails
 
@@ -53,7 +55,7 @@
 - [x] Frontend screen tests cover LTR direction hints on branded password fields.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package markup markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.66 Small Release Cycle
 
