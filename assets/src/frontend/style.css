@@ -260,6 +260,16 @@
 	outline-offset: 2px;
 }
 
+.agw-field input:focus-visible,
+.agw-checkbox input:focus-visible,
+.agw-password__toggle:focus-visible,
+.agw-button:focus-visible,
+.agw-back-link:focus-visible,
+.agw-links a:focus-visible {
+	outline: 3px solid var(--agw-color-primary);
+	outline-offset: 3px;
+}
+
 .agw-field input[aria-invalid="true"] {
 	border-color: var(--agw-color-error);
 	box-shadow: 0 0 0 1px var(--agw-color-error);
@@ -983,6 +993,21 @@
 	outline-offset: 2px;
 }
 
+.agw-dashboard-section-actions a:focus-visible,
+.agw-dashboard-overview__action:focus-visible,
+.agw-dashboard-link:focus-visible,
+.agw-dashboard__logout:focus-visible,
+.agw-dashboard-affordance a:focus-visible,
+.agw-dashboard-content input:focus-visible,
+.agw-dashboard-content select:focus-visible,
+.agw-dashboard-content textarea:focus-visible,
+.agw-dashboard-content .button:focus-visible,
+.agw-dashboard-content button:focus-visible,
+.agw-dashboard-content input[type="submit"]:focus-visible {
+	outline: 3px solid var(--agw-color-primary);
+	outline-offset: 3px;
+}
+
 .agw-dashboard-content .woocommerce-PaymentMethods,
 .agw-dashboard-content .woocommerce-PaymentMethod,
 .agw-dashboard-content #payment,
@@ -1088,6 +1113,101 @@
 
 	.agw-dashboard__logout {
 		align-self: flex-start;
+	}
+}
+
+@media (forced-colors: active) {
+	.alynt-ag-gateway {
+		--agw-color-text: CanvasText;
+		--agw-color-primary: LinkText;
+		--agw-color-background: Canvas;
+		--agw-color-notice: Canvas;
+		--agw-color-error: Mark;
+		--agw-color-surface: Canvas;
+		--agw-button-background: ButtonFace;
+		--agw-button-text: ButtonText;
+		background: Canvas;
+		color: CanvasText;
+		forced-color-adjust: auto;
+	}
+
+	.agw-media__pattern,
+	.agw-leaf,
+	.agw-dot,
+	.agw-dashboard-link__icon::before,
+	.agw-dashboard-link__icon::after {
+		display: none;
+	}
+
+	.agw-card,
+	.agw-notice,
+	.agw-status,
+	.agw-resend-guidance,
+	.agw-verification-slot,
+	.agw-dashboard-overview,
+	.agw-dashboard-overview__action,
+	.agw-dashboard-link,
+	.agw-dashboard-guidance,
+	.agw-dashboard-affordance,
+	.agw-dashboard-content,
+	.agw-dashboard-content fieldset,
+	.agw-dashboard-content .woocommerce-message,
+	.agw-dashboard-content .woocommerce-info,
+	.agw-dashboard-content .woocommerce-error,
+	.agw-dashboard-content .woocommerce-PaymentMethod,
+	.agw-dashboard-content #payment,
+	.agw-dashboard-content .payment_box {
+		border: 1px solid CanvasText;
+		background: Canvas;
+		box-shadow: none;
+		color: CanvasText;
+	}
+
+	.agw-field input,
+	.agw-dashboard-content input,
+	.agw-dashboard-content select,
+	.agw-dashboard-content textarea {
+		border: 1px solid CanvasText;
+		background: Field;
+		color: FieldText;
+	}
+
+	.agw-button--primary,
+	.agw-dashboard-content .button,
+	.agw-dashboard-content button,
+	.agw-dashboard-content input[type="submit"] {
+		border: 1px solid ButtonText;
+		background: ButtonFace;
+		color: ButtonText;
+	}
+
+	.agw-links a,
+	.agw-back-link,
+	.agw-checkbox a,
+	.agw-dashboard-affordance a,
+	.agw-dashboard-content a {
+		color: LinkText;
+	}
+
+	.agw-field input:focus,
+	.agw-checkbox input:focus,
+	.agw-password__toggle:focus,
+	.agw-button:focus,
+	.agw-back-link:focus,
+	.agw-links a:focus,
+	.agw-dashboard-section-actions a:focus,
+	.agw-dashboard-overview__action:focus,
+	.agw-dashboard-link:focus,
+	.agw-dashboard__logout:focus,
+	.agw-dashboard-affordance a:focus,
+	.agw-dashboard-content input:focus,
+	.agw-dashboard-content select:focus,
+	.agw-dashboard-content textarea:focus,
+	.agw-dashboard-content .button:focus,
+	.agw-dashboard-content button:focus,
+	.agw-dashboard-content input[type="submit"]:focus {
+		outline: 3px solid Highlight;
+		outline-offset: 3px;
 	}
 }
 
