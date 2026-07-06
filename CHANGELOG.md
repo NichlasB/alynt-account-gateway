@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.65 - 2026-07-06
+
+### Changed
+
+- Added scoped dashboard form-control CSS guardrails to reduce theme interference with delegated account controls.
+
 ## 0.1.64 - 2026-07-06
 
 ### Changed

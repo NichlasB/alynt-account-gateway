@@ -96,4 +96,13 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertStringContainsString( ".agw-password__toggle {\n\tappearance: none;", $css );
 		$this->assertStringContainsString( ".agw-button {\n\tappearance: none;", $css );
 	}
+
+	public function test_frontend_css_normalizes_dashboard_form_controls_against_theme_styles() {
+		$css = $this->get_frontend_css();
+
+		$this->assertStringContainsString( ".agw-dashboard-content input,\n.agw-dashboard-content textarea {\n\tappearance: none;", $css );
+		$this->assertStringContainsString( ".agw-dashboard-content input[type=\"checkbox\"],\n.agw-dashboard-content input[type=\"radio\"] {\n\tappearance: auto;", $css );
+		$this->assertStringContainsString( ".agw-dashboard-content .button,\n.agw-dashboard-content button,\n.agw-dashboard-content input[type=\"submit\"] {\n\tappearance: none;", $css );
+		$this->assertStringContainsString( "\tmax-width: 100%;\n\tmin-height: 42px;", $css );
+	}
 }

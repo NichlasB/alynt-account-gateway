@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.64 released and updater-verified; next slice selection pending
+- Current phase: v0.1.65 released and updater-verified; next slice selection pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.64 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.63 remains the fallback baseline for updater checks.
+- Plugin status: v0.1.65 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.64 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,43 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.65 Small Release Cycle
+
+### Scope
+
+- [x] Start the frontend visual QA and theme compatibility sub-slice from the released `v0.1.64` baseline.
+- [x] Add scoped dashboard and delegated WooCommerce form-control CSS guardrails that reduce browser/theme interference with account fields and buttons.
+- [x] Preserve native select, checkbox, and radio control behavior while normalizing text-like inputs, textareas, and dashboard action buttons.
+- [x] Add focused frontend CSS source coverage for the dashboard guardrails.
+- [x] Keep the slice CSS-only: do not change markup, JavaScript behavior, authentication decisions, password policy validation, registration creation, provider verification, saved settings, diagnostics logging, admin UI behavior, WooCommerce delegated form behavior, privacy cleanup, or updater behavior.
+- [x] Run build, focused frontend CSS tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Package and run Plugin Tester smoke.
+- [x] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.65` from clean `master` after the updater-verified `v0.1.64` release.
+- Added `appearance: none` to dashboard text-like inputs, textareas, and delegated account action buttons, plus a `max-width: 100%` guardrail on dashboard buttons, so browser or theme form styling is less likely to distort the branded dashboard area.
+- Preserved native select arrows and checkbox/radio platform controls by keeping select out of the appearance reset and adding an explicit `appearance: auto` reset for checkbox/radio controls.
+- Added focused `FrontendCssSourceTest` coverage for the new scoped dashboard form-control guardrails. Initial validation passed: focused `FrontendCssSourceTest` (`7 tests, 47 assertions`) and `npm run build`.
+- Release validation passed: `npm run build`, PHP syntax for the main plugin and updated frontend CSS test, focused `FrontendCssSourceTest` (`7 tests, 47 assertions`), `npm run lint`, `npm test -- --do-not-cache-result` (`238 tests, 1399 assertions`), `npm audit --audit-level=moderate`, `npm run make-pot` (`874 strings`), and whitespace check. The only diff-check notes were expected line-ending normalization warnings on generated/metadata files.
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.65-20260706-232116\alynt-account-gateway-v0.1.65.zip` and inspected as 46 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.65` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, compiled dashboard form-control guardrails present, source CSS excluded, and SHA-256 `C65A024539F106B2870C96D5AB2ADF3E104B2E7C6F7998F2F3E12A91B3AFDEF7`.
+- Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.65` header/constant, exactly one `GitHub Plugin URI` updater header, compiled frontend CSS includes dashboard input/textarea, checkbox/radio, and button appearance guardrails, dashboard button `max-width:100%` is present, source CSS is excluded, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.65`, confirmed the Build Release workflow completed successfully, downloaded and inspected the public asset as 55 entries with no dev entries, `0.1.65` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, compiled dashboard form-control guardrails present, source CSS excluded, and SHA-256 `C7942F21E1FA01F4AA0BEB3F3E0B6C384A9356C979D77AA518ECF4029CD85475`.
+- Verified Alynt Plugin Updater end to end on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.64` release asset, forcing a fresh updater check that detected `0.1.64` to `0.1.65`, running the WordPress plugin upgrader against the public `v0.1.65` asset, and confirming final active state `0.1.65` with no remaining update.
+
+### Guardrails
+
+- Do not alter PHP runtime behavior, translated strings outside necessary metadata/plan changes, frontend route handling, saved setting keys, diagnostics event names, provider API behavior, data retention, privacy cleanup, WooCommerce delegated form behavior, or updater metadata in this slice.
+- Keep the CSS changes scoped to branded dashboard and delegated account form controls and buttons.
+
+### Completion Gate
+
+- [x] Frontend CSS tests cover scoped dashboard form-control theme-compatibility guardrails.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package CSS markers.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.64 Small Release Cycle
 
