@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.42 - 2026-07-06
+
+### Added
+
+- Added Security tab Registration Flow Signals for recent consent blocks, registration system failures, password setup blocks, and confirmation resends.
+
 ## 0.1.41 - 2026-07-05
 
 ### Added
