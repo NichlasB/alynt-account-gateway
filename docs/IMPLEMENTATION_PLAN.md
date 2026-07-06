@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.53 resend throttling UX local release package smoke complete; commit/tag/publish approval next
+- Current phase: v0.1.53 resend throttling UX shipped; next small release slice ready
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.52 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.51 remains the fallback baseline for updater checks.
+- Plugin status: v0.1.53 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.52 remains the fallback baseline for updater checks.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -30,7 +30,7 @@
 - [ ] Keep this slice scoped to frontend resend guidance and tests; do not change rate-limit enforcement, token expiry, resend email delivery, registration storage, provider enforcement, dashboard output, WooCommerce behavior, webhooks, privacy cleanup, updater behavior, or default frontend-output disabled behavior.
 - [x] Run focused frontend state screen tests, build, lint, full tests, audit, and POT generation.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -44,6 +44,9 @@
 - Release metadata bumped to `0.1.53`, POT regenerated (`832 strings`), and release validation passed: PHP syntax for the main plugin and frontend state screen service, build, lint, full tests (`220 tests, 1251 assertions`), npm audit, and whitespace check. The only diff-check notes were expected line-ending normalization warnings on metadata/POT files.
 - Final release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.53-20260706-162635\alynt-account-gateway-v0.1.53.zip` and inspected as 45 runtime files, wrapped main file, no directory entries, no backslash entries, no dev entries, `0.1.53` header/constant/stable tag, exactly one updater header, and resend guidance renderer/message/built CSS/POT strings present.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after a fresh request: active plugin, `0.1.53` header/constant, rate-limited invalid-link resend screen shows cooldown, newest-link, inbox-check, and ARIA guidance, non-rate-limited resend errors omit the cooldown panel, and uploaded test artifacts were cleaned.
+- GitHub `v0.1.53` release was created at `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.53`; release workflow `28807333580` passed with only the non-blocking Node.js 20 deprecation annotation from `softprops/action-gh-release@v2`.
+- Public `v0.1.53` asset downloaded to `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.53-public\alynt-account-gateway-v0.1.53.zip` and inspected as 55 runtime entries, wrapped main file, no backslash entries, no dev entries, `0.1.53` header/constant/stable tag, exactly one updater header, and resend guidance renderer/message/built CSS/POT strings present. Public asset SHA-256: `A8E0A82CA20AF84D45E7AD0361F633B8C200F3723E1D1A0F800A2237FE26C757`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site from public `0.1.52`: updater found `0.1.53`, update response used `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.53/alynt-account-gateway-v0.1.53.zip`, `Plugin_Upgrader->upgrade()` installed successfully, fresh runtime showed active `0.1.53`, no update remained pending, the rate-limited invalid-link resend screen rendered cooldown/newest-link/inbox-check/ARIA guidance, non-rate-limited resend errors omitted the cooldown panel, and uploaded test artifacts were cleaned.
 
 ### Guardrails
 
@@ -55,7 +58,7 @@
 - [x] Frontend renderer tests cover rate-limited resend guidance and non-rate-limited resend errors.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates the installed-package resend guidance.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.52 Small Release Cycle
 
