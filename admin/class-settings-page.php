@@ -1179,6 +1179,8 @@ class ALYNT_AG_Settings_Page {
 	private function render_security_verification_activity() {
 		$logs              = $this->security_recent_verification_logs( 10 );
 		$diagnostic_events = $this->security_recent_diagnostics_events( 25 );
+		$external_events   = $this->security_recent_external_diagnostics_events( 25 );
+		$webhook_logs      = $this->recent_webhook_logs();
 		?>
 		<div class="alynt-ag-security-activity">
 			<h3><?php esc_html_e( 'Recent Registration Verification Activity', 'alynt-account-gateway' ); ?></h3>
@@ -1191,6 +1193,7 @@ class ALYNT_AG_Settings_Page {
 			<?php $this->render_security_access_control_signals( $logs, $diagnostic_events ); ?>
 			<?php $this->render_security_auth_redirect_signals( $diagnostic_events ); ?>
 			<?php $this->render_security_registration_flow_signals( $logs ); ?>
+			<?php $this->render_security_delivery_signals( $external_events, $webhook_logs ); ?>
 
 			<?php if ( empty( $logs ) ) : ?>
 				<p class="alynt-ag-security-status__notice">
@@ -1444,6 +1447,68 @@ class ALYNT_AG_Settings_Page {
 	}
 
 	/**
+	 * Render account delivery summary from recent diagnostics and webhook logs.
+	 *
+	 * @param array<int,object> $external_events Recent external diagnostics events.
+	 * @param array<int,object> $webhook_logs    Recent webhook logs.
+	 * @return void
+	 */
+	private function render_security_delivery_signals( $external_events, $webhook_logs ) {
+		$items = $this->security_delivery_signal_items( $external_events, $webhook_logs );
+		?>
+		<div class="alynt-ag-security-delivery" aria-label="<?php esc_attr_e( 'Recent account delivery signals', 'alynt-account-gateway' ); ?>">
+			<h4><?php esc_html_e( 'Account Delivery Signals', 'alynt-account-gateway' ); ?></h4>
+			<div class="alynt-ag-security-status__grid">
+				<?php foreach ( $items as $item ) : ?>
+					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+						<h5><?php echo esc_html( $item['label'] ); ?></h5>
+						<p>
+							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
+							<?php echo esc_html( $item['message'] ); ?>
+						</p>
+					</section>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Return account delivery signal items from recent diagnostics and webhook logs.
+	 *
+	 * @param array<int,object> $external_events Recent external diagnostics events.
+	 * @param array<int,object> $webhook_logs    Recent webhook logs.
+	 * @return array<int,array{label:string,status:string,count:int,message:string}>
+	 */
+	private function security_delivery_signal_items( $external_events, $webhook_logs ) {
+		$welcome_failures  = $this->count_diagnostics_events_by_code( $external_events, 'account_created_welcome_failed' );
+		$webhook_failures  = $this->count_diagnostics_events_by_code( $external_events, 'account_created_webhook_failed' );
+		$failed_deliveries = $this->count_failed_webhook_logs( $webhook_logs );
+
+		return array(
+			array(
+				'label'   => __( 'Welcome Email Failures', 'alynt-account-gateway' ),
+				'status'  => $welcome_failures > 0 ? 'action' : 'ready',
+				'count'   => $welcome_failures,
+				'message' => __( 'recent account-created welcome email failures. Check mail delivery before relying on account onboarding.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Account Webhook Failures', 'alynt-account-gateway' ),
+				'status'  => $webhook_failures > 0 ? 'action' : 'ready',
+				'count'   => $webhook_failures,
+				'message' => __( 'recent account-created webhook dispatch failures. Review endpoint configuration and signing before relying on automation.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Failed Webhook Deliveries', 'alynt-account-gateway' ),
+				'status'  => $failed_deliveries > 0 ? 'action' : 'ready',
+				'count'   => $failed_deliveries,
+				'message' => __( 'recent failed webhook delivery rows. Open the Webhooks tab to review destinations, HTTP status, and error messages.', 'alynt-account-gateway' ),
+			),
+		);
+	}
+
+	/**
 	 * Render provider health summary from recent verification logs.
 	 *
 	 * @param array<int,object> $logs Recent verification logs.
@@ -1581,6 +1646,24 @@ class ALYNT_AG_Settings_Page {
 			$code = isset( $event->event_code ) ? sanitize_key( $event->event_code ) : '';
 
 			if ( $event_code === $code ) {
+				++$count;
+			}
+		}
+
+		return $count;
+	}
+
+	/**
+	 * Count failed webhook log rows.
+	 *
+	 * @param array<int,object> $logs Recent webhook logs.
+	 * @return int
+	 */
+	private function count_failed_webhook_logs( $logs ) {
+		$count = 0;
+
+		foreach ( $logs as $log ) {
+			if ( empty( $log->success ) ) {
 				++$count;
 			}
 		}
@@ -1840,6 +1923,31 @@ class ALYNT_AG_Settings_Page {
 			$wpdb->prepare(
 				"SELECT event_code, context, created_at FROM {$tables['diagnostics_logs']} WHERE category = %s ORDER BY created_at DESC, id DESC LIMIT %d",
 				'security',
+				$limit
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return is_array( $events ) ? $events : array();
+	}
+
+	/**
+	 * Return recent external diagnostics events.
+	 *
+	 * @param int $limit Maximum records.
+	 * @return array<int,object>
+	 */
+	private function security_recent_external_diagnostics_events( $limit = 25 ) {
+		global $wpdb;
+
+		$tables = ALYNT_AG_Database::tables();
+		$limit  = min( 50, max( 1, absint( $limit ) ) );
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Admin security viewer reads plugin-owned diagnostics log table.
+		$events = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT event_code, context, created_at FROM {$tables['diagnostics_logs']} WHERE category = %s ORDER BY created_at DESC, id DESC LIMIT %d",
+				'external_api',
 				$limit
 			)
 		);

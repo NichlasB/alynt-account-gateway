@@ -372,6 +372,57 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( 'warning', $items[2]['status'] );
 	}
 
+	public function test_security_delivery_signals_count_recent_activity() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper(
+			$settings_page,
+			'security_delivery_signal_items',
+			array(
+				array(
+					(object) array(
+						'event_code' => 'account_created_welcome_failed',
+					),
+					(object) array(
+						'event_code' => 'account_created_webhook_failed',
+					),
+					(object) array(
+						'event_code' => 'account_created_webhook_failed',
+					),
+					(object) array(
+						'event_code' => 'native_login_redirected',
+					),
+				),
+				array(
+					(object) array(
+						'event_name'  => 'account.created',
+						'http_status' => 500,
+						'success'     => 0,
+					),
+					(object) array(
+						'event_name'  => 'account.created.test',
+						'http_status' => 0,
+						'success'     => '0',
+					),
+					(object) array(
+						'event_name'  => 'account.created',
+						'http_status' => 200,
+						'success'     => 1,
+					),
+				),
+			)
+		);
+
+		$this->assertSame( 'Welcome Email Failures', $items[0]['label'] );
+		$this->assertSame( 1, $items[0]['count'] );
+		$this->assertSame( 'action', $items[0]['status'] );
+		$this->assertSame( 'Account Webhook Failures', $items[1]['label'] );
+		$this->assertSame( 2, $items[1]['count'] );
+		$this->assertSame( 'action', $items[1]['status'] );
+		$this->assertSame( 'Failed Webhook Deliveries', $items[2]['label'] );
+		$this->assertSame( 2, $items[2]['count'] );
+		$this->assertSame( 'action', $items[2]['status'] );
+	}
+
 	public function test_security_recent_verification_activity_renders_masked_rows() {
 		$tables = ALYNT_AG_Database::tables();
 		$GLOBALS['alynt_ag_test_db_results'][ $tables['verification_logs'] ] = array(
@@ -521,6 +572,46 @@ class SettingsPageSecurityStatusTest extends TestCase {
 				),
 				'created_at' => '2026-07-05 12:56:00',
 			),
+			(object) array(
+				'event_code' => 'account_created_welcome_failed',
+				'context'    => wp_json_encode(
+					array(
+						'user_id' => 42,
+						'error'   => 'welcome_email_failed',
+					)
+				),
+				'created_at' => '2026-07-05 12:57:00',
+			),
+			(object) array(
+				'event_code' => 'account_created_webhook_failed',
+				'context'    => wp_json_encode(
+					array(
+						'user_id' => 42,
+						'error'   => 'alynt_ag_webhook_http_error',
+					)
+				),
+				'created_at' => '2026-07-05 12:58:00',
+			),
+		);
+		$GLOBALS['alynt_ag_test_db_results'][ $tables['webhook_logs'] ] = array(
+			(object) array(
+				'id'               => 1,
+				'event_name'       => 'account.created',
+				'destination_host' => 'hooks.example.test',
+				'http_status'      => 500,
+				'success'          => 0,
+				'error_message'    => 'Server error',
+				'created_at'       => '2026-07-05 12:59:00',
+			),
+			(object) array(
+				'id'               => 2,
+				'event_name'       => 'account.created.test',
+				'destination_host' => 'hooks.example.test',
+				'http_status'      => 200,
+				'success'          => 1,
+				'error_message'    => '',
+				'created_at'       => '2026-07-05 13:00:00',
+			),
 		);
 
 		$settings_page = new ALYNT_AG_Settings_Page();
@@ -553,6 +644,10 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'recent pending-record or confirmation-email failures. Review database writes and email delivery before public launch.', $output );
 		$this->assertStringContainsString( 'recent password or email-availability blocks. Review password guidance if customers struggle to complete setup.', $output );
 		$this->assertStringContainsString( 'recent successful resends. Repeated resends can point to delivery delays or unclear confirmation instructions.', $output );
+		$this->assertStringContainsString( 'Account Delivery Signals', $output );
+		$this->assertStringContainsString( 'recent account-created welcome email failures. Check mail delivery before relying on account onboarding.', $output );
+		$this->assertStringContainsString( 'recent account-created webhook dispatch failures. Review endpoint configuration and signing before relying on automation.', $output );
+		$this->assertStringContainsString( 'recent failed webhook delivery rows. Open the Webhooks tab to review destinations, HTTP status, and error messages.', $output );
 		$this->assertStringContainsString( 'd***@example.test', $output );
 		$this->assertStringContainsString( 's***@example.test', $output );
 		$this->assertStringContainsString( 'r***@example.test', $output );
