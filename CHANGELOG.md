@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.64 - 2026-07-06
+
+### Changed
+
+- Added scoped gateway form-control CSS guardrails to reduce theme interference with fields and buttons.
+
 ## 0.1.63 - 2026-07-06
 
 ### Changed
