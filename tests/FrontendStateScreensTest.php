@@ -66,6 +66,7 @@ class FrontendStateScreensTest extends TestCase {
 		$this->assertStringContainsString( 'name="alynt_ag_action" value="resend_confirmation"', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_registration_nonce" value="test-nonce"', $html );
 		$this->assertStringContainsString( 'id="agw-invalid-email"', $html );
+		$this->assertStringContainsString( 'type="email" autocomplete="email" dir="ltr"', $html );
 		$this->assertStringContainsString( 'Send New Link', $html );
 		$this->assertStringNotContainsString( 'agw-status--success', $html );
 		$this->assertStringNotContainsString( 'agw-resend-error', $html );

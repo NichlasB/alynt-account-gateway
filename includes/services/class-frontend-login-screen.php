@@ -87,7 +87,7 @@ class ALYNT_AG_Frontend_Login_Screen {
 			<?php endif; ?>
 			<div class="agw-field">
 				<label for="agw-login-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-login-email" name="email" type="email" autocomplete="email" required <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-login-error"' : ''; ?>>
+				<input id="agw-login-email" name="email" type="email" autocomplete="email" dir="ltr" required <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-login-error"' : ''; ?>>
 			</div>
 			<div class="agw-field agw-field--password">
 				<label for="agw-login-password"><?php esc_html_e( 'Password', 'alynt-account-gateway' ); ?></label>

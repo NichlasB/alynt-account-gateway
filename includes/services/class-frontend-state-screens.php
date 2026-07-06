@@ -93,7 +93,7 @@ class ALYNT_AG_Frontend_State_Screens {
 			<?php wp_nonce_field( 'alynt_ag_resend_confirmation', 'alynt_ag_registration_nonce' ); ?>
 			<div class="agw-field">
 				<label for="agw-invalid-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-invalid-email" name="email" type="email" autocomplete="email" required <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-resend-error"' : ''; ?>>
+				<input id="agw-invalid-email" name="email" type="email" autocomplete="email" dir="ltr" required <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-resend-error"' : ''; ?>>
 			</div>
 			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Send New Link', 'alynt-account-gateway' ); ?></button>
 			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
