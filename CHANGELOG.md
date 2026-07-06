@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.68 - 2026-07-07
+
+### Changed
+
+- Added stronger status semantics to the password strength live region.
+
 ## 0.1.67 - 2026-07-07
 
 ### Changed

@@ -191,7 +191,7 @@ class ALYNT_AG_Frontend_Setpassword_Screen {
 					<button type="button" class="agw-password__toggle" data-agw-password-toggle aria-controls="agw-set-confirm" aria-label="<?php esc_attr_e( 'Show password', 'alynt-account-gateway' ); ?>" aria-pressed="false"><?php esc_html_e( 'Show', 'alynt-account-gateway' ); ?></button>
 				</div>
 			</div>
-			<div class="agw-strength" data-agw-strength data-agw-strength-score="0" data-agw-message-empty="<?php esc_attr_e( 'Enter a password to begin.', 'alynt-account-gateway' ); ?>" data-agw-message-weak="<?php esc_attr_e( 'Keep going.', 'alynt-account-gateway' ); ?>" data-agw-message-good="<?php esc_attr_e( 'Almost there.', 'alynt-account-gateway' ); ?>" data-agw-message-ready="<?php esc_attr_e( 'Password is ready.', 'alynt-account-gateway' ); ?>" aria-live="polite">
+			<div class="agw-strength" data-agw-strength data-agw-strength-score="0" data-agw-message-empty="<?php esc_attr_e( 'Enter a password to begin.', 'alynt-account-gateway' ); ?>" data-agw-message-weak="<?php esc_attr_e( 'Keep going.', 'alynt-account-gateway' ); ?>" data-agw-message-good="<?php esc_attr_e( 'Almost there.', 'alynt-account-gateway' ); ?>" data-agw-message-ready="<?php esc_attr_e( 'Password is ready.', 'alynt-account-gateway' ); ?>" role="status" aria-live="polite" aria-atomic="true">
 				<span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
 				<strong id="agw-password-status" data-agw-strength-label><?php esc_html_e( 'Enter a password to begin.', 'alynt-account-gateway' ); ?></strong>
 			</div>

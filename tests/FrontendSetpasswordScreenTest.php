@@ -106,6 +106,7 @@ class FrontendSetpasswordScreenTest extends TestCase {
 		$this->assertSame( 2, substr_count( $html, 'data-agw-password-toggle' ) );
 		$this->assertSame( 2, substr_count( $html, 'aria-label="Show password"' ) );
 		$this->assertStringContainsString( 'data-agw-strength', $html );
+		$this->assertStringContainsString( 'role="status" aria-live="polite" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'data-agw-password-requirements', $html );
 		$this->assertStringContainsString( 'At least 12 characters', $html );
 		$this->assertStringContainsString( 'At least one uppercase letter', $html );
