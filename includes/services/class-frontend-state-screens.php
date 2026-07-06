@@ -85,6 +85,9 @@ class ALYNT_AG_Frontend_State_Screens {
 		<?php if ( $error_code ) : ?>
 			<div id="agw-resend-error" class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->messages->resend_error( $error_code ) ); ?></div>
 		<?php endif; ?>
+		<?php if ( 'alynt_ag_rate_limited' === $error_code ) : ?>
+			<?php $this->render_resend_throttle_guidance( $settings ); ?>
+		<?php endif; ?>
 		<form class="agw-form" method="post" action="<?php echo esc_url( $resend_action ); ?>" <?php echo $error_code ? 'aria-describedby="agw-resend-error"' : ''; ?>>
 			<input type="hidden" name="alynt_ag_action" value="resend_confirmation">
 			<?php wp_nonce_field( 'alynt_ag_resend_confirmation', 'alynt_ag_registration_nonce' ); ?>
@@ -95,6 +98,34 @@ class ALYNT_AG_Frontend_State_Screens {
 			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Send New Link', 'alynt-account-gateway' ); ?></button>
 			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
 		</form>
+		<?php
+	}
+
+	/**
+	 * Render resend cooldown guidance.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_resend_throttle_guidance( $settings ) {
+		$window_mins = isset( $settings['resend_confirmation_rate_limit_window'] ) ? max( 1, absint( $settings['resend_confirmation_rate_limit_window'] ) ) : 60;
+		?>
+		<div class="agw-resend-guidance" aria-labelledby="agw-resend-guidance-title">
+			<h2 id="agw-resend-guidance-title"><?php esc_html_e( 'Before requesting another link', 'alynt-account-gateway' ); ?></h2>
+			<ul>
+				<li>
+					<?php
+					printf(
+						/* translators: %d: configured resend cooldown window in minutes. */
+						esc_html__( 'Wait %d minutes before requesting another confirmation email.', 'alynt-account-gateway' ),
+						(int) $window_mins
+					);
+					?>
+				</li>
+				<li><?php esc_html_e( 'Use the newest confirmation email only. Older links may stop working after a resend.', 'alynt-account-gateway' ); ?></li>
+				<li><?php esc_html_e( 'Check spam, promotions, and filtered inbox folders if the email is not in your inbox.', 'alynt-account-gateway' ); ?></li>
+			</ul>
+		</div>
 		<?php
 	}
 }
