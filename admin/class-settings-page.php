@@ -1189,6 +1189,7 @@ class ALYNT_AG_Settings_Page {
 			<?php $this->render_security_provider_health_signals( $logs ); ?>
 			<?php $this->render_security_rate_limit_pressure( $logs ); ?>
 			<?php $this->render_security_access_control_signals( $logs, $diagnostic_events ); ?>
+			<?php $this->render_security_auth_redirect_signals( $diagnostic_events ); ?>
 			<?php $this->render_security_registration_flow_signals( $logs ); ?>
 
 			<?php if ( empty( $logs ) ) : ?>
@@ -1295,6 +1296,66 @@ class ALYNT_AG_Settings_Page {
 				'status'  => $admin_blocks > 0 ? 'warning' : 'ready',
 				'count'   => $admin_blocks,
 				'message' => __( 'recent wp-admin redirects recorded by diagnostics. Repeated blocks can mean customers are following admin links or a role rule needs review.', 'alynt-account-gateway' ),
+			),
+		);
+	}
+
+	/**
+	 * Render auth redirect summary from recent diagnostics logs.
+	 *
+	 * @param array<int,object> $diagnostic_events Recent diagnostics events.
+	 * @return void
+	 */
+	private function render_security_auth_redirect_signals( $diagnostic_events ) {
+		$items = $this->security_auth_redirect_signal_items( $diagnostic_events );
+		?>
+		<div class="alynt-ag-security-routing" aria-label="<?php esc_attr_e( 'Recent gateway routing signals', 'alynt-account-gateway' ); ?>">
+			<h4><?php esc_html_e( 'Gateway Routing Signals', 'alynt-account-gateway' ); ?></h4>
+			<div class="alynt-ag-security-status__grid">
+				<?php foreach ( $items as $item ) : ?>
+					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+						<h5><?php echo esc_html( $item['label'] ); ?></h5>
+						<p>
+							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
+							<?php echo esc_html( $item['message'] ); ?>
+						</p>
+					</section>
+				<?php endforeach; ?>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Return auth redirect signal items from recent diagnostics logs.
+	 *
+	 * @param array<int,object> $diagnostic_events Recent diagnostics events.
+	 * @return array<int,array{label:string,status:string,count:int,message:string}>
+	 */
+	private function security_auth_redirect_signal_items( $diagnostic_events ) {
+		$native_redirects = $this->count_native_login_redirects_with_preserved_keys( $diagnostic_events );
+		$reset_redirects  = $this->count_native_login_redirects_with_preserved_keys( $diagnostic_events, array( 'key', 'login' ) );
+		$target_redirects = $this->count_native_login_redirects_with_preserved_keys( $diagnostic_events, array( 'redirect_to' ) );
+
+		return array(
+			array(
+				'label'   => __( 'Native Login Redirects', 'alynt-account-gateway' ),
+				'status'  => $native_redirects > 0 ? 'warning' : 'ready',
+				'count'   => $native_redirects,
+				'message' => __( 'recent native wp-login.php redirects. If this rises, update menus, emails, and third-party links to use branded account routes.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Reset Link Redirects', 'alynt-account-gateway' ),
+				'status'  => $reset_redirects > 0 ? 'warning' : 'ready',
+				'count'   => $reset_redirects,
+				'message' => __( 'recent reset-link redirects preserved password setup keys. Confirm branded set-password handling stays healthy.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Redirect-To Preserved', 'alynt-account-gateway' ),
+				'status'  => $target_redirects > 0 ? 'warning' : 'ready',
+				'count'   => $target_redirects,
+				'message' => __( 'recent login redirects preserved a destination. Review protected-page links if customers seem bounced through login often.', 'alynt-account-gateway' ),
 			),
 		);
 	}
@@ -1528,6 +1589,84 @@ class ALYNT_AG_Settings_Page {
 	}
 
 	/**
+	 * Count native login redirects by preserved query keys.
+	 *
+	 * @param array<int,object> $events        Recent diagnostics events.
+	 * @param array<int,string> $required_keys Required preserved query keys.
+	 * @return int
+	 */
+	private function count_native_login_redirects_with_preserved_keys( $events, $required_keys = array() ) {
+		$count         = 0;
+		$required_keys = array_values( array_filter( array_map( 'sanitize_key', $required_keys ) ) );
+
+		foreach ( $events as $event ) {
+			$code = isset( $event->event_code ) ? sanitize_key( $event->event_code ) : '';
+
+			if ( 'native_login_redirected' !== $code ) {
+				continue;
+			}
+
+			if ( empty( $required_keys ) || $this->diagnostics_event_has_preserved_query_keys( $event, $required_keys ) ) {
+				++$count;
+			}
+		}
+
+		return $count;
+	}
+
+	/**
+	 * Determine whether a diagnostics event preserved all requested query keys.
+	 *
+	 * @param object            $event         Diagnostics event row.
+	 * @param array<int,string> $required_keys Required preserved query keys.
+	 * @return bool
+	 */
+	private function diagnostics_event_has_preserved_query_keys( $event, $required_keys ) {
+		$context        = $this->diagnostics_event_context( $event );
+		$preserved_keys = array();
+
+		if ( isset( $context['preserved_query_keys'] ) && is_array( $context['preserved_query_keys'] ) ) {
+			foreach ( $context['preserved_query_keys'] as $key ) {
+				if ( is_scalar( $key ) ) {
+					$preserved_keys[] = sanitize_key( (string) $key );
+				}
+			}
+		}
+
+		foreach ( $required_keys as $required_key ) {
+			if ( ! in_array( sanitize_key( $required_key ), $preserved_keys, true ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Return a decoded diagnostics event context.
+	 *
+	 * @param object $event Diagnostics event row.
+	 * @return array<string,mixed>
+	 */
+	private function diagnostics_event_context( $event ) {
+		if ( ! isset( $event->context ) ) {
+			return array();
+		}
+
+		if ( is_array( $event->context ) ) {
+			return $event->context;
+		}
+
+		if ( ! is_string( $event->context ) || '' === $event->context ) {
+			return array();
+		}
+
+		$context = json_decode( $event->context, true );
+
+		return is_array( $context ) ? $context : array();
+	}
+
+	/**
 	 * Render rate-limit pressure summary from recent verification logs.
 	 *
 	 * @param array<int,object> $logs Recent verification logs.
@@ -1699,7 +1838,7 @@ class ALYNT_AG_Settings_Page {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Admin security viewer reads plugin-owned diagnostics log table.
 		$events = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT event_code, created_at FROM {$tables['diagnostics_logs']} WHERE category = %s ORDER BY created_at DESC, id DESC LIMIT %d",
+				"SELECT event_code, context, created_at FROM {$tables['diagnostics_logs']} WHERE category = %s ORDER BY created_at DESC, id DESC LIMIT %d",
 				'security',
 				$limit
 			)

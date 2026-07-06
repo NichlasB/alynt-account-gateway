@@ -314,6 +314,64 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( 'warning', $items[2]['status'] );
 	}
 
+	public function test_security_auth_redirect_signals_count_recent_activity() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper(
+			$settings_page,
+			'security_auth_redirect_signal_items',
+			array(
+				array(
+					(object) array(
+						'event_code' => 'native_login_redirected',
+						'context'    => wp_json_encode(
+							array(
+								'preserved_query_keys' => array( 'login', 'key' ),
+							)
+						),
+					),
+					(object) array(
+						'event_code' => 'native_login_redirected',
+						'context'    => wp_json_encode(
+							array(
+								'preserved_query_keys' => array( 'redirect_to' ),
+							)
+						),
+					),
+					(object) array(
+						'event_code' => 'native_login_redirected',
+						'context'    => wp_json_encode(
+							array(
+								'preserved_query_keys' => array( 'login' ),
+							)
+						),
+					),
+					(object) array(
+						'event_code' => 'native_login_redirected',
+						'context'    => '{invalid-json',
+					),
+					(object) array(
+						'event_code' => 'wp_admin_access_blocked',
+						'context'    => wp_json_encode(
+							array(
+								'preserved_query_keys' => array( 'redirect_to' ),
+							)
+						),
+					),
+				),
+			)
+		);
+
+		$this->assertSame( 'Native Login Redirects', $items[0]['label'] );
+		$this->assertSame( 4, $items[0]['count'] );
+		$this->assertSame( 'warning', $items[0]['status'] );
+		$this->assertSame( 'Reset Link Redirects', $items[1]['label'] );
+		$this->assertSame( 1, $items[1]['count'] );
+		$this->assertSame( 'warning', $items[1]['status'] );
+		$this->assertSame( 'Redirect-To Preserved', $items[2]['label'] );
+		$this->assertSame( 1, $items[2]['count'] );
+		$this->assertSame( 'warning', $items[2]['status'] );
+	}
+
 	public function test_security_recent_verification_activity_renders_masked_rows() {
 		$tables = ALYNT_AG_Database::tables();
 		$GLOBALS['alynt_ag_test_db_results'][ $tables['verification_logs'] ] = array(
@@ -447,10 +505,20 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$GLOBALS['alynt_ag_test_db_results'][ $tables['diagnostics_logs'] ] = array(
 			(object) array(
 				'event_code' => 'wp_admin_access_blocked',
+				'context'    => wp_json_encode(
+					array(
+						'path' => '/wp-admin/',
+					)
+				),
 				'created_at' => '2026-07-05 12:55:00',
 			),
 			(object) array(
 				'event_code' => 'native_login_redirected',
+				'context'    => wp_json_encode(
+					array(
+						'preserved_query_keys' => array( 'key', 'login', 'redirect_to' ),
+					)
+				),
 				'created_at' => '2026-07-05 12:56:00',
 			),
 		);
@@ -476,6 +544,10 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'recent login rate-limit blocks. Review for credential stuffing or customers stuck at login.', $output );
 		$this->assertStringContainsString( 'recent password-reset rate-limit blocks. Watch for repeated reset requests against the same account.', $output );
 		$this->assertStringContainsString( 'recent wp-admin redirects recorded by diagnostics. Repeated blocks can mean customers are following admin links or a role rule needs review.', $output );
+		$this->assertStringContainsString( 'Gateway Routing Signals', $output );
+		$this->assertStringContainsString( 'recent native wp-login.php redirects. If this rises, update menus, emails, and third-party links to use branded account routes.', $output );
+		$this->assertStringContainsString( 'recent reset-link redirects preserved password setup keys. Confirm branded set-password handling stays healthy.', $output );
+		$this->assertStringContainsString( 'recent login redirects preserved a destination. Review protected-page links if customers seem bounced through login often.', $output );
 		$this->assertStringContainsString( 'Registration Flow Signals', $output );
 		$this->assertStringContainsString( 'recent consent-related blocks. Check Terms and Privacy copy if legitimate customers are stopping here.', $output );
 		$this->assertStringContainsString( 'recent pending-record or confirmation-email failures. Review database writes and email delivery before public launch.', $output );
