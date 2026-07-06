@@ -289,6 +289,7 @@
 }
 
 .alynt-ag-security-signal,
+.alynt-ag-security-triage,
 .alynt-ag-security-pressure,
 .alynt-ag-security-abuse,
 .alynt-ag-security-access,
@@ -300,6 +301,7 @@
 }
 
 .alynt-ag-security-signal h4,
+.alynt-ag-security-triage h4,
 .alynt-ag-security-pressure h4,
 .alynt-ag-security-abuse h4,
 .alynt-ag-security-access h4,

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.52 - 2026-07-06
+
+### Added
+
+- Added Security & Spam Provider Failure Triage guidance for Turnstile and Reoon configuration, connectivity, challenge, and response issues.
+
 ## 0.1.51 - 2026-07-06
 
 ### Added
