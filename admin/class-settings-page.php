@@ -262,15 +262,38 @@ class ALYNT_AG_Settings_Page {
 			return;
 		}
 
-		$type = 'secret' === $field['type'] ? 'password' : 'text';
+		$type      = 'secret' === $field['type'] ? 'password' : 'text';
+		$direction = $this->field_direction_attribute( $key, $field );
 		printf(
-			'<input type="%1$s" class="regular-text" id="%2$s" name="%3$s" value="%4$s" autocomplete="off"%5$s>',
+			'<input type="%1$s" class="regular-text" id="%2$s" name="%3$s" value="%4$s" autocomplete="off"%5$s%6$s>',
 			esc_attr( $type ),
 			esc_attr( $id ),
 			esc_attr( $name ),
 			esc_attr( $value ),
-			$aria // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute().
+			$aria, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute().
+			$direction // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static attribute from field_direction_attribute().
 		);
+	}
+
+	/**
+	 * Return text direction for machine-readable settings fields.
+	 *
+	 * @param string              $key   Field key.
+	 * @param array<string,mixed> $field Field schema.
+	 * @return string
+	 */
+	private function field_direction_attribute( $key, $field ) {
+		$type = isset( $field['type'] ) ? (string) $field['type'] : '';
+
+		if ( in_array( $type, array( 'relative_path', 'url', 'secret', 'css_font_family' ), true ) ) {
+			return ' dir="ltr"';
+		}
+
+		if ( in_array( $key, array( 'turnstile_site_key', 'username_format' ), true ) ) {
+			return ' dir="ltr"';
+		}
+
+		return '';
 	}
 
 	/**

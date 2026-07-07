@@ -86,8 +86,62 @@ class SettingsPageFieldHelpTest extends TestCase {
 		$output = ob_get_clean();
 
 		$this->assertStringContainsString( 'aria-describedby="alynt-ag-login_path-help"', $output );
+		$this->assertStringContainsString( 'dir="ltr"', $output );
 		$this->assertStringContainsString( 'id="alynt-ag-login_path-help"', $output );
 		$this->assertStringContainsString( 'Use a relative path such as /login.', $output );
+	}
+
+	public function test_machine_readable_text_fields_render_ltr_direction() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		ob_start();
+		$this->invoke_helper(
+			$settings_page,
+			'render_field',
+			array(
+				'account_created_webhook',
+				array(
+					'type'    => 'url',
+					'default' => '',
+				),
+				'https://hooks.example.test/account-created'
+			)
+		);
+		$url_output = ob_get_clean();
+
+		ob_start();
+		$this->invoke_helper(
+			$settings_page,
+			'render_field',
+			array(
+				'webhook_signing_secret',
+				array(
+					'type'    => 'secret',
+					'default' => '',
+				),
+				'shared-secret'
+			)
+		);
+		$secret_output = ob_get_clean();
+
+		ob_start();
+		$this->invoke_helper(
+			$settings_page,
+			'render_field',
+			array(
+				'email_password_reset_subject',
+				array(
+					'type'    => 'string',
+					'default' => '',
+				),
+				'Reset your password'
+			)
+		);
+		$subject_output = ob_get_clean();
+
+		$this->assertStringContainsString( 'dir="ltr"', $url_output );
+		$this->assertStringContainsString( 'dir="ltr"', $secret_output );
+		$this->assertStringNotContainsString( 'dir="ltr"', $subject_output );
 	}
 
 	public function test_boolean_field_renders_aria_describedby_and_help() {
