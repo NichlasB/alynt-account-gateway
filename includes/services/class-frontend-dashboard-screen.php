@@ -104,7 +104,7 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 		</section>
 
 		<?php if ( ! empty( $settings['woocommerce_takeover'] ) && ! $this->dashboard->woocommerce_available() ) : ?>
-			<div class="agw-status agw-status--error" role="alert">
+			<div class="agw-status agw-status--error" role="alert" aria-live="assertive" aria-atomic="true">
 				<?php esc_html_e( 'WooCommerce account takeover is enabled, but WooCommerce is not active.', 'alynt-account-gateway' ); ?>
 			</div>
 		<?php endif; ?>
@@ -414,7 +414,7 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 		$labels = $this->woocommerce->endpoint_labels();
 		$title  = $labels[ $endpoint ] ?? __( 'Account section', 'alynt-account-gateway' );
 		?>
-		<div class="agw-dashboard-empty" role="status">
+		<div class="agw-dashboard-empty" role="status" aria-live="polite" aria-atomic="true">
 			<span class="agw-dashboard-empty__eyebrow"><?php esc_html_e( 'Account section unavailable', 'alynt-account-gateway' ); ?></span>
 			<h3><?php esc_html_e( 'This area is not ready yet', 'alynt-account-gateway' ); ?></h3>
 			<p>

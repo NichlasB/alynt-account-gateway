@@ -64,22 +64,29 @@ class ALYNT_AG_Frontend_Login_Screen {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Optional redirect target for a login attempt.
 		$redirect_to = isset( $_GET['redirect_to'] ) ? esc_url_raw( wp_unslash( $_GET['redirect_to'] ) ) : '';
 		$notice_id   = $this->components->has_notice( $settings['login_intro_text'] ) ? 'agw-login-instructions' : '';
-		$form_desc   = array_filter( array( $notice_id, $error_code ? 'agw-login-error' : '' ) );
+		$form_desc   = array_filter(
+			array(
+				$notice_id,
+				$registration_complete ? 'agw-registration-complete' : '',
+				$password_reset ? 'agw-password-reset' : '',
+				$error_code ? 'agw-login-error' : '',
+			)
+		);
 		?>
 		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Log In', 'alynt-account-gateway' ); ?></h1>
 		<?php $this->components->render_notice( $settings['login_intro_text'], $notice_id ); ?>
 		<?php if ( $registration_complete ) : ?>
-			<div class="agw-status agw-status--success" role="status" aria-live="polite">
+			<div id="agw-registration-complete" class="agw-status agw-status--success" role="status" aria-live="polite" aria-atomic="true">
 				<?php esc_html_e( 'Your account has been created. You can log in now.', 'alynt-account-gateway' ); ?>
 			</div>
 		<?php endif; ?>
 		<?php if ( $password_reset ) : ?>
-			<div class="agw-status agw-status--success" role="status" aria-live="polite">
+			<div id="agw-password-reset" class="agw-status agw-status--success" role="status" aria-live="polite" aria-atomic="true">
 				<?php esc_html_e( 'Your password has been updated. You can log in now.', 'alynt-account-gateway' ); ?>
 			</div>
 		<?php endif; ?>
 		<?php if ( $error_code ) : ?>
-			<div id="agw-login-error" class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->auth->get_login_error_message( $error_code ) ); ?></div>
+			<div id="agw-login-error" class="agw-status agw-status--error" role="alert" aria-live="assertive" aria-atomic="true"><?php echo esc_html( $this->auth->get_login_error_message( $error_code ) ); ?></div>
 		<?php endif; ?>
 		<form class="agw-form" method="post" action="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"<?php echo $this->components->describedby_attribute( $form_desc ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by describedby_attribute(). ?>>
 			<input type="hidden" name="alynt_ag_action" value="login">

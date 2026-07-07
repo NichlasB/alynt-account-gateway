@@ -279,7 +279,7 @@ class FrontendDashboardScreenTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( 'WooCommerce account takeover is enabled, but WooCommerce is not active.', $html );
-		$this->assertStringContainsString( 'role="alert"', $html );
+		$this->assertStringContainsString( 'role="alert" aria-live="assertive" aria-atomic="true"', $html );
 	}
 
 	public function test_render_dashboard_screen_outputs_woocommerce_endpoint_content() {
@@ -508,7 +508,7 @@ class FrontendDashboardScreenTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( 'class="agw-dashboard-empty"', $html );
-		$this->assertStringContainsString( 'role="status"', $html );
+		$this->assertStringContainsString( 'role="status" aria-live="polite" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'Account section unavailable', $html );
 		$this->assertStringContainsString( 'This area is not ready yet', $html );
 		$this->assertStringContainsString( 'WooCommerce did not return content for Orders.', $html );

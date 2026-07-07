@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.85 - 2026-07-07
+
+### Changed
+
+- Improved frontend live-region semantics for auth feedback, verification placeholders, and dashboard fallback states.
+
 ## 0.1.84 - 2026-07-07
 
 ### Changed

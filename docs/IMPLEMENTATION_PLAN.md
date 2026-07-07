@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.84 frontend theme-compatibility CSS resilience released and updater-verified
+- Current phase: v0.1.85 frontend live-region accessibility semantics ready for release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.84 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.84 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.85 is locally validated and awaiting release approval.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,41 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.85 Small Release Cycle
+
+### Scope
+
+- [x] Continue the Accessibility, RTL, and multilingual QA pass from the released `v0.1.84` baseline.
+- [x] Add explicit, consistent live-region semantics to auth feedback and dashboard fallback states.
+- [x] Give redirect-landed success messages stable IDs and atomic polite status announcements.
+- [x] Give redirect-landed error messages explicit assertive atomic alert announcements.
+- [x] Preserve behavior: no copy changes, route handling changes, saved settings changes, database schema changes, registration flow changes, provider policy changes, rate-limit changes, email delivery changes, dashboard endpoint changes, WooCommerce action delegation changes, diagnostics storage changes, privacy cleanup changes, or updater behavior changes.
+- [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.85` from clean `master` after updater-verified `v0.1.84`.
+- Added stable IDs and `aria-live`/`aria-atomic` semantics for login success states, login errors, lost-password sent/errors, registration sent/errors, set-password errors, invalid-link resend success/errors, verification placeholder status, WooCommerce unavailable alert, and WooCommerce endpoint fallback status.
+- Included login success IDs in the login form `aria-describedby` chain when success messages are present after redirects.
+- Added focused frontend screen coverage for polite atomic success/status regions, assertive atomic error alerts, verification placeholder status semantics, and dashboard fallback live regions.
+- Initial focused validation passed: PHP syntax for touched frontend service files and focused `FrontendLoginScreenTest` plus `SampleTest` (`3 tests, 33 assertions`). The full suite below covered all touched frontend tests.
+- Release validation passed: `npm run build`; `npm run lint`; `npm run make-pot` (`953 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`254 tests, 1588 assertions`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.85-20260707-193237\alynt-account-gateway-v0.1.85.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.85` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, live-region marker checks present, and SHA-256 `3DC494F8E3B8FD29185C1FCF4633C9091E74973B40B2338C35B3A634CAE433F9`.
+- Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader` under LocalWP web PHP: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, `get_plugins()` reports `0.1.85`, main file header/constant `0.1.85`, stable tag `0.1.85`, exactly one `GitHub Plugin URI` updater header, live-region marker checks present, 45 runtime files, no source/dev package files, Novamira MCP was not exposed in the active tool list, and temporary web smoke scripts were removed.
+
+### Guardrails
+
+- Do not change frontend copy, auth routes, frontend output gating, saved settings, database schema, registration flow, provider verification decisions, rate-limit enforcement, email delivery, dashboard/WooCommerce endpoint behavior, diagnostics storage schema, privacy cleanup, or updater behavior.
+
+### Completion Gate
+
+- [x] Focused tests cover frontend live-region accessibility semantics.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package markers.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.84 Small Release Cycle
 

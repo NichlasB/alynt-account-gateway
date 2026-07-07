@@ -30,7 +30,7 @@ class ALYNT_AG_Frontend_Components {
 			return;
 		}
 		?>
-		<div class="agw-verification-slot" role="status"><?php esc_html_e( 'Verification will appear here when enabled.', 'alynt-account-gateway' ); ?></div>
+		<div class="agw-verification-slot" role="status" aria-live="polite" aria-atomic="true"><?php esc_html_e( 'Verification will appear here when enabled.', 'alynt-account-gateway' ); ?></div>
 		<?php
 	}
 

@@ -64,6 +64,7 @@ class FrontendRegisterScreenTest extends TestCase {
 		$this->assertStringContainsString( 'id="agw-register-terms"', $html );
 		$this->assertStringContainsString( 'href="https://example.test/terms/"', $html );
 		$this->assertStringContainsString( 'href="https://example.test/legal/privacy/"', $html );
+		$this->assertStringContainsString( 'role="status" aria-live="polite" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'Verification will appear here when enabled.', $html );
 		$this->assertStringContainsString( 'data-agw-registration-submit disabled aria-disabled="true"', $html );
 		$this->assertStringContainsString( 'href="https://example.test/login"', $html );
@@ -80,7 +81,7 @@ class FrontendRegisterScreenTest extends TestCase {
 
 		$this->assertStringContainsString( '<h1 id="agw-screen-title" class="agw-title">Check Your Email</h1>', $html );
 		$this->assertStringContainsString( 'If the details can be used, a confirmation email has been sent.', $html );
-		$this->assertStringContainsString( 'role="status" aria-live="polite"', $html );
+		$this->assertStringContainsString( 'id="agw-registration-sent" class="agw-status agw-status--success" role="status" aria-live="polite" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'href="https://example.test/login"', $html );
 		$this->assertStringNotContainsString( 'data-agw-registration-form', $html );
 	}
@@ -94,6 +95,7 @@ class FrontendRegisterScreenTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( 'id="agw-register-error"', $html );
+		$this->assertStringContainsString( 'role="alert" aria-live="assertive" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'Please accept the terms and privacy policy to continue.', $html );
 		$this->assertStringContainsString( 'data-agw-registration-form aria-describedby="agw-register-instructions agw-register-error"', $html );
 		$this->assertStringContainsString( 'aria-describedby="agw-register-error"', $html );

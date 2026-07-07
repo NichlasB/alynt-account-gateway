@@ -67,6 +67,7 @@ class FrontendLostpasswordScreenTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( 'id="agw-lostpassword-error"', $html );
+		$this->assertStringContainsString( 'role="alert" aria-live="assertive" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'Too many attempts. Please wait a moment and try again.', $html );
 		$this->assertStringContainsString( 'aria-describedby="agw-lostpassword-instructions agw-lostpassword-error"', $html );
 		$this->assertStringContainsString( 'aria-describedby="agw-lostpassword-error"', $html );
@@ -94,7 +95,7 @@ class FrontendLostpasswordScreenTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( '<h1 id="agw-screen-title" class="agw-title">Check Your Email</h1>', $html );
-		$this->assertStringContainsString( 'agw-status agw-status--success', $html );
+		$this->assertStringContainsString( 'id="agw-lostpassword-sent" class="agw-status agw-status--success" role="status" aria-live="polite" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'If an account can receive password reset instructions', $html );
 		$this->assertStringContainsString( 'href="https://example.test/login"', $html );
 		$this->assertStringNotContainsString( 'name="alynt_ag_action" value="lostpassword"', $html );
