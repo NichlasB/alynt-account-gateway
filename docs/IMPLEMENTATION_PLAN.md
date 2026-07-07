@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.77 frontend instruction accessibility slice ready for release approval
+- Current phase: v0.1.77 frontend instruction accessibility slice released
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.76 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification; v0.1.77 local package smoke passed on Plugin Tester.
+- Plugin status: v0.1.77 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep field-level error descriptions intact while adding form-level context for assistive technology.
 - [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -43,6 +43,10 @@
 - Release validation passed: PHP syntax for edited runtime and focused test files; `npm run build`; `npm run lint`; `npm run make-pot` (`927 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`249 tests, 1517 assertions`).
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.77-20260707-145711\alynt-account-gateway-v0.1.77.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.77` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, frontend `describedby_attribute` helper marker present, login/register/set-password/invalid-link instruction markers present, and SHA-256 `30281485EF9D21E7D1C8A8303F266AE622990F0CF247944C633C29F13F81498B`.
 - Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin upgraded from `0.1.76` to `0.1.77`, fresh-request loaded constant `0.1.77`, stable tag `0.1.77`, exactly one `GitHub Plugin URI` updater header, frontend `describedby_attribute` helper marker present, login/register/set-password/invalid-link instruction markers present, 45 runtime files, no source/dev package files, and Novamira MCP was available for verification.
+- Published GitHub release `v0.1.77`; Build Release workflow run `28868430529` passed and produced the public asset.
+- Public release asset `alynt-account-gateway-v0.1.77.zip` was downloaded from GitHub and inspected as 55 entries, 10 directory entries, no backslash entries, no dev entries, `0.1.77` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, frontend `describedby_attribute` helper marker present, login/register/set-password/invalid-link instruction markers present, and SHA-256 `35E82DEFDA65985195D7E6518206790A4381567A944F2529FAA9AACB5B1C809A`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.76` asset, confirming Alynt Plugin Updater detected `0.1.76` -> `0.1.77` with the public `v0.1.77` GitHub release asset URL, upgrading through WordPress `Plugin_Upgrader`, and verifying the final active plugin as `0.1.77` with no remaining update.
+- Post-updater Plugin Tester verification confirmed the installed public package: active plugin, `0.1.77` header/constant, stable tag `0.1.77`, exactly one `GitHub Plugin URI` updater header, frontend `describedby_attribute` helper marker present, login/register/set-password/invalid-link instruction markers present, 45 runtime files, and no source/dev package files.
 
 ### Guardrails
 
@@ -53,7 +57,7 @@
 - [x] Focused tests cover instruction notice IDs and form-level accessible descriptions.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.76 Small Release Cycle
 
