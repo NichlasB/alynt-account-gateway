@@ -79,6 +79,9 @@ class FrontendLoginScreenTest extends TestCase {
 
 		$this->assertStringContainsString( 'Your account has been created. You can log in now.', $html );
 		$this->assertStringContainsString( 'Your password has been updated. You can log in now.', $html );
+		$this->assertStringContainsString( 'id="agw-registration-complete" class="agw-status agw-status--success" role="status" aria-live="polite" aria-atomic="true"', $html );
+		$this->assertStringContainsString( 'id="agw-password-reset" class="agw-status agw-status--success" role="status" aria-live="polite" aria-atomic="true"', $html );
+		$this->assertStringContainsString( 'aria-describedby="agw-login-instructions agw-registration-complete agw-password-reset"', $html );
 		$this->assertStringContainsString( 'name="redirect_to" value="https://example.test/my-account/"', $html );
 	}
 
@@ -91,6 +94,7 @@ class FrontendLoginScreenTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( 'id="agw-login-error"', $html );
+		$this->assertStringContainsString( 'role="alert" aria-live="assertive" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'Too many attempts. Please wait a moment and try again.', $html );
 		$this->assertStringContainsString( '<form class="agw-form" method="post" action="https://example.test/login" aria-describedby="agw-login-instructions agw-login-error">', $html );
 		$this->assertStringContainsString( 'aria-describedby="agw-login-error"', $html );

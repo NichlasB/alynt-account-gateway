@@ -66,7 +66,7 @@ class ALYNT_AG_Frontend_Lostpassword_Screen {
 		if ( $reset_sent ) {
 			?>
 			<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Check Your Email', 'alynt-account-gateway' ); ?></h1>
-			<div class="agw-status agw-status--success" role="status" aria-live="polite">
+			<div id="agw-lostpassword-sent" class="agw-status agw-status--success" role="status" aria-live="polite" aria-atomic="true">
 				<?php echo esc_html( $this->auth->get_lostpassword_sent_message() ); ?>
 			</div>
 			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
@@ -77,7 +77,7 @@ class ALYNT_AG_Frontend_Lostpassword_Screen {
 		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Reset Password', 'alynt-account-gateway' ); ?></h1>
 		<?php $this->components->render_notice( $settings['lostpassword_intro_text'], $notice_id ); ?>
 		<?php if ( $error_code ) : ?>
-			<div id="agw-lostpassword-error" class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->auth->get_lostpassword_error_message( $error_code ) ); ?></div>
+			<div id="agw-lostpassword-error" class="agw-status agw-status--error" role="alert" aria-live="assertive" aria-atomic="true"><?php echo esc_html( $this->auth->get_lostpassword_error_message( $error_code ) ); ?></div>
 		<?php endif; ?>
 		<form class="agw-form" method="post" action="<?php echo esc_url( $this->routes->action_url( 'lostpassword', $settings ) ); ?>"<?php echo $this->components->describedby_attribute( $form_desc ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by describedby_attribute(). ?>>
 			<input type="hidden" name="alynt_ag_action" value="lostpassword">

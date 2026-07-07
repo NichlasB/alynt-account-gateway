@@ -83,9 +83,10 @@ class FrontendStateScreensTest extends TestCase {
 		$screens->render_invalid_link_screen( $this->settings );
 		$html = ob_get_clean();
 
-		$this->assertStringContainsString( 'agw-status agw-status--success', $html );
+		$this->assertStringContainsString( 'id="agw-confirmation-resent" class="agw-status agw-status--success" role="status" aria-live="polite" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'If a pending registration can be found, a new confirmation email has been sent.', $html );
 		$this->assertStringContainsString( 'id="agw-resend-error"', $html );
+		$this->assertStringContainsString( 'role="alert" aria-live="assertive" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'Too many confirmation email requests. Please wait for the resend window before trying again.', $html );
 		$this->assertStringContainsString( 'id="agw-resend-guidance"', $html );
 		$this->assertStringContainsString( 'Before requesting another link', $html );

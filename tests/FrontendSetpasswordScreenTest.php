@@ -140,6 +140,7 @@ class FrontendSetpasswordScreenTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( 'id="agw-password-error"', $html );
+		$this->assertStringContainsString( 'role="alert" aria-live="assertive" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'The passwords do not match.', $html );
 		$this->assertStringContainsString( 'data-agw-password-form aria-describedby="agw-setpassword-instructions agw-password-error"', $html );
 		$this->assertStringContainsString( 'aria-describedby="agw-password-error agw-password-status agw-password-requirements"', $html );

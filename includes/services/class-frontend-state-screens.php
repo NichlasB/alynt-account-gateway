@@ -87,12 +87,12 @@ class ALYNT_AG_Frontend_State_Screens {
 		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Link Expired', 'alynt-account-gateway' ); ?></h1>
 		<?php $this->components->render_notice( $settings['invalid_link_text'], $notice_id ); ?>
 		<?php if ( $confirmation_resent ) : ?>
-			<div class="agw-status agw-status--success" role="status" aria-live="polite">
+			<div id="agw-confirmation-resent" class="agw-status agw-status--success" role="status" aria-live="polite" aria-atomic="true">
 				<?php esc_html_e( 'If a pending registration can be found, a new confirmation email has been sent.', 'alynt-account-gateway' ); ?>
 			</div>
 		<?php endif; ?>
 		<?php if ( $error_code ) : ?>
-			<div id="agw-resend-error" class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->messages->resend_error( $error_code ) ); ?></div>
+			<div id="agw-resend-error" class="agw-status agw-status--error" role="alert" aria-live="assertive" aria-atomic="true"><?php echo esc_html( $this->messages->resend_error( $error_code ) ); ?></div>
 		<?php endif; ?>
 		<?php if ( $is_rate_limited ) : ?>
 			<?php $this->render_resend_throttle_guidance( $settings ); ?>
