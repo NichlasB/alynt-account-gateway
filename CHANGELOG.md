@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.77 - 2026-07-07
+
+### Changed
+
+- Associated frontend instruction notices with login, registration, password, and invalid-link forms through form-level `aria-describedby` relationships.
+
 ## 0.1.76 - 2026-07-07
 
 ### Changed

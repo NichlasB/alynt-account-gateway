@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.76 dashboard current-link accessibility slice released
+- Current phase: v0.1.77 frontend instruction accessibility slice ready for release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.76 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.76 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification; v0.1.77 local package smoke passed on Plugin Tester.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,40 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.77 Small Release Cycle
+
+### Scope
+
+- [x] Continue the accessibility, RTL, and multilingual QA pass from the released `v0.1.76` baseline.
+- [x] Associate configurable instruction notices with their frontend account forms through form-level `aria-describedby` relationships.
+- [x] Cover login, lost password, registration, set-password, registration-disabled, invalid-link, and logout notice IDs without changing visible copy or behavior.
+- [x] Keep field-level error descriptions intact while adding form-level context for assistive technology.
+- [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.77` from clean `master` after updater-verified `v0.1.76`.
+- Added reusable frontend component helpers for notice presence checks and sanitized `aria-describedby` attribute generation.
+- Added stable IDs to configurable instruction notices and associated them with the relevant frontend forms.
+- Preserved existing field-level error relationships for invalid fields and password requirement/status descriptions.
+- Added focused frontend component and screen coverage. Initial validation passed: PHP syntax for the edited frontend services; focused `FrontendComponentsTest` (`6 tests, 16 assertions`), `FrontendLoginScreenTest` (`3 tests, 29 assertions`), `FrontendRegisterScreenTest` (`4 tests, 35 assertions`), `FrontendLostpasswordScreenTest` (`4 tests, 25 assertions`), `FrontendSetpasswordScreenTest` (`6 tests, 55 assertions`), and `FrontendStateScreensTest` (`4 tests, 30 assertions`).
+- Release validation passed: PHP syntax for edited runtime and focused test files; `npm run build`; `npm run lint`; `npm run make-pot` (`927 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`249 tests, 1517 assertions`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.77-20260707-145711\alynt-account-gateway-v0.1.77.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.77` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, frontend `describedby_attribute` helper marker present, login/register/set-password/invalid-link instruction markers present, and SHA-256 `30281485EF9D21E7D1C8A8303F266AE622990F0CF247944C633C29F13F81498B`.
+- Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin upgraded from `0.1.76` to `0.1.77`, fresh-request loaded constant `0.1.77`, stable tag `0.1.77`, exactly one `GitHub Plugin URI` updater header, frontend `describedby_attribute` helper marker present, login/register/set-password/invalid-link instruction markers present, 45 runtime files, no source/dev package files, and Novamira MCP was available for verification.
+
+### Guardrails
+
+- Do not change frontend routing, saved settings, visual styles, screen copy, registration flow, password policy, provider verification, rate limits, diagnostics, email delivery, privacy cleanup, dashboard/WooCommerce behavior, or updater metadata beyond the release version.
+
+### Completion Gate
+
+- [x] Focused tests cover instruction notice IDs and form-level accessible descriptions.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package markers.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.76 Small Release Cycle
 

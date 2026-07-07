@@ -60,6 +60,8 @@ class ALYNT_AG_Frontend_Lostpassword_Screen {
 		$reset_sent = ! empty( $_GET['reset_sent'] );
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only error display.
 		$error_code = $forced_error_code ? sanitize_key( $forced_error_code ) : ( isset( $_GET['reset_error'] ) ? sanitize_key( wp_unslash( $_GET['reset_error'] ) ) : '' );
+		$notice_id  = $this->components->has_notice( $settings['lostpassword_intro_text'] ) ? 'agw-lostpassword-instructions' : '';
+		$form_desc  = array_filter( array( $notice_id, $error_code ? 'agw-lostpassword-error' : '' ) );
 
 		if ( $reset_sent ) {
 			?>
@@ -73,11 +75,11 @@ class ALYNT_AG_Frontend_Lostpassword_Screen {
 		}
 		?>
 		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Reset Password', 'alynt-account-gateway' ); ?></h1>
-		<?php $this->components->render_notice( $settings['lostpassword_intro_text'] ); ?>
+		<?php $this->components->render_notice( $settings['lostpassword_intro_text'], $notice_id ); ?>
 		<?php if ( $error_code ) : ?>
 			<div id="agw-lostpassword-error" class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->auth->get_lostpassword_error_message( $error_code ) ); ?></div>
 		<?php endif; ?>
-		<form class="agw-form" method="post" action="<?php echo esc_url( $this->routes->action_url( 'lostpassword', $settings ) ); ?>" <?php echo $error_code ? 'aria-describedby="agw-lostpassword-error"' : ''; ?>>
+		<form class="agw-form" method="post" action="<?php echo esc_url( $this->routes->action_url( 'lostpassword', $settings ) ); ?>"<?php echo $this->components->describedby_attribute( $form_desc ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by describedby_attribute(). ?>>
 			<input type="hidden" name="alynt_ag_action" value="lostpassword">
 			<?php wp_nonce_field( 'alynt_ag_lostpassword', 'alynt_ag_auth_nonce' ); ?>
 			<div class="agw-field">

@@ -47,7 +47,7 @@ class FrontendStateScreensTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( 'Registration Unavailable', $html );
-		$this->assertStringContainsString( '<div class="agw-notice">', $html );
+		$this->assertStringContainsString( '<div class="agw-notice" id="agw-registration-disabled-instructions">', $html );
 		$this->assertStringContainsString( 'Registration is currently closed.', $html );
 		$this->assertStringContainsString( 'href="https://example.test/login"', $html );
 		$this->assertStringContainsString( 'Back to Login', $html );
@@ -61,8 +61,10 @@ class FrontendStateScreensTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( 'Link Expired', $html );
+		$this->assertStringContainsString( '<div class="agw-notice" id="agw-invalid-link-instructions">', $html );
 		$this->assertStringContainsString( 'This link has expired. Request a new one.', $html );
 		$this->assertStringContainsString( 'action="https://example.test/account?action=invalidlink"', $html );
+		$this->assertStringContainsString( 'aria-describedby="agw-invalid-link-instructions"', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_action" value="resend_confirmation"', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_registration_nonce" value="test-nonce"', $html );
 		$this->assertStringContainsString( 'id="agw-invalid-email"', $html );
@@ -89,7 +91,7 @@ class FrontendStateScreensTest extends TestCase {
 		$this->assertStringContainsString( 'Before requesting another link', $html );
 		$this->assertStringContainsString( 'Wait 45 minutes before requesting another confirmation email.', $html );
 		$this->assertStringContainsString( 'Use the newest confirmation email only.', $html );
-		$this->assertStringContainsString( 'aria-describedby="agw-resend-error agw-resend-guidance"', $html );
+		$this->assertStringContainsString( 'aria-describedby="agw-invalid-link-instructions agw-resend-error agw-resend-guidance"', $html );
 		$this->assertStringContainsString( 'aria-invalid="true"', $html );
 	}
 

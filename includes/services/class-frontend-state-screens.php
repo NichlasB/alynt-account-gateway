@@ -57,7 +57,7 @@ class ALYNT_AG_Frontend_State_Screens {
 	public function render_registration_disabled_screen( $settings ) {
 		?>
 		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Registration Unavailable', 'alynt-account-gateway' ); ?></h1>
-		<?php $this->components->render_notice( $settings['registration_disabled_text'] ); ?>
+		<?php $this->components->render_notice( $settings['registration_disabled_text'], 'agw-registration-disabled-instructions' ); ?>
 		<a class="agw-button agw-button--primary" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
 		<?php
 	}
@@ -75,13 +75,17 @@ class ALYNT_AG_Frontend_State_Screens {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only error display.
 		$error_code      = isset( $_GET['resend_error'] ) ? sanitize_key( wp_unslash( $_GET['resend_error'] ) ) : '';
 		$is_rate_limited = 'alynt_ag_rate_limited' === $error_code;
-		$describedby     = $error_code ? 'agw-resend-error' : '';
+		$notice_id       = $this->components->has_notice( $settings['invalid_link_text'] ) ? 'agw-invalid-link-instructions' : '';
+		$describedby     = $notice_id;
+		if ( $error_code ) {
+			$describedby = trim( $describedby . ' agw-resend-error' );
+		}
 		if ( $is_rate_limited ) {
 			$describedby = trim( $describedby . ' agw-resend-guidance' );
 		}
 		?>
 		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Link Expired', 'alynt-account-gateway' ); ?></h1>
-		<?php $this->components->render_notice( $settings['invalid_link_text'] ); ?>
+		<?php $this->components->render_notice( $settings['invalid_link_text'], $notice_id ); ?>
 		<?php if ( $confirmation_resent ) : ?>
 			<div class="agw-status agw-status--success" role="status" aria-live="polite">
 				<?php esc_html_e( 'If a pending registration can be found, a new confirmation email has been sent.', 'alynt-account-gateway' ); ?>
