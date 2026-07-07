@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.83 provider failure recency render correction released and updater-verified
+- Current phase: v0.1.84 frontend theme-compatibility CSS resilience ready for release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.83 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.83 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.84 is locally validated and awaiting release approval.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,39 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.84 Small Release Cycle
+
+### Scope
+
+- [x] Continue the Frontend visual QA and theme compatibility pass from the released `v0.1.83` baseline.
+- [x] Add CSS guardrails that make auth gateway form controls, buttons, links, and WooCommerce dashboard controls more resilient against theme-injected margins, shadows, text transforms, letter spacing, line height, and grid overflow.
+- [x] Extend box-sizing coverage to the gateway root and pseudo-elements.
+- [x] Preserve behavior: no route handling changes, saved settings changes, database schema changes, registration flow changes, provider policy changes, rate-limit changes, email delivery changes, dashboard endpoint changes, WooCommerce action delegation changes, diagnostics storage changes, privacy cleanup changes, or updater behavior changes.
+- [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.84` from clean `master` after updater-verified `v0.1.83`.
+- Added frontend CSS normalization for auth form paragraphs/fieldsets, inputs, password toggles, checkboxes, buttons, links, and WooCommerce dashboard form controls so common theme styles are less likely to distort the gateway shell.
+- Added source-level CSS tests covering pseudo-element box-sizing, form margin resets, input/button shadow and margin resets, link wrapping, text-transform resets, dashboard input min-width protection, and dashboard button normalization.
+- Initial focused validation passed: PHP syntax for touched PHP files and focused `FrontendCssSourceTest` plus `SampleTest` (`7 tests, 57 assertions`).
+- Release validation passed: `npm run build`; `npm run lint`; `npm run make-pot` (`953 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`254 tests, 1579 assertions`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.84-20260707-191051\alynt-account-gateway-v0.1.84.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.84` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, compiled CSS guardrail markers present, and SHA-256 `9C4150E3F7B61C0482AE98C5BC0EC610ECE172805CA97433EEADEFCE264B80DD`.
+- Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader` under LocalWP web PHP: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, `get_plugins()` reports `0.1.84`, main file header/constant `0.1.84`, stable tag `0.1.84`, exactly one `GitHub Plugin URI` updater header, compiled CSS guardrail markers present, 45 runtime files, no source/dev package files, Novamira MCP was not exposed in the active tool list, and temporary web smoke scripts were removed.
+
+### Guardrails
+
+- Do not change auth routes, frontend output gating, saved settings, database schema, registration flow, provider verification decisions, rate-limit enforcement, public messages, email delivery, dashboard/WooCommerce endpoint behavior, diagnostics storage schema, privacy cleanup, or updater behavior.
+
+### Completion Gate
+
+- [x] Focused tests cover frontend theme-compatibility CSS guardrails.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package markers.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.83 Small Release Cycle
 

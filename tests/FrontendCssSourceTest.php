@@ -91,18 +91,28 @@ class FrontendCssSourceTest extends TestCase {
 	public function test_frontend_css_normalizes_gateway_form_controls_against_theme_styles() {
 		$css = $this->get_frontend_css();
 
+		$this->assertStringContainsString( ".alynt-ag-gateway,\n.alynt-ag-gateway *,\n.alynt-ag-gateway *::before,\n.alynt-ag-gateway *::after {\n\tbox-sizing: border-box;", $css );
+		$this->assertStringContainsString( ".agw-form p,\n.agw-form fieldset {\n\tmargin: 0;", $css );
 		$this->assertStringContainsString( ".agw-field input {\n\tappearance: none;", $css );
-		$this->assertStringContainsString( "\tmax-width: 100%;\n\tmin-height: 48px;", $css );
+		$this->assertStringContainsString( "\tmax-width: 100%;\n\tmin-height: 48px;\n\tmargin: 0;", $css );
+		$this->assertStringContainsString( "\tbox-shadow: none;\n\tcolor: var(--agw-color-text);", $css );
 		$this->assertStringContainsString( ".agw-password__toggle {\n\tappearance: none;", $css );
+		$this->assertStringContainsString( "\tline-height: 1;\n\ttext-transform: none;", $css );
 		$this->assertStringContainsString( ".agw-button {\n\tappearance: none;", $css );
+		$this->assertStringContainsString( "\ttext-decoration: none;\n\ttext-transform: none;\n\tletter-spacing: 0;", $css );
+		$this->assertStringContainsString( ".agw-links a,\n.agw-back-link,\n.agw-checkbox a {\n\tcolor: var(--agw-color-primary);", $css );
+		$this->assertStringContainsString( "\toverflow-wrap: anywhere;\n\ttext-decoration: underline;\n\ttext-transform: none;", $css );
 	}
 
 	public function test_frontend_css_normalizes_dashboard_form_controls_against_theme_styles() {
 		$css = $this->get_frontend_css();
 
 		$this->assertStringContainsString( ".agw-dashboard-content input,\n.agw-dashboard-content textarea {\n\tappearance: none;", $css );
+		$this->assertStringContainsString( "\tmax-width: 100%;\n\tmin-width: 0;\n\tmin-height: 42px;\n\tmargin: 0;", $css );
+		$this->assertStringContainsString( "\tbox-shadow: none;\n\tcolor: var(--agw-color-text);", $css );
 		$this->assertStringContainsString( ".agw-dashboard-content input[type=\"checkbox\"],\n.agw-dashboard-content input[type=\"radio\"] {\n\tappearance: auto;", $css );
 		$this->assertStringContainsString( ".agw-dashboard-content .button,\n.agw-dashboard-content button,\n.agw-dashboard-content input[type=\"submit\"] {\n\tappearance: none;", $css );
-		$this->assertStringContainsString( "\tmax-width: 100%;\n\tmin-height: 42px;", $css );
+		$this->assertStringContainsString( "\tmax-width: 100%;\n\tmin-height: 42px;\n\tmargin: 0;", $css );
+		$this->assertStringContainsString( "\ttext-decoration: none;\n\ttext-transform: none;\n\tletter-spacing: 0;", $css );
 	}
 }

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.84 - 2026-07-07
+
+### Changed
+
+- Improved frontend CSS resilience against theme-injected form, button, link, and dashboard control styles.
+
 ## 0.1.83 - 2026-07-07
 
 ### Fixed
