@@ -238,6 +238,27 @@ if ( ! function_exists( 'wp_json_encode' ) ) {
 	}
 }
 
+if ( ! function_exists( 'maybe_unserialize' ) ) {
+	function maybe_unserialize( $value ) {
+		if ( ! is_string( $value ) ) {
+			return $value;
+		}
+
+		$trimmed = trim( $value );
+		if ( 'N;' === $trimmed ) {
+			return null;
+		}
+
+		if ( ! preg_match( '/^(a|O|s|i|b|d):/', $trimmed ) ) {
+			return $value;
+		}
+
+		$data = unserialize( $value );
+
+		return false !== $data || 'b:0;' === $value ? $data : $value;
+	}
+}
+
 if ( ! function_exists( 'wp_enqueue_style' ) ) {
 	function wp_enqueue_style( $handle, $src = '', $deps = array(), $ver = false, $media = 'all' ) {
 		$GLOBALS['alynt_ag_test_enqueued_styles'][] = array(

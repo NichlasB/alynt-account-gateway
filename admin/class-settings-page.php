@@ -2271,15 +2271,32 @@ class ALYNT_AG_Settings_Page {
 	 * @return void
 	 */
 	private function render_security_rate_limit_pressure( $logs ) {
-		$items = $this->security_rate_limit_pressure_items( $logs );
+		$items          = $this->security_rate_limit_pressure_items( $logs );
+		$active_buckets = $this->security_active_rate_limit_bucket_items();
 		?>
 		<div class="alynt-ag-security-pressure" aria-label="<?php esc_attr_e( 'Recent rate limit pressure', 'alynt-account-gateway' ); ?>">
 			<h4><?php esc_html_e( 'Rate Limit Pressure', 'alynt-account-gateway' ); ?></h4>
+			<p class="description">
+				<?php esc_html_e( 'Recent blocks come from verification logs. Active buckets show privacy-preserving lockout pressure that is still inside the configured rate-limit window.', 'alynt-account-gateway' ); ?>
+			</p>
 			<div class="alynt-ag-security-status__grid">
 				<?php foreach ( $items as $item ) : ?>
 					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
 						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
 						<h5><?php echo esc_html( $item['label'] ); ?></h5>
+						<p>
+							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
+							<?php echo esc_html( $item['message'] ); ?>
+						</p>
+					</section>
+				<?php endforeach; ?>
+			</div>
+			<h5><?php esc_html_e( 'Active Rate Limit Buckets', 'alynt-account-gateway' ); ?></h5>
+			<div class="alynt-ag-security-status__grid">
+				<?php foreach ( $active_buckets as $item ) : ?>
+					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+						<h6><?php echo esc_html( $item['label'] ); ?></h6>
 						<p>
 							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
 							<?php echo esc_html( $item['message'] ); ?>
@@ -2340,6 +2357,115 @@ class ALYNT_AG_Settings_Page {
 				'message' => __( 'recent password-reset blocks. Check for repeated reset requests against the same account.', 'alynt-account-gateway' ),
 			),
 		);
+	}
+
+	/**
+	 * Return active rate-limit bucket summary items.
+	 *
+	 * @return array<int,array{label:string,status:string,count:int,message:string}>
+	 */
+	private function security_active_rate_limit_bucket_items() {
+		$counts = array(
+			'registration'        => array(
+				'active' => 0,
+				'locked' => 0,
+			),
+			'resend_confirmation' => array(
+				'active' => 0,
+				'locked' => 0,
+			),
+			'login'               => array(
+				'active' => 0,
+				'locked' => 0,
+			),
+			'lostpassword'        => array(
+				'active' => 0,
+				'locked' => 0,
+			),
+		);
+
+		foreach ( $this->security_active_rate_limit_bucket_rows() as $row ) {
+			$meta = isset( $row->option_value ) ? maybe_unserialize( $row->option_value ) : null;
+
+			if ( ! is_array( $meta ) || empty( $meta['action'] ) ) {
+				continue;
+			}
+
+			$action = sanitize_key( $meta['action'] );
+			if ( ! isset( $counts[ $action ] ) ) {
+				continue;
+			}
+
+			if ( ! empty( $meta['expires_at'] ) && absint( $meta['expires_at'] ) < time() ) {
+				continue;
+			}
+
+			++$counts[ $action ]['active'];
+			if ( ! empty( $meta['locked'] ) ) {
+				++$counts[ $action ]['locked'];
+			}
+		}
+
+		return array(
+			array(
+				'label'   => __( 'Registration', 'alynt-account-gateway' ),
+				'status'  => $counts['registration']['locked'] > 0 ? 'warning' : 'ready',
+				'count'   => $counts['registration']['locked'],
+				'message' => sprintf(
+					/* translators: %d: active bucket count. */
+					__( 'active lockouts from %d current registration buckets.', 'alynt-account-gateway' ),
+					$counts['registration']['active']
+				),
+			),
+			array(
+				'label'   => __( 'Confirmation Resends', 'alynt-account-gateway' ),
+				'status'  => $counts['resend_confirmation']['locked'] > 0 ? 'warning' : 'ready',
+				'count'   => $counts['resend_confirmation']['locked'],
+				'message' => sprintf(
+					/* translators: %d: active bucket count. */
+					__( 'active lockouts from %d current resend buckets.', 'alynt-account-gateway' ),
+					$counts['resend_confirmation']['active']
+				),
+			),
+			array(
+				'label'   => __( 'Login', 'alynt-account-gateway' ),
+				'status'  => $counts['login']['locked'] > 0 ? 'warning' : 'ready',
+				'count'   => $counts['login']['locked'],
+				'message' => sprintf(
+					/* translators: %d: active bucket count. */
+					__( 'active lockouts from %d current login buckets.', 'alynt-account-gateway' ),
+					$counts['login']['active']
+				),
+			),
+			array(
+				'label'   => __( 'Password Reset', 'alynt-account-gateway' ),
+				'status'  => $counts['lostpassword']['locked'] > 0 ? 'warning' : 'ready',
+				'count'   => $counts['lostpassword']['locked'],
+				'message' => sprintf(
+					/* translators: %d: active bucket count. */
+					__( 'active lockouts from %d current password-reset buckets.', 'alynt-account-gateway' ),
+					$counts['lostpassword']['active']
+				),
+			),
+		);
+	}
+
+	/**
+	 * Fetch active rate-limit metadata transient rows.
+	 *
+	 * @return array<int,object>
+	 */
+	private function security_active_rate_limit_bucket_rows() {
+		global $wpdb;
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Admin-only aggregate observability for plugin-owned transient rows.
+		return (array) $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT option_value FROM {$wpdb->options} WHERE option_name LIKE %s",
+				$wpdb->esc_like( '_transient_alynt_ag_rl_meta_' ) . '%'
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	}
 
 	/**

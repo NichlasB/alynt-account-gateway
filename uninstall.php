@@ -44,9 +44,11 @@ foreach ( $tables as $table ) {
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Uninstall removes plugin-owned transient option rows.
 $wpdb->query(
 	$wpdb->prepare(
-		"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s",
+		"DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s",
 		$wpdb->esc_like( '_transient_alynt_ag_rl_' ) . '%',
-		$wpdb->esc_like( '_transient_timeout_alynt_ag_rl_' ) . '%'
+		$wpdb->esc_like( '_transient_timeout_alynt_ag_rl_' ) . '%',
+		$wpdb->esc_like( '_transient_alynt_ag_rl_meta_' ) . '%',
+		$wpdb->esc_like( '_transient_timeout_alynt_ag_rl_meta_' ) . '%'
 	)
 );
 // phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching

@@ -91,9 +91,12 @@ class ALYNT_AG_Rate_Limiter {
 		$limit       = max( 1, absint( $limit ) );
 		$window_mins = max( 1, absint( $window_mins ) );
 		$key         = $this->get_bucket_key( $action, $identifier );
+		$meta_key    = $this->get_bucket_meta_key( $key );
 		$count       = (int) get_transient( $key );
 
 		if ( $count >= $limit ) {
+			$this->set_bucket_meta( $meta_key, $action, $count, $limit, $window_mins, true );
+
 			return new WP_Error(
 				'alynt_ag_rate_limited',
 				__( 'Too many attempts. Please wait and try again.', 'alynt-account-gateway' )
@@ -101,6 +104,7 @@ class ALYNT_AG_Rate_Limiter {
 		}
 
 		set_transient( $key, $count + 1, $window_mins * MINUTE_IN_SECONDS );
+		$this->set_bucket_meta( $meta_key, $action, $count + 1, $limit, $window_mins, false );
 
 		return true;
 	}
@@ -120,6 +124,50 @@ class ALYNT_AG_Rate_Limiter {
 		);
 
 		return 'alynt_ag_rl_' . hash_hmac( 'sha256', implode( '|', $parts ), wp_salt( 'auth' ) );
+	}
+
+	/**
+	 * Build the metadata transient key for a rate-limit bucket.
+	 *
+	 * @param string $bucket_key Privacy-preserving bucket key.
+	 * @return string
+	 */
+	private function get_bucket_meta_key( $bucket_key ) {
+		return 'alynt_ag_rl_meta_' . preg_replace( '/^alynt_ag_rl_/', '', (string) $bucket_key );
+	}
+
+	/**
+	 * Store aggregate metadata for admin visibility without identifiers.
+	 *
+	 * @param string $meta_key    Metadata transient key.
+	 * @param string $action      Rate-limit action.
+	 * @param int    $count       Current attempt count.
+	 * @param int    $limit       Configured limit.
+	 * @param int    $window_mins Window in minutes.
+	 * @param bool   $locked      Whether the latest attempt was blocked.
+	 * @return void
+	 */
+	private function set_bucket_meta( $meta_key, $action, $count, $limit, $window_mins, $locked ) {
+		$existing   = get_transient( $meta_key );
+		$expires_at = is_array( $existing ) && ! empty( $existing['expires_at'] )
+			? max( time() + 1, absint( $existing['expires_at'] ) )
+			: time() + ( max( 1, absint( $window_mins ) ) * MINUTE_IN_SECONDS );
+
+		if ( ! $locked ) {
+			$expires_at = time() + ( max( 1, absint( $window_mins ) ) * MINUTE_IN_SECONDS );
+		}
+
+		set_transient(
+			$meta_key,
+			array(
+				'action'     => sanitize_key( $action ),
+				'count'      => max( 0, absint( $count ) ),
+				'limit'      => max( 1, absint( $limit ) ),
+				'locked'     => (bool) $locked,
+				'expires_at' => $expires_at,
+			),
+			max( 1, $expires_at - time() )
+		);
 	}
 
 	/**
