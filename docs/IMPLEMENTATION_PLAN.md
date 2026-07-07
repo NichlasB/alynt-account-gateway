@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.81 password requirement checklist semantics slice released
+- Current phase: v0.1.82 provider failure recency metadata slice ready for release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.81 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.81 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification; v0.1.82 is locally validated and awaiting release approval.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,39 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.82 Small Release Cycle
+
+### Scope
+
+- [x] Continue security and anti-spam hardening plus admin observability from the released `v0.1.81` baseline.
+- [x] Add privacy-safe latest-seen timestamps to Security tab Provider Failure Triage cards.
+- [x] Cover Turnstile and Reoon configuration/connectivity/response failure recency without exposing email addresses, tokens, IP addresses, raw API responses, or query values.
+- [x] Preserve behavior: no provider policy changes, rate-limit threshold changes, registration flow changes, saved settings changes, database schema changes, frontend copy changes, public response changes, diagnostics storage changes, email delivery changes, dashboard/WooCommerce behavior changes, privacy cleanup changes, or updater behavior changes.
+- [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.82` from clean `master` after updater-verified `v0.1.81`.
+- Added `Latest seen` metadata to the existing Security tab Provider Failure Triage cards when matching recent verification logs include timestamps.
+- Added latest matching timestamp selection for Turnstile configuration, Turnstile connectivity, Turnstile challenge rejection, Reoon configuration, Reoon connectivity, and Reoon unexpected response failures.
+- Initial focused validation passed: PHP syntax for edited admin/test files; focused `SettingsPageSecurityStatusTest` (`25 tests, 396 assertions`).
+- Release validation passed: `npm run build`; `npm run lint`; `npm run make-pot` (`953 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`253 tests, 1563 assertions`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.82-20260707-182055\alynt-account-gateway-v0.1.82.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.82` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, `Latest seen` marker present, latest-seen helper marker present, Provider Failure Triage marker present, and SHA-256 `EA1E39867BE727898B80AB97FB58DF4327542ABD4135E2FB8B049602FE6E5DEE`.
+- Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader` under LocalWP web PHP: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, `get_plugins()` reports `0.1.82`, main file constant is `0.1.82`, stable tag `0.1.82`, exactly one `GitHub Plugin URI` updater header, `Latest seen` marker present, latest-seen helper marker present, Provider Failure Triage marker present, 45 runtime files, no source/dev package files, Novamira MCP was not exposed in the active tool list, and temporary web smoke scripts were removed.
+
+### Guardrails
+
+- Do not change provider verification decisions, Reoon flagged-status policy behavior, Turnstile verification behavior, rate-limit enforcement, registration flow, public messages, saved settings, database schema, diagnostics storage schema, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater behavior.
+
+### Completion Gate
+
+- [x] Focused tests cover provider failure latest-seen timestamp selection.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package markers.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.81 Small Release Cycle
 
