@@ -1503,17 +1503,6 @@ class ALYNT_AG_Settings_Page {
 							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
 							<?php echo esc_html( $item['message'] ); ?>
 						</p>
-						<?php if ( ! empty( $item['latest'] ) ) : ?>
-							<p class="description alynt-ag-security-card__meta">
-								<?php
-								printf(
-									/* translators: %s: latest provider failure timestamp. */
-									esc_html__( 'Latest seen: %s.', 'alynt-account-gateway' ),
-									esc_html( $item['latest'] )
-								);
-								?>
-							</p>
-						<?php endif; ?>
 					</section>
 				<?php endforeach; ?>
 			</div>
@@ -2281,6 +2270,17 @@ class ALYNT_AG_Settings_Page {
 							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
 							<?php echo esc_html( $item['message'] ); ?>
 						</p>
+						<?php if ( ! empty( $item['latest'] ) ) : ?>
+							<p class="description alynt-ag-security-card__meta">
+								<?php
+								printf(
+									/* translators: %s: latest provider failure timestamp. */
+									esc_html__( 'Latest seen: %s.', 'alynt-account-gateway' ),
+									esc_html( $item['latest'] )
+								);
+								?>
+							</p>
+						<?php endif; ?>
 					</section>
 				<?php endforeach; ?>
 			</div>
@@ -2292,7 +2292,7 @@ class ALYNT_AG_Settings_Page {
 	 * Return provider failure triage items from recent verification logs.
 	 *
 	 * @param array<int,object> $logs Recent verification logs.
-	 * @return array<int,array{label:string,status:string,count:int,message:string}>
+	 * @return array<int,array{label:string,status:string,count:int,message:string,latest:string}>
 	 */
 	private function security_provider_failure_triage_items( $logs ) {
 		$turnstile_missing         = $this->count_security_logs_by_provider_statuses(

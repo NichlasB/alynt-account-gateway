@@ -496,6 +496,46 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( '2026-07-05 12:30:00', $items[5]['latest'] );
 	}
 
+	public function test_security_provider_failure_triage_renders_latest_seen_metadata() {
+		$GLOBALS['alynt_ag_test_options']['date_format'] = 'Y-m-d';
+		$GLOBALS['alynt_ag_test_options']['time_format'] = 'H:i:s';
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		ob_start();
+		$this->invoke_helper(
+			$settings_page,
+			'render_security_provider_failure_triage',
+			array(
+				array(
+					(object) array(
+						'provider'   => 'turnstile',
+						'status'     => 'alynt_ag_turnstile_missing',
+						'created_at' => '2026-07-05 12:00:00',
+					),
+					(object) array(
+						'provider'   => 'turnstile',
+						'status'     => 'alynt_ag_turnstile_missing',
+						'created_at' => '2026-07-05 12:03:00',
+					),
+					(object) array(
+						'provider'   => 'reoon',
+						'status'     => 'alynt_ag_reoon_request_failed',
+						'created_at' => '2026-07-05 12:20:00',
+					),
+				),
+			)
+		);
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( 'Provider Failure Triage', $output );
+		$this->assertStringContainsString( 'Turnstile Configuration', $output );
+		$this->assertStringContainsString( 'Reoon Connectivity', $output );
+		$this->assertStringContainsString( 'alynt-ag-security-card__meta', $output );
+		$this->assertStringContainsString( 'Latest seen: 2026-07-05 12:03:00.', $output );
+		$this->assertStringContainsString( 'Latest seen: 2026-07-05 12:20:00.', $output );
+	}
+
 	public function test_security_registration_abuse_signals_count_recent_activity() {
 		$settings_page = new ALYNT_AG_Settings_Page();
 		$items         = $this->invoke_helper(
