@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.74 - 2026-07-07
+
+### Changed
+
+- Improved resend-throttle accessibility by associating cooldown guidance with the rate-limited confirmation resend form.
+
 ## 0.1.73 - 2026-07-07
 
 ### Changed

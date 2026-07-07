@@ -73,7 +73,12 @@ class ALYNT_AG_Frontend_State_Screens {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only status display.
 		$confirmation_resent = ! empty( $_GET['confirmation_resent'] );
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only error display.
-		$error_code = isset( $_GET['resend_error'] ) ? sanitize_key( wp_unslash( $_GET['resend_error'] ) ) : '';
+		$error_code      = isset( $_GET['resend_error'] ) ? sanitize_key( wp_unslash( $_GET['resend_error'] ) ) : '';
+		$is_rate_limited = 'alynt_ag_rate_limited' === $error_code;
+		$describedby     = $error_code ? 'agw-resend-error' : '';
+		if ( $is_rate_limited ) {
+			$describedby = trim( $describedby . ' agw-resend-guidance' );
+		}
 		?>
 		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Link Expired', 'alynt-account-gateway' ); ?></h1>
 		<?php $this->components->render_notice( $settings['invalid_link_text'] ); ?>
@@ -85,15 +90,15 @@ class ALYNT_AG_Frontend_State_Screens {
 		<?php if ( $error_code ) : ?>
 			<div id="agw-resend-error" class="agw-status agw-status--error" role="alert"><?php echo esc_html( $this->messages->resend_error( $error_code ) ); ?></div>
 		<?php endif; ?>
-		<?php if ( 'alynt_ag_rate_limited' === $error_code ) : ?>
+		<?php if ( $is_rate_limited ) : ?>
 			<?php $this->render_resend_throttle_guidance( $settings ); ?>
 		<?php endif; ?>
-		<form class="agw-form" method="post" action="<?php echo esc_url( $resend_action ); ?>" <?php echo $error_code ? 'aria-describedby="agw-resend-error"' : ''; ?>>
+		<form class="agw-form" method="post" action="<?php echo esc_url( $resend_action ); ?>" <?php echo $describedby ? 'aria-describedby="' . esc_attr( $describedby ) . '"' : ''; ?>>
 			<input type="hidden" name="alynt_ag_action" value="resend_confirmation">
 			<?php wp_nonce_field( 'alynt_ag_resend_confirmation', 'alynt_ag_registration_nonce' ); ?>
 			<div class="agw-field">
 				<label for="agw-invalid-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-invalid-email" name="email" type="email" autocomplete="email" dir="ltr" required <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-resend-error"' : ''; ?>>
+				<input id="agw-invalid-email" name="email" type="email" autocomplete="email" dir="ltr" required <?php echo $error_code ? 'aria-invalid="true" aria-describedby="' . esc_attr( $describedby ) . '"' : ''; ?>>
 			</div>
 			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Send New Link', 'alynt-account-gateway' ); ?></button>
 			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
@@ -110,7 +115,7 @@ class ALYNT_AG_Frontend_State_Screens {
 	private function render_resend_throttle_guidance( $settings ) {
 		$window_mins = isset( $settings['resend_confirmation_rate_limit_window'] ) ? max( 1, absint( $settings['resend_confirmation_rate_limit_window'] ) ) : 60;
 		?>
-		<div class="agw-resend-guidance" aria-labelledby="agw-resend-guidance-title">
+		<div id="agw-resend-guidance" class="agw-resend-guidance" aria-labelledby="agw-resend-guidance-title">
 			<h2 id="agw-resend-guidance-title"><?php esc_html_e( 'Before requesting another link', 'alynt-account-gateway' ); ?></h2>
 			<ul>
 				<li>
