@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.75 manual-review decision playbook slice released
+- Current phase: v0.1.76 dashboard current-link accessibility slice in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.75 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -20,6 +20,37 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.76 Small Release Cycle
+
+### Scope
+
+- [x] Continue the accessibility, RTL, and multilingual QA pass from the released `v0.1.75` baseline.
+- [x] Add current-page semantics to dashboard account links so assistive technology can identify the active account area.
+- [x] Keep matching path-only and behavior-neutral: no route changes, saved settings changes, WooCommerce endpoint changes, visual style changes, email behavior, provider verification, rate limits, diagnostics, privacy cleanup, or updater metadata changes.
+- [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Package and run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.76` from clean `master` after updater-verified `v0.1.75`.
+- Added `aria-current="page"` to matching dashboard account links and account section shortcuts.
+- Added focused `FrontendDashboardScreenTest` coverage. Initial validation passed: PHP syntax and focused test (`10 tests, 76 assertions`).
+- Release validation passed: PHP syntax for the edited dashboard screen and focused test; `npm run build`; focused `FrontendDashboardScreenTest` (`10 tests, 76 assertions`); `npm run lint`; `npm run make-pot` (`927 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`247 tests, 1503 assertions`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.76-20260707-141800\alynt-account-gateway-v0.1.76.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.76` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, dashboard `aria-current` marker present, dashboard current-link helper marker present, and SHA-256 `830D5113E064C648DF5F9DAA1A58F486D2E0FA6E90EB33E23AB8264BC5E1046C`.
+- Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.76` header/constant, stable tag `0.1.76`, exactly one `GitHub Plugin URI` updater header, dashboard `aria-current` marker present, dashboard current-link helper marker present, 45 runtime files, no source/dev package files, and uploaded sandbox artifacts were cleaned.
+
+### Guardrails
+
+- Do not change dashboard routes, URL generation, custom-link settings, WooCommerce endpoint detection/delegation, frontend-output gating, saved settings, screen copy beyond release notes, provider verification, rate limits, diagnostics events, email delivery, privacy cleanup, or updater behavior.
+
+### Completion Gate
+
+- [x] Focused tests cover current-page semantics for dashboard account links.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package markers.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.75 Small Release Cycle
 

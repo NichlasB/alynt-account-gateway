@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.76 - 2026-07-07
+
+### Changed
+
+- Added current-page semantics to dashboard account links for screen reader and keyboard navigation.
+
 ## 0.1.75 - 2026-07-07
 
 ### Changed

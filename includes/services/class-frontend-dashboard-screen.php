@@ -116,7 +116,8 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 			<h2 id="agw-dashboard-links-title"><?php esc_html_e( 'Manage Account', 'alynt-account-gateway' ); ?></h2>
 			<div class="agw-dashboard-grid">
 				<?php foreach ( $links as $link ) : ?>
-					<a class="agw-dashboard-link" href="<?php echo esc_url( $link['url'] ); ?>" target="<?php echo esc_attr( $link['target'] ); ?>" <?php echo '_blank' === $link['target'] ? 'rel="noopener noreferrer"' : ''; ?>>
+					<?php $current_attribute = $this->dashboard_current_attribute( $link['url'], $current_path ); ?>
+					<a class="agw-dashboard-link" href="<?php echo esc_url( $link['url'] ); ?>" target="<?php echo esc_attr( $link['target'] ); ?>"<?php echo '_blank' === $link['target'] ? ' rel="noopener noreferrer"' : ''; ?><?php echo $current_attribute; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by dashboard_current_attribute(). ?>>
 						<span class="agw-dashboard-link__icon agw-dashboard-link__icon--<?php echo esc_attr( $link['icon'] ); ?>" aria-hidden="true"></span>
 						<span class="agw-dashboard-link__label"><?php echo esc_html( $link['label'] ); ?></span>
 						<?php if ( '_blank' === $link['target'] ) : ?>
@@ -135,10 +136,10 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 				<h2 id="agw-dashboard-content-title">
 					<?php echo esc_html( $this->woocommerce->endpoint_labels()[ $endpoint['endpoint'] ] ?? __( 'Account', 'alynt-account-gateway' ) ); ?>
 				</h2>
-				<?php if ( ! empty( $actions ) ) : ?>
+					<?php if ( ! empty( $actions ) ) : ?>
 					<nav class="agw-dashboard-section-actions" aria-label="<?php esc_attr_e( 'Account section shortcuts', 'alynt-account-gateway' ); ?>">
 						<?php foreach ( $actions as $action ) : ?>
-							<a href="<?php echo esc_url( $action['url'] ); ?>"><?php echo esc_html( $action['label'] ); ?></a>
+							<a href="<?php echo esc_url( $action['url'] ); ?>"<?php echo $this->dashboard_current_attribute( $action['url'], $current_path ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by dashboard_current_attribute(). ?>><?php echo esc_html( $action['label'] ); ?></a>
 						<?php endforeach; ?>
 					</nav>
 				<?php endif; ?>
@@ -169,6 +170,35 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 			</section>
 		<?php endif; ?>
 		<?php
+	}
+
+	/**
+	 * Return aria-current when a dashboard URL represents the current path.
+	 *
+	 * @param string $url          Link URL.
+	 * @param string $current_path Current relative request path.
+	 * @return string
+	 */
+	private function dashboard_current_attribute( $url, $current_path ) {
+		return $this->is_current_dashboard_url( $url, $current_path ) ? ' aria-current="page"' : '';
+	}
+
+	/**
+	 * Return whether a dashboard URL points at the current path.
+	 *
+	 * @param string $url          Link URL.
+	 * @param string $current_path Current relative request path.
+	 * @return bool
+	 */
+	private function is_current_dashboard_url( $url, $current_path ) {
+		$url_path     = (string) wp_parse_url( (string) $url, PHP_URL_PATH );
+		$current_path = (string) wp_parse_url( (string) $current_path, PHP_URL_PATH );
+
+		if ( '' === $url_path || '' === $current_path ) {
+			return false;
+		}
+
+		return untrailingslashit( '/' . ltrim( $url_path, '/' ) ) === untrailingslashit( '/' . ltrim( $current_path, '/' ) );
 	}
 
 	/**

@@ -205,6 +205,37 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringContainsString( 'opens in a new tab', $html );
 	}
 
+	public function test_render_dashboard_shell_marks_current_account_link() {
+		$dashboard = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->links = array(
+			array(
+				'label'  => 'Account Details',
+				'url'    => 'https://example.test/my-account/edit-account/',
+				'icon'   => 'user',
+				'target' => '_self',
+			),
+			array(
+				'label'  => 'Support',
+				'url'    => 'https://example.test/support/',
+				'icon'   => 'help',
+				'target' => '_self',
+			),
+		);
+		$screen = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce(),
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+
+		ob_start();
+		$screen->render_dashboard_shell( $this->settings, '/my-account/edit-account/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'href="https://example.test/my-account/edit-account/" target="_self" aria-current="page"', $html );
+		$this->assertStringContainsString( 'href="https://example.test/support/" target="_self"', $html );
+		$this->assertSame( 1, substr_count( $html, 'aria-current="page"' ) );
+	}
+
 	public function test_render_dashboard_screen_outputs_woocommerce_unavailable_warning() {
 		$dashboard = new ALYNT_AG_Test_Frontend_Dashboard_Service();
 		$screen    = new ALYNT_AG_Frontend_Dashboard_Screen(
