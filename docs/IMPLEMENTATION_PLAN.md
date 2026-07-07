@@ -4,7 +4,7 @@
 
 - Current phase: v0.1.72 admin settings machine-readable field RTL slice in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.71 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.72 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep the slice admin-output-only: do not change saved settings, sanitization, settings schema, frontend routes, frontend rendering, provider verification, rate limits, diagnostics logging, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater behavior.
 - [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -41,6 +41,10 @@
 - Release validation passed: PHP syntax for the main plugin, edited settings page, and focused test, `npm run build`, focused `SettingsPageFieldHelpTest` (`5 tests, 16 assertions`), `npm run lint`, `npm run make-pot` (`896 strings`), `npm audit --audit-level=moderate`, and `npm test -- --do-not-cache-result` (`244 tests, 1466 assertions`).
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.72-20260707-123052\alynt-account-gateway-v0.1.72.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.72` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, admin field-direction helper marker present, LTR direction marker present, and SHA-256 `F81D045E32EDCA3552A8AD916CAE8D6D18B1F1F87CA6E5160354A7BB2AA1A302`.
 - Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.72` header/constant, stable tag `0.1.72`, exactly one `GitHub Plugin URI` updater header, admin field-direction helper marker present, LTR direction marker present, expected machine-readable field rules present, docs/tests/source/package files excluded, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.72`; Build Release workflow run `28859768133` passed and produced the public asset.
+- Public release asset `alynt-account-gateway-v0.1.72.zip` was downloaded from GitHub and inspected as 55 entries, 10 directory entries, no backslash entries, no dev entries, `0.1.72` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, admin field-direction helper marker present, LTR direction marker present, and SHA-256 `F4CA57FD16D660CE20199228D398AB5C8EF32014BD9AB81C9A4E3F89B787E0A1`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.71` asset, forcing update detection to `0.1.71` -> `0.1.72`, upgrading through the public `v0.1.72` GitHub release asset URL, and verifying the final active plugin as `0.1.72` with no remaining update.
+- Post-updater Plugin Tester verification confirmed the installed public package: active plugin, `0.1.72` header/constant, stable tag `0.1.72`, exactly one `GitHub Plugin URI` updater header, admin field-direction helper marker present, LTR direction marker present, and no source/dev package files.
 
 ### Guardrails
 
@@ -52,7 +56,7 @@
 - [x] Focused tests cover LTR hints for machine-readable admin fields and avoid applying LTR to normal prose string fields.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.71 Small Release Cycle
 
