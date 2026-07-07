@@ -77,7 +77,7 @@ function alyntAgUpdatePasswordPolicy( form ) {
 		const passed = Boolean( checks[ key ] );
 
 		item.classList.toggle( 'is-met', passed );
-		item.setAttribute( 'aria-current', passed ? 'true' : 'false' );
+		item.setAttribute( 'aria-checked', passed ? 'true' : 'false' );
 	}
 
 	strength.setAttribute( 'data-agw-strength-score', String( isValid ? 4 : score ) );

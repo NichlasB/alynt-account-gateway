@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.80 frontend shell direction semantics slice released
+- Current phase: v0.1.81 password requirement checklist semantics slice ready for release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.80 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.80 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification; v0.1.81 is locally validated and awaiting release approval.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,40 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.81 Small Release Cycle
+
+### Scope
+
+- [x] Continue the accessibility, RTL, and multilingual QA pass from the released `v0.1.80` baseline.
+- [x] Change set-password requirement checklist state from `aria-current` to checkbox-style `aria-checked` semantics.
+- [x] Render each password requirement as a non-interactive disabled checkbox status item with an initial unchecked state.
+- [x] Cover rendered requirement semantics and frontend JavaScript state updates with focused tests.
+- [x] Preserve behavior: no password policy changes, validation threshold changes, form submission changes, saved settings changes, frontend routing changes, visual CSS changes, provider verification changes, diagnostics changes, email delivery changes, dashboard/WooCommerce behavior changes, privacy cleanup changes, or updater behavior changes.
+- [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.81` from clean `master` after updater-verified `v0.1.80`.
+- Updated set-password password requirement rows to render as `role="checkbox" aria-checked="false" aria-disabled="true"` status items.
+- Updated frontend password policy JavaScript to synchronize requirement state with `aria-checked` instead of `aria-current`.
+- Initial focused validation passed: PHP syntax for edited runtime/test files; focused `FrontendSetpasswordScreenTest` (`6 tests, 58 assertions`) and `FrontendJsSourceTest` (`2 tests, 6 assertions`).
+- Release validation passed: `npm run build`; `npm run lint`; `npm run make-pot` (`952 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`253 tests, 1557 assertions`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.81-20260707-180328\alynt-account-gateway-v0.1.81.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.81` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, requirement checkbox marker present, built frontend JavaScript `aria-checked` marker present, built frontend JavaScript `aria-current` marker absent, and SHA-256 `30602B7B98D7ADAD40D25E31AD5E0A31E2D947BAFDC3303DA773B27081BD8257`.
+- Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader` under LocalWP web PHP: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, `get_plugins()` reports `0.1.81`, stable tag `0.1.81`, exactly one `GitHub Plugin URI` updater header, requirement checkbox marker present, built frontend JavaScript `aria-checked` marker present, built frontend JavaScript `aria-current` marker absent, 45 runtime files, no source/dev package files, Novamira MCP was not exposed in the active tool list, and temporary web smoke scripts were removed.
+
+### Guardrails
+
+- Do not change password requirements, password reset or registration completion behavior, public copy, visible styling, saved settings, frontend routes, provider verification, rate limits, diagnostics, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater behavior.
+
+### Completion Gate
+
+- [x] Focused tests cover rendered requirement checkbox semantics and JavaScript `aria-checked` synchronization.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package markers.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.80 Small Release Cycle
 
