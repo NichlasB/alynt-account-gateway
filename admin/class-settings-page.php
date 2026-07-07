@@ -1437,6 +1437,7 @@ class ALYNT_AG_Settings_Page {
 							<th scope="col"><?php esc_html_e( 'Outcome', 'alynt-account-gateway' ); ?></th>
 							<th scope="col"><?php esc_html_e( 'Decision', 'alynt-account-gateway' ); ?></th>
 							<th scope="col"><?php esc_html_e( 'Guidance', 'alynt-account-gateway' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Next Step', 'alynt-account-gateway' ); ?></th>
 							<th scope="col"><?php esc_html_e( 'Logged At', 'alynt-account-gateway' ); ?></th>
 						</tr>
 					</thead>
@@ -1452,6 +1453,7 @@ class ALYNT_AG_Settings_Page {
 									</span>
 								</td>
 								<td class="alynt-ag-security-guidance"><?php echo esc_html( $this->security_verification_guidance( $log ) ); ?></td>
+								<td class="alynt-ag-security-next-step"><?php echo esc_html( $this->security_verification_next_step( $log ) ); ?></td>
 								<td><?php echo esc_html( $log->created_at ?? '' ); ?></td>
 							</tr>
 						<?php endforeach; ?>
@@ -3091,6 +3093,96 @@ class ALYNT_AG_Settings_Page {
 		return $blocked
 			? __( 'Verification blocked this registration.', 'alynt-account-gateway' )
 			: __( 'Verification passed.', 'alynt-account-gateway' );
+	}
+
+	/**
+	 * Return the recommended next step for a verification log row.
+	 *
+	 * @param object $log Verification log row.
+	 * @return string
+	 */
+	private function security_verification_next_step( $log ) {
+		$provider = isset( $log->provider ) ? sanitize_key( $log->provider ) : '';
+		$status   = isset( $log->status ) ? sanitize_key( $log->status ) : '';
+		$blocked  = ! empty( $log->blocked );
+
+		if ( 'rate_limit' === $provider ) {
+			if ( 'resend_confirmation_rate_limited' === $status ) {
+				return __( 'Ask the customer to wait for the resend window; check email delivery if resend blocks repeat.', 'alynt-account-gateway' );
+			}
+
+			if ( 'login_rate_limited' === $status ) {
+				return __( 'Review login lockout pressure before changing limits or support guidance.', 'alynt-account-gateway' );
+			}
+
+			if ( 'lostpassword_rate_limited' === $status ) {
+				return __( 'Review reset-request pressure and delivery reports before changing limits.', 'alynt-account-gateway' );
+			}
+
+			return __( 'Review active rate-limit buckets and support reports before loosening limits.', 'alynt-account-gateway' );
+		}
+
+		if ( 'reoon' === $provider ) {
+			if ( $this->status_has_suffix( $status, '_flagged_blocked' ) ) {
+				return __( 'Check support tickets for false positives before keeping strict flagged-status blocking.', 'alynt-account-gateway' );
+			}
+
+			if ( $this->status_has_suffix( $status, '_flagged' ) ) {
+				return __( 'Review masked email and domain patterns before changing the flagged-status policy.', 'alynt-account-gateway' );
+			}
+
+			if ( 'alynt_ag_reoon_missing' === $status || 'alynt_ag_reoon_request_failed' === $status || 'alynt_ag_reoon_invalid_response' === $status ) {
+				return __( 'Test the Reoon API key and outbound HTTP path before relying on email verification.', 'alynt-account-gateway' );
+			}
+
+			return $blocked
+				? __( 'Review support reports before manually recovering a blocked registrant.', 'alynt-account-gateway' )
+				: __( 'No action needed unless this status pattern changes.', 'alynt-account-gateway' );
+		}
+
+		if ( 'turnstile' === $provider ) {
+			if ( 'alynt_ag_turnstile_failed' === $status ) {
+				return __( 'Confirm domain and key pairing, then watch for bot traffic if challenge failures rise.', 'alynt-account-gateway' );
+			}
+
+			if ( 'alynt_ag_turnstile_missing' === $status || 'alynt_ag_turnstile_request_failed' === $status ) {
+				return __( 'Confirm Turnstile keys and outbound HTTP connectivity before public launch.', 'alynt-account-gateway' );
+			}
+
+			return $blocked
+				? __( 'Review challenge failures before changing Turnstile settings.', 'alynt-account-gateway' )
+				: __( 'No action needed unless challenge failures rise.', 'alynt-account-gateway' );
+		}
+
+		if ( 'registration_flow' === $provider ) {
+			if ( 'terms_required' === $status ) {
+				return __( 'Review Terms and Privacy copy if consent blocks repeat.', 'alynt-account-gateway' );
+			}
+
+			if ( in_array( $status, array( 'pending_registration_failed', 'consent_record_failed', 'confirmation_email_failed' ), true ) ) {
+				return __( 'Check database writes and email delivery before public launch.', 'alynt-account-gateway' );
+			}
+
+			if ( 'confirmation_resent' === $status ) {
+				return __( 'Watch resend volume and confirmation-email instructions for customer confusion.', 'alynt-account-gateway' );
+			}
+
+			if ( in_array( $status, array( 'password_mismatch', 'alynt_ag_password_length', 'alynt_ag_password_complexity' ), true ) ) {
+				return __( 'Review password guidance if account setup blocks repeat.', 'alynt-account-gateway' );
+			}
+
+			if ( 'email_unavailable' === $status ) {
+				return __( 'No action needed unless email-unavailable blocks repeat.', 'alynt-account-gateway' );
+			}
+
+			return $blocked
+				? __( 'Review the related registration setting or support reports.', 'alynt-account-gateway' )
+				: __( 'No action needed unless this registration-flow pattern rises.', 'alynt-account-gateway' );
+		}
+
+		return $blocked
+			? __( 'Review this blocked verification before changing policy.', 'alynt-account-gateway' )
+			: __( 'No action needed unless this verification pattern changes.', 'alynt-account-gateway' );
 	}
 
 	/**
