@@ -114,7 +114,7 @@ class FrontendSetpasswordScreenTest extends TestCase {
 		$this->assertStringContainsString( 'At least one number', $html );
 		$this->assertStringContainsString( 'At least one special symbol', $html );
 		$this->assertStringContainsString( 'Passwords match', $html );
-		$this->assertStringContainsString( 'data-agw-password-submit disabled', $html );
+		$this->assertStringContainsString( 'data-agw-password-submit disabled aria-disabled="true"', $html );
 		$this->assertStringNotContainsString( 'agw-password-error', $html );
 	}
 

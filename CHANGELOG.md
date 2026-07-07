@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.71 - 2026-07-07
+
+### Changed
+
+- Added synchronized `aria-disabled` state for the set-password submit button while password requirements are unmet.
+
 ## 0.1.70 - 2026-07-07
 
 ### Changed
