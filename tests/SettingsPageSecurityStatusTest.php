@@ -1047,6 +1047,16 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'recent role-account emails allowed for review. Confirm whether shared inboxes are acceptable for this site.', $output );
 		$this->assertStringContainsString( 'recent catch-all, unknown, or inbox-full results allowed for review. Watch for repeated domains before tightening policy.', $output );
 		$this->assertStringContainsString( 'recent Reoon flagged results blocked by strict policy. Check support tickets for legitimate customers who may need help.', $output );
+		$this->assertStringContainsString( 'Manual Review Decision Playbook', $output );
+		$this->assertStringContainsString( 'Use this as a support-friendly rubric before changing the site-wide Reoon flagged-status policy.', $output );
+		$this->assertStringContainsString( 'Result Family', $output );
+		$this->assertStringContainsString( 'Default Decision', $output );
+		$this->assertStringContainsString( 'Tighten When', $output );
+		$this->assertStringContainsString( 'Review First', $output );
+		$this->assertStringContainsString( 'Role account', $output );
+		$this->assertStringContainsString( 'Catch-all domain', $output );
+		$this->assertStringContainsString( 'Unknown or inbox full', $output );
+		$this->assertStringContainsString( 'Disposable, spamtrap, invalid, or disabled', $output );
 		$this->assertStringContainsString( 'Provider Failure Triage', $output );
 		$this->assertStringContainsString( 'Use these focused checks when provider errors appear.', $output );
 		$this->assertStringContainsString( 'recent missing-token or key configuration failures. Confirm both keys are saved and belong to the same Cloudflare Turnstile site.', $output );
@@ -1141,6 +1151,20 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'The pending registration record could not be stored.', $output );
 		$this->assertStringContainsString( 'Account creation was blocked because the password confirmation did not match.', $output );
 		$this->assertStringNotContainsString( 'damon@example.test', $output );
+	}
+
+	public function test_security_manual_review_decision_items_describe_review_policy() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper( $settings_page, 'security_manual_review_decision_items' );
+
+		$this->assertSame( 'Role account', $items[0]['result_family'] );
+		$this->assertSame( 'Allow and review when shared inboxes are acceptable for the site.', $items[0]['default_decision'] );
+		$this->assertSame( 'Block when personal accountability, subscriptions, or fraud exposure matter more than shared access.', $items[0]['tighten_when'] );
+		$this->assertSame( 'Check whether customers commonly use support, info, billing, or team inboxes.', $items[0]['review_first'] );
+		$this->assertSame( 'Catch-all domain', $items[1]['result_family'] );
+		$this->assertSame( 'Unknown or inbox full', $items[2]['result_family'] );
+		$this->assertSame( 'Disposable, spamtrap, invalid, or disabled', $items[3]['result_family'] );
+		$this->assertSame( 'Keep blocked; these are always treated as high-risk or unusable.', $items[3]['default_decision'] );
 	}
 
 	public function test_security_activity_omits_diagnostics_dependency_notice_when_enabled() {
