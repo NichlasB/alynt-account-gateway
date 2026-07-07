@@ -1217,6 +1217,7 @@ class ALYNT_AG_Settings_Page {
 		$policy_label = 'block' === $policy
 			? __( 'Block flagged statuses', 'alynt-account-gateway' )
 			: __( 'Allow and log flagged statuses', 'alynt-account-gateway' );
+		$policy_items = $this->security_reoon_policy_visibility_items( $policy );
 		?>
 		<div class="alynt-ag-reoon-policy-guide">
 			<div>
@@ -1233,6 +1234,24 @@ class ALYNT_AG_Settings_Page {
 					?>
 				</p>
 			</div>
+			<table class="widefat striped alynt-ag-reoon-policy-guide__table">
+				<thead>
+					<tr>
+						<th scope="col"><?php esc_html_e( 'Reoon Result Group', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Statuses', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Registration Treatment', 'alynt-account-gateway' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $policy_items as $item ) : ?>
+						<tr>
+							<th scope="row"><?php echo esc_html( $item['group'] ); ?></th>
+							<td><?php echo esc_html( $item['statuses'] ); ?></td>
+							<td><?php echo esc_html( $item['treatment'] ); ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
 			<div class="alynt-ag-reoon-policy-guide__grid">
 				<section>
 					<h4><?php esc_html_e( 'Recommended default', 'alynt-account-gateway' ); ?></h4>
@@ -1249,6 +1268,31 @@ class ALYNT_AG_Settings_Page {
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Return Reoon policy visibility rows for the Security tab.
+	 *
+	 * @param string $policy Reoon flagged-status policy.
+	 * @return array<int,array{group:string,statuses:string,treatment:string}>
+	 */
+	private function security_reoon_policy_visibility_items( $policy ) {
+		$flagged_treatment = 'block' === $policy
+			? __( 'Blocked before account creation.', 'alynt-account-gateway' )
+			: __( 'Allowed, logged, and shown for admin review.', 'alynt-account-gateway' );
+
+		return array(
+			array(
+				'group'     => __( 'Always blocked', 'alynt-account-gateway' ),
+				'statuses'  => __( 'invalid, disabled, disposable, spamtrap', 'alynt-account-gateway' ),
+				'treatment' => __( 'Blocked before account creation.', 'alynt-account-gateway' ),
+			),
+			array(
+				'group'     => __( 'Configurable flagged statuses', 'alynt-account-gateway' ),
+				'statuses'  => __( 'catch_all, role_account, unknown, inbox_full', 'alynt-account-gateway' ),
+				'treatment' => $flagged_treatment,
+			),
+		);
 	}
 
 	/**
