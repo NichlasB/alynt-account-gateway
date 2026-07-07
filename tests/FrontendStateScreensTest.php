@@ -85,10 +85,11 @@ class FrontendStateScreensTest extends TestCase {
 		$this->assertStringContainsString( 'If a pending registration can be found, a new confirmation email has been sent.', $html );
 		$this->assertStringContainsString( 'id="agw-resend-error"', $html );
 		$this->assertStringContainsString( 'Too many confirmation email requests. Please wait for the resend window before trying again.', $html );
+		$this->assertStringContainsString( 'id="agw-resend-guidance"', $html );
 		$this->assertStringContainsString( 'Before requesting another link', $html );
 		$this->assertStringContainsString( 'Wait 45 minutes before requesting another confirmation email.', $html );
 		$this->assertStringContainsString( 'Use the newest confirmation email only.', $html );
-		$this->assertStringContainsString( 'aria-describedby="agw-resend-error"', $html );
+		$this->assertStringContainsString( 'aria-describedby="agw-resend-error agw-resend-guidance"', $html );
 		$this->assertStringContainsString( 'aria-invalid="true"', $html );
 	}
 

@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.73 Reoon policy visibility slice released
+- Current phase: v0.1.74 resend-throttle accessibility slice released
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.73 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.74 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,41 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.74 Small Release Cycle
+
+### Scope
+
+- [x] Continue security and anti-spam hardening from released `v0.1.73` baseline.
+- [x] Improve resend-throttle UX accessibility by associating cooldown guidance with the rate-limited resend form and email field.
+- [x] Keep behavior unchanged: no rate-limit thresholds, resend flow, token handling, email delivery, settings schema/defaults, diagnostics, dashboard/WooCommerce, privacy cleanup, or updater metadata changes.
+- [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Package and run Plugin Tester smoke.
+- [x] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.74` from clean `master` after updater-verified `v0.1.73`.
+- Added an `id` to the resend cooldown guidance and included it in `aria-describedby` when the confirmation resend form is rate-limited.
+- Added focused `FrontendStateScreensTest` coverage. Initial validation passed: PHP syntax and focused test (`4 tests, 28 assertions`).
+- Release validation passed: PHP syntax for the main plugin, edited frontend state screen, and focused test; `npm run build`; focused `FrontendStateScreensTest` (`4 tests, 28 assertions`); `npm run lint`; `npm run make-pot` (`905 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`245 tests, 1482 assertions`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.74-20260707-132848\alynt-account-gateway-v0.1.74.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.74` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, resend guidance ID marker present, resend describedby logic marker present, and SHA-256 `2EC8C86F3BA8F1BE23E9EA1ABCA0CCCE6F7881A12F9A29F67BDB7565ABB84D01`.
+- Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.74` header/constant, stable tag `0.1.74`, exactly one `GitHub Plugin URI` updater header, resend guidance ID marker present, resend describedby logic marker present, 45 runtime files, no source/dev package files, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.74`; Build Release workflow run `28863485457` passed and produced the public asset.
+- Public release asset `alynt-account-gateway-v0.1.74.zip` was downloaded from GitHub and inspected as 55 entries, 10 directory entries, no backslash entries, no dev entries, `0.1.74` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, resend guidance ID marker present, resend describedby logic marker present, and SHA-256 `14A438028F31F90524656D276CDA99AFF2FD95221A82DB7EB414E8C9B8802F0D`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.73` asset, forcing update detection to `0.1.73` -> `0.1.74`, upgrading through the public `v0.1.74` GitHub release asset URL from the updater transient, and verifying the final active plugin as `0.1.74` with no remaining update.
+- Post-updater Plugin Tester verification confirmed the installed public package: active plugin, `0.1.74` header/constant, stable tag `0.1.74`, exactly one `GitHub Plugin URI` updater header, resend guidance ID marker present, resend describedby logic marker present, 45 runtime files, and no source/dev package files.
+
+### Guardrails
+
+- Do not change resend rate-limit thresholds, bucket keys, cooldown behavior, pending-registration lookup, token handling, email delivery, saved settings, settings schema/defaults, diagnostics logging, frontend routes beyond accessibility attributes, dashboard/WooCommerce behavior, privacy cleanup, or updater behavior.
+
+### Completion Gate
+
+- [x] Focused tests cover rate-limited resend guidance association.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package markers.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.73 Small Release Cycle
 
