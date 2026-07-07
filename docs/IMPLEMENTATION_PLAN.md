@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.78 blocked-admin diagnostics observability slice ready for release approval
+- Current phase: v0.1.78 blocked-admin diagnostics observability slice released
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.77 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.78 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Preserve existing access-control behavior: no role/capability changes, redirect changes, frontend-output changes, saved settings changes, diagnostics storage schema changes, or updater metadata changes beyond the release version.
 - [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -42,6 +42,10 @@
 - Release validation passed: PHP syntax for edited runtime/admin/test files; `npm run build`; `npm run lint`; `npm run make-pot` (`930 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`249 tests, 1524 assertions`).
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.78-20260707-152329\alynt-account-gateway-v0.1.78.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.78` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, blocked-admin request-path/query-key markers present, Security tab latest-blocked-path/query-key markers present, and SHA-256 `383C9B1CD0A2D0D3A10AA72EEB5C8B73595F6D3196058F3D094DB1BC26D2F6D7`.
 - Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader` under LocalWP web PHP: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, `get_plugins()` reports `0.1.78`, loaded constant `0.1.78`, main file header/constant are `0.1.78`, stable tag `0.1.78`, exactly one `GitHub Plugin URI` updater header, blocked-admin request-path/query-key markers present, Security tab latest-blocked-path/query-key markers present, 45 runtime files, no source/dev package files, and temporary web smoke scripts were removed.
+- Published GitHub release `v0.1.78`; Build Release workflow run `28870776144` passed and produced the public asset.
+- Public release asset `alynt-account-gateway-v0.1.78.zip` was downloaded from GitHub and inspected as 55 entries, 10 directory entries, no backslash entries, no dev entries, `0.1.78` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, blocked-admin request-path/query-key markers present, Security tab latest-blocked-path/query-key markers present, and SHA-256 `8B4BE8F4547E4CCF68C016F4EC9BFAA4F6552AC85C5AC936EC1409C2B6EB6651`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.77` asset, confirming Alynt Plugin Updater detected `0.1.77` -> `0.1.78` with the public `v0.1.78` GitHub release asset URL, upgrading through WordPress `Plugin_Upgrader`, and verifying no remaining update.
+- Post-updater Plugin Tester verification confirmed the installed public package: active plugin, `0.1.78` header/constant, stable tag `0.1.78`, exactly one `GitHub Plugin URI` updater header, blocked-admin request-path/query-key markers present, Security tab latest-blocked-path/query-key markers present, 45 runtime files, no source/dev package files, and no temporary web verifier scripts remaining.
 
 ### Guardrails
 
@@ -52,7 +56,7 @@
 - [x] Focused tests cover privacy-safe blocked-admin diagnostics and Security tab summary detail.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.77 Small Release Cycle
 
