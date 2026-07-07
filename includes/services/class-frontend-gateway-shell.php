@@ -101,8 +101,9 @@ class ALYNT_AG_Frontend_Gateway_Shell {
 	 */
 	public function render_gateway_shell( $screen, $settings ) {
 		$style = $this->branding->style_attribute( $settings );
+		$dir   = is_rtl() ? 'rtl' : 'ltr';
 		?>
-		<main class="alynt-ag-gateway" data-agw-screen="<?php echo esc_attr( $screen ); ?>" style="<?php echo esc_attr( $style ); ?>">
+		<main class="alynt-ag-gateway" data-agw-screen="<?php echo esc_attr( $screen ); ?>" dir="<?php echo esc_attr( $dir ); ?>" style="<?php echo esc_attr( $style ); ?>">
 			<section class="agw-shell" aria-labelledby="agw-screen-title">
 				<div class="agw-media" aria-hidden="true">
 					<?php $this->branding->render_media_panel( $settings ); ?>
@@ -126,8 +127,9 @@ class ALYNT_AG_Frontend_Gateway_Shell {
 	 */
 	public function render_gateway_shell_with_password_preview( $settings ) {
 		$style = $this->branding->style_attribute( $settings );
+		$dir   = is_rtl() ? 'rtl' : 'ltr';
 		?>
-		<main class="alynt-ag-gateway" data-agw-screen="setpassword" style="<?php echo esc_attr( $style ); ?>">
+		<main class="alynt-ag-gateway" data-agw-screen="setpassword" dir="<?php echo esc_attr( $dir ); ?>" style="<?php echo esc_attr( $style ); ?>">
 			<section class="agw-shell" aria-labelledby="agw-screen-title">
 				<div class="agw-media" aria-hidden="true">
 					<?php $this->branding->render_media_panel( $settings ); ?>

@@ -57,8 +57,9 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 	 */
 	public function render_dashboard_shell( $settings, $current_path = '' ) {
 		$style = $this->branding->style_attribute( $settings );
+		$dir   = is_rtl() ? 'rtl' : 'ltr';
 		?>
-		<main class="alynt-ag-gateway agw-dashboard" data-agw-screen="dashboard" style="<?php echo esc_attr( $style ); ?>">
+		<main class="alynt-ag-gateway agw-dashboard" data-agw-screen="dashboard" dir="<?php echo esc_attr( $dir ); ?>" style="<?php echo esc_attr( $style ); ?>">
 			<div class="agw-dashboard__inner">
 				<header class="agw-dashboard__header">
 					<?php $this->branding->render_brand_block( $settings ); ?>

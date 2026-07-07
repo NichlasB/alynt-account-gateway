@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.79 verification activity next-step triage slice released
+- Current phase: v0.1.80 frontend shell direction semantics slice in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.79 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -20,6 +20,38 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.80 Small Release Cycle
+
+### Scope
+
+- [x] Continue the accessibility, RTL, and multilingual QA pass from the released `v0.1.79` baseline.
+- [x] Add explicit `dir="ltr"` / `dir="rtl"` attributes to auth gateway shell, set-password preview shell, and dashboard shell containers.
+- [x] Cover default LTR and site RTL output with focused frontend shell and dashboard tests.
+- [x] Preserve behavior: no route changes, saved settings changes, visual CSS changes, screen copy changes beyond release notes, field-level direction changes, registration flow changes, provider verification changes, rate-limit changes, diagnostics changes, email delivery changes, dashboard/WooCommerce behavior changes, privacy cleanup changes, or updater behavior changes.
+- [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.80` from clean `master` after updater-verified `v0.1.79`.
+- Added shell-level direction attributes based on `is_rtl()` to the reusable auth gateway shell, set-password preview shell, and frontend dashboard shell.
+- Added a test-controlled `is_rtl()` stub and focused frontend coverage. Initial validation passed: PHP syntax for edited runtime/test files; focused `FrontendGatewayShellTest` (`10 tests, 24 assertions`) and `FrontendDashboardScreenTest` (`11 tests, 79 assertions`).
+- Release validation passed: `npm run build`; `npm run lint`; `npm run make-pot` (`952 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`252 tests, 1551 assertions`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.80-20260707-173212\alynt-account-gateway-v0.1.80.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.80` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, auth shell direction marker present, dashboard shell direction marker present, RTL helper marker present, and SHA-256 `ACF650694E4130B58D0AEA75E71DF4E00028804EB84C65A0EC5D7E03C788195E`.
+- Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader` under LocalWP web PHP: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, `get_plugins()` reports `0.1.80`, fresh-request loaded constant `0.1.80`, stable tag `0.1.80`, exactly one `GitHub Plugin URI` updater header, auth shell direction marker present, dashboard shell direction marker present, RTL helper marker present, 45 runtime files, no source/dev package files, and temporary web smoke scripts were removed.
+
+### Guardrails
+
+- Do not change frontend routing, saved settings, visual styling, user-facing account flow behavior, field-level `dir="ltr"` handling for email/password/path-like values, provider verification, rate limits, diagnostics, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater behavior.
+
+### Completion Gate
+
+- [x] Focused tests cover LTR/RTL shell direction output for auth, set-password preview, and dashboard shells.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package markers.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.79 Small Release Cycle
 
