@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.70 security launch decision summary slice in progress
+- Current phase: v0.1.70 security launch decision summary slice released and updater-verified; ready for the next small product slice
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.69 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.70 is in progress.
+- Plugin status: v0.1.70 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep the slice read-only and guidance-only: do not add saved settings, change registration flow behavior, provider verification logic, rate-limit enforcement, diagnostics event names, frontend routes, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater behavior.
 - [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -41,6 +41,10 @@
 - Release validation passed: PHP syntax for the main plugin and edited settings page, `npm run build`, focused `SettingsPageSecurityStatusTest` (`22 tests, 337 assertions`), `npm run lint`, `npm test -- --do-not-cache-result` (`242 tests, 1459 assertions`), `npm audit --audit-level=moderate`, and `npm run make-pot` (`896 strings`).
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.70-20260707-114240\alynt-account-gateway-v0.1.70.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.70` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, Launch Decision Summary marker present, built admin CSS launch marker present, source assets excluded, and SHA-256 `6297F9BBEDC32511BF61914F72FF20B3B40A4BDC7BA582BE8F127E8C6D287C02`.
 - Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.70` header/constant, exactly one `GitHub Plugin URI` updater header, Launch Decision Summary and Anti-Spam Coverage markers present, built admin CSS launch marker present, docs/tests/source package files excluded, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.70`; Build Release workflow run `28857639977` passed and produced the public asset.
+- Public release asset `alynt-account-gateway-v0.1.70.zip` was downloaded from GitHub and inspected as 55 entries, 10 directory entries, no backslash entries, no dev entries, `0.1.70` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, Launch Decision Summary marker present, Anti-Spam Coverage marker present, built admin CSS launch marker present, and SHA-256 `B55431F15D4B9FDD1A344998B2A1C7582C7AB7C2B6A48F07628594E83BE1DF77`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.69` asset, forcing update detection to `0.1.69` -> `0.1.70`, upgrading through the public `v0.1.70` GitHub release asset URL, and verifying the final active plugin as `0.1.70` with no remaining update.
+- Post-updater Plugin Tester verification confirmed the installed public package: active plugin, `0.1.70` header/constant, exactly one `GitHub Plugin URI` updater header, Launch Decision Summary and Anti-Spam Coverage markers present, built admin CSS launch marker present, and no source/dev package files.
 
 ### Guardrails
 
@@ -53,7 +57,7 @@
 - [x] Focused tests cover the launch decision summary helper and rendered markers.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.69 Small Release Cycle
 
