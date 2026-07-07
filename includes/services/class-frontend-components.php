@@ -38,14 +38,39 @@ class ALYNT_AG_Frontend_Components {
 	 * Render configurable screen instruction text.
 	 *
 	 * @param string $copy Notice copy.
+	 * @param string $id   Optional notice ID.
 	 * @return void
 	 */
-	public function render_notice( $copy ) {
-		if ( '' === trim( wp_strip_all_tags( (string) $copy ) ) ) {
+	public function render_notice( $copy, $id = '' ) {
+		if ( ! $this->has_notice( $copy ) ) {
 			return;
 		}
+
+		$id = sanitize_key( (string) $id );
 		?>
-		<div class="agw-notice"><?php echo wp_kses_post( wpautop( $copy ) ); ?></div>
+		<div class="agw-notice"<?php echo $id ? ' id="' . esc_attr( $id ) . '"' : ''; ?>><?php echo wp_kses_post( wpautop( $copy ) ); ?></div>
 		<?php
+	}
+
+	/**
+	 * Return whether notice copy has visible text after tags are stripped.
+	 *
+	 * @param string $copy Notice copy.
+	 * @return bool
+	 */
+	public function has_notice( $copy ) {
+		return '' !== trim( wp_strip_all_tags( (string) $copy ) );
+	}
+
+	/**
+	 * Return an aria-describedby attribute for one or more IDs.
+	 *
+	 * @param array<int,string> $ids Description IDs.
+	 * @return string
+	 */
+	public function describedby_attribute( $ids ) {
+		$ids = array_filter( array_map( 'sanitize_key', (array) $ids ) );
+
+		return $ids ? ' aria-describedby="' . esc_attr( implode( ' ', $ids ) ) . '"' : '';
 	}
 }

@@ -45,9 +45,10 @@ class FrontendLostpasswordScreenTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( '<h1 id="agw-screen-title" class="agw-title">Reset Password</h1>', $html );
-		$this->assertStringContainsString( '<div class="agw-notice">', $html );
+		$this->assertStringContainsString( '<div class="agw-notice" id="agw-lostpassword-instructions">', $html );
 		$this->assertStringContainsString( 'Enter your email address to receive a password reset link.', $html );
 		$this->assertStringContainsString( 'action="https://example.test/account?action=lostpassword"', $html );
+		$this->assertStringContainsString( 'aria-describedby="agw-lostpassword-instructions"', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_action" value="lostpassword"', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_auth_nonce" value="test-nonce"', $html );
 		$this->assertStringContainsString( 'id="agw-lost-email"', $html );
@@ -67,6 +68,7 @@ class FrontendLostpasswordScreenTest extends TestCase {
 
 		$this->assertStringContainsString( 'id="agw-lostpassword-error"', $html );
 		$this->assertStringContainsString( 'Too many attempts. Please wait a moment and try again.', $html );
+		$this->assertStringContainsString( 'aria-describedby="agw-lostpassword-instructions agw-lostpassword-error"', $html );
 		$this->assertStringContainsString( 'aria-describedby="agw-lostpassword-error"', $html );
 		$this->assertStringContainsString( 'aria-invalid="true"', $html );
 	}
@@ -79,6 +81,7 @@ class FrontendLostpasswordScreenTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( 'This reset link is invalid or has expired. Please request a new link.', $html );
+		$this->assertStringContainsString( 'aria-describedby="agw-lostpassword-instructions agw-lostpassword-error"', $html );
 		$this->assertStringContainsString( 'aria-describedby="agw-lostpassword-error"', $html );
 	}
 

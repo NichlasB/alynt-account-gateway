@@ -45,9 +45,10 @@ class FrontendLoginScreenTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( '<h1 id="agw-screen-title" class="agw-title">Log In</h1>', $html );
-		$this->assertStringContainsString( '<div class="agw-notice">', $html );
+		$this->assertStringContainsString( '<div class="agw-notice" id="agw-login-instructions">', $html );
 		$this->assertStringContainsString( 'Welcome back to your account.', $html );
 		$this->assertStringContainsString( 'action="https://example.test/login"', $html );
+		$this->assertStringContainsString( '<form class="agw-form" method="post" action="https://example.test/login" aria-describedby="agw-login-instructions">', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_action" value="login"', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_auth_nonce" value="test-nonce"', $html );
 		$this->assertStringContainsString( 'id="agw-login-email"', $html );
@@ -91,6 +92,7 @@ class FrontendLoginScreenTest extends TestCase {
 
 		$this->assertStringContainsString( 'id="agw-login-error"', $html );
 		$this->assertStringContainsString( 'Too many attempts. Please wait a moment and try again.', $html );
+		$this->assertStringContainsString( '<form class="agw-form" method="post" action="https://example.test/login" aria-describedby="agw-login-instructions agw-login-error">', $html );
 		$this->assertStringContainsString( 'aria-describedby="agw-login-error"', $html );
 		$this->assertStringContainsString( 'aria-invalid="true"', $html );
 	}

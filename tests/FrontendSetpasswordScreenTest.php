@@ -88,9 +88,10 @@ class FrontendSetpasswordScreenTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( '<h1 id="agw-screen-title" class="agw-title">Set New Password</h1>', $html );
+		$this->assertStringContainsString( '<div class="agw-notice" id="agw-setpassword-instructions">', $html );
 		$this->assertStringContainsString( 'Choose a strong password.', $html );
 		$this->assertStringContainsString( 'action="https://example.test/account?action=setpassword"', $html );
-		$this->assertStringContainsString( 'data-agw-password-form', $html );
+		$this->assertStringContainsString( 'data-agw-password-form aria-describedby="agw-setpassword-instructions"', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_action" value="reset_password"', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_auth_nonce" value="test-nonce"', $html );
 		$this->assertStringContainsString( 'name="key" value="reset-key"', $html );
@@ -137,7 +138,8 @@ class FrontendSetpasswordScreenTest extends TestCase {
 
 		$this->assertStringContainsString( 'id="agw-password-error"', $html );
 		$this->assertStringContainsString( 'The passwords do not match.', $html );
-		$this->assertStringContainsString( 'aria-describedby="agw-password-error"', $html );
+		$this->assertStringContainsString( 'data-agw-password-form aria-describedby="agw-setpassword-instructions agw-password-error"', $html );
+		$this->assertStringContainsString( 'aria-describedby="agw-password-error agw-password-status agw-password-requirements"', $html );
 		$this->assertStringContainsString( 'aria-invalid="true"', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_registration_nonce" value="test-nonce"', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_token" value="registration-token"', $html );
