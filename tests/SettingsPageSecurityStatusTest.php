@@ -607,6 +607,13 @@ class SettingsPageSecurityStatusTest extends TestCase {
 				array(
 					(object) array(
 						'event_code' => 'wp_admin_access_blocked',
+						'context'    => wp_json_encode(
+							array(
+								'request_path'       => '/wp-admin/admin.php',
+								'destination_path'   => '/my-account/',
+								'request_query_keys' => array( 'page', 'redirect_to' ),
+							)
+						),
 					),
 					(object) array(
 						'event_code' => 'wp_admin_access_blocked',
@@ -627,6 +634,8 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( 'Blocked Admin Access', $items[2]['label'] );
 		$this->assertSame( 2, $items[2]['count'] );
 		$this->assertSame( 'warning', $items[2]['status'] );
+		$this->assertStringContainsString( 'Latest blocked path: /wp-admin/admin.php -> /my-account/.', $items[2]['message'] );
+		$this->assertStringContainsString( 'Query keys: page, redirect_to.', $items[2]['message'] );
 	}
 
 	public function test_security_auth_redirect_signals_count_recent_activity() {

@@ -1612,6 +1612,11 @@ class ALYNT_AG_Settings_Page {
 			array( 'lostpassword_rate_limited' )
 		);
 		$admin_blocks            = $this->count_diagnostics_events_by_code( $diagnostic_events, 'wp_admin_access_blocked' );
+		$admin_block_detail      = $this->latest_wp_admin_block_detail( $diagnostic_events );
+		$admin_block_message     = __( 'recent wp-admin redirects recorded by diagnostics. Repeated blocks can mean customers are following admin links or a role rule needs review.', 'alynt-account-gateway' );
+		if ( '' !== $admin_block_detail ) {
+			$admin_block_message .= ' ' . $admin_block_detail;
+		}
 
 		return array(
 			array(
@@ -1630,9 +1635,66 @@ class ALYNT_AG_Settings_Page {
 				'label'   => __( 'Blocked Admin Access', 'alynt-account-gateway' ),
 				'status'  => $admin_blocks > 0 ? 'warning' : 'ready',
 				'count'   => $admin_blocks,
-				'message' => __( 'recent wp-admin redirects recorded by diagnostics. Repeated blocks can mean customers are following admin links or a role rule needs review.', 'alynt-account-gateway' ),
+				'message' => $admin_block_message,
 			),
 		);
+	}
+
+	/**
+	 * Return safe detail from the most recent blocked wp-admin event.
+	 *
+	 * @param array<int,object> $diagnostic_events Recent diagnostics events.
+	 * @return string
+	 */
+	private function latest_wp_admin_block_detail( $diagnostic_events ) {
+		foreach ( $diagnostic_events as $event ) {
+			$code = isset( $event->event_code ) ? sanitize_key( $event->event_code ) : '';
+			if ( 'wp_admin_access_blocked' !== $code ) {
+				continue;
+			}
+
+			$context          = $this->diagnostics_event_context( $event );
+			$request_path     = isset( $context['request_path'] ) && is_scalar( $context['request_path'] ) ? sanitize_text_field( (string) $context['request_path'] ) : '';
+			$destination_path = isset( $context['destination_path'] ) && is_scalar( $context['destination_path'] ) ? sanitize_text_field( (string) $context['destination_path'] ) : '';
+			$query_keys       = $this->diagnostics_context_query_keys( $context );
+
+			if ( '' === $request_path && isset( $context['path'] ) && is_scalar( $context['path'] ) ) {
+				$request_path = sanitize_text_field( (string) $context['path'] );
+			}
+
+			if ( '' === $request_path && '' === $destination_path && empty( $query_keys ) ) {
+				return '';
+			}
+
+			$detail = array();
+
+			if ( '' !== $request_path && '' !== $destination_path ) {
+				$detail[] = sprintf(
+					/* translators: 1: blocked request path, 2: redirect destination path. */
+					__( 'Latest blocked path: %1$s -> %2$s.', 'alynt-account-gateway' ),
+					$request_path,
+					$destination_path
+				);
+			} elseif ( '' !== $request_path ) {
+				$detail[] = sprintf(
+					/* translators: %s: blocked request path. */
+					__( 'Latest blocked path: %s.', 'alynt-account-gateway' ),
+					$request_path
+				);
+			}
+
+			if ( ! empty( $query_keys ) ) {
+				$detail[] = sprintf(
+					/* translators: %s: comma-separated query argument names. */
+					__( 'Query keys: %s.', 'alynt-account-gateway' ),
+					implode( ', ', $query_keys )
+				);
+			}
+
+			return implode( ' ', $detail );
+		}
+
+		return '';
 	}
 
 	/**
@@ -2468,6 +2530,28 @@ class ALYNT_AG_Settings_Page {
 		$context = json_decode( $event->context, true );
 
 		return is_array( $context ) ? $context : array();
+	}
+
+	/**
+	 * Return sanitized query keys from diagnostics context.
+	 *
+	 * @param array<string,mixed> $context Diagnostics context.
+	 * @return array<int,string>
+	 */
+	private function diagnostics_context_query_keys( $context ) {
+		$keys = array();
+
+		if ( ! isset( $context['request_query_keys'] ) || ! is_array( $context['request_query_keys'] ) ) {
+			return $keys;
+		}
+
+		foreach ( $context['request_query_keys'] as $key ) {
+			if ( is_scalar( $key ) ) {
+				$keys[] = sanitize_key( (string) $key );
+			}
+		}
+
+		return array_values( array_filter( array_unique( $keys ) ) );
 	}
 
 	/**

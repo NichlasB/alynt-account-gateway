@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.77 frontend instruction accessibility slice released
+- Current phase: v0.1.78 blocked-admin diagnostics observability slice ready for release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.77 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -20,6 +20,39 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.78 Small Release Cycle
+
+### Scope
+
+- [x] Continue admin observability from the released `v0.1.77` baseline.
+- [x] Enrich blocked `wp-admin` access diagnostics with privacy-safe request path, request method, and query-key names.
+- [x] Surface the latest blocked admin path, destination path, and query-key names in Security tab Access Control Signals when diagnostics context is available.
+- [x] Preserve existing access-control behavior: no role/capability changes, redirect changes, frontend-output changes, saved settings changes, diagnostics storage schema changes, or updater metadata changes beyond the release version.
+- [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.78` from clean `master` after updater-verified `v0.1.77`.
+- Added privacy-safe blocked-admin diagnostics context for request path, request method, and query-key names while continuing to omit query values.
+- Added Security tab Access Control Signals detail for the latest blocked-admin event when diagnostics rows include request context.
+- Added focused `FrontendRoutingTest` and `SettingsPageSecurityStatusTest` coverage. Initial validation passed: PHP syntax for edited runtime/admin/test files; focused `FrontendRoutingTest` (`7 tests, 39 assertions`) and `SettingsPageSecurityStatusTest` (`24 tests, 372 assertions`).
+- Release validation passed: PHP syntax for edited runtime/admin/test files; `npm run build`; `npm run lint`; `npm run make-pot` (`930 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`249 tests, 1524 assertions`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.78-20260707-152329\alynt-account-gateway-v0.1.78.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.78` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, blocked-admin request-path/query-key markers present, Security tab latest-blocked-path/query-key markers present, and SHA-256 `383C9B1CD0A2D0D3A10AA72EEB5C8B73595F6D3196058F3D094DB1BC26D2F6D7`.
+- Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader` under LocalWP web PHP: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, `get_plugins()` reports `0.1.78`, loaded constant `0.1.78`, main file header/constant are `0.1.78`, stable tag `0.1.78`, exactly one `GitHub Plugin URI` updater header, blocked-admin request-path/query-key markers present, Security tab latest-blocked-path/query-key markers present, 45 runtime files, no source/dev package files, and temporary web smoke scripts were removed.
+
+### Guardrails
+
+- Do not change who can access `wp-admin`, where blocked users are redirected, admin toolbar policy, login routing, public frontend behavior, saved settings, database schema, provider verification, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater behavior.
+
+### Completion Gate
+
+- [x] Focused tests cover privacy-safe blocked-admin diagnostics and Security tab summary detail.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package markers.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.77 Small Release Cycle
 

@@ -31,6 +31,7 @@ class FrontendRoutingTest extends TestCase {
 		$GLOBALS['alynt_ag_test_user_logged_in'] = false;
 		$_GET = array();
 		$_SERVER['REQUEST_METHOD'] = 'GET';
+		$_SERVER['REQUEST_URI'] = '/wp-admin/';
 	}
 
 	protected function tearDown(): void {
@@ -43,6 +44,7 @@ class FrontendRoutingTest extends TestCase {
 			$GLOBALS['alynt_ag_test_user_logged_in']
 		);
 		$_GET = array();
+		unset( $_SERVER['REQUEST_URI'] );
 
 		parent::tearDown();
 	}
@@ -174,6 +176,11 @@ class FrontendRoutingTest extends TestCase {
 		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings']['diagnostics_min_level'] = 'debug';
 		$GLOBALS['alynt_ag_test_user_logged_in'] = true;
 		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
+		$_GET = array(
+			'page'        => 'orders',
+			'redirect_to' => 'https://evil.example/path',
+		);
+		$_SERVER['REQUEST_URI'] = '/wp-admin/admin.php?page=orders&redirect_to=https%3A%2F%2Fevil.example%2Fpath';
 
 		try {
 			$frontend->maybe_block_wp_admin();
@@ -194,5 +201,10 @@ class FrontendRoutingTest extends TestCase {
 		$this->assertSame( 'wp_admin_access_blocked', $row['event_code'] );
 		$this->assertSame( '/my-account/', $context['destination_path'] );
 		$this->assertSame( 0, $context['user_id'] );
+		$this->assertSame( '/wp-admin/admin.php', $context['request_path'] );
+		$this->assertSame( 'GET', $context['request_method'] );
+		$this->assertSame( array( 'page', 'redirect_to' ), $context['request_query_keys'] );
+		$this->assertStringNotContainsString( 'orders', $row['context'] );
+		$this->assertStringNotContainsString( 'evil.example', $row['context'] );
 	}
 }
