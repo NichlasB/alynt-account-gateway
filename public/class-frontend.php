@@ -80,8 +80,11 @@ class ALYNT_AG_Frontend {
 			'wp_admin_access_blocked',
 			__( 'Blocked wp-admin access for a non-privileged user.', 'alynt-account-gateway' ),
 			array(
-				'destination_path' => $this->path_from_url( $destination ),
-				'user_id'          => function_exists( 'get_current_user_id' ) ? absint( get_current_user_id() ) : 0,
+				'destination_path'   => $this->path_from_url( $destination ),
+				'user_id'            => function_exists( 'get_current_user_id' ) ? absint( get_current_user_id() ) : 0,
+				'request_path'       => $this->current_request_path(),
+				'request_method'     => $this->current_request_method(),
+				'request_query_keys' => $this->current_request_query_keys(),
 			)
 		);
 
@@ -305,6 +308,51 @@ class ALYNT_AG_Frontend {
 		$path = wp_parse_url( $url, PHP_URL_PATH );
 
 		return $path ? sanitize_text_field( $path ) : '';
+	}
+
+	/**
+	 * Return the current request path for diagnostics without query values.
+	 *
+	 * @return string
+	 */
+	private function current_request_path() {
+		$uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		if ( '' === $uri ) {
+			return '';
+		}
+
+		$path = wp_parse_url( $uri, PHP_URL_PATH );
+
+		return $path ? sanitize_text_field( $path ) : '';
+	}
+
+	/**
+	 * Return the current request method for diagnostics.
+	 *
+	 * @return string
+	 */
+	private function current_request_method() {
+		$method = isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '';
+
+		return strtoupper( $method );
+	}
+
+	/**
+	 * Return current request query keys without their values.
+	 *
+	 * @return array<int,string>
+	 */
+	private function current_request_query_keys() {
+		$keys = array();
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Diagnostics records query keys only, not values.
+		foreach ( array_keys( $_GET ) as $key ) {
+			if ( is_scalar( $key ) ) {
+				$keys[] = sanitize_key( (string) $key );
+			}
+		}
+
+		return array_values( array_filter( array_unique( $keys ) ) );
 	}
 
 	/**

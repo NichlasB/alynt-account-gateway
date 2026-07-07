@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.78 - 2026-07-07
+
+### Changed
+
+- Improved blocked wp-admin access diagnostics with privacy-safe request path, method, and query-key context plus clearer Security tab guidance.
+
 ## 0.1.77 - 2026-07-07
 
 ### Changed
