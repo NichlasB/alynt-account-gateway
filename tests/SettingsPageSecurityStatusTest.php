@@ -1121,6 +1121,7 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Rate Limit', $output );
 		$this->assertStringContainsString( 'Turnstile', $output );
 		$this->assertStringContainsString( 'Registration Flow', $output );
+		$this->assertStringContainsString( 'Next Step', $output );
 		$this->assertStringContainsString( 'safe', $output );
 		$this->assertStringContainsString( 'registration_rate_limited', $output );
 		$this->assertStringContainsString( 'resend_confirmation_rate_limited', $output );
@@ -1159,7 +1160,56 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'A fresh confirmation email was sent for an existing pending registration.', $output );
 		$this->assertStringContainsString( 'The pending registration record could not be stored.', $output );
 		$this->assertStringContainsString( 'Account creation was blocked because the password confirmation did not match.', $output );
+		$this->assertStringContainsString( 'No action needed unless this status pattern changes.', $output );
+		$this->assertStringContainsString( 'Review active rate-limit buckets and support reports before loosening limits.', $output );
+		$this->assertStringContainsString( 'Ask the customer to wait for the resend window; check email delivery if resend blocks repeat.', $output );
+		$this->assertStringContainsString( 'Review masked email and domain patterns before changing the flagged-status policy.', $output );
+		$this->assertStringContainsString( 'Check support tickets for false positives before keeping strict flagged-status blocking.', $output );
+		$this->assertStringContainsString( 'Review support reports before manually recovering a blocked registrant.', $output );
+		$this->assertStringContainsString( 'Confirm domain and key pairing, then watch for bot traffic if challenge failures rise.', $output );
+		$this->assertStringContainsString( 'Test the Reoon API key and outbound HTTP path before relying on email verification.', $output );
+		$this->assertStringContainsString( 'Confirm Turnstile keys and outbound HTTP connectivity before public launch.', $output );
+		$this->assertStringContainsString( 'Review login lockout pressure before changing limits or support guidance.', $output );
+		$this->assertStringContainsString( 'Review reset-request pressure and delivery reports before changing limits.', $output );
+		$this->assertStringContainsString( 'Review Terms and Privacy copy if consent blocks repeat.', $output );
+		$this->assertStringContainsString( 'Watch resend volume and confirmation-email instructions for customer confusion.', $output );
+		$this->assertStringContainsString( 'Check database writes and email delivery before public launch.', $output );
+		$this->assertStringContainsString( 'Review password guidance if account setup blocks repeat.', $output );
 		$this->assertStringNotContainsString( 'damon@example.test', $output );
+	}
+
+	public function test_security_verification_next_step_handles_generic_rows() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		$this->assertSame(
+			'Review this blocked verification before changing policy.',
+			$this->invoke_helper(
+				$settings_page,
+				'security_verification_next_step',
+				array(
+					(object) array(
+						'provider' => 'custom_provider',
+						'status'   => 'blocked_status',
+						'blocked'  => 1,
+					),
+				)
+			)
+		);
+
+		$this->assertSame(
+			'No action needed unless this verification pattern changes.',
+			$this->invoke_helper(
+				$settings_page,
+				'security_verification_next_step',
+				array(
+					(object) array(
+						'provider' => 'custom_provider',
+						'status'   => 'passed_status',
+						'blocked'  => 0,
+					),
+				)
+			)
+		);
 	}
 
 	public function test_security_manual_review_decision_items_describe_review_policy() {

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.79 - 2026-07-07
+
+### Changed
+
+- Added Security tab next-step triage guidance for recent verification activity rows.
+
 ## 0.1.78 - 2026-07-07
 
 ### Changed
