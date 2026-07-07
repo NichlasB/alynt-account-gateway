@@ -31,4 +31,10 @@ class FrontendJsSourceTest extends TestCase {
 		$this->assertStringContainsString( 'submit.disabled = ! isValid;', $js );
 		$this->assertStringContainsString( "submit.setAttribute( 'aria-disabled', isValid ? 'false' : 'true' );", $js );
 	}
+	public function test_password_requirements_use_aria_checked_state() {
+		$js = $this->get_frontend_js();
+
+		$this->assertStringContainsString( "item.setAttribute( 'aria-checked', passed ? 'true' : 'false' );", $js );
+		$this->assertStringNotContainsString( "item.setAttribute( 'aria-current'", $js );
+	}
 }

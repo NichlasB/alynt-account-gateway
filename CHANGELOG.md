@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.81 - 2026-07-07
+
+### Changed
+
+- Changed password requirement checklist state from current-page semantics to checkbox-style ria-checked semantics for assistive technology.
+
 ## 0.1.80 - 2026-07-07
 
 ### Changed
