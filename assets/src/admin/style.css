@@ -302,6 +302,7 @@
 	background: #fff;
 }
 
+.alynt-ag-security-launch,
 .alynt-ag-security-signal,
 .alynt-ag-security-triage,
 .alynt-ag-security-pressure,
@@ -325,6 +326,10 @@
 .alynt-ag-security-lifecycle h4 {
 	margin: 0 0 10px;
 	font-size: 14px;
+}
+
+.alynt-ag-security-launch h3 {
+	margin: 0 0 6px;
 }
 
 .alynt-ag-security-activity {
