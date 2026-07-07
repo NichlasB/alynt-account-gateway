@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.69 active rate-limit visibility security slice packaged and smoke-tested; awaiting release approval
+- Current phase: v0.1.69 active rate-limit visibility security slice released and updater-verified; ready for the next small product slice
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.68 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.69 is packaged and smoke-tested locally, but not released.
+- Plugin status: v0.1.69 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,7 +32,7 @@
 - [x] Keep the slice observability-only: do not change rate-limit thresholds, bucket identity, submitted field names, frontend routes, provider verification, registration creation, diagnostics event codes, saved setting keys, email delivery, dashboard/WooCommerce behavior, privacy exporter behavior, or updater behavior.
 - [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -43,6 +43,10 @@
 - Release validation passed: `npm run build`, PHP syntax for the main plugin, edited rate limiter, settings page, and uninstall script, focused security/cleanup tests (`27 tests, 354 assertions`), `npm run lint`, `npm test -- --do-not-cache-result` (`240 tests, 1432 assertions`), `npm audit --audit-level=moderate`, `npm run make-pot` (`880 strings`), and whitespace check. The only diff-check notes were expected line-ending normalization warnings on generated/metadata files.
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.69-20260707-111615\alynt-account-gateway-v0.1.69.zip` and inspected as 46 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.69` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, Active Rate Limit Buckets UI marker present, rate-limit metadata transient marker present, metadata uninstall cleanup marker present, source assets excluded, and SHA-256 `1D96C30971E8AADEC68AB8611C70998191FBDCD4870A4225B7C9D4B91EDAB699`.
 - Plugin Tester final package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.69` header/constant, exactly one `GitHub Plugin URI` updater header, Active Rate Limit Buckets UI marker present, metadata transient and cleanup markers present, source assets excluded, a throwaway login bucket produced locked metadata without storing the submitted email or IP address, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.69`; Build Release workflow run `28855833215` passed and produced the public asset.
+- Public release asset `alynt-account-gateway-v0.1.69.zip` was downloaded from GitHub and inspected as 55 entries, 10 directory entries, no backslash entries, no dev entries, `0.1.69` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, Active Rate Limit Buckets UI marker present, rate-limit metadata transient marker present, metadata uninstall cleanup marker present, and SHA-256 `96D6B58FA941BC61AD509B3ED8DFCB3C15D7640CF73C1005760E10258C8327A6`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.68` asset, forcing update detection to `0.1.68` -> `0.1.69`, upgrading through the public `v0.1.69` GitHub release asset URL, and verifying the final active plugin as `0.1.69` with no remaining update.
+- Post-updater Plugin Tester verification confirmed the installed public package: active plugin, `0.1.69` header/constant, exactly one `GitHub Plugin URI` updater header, Active Rate Limit Buckets UI marker present, metadata transient and cleanup markers present, no source/dev package files, and a throwaway login bucket produced locked metadata without storing the submitted email or IP address.
 
 ### Guardrails
 
@@ -54,7 +58,7 @@
 - [x] Focused tests cover privacy-preserving metadata, active lockout admin summary, and uninstall cleanup.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.68 Small Release Cycle
 
