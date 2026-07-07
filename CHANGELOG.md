@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.82 - 2026-07-07
+
+### Changed
+
+- Added latest-seen timestamps to provider failure triage cards in the Security tab.
+
 ## 0.1.81 - 2026-07-07
 
 ### Changed

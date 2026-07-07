@@ -20,6 +20,15 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		unset( $GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] );
 	}
 
+	protected function tearDown(): void {
+		unset(
+			$GLOBALS['alynt_ag_test_options']['date_format'],
+			$GLOBALS['alynt_ag_test_options']['time_format']
+		);
+
+		parent::tearDown();
+	}
+
 	/**
 	 * Invoke a private settings page helper.
 	 *
@@ -408,6 +417,9 @@ class SettingsPageSecurityStatusTest extends TestCase {
 	}
 
 	public function test_security_provider_failure_triage_items_count_specific_failures() {
+		$GLOBALS['alynt_ag_test_options']['date_format'] = 'Y-m-d';
+		$GLOBALS['alynt_ag_test_options']['time_format'] = 'H:i:s';
+
 		$settings_page = new ALYNT_AG_Settings_Page();
 		$items         = $this->invoke_helper(
 			$settings_page,
@@ -417,53 +429,71 @@ class SettingsPageSecurityStatusTest extends TestCase {
 					(object) array(
 						'provider' => 'turnstile',
 						'status'   => 'alynt_ag_turnstile_missing',
+						'created_at' => '2026-07-05 12:00:00',
+					),
+					(object) array(
+						'provider' => 'turnstile',
+						'status'   => 'alynt_ag_turnstile_missing',
+						'created_at' => '2026-07-05 12:03:00',
 					),
 					(object) array(
 						'provider' => 'turnstile',
 						'status'   => 'alynt_ag_turnstile_request_failed',
+						'created_at' => '2026-07-05 12:05:00',
 					),
 					(object) array(
 						'provider' => 'turnstile',
 						'status'   => 'alynt_ag_turnstile_failed',
+						'created_at' => '2026-07-05 12:06:00',
 					),
 					(object) array(
 						'provider' => 'reoon',
 						'status'   => 'alynt_ag_reoon_missing',
+						'created_at' => '2026-07-05 12:10:00',
 					),
 					(object) array(
 						'provider' => 'reoon',
 						'status'   => 'alynt_ag_reoon_request_failed',
+						'created_at' => '2026-07-05 12:20:00',
 					),
 					(object) array(
 						'provider' => 'reoon',
 						'status'   => 'alynt_ag_reoon_invalid_response',
+						'created_at' => '2026-07-05 12:30:00',
 					),
 					(object) array(
 						'provider' => 'reoon',
 						'status'   => 'alynt_ag_reoon_blocked',
+						'created_at' => '2026-07-05 12:40:00',
 					),
 				),
 			)
 		);
 
 		$this->assertSame( 'Turnstile Configuration', $items[0]['label'] );
-		$this->assertSame( 1, $items[0]['count'] );
+		$this->assertSame( 2, $items[0]['count'] );
 		$this->assertSame( 'action', $items[0]['status'] );
+		$this->assertSame( '2026-07-05 12:03:00', $items[0]['latest'] );
 		$this->assertSame( 'Turnstile Connectivity', $items[1]['label'] );
 		$this->assertSame( 1, $items[1]['count'] );
 		$this->assertSame( 'action', $items[1]['status'] );
+		$this->assertSame( '2026-07-05 12:05:00', $items[1]['latest'] );
 		$this->assertSame( 'Turnstile Challenge Rejections', $items[2]['label'] );
 		$this->assertSame( 1, $items[2]['count'] );
 		$this->assertSame( 'warning', $items[2]['status'] );
+		$this->assertSame( '2026-07-05 12:06:00', $items[2]['latest'] );
 		$this->assertSame( 'Reoon Configuration', $items[3]['label'] );
 		$this->assertSame( 1, $items[3]['count'] );
 		$this->assertSame( 'action', $items[3]['status'] );
+		$this->assertSame( '2026-07-05 12:10:00', $items[3]['latest'] );
 		$this->assertSame( 'Reoon Connectivity', $items[4]['label'] );
 		$this->assertSame( 1, $items[4]['count'] );
 		$this->assertSame( 'action', $items[4]['status'] );
+		$this->assertSame( '2026-07-05 12:20:00', $items[4]['latest'] );
 		$this->assertSame( 'Reoon Unexpected Responses', $items[5]['label'] );
 		$this->assertSame( 1, $items[5]['count'] );
 		$this->assertSame( 'action', $items[5]['status'] );
+		$this->assertSame( '2026-07-05 12:30:00', $items[5]['latest'] );
 	}
 
 	public function test_security_registration_abuse_signals_count_recent_activity() {
