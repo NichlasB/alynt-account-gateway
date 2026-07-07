@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.81 password requirement checklist semantics slice ready for release approval
+- Current phase: v0.1.81 password requirement checklist semantics slice released
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.80 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification; v0.1.81 is locally validated and awaiting release approval.
+- Plugin status: v0.1.81 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,7 +32,7 @@
 - [x] Preserve behavior: no password policy changes, validation threshold changes, form submission changes, saved settings changes, frontend routing changes, visual CSS changes, provider verification changes, diagnostics changes, email delivery changes, dashboard/WooCommerce behavior changes, privacy cleanup changes, or updater behavior changes.
 - [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -43,6 +43,10 @@
 - Release validation passed: `npm run build`; `npm run lint`; `npm run make-pot` (`952 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`253 tests, 1557 assertions`).
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.81-20260707-180328\alynt-account-gateway-v0.1.81.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.81` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, requirement checkbox marker present, built frontend JavaScript `aria-checked` marker present, built frontend JavaScript `aria-current` marker absent, and SHA-256 `30602B7B98D7ADAD40D25E31AD5E0A31E2D947BAFDC3303DA773B27081BD8257`.
 - Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader` under LocalWP web PHP: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, `get_plugins()` reports `0.1.81`, stable tag `0.1.81`, exactly one `GitHub Plugin URI` updater header, requirement checkbox marker present, built frontend JavaScript `aria-checked` marker present, built frontend JavaScript `aria-current` marker absent, 45 runtime files, no source/dev package files, Novamira MCP was not exposed in the active tool list, and temporary web smoke scripts were removed.
+- Published GitHub release `v0.1.81`; Build Release workflow run `28880752152` passed and produced the public asset.
+- Public release asset `alynt-account-gateway-v0.1.81.zip` was downloaded from GitHub and inspected as 55 entries, 45 files, 10 directory entries, no backslash entries, no dev entries, `0.1.81` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, requirement checkbox marker present, built frontend JavaScript `aria-checked` marker present, built frontend JavaScript `aria-current` marker absent, and SHA-256 `C40D58A23F25CD1D05A12D1394C878D250C8863608B6F34C7854D471F88C7BFE`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.80` asset, clearing Alynt Plugin Updater scanner/release cache after the deliberate downgrade, confirming Alynt Plugin Updater detected `0.1.80` -> `0.1.81` with the public `v0.1.81` GitHub release asset URL, upgrading through WordPress `Plugin_Upgrader`, and verifying the final active plugin as `0.1.81` with no remaining update.
+- Post-updater Plugin Tester verification confirmed the installed public package: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, header/constant `0.1.81`, stable tag `0.1.81`, exactly one `GitHub Plugin URI` updater header, requirement checkbox marker present, built frontend JavaScript `aria-checked` marker present, built frontend JavaScript `aria-current` marker absent, 45 runtime files, no source/dev package files, and no temporary web verifier scripts remaining.
 
 ### Guardrails
 
@@ -53,7 +57,7 @@
 - [x] Focused tests cover rendered requirement checkbox semantics and JavaScript `aria-checked` synchronization.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.80 Small Release Cycle
 
