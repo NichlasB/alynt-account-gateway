@@ -103,6 +103,8 @@ class CleanupLifecycleTest extends TestCase {
 		$this->assertStringContainsString( 'DELETE FROM wp_options WHERE option_name LIKE', $queries );
 		$this->assertStringContainsString( '\\_transient\\_alynt\\_ag\\_rl\\_', $queries );
 		$this->assertStringContainsString( '\\_transient\\_timeout\\_alynt\\_ag\\_rl\\_', $queries );
+		$this->assertStringContainsString( '\\_transient\\_alynt\\_ag\\_rl\\_meta\\_', $queries );
+		$this->assertStringContainsString( '\\_transient\\_timeout\\_alynt\\_ag\\_rl\\_meta\\_', $queries );
 	}
 
 	public function test_uninstall_drops_the_database_registry_tables_only() {

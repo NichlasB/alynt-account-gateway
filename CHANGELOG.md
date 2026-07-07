@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.69 - 2026-07-07
+
+### Changed
+
+- Added privacy-preserving active rate-limit bucket visibility to the Security settings panel.
+
 ## 0.1.68 - 2026-07-07
 
 ### Changed

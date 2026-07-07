@@ -54,6 +54,8 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Rate Limit Posture', $output );
 		$this->assertStringContainsString( 'Registration Attempts', $output );
 		$this->assertStringContainsString( 'Password Reset Attempts', $output );
+		$this->assertStringContainsString( 'Active Rate Limit Buckets', $output );
+		$this->assertStringContainsString( 'Active buckets show privacy-preserving lockout pressure', $output );
 		$this->assertStringContainsString( 'Recent Registration Verification Activity', $output );
 		$this->assertStringContainsString( 'No verification activity has been logged yet.', $output );
 		$this->assertStringContainsString( 'Recent Pending Registrations', $output );
@@ -161,6 +163,71 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( 1, $items[2]['count'] );
 		$this->assertSame( 'Password Reset', $items[3]['label'] );
 		$this->assertSame( 0, $items[3]['count'] );
+	}
+
+	public function test_security_active_rate_limit_bucket_items_count_current_lockouts() {
+		$GLOBALS['alynt_ag_test_db_results']['wp_options'] = array(
+			(object) array(
+				'option_value' => serialize(
+					array(
+						'action'     => 'registration',
+						'count'      => 5,
+						'limit'      => 5,
+						'locked'     => true,
+						'expires_at' => time() + 300,
+					)
+				),
+			),
+			(object) array(
+				'option_value' => serialize(
+					array(
+						'action'     => 'registration',
+						'count'      => 2,
+						'limit'      => 5,
+						'locked'     => false,
+						'expires_at' => time() + 300,
+					)
+				),
+			),
+			(object) array(
+				'option_value' => serialize(
+					array(
+						'action'     => 'login',
+						'count'      => 10,
+						'limit'      => 10,
+						'locked'     => true,
+						'expires_at' => time() + 300,
+					)
+				),
+			),
+			(object) array(
+				'option_value' => serialize(
+					array(
+						'action'     => 'lostpassword',
+						'count'      => 5,
+						'limit'      => 5,
+						'locked'     => true,
+						'expires_at' => time() - 1,
+					)
+				),
+			),
+		);
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper( $settings_page, 'security_active_rate_limit_bucket_items' );
+
+		$this->assertSame( 'Registration', $items[0]['label'] );
+		$this->assertSame( 1, $items[0]['count'] );
+		$this->assertSame( 'warning', $items[0]['status'] );
+		$this->assertSame( 'active lockouts from 2 current registration buckets.', $items[0]['message'] );
+		$this->assertSame( 'Confirmation Resends', $items[1]['label'] );
+		$this->assertSame( 0, $items[1]['count'] );
+		$this->assertSame( 'Login', $items[2]['label'] );
+		$this->assertSame( 1, $items[2]['count'] );
+		$this->assertSame( 'warning', $items[2]['status'] );
+		$this->assertSame( 'Password Reset', $items[3]['label'] );
+		$this->assertSame( 0, $items[3]['count'] );
+		$this->assertSame( 'ready', $items[3]['status'] );
 	}
 
 	public function test_security_provider_health_signals_count_recent_activity() {
