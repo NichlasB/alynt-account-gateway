@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.72 - 2026-07-07
+
+### Changed
+
+- Added LTR direction hints to machine-readable admin settings fields for RTL and multilingual admin environments.
+
 ## 0.1.71 - 2026-07-07
 
 ### Changed

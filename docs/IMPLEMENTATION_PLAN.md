@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.71 set-password submit accessibility slice in progress
+- Current phase: v0.1.72 admin settings machine-readable field RTL slice in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.71 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.72 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,43 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.72 Small Release Cycle
+
+### Scope
+
+- [x] Continue the accessibility, RTL, and multilingual QA pass from the released `v0.1.71` baseline.
+- [x] Add explicit LTR direction hints to machine-readable admin settings inputs, including relative paths, webhook URLs, secrets, font stacks, username format, and Turnstile site key values.
+- [x] Preserve normal prose fields, including email subject/preheader/body settings, so translatable site copy follows the admin language direction.
+- [x] Keep the slice admin-output-only: do not change saved settings, sanitization, settings schema, frontend routes, frontend rendering, provider verification, rate limits, diagnostics logging, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater behavior.
+- [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Package and run Plugin Tester smoke.
+- [x] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.72` from clean `master` after the updater-verified `v0.1.71` release.
+- Added `dir="ltr"` to shared admin text/password rendering for machine-readable settings fields while leaving ordinary prose string fields direction-neutral.
+- Added focused `SettingsPageFieldHelpTest` coverage for relative path, webhook URL, signing secret, and prose-subject negative cases. Initial validation passed: PHP syntax for the edited settings page and test, and focused `SettingsPageFieldHelpTest` (`5 tests, 16 assertions`).
+- Release validation passed: PHP syntax for the main plugin, edited settings page, and focused test, `npm run build`, focused `SettingsPageFieldHelpTest` (`5 tests, 16 assertions`), `npm run lint`, `npm run make-pot` (`896 strings`), `npm audit --audit-level=moderate`, and `npm test -- --do-not-cache-result` (`244 tests, 1466 assertions`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.72-20260707-123052\alynt-account-gateway-v0.1.72.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.72` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, admin field-direction helper marker present, LTR direction marker present, and SHA-256 `F81D045E32EDCA3552A8AD916CAE8D6D18B1F1F87CA6E5160354A7BB2AA1A302`.
+- Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.72` header/constant, stable tag `0.1.72`, exactly one `GitHub Plugin URI` updater header, admin field-direction helper marker present, LTR direction marker present, expected machine-readable field rules present, docs/tests/source/package files excluded, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.72`; Build Release workflow run `28859768133` passed and produced the public asset.
+- Public release asset `alynt-account-gateway-v0.1.72.zip` was downloaded from GitHub and inspected as 55 entries, 10 directory entries, no backslash entries, no dev entries, `0.1.72` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, admin field-direction helper marker present, LTR direction marker present, and SHA-256 `F4CA57FD16D660CE20199228D398AB5C8EF32014BD9AB81C9A4E3F89B787E0A1`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.71` asset, forcing update detection to `0.1.71` -> `0.1.72`, upgrading through the public `v0.1.72` GitHub release asset URL, and verifying the final active plugin as `0.1.72` with no remaining update.
+- Post-updater Plugin Tester verification confirmed the installed public package: active plugin, `0.1.72` header/constant, stable tag `0.1.72`, exactly one `GitHub Plugin URI` updater header, admin field-direction helper marker present, LTR direction marker present, and no source/dev package files.
+
+### Guardrails
+
+- Do not change settings keys, settings types, sanitization rules, default values, saved option payloads, tab placement, frontend output, public routes, provider behavior, diagnostics events, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater metadata.
+- Keep the change limited to admin field direction attributes and focused coverage.
+
+### Completion Gate
+
+- [x] Focused tests cover LTR hints for machine-readable admin fields and avoid applying LTR to normal prose string fields.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package markers.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.71 Small Release Cycle
 
