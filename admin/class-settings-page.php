@@ -2028,8 +2028,78 @@ class ALYNT_AG_Settings_Page {
 					</section>
 				<?php endforeach; ?>
 			</div>
+			<?php $this->render_security_manual_review_decision_playbook(); ?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Render manual-review decision guidance.
+	 *
+	 * @return void
+	 */
+	private function render_security_manual_review_decision_playbook() {
+		$items = $this->security_manual_review_decision_items();
+		?>
+		<div class="alynt-ag-security-manual-review__playbook">
+			<h5><?php esc_html_e( 'Manual Review Decision Playbook', 'alynt-account-gateway' ); ?></h5>
+			<p class="description"><?php esc_html_e( 'Use this as a support-friendly rubric before changing the site-wide Reoon flagged-status policy.', 'alynt-account-gateway' ); ?></p>
+			<table class="widefat striped alynt-ag-security-manual-review__table">
+				<thead>
+					<tr>
+						<th scope="col"><?php esc_html_e( 'Result Family', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Default Decision', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Tighten When', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Review First', 'alynt-account-gateway' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $items as $item ) : ?>
+						<tr>
+							<th scope="row"><?php echo esc_html( $item['result_family'] ); ?></th>
+							<td><?php echo esc_html( $item['default_decision'] ); ?></td>
+							<td><?php echo esc_html( $item['tighten_when'] ); ?></td>
+							<td><?php echo esc_html( $item['review_first'] ); ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Return manual-review decision guidance rows.
+	 *
+	 * @return array<int,array{result_family:string,default_decision:string,tighten_when:string,review_first:string}>
+	 */
+	private function security_manual_review_decision_items() {
+		return array(
+			array(
+				'result_family'    => __( 'Role account', 'alynt-account-gateway' ),
+				'default_decision' => __( 'Allow and review when shared inboxes are acceptable for the site.', 'alynt-account-gateway' ),
+				'tighten_when'     => __( 'Block when personal accountability, subscriptions, or fraud exposure matter more than shared access.', 'alynt-account-gateway' ),
+				'review_first'     => __( 'Check whether customers commonly use support, info, billing, or team inboxes.', 'alynt-account-gateway' ),
+			),
+			array(
+				'result_family'    => __( 'Catch-all domain', 'alynt-account-gateway' ),
+				'default_decision' => __( 'Allow and monitor until repeated abuse appears from the same domain.', 'alynt-account-gateway' ),
+				'tighten_when'     => __( 'Block or manually review when one domain creates repeated low-quality registrations.', 'alynt-account-gateway' ),
+				'review_first'     => __( 'Compare masked activity rows with support tickets and order history before tightening.', 'alynt-account-gateway' ),
+			),
+			array(
+				'result_family'    => __( 'Unknown or inbox full', 'alynt-account-gateway' ),
+				'default_decision' => __( 'Allow and retry support contact if the customer later needs help.', 'alynt-account-gateway' ),
+				'tighten_when'     => __( 'Block when failed delivery, fake-account pressure, or manual support burden rises.', 'alynt-account-gateway' ),
+				'review_first'     => __( 'Confirm email delivery health and whether the address belongs to a real customer record.', 'alynt-account-gateway' ),
+			),
+			array(
+				'result_family'    => __( 'Disposable, spamtrap, invalid, or disabled', 'alynt-account-gateway' ),
+				'default_decision' => __( 'Keep blocked; these are always treated as high-risk or unusable.', 'alynt-account-gateway' ),
+				'tighten_when'     => __( 'No extra tightening is needed because these statuses are already blocked.', 'alynt-account-gateway' ),
+				'review_first'     => __( 'Review only when a known customer reports a false positive.', 'alynt-account-gateway' ),
+			),
+		);
 	}
 
 	/**

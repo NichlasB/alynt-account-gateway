@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.75 - 2026-07-07
+
+### Changed
+
+- Added a read-only manual-review decision playbook for Reoon flagged email statuses in the Security tab.
+
 ## 0.1.74 - 2026-07-07
 
 ### Changed
