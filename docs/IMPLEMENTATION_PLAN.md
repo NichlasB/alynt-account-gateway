@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.70 security launch decision summary slice released and updater-verified; ready for the next small product slice
+- Current phase: v0.1.71 set-password submit accessibility slice in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.70 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.70 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.71 is in progress.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,39 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.71 Small Release Cycle
+
+### Scope
+
+- [x] Continue the accessibility, RTL, and multilingual QA pass from the released `v0.1.70` baseline.
+- [x] Add explicit `aria-disabled="true"` to the initially disabled set-password submit button.
+- [x] Keep set-password JavaScript synchronized so `aria-disabled` changes to `false` only when the password requirements and confirmation match pass.
+- [x] Keep the slice accessibility-only: do not change password requirements, validation rules, submitted field names, token handling, registration creation, password reset behavior, Reoon/Turnstile checks, rate limits, diagnostics logging, saved settings, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater behavior.
+- [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Package and run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.71` from clean `master` after the updater-verified `v0.1.70` release.
+- Added `aria-disabled="true"` to the set-password submit button's initial disabled state and synchronized `aria-disabled` with password validity in the frontend password-policy JavaScript.
+- Added focused frontend coverage for the rendered set-password submit state and frontend JavaScript source guardrail. Initial validation passed: PHP syntax for the edited renderer and tests, focused `FrontendSetpasswordScreenTest` (`6 tests, 53 assertions`), and focused `FrontendJsSourceTest` (`1 test, 3 assertions`).
+- Release validation passed: PHP syntax for the main plugin, edited renderer, and tests, `npm run build`, focused `FrontendSetpasswordScreenTest` (`6 tests, 53 assertions`), focused `FrontendJsSourceTest` (`1 test, 3 assertions`), `npm run make-pot` (`896 strings`), `npm run lint`, `npm test -- --do-not-cache-result` (`243 tests, 1462 assertions`), and `npm audit --audit-level=moderate`.
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.71-20260707-120830\alynt-account-gateway-v0.1.71.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.71` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, set-password submit `aria-disabled` marker present, built frontend JavaScript `aria-disabled` synchronization marker present, and SHA-256 `0C821E29761D465C756BD4BFB2A076A23D45043D3BC25331C68C3E321D6DEB1A`.
+- Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.71` header/constant, stable tag `0.1.71`, exactly one `GitHub Plugin URI` updater header in the main plugin file, set-password submit `aria-disabled` marker present, built frontend JavaScript `aria-disabled` synchronization marker present, docs/tests/source package files excluded, and uploaded sandbox artifacts were cleaned.
+
+### Guardrails
+
+- Do not alter password complexity requirements, password mismatch behavior, native reset-key validation, pending-registration token validation, account creation, frontend routes, submitted field names, nonce names, provider verification, rate limits, diagnostics events, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater metadata.
+- Keep the JavaScript change scoped to button state semantics.
+
+### Completion Gate
+
+- [x] Focused frontend tests cover the set-password submit `aria-disabled` state and JavaScript synchronization marker.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package markers.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.70 Small Release Cycle
 

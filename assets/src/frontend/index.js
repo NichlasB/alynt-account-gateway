@@ -90,6 +90,7 @@ function alyntAgUpdatePasswordPolicy( form ) {
 	passwordInput.setAttribute( 'aria-invalid', password.length > 0 && corePass !== coreKeys.length ? 'true' : 'false' );
 	confirmInput.setAttribute( 'aria-invalid', confirm.length > 0 && ! checks.match ? 'true' : 'false' );
 	submit.disabled = ! isValid;
+	submit.setAttribute( 'aria-disabled', isValid ? 'false' : 'true' );
 }
 
 function alyntAgInitPasswordPolicy() {

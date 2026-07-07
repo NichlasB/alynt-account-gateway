@@ -1,0 +1,34 @@
+<?php
+/**
+ * Frontend JavaScript source tests.
+ *
+ * @package Alynt_Account_Gateway
+ */
+
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Tests important frontend JavaScript behavior markers.
+ */
+class FrontendJsSourceTest extends TestCase {
+
+	/**
+	 * Reads the frontend source JavaScript.
+	 *
+	 * @return string
+	 */
+	private function get_frontend_js() {
+		$js = file_get_contents( dirname( __DIR__ ) . '/assets/src/frontend/index.js' );
+
+		$this->assertIsString( $js );
+
+		return $js;
+	}
+
+	public function test_password_submit_aria_disabled_tracks_validity() {
+		$js = $this->get_frontend_js();
+
+		$this->assertStringContainsString( 'submit.disabled = ! isValid;', $js );
+		$this->assertStringContainsString( "submit.setAttribute( 'aria-disabled', isValid ? 'false' : 'true' );", $js );
+	}
+}
