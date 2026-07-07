@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.83 - 2026-07-07
+
+### Fixed
+
+- Fixed Provider Failure Triage latest-seen metadata rendering in the Security tab.
+
 ## 0.1.82 - 2026-07-07
 
 ### Changed
