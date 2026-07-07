@@ -62,6 +62,47 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'No pending registration records have been created yet.', $output );
 	}
 
+	public function test_security_launch_decision_items_warn_before_public_launch() {
+		$settings      = ALYNT_AG_Settings_Schema::defaults();
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper( $settings_page, 'security_launch_decision_items', array( $settings ) );
+
+		$this->assertSame( 'Public Registration', $items[0]['label'] );
+		$this->assertSame( 'action', $items[0]['status'] );
+		$this->assertSame( 'Public account creation is disabled. Keep it disabled while configuring the gateway, then enable it only after provider and email checks are ready.', $items[0]['message'] );
+		$this->assertSame( 'Anti-Spam Coverage', $items[1]['label'] );
+		$this->assertSame( 'action', $items[1]['status'] );
+		$this->assertSame( 'No fully configured anti-spam provider is available. Configure Turnstile or Reoon before public registration receives traffic.', $items[1]['message'] );
+		$this->assertSame( 'Consent Links', $items[2]['label'] );
+		$this->assertSame( 'ready', $items[2]['status'] );
+		$this->assertSame( 'Flagged Email Policy', $items[3]['label'] );
+		$this->assertSame( 'warning', $items[3]['status'] );
+		$this->assertSame( 'Reoon is not configured, so flagged email policy decisions are inactive. Use Turnstile alone or add Reoon before relying on email-quality review.', $items[3]['message'] );
+		$this->assertSame( 'Launch Evidence', $items[4]['label'] );
+		$this->assertSame( 'warning', $items[4]['status'] );
+	}
+
+	public function test_security_launch_decision_items_mark_ready_configuration() {
+		$settings                         = ALYNT_AG_Settings_Schema::defaults();
+		$settings['registration_enabled'] = true;
+		$settings['turnstile_site_key']   = 'site-key';
+		$settings['turnstile_secret_key'] = 'secret-key';
+		$settings['reoon_api_key']        = 'reoon-key';
+		$settings['reoon_flagged_policy'] = 'block';
+		$settings['diagnostics_enabled']  = true;
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$items         = $this->invoke_helper( $settings_page, 'security_launch_decision_items', array( $settings ) );
+
+		$this->assertSame( 'ready', $items[0]['status'] );
+		$this->assertSame( 'ready', $items[1]['status'] );
+		$this->assertSame( 'ready', $items[2]['status'] );
+		$this->assertSame( 'ready', $items[3]['status'] );
+		$this->assertSame( 'Blocks catch-all, role account, unknown, and inbox-full statuses before account creation.', $items[3]['message'] );
+		$this->assertSame( 'ready', $items[4]['status'] );
+		$this->assertSame( 'Diagnostics are enabled, so launch and support signals can be collected during registration rollout.', $items[4]['message'] );
+	}
+
 	public function test_security_status_panel_marks_configured_providers_and_policy() {
 		$settings                         = ALYNT_AG_Settings_Schema::defaults();
 		$settings['turnstile_site_key']   = 'site-key';
@@ -76,6 +117,13 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$output = ob_get_clean();
 
 		$this->assertStringNotContainsString( 'No anti-spam provider is fully configured.', $output );
+		$this->assertStringContainsString( 'Launch Decision Summary', $output );
+		$this->assertStringContainsString( 'Use this quick checklist before making public registration available.', $output );
+		$this->assertStringContainsString( 'Public Registration', $output );
+		$this->assertStringContainsString( 'Anti-Spam Coverage', $output );
+		$this->assertStringContainsString( 'Consent Links', $output );
+		$this->assertStringContainsString( 'Flagged Email Policy', $output );
+		$this->assertStringContainsString( 'Launch Evidence', $output );
 		$this->assertStringContainsString( 'Every configured provider must pass registration.', $output );
 		$this->assertStringContainsString( 'Server-side verification can run', $output );
 		$this->assertStringContainsString( 'Email quality verification can run', $output );

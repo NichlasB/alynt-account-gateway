@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.70 - 2026-07-07
+
+### Changed
+
+- Added a Security tab launch decision summary for public registration readiness, anti-spam coverage, consent links, flagged email policy, and launch diagnostics evidence.
+
 ## 0.1.69 - 2026-07-07
 
 ### Changed

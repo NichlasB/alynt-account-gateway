@@ -1006,6 +1006,7 @@ class ALYNT_AG_Settings_Page {
 	 */
 	private function render_security_status_panel( $settings ) {
 		$providers       = $this->security_provider_status_items( $settings );
+		$launch_items    = $this->security_launch_decision_items( $settings );
 		$rate_limits     = $this->security_rate_limit_items( $settings );
 		$provider_counts = $this->setup_readiness_counts( $providers );
 		?>
@@ -1027,6 +1028,20 @@ class ALYNT_AG_Settings_Page {
 					<?php esc_html_e( 'No anti-spam provider is fully configured. Keep registration disabled or configure Turnstile or Reoon before going public.', 'alynt-account-gateway' ); ?>
 				</p>
 			<?php endif; ?>
+
+			<div class="alynt-ag-security-launch" aria-label="<?php esc_attr_e( 'Security launch decision summary', 'alynt-account-gateway' ); ?>">
+				<h3><?php esc_html_e( 'Launch Decision Summary', 'alynt-account-gateway' ); ?></h3>
+				<p class="description"><?php esc_html_e( 'Use this quick checklist before making public registration available. It summarizes configuration choices that affect spam resistance, customer support, and launch evidence.', 'alynt-account-gateway' ); ?></p>
+				<div class="alynt-ag-security-status__grid">
+					<?php foreach ( $launch_items as $item ) : ?>
+						<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+							<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+							<h4><?php echo esc_html( $item['label'] ); ?></h4>
+							<p><?php echo esc_html( $item['message'] ); ?></p>
+						</section>
+					<?php endforeach; ?>
+				</div>
+			</div>
 
 			<h3><?php esc_html_e( 'Provider Readiness', 'alynt-account-gateway' ); ?></h3>
 			<div class="alynt-ag-security-status__grid">
@@ -1056,6 +1071,60 @@ class ALYNT_AG_Settings_Page {
 			<?php $this->render_security_pending_registrations(); ?>
 		</section>
 		<?php
+	}
+
+	/**
+	 * Return security launch decision items.
+	 *
+	 * @param array<string,mixed> $settings Current settings.
+	 * @return array<int,array{label:string,status:string,message:string}>
+	 */
+	private function security_launch_decision_items( $settings ) {
+		$registration_enabled = ! empty( $settings['registration_enabled'] );
+		$provider_count       = $this->security_configured_provider_count( $settings );
+		$has_terms            = ! empty( $settings['terms_path'] );
+		$has_privacy          = ! empty( $settings['privacy_path'] );
+		$has_reoon            = ! empty( $settings['reoon_api_key'] );
+		$flagged_policy       = ! empty( $settings['reoon_flagged_policy'] ) ? sanitize_key( $settings['reoon_flagged_policy'] ) : 'allow';
+		$diagnostics_enabled  = ! empty( $settings['diagnostics_enabled'] );
+
+		return array(
+			array(
+				'label'   => __( 'Public Registration', 'alynt-account-gateway' ),
+				'status'  => $registration_enabled ? 'ready' : 'action',
+				'message' => $registration_enabled
+					? __( 'Public account creation is enabled. Confirm the remaining checks before sending customers to registration.', 'alynt-account-gateway' )
+					: __( 'Public account creation is disabled. Keep it disabled while configuring the gateway, then enable it only after provider and email checks are ready.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Anti-Spam Coverage', 'alynt-account-gateway' ),
+				'status'  => $provider_count > 0 ? 'ready' : 'action',
+				'message' => $provider_count > 0
+					? __( 'At least one anti-spam provider is fully configured for registration verification.', 'alynt-account-gateway' )
+					: __( 'No fully configured anti-spam provider is available. Configure Turnstile or Reoon before public registration receives traffic.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Consent Links', 'alynt-account-gateway' ),
+				'status'  => $has_terms && $has_privacy ? 'ready' : 'action',
+				'message' => $has_terms && $has_privacy
+					? __( 'Terms and privacy links are configured for the registration consent checkbox.', 'alynt-account-gateway' )
+					: __( 'Configure both Terms and Privacy relative URL paths before public registration.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Flagged Email Policy', 'alynt-account-gateway' ),
+				'status'  => $has_reoon && 'block' === $flagged_policy ? 'ready' : 'warning',
+				'message' => $has_reoon
+					? $this->security_reoon_flagged_policy_message( $flagged_policy )
+					: __( 'Reoon is not configured, so flagged email policy decisions are inactive. Use Turnstile alone or add Reoon before relying on email-quality review.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Launch Evidence', 'alynt-account-gateway' ),
+				'status'  => $diagnostics_enabled ? 'ready' : 'warning',
+				'message' => $diagnostics_enabled
+					? __( 'Diagnostics are enabled, so launch and support signals can be collected during registration rollout.', 'alynt-account-gateway' )
+					: __( 'Diagnostics are disabled. Enable them temporarily during launch or support windows if you need fuller evidence for redirects, emails, and webhook outcomes.', 'alynt-account-gateway' ),
+			),
+		);
 	}
 
 	/**

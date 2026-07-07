@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.69 active rate-limit visibility security slice released and updater-verified; ready for the next small product slice
+- Current phase: v0.1.70 security launch decision summary slice released and updater-verified; ready for the next small product slice
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.69 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.70 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,44 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.70 Small Release Cycle
+
+### Scope
+
+- [x] Continue the security and anti-spam hardening slice from the released `v0.1.69` baseline.
+- [x] Add an admin-only Security tab launch decision summary that turns existing settings into public-registration readiness guidance.
+- [x] Cover public registration state, anti-spam provider coverage, Terms/Privacy consent links, Reoon flagged-email policy, and diagnostics launch evidence.
+- [x] Keep the slice read-only and guidance-only: do not add saved settings, change registration flow behavior, provider verification logic, rate-limit enforcement, diagnostics event names, frontend routes, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater behavior.
+- [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Package and run Plugin Tester smoke.
+- [x] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.70` from clean `master` after the updater-verified `v0.1.69` release.
+- Added a Launch Decision Summary to the Security tab so administrators can see pre-launch blockers and review items before enabling public registration.
+- Added focused `SettingsPageSecurityStatusTest` coverage for default pre-launch warnings, launch-ready configuration, and rendered Security tab markers. Initial validation passed: PHP syntax for the edited settings page and focused `SettingsPageSecurityStatusTest` (`22 tests, 337 assertions`).
+- Release validation passed: PHP syntax for the main plugin and edited settings page, `npm run build`, focused `SettingsPageSecurityStatusTest` (`22 tests, 337 assertions`), `npm run lint`, `npm test -- --do-not-cache-result` (`242 tests, 1459 assertions`), `npm audit --audit-level=moderate`, and `npm run make-pot` (`896 strings`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.70-20260707-114240\alynt-account-gateway-v0.1.70.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.70` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, Launch Decision Summary marker present, built admin CSS launch marker present, source assets excluded, and SHA-256 `6297F9BBEDC32511BF61914F72FF20B3B40A4BDC7BA582BE8F127E8C6D287C02`.
+- Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.70` header/constant, exactly one `GitHub Plugin URI` updater header, Launch Decision Summary and Anti-Spam Coverage markers present, built admin CSS launch marker present, docs/tests/source package files excluded, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.70`; Build Release workflow run `28857639977` passed and produced the public asset.
+- Public release asset `alynt-account-gateway-v0.1.70.zip` was downloaded from GitHub and inspected as 55 entries, 10 directory entries, no backslash entries, no dev entries, `0.1.70` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, Launch Decision Summary marker present, Anti-Spam Coverage marker present, built admin CSS launch marker present, and SHA-256 `B55431F15D4B9FDD1A344998B2A1C7582C7AB7C2B6A48F07628594E83BE1DF77`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.69` asset, forcing update detection to `0.1.69` -> `0.1.70`, upgrading through the public `v0.1.70` GitHub release asset URL, and verifying the final active plugin as `0.1.70` with no remaining update.
+- Post-updater Plugin Tester verification confirmed the installed public package: active plugin, `0.1.70` header/constant, exactly one `GitHub Plugin URI` updater header, Launch Decision Summary and Anti-Spam Coverage markers present, built admin CSS launch marker present, and no source/dev package files.
+
+### Guardrails
+
+- Do not change authentication, registration creation, confirmation resend, Reoon, Turnstile, rate-limit, diagnostics, email, dashboard, WooCommerce, privacy, uninstall, or updater runtime behavior in this slice.
+- Do not store new data or introduce new settings.
+- Keep the new output admin-only and read-only.
+
+### Completion Gate
+
+- [x] Focused tests cover the launch decision summary helper and rendered markers.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package markers.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.69 Small Release Cycle
 
