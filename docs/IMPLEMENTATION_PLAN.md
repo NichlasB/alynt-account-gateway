@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.82 provider failure recency metadata slice ready for release approval
+- Current phase: v0.1.82 provider failure recency metadata slice released and updater-verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.81 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification; v0.1.82 is locally validated and awaiting release approval.
+- Plugin status: v0.1.82 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Preserve behavior: no provider policy changes, rate-limit threshold changes, registration flow changes, saved settings changes, database schema changes, frontend copy changes, public response changes, diagnostics storage changes, email delivery changes, dashboard/WooCommerce behavior changes, privacy cleanup changes, or updater behavior changes.
 - [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -42,6 +42,10 @@
 - Release validation passed: `npm run build`; `npm run lint`; `npm run make-pot` (`953 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`253 tests, 1563 assertions`).
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.82-20260707-182055\alynt-account-gateway-v0.1.82.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.82` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, `Latest seen` marker present, latest-seen helper marker present, Provider Failure Triage marker present, and SHA-256 `EA1E39867BE727898B80AB97FB58DF4327542ABD4135E2FB8B049602FE6E5DEE`.
 - Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader` under LocalWP web PHP: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, `get_plugins()` reports `0.1.82`, main file constant is `0.1.82`, stable tag `0.1.82`, exactly one `GitHub Plugin URI` updater header, `Latest seen` marker present, latest-seen helper marker present, Provider Failure Triage marker present, 45 runtime files, no source/dev package files, Novamira MCP was not exposed in the active tool list, and temporary web smoke scripts were removed.
+- Published GitHub release `v0.1.82`; Build Release workflow run `28882675381` passed and produced the public asset.
+- Public release asset `alynt-account-gateway-v0.1.82.zip` was downloaded from GitHub and inspected as 55 entries, 45 files, 10 directory entries, no backslash entries, no dev entries, `0.1.82` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, `Latest seen` marker present, latest-seen helper marker present, Provider Failure Triage marker present, and SHA-256 `603D4251C4E23C68D11301A1074C2A68D03B17A7FC15813A5FFF556585764A19`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.81` asset, clearing Alynt Plugin Updater scanner/release cache after the deliberate downgrade, confirming Alynt Plugin Updater detected `0.1.81` -> `0.1.82` with the public `v0.1.82` GitHub release asset URL, upgrading through WordPress `Plugin_Upgrader`, and verifying no remaining update.
+- Post-updater Plugin Tester verification confirmed the installed public package: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, header/constant `0.1.82`, stable tag `0.1.82`, exactly one `GitHub Plugin URI` updater header, `Latest seen` marker present, latest-seen helper marker present, Provider Failure Triage marker present, 45 runtime files, no source/dev package files, and no temporary web verifier scripts remaining.
 
 ### Guardrails
 
@@ -52,7 +56,7 @@
 - [x] Focused tests cover provider failure latest-seen timestamp selection.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.81 Small Release Cycle
 
