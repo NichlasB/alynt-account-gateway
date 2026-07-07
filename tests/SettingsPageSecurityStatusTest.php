@@ -130,6 +130,12 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Always blocks invalid, disabled, disposable, and spamtrap statuses.', $output );
 		$this->assertStringContainsString( 'Allows but logs catch-all, role account, unknown, and inbox-full statuses for admin review.', $output );
 		$this->assertStringContainsString( 'Current policy: Allow and log flagged statuses.', $output );
+		$this->assertStringContainsString( 'Reoon Result Group', $output );
+		$this->assertStringContainsString( 'Always blocked', $output );
+		$this->assertStringContainsString( 'invalid, disabled, disposable, spamtrap', $output );
+		$this->assertStringContainsString( 'Configurable flagged statuses', $output );
+		$this->assertStringContainsString( 'catch_all, role_account, unknown, inbox_full', $output );
+		$this->assertStringContainsString( 'Allowed, logged, and shown for admin review.', $output );
 		$this->assertStringContainsString( 'For most stores, allow and log flagged statuses first.', $output );
 		$this->assertStringContainsString( 'Catch-all domains, role accounts, unknown results, and full inboxes can include legitimate customers', $output );
 		$this->assertStringContainsString( 'Use Recent Registration Verification Activity below to review allowed flagged results and blocked Reoon decisions', $output );
@@ -149,7 +155,24 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'Reoon Flagged Statuses', $output );
 		$this->assertStringContainsString( 'Blocks catch-all, role account, unknown, and inbox-full statuses before account creation.', $output );
 		$this->assertStringContainsString( 'Current policy: Block flagged statuses.', $output );
+		$this->assertStringContainsString( 'Configurable flagged statuses', $output );
+		$this->assertStringContainsString( 'Blocked before account creation.', $output );
 		$this->assertStringContainsString( 'Switch to blocking when support volume, spam pressure, or fraud risk matters more', $output );
+	}
+
+	public function test_reoon_policy_visibility_items_follow_selected_policy() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		$allow_items = $this->invoke_helper( $settings_page, 'security_reoon_policy_visibility_items', array( 'allow' ) );
+		$block_items = $this->invoke_helper( $settings_page, 'security_reoon_policy_visibility_items', array( 'block' ) );
+
+		$this->assertSame( 'Always blocked', $allow_items[0]['group'] );
+		$this->assertSame( 'invalid, disabled, disposable, spamtrap', $allow_items[0]['statuses'] );
+		$this->assertSame( 'Blocked before account creation.', $allow_items[0]['treatment'] );
+		$this->assertSame( 'Configurable flagged statuses', $allow_items[1]['group'] );
+		$this->assertSame( 'catch_all, role_account, unknown, inbox_full', $allow_items[1]['statuses'] );
+		$this->assertSame( 'Allowed, logged, and shown for admin review.', $allow_items[1]['treatment'] );
+		$this->assertSame( 'Blocked before account creation.', $block_items[1]['treatment'] );
 	}
 
 	public function test_security_rate_limit_items_use_configured_values() {

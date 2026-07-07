@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.73 - 2026-07-07
+
+### Changed
+
+- Added a Reoon policy visibility table separating always-blocked statuses from configurable flagged statuses.
+
 ## 0.1.72 - 2026-07-07
 
 ### Changed

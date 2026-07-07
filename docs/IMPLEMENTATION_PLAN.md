@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.72 admin settings machine-readable field RTL slice in progress
+- Current phase: v0.1.73 Reoon policy visibility slice in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.72 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -20,6 +20,38 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.73 Small Release Cycle
+
+### Scope
+
+- [x] Continue security and anti-spam hardening from released `v0.1.72` baseline.
+- [x] Add read-only Reoon policy visibility table separating always-blocked statuses from configurable flagged statuses.
+- [x] Show current registration treatment for configurable flagged statuses based on selected policy.
+- [x] Keep behavior read-only/admin-only; no saved setting/schema/provider/runtime changes.
+- [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Package and run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.73` from clean `master` after updater-verified `v0.1.72`.
+- Added a Reoon policy visibility table in the Security tab with always-blocked and configurable flagged status rows.
+- Added focused `SettingsPageSecurityStatusTest` coverage. Initial validation passed: PHP syntax and focused test (`23 tests, 352 assertions`).
+- Release validation passed: PHP syntax for the main plugin, edited settings page, and focused test; `npm run build`; focused `SettingsPageSecurityStatusTest` (`23 tests, 352 assertions`); `npm run lint`; `npm run make-pot` (`905 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`245 tests, 1481 assertions`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.73-20260707-124727\alynt-account-gateway-v0.1.73.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.73` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, Reoon policy table marker present, Reoon policy helper marker present, and SHA-256 `2DE01E9FBC52CC3B9F4A161BEEA48FC0C99CDDFA4C4CEB31F22A0E3A822BF06A`.
+- Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.73` header/constant, stable tag `0.1.73`, exactly one `GitHub Plugin URI` updater header, Reoon policy table marker present, Reoon policy helper marker present, 45 runtime files, no source/dev package files, and uploaded sandbox artifacts were cleaned.
+
+### Guardrails
+
+- Do not change settings keys/types/defaults/sanitization, registration flow, Reoon verification policy, provider error handling, rate limits, diagnostics events, frontend output, emails, dashboard/WooCommerce, privacy cleanup, or updater metadata.
+
+### Completion Gate
+
+- [x] Focused tests cover Reoon policy table and allow/block treatment rows.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Plugin Tester smoke validates installed-package markers.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.72 Small Release Cycle
 
