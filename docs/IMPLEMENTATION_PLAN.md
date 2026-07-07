@@ -4,7 +4,7 @@
 
 - Current phase: v0.1.71 set-password submit accessibility slice in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.70 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.71 is in progress.
+- Plugin status: v0.1.71 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Keep the slice accessibility-only: do not change password requirements, validation rules, submitted field names, token handling, registration creation, password reset behavior, Reoon/Turnstile checks, rate limits, diagnostics logging, saved settings, email delivery, dashboard/WooCommerce behavior, privacy cleanup, or updater behavior.
 - [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Package and run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -41,6 +41,10 @@
 - Release validation passed: PHP syntax for the main plugin, edited renderer, and tests, `npm run build`, focused `FrontendSetpasswordScreenTest` (`6 tests, 53 assertions`), focused `FrontendJsSourceTest` (`1 test, 3 assertions`), `npm run make-pot` (`896 strings`), `npm run lint`, `npm test -- --do-not-cache-result` (`243 tests, 1462 assertions`), and `npm audit --audit-level=moderate`.
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.71-20260707-120830\alynt-account-gateway-v0.1.71.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.71` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, set-password submit `aria-disabled` marker present, built frontend JavaScript `aria-disabled` synchronization marker present, and SHA-256 `0C821E29761D465C756BD4BFB2A076A23D45043D3BC25331C68C3E321D6DEB1A`.
 - Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader`: active plugin, `0.1.71` header/constant, stable tag `0.1.71`, exactly one `GitHub Plugin URI` updater header in the main plugin file, set-password submit `aria-disabled` marker present, built frontend JavaScript `aria-disabled` synchronization marker present, docs/tests/source package files excluded, and uploaded sandbox artifacts were cleaned.
+- Published GitHub release `v0.1.71`; Build Release workflow run `28858660563` passed and produced the public asset.
+- Public release asset `alynt-account-gateway-v0.1.71.zip` was downloaded from GitHub and inspected as 55 entries, 10 directory entries, no backslash entries, no dev entries, `0.1.71` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, set-password submit `aria-disabled` marker present, built frontend JavaScript `aria-disabled` synchronization marker present, and SHA-256 `7A701FF774B6F3415F37ACB1791E8FE449E6D0ECA66CB7A48A5DE43FA5566743`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.70` asset, forcing update detection to `0.1.70` -> `0.1.71`, upgrading through the public `v0.1.71` GitHub release asset URL, and verifying the final active plugin as `0.1.71` with no remaining update.
+- Post-updater Plugin Tester verification confirmed the installed public package: active plugin, `0.1.71` header/constant, stable tag `0.1.71`, exactly one `GitHub Plugin URI` updater header, set-password submit `aria-disabled` marker present, built frontend JavaScript `aria-disabled` synchronization marker present, and no source/dev package files.
 
 ### Guardrails
 
@@ -52,7 +56,7 @@
 - [x] Focused frontend tests cover the set-password submit `aria-disabled` state and JavaScript synchronization marker.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.70 Small Release Cycle
 
