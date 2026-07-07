@@ -80,9 +80,16 @@ class FrontendGatewayShellTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
+		$GLOBALS['alynt_ag_test_is_rtl'] = false;
 		$this->settings = array(
 			'account_action_base' => '/account',
 		);
+	}
+
+	protected function tearDown(): void {
+		unset( $GLOBALS['alynt_ag_test_is_rtl'] );
+
+		parent::tearDown();
 	}
 
 	public function test_render_gateway_shell_outputs_shell_branding_and_selected_screen() {
@@ -94,6 +101,7 @@ class FrontendGatewayShellTest extends TestCase {
 
 		$this->assertStringContainsString( 'class="alynt-ag-gateway"', $html );
 		$this->assertStringContainsString( 'data-agw-screen="register"', $html );
+		$this->assertStringContainsString( 'dir="ltr"', $html );
 		$this->assertStringContainsString( 'style="--agw-color-primary:#123456;"', $html );
 		$this->assertStringContainsString( '<div class="test-media"></div>', $html );
 		$this->assertStringContainsString( '<div class="test-brand">Brand</div>', $html );
@@ -126,9 +134,29 @@ class FrontendGatewayShellTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( 'data-agw-screen="setpassword"', $html );
+		$this->assertStringContainsString( 'dir="ltr"', $html );
 		$this->assertStringContainsString( '<div class="test-brand">Brand</div>', $html );
 		$this->assertStringContainsString( 'class="test-password-preview"', $html );
 		$this->assertStringContainsString( 'data-action="https://example.test/account"', $html );
+	}
+
+	public function test_render_gateway_shell_uses_rtl_direction_when_site_is_rtl() {
+		$GLOBALS['alynt_ag_test_is_rtl'] = true;
+		$shell                          = $this->make_shell();
+
+		ob_start();
+		$shell->render_gateway_shell( 'login', $this->settings );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'data-agw-screen="login"', $html );
+		$this->assertStringContainsString( 'dir="rtl"', $html );
+
+		ob_start();
+		$shell->render_gateway_shell_with_password_preview( $this->settings );
+		$preview_html = ob_get_clean();
+
+		$this->assertStringContainsString( 'data-agw-screen="setpassword"', $preview_html );
+		$this->assertStringContainsString( 'dir="rtl"', $preview_html );
 	}
 
 	public function screen_provider() {

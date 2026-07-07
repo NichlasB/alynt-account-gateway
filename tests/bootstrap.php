@@ -208,6 +208,12 @@ if ( ! function_exists( 'is_email' ) ) {
 	}
 }
 
+if ( ! function_exists( 'is_rtl' ) ) {
+	function is_rtl() {
+		return ! empty( $GLOBALS['alynt_ag_test_is_rtl'] );
+	}
+}
+
 if ( ! function_exists( 'wp_salt' ) ) {
 	function wp_salt( $scheme = 'auth' ) {
 		return 'test-salt-' . $scheme;

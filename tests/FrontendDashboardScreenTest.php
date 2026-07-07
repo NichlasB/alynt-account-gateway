@@ -156,12 +156,19 @@ class FrontendDashboardScreenTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
+		$GLOBALS['alynt_ag_test_is_rtl'] = false;
 		$this->settings = array(
 			'after_login_redirect'  => '/my-account/',
 			'login_path'            => '/login',
 			'woocommerce_takeover'  => false,
 			'dashboard_custom_links' => '[]',
 		);
+	}
+
+	protected function tearDown(): void {
+		unset( $GLOBALS['alynt_ag_test_is_rtl'] );
+
+		parent::tearDown();
 	}
 
 	public function test_render_dashboard_shell_outputs_brand_logout_hero_and_links() {
@@ -192,6 +199,7 @@ class FrontendDashboardScreenTest extends TestCase {
 
 		$this->assertStringContainsString( 'class="alynt-ag-gateway agw-dashboard"', $html );
 		$this->assertStringContainsString( 'data-agw-screen="dashboard"', $html );
+		$this->assertStringContainsString( 'dir="ltr"', $html );
 		$this->assertStringContainsString( 'style="--test-color:#123;"', $html );
 		$this->assertStringContainsString( 'Test Store', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard__logout"', $html );
@@ -203,6 +211,22 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringContainsString( 'Support', $html );
 		$this->assertStringContainsString( 'target="_blank" rel="noopener noreferrer"', $html );
 		$this->assertStringContainsString( 'opens in a new tab', $html );
+	}
+
+	public function test_render_dashboard_shell_uses_rtl_direction_when_site_is_rtl() {
+		$GLOBALS['alynt_ag_test_is_rtl'] = true;
+		$screen                         = new ALYNT_AG_Frontend_Dashboard_Screen(
+			new ALYNT_AG_Test_Frontend_Dashboard_Service(),
+			new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce(),
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+
+		ob_start();
+		$screen->render_dashboard_shell( $this->settings, '/my-account/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'data-agw-screen="dashboard"', $html );
+		$this->assertStringContainsString( 'dir="rtl"', $html );
 	}
 
 	public function test_render_dashboard_shell_marks_current_account_link() {

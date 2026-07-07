@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.80 - 2026-07-07
+
+### Changed
+
+- Added explicit shell direction attributes for auth gateway and dashboard surfaces to improve RTL resilience.
+
 ## 0.1.79 - 2026-07-07
 
 ### Changed
