@@ -21,6 +21,7 @@ function alyntAgTogglePassword( event ) {
 	const controlled   = controlledId ? document.getElementById( controlledId ) : null;
 	const wrapper      = toggle.closest( '.agw-password' );
 	const input        = controlled || ( wrapper ? wrapper.querySelector( 'input' ) : null );
+	const status       = wrapper ? wrapper.querySelector( '[data-agw-password-visibility-status]' ) : null;
 
 	if ( ! input ) {
 		return;
@@ -28,11 +29,16 @@ function alyntAgTogglePassword( event ) {
 
 	const shouldShow = input.type === 'password';
 	const label      = shouldShow ? alyntAgLabels.hidePassword || 'Hide password' : alyntAgLabels.showPassword || 'Show password';
+	const statusText = shouldShow ? alyntAgLabels.passwordVisible || 'Password is visible.' : alyntAgLabels.passwordHidden || 'Password is hidden.';
 
 	input.type         = shouldShow ? 'text' : 'password';
 	toggle.textContent = shouldShow ? alyntAgLabels.hide || 'Hide' : alyntAgLabels.show || 'Show';
 	toggle.setAttribute( 'aria-label', label );
 	toggle.setAttribute( 'aria-pressed', shouldShow ? 'true' : 'false' );
+
+	if ( status ) {
+		status.textContent = statusText;
+	}
 }
 
 function alyntAgGetPasswordChecks( password, confirm ) {

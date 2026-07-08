@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.86 - 2026-07-07
+
+### Changed
+
+- Added screen-reader status updates for password visibility toggles.
+
 ## 0.1.85 - 2026-07-07
 
 ### Changed

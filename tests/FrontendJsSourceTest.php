@@ -37,4 +37,13 @@ class FrontendJsSourceTest extends TestCase {
 		$this->assertStringContainsString( "item.setAttribute( 'aria-checked', passed ? 'true' : 'false' );", $js );
 		$this->assertStringNotContainsString( "item.setAttribute( 'aria-current'", $js );
 	}
+
+	public function test_password_toggle_updates_hidden_visibility_status() {
+		$js = $this->get_frontend_js();
+
+		$this->assertStringContainsString( "wrapper ? wrapper.querySelector( '[data-agw-password-visibility-status]' ) : null;", $js );
+		$this->assertStringContainsString( "alyntAgLabels.passwordVisible || 'Password is visible.'", $js );
+		$this->assertStringContainsString( "alyntAgLabels.passwordHidden || 'Password is hidden.'", $js );
+		$this->assertStringContainsString( 'status.textContent = statusText;', $js );
+	}
 }
