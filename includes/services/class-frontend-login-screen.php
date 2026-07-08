@@ -103,6 +103,7 @@ class ALYNT_AG_Frontend_Login_Screen {
 				<div class="agw-password">
 					<input id="agw-login-password" name="pwd" type="password" autocomplete="current-password" dir="ltr" required <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-login-error"' : ''; ?>>
 					<button type="button" class="agw-password__toggle" data-agw-password-toggle aria-controls="agw-login-password" aria-label="<?php esc_attr_e( 'Show password', 'alynt-account-gateway' ); ?>" aria-pressed="false"><?php esc_html_e( 'Show', 'alynt-account-gateway' ); ?></button>
+					<span class="screen-reader-text" data-agw-password-visibility-status role="status" aria-live="polite" aria-atomic="true"></span>
 				</div>
 			</div>
 			<label class="agw-checkbox">
