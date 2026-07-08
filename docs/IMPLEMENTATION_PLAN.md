@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.86 password visibility status accessibility ready for release approval
+- Current phase: v0.1.86 password visibility status accessibility released and updater-verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.85 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.86 is locally validated and awaiting release approval.
+- Plugin status: v0.1.86 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -31,7 +31,7 @@
 - [x] Preserve behavior: no visible copy changes, layout changes, route handling changes, saved settings changes, database schema changes, registration flow changes, provider policy changes, rate-limit changes, email delivery changes, dashboard endpoint changes, WooCommerce action delegation changes, diagnostics storage changes, privacy cleanup changes, or updater behavior changes.
 - [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -44,6 +44,10 @@
 - Release validation passed: `npm run build`; `npm run lint`; `npm run make-pot` (`955 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`255 tests, 1597 assertions`).
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.86-20260707-233439\alynt-account-gateway-v0.1.86.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.86` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, password visibility status marker checks present, and SHA-256 `F530E829F8C6073122F9052BF81C2DE21E1C3CC35822F9CB3814B4481FC8EBC7`.
 - Plugin Tester package smoke passed on the local-only `plugin-tester.local` site after installing the local package through WordPress `Plugin_Upgrader` under LocalWP web PHP and then running a settled-state verification: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, header/constant `0.1.86`, stable tag `0.1.86`, exactly one `GitHub Plugin URI` updater header, password visibility status marker checks present, 45 runtime files, no source/dev package files, Novamira MCP was not exposed in the active tool list, and temporary web smoke scripts were removed.
+- Published GitHub release `v0.1.86`; Build Release workflow run `28929563916` passed and produced the public asset.
+- Public release asset `alynt-account-gateway-v0.1.86.zip` was downloaded from GitHub and inspected as 55 entries, 45 files, 10 directory entries, no backslash entries, no dev entries, `0.1.86` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, password visibility status marker checks present, and SHA-256 `A08D2248C02C106901876B82B55BB8ECF6A88D9F66B72D5BBFFEAA5686A9DF0E`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.85` asset, clearing Alynt Plugin Updater scanner/release cache, seeding release data through the updater's force-fresh check path, confirming Alynt Plugin Updater detected `0.1.85` -> `0.1.86` with the public `v0.1.86` GitHub release asset URL, upgrading through WordPress `Plugin_Upgrader`, and verifying no remaining update.
+- Post-updater Plugin Tester verification confirmed the installed public package: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, header/constant `0.1.86`, stable tag `0.1.86`, exactly one `GitHub Plugin URI` updater header, password visibility status marker checks present, no remaining update, and no temporary web verifier scripts remaining.
 
 ### Guardrails
 
@@ -54,7 +58,7 @@
 - [x] Focused tests cover password visibility screen-reader status updates.
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates installed-package markers.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.85 Small Release Cycle
 
