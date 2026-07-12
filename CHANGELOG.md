@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.89 - 2026-07-12
+
+### Changed
+
+- Improved the 800px responsive boundary and gateway resilience against theme-injected form styles.
+
 ## 0.1.88 - 2026-07-12
 
 ### Added
