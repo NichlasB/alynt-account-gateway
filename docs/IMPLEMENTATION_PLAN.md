@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.89 frontend breakpoint and theme-interference hardening ready for release approval
+- Current phase: v0.1.89 frontend breakpoint and theme-interference hardening released and updater-verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.88 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.89 is locally validated and awaiting release approval.
+- Plugin status: v0.1.89 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,7 +32,7 @@
 - [x] Recheck forced-colors, reduced-motion, focus visibility, frontend asset loading, native-login avoidance, clipped controls, and console errors.
 - [x] Preserve screen copy, routes, submitted fields, registration/login/password behavior, saved settings, dashboard/WooCommerce delegation, provider verification, rate limits, diagnostics, privacy behavior, database schema, and updater behavior.
 - [x] Run focused tests, build, lint, full tests, audit, POT generation, package inspection, and final Plugin Tester browser smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -50,6 +50,10 @@
 - Final Playwright matrix against the installed release candidate covered seven gateway states at `390`, `799`, `800`, `801`, and `1440px` for 35 combinations with zero failures, zero horizontal overflow, zero clipped controls, single-column layout through `800px`, two-column layout from `801px`, branded output, and no native-login fallback while QA output was enabled.
 - Installed-package theme-interference injection passed on mobile login and registration with zero overflow/clipping, `0px` control minimum widths and margins, removed injected shadows, and zeroed link margins. Desktop login and mobile registration screenshots were captured, and no browser console errors were reported.
 - Plugin Tester settings were restored to their exact pre-QA values after browser testing; `/login` again followed the restored frontend-disabled behavior to native `wp-login.php`, and temporary QA/install scripts and packages were removed. Novamira MCP was not exposed in the active tool list.
+- GitHub release `v0.1.89` was published at `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.89`; release workflow run `29198485615` completed successfully.
+- Public release asset `alynt-account-gateway-v0.1.89.zip` was downloaded and inspected as 45 files, with no development directories, `0.1.89` header/constant/stable tag, compiled inclusive `800px` breakpoint, no stale `799px` breakpoint, input/button/link guardrails, forced-colors support, and exactly one `GitHub Plugin URI` updater header, with SHA-256 `D7C24C5579253ED0A967C65EF89165AF030A496A25813D32AAA9DDEA1E13A0B2`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to public `v0.1.88`, detecting `0.1.88` -> `0.1.89` with package URL `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.89/alynt-account-gateway-v0.1.89.zip`, upgrading through WordPress `Plugin_Upgrader`, reactivating ACG, confirming active `0.1.89`, the inclusive breakpoint, all guardrails, 45 runtime files, no development files, exactly one updater header, and no remaining update.
+- The temporary updater smoke script and public downgrade package were removed from the LocalWP webroot after verification. Novamira MCP was not exposed in the active tool list.
 
 ### Guardrails
 
@@ -62,7 +66,7 @@
 - [x] Forced-colors, reduced-motion, focus visibility, branded routing, and console checks pass.
 - [x] Full local validation and package inspection pass.
 - [x] Final installed-package Playwright matrix passes on Plugin Tester.
-- [ ] Public release asset installs through Alynt Plugin Updater with no update remaining.
+- [x] Public release asset installs through Alynt Plugin Updater with no update remaining.
 
 ## v0.1.88 Small Release Cycle
 
