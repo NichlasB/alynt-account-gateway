@@ -28,6 +28,7 @@ class ALYNT_AG_Settings_Page {
 		add_action( 'admin_post_alynt_ag_preview_gateway', array( $this, 'handle_preview_gateway' ) );
 		add_action( 'admin_post_alynt_ag_export_diagnostics', array( $this, 'handle_export_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_clear_diagnostics', array( $this, 'handle_clear_diagnostics' ) );
+		add_action( 'admin_post_alynt_ag_review_verification', array( $this, 'handle_review_verification' ) );
 		add_action( 'admin_post_alynt_ag_preview_email', array( $this, 'handle_preview_email' ) );
 		add_action( 'admin_post_alynt_ag_test_email', array( $this, 'handle_test_email' ) );
 		add_action( 'admin_post_alynt_ag_test_webhook', array( $this, 'handle_test_webhook' ) );
@@ -531,6 +532,20 @@ class ALYNT_AG_Settings_Page {
 		if ( 'webhook_test_failed' === $notice ) {
 			?>
 			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'The test webhook could not be sent. Review the recent webhook deliveries table for details.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
+		if ( 'verification_review_recorded' === $notice ) {
+			?>
+			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'The Reoon review decision was recorded.', 'alynt-account-gateway' ); ?></p></div>
+			<?php
+			return;
+		}
+
+		if ( 'verification_review_failed' === $notice ) {
+			?>
+			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'The review decision could not be recorded. Refresh the Security tab and try again.', 'alynt-account-gateway' ); ?></p></div>
 			<?php
 		}
 	}
@@ -1438,6 +1453,7 @@ class ALYNT_AG_Settings_Page {
 							<th scope="col"><?php esc_html_e( 'Decision', 'alynt-account-gateway' ); ?></th>
 							<th scope="col"><?php esc_html_e( 'Guidance', 'alynt-account-gateway' ); ?></th>
 							<th scope="col"><?php esc_html_e( 'Next Step', 'alynt-account-gateway' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Review', 'alynt-account-gateway' ); ?></th>
 							<th scope="col"><?php esc_html_e( 'Logged At', 'alynt-account-gateway' ); ?></th>
 						</tr>
 					</thead>
@@ -1454,6 +1470,7 @@ class ALYNT_AG_Settings_Page {
 								</td>
 								<td class="alynt-ag-security-guidance"><?php echo esc_html( $this->security_verification_guidance( $log ) ); ?></td>
 								<td class="alynt-ag-security-next-step"><?php echo esc_html( $this->security_verification_next_step( $log ) ); ?></td>
+								<td class="alynt-ag-security-review"><?php $this->render_security_review_action( $log ); ?></td>
 								<td><?php echo esc_html( $log->created_at ?? '' ); ?></td>
 							</tr>
 						<?php endforeach; ?>
@@ -2079,7 +2096,7 @@ class ALYNT_AG_Settings_Page {
 		?>
 		<div class="alynt-ag-security-manual-review" aria-label="<?php esc_attr_e( 'Manual review queue', 'alynt-account-gateway' ); ?>">
 			<h4><?php esc_html_e( 'Manual Review Queue', 'alynt-account-gateway' ); ?></h4>
-			<p class="description"><?php esc_html_e( 'Highlights Reoon flagged results that were allowed by policy so support teams can review legitimate-risk signups without changing the public registration flow.', 'alynt-account-gateway' ); ?></p>
+			<p class="description"><?php esc_html_e( 'Highlights unresolved Reoon flagged results that were allowed by policy so support teams can record a review decision without changing the public registration flow.', 'alynt-account-gateway' ); ?></p>
 			<div class="alynt-ag-security-status__grid">
 				<?php foreach ( $items as $item ) : ?>
 					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
@@ -2173,9 +2190,9 @@ class ALYNT_AG_Settings_Page {
 	 * @return array<int,array{label:string,status:string,count:int,message:string}>
 	 */
 	private function security_manual_review_queue_items( $logs ) {
-		$allowed_flagged = $this->count_reoon_review_logs( $logs, array(), array( '_flagged' ), false );
-		$role_accounts   = $this->count_reoon_review_logs( $logs, array( 'role_account_flagged' ), array(), false );
-		$risky_domains   = $this->count_reoon_review_logs( $logs, array( 'catch_all_flagged', 'unknown_flagged', 'inbox_full_flagged' ), array(), false );
+		$allowed_flagged = $this->count_reoon_review_logs( $logs, array(), array( '_flagged' ), false, true );
+		$role_accounts   = $this->count_reoon_review_logs( $logs, array( 'role_account_flagged' ), array(), false, true );
+		$risky_domains   = $this->count_reoon_review_logs( $logs, array( 'catch_all_flagged', 'unknown_flagged', 'inbox_full_flagged' ), array(), false, true );
 		$blocked_flagged = $this->count_reoon_review_logs( $logs, array(), array( '_flagged_blocked' ), true );
 
 		return array(
@@ -2183,19 +2200,19 @@ class ALYNT_AG_Settings_Page {
 				'label'   => __( 'Allowed Flagged Results', 'alynt-account-gateway' ),
 				'status'  => $allowed_flagged > 0 ? 'warning' : 'ready',
 				'count'   => $allowed_flagged,
-				'message' => __( 'recent Reoon flagged results allowed by policy. Review the masked rows below before deciding whether to block flagged statuses.', 'alynt-account-gateway' ),
+				'message' => __( 'unreviewed Reoon flagged results allowed by policy. Record a decision on the masked rows below before changing the site-wide policy.', 'alynt-account-gateway' ),
 			),
 			array(
 				'label'   => __( 'Role Account Reviews', 'alynt-account-gateway' ),
 				'status'  => $role_accounts > 0 ? 'warning' : 'ready',
 				'count'   => $role_accounts,
-				'message' => __( 'recent role-account emails allowed for review. Confirm whether shared inboxes are acceptable for this site.', 'alynt-account-gateway' ),
+				'message' => __( 'unreviewed role-account emails allowed by policy. Confirm whether shared inboxes are acceptable for this site.', 'alynt-account-gateway' ),
 			),
 			array(
 				'label'   => __( 'Catch-All And Unknown Reviews', 'alynt-account-gateway' ),
 				'status'  => $risky_domains > 0 ? 'warning' : 'ready',
 				'count'   => $risky_domains,
-				'message' => __( 'recent catch-all, unknown, or inbox-full results allowed for review. Watch for repeated domains before tightening policy.', 'alynt-account-gateway' ),
+				'message' => __( 'unreviewed catch-all, unknown, or inbox-full results allowed by policy. Watch for repeated domains before tightening policy.', 'alynt-account-gateway' ),
 			),
 			array(
 				'label'   => __( 'Blocked Flagged Results', 'alynt-account-gateway' ),
@@ -2213,9 +2230,10 @@ class ALYNT_AG_Settings_Page {
 	 * @param array<int,string> $statuses        Exact status keys.
 	 * @param array<int,string> $status_suffixes Status suffixes.
 	 * @param bool|null         $blocked         Required blocked state, or null for any state.
+	 * @param bool              $unreviewed_only Whether to exclude rows with a recorded review decision.
 	 * @return int
 	 */
-	private function count_reoon_review_logs( $logs, $statuses, $status_suffixes, $blocked = null ) {
+	private function count_reoon_review_logs( $logs, $statuses, $status_suffixes, $blocked = null, $unreviewed_only = false ) {
 		$count           = 0;
 		$statuses        = array_map( 'sanitize_key', $statuses );
 		$status_suffixes = array_map( 'sanitize_key', $status_suffixes );
@@ -2230,6 +2248,10 @@ class ALYNT_AG_Settings_Page {
 
 			$log_blocked = ! empty( $log->blocked );
 			if ( null !== $blocked && $log_blocked !== (bool) $blocked ) {
+				continue;
+			}
+
+			if ( $unreviewed_only && ! empty( $log->review_decision ) ) {
 				continue;
 			}
 
@@ -3010,7 +3032,7 @@ class ALYNT_AG_Settings_Page {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Admin security viewer reads plugin-owned verification log table.
 		$logs = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT email, provider, status, blocked, created_at FROM {$tables['verification_logs']} ORDER BY created_at DESC, id DESC LIMIT %d",
+				"SELECT id, email, provider, status, blocked, review_decision, reviewed_by, reviewed_at, created_at FROM {$tables['verification_logs']} ORDER BY created_at DESC, id DESC LIMIT %d",
 				$limit
 			)
 		);
@@ -3283,6 +3305,78 @@ class ALYNT_AG_Settings_Page {
 		return $blocked
 			? __( 'Review this blocked verification before changing policy.', 'alynt-account-gateway' )
 			: __( 'No action needed unless this verification pattern changes.', 'alynt-account-gateway' );
+	}
+
+	/**
+	 * Render an admin review action or recorded decision for a verification row.
+	 *
+	 * @param object $log Verification log row.
+	 * @return void
+	 */
+	private function render_security_review_action( $log ) {
+		if ( ! $this->is_security_reoon_reviewable( $log ) ) {
+			echo esc_html__( 'Not required', 'alynt-account-gateway' );
+			return;
+		}
+
+		$decision = isset( $log->review_decision ) ? sanitize_key( $log->review_decision ) : '';
+		if ( in_array( $decision, array( 'legitimate', 'monitor' ), true ) ) {
+			?>
+			<span class="alynt-ag-security-review__recorded">
+				<?php echo esc_html( $this->security_review_decision_label( $decision ) ); ?>
+			</span>
+			<?php if ( ! empty( $log->reviewed_at ) ) : ?>
+				<small><?php echo esc_html( $log->reviewed_at ); ?></small>
+			<?php endif; ?>
+			<?php
+			return;
+		}
+
+		$log_id = isset( $log->id ) ? absint( $log->id ) : 0;
+		if ( ! $log_id ) {
+			echo esc_html__( 'Unavailable', 'alynt-account-gateway' );
+			return;
+		}
+		?>
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-security-review__form">
+			<input type="hidden" name="action" value="alynt_ag_review_verification">
+			<input type="hidden" name="log_id" value="<?php echo esc_attr( (string) $log_id ); ?>">
+			<?php wp_nonce_field( 'alynt_ag_review_verification_' . $log_id ); ?>
+			<label class="screen-reader-text" for="alynt-ag-review-decision-<?php echo esc_attr( (string) $log_id ); ?>">
+				<?php esc_html_e( 'Review decision', 'alynt-account-gateway' ); ?>
+			</label>
+			<select id="alynt-ag-review-decision-<?php echo esc_attr( (string) $log_id ); ?>" name="decision">
+				<option value="legitimate"><?php esc_html_e( 'Legitimate signup', 'alynt-account-gateway' ); ?></option>
+				<option value="monitor"><?php esc_html_e( 'Monitor pattern', 'alynt-account-gateway' ); ?></option>
+			</select>
+			<button type="submit" class="button button-small"><?php esc_html_e( 'Record review', 'alynt-account-gateway' ); ?></button>
+		</form>
+		<?php
+	}
+
+	/**
+	 * Return whether a verification row supports a manual review decision.
+	 *
+	 * @param object $log Verification log row.
+	 * @return bool
+	 */
+	private function is_security_reoon_reviewable( $log ) {
+		$provider = isset( $log->provider ) ? sanitize_key( $log->provider ) : '';
+		$status   = isset( $log->status ) ? sanitize_key( $log->status ) : '';
+
+		return 'reoon' === $provider && empty( $log->blocked ) && $this->status_has_suffix( $status, '_flagged' );
+	}
+
+	/**
+	 * Return the label for a stored review decision.
+	 *
+	 * @param string $decision Review decision key.
+	 * @return string
+	 */
+	private function security_review_decision_label( $decision ) {
+		return 'monitor' === sanitize_key( $decision )
+			? __( 'Monitor pattern', 'alynt-account-gateway' )
+			: __( 'Legitimate signup', 'alynt-account-gateway' );
 	}
 
 	/**
@@ -4483,6 +4577,102 @@ class ALYNT_AG_Settings_Page {
 			)
 		);
 		exit;
+	}
+
+	/**
+	 * Record an admin decision for an allowed flagged Reoon result.
+	 *
+	 * @return void
+	 */
+	public function handle_review_verification() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to review verification results.', 'alynt-account-gateway' ) );
+		}
+
+		$log_id = isset( $_POST['log_id'] ) ? absint( wp_unslash( $_POST['log_id'] ) ) : 0;
+		check_admin_referer( 'alynt_ag_review_verification_' . $log_id );
+
+		$decision = isset( $_POST['decision'] ) ? sanitize_key( wp_unslash( $_POST['decision'] ) ) : '';
+		$recorded = $this->record_security_review_decision( $log_id, $decision, get_current_user_id() );
+		$status   = $recorded ? 'verification_review_recorded' : 'verification_review_failed';
+
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'            => 'alynt-account-gateway',
+					'tab'             => 'security',
+					'alynt_ag_notice' => $status,
+				),
+				admin_url( 'options-general.php' )
+			)
+		);
+		exit;
+	}
+
+	/**
+	 * Persist a review decision for one eligible verification row.
+	 *
+	 * @param int    $log_id   Verification log ID.
+	 * @param string $decision Review decision key.
+	 * @param int    $user_id  Reviewing administrator ID.
+	 * @return bool
+	 */
+	private function record_security_review_decision( $log_id, $decision, $user_id ) {
+		global $wpdb;
+
+		$log_id   = absint( $log_id );
+		$decision = sanitize_key( $decision );
+		$user_id  = absint( $user_id );
+
+		if ( ! $log_id || ! in_array( $decision, array( 'legitimate', 'monitor' ), true ) ) {
+			return false;
+		}
+
+		$tables = ALYNT_AG_Database::tables();
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Admin action validates a plugin-owned verification row before updating it.
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT id, provider, status, blocked, review_decision FROM {$tables['verification_logs']} WHERE id = %d LIMIT 1",
+				$log_id
+			)
+		);
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		$log = is_array( $rows ) && ! empty( $rows ) ? $rows[0] : null;
+		if ( ! is_object( $log ) || ! $this->is_security_reoon_reviewable( $log ) || ! empty( $log->review_decision ) ) {
+			return false;
+		}
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Admin action updates one validated plugin-owned verification row.
+		$updated = $wpdb->update(
+			$tables['verification_logs'],
+			array(
+				'review_decision' => $decision,
+				'reviewed_by'     => $user_id,
+				'reviewed_at'     => current_time( 'mysql', true ),
+			),
+			array(
+				'id'              => $log_id,
+				'review_decision' => '',
+			),
+			array( '%s', '%d', '%s' ),
+			array( '%d', '%s' )
+		);
+
+		if ( false === $updated || 0 === $updated ) {
+			return false;
+		}
+
+		ALYNT_AG_Diagnostics_Logger::log(
+			'reoon_review_recorded',
+			array(
+				'verification_log_id' => $log_id,
+				'decision'            => $decision,
+			),
+			$user_id
+		);
+
+		return true;
 	}
 
 	/**

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.88 - 2026-07-12
+
+### Added
+
+- Added auditable admin review decisions for allowed flagged Reoon verification results.
+
 ## 0.1.87 - 2026-07-12
 
 ### Changed

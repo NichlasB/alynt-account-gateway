@@ -230,6 +230,8 @@ class ALYNT_AG_Privacy_Service {
 					__( 'Provider', 'alynt-account-gateway' ) => $log->provider,
 					__( 'Status', 'alynt-account-gateway' ) => $log->status,
 					__( 'Blocked', 'alynt-account-gateway' ) => ! empty( $log->blocked ) ? __( 'Yes', 'alynt-account-gateway' ) : __( 'No', 'alynt-account-gateway' ),
+					__( 'Review Decision', 'alynt-account-gateway' ) => $log->review_decision ?? '',
+					__( 'Reviewed At', 'alynt-account-gateway' ) => $log->reviewed_at ?? '',
 					__( 'Created At', 'alynt-account-gateway' ) => $log->created_at,
 				)
 			);

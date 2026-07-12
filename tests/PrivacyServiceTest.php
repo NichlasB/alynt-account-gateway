@@ -92,14 +92,32 @@ class PrivacyServiceTest extends TestCase {
 				'expires_at' => '2026-07-04 12:00:00',
 			),
 		);
+		$GLOBALS['alynt_ag_test_db_results'][ $tables['verification_logs'] ] = array(
+			(object) array(
+				'id'              => 3,
+				'email'           => 'customer@example.test',
+				'provider'        => 'reoon',
+				'status'          => 'catch_all_flagged',
+				'blocked'         => 0,
+				'review_decision' => 'monitor',
+				'reviewed_by'     => 7,
+				'reviewed_at'     => '2026-07-03 12:30:00',
+				'created_at'      => '2026-07-03 12:00:00',
+			),
+		);
 
 		$service = new ALYNT_AG_Privacy_Service();
 		$export  = $service->export_personal_data( 'customer@example.test' );
 
 		$this->assertTrue( $export['done'] );
-		$this->assertCount( 2, $export['data'] );
+		$this->assertCount( 3, $export['data'] );
 		$this->assertSame( 'Account Gateway Consent', $export['data'][0]['group_label'] );
 		$this->assertSame( 'Pending Account Registration', $export['data'][1]['group_label'] );
+		$this->assertSame( 'Email Verification Log', $export['data'][2]['group_label'] );
+		$verification_values = array_column( $export['data'][2]['data'], 'value', 'name' );
+		$this->assertSame( 'monitor', $verification_values['Review Decision'] );
+		$this->assertSame( '2026-07-03 12:30:00', $verification_values['Reviewed At'] );
+		$this->assertArrayNotHasKey( 'Reviewed By', $verification_values );
 	}
 
 	public function test_erase_personal_data_deletes_plugin_records() {

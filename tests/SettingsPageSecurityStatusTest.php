@@ -17,14 +17,24 @@ class SettingsPageSecurityStatusTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$GLOBALS['alynt_ag_test_db_results'] = array();
+		$GLOBALS['alynt_ag_test_db_updates'] = array();
+		$GLOBALS['alynt_ag_test_db_inserts'] = array();
+		$GLOBALS['alynt_ag_test_redirects']  = array();
 		unset( $GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] );
 	}
 
 	protected function tearDown(): void {
+		$GLOBALS['alynt_ag_test_db_updates'] = array();
+		$GLOBALS['alynt_ag_test_db_inserts'] = array();
+		$GLOBALS['alynt_ag_test_redirects']  = array();
 		unset(
 			$GLOBALS['alynt_ag_test_options']['date_format'],
-			$GLOBALS['alynt_ag_test_options']['time_format']
+			$GLOBALS['alynt_ag_test_options']['time_format'],
+			$GLOBALS['alynt_ag_test_user_caps'],
+			$GLOBALS['alynt_ag_test_current_user_id'],
+			$GLOBALS['alynt_ag_test_throw_on_redirect']
 		);
+		$_POST = array();
 
 		parent::tearDown();
 	}
@@ -386,6 +396,12 @@ class SettingsPageSecurityStatusTest extends TestCase {
 						'blocked'  => 0,
 					),
 					(object) array(
+						'provider'        => 'reoon',
+						'status'          => 'inbox_full_flagged',
+						'blocked'         => 0,
+						'review_decision' => 'monitor',
+					),
+					(object) array(
 						'provider' => 'reoon',
 						'status'   => 'role_account_flagged_blocked',
 						'blocked'  => 1,
@@ -414,6 +430,117 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertSame( 'Blocked Flagged Results', $items[3]['label'] );
 		$this->assertSame( 1, $items[3]['count'] );
 		$this->assertSame( 'warning', $items[3]['status'] );
+	}
+
+	public function test_security_review_action_renders_form_and_recorded_decision() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		ob_start();
+		$this->invoke_helper(
+			$settings_page,
+			'render_security_review_action',
+			array(
+				(object) array(
+					'id'              => 41,
+					'provider'        => 'reoon',
+					'status'          => 'catch_all_flagged',
+					'blocked'         => 0,
+					'review_decision' => '',
+				),
+			)
+		);
+		$pending_output = ob_get_clean();
+
+		$this->assertStringContainsString( 'alynt_ag_review_verification', $pending_output );
+		$this->assertStringContainsString( 'Legitimate signup', $pending_output );
+		$this->assertStringContainsString( 'Monitor pattern', $pending_output );
+		$this->assertStringContainsString( 'Record review', $pending_output );
+
+		ob_start();
+		$this->invoke_helper(
+			$settings_page,
+			'render_security_review_action',
+			array(
+				(object) array(
+					'id'              => 41,
+					'provider'        => 'reoon',
+					'status'          => 'catch_all_flagged',
+					'blocked'         => 0,
+					'review_decision' => 'monitor',
+					'reviewed_at'     => '2026-07-12 15:00:00',
+				),
+			)
+		);
+		$reviewed_output = ob_get_clean();
+
+		$this->assertStringContainsString( 'Monitor pattern', $reviewed_output );
+		$this->assertStringContainsString( '2026-07-12 15:00:00', $reviewed_output );
+		$this->assertStringNotContainsString( 'Record review', $reviewed_output );
+	}
+
+	public function test_review_verification_handler_records_eligible_decision_and_audit_event() {
+		$tables = ALYNT_AG_Database::tables();
+		$GLOBALS['alynt_ag_test_db_results'][ $tables['verification_logs'] ] = array(
+			(object) array(
+				'id'       => 41,
+				'provider' => 'reoon',
+				'status'   => 'role_account_flagged',
+				'blocked'  => 0,
+			),
+		);
+		$GLOBALS['alynt_ag_test_user_caps']          = array( 'manage_options' );
+		$GLOBALS['alynt_ag_test_current_user_id']    = 7;
+		$GLOBALS['alynt_ag_test_throw_on_redirect']  = true;
+		$_POST = array(
+			'log_id'   => '41',
+			'decision' => 'legitimate',
+		);
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		try {
+			$settings_page->handle_review_verification();
+			$this->fail( 'Expected redirect exception.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertStringContainsString( 'verification_review_recorded', $exception->getMessage() );
+		}
+
+		$this->assertSame( $tables['verification_logs'], $GLOBALS['alynt_ag_test_db_updates'][0]['table'] );
+		$this->assertSame( 'legitimate', $GLOBALS['alynt_ag_test_db_updates'][0]['data']['review_decision'] );
+		$this->assertSame( 7, $GLOBALS['alynt_ag_test_db_updates'][0]['data']['reviewed_by'] );
+		$this->assertSame( 41, $GLOBALS['alynt_ag_test_db_updates'][0]['where']['id'] );
+		$this->assertSame( '', $GLOBALS['alynt_ag_test_db_updates'][0]['where']['review_decision'] );
+		$this->assertSame( $tables['audit_logs'], $GLOBALS['alynt_ag_test_db_inserts'][0]['table'] );
+		$this->assertSame( 'reoon_review_recorded', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['action'] );
+	}
+
+	public function test_record_security_review_decision_rejects_blocked_or_unknown_rows() {
+		$tables = ALYNT_AG_Database::tables();
+		$GLOBALS['alynt_ag_test_db_results'][ $tables['verification_logs'] ] = array(
+			(object) array(
+				'id'       => 52,
+				'provider' => 'reoon',
+				'status'   => 'role_account_flagged_blocked',
+				'blocked'  => 1,
+			),
+		);
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		$this->assertFalse( $this->invoke_helper( $settings_page, 'record_security_review_decision', array( 52, 'legitimate', 7 ) ) );
+		$this->assertFalse( $this->invoke_helper( $settings_page, 'record_security_review_decision', array( 52, 'unknown', 7 ) ) );
+
+		$GLOBALS['alynt_ag_test_db_results'][ $tables['verification_logs'] ] = array(
+			(object) array(
+				'id'              => 53,
+				'provider'        => 'reoon',
+				'status'          => 'catch_all_flagged',
+				'blocked'         => 0,
+				'review_decision' => 'monitor',
+			),
+		);
+		$this->assertFalse( $this->invoke_helper( $settings_page, 'record_security_review_decision', array( 53, 'legitimate', 7 ) ) );
+		$this->assertSame( array(), $GLOBALS['alynt_ag_test_db_updates'] );
 	}
 
 	public function test_security_provider_failure_triage_items_count_specific_failures() {
@@ -1121,10 +1248,10 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		$this->assertStringContainsString( 'recent email-quality blocks. Review the policy if legitimate customers are affected.', $output );
 		$this->assertStringContainsString( 'recent configuration, connectivity, or response failures. Test the API key and outbound HTTP connectivity.', $output );
 		$this->assertStringContainsString( 'Manual Review Queue', $output );
-		$this->assertStringContainsString( 'Highlights Reoon flagged results that were allowed by policy', $output );
-		$this->assertStringContainsString( 'recent Reoon flagged results allowed by policy. Review the masked rows below before deciding whether to block flagged statuses.', $output );
-		$this->assertStringContainsString( 'recent role-account emails allowed for review. Confirm whether shared inboxes are acceptable for this site.', $output );
-		$this->assertStringContainsString( 'recent catch-all, unknown, or inbox-full results allowed for review. Watch for repeated domains before tightening policy.', $output );
+		$this->assertStringContainsString( 'Highlights unresolved Reoon flagged results that were allowed by policy', $output );
+		$this->assertStringContainsString( 'unreviewed Reoon flagged results allowed by policy. Record a decision on the masked rows below before changing the site-wide policy.', $output );
+		$this->assertStringContainsString( 'unreviewed role-account emails allowed by policy. Confirm whether shared inboxes are acceptable for this site.', $output );
+		$this->assertStringContainsString( 'unreviewed catch-all, unknown, or inbox-full results allowed by policy. Watch for repeated domains before tightening policy.', $output );
 		$this->assertStringContainsString( 'recent Reoon flagged results blocked by strict policy. Check support tickets for legitimate customers who may need help.', $output );
 		$this->assertStringContainsString( 'Manual Review Decision Playbook', $output );
 		$this->assertStringContainsString( 'Use this as a support-friendly rubric before changing the site-wide Reoon flagged-status policy.', $output );
