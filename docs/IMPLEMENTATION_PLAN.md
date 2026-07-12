@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.88 auditable Reoon manual-review decisions ready for release approval
+- Current phase: v0.1.88 auditable Reoon manual-review decisions released and updater-verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.87 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.88 is locally validated and awaiting release approval.
+- Plugin status: v0.1.88 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -32,7 +32,7 @@
 - [x] Protect review writes with `manage_options`, a row-specific nonce, a strict decision allowlist, and eligibility revalidation against the stored provider/status/block state.
 - [x] Preserve registration, account creation, provider API calls, Reoon allow/block behavior, rate-limit thresholds, frontend output, emails, dashboard/WooCommerce behavior, privacy erasure, retention cleanup, and updater behavior.
 - [x] Run focused tests, build, lint, full tests, audit, POT generation, package inspection, and Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -45,6 +45,10 @@
 - Release validation passed: `npm run build`; `npm run lint`; `npm run make-pot` (`966 strings`); `npm audit --audit-level=moderate` (`0 vulnerabilities`); and `npm test -- --do-not-cache-result` (`260 tests, 1633 assertions`).
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.88-20260712-164250\alynt-account-gateway-v0.1.88.zip` and inspected as 45 runtime files, no source/dev package files, `0.1.88` header/constant/stable tag, database schema `0.1.4`, exactly one `GitHub Plugin URI` updater header, review handler/immutable-decision/schema/privacy-export markers present, compiled review-control CSS present, and SHA-256 `2BBF8A090F765F91EE4E4CC06DBFE7EB7111E571560A4EFD2B5A149B9A1FB8D4`.
 - Plugin Tester smoke passed on the local-only `plugin-tester.local` site: the installed release candidate remained active at header/constant/stable tag `0.1.88`, migrated the verification log table to schema `0.1.4`, added all three review columns, recorded a `monitor` decision with reviewer/timestamp, rejected a second attempt to rewrite that decision as `legitimate`, changed the unresolved queue count from `1` to `0`, wrote an audit event without the test email address, retained exactly one updater header, and removed the temporary verification/audit rows and web artifacts. Novamira MCP was not exposed in the active tool list.
+- GitHub release `v0.1.88` was published at `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.88`; release workflow run `29197208069` completed successfully.
+- Public release asset `alynt-account-gateway-v0.1.88.zip` was downloaded and inspected as 45 files, with no development directories, `0.1.88` header/constant/stable tag, database schema `0.1.4`, exactly one `GitHub Plugin URI` updater header, review handler/immutable-decision/schema/privacy-export markers present, compiled review-control CSS present, and SHA-256 `DB6ADDDB617B1AC8F5F0C54F86FACAD9D9B9D7E286CD57AFA6C435A45D1BE7F2`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to public `v0.1.87`, detecting `0.1.87` -> `0.1.88` with package URL `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.88/alynt-account-gateway-v0.1.88.zip`, upgrading through WordPress `Plugin_Upgrader`, reactivating ACG, confirming active `0.1.88`, schema `0.1.4`, all review markers, 45 runtime files, no development files, exactly one updater header, and no remaining update.
+- The temporary updater smoke script and public downgrade package were removed from the LocalWP webroot after verification. Novamira MCP was not exposed in the active tool list.
 
 ### Guardrails
 
@@ -57,7 +61,7 @@
 - [x] Resolved rows no longer contribute to unresolved manual-review queue counts.
 - [x] Full local validation and package inspection pass.
 - [x] Plugin Tester schema migration and review-action smoke pass.
-- [ ] Public release asset installs through Alynt Plugin Updater with no update remaining.
+- [x] Public release asset installs through Alynt Plugin Updater with no update remaining.
 
 ## v0.1.87 Small Release Cycle
 
