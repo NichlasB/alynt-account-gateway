@@ -520,6 +520,12 @@ if ( ! function_exists( 'current_user_can' ) ) {
 	}
 }
 
+if ( ! function_exists( 'get_current_user_id' ) ) {
+	function get_current_user_id() {
+		return isset( $GLOBALS['alynt_ag_test_current_user_id'] ) ? absint( $GLOBALS['alynt_ag_test_current_user_id'] ) : 0;
+	}
+}
+
 if ( ! function_exists( 'wp_safe_redirect' ) ) {
 	function wp_safe_redirect( $location, $status = 302, $x_redirect_by = 'WordPress' ) {
 		$GLOBALS['alynt_ag_test_redirects'][] = array(

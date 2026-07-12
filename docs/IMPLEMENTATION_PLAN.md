@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.87 admin preview password status i18n released and updater-verified
+- Current phase: v0.1.88 auditable Reoon manual-review decisions ready for release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.87 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.87 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.88 is locally validated and awaiting release approval.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -14,12 +14,50 @@
 - [x] Real-world WooCommerce dashboard polish: improve branded empty states, endpoint affordances, customer account copy, delegated WooCommerce form styling, order/address/payment-method edge states, and WooCommerce unavailable guidance.
 - [x] Settings UX refinement: improve setup grouping, tab-level guidance, validation hints, admin notices, and safe defaults for first-time configuration.
 - [x] Email template editor polish: add richer token browsing, per-template reset guidance, preview/test-send ergonomics, and clearer plain-text/core-email limitations.
-- [ ] Security and anti-spam hardening: improve Reoon policy visibility, provider failure feedback, registration abuse logs, lockout visibility, resend throttling UX, and optional manual-review decisions.
+- [x] Security and anti-spam hardening: improve Reoon policy visibility, provider failure feedback, registration abuse logs, lockout visibility, resend throttling UX, and optional manual-review decisions.
 - [x] Accessibility, RTL, and multilingual QA pass: verify keyboard flow, focus states, ARIA messaging, contrast resilience, RTL layout behavior, and translation coverage across frontend/admin screens.
 - [ ] Frontend visual QA and theme compatibility: smoke common themes, mobile/desktop breakpoints, high-contrast settings, and CSS interference around the gateway shell.
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.88 Small Release Cycle
+
+### Scope
+
+- [x] Finish the actionable manual-review portion of the Security and anti-spam hardening slice from the updater-verified `v0.1.87` baseline.
+- [x] Add admin-only review decisions for allowed flagged Reoon verification rows without changing registration outcomes or the site-wide Reoon policy.
+- [x] Persist review decision, reviewer ID, and review timestamp on the plugin-owned verification log and exclude resolved rows from unresolved queue counts.
+- [x] Record a privacy-conscious audit event containing the verification log ID and decision, not the registrant email address.
+- [x] Protect review writes with `manage_options`, a row-specific nonce, a strict decision allowlist, and eligibility revalidation against the stored provider/status/block state.
+- [x] Preserve registration, account creation, provider API calls, Reoon allow/block behavior, rate-limit thresholds, frontend output, emails, dashboard/WooCommerce behavior, privacy erasure, retention cleanup, and updater behavior.
+- [x] Run focused tests, build, lint, full tests, audit, POT generation, package inspection, and Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.88` from clean `master` after updater-verified `v0.1.87`.
+- Added `legitimate` and `monitor` review decisions for allowed Reoon statuses ending in `_flagged`; blocked rows and non-Reoon rows remain ineligible.
+- Added verification-log review metadata and bumped the plugin database schema to `0.1.4`; existing installs migrate through the established `dbDelta()` upgrade path.
+- Added unresolved-only Manual Review Queue counts, per-row review controls, recorded-decision display, and success/failure admin notices.
+- Added focused coverage for schema markers, queue resolution, review rendering, secure persistence, first-write-only decisions, audit logging, privacy export, and rejection of blocked or unknown decisions.
+- Focused validation passed: PHP syntax for touched PHP files; `SettingsPageSecurityStatusTest` (`29 tests, 421 assertions`); `DatabaseReviewSchemaTest` (`1 test, 6 assertions`); `PrivacyServiceTest` (`5 tests, 31 assertions`); and `SampleTest` (`1 test, 2 assertions`).
+- Release validation passed: `npm run build`; `npm run lint`; `npm run make-pot` (`966 strings`); `npm audit --audit-level=moderate` (`0 vulnerabilities`); and `npm test -- --do-not-cache-result` (`260 tests, 1633 assertions`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.88-20260712-164250\alynt-account-gateway-v0.1.88.zip` and inspected as 45 runtime files, no source/dev package files, `0.1.88` header/constant/stable tag, database schema `0.1.4`, exactly one `GitHub Plugin URI` updater header, review handler/immutable-decision/schema/privacy-export markers present, compiled review-control CSS present, and SHA-256 `2BBF8A090F765F91EE4E4CC06DBFE7EB7111E571560A4EFD2B5A149B9A1FB8D4`.
+- Plugin Tester smoke passed on the local-only `plugin-tester.local` site: the installed release candidate remained active at header/constant/stable tag `0.1.88`, migrated the verification log table to schema `0.1.4`, added all three review columns, recorded a `monitor` decision with reviewer/timestamp, rejected a second attempt to rewrite that decision as `legitimate`, changed the unresolved queue count from `1` to `0`, wrote an audit event without the test email address, retained exactly one updater header, and removed the temporary verification/audit rows and web artifacts. Novamira MCP was not exposed in the active tool list.
+
+### Guardrails
+
+- Do not alter public registration outcomes, account creation, Reoon provider requests, Reoon status classification, the configured allow/block policy, rate-limit enforcement, frontend copy, email delivery, webhook payloads, dashboard/WooCommerce behavior, privacy erasure, retention windows, or updater behavior.
+
+### Completion Gate
+
+- [x] Review decisions are limited to allowed flagged Reoon rows and known decision values.
+- [x] Review writes are capability- and nonce-protected and produce a redacted audit event.
+- [x] Resolved rows no longer contribute to unresolved manual-review queue counts.
+- [x] Full local validation and package inspection pass.
+- [x] Plugin Tester schema migration and review-action smoke pass.
+- [ ] Public release asset installs through Alynt Plugin Updater with no update remaining.
 
 ## v0.1.87 Small Release Cycle
 

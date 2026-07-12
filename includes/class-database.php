@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ALYNT_AG_Database {
 
-	const DB_VERSION = '0.1.3';
+	const DB_VERSION = '0.1.4';
 
 	/**
 	 * Install database tables.
@@ -70,11 +70,16 @@ class ALYNT_AG_Database {
 				provider varchar(40) NOT NULL,
 				status varchar(80) NOT NULL,
 				blocked tinyint(1) NOT NULL DEFAULT 0,
+				review_decision varchar(40) NOT NULL DEFAULT '',
+				reviewed_by bigint(20) unsigned NOT NULL DEFAULT 0,
+				reviewed_at datetime NULL,
 				created_at datetime NOT NULL,
 				PRIMARY KEY  (id),
 				KEY email (email),
 				KEY provider (provider),
 				KEY status (status),
+				KEY review_decision (review_decision),
+				KEY reviewed_at (reviewed_at),
 				KEY created_at (created_at)
 			) {$charset_collate};",
 			"CREATE TABLE {$tables['consent_records']} (

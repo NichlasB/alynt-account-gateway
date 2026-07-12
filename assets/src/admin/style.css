@@ -348,6 +348,37 @@
 	white-space: normal;
 }
 
+.alynt-ag-security-review {
+	min-width: 180px;
+}
+
+.alynt-ag-security-review__form {
+	display: grid;
+	gap: 6px;
+}
+
+.alynt-ag-security-review__form select {
+	max-width: 100%;
+}
+
+.alynt-ag-security-review__recorded {
+	display: inline-flex;
+	width: max-content;
+	max-width: 100%;
+	padding: 3px 7px;
+	border: 1px solid #008a20;
+	background: #f6f7f7;
+	color: #008a20;
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.alynt-ag-security-review small {
+	display: block;
+	margin-top: 5px;
+	color: #50575e;
+}
+
 .alynt-ag-security-guidance {
 	max-width: 280px;
 	color: #50575e;
