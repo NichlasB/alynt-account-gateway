@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.88 auditable Reoon manual-review decisions released and updater-verified
+- Current phase: v0.1.89 frontend breakpoint and theme-interference hardening ready for release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.88 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.88 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.89 is locally validated and awaiting release approval.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -16,10 +16,53 @@
 - [x] Email template editor polish: add richer token browsing, per-template reset guidance, preview/test-send ergonomics, and clearer plain-text/core-email limitations.
 - [x] Security and anti-spam hardening: improve Reoon policy visibility, provider failure feedback, registration abuse logs, lockout visibility, resend throttling UX, and optional manual-review decisions.
 - [x] Accessibility, RTL, and multilingual QA pass: verify keyboard flow, focus states, ARIA messaging, contrast resilience, RTL layout behavior, and translation coverage across frontend/admin screens.
-- [ ] Frontend visual QA and theme compatibility: smoke common themes, mobile/desktop breakpoints, high-contrast settings, and CSS interference around the gateway shell.
+- [x] Frontend visual QA and theme compatibility: smoke common themes, mobile/desktop breakpoints, high-contrast settings, and CSS interference around the gateway shell.
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.89 Small Release Cycle
+
+### Scope
+
+- [x] Finish the Frontend visual QA and theme compatibility slice from the updater-verified `v0.1.88` baseline.
+- [x] Run current gateway screens through mobile, breakpoint-edge, and desktop browser geometry checks using Playwright MCP.
+- [x] Make the single-column breakpoint inclusive through `800px` so fractional CSS viewport calculations do not leave a nominal `799px` viewport in two-column mode.
+- [x] Add higher-specificity, gateway-scoped form, control, and link constraints that neutralize theme-injected minimum widths, margins, and shadows without affecting page elements outside the gateway.
+- [x] Recheck forced-colors, reduced-motion, focus visibility, frontend asset loading, native-login avoidance, clipped controls, and console errors.
+- [x] Preserve screen copy, routes, submitted fields, registration/login/password behavior, saved settings, dashboard/WooCommerce delegation, provider verification, rate limits, diagnostics, privacy behavior, database schema, and updater behavior.
+- [x] Run focused tests, build, lint, full tests, audit, POT generation, package inspection, and final Plugin Tester browser smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.89` from clean `master` after updater-verified `v0.1.88`.
+- Initial Playwright matrix covered login, registration, registration error, lost password, invalid set-password, invalid-link resend throttle, and logout screens at `360x800`, `390x844`, `799x900`, `800x900`, and `1440x1000`; all screens used the branded gateway, loaded plugin CSS, avoided native WordPress login, and had no baseline horizontal overflow or clipped controls.
+- The matrix exposed a nominal `799px` viewport where `(max-width: 799px)` did not match because of fractional browser viewport evaluation, leaving the media panel visible and the shell in two-column mode.
+- A theme-interference test using ordinary input/button/form/link selectors exposed `181px` login overflow and `229px` registration overflow on a `390px` viewport because injected minimum widths, margins, and shadows could outrank the existing scoped resets.
+- Changed the breakpoint to `(max-width: 800px)` and added higher-specificity gateway constraints for form paragraphs/fieldsets, inputs, password toggles, action buttons, and links.
+- Post-fix Playwright injection checks passed at `390`, `799`, `800`, `801`, and `1440px`: zero overflow, single-column through `800px`, two-column at `801px`, zeroed input/button minimum widths and margins, and removed injected shadows.
+- Forced-colors and reduced-motion runtime checks passed with system foreground/background colors, visible focused-input outline, hidden decorative pattern, and no browser console errors.
+- Focused validation passed: `FrontendCssSourceTest` (`7 tests, 62 assertions`) and `SampleTest` (`1 test, 2 assertions`).
+- Release validation passed: `npm run build`; `npm run lint`; `npm run make-pot` (`966 strings`); `npm audit --audit-level=moderate` (`0 vulnerabilities`); and `npm test -- --do-not-cache-result` (`260 tests, 1638 assertions`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.89-20260712-172537\alynt-account-gateway-v0.1.89.zip` and inspected as 45 runtime files, no source/dev package files, `0.1.89` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, compiled `800px` breakpoint, input/button/link guardrails, and forced-colors support present, with SHA-256 `E089ABD2BC2A2F14F8CE1BE2237CE9661F4FAE1780B78A04F8245B7E44AA323F`.
+- Plugin Tester installed-package smoke passed on the local-only `plugin-tester.local` site: active `0.1.89`, 45 runtime files, no development files, exactly one updater header, compiled `800px` breakpoint, input/button/link guardrails, and forced-colors support present.
+- Final Playwright matrix against the installed release candidate covered seven gateway states at `390`, `799`, `800`, `801`, and `1440px` for 35 combinations with zero failures, zero horizontal overflow, zero clipped controls, single-column layout through `800px`, two-column layout from `801px`, branded output, and no native-login fallback while QA output was enabled.
+- Installed-package theme-interference injection passed on mobile login and registration with zero overflow/clipping, `0px` control minimum widths and margins, removed injected shadows, and zeroed link margins. Desktop login and mobile registration screenshots were captured, and no browser console errors were reported.
+- Plugin Tester settings were restored to their exact pre-QA values after browser testing; `/login` again followed the restored frontend-disabled behavior to native `wp-login.php`, and temporary QA/install scripts and packages were removed. Novamira MCP was not exposed in the active tool list.
+
+### Guardrails
+
+- Keep CSS changes scoped to `.alynt-ag-gateway`; do not alter WordPress theme elements outside the gateway, screen content, form semantics, routes, auth/registration behavior, settings, provider decisions, diagnostics, emails, dashboard/WooCommerce delegation, privacy behavior, database schema, or updater metadata beyond the release version.
+
+### Completion Gate
+
+- [x] Browser evidence covers public gateway screens across mobile, breakpoint-edge, and desktop viewports.
+- [x] Theme-interference injection no longer causes horizontal overflow or distorted control constraints.
+- [x] Forced-colors, reduced-motion, focus visibility, branded routing, and console checks pass.
+- [x] Full local validation and package inspection pass.
+- [x] Final installed-package Playwright matrix passes on Plugin Tester.
+- [ ] Public release asset installs through Alynt Plugin Updater with no update remaining.
 
 ## v0.1.88 Small Release Cycle
 

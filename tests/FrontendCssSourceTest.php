@@ -49,7 +49,7 @@ class FrontendCssSourceTest extends TestCase {
 	public function test_woocommerce_dashboard_form_polish_has_mobile_single_column_fallback() {
 		$css = $this->get_frontend_css();
 
-		$this->assertStringContainsString( '@media (max-width: 799px)', $css );
+		$this->assertStringContainsString( '@media (max-width: 800px)', $css );
 		$this->assertStringContainsString( '.agw-dashboard-content .woocommerce-address-fields__field-wrapper', $css );
 		$this->assertStringContainsString( '.agw-dashboard-content .woocommerce-EditAccountForm', $css );
 		$this->assertStringContainsString( 'grid-template-columns: 1fr;', $css );
@@ -102,6 +102,11 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertStringContainsString( "\ttext-decoration: none;\n\ttext-transform: none;\n\tletter-spacing: 0;", $css );
 		$this->assertStringContainsString( ".agw-links a,\n.agw-back-link,\n.agw-checkbox a {\n\tcolor: var(--agw-color-primary);", $css );
 		$this->assertStringContainsString( "\toverflow-wrap: anywhere;\n\ttext-decoration: underline;\n\ttext-transform: none;", $css );
+		$this->assertStringContainsString( ".alynt-ag-gateway .agw-form p,\n.alynt-ag-gateway .agw-form fieldset {\n\tmin-width: 0;\n\tmargin: 0;", $css );
+		$this->assertStringContainsString( ".alynt-ag-gateway .agw-form .agw-field input {\n\tmin-width: 0;\n\tmargin: 0;\n\tbox-shadow: none;", $css );
+		$this->assertStringContainsString( '.alynt-ag-gateway .agw-form .agw-password__toggle', $css );
+		$this->assertStringContainsString( ".alynt-ag-gateway .agw-form .agw-button,\n.alynt-ag-gateway .agw-actions .agw-button {\n\twidth: auto;\n\tmax-width: 100%;\n\tmin-width: 0;", $css );
+		$this->assertStringContainsString( ".alynt-ag-gateway .agw-links a,\n.alynt-ag-gateway .agw-back-link,\n.alynt-ag-gateway .agw-checkbox a {\n\tmax-width: 100%;\n\tmargin: 0;", $css );
 	}
 
 	public function test_frontend_css_normalizes_dashboard_form_controls_against_theme_styles() {
