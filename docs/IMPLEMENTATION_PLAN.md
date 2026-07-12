@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.90 admin observability release candidate prepared; awaiting release approval
+- Current phase: v0.1.90 admin observability snapshot released and updater-verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.89 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.90 is local-only until approval, release publication, and updater verification complete.
+- Plugin status: v0.1.90 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -30,7 +30,7 @@
 - [x] Add an Advanced Tools operational snapshot that summarizes redirects/admin blocks, branded auth outcomes, provider verification failures, registration flow failures, account email failures, and webhook delivery failures.
 - [x] Keep raw diagnostics export/recent-event behavior available while making support triage faster.
 - [x] Preserve auth behavior, registration outcomes, provider policy decisions, webhook delivery behavior, privacy retention behavior, frontend output, dashboard/WooCommerce behavior, and updater behavior.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -42,6 +42,10 @@
 - Release-candidate validation passed before version bump: `npm run build`; `npm run make-pot` (`980 strings`); `npm run lint`; `npm audit --audit-level=moderate` (`0 vulnerabilities`); and `npm test -- --do-not-cache-result` (`261 tests, 1647 assertions`).
 - Release-candidate validation passed after version bump: `npm run build`; `npm run make-pot` (`980 strings`); `npm run lint`; `npm audit --audit-level=moderate` (`0 vulnerabilities`); `npm test -- --do-not-cache-result` (`261 tests, 1647 assertions`); and `git diff --check` with only line-ending normalization warnings for `readme.txt` and `languages/alynt-account-gateway.pot`.
 - Local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.90-20260712-175245\alynt-account-gateway-v0.1.90.zip` and inspected as 45 runtime files, no source/dev package files, `0.1.90` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, and the new Advanced Tools operational snapshot strings present, with SHA-256 `04E7089B074AB9DEDA20DD3E6873F04848BF78644ABF6DFD0ED9061103E0F5B7`.
+- GitHub release `v0.1.90` was published at `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.90`; release workflow run `29199160372` completed successfully.
+- Public release asset `alynt-account-gateway-v0.1.90.zip` was downloaded and inspected as 45 files, with no development directories, `0.1.90` header/constant/stable tag, the Advanced Tools operational snapshot strings, and exactly one `GitHub Plugin URI` updater header, with SHA-256 `776864CEBFE24CF8921BF82445A67567BE07CEACDC28B6716719A2E3D3BF62F9`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site from public `v0.1.89` to public `v0.1.90`, detecting package URL `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.90/alynt-account-gateway-v0.1.90.zip`, upgrading through WordPress `Plugin_Upgrader`, reactivating ACG, confirming active `0.1.90`, the new operational snapshot source string, and no remaining update.
+- The temporary updater smoke script was removed from the LocalWP webroot and work folder after verification. Novamira MCP was not exposed in the active tool list.
 
 ### Guardrails
 
@@ -53,8 +57,8 @@
 - [x] Advanced Tools now has a support-oriented diagnostics snapshot for the named product concerns.
 - [x] Focused and full local validation pass.
 - [x] Final package inspection passes.
-- [ ] Plugin Tester installed-package smoke passes if needed for this admin-only release.
-- [ ] Public release asset installs through Alynt Plugin Updater with no update remaining.
+- [x] Plugin Tester installed-package smoke passes.
+- [x] Public release asset installs through Alynt Plugin Updater with no update remaining.
 
 ## v0.1.89 Small Release Cycle
 
