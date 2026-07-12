@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Alynt Account Gateway 0.1.89\n"
+"Project-Id-Version: Alynt Account Gateway 0.1.90\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-12 15:24+0000\n"
+"POT-Creation-Date: 2026-07-12 15:50+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -126,6 +126,10 @@ msgstr ""
 #: includes/services/class-woocommerce-integration.php:29
 #: includes/services/class-woocommerce-integration.php:85
 msgid "Account Details"
+msgstr ""
+
+#: admin/class-settings-page.php:4427
+msgid "Account Email Failures"
 msgstr ""
 
 #: admin/class-settings-page.php:46
@@ -479,6 +483,10 @@ msgstr ""
 msgid "Brand Logo"
 msgstr ""
 
+#: admin/class-settings-page.php:4409
+msgid "Branded Auth Outcomes"
+msgstr ""
+
 #: admin/class-settings-page.php:811
 msgid "Branding"
 msgstr ""
@@ -519,7 +527,7 @@ msgstr ""
 msgid "Catch-all domain"
 msgstr ""
 
-#: admin/class-settings-page.php:4285
+#: admin/class-settings-page.php:4290
 msgid "Category"
 msgstr ""
 
@@ -564,7 +572,7 @@ msgstr ""
 msgid "Choose which saved payment method should be used first when the store supports defaults."
 msgstr ""
 
-#: admin/class-settings-page.php:4273
+#: admin/class-settings-page.php:4278
 msgid "Clear Diagnostics Events"
 msgstr ""
 
@@ -903,11 +911,11 @@ msgstr ""
 msgid "Details"
 msgstr ""
 
-#: admin/class-settings-page.php:4240
+#: admin/class-settings-page.php:4243
 msgid "Diagnostics"
 msgstr ""
 
-#: admin/class-settings-page.php:4242
+#: admin/class-settings-page.php:4245
 msgid "Diagnostics are disabled by default. When enabled, structured events are stored in a plugin-owned table with sensitive fields redacted before persistence."
 msgstr ""
 
@@ -1149,7 +1157,7 @@ msgid "Error:"
 msgstr ""
 
 #: admin/class-settings-page.php:3738
-#: admin/class-settings-page.php:4286
+#: admin/class-settings-page.php:4291
 #: includes/services/class-privacy-service.php:245
 msgid "Event"
 msgstr ""
@@ -1187,7 +1195,7 @@ msgstr ""
 msgid "Export all plugin-owned settings as JSON, or import a JSON settings package from another site. Imported values are sanitized through the active settings schema."
 msgstr ""
 
-#: admin/class-settings-page.php:4266
+#: admin/class-settings-page.php:4271
 msgid "Export Diagnostics CSV"
 msgstr ""
 
@@ -1365,12 +1373,12 @@ msgid ""
 "Use the button below to visit your account."
 msgstr ""
 
-#: admin/class-settings-page.php:4521
+#: admin/class-settings-page.php:4656
 #: includes/services/class-frontend-assets.php:85
 msgid "Hide"
 msgstr ""
 
-#: admin/class-settings-page.php:4517
+#: admin/class-settings-page.php:4652
 #: includes/services/class-frontend-assets.php:81
 msgid "Hide password"
 msgstr ""
@@ -1558,7 +1566,7 @@ msgstr ""
 msgid "Length of the registration rate-limit window in minutes."
 msgstr ""
 
-#: admin/class-settings-page.php:4284
+#: admin/class-settings-page.php:4289
 msgid "Level"
 msgstr ""
 
@@ -1737,7 +1745,7 @@ msgstr ""
 msgid "Mention spam-folder checks on registration and password reset flows where appropriate."
 msgstr ""
 
-#: admin/class-settings-page.php:4287
+#: admin/class-settings-page.php:4292
 msgid "Message"
 msgstr ""
 
@@ -1767,7 +1775,7 @@ msgstr ""
 msgid "Next Step"
 msgstr ""
 
-#: admin/class-settings-page.php:4253
+#: admin/class-settings-page.php:4256
 #: includes/services/class-privacy-service.php:232
 #: includes/services/class-privacy-service.php:248
 msgid "No"
@@ -1813,7 +1821,7 @@ msgstr ""
 msgid "No deliveries have been logged yet."
 msgstr ""
 
-#: admin/class-settings-page.php:4278
+#: admin/class-settings-page.php:4283
 msgid "No diagnostics events have been recorded."
 msgstr ""
 
@@ -1891,6 +1899,10 @@ msgstr ""
 
 #: admin/class-settings-page.php:3560
 msgid "Opens the selected email in a new tab using saved settings and sample token values."
+msgstr ""
+
+#: admin/class-settings-page.php:4322
+msgid "Operational Snapshot"
 msgstr ""
 
 #: admin/class-settings-page.php:3997
@@ -1972,7 +1984,7 @@ msgstr ""
 msgid "Password Changed Subject"
 msgstr ""
 
-#: admin/class-settings-page.php:4519
+#: admin/class-settings-page.php:4654
 #: includes/services/class-frontend-assets.php:83
 msgid "Password is hidden."
 msgstr ""
@@ -1981,7 +1993,7 @@ msgstr ""
 msgid "Password is ready."
 msgstr ""
 
-#: admin/class-settings-page.php:4518
+#: admin/class-settings-page.php:4653
 #: includes/services/class-frontend-assets.php:82
 msgid "Password is visible."
 msgstr ""
@@ -2217,6 +2229,10 @@ msgstr ""
 msgid "Provider Readiness"
 msgstr ""
 
+#: admin/class-settings-page.php:4415
+msgid "Provider Verification Failures"
+msgstr ""
+
 #: admin/class-settings-page.php:378
 msgid "Public account creation is disabled by default. Enable it only after terms, privacy, email confirmation, and anti-spam settings are ready."
 msgstr ""
@@ -2303,6 +2319,10 @@ msgstr ""
 msgid "recent account-created webhook dispatch failures. Review endpoint configuration and signing before relying on automation."
 msgstr ""
 
+#: admin/class-settings-page.php:4436
+msgid "recent account-created webhook failures. Review endpoint status, signing, and the Webhooks tab delivery rows."
+msgstr ""
+
 #: admin/class-settings-page.php:1987
 msgid "recent account-created welcome email failures. Check mail delivery before relying on account onboarding."
 msgstr ""
@@ -2313,6 +2333,10 @@ msgstr ""
 
 #: admin/class-settings-page.php:1788
 msgid "Recent branded authentication signals"
+msgstr ""
+
+#: admin/class-settings-page.php:4412
+msgid "recent branded login and password-reset outcomes recorded by diagnostics."
 msgstr ""
 
 #: admin/class-settings-page.php:1830
@@ -2339,6 +2363,10 @@ msgstr ""
 msgid "recent confirmation resend attempts blocked by throttling. Repeated blocks can indicate inbox delivery delays or automated retries."
 msgstr ""
 
+#: admin/class-settings-page.php:4430
+msgid "recent confirmation, reset, or welcome email failures. Check the mail path before inviting customers."
+msgstr ""
+
 #: admin/class-settings-page.php:1919
 msgid "recent consent-related blocks. Check Terms and Privacy copy if legitimate customers are stopping here."
 msgstr ""
@@ -2347,7 +2375,7 @@ msgstr ""
 msgid "recent email-quality blocks. Review the policy if legitimate customers are affected."
 msgstr ""
 
-#: admin/class-settings-page.php:4276
+#: admin/class-settings-page.php:4281
 msgid "Recent Events"
 msgstr ""
 
@@ -2381,6 +2409,10 @@ msgstr ""
 
 #: admin/class-settings-page.php:2386
 msgid "recent missing-token or key configuration failures. Confirm both keys are saved and belong to the same Cloudflare Turnstile site."
+msgstr ""
+
+#: admin/class-settings-page.php:4406
+msgid "recent native login redirects or blocked wp-admin visits. Update stale links or review role access if this rises."
 msgstr ""
 
 #: admin/class-settings-page.php:1762
@@ -2451,6 +2483,10 @@ msgstr ""
 msgid "recent registration attempts blocked before verification. Watch for bursts from the same campaign or customer support reports."
 msgstr ""
 
+#: admin/class-settings-page.php:4424
+msgid "recent registration blocks or system failures. Review consent copy, pending-registration storage, and password setup guidance."
+msgstr ""
+
 #: admin/class-settings-page.php:2753
 msgid "recent registration blocks. Review the limit if legitimate customers are affected."
 msgstr ""
@@ -2503,6 +2539,10 @@ msgstr ""
 msgid "recent successful resends. Repeated resends can point to delivery delays or unclear confirmation instructions."
 msgstr ""
 
+#: admin/class-settings-page.php:4418
+msgid "recent Turnstile or Reoon failures and blocks. Check provider configuration, outbound HTTP, and policy false positives."
+msgstr ""
+
 #: admin/class-settings-page.php:3730
 msgid "Recent Webhook Deliveries"
 msgstr ""
@@ -2529,6 +2569,10 @@ msgstr ""
 
 #: public/class-frontend.php:127
 msgid "Redirected a native wp-login.php request to the branded account gateway."
+msgstr ""
+
+#: admin/class-settings-page.php:4403
+msgid "Redirects and Admin Blocks"
 msgstr ""
 
 #: admin/class-settings-page.php:2750
@@ -2592,6 +2636,10 @@ msgstr ""
 
 #: admin/class-settings-page.php:3207
 msgid "Registration flow blocked this account action."
+msgstr ""
+
+#: admin/class-settings-page.php:4421
+msgid "Registration Flow Failures"
 msgstr ""
 
 #: admin/class-settings-page.php:3208
@@ -3106,7 +3154,7 @@ msgstr ""
 msgid "Set the public account paths first."
 msgstr ""
 
-#: admin/class-settings-page.php:4322
+#: admin/class-settings-page.php:4457
 msgid "Settings could not be encoded for export."
 msgstr ""
 
@@ -3162,7 +3210,7 @@ msgstr ""
 msgid "Shop Manager"
 msgstr ""
 
-#: admin/class-settings-page.php:4520
+#: admin/class-settings-page.php:4655
 #: includes/services/class-frontend-assets.php:84
 #: includes/services/class-frontend-login-screen.php:105
 #: includes/services/class-frontend-setpassword-screen.php:186
@@ -3170,7 +3218,7 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
-#: admin/class-settings-page.php:4516
+#: admin/class-settings-page.php:4651
 #: includes/services/class-frontend-assets.php:80
 #: includes/services/class-frontend-login-screen.php:105
 #: includes/services/class-frontend-setpassword-screen.php:186
@@ -3251,6 +3299,10 @@ msgstr ""
 
 #: admin/class-settings-page.php:417
 msgid "Successful webhook logs usually need shorter retention than failed delivery evidence."
+msgstr ""
+
+#: admin/class-settings-page.php:4324
+msgid "Summarizes recent diagnostics, verification, and delivery evidence so support can spot account-gateway problems without reading raw rows first."
 msgstr ""
 
 #: admin/class-settings-page.php:1277
@@ -3518,7 +3570,7 @@ msgid "Tighten When"
 msgstr ""
 
 #: admin/class-settings-page.php:3737
-#: admin/class-settings-page.php:4283
+#: admin/class-settings-page.php:4288
 msgid "Time"
 msgstr ""
 
@@ -3881,6 +3933,10 @@ msgstr ""
 msgid "Watch resend volume and confirmation-email instructions for customer confusion."
 msgstr ""
 
+#: admin/class-settings-page.php:4433
+msgid "Webhook Delivery Failures"
+msgstr ""
+
 #: includes/services/class-privacy-service.php:243
 msgid "Webhook Delivery Metadata"
 msgstr ""
@@ -3993,49 +4049,49 @@ msgstr ""
 msgid "WPS Hide Login may overlap with login URL routing"
 msgstr ""
 
-#: admin/class-settings-page.php:4253
+#: admin/class-settings-page.php:4256
 #: includes/services/class-privacy-service.php:232
 #: includes/services/class-privacy-service.php:248
 msgid "Yes"
 msgstr ""
 
-#: admin/class-settings-page.php:4564
+#: admin/class-settings-page.php:4699
 msgid "You do not have permission to clear diagnostics."
 msgstr ""
 
-#: admin/class-settings-page.php:4545
+#: admin/class-settings-page.php:4680
 msgid "You do not have permission to export diagnostics."
 msgstr ""
 
-#: admin/class-settings-page.php:4313
+#: admin/class-settings-page.php:4448
 msgid "You do not have permission to export settings."
 msgstr ""
 
-#: admin/class-settings-page.php:4339
+#: admin/class-settings-page.php:4474
 msgid "You do not have permission to import settings."
 msgstr ""
 
-#: admin/class-settings-page.php:4685
+#: admin/class-settings-page.php:4820
 msgid "You do not have permission to preview emails."
 msgstr ""
 
-#: admin/class-settings-page.php:4444
+#: admin/class-settings-page.php:4579
 msgid "You do not have permission to preview gateway screens."
 msgstr ""
 
-#: admin/class-settings-page.php:4399
+#: admin/class-settings-page.php:4534
 msgid "You do not have permission to restore settings."
 msgstr ""
 
-#: admin/class-settings-page.php:4589
+#: admin/class-settings-page.php:4724
 msgid "You do not have permission to review verification results."
 msgstr ""
 
-#: admin/class-settings-page.php:4711
+#: admin/class-settings-page.php:4846
 msgid "You do not have permission to send test emails."
 msgstr ""
 
-#: admin/class-settings-page.php:4742
+#: admin/class-settings-page.php:4877
 msgid "You do not have permission to send test webhooks."
 msgstr ""
 
