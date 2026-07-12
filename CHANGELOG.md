@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.87 - 2026-07-12
+
+### Changed
+
+- Localized password visibility status labels in standalone gateway previews.
+
 ## 0.1.86 - 2026-07-07
 
 ### Changed
