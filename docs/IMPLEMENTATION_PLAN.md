@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.87 admin preview password status i18n ready for release approval
+- Current phase: v0.1.87 admin preview password status i18n released and updater-verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.86 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.87 is locally validated and awaiting release approval.
+- Plugin status: v0.1.87 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -15,7 +15,7 @@
 - [x] Settings UX refinement: improve setup grouping, tab-level guidance, validation hints, admin notices, and safe defaults for first-time configuration.
 - [x] Email template editor polish: add richer token browsing, per-template reset guidance, preview/test-send ergonomics, and clearer plain-text/core-email limitations.
 - [ ] Security and anti-spam hardening: improve Reoon policy visibility, provider failure feedback, registration abuse logs, lockout visibility, resend throttling UX, and optional manual-review decisions.
-- [ ] Accessibility, RTL, and multilingual QA pass: verify keyboard flow, focus states, ARIA messaging, contrast resilience, RTL layout behavior, and translation coverage across frontend/admin screens.
+- [x] Accessibility, RTL, and multilingual QA pass: verify keyboard flow, focus states, ARIA messaging, contrast resilience, RTL layout behavior, and translation coverage across frontend/admin screens.
 - [ ] Frontend visual QA and theme compatibility: smoke common themes, mobile/desktop breakpoints, high-contrast settings, and CSS interference around the gateway shell.
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
@@ -30,7 +30,7 @@
 - [x] Preserve behavior: no visible frontend copy changes, layout changes, route handling changes, saved settings changes, database schema changes, registration flow changes, provider policy changes, rate-limit changes, email delivery changes, dashboard endpoint changes, WooCommerce action delegation changes, diagnostics storage changes, privacy cleanup changes, or updater behavior changes.
 - [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
 - [x] Run Plugin Tester smoke.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -42,6 +42,10 @@
 - Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.87-20260712-132754\alynt-account-gateway-v0.1.87.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.87` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, preview password visibility status label markers present, and SHA-256 `29E879E1F986A6B485EF0C06655CB123083D7C646D2E2F9C9208463752EA2A61`.
 - Initial Plugin Tester smoke was blocked because `http://plugin-tester.local/` did not respond on port 80 during the first local-only smoke attempt. The temporary web smoke script was removed from the LocalWP webroot after the failed connection.
 - Plugin Tester package smoke passed after the LocalWP site was available again: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, header/constant `0.1.87`, stable tag `0.1.87`, exactly one `GitHub Plugin URI` updater header, preview password visibility status label markers present, 45 runtime files, no source/dev package files, and the temporary web smoke script was removed.
+- GitHub release `v0.1.87` was published at `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.87`; the release workflow run `29195911082` completed successfully.
+- Public release asset `alynt-account-gateway-v0.1.87.zip` was downloaded and inspected as 45 files, with no development directories, `0.1.87` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, preview password visibility status label markers present, and SHA-256 `23B02E471564E055B07E852C2CEFA11E727E645E83CF603ADB1354E7E49CC9A`.
+- Alynt Plugin Updater verification passed on the local-only `plugin-tester.local` site by downgrading to the public `v0.1.86` asset, detecting `0.1.86` -> `0.1.87` with package URL `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.87/alynt-account-gateway-v0.1.87.zip`, upgrading through WordPress `Plugin_Upgrader`, reactivating ACG, confirming active `0.1.87`, confirming both preview password status labels, and confirming no remaining update.
+- Temporary updater smoke script and downgrade package were removed from the LocalWP webroot after verification. Novamira MCP was not exposed in the active tool list.
 
 ### Guardrails
 
@@ -53,6 +57,8 @@
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Local package inspection validates installed-package markers.
 - [x] Plugin Tester smoke validates installed-package markers.
+- [x] Public GitHub release asset inspection passes.
+- [x] Alynt Plugin Updater detects and installs `v0.1.87` from public `v0.1.86` on Plugin Tester with no update remaining.
 - [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.86 Small Release Cycle
