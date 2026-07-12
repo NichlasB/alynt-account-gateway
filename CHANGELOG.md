@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.90 - 2026-07-12
+
+### Added
+
+- Added an Advanced Tools operational diagnostics snapshot for account gateway redirects, auth outcomes, provider failures, registration failures, email delivery failures, and webhook failures.
+
 ## 0.1.89 - 2026-07-12
 
 ### Changed

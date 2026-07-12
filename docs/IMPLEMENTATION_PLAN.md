@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.89 frontend breakpoint and theme-interference hardening released and updater-verified
+- Current phase: v0.1.90 admin observability release candidate prepared; awaiting release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.89 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.89 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.90 is local-only until approval, release publication, and updater verification complete.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -17,9 +17,44 @@
 - [x] Security and anti-spam hardening: improve Reoon policy visibility, provider failure feedback, registration abuse logs, lockout visibility, resend throttling UX, and optional manual-review decisions.
 - [x] Accessibility, RTL, and multilingual QA pass: verify keyboard flow, focus states, ARIA messaging, contrast resilience, RTL layout behavior, and translation coverage across frontend/admin screens.
 - [x] Frontend visual QA and theme compatibility: smoke common themes, mobile/desktop breakpoints, high-contrast settings, and CSS interference around the gateway shell.
-- [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
+- [x] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.90 Small Release Cycle
+
+### Scope
+
+- [x] Finish the Admin observability slice from the updater-verified `v0.1.89` baseline.
+- [x] Audit existing diagnostics, verification-log, webhook-log, and Security tab coverage before adding UI.
+- [x] Add an Advanced Tools operational snapshot that summarizes redirects/admin blocks, branded auth outcomes, provider verification failures, registration flow failures, account email failures, and webhook delivery failures.
+- [x] Keep raw diagnostics export/recent-event behavior available while making support triage faster.
+- [x] Preserve auth behavior, registration outcomes, provider policy decisions, webhook delivery behavior, privacy retention behavior, frontend output, dashboard/WooCommerce behavior, and updater behavior.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.90` from clean `master` after updater-verified `v0.1.89`.
+- Audit confirmed the Security tab already surfaced most individual signals, while Advanced Tools still required reading raw diagnostics rows to understand account-gateway health.
+- Added `Operational Snapshot` to Advanced Tools, backed by the existing diagnostics log, verification log, and webhook log helpers.
+- The snapshot groups the admin observability concerns into six operator cards: `Redirects and Admin Blocks`, `Branded Auth Outcomes`, `Provider Verification Failures`, `Registration Flow Failures`, `Account Email Failures`, and `Webhook Delivery Failures`.
+- Focused validation passed: `SettingsPageSettingsToolsTest` (`2 tests, 15 assertions`).
+- Release-candidate validation passed before version bump: `npm run build`; `npm run make-pot` (`980 strings`); `npm run lint`; `npm audit --audit-level=moderate` (`0 vulnerabilities`); and `npm test -- --do-not-cache-result` (`261 tests, 1647 assertions`).
+- Release-candidate validation passed after version bump: `npm run build`; `npm run make-pot` (`980 strings`); `npm run lint`; `npm audit --audit-level=moderate` (`0 vulnerabilities`); `npm test -- --do-not-cache-result` (`261 tests, 1647 assertions`); and `git diff --check` with only line-ending normalization warnings for `readme.txt` and `languages/alynt-account-gateway.pot`.
+- Local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.90-20260712-175245\alynt-account-gateway-v0.1.90.zip` and inspected as 45 runtime files, no source/dev package files, `0.1.90` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, and the new Advanced Tools operational snapshot strings present, with SHA-256 `04E7089B074AB9DEDA20DD3E6873F04848BF78644ABF6DFD0ED9061103E0F5B7`.
+
+### Guardrails
+
+- Keep observability changes read-only/admin-only. Do not change public auth, registration, provider decisions, email/webhook sending behavior, storage schema, retention cleanup, frontend rendering, dashboard/WooCommerce behavior, privacy behavior, or updater metadata beyond the release version.
+
+### Completion Gate
+
+- [x] Existing observability coverage was audited before adding UI.
+- [x] Advanced Tools now has a support-oriented diagnostics snapshot for the named product concerns.
+- [x] Focused and full local validation pass.
+- [x] Final package inspection passes.
+- [ ] Plugin Tester installed-package smoke passes if needed for this admin-only release.
+- [ ] Public release asset installs through Alynt Plugin Updater with no update remaining.
 
 ## v0.1.89 Small Release Cycle
 
