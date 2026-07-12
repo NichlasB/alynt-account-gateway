@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.86 password visibility status accessibility released and updater-verified
+- Current phase: v0.1.87 admin preview password status i18n ready for release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.86 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.86 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification. v0.1.87 is locally validated and awaiting release approval.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -20,6 +20,40 @@
 - [ ] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.87 Small Release Cycle
+
+### Scope
+
+- [x] Continue the Accessibility, RTL, and multilingual QA pass from the released `v0.1.86` baseline.
+- [x] Localize the password visibility status labels in standalone admin gateway previews so previewed password toggles do not fall back to hard-coded English strings.
+- [x] Preserve behavior: no visible frontend copy changes, layout changes, route handling changes, saved settings changes, database schema changes, registration flow changes, provider policy changes, rate-limit changes, email delivery changes, dashboard endpoint changes, WooCommerce action delegation changes, diagnostics storage changes, privacy cleanup changes, or updater behavior changes.
+- [x] Run build, focused tests, lint, full tests, audit, POT generation, and package inspection.
+- [x] Run Plugin Tester smoke.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started `v0.1.87` from clean `master` after updater-verified `v0.1.86`.
+- Added `passwordVisible` and `passwordHidden` localized labels to the standalone admin gateway preview asset localization path.
+- Added focused coverage for admin preview password visibility status labels.
+- Initial focused validation passed: PHP syntax for touched admin/test/plugin files; focused `SettingsPagePreviewAssetsTest` (`1 test, 7 assertions`), `FrontendAssetsTest` (`3 tests, 20 assertions`), and `SampleTest` (`1 test, 2 assertions`).
+- Release validation passed: `npm run build`; `npm run lint`; `npm run make-pot` (`955 strings`); `npm audit --audit-level=moderate`; and `npm test -- --do-not-cache-result` (`256 tests, 1604 assertions`).
+- Final local release package built at `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.87-20260712-132754\alynt-account-gateway-v0.1.87.zip` and inspected as 45 runtime files, no directory entries, no backslash entries, no dev entries, `0.1.87` header/constant/stable tag, exactly one `GitHub Plugin URI` updater header, preview password visibility status label markers present, and SHA-256 `29E879E1F986A6B485EF0C06655CB123083D7C646D2E2F9C9208463752EA2A61`.
+- Initial Plugin Tester smoke was blocked because `http://plugin-tester.local/` did not respond on port 80 during the first local-only smoke attempt. The temporary web smoke script was removed from the LocalWP webroot after the failed connection.
+- Plugin Tester package smoke passed after the LocalWP site was available again: active plugin option contains `alynt-account-gateway/alynt-account-gateway.php`, header/constant `0.1.87`, stable tag `0.1.87`, exactly one `GitHub Plugin URI` updater header, preview password visibility status label markers present, 45 runtime files, no source/dev package files, and the temporary web smoke script was removed.
+
+### Guardrails
+
+- Do not change visible frontend copy, layout, auth routes, frontend output gating, saved settings, database schema, registration flow, provider verification decisions, rate-limit enforcement, email delivery, dashboard/WooCommerce endpoint behavior, diagnostics storage schema, privacy cleanup, or updater behavior.
+
+### Completion Gate
+
+- [x] Focused tests cover standalone admin preview password visibility status labels.
+- [x] Build, lint, test, audit, and POT generation pass.
+- [x] Local package inspection validates installed-package markers.
+- [x] Plugin Tester smoke validates installed-package markers.
+- [ ] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.86 Small Release Cycle
 

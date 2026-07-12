@@ -4419,10 +4419,12 @@ class ALYNT_AG_Settings_Page {
 				'alyntAgFrontend',
 				array(
 					'labels' => array(
-						'showPassword' => __( 'Show password', 'alynt-account-gateway' ),
-						'hidePassword' => __( 'Hide password', 'alynt-account-gateway' ),
-						'show'         => __( 'Show', 'alynt-account-gateway' ),
-						'hide'         => __( 'Hide', 'alynt-account-gateway' ),
+						'showPassword'    => __( 'Show password', 'alynt-account-gateway' ),
+						'hidePassword'    => __( 'Hide password', 'alynt-account-gateway' ),
+						'passwordVisible' => __( 'Password is visible.', 'alynt-account-gateway' ),
+						'passwordHidden'  => __( 'Password is hidden.', 'alynt-account-gateway' ),
+						'show'            => __( 'Show', 'alynt-account-gateway' ),
+						'hide'            => __( 'Hide', 'alynt-account-gateway' ),
 					),
 				)
 			);
