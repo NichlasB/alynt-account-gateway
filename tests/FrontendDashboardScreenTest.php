@@ -205,7 +205,8 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringContainsString( 'class="agw-dashboard__logout"', $html );
 		$this->assertStringContainsString( 'redirect_to=https%3A%2F%2Fexample.test%2Flogin', $html );
 		$this->assertStringContainsString( 'Account Dashboard', $html );
-		$this->assertStringContainsString( 'Welcome, Damon Paulo', $html );
+		$this->assertStringContainsString( 'Welcome, Damon', $html );
+		$this->assertStringNotContainsString( 'Welcome, Damon Paulo', $html );
 		$this->assertStringContainsString( 'damon@example.test', $html );
 		$this->assertStringContainsString( 'Account Details', $html );
 		$this->assertStringContainsString( 'Support', $html );

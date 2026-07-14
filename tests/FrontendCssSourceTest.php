@@ -120,4 +120,28 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertStringContainsString( "\tmax-width: 100%;\n\tmin-height: 42px;\n\tmargin: 0;", $css );
 		$this->assertStringContainsString( "\ttext-decoration: none;\n\ttext-transform: none;\n\tletter-spacing: 0;", $css );
 	}
+
+	public function test_frontend_text_sizes_are_at_least_sixteen_pixels() {
+		$css = $this->get_frontend_css();
+
+		preg_match_all( '/font-size:\s*([0-9]+)px;/', $css, $matches );
+
+		$this->assertNotEmpty( $matches[1] );
+
+		foreach ( $matches[1] as $font_size ) {
+			$this->assertGreaterThanOrEqual( 16, (int) $font_size );
+		}
+	}
+
+	public function test_requested_gateway_controls_use_eighteen_pixel_text() {
+		$css = $this->get_frontend_css();
+
+		$this->assertMatchesRegularExpression( '/\.agw-notice\s*\{[^}]*font-size:\s*18px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-field input\s*\{[^}]*font-size:\s*18px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-checkbox\s*\{[^}]*font-size:\s*18px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-button\s*\{[^}]*font-size:\s*18px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-links\s*\{[^}]*font-size:\s*18px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-back-link\s*\{[^}]*font-size:\s*18px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-dashboard-content input,[^}]*font-size:\s*18px;/s', $css );
+	}
 }

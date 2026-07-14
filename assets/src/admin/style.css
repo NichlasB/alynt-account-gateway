@@ -1,5 +1,31 @@
 .alynt-ag-admin .nav-tab-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
 	margin-top: 16px;
+	padding: 0;
+	border-bottom: 0;
+}
+
+.alynt-ag-admin .nav-tab {
+	float: none;
+	margin: 0;
+	padding: 8px 12px;
+	border: 1px solid #c3c4c7;
+	background: #f6f7f7;
+	font-size: 16px;
+	white-space: nowrap;
+}
+
+.alynt-ag-admin .nav-tab:hover,
+.alynt-ag-admin .nav-tab:focus {
+	background: #fff;
+}
+
+.alynt-ag-admin .nav-tab-active {
+	border-color: #2271b1;
+	background: #fff;
+	box-shadow: inset 0 3px #2271b1;
 }
 
 .alynt-ag-admin input.regular-text {

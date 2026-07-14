@@ -47,4 +47,15 @@ class AdminCssSourceTest extends TestCase {
 		$this->assertStringNotContainsString( 'padding-left: 18px;', $css );
 		$this->assertStringNotContainsString( 'left: 0;', $css );
 	}
+
+	public function test_settings_tabs_wrap_as_independent_controls() {
+		$css = $this->get_admin_css();
+
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-admin \.nav-tab-wrapper\s*\{[^}]*display:\s*flex;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-admin \.nav-tab-wrapper\s*\{[^}]*flex-wrap:\s*wrap;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-admin \.nav-tab-wrapper\s*\{[^}]*gap:\s*8px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-admin \.nav-tab\s*\{[^}]*float:\s*none;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-admin \.nav-tab\s*\{[^}]*white-space:\s*nowrap;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-admin \.nav-tab-active\s*\{[^}]*box-shadow:\s*inset 0 3px #2271b1;/s', $css );
+	}
 }
