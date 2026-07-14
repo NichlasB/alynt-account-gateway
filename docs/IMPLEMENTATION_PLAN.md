@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.91 frontend typography, personalized dashboard greeting, logout copy, and responsive admin tabs in progress
+- Current phase: v0.1.92 rich-text email editor in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.90 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.91 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -33,7 +33,7 @@
 - [x] Add focused regression coverage for typography thresholds, requested 18px controls, logout copy, first-name greeting, and responsive tab CSS.
 - [x] Run build, lint, full tests, POT generation, audit, and diff checks.
 - [x] Install and browser-test the release candidate on LocalWP Plugin Tester at frontend and admin breakpoint widths.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -56,6 +56,9 @@
 - Bumped final release metadata to `0.1.91` across the plugin header/constant, npm metadata, readme stable tag/changelog, sample version assertion, changelog, and generated POT.
 - Final release validation passed: `npm run build`; `npm run make-pot` (`981 strings`); `npm run lint`; `npm test -- --do-not-cache-result` (`264 tests, 1740 assertions`); `npm audit --audit-level=moderate` (`0 vulnerabilities`); and `composer audit` (no advisories).
 - Built final package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.91-20260714-121408\alynt-account-gateway-v0.1.91.zip` with SHA-256 `B48682889762913BDD878590DC551E8D81ABAA2D89D3A7771F39BFF32309882B`. Inspection found 45 runtime files, zero backslash entries, zero unexpected roots, zero development/source entries, aligned `0.1.91` header/constant/stable-tag/POT metadata, exactly one updater header, and all typography, responsive-tab, first-name greeting, and logout-copy markers present.
+- Published GitHub release `v0.1.91`; Build Release workflow run `29327498012` completed successfully.
+- Downloaded and inspected public asset `alynt-account-gateway-v0.1.91.zip` as 55 ZIP entries representing 45 runtime files, with zero backslash entries, zero unexpected roots, zero development/source files, aligned `0.1.91` metadata, exactly one updater header, all release markers present, and SHA-256 `9fe2d3fc5482040de020da25b0da07045cb5ca82cf63b0fc7978e79969e33e68` matching GitHub's published digest.
+- Alynt Plugin Updater on local-only `plugin-tester.local` detected `0.1.90` to `0.1.91` from the public GitHub release asset URL and installed it through WordPress `Plugin_Upgrader`. Final fresh runtime state: active header/constant `0.1.91`, 45 runtime files, no development files, one updater header, all typography/tab/greeting/logout markers present, and no update remaining.
 
 ### Guardrails
 
@@ -67,13 +70,13 @@
 - [x] Focused and full local validation pass.
 - [x] Plugin Tester frontend and admin responsive browser checks pass without overflow, clipped controls, or broken tab states.
 - [x] Final package inspection passes.
-- [ ] Public release asset installs through Alynt Plugin Updater with no update remaining.
+- [x] Public release asset installs through Alynt Plugin Updater with no update remaining.
 
 ## v0.1.92 Rich-Text Email Editor Slice
 
 ### Scope
 
-- [ ] Start from the released and updater-verified `v0.1.91` baseline.
+- [x] Start from the released and updater-verified `v0.1.91` baseline.
 - [ ] Replace the five email body textareas with WordPress-native visual editors that retain Visual and Text modes.
 - [ ] Support safely sanitized headings, bold, italic, links, blockquotes, and ordered/unordered lists in branded HTML emails.
 - [ ] Preserve template tokens in rich content and keep template-specific action buttons generated from their URL tokens.
