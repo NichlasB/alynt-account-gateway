@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.95 final package validated; release approval pending
+- Current phase: v0.1.95 released and updater verified; next slice selection pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.94 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.95 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -18,7 +18,7 @@
 - [x] Hide the warning, remove the dirty class, and re-enable Preview Email and Send Test Email when the form becomes clean again.
 - [x] Preserve clean editor mode switching, standalone test-recipient independence, valid-save behavior, and native leave-page protection for real unsaved differences.
 - [x] Add focused regression coverage and run build, lint, full tests, POT generation, audits, package inspection, and Plugin Tester browser QA.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -33,6 +33,11 @@
 - Bumped final release metadata to `0.1.95` across the plugin header/constant, npm metadata, readme stable tag/changelog, sample version assertion, changelog, README feature summary, and generated POT.
 - Final release validation passed: build; POT generation (`984 strings`); PHPCS; `271 tests, 1806 assertions`; npm audit (`0 vulnerabilities`); Composer audit (no advisories); and `git diff --check`.
 - Built and inspected final package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.95-20260714-174026\alynt-account-gateway-v0.1.95.zip`: 45 runtime files, zero backslash entries, zero development/source entries, aligned header/constant/stable-tag/POT `0.1.95` metadata, exactly one updater header, compiled form snapshot, settled per-editor baseline, clean-state restoration, and leave-page guards present, SHA-256 `30254339B8546A52322E0B8B3A793EB5EF9A30FBAEAF3A05A2A79E7EA900C4FA`.
+- Merged release commit `dcc36c9` through merge commit `4961b07`, tagged `v0.1.95`, and published GitHub release `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.95`; Build Release workflow run `29346729310` completed successfully.
+- Downloaded and inspected public asset `alynt-account-gateway-v0.1.95.zip`: 55 ZIP entries representing 45 runtime files, zero backslash entries, one expected plugin root, zero development/source files, aligned `0.1.95` metadata, exactly one updater header, and compiled dirty-state reconciliation guards present. SHA-256 `0D5C5E01514C504B513D9CA43B7064233EF2A72FD699DFD6AA6A1EDFBB7F4740` matches GitHub's published digest.
+- Alynt Plugin Updater on local-only Plugin Tester performed a forced fresh release check from public `0.1.94`, reported public `0.1.95`, and populated WordPress's normal plugin-update transient with package URL `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.95/alynt-account-gateway-v0.1.95.zip`.
+- WordPress `Plugin_Upgrader::upgrade()` installed that public package. The headless updater left the plugin inactive after replacement, so the prior active state was restored explicitly; final state is active at `0.1.95`, 45 runtime files, exactly one updater header, unchanged settings fingerprint `2d0e919d2f2bc08590b34fcf6ffc6fdc24ebd8e97b6b778f0e67326636226a8e`, compiled reconciliation guards present, and no update remaining.
+- Post-updater Playwright smoke verified all five editors, clean/enabled initial state, ordinary field change/restoration, Visual edit/undo, standalone test-recipient independence, native leave-page confirmation for a real difference, clean reload after discarding the QA edit, and zero console errors. The temporary administrator and verifier scripts were removed.
 
 ### Guardrails
 
@@ -45,7 +50,7 @@
 - [x] Changing and exactly restoring an ordinary saved field returns to the clean state without a navigation prompt.
 - [x] Visual/Text editor changes and undo/restoration reconcile accurately without mode-switch false positives.
 - [x] Real unsaved differences still show the warning, disable both email actions, and prompt before navigation.
-- [ ] Full validation, final package inspection, and public updater verification pass.
+- [x] Full validation, final package inspection, and public updater verification pass.
 
 ## v0.1.94 Unsaved Email Navigation Guard
 
