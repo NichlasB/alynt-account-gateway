@@ -21,27 +21,57 @@ function alyntAgInitEmailSaveState() {
 		return;
 	}
 
-	let isDirty = false;
+	let isDirty      = false;
+	let initialState = readSettings();
 
-	function setDirty() {
-		if ( isDirty ) {
+	function readSettings() {
+		return Array.from( new window.FormData( settingsForm ).entries() );
+	}
+
+	function serializeSettings( entries ) {
+		return JSON.stringify( entries || readSettings() );
+	}
+
+	function updateInitialField( field ) {
+		initialState = initialState.map(
+			function ( entry ) {
+				if ( entry[0] !== field.name ) {
+					return entry;
+				}
+
+				return [ entry[0], field.value ];
+			}
+		);
+	}
+
+	function setDirtyState( nextIsDirty ) {
+		if ( isDirty === nextIsDirty ) {
 			return;
 		}
 
-		isDirty       = true;
-		notice.hidden = false;
-		settingsForm.classList.add( 'alynt-ag-email-settings--dirty' );
+		isDirty       = nextIsDirty;
+		notice.hidden = ! isDirty;
+		settingsForm.classList.toggle( 'alynt-ag-email-settings--dirty', isDirty );
 
 		actionForms.forEach(
 			function ( form ) {
 				const submit = form.querySelector( 'button[type="submit"], input[type="submit"]' );
 
 				if ( submit ) {
-					submit.disabled = true;
-					submit.setAttribute( 'aria-disabled', 'true' );
+					submit.disabled = isDirty;
+
+					if ( isDirty ) {
+						submit.setAttribute( 'aria-disabled', 'true' );
+					} else {
+						submit.removeAttribute( 'aria-disabled' );
+					}
 				}
 			}
 		);
+	}
+
+	function updateDirtyState() {
+		setDirtyState( serializeSettings() !== serializeSettings( initialState ) );
 	}
 
 	function trackTinyMceEditor( editor ) {
@@ -58,8 +88,17 @@ function alyntAgInitEmailSaveState() {
 		editor.alyntAgEmailSaveStateTracked = 'pending';
 		window.setTimeout(
 			function () {
+				editor.save();
+				updateInitialField( textarea );
 				editor.alyntAgEmailSaveStateTracked = true;
-				editor.on( 'change input undo redo', setDirty );
+				editor.on(
+					'change input undo redo',
+					function () {
+						editor.save();
+						updateDirtyState();
+					}
+				);
+				updateDirtyState();
 			},
 			0
 		);
@@ -70,7 +109,7 @@ function alyntAgInitEmailSaveState() {
 			return;
 		}
 
-		setDirty();
+		updateDirtyState();
 	}
 
 	function handleBeforeUnload( event ) {
@@ -87,7 +126,7 @@ function alyntAgInitEmailSaveState() {
 	settingsForm.addEventListener(
 		'submit',
 		function () {
-			isDirty = false;
+			setDirtyState( false );
 		}
 	);
 	window.addEventListener( 'beforeunload', handleBeforeUnload );

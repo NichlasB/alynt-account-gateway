@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.95 - 2026-07-14
+
+### Changed
+
+- Improved the Email tab's unsaved-change guard so exact field restoration and Visual editor undo return the page to a clean state.
+
 ## 0.1.94 - 2026-07-14
 
 ### Added
