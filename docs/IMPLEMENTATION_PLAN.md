@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.97 brand-agnostic typography presets release approval gate
+- Current phase: v0.1.97 released and updater-verified; ready for the next product slice
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.96 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.97 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -18,7 +18,7 @@
 - [x] Add an immediate accessible admin preview and a clear Custom state when either stack is edited manually.
 - [x] Add focused PHP, admin JavaScript, and admin CSS regression coverage.
 - [x] Run build, lint, full tests, POT generation, audits, package inspection, and Plugin Tester browser QA.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -38,6 +38,11 @@
 - Built and inspected final package `alynt-account-gateway-v0.1.97.zip`: one expected plugin root, 45 runtime files, zero backslash entries, zero development/source entries, aligned header/constant/stable-tag/POT `0.1.97` metadata, exactly one updater header, and all typography PHP/compiled JS/compiled CSS markers present. SHA-256: `DAA9663261995978BF5B8365802B7D7DAD43A4E937BB55C208616CC3DCDC8CF5`.
 - Installed that exact final package on local-only Plugin Tester through WordPress's replace-current upload flow. WordPress reported `0.1.97`; the packaged admin screen exposed all five preset states, local/system guidance, preview, and immediate Modern Sans updates from compiled assets.
 - Returned Alynt Account Gateway to its pre-test inactive state with the exact original settings fingerprint, deleted the final temporary administrator and helper, and closed the browser session. The only console error remained the unrelated pre-existing SureForms analytics stylesheet 404.
+- Published GitHub release `v0.1.97` after merging release commit `a670771` into `master` as `e87d5ed`; Build Release workflow run `29360699226` completed successfully and attached the generated runtime ZIP.
+- Downloaded and inspected the exact public asset `alynt-account-gateway-v0.1.97.zip`: one expected plugin root, 45 runtime files, zero backslash entries, zero development/source entries, aligned `0.1.97` metadata, exactly one updater header, and all typography PHP/compiled JavaScript/compiled CSS markers present. SHA-256: `83B201EFD9492D965862BAC74C8CA3776832EDC1964907710934576748354625`.
+- On restored local-only Plugin Tester, Alynt Plugin Updater `1.1.1` discovered Alynt Account Gateway `0.1.97` over active installed `0.1.93`; the standard WordPress update flow completed successfully and no gateway update remained after a forced refresh.
+- Updater-installed runtime verification found active header `0.1.97`, 45 runtime files, zero development files, and all compiled typography markers. Branding browser smoke confirmed all five preset states, the preview, and no-remote-font guidance with zero console errors.
+- Preserved both plugins' restored active state and the exact settings fingerprint `2d0e919d2f2bc08590b34fcf6ffc6fdc24ebd8e97b6b778f0e67326636226a8e`, deleted the temporary administrator and helper, and closed the browser session.
 
 ### Guardrails
 
@@ -50,7 +55,7 @@
 - [x] Selecting a preset updates both saved font-stack fields and the preview without a page reload.
 - [x] Manually editing either font stack switches the selector to Custom without overwriting the entered value.
 - [x] Existing custom stacks and imported settings remain unchanged until an administrator deliberately selects a preset and saves.
-- [ ] Full validation, final package inspection, and public updater verification pass.
+- [x] Full validation, final package inspection, and public updater verification pass.
 
 ## v0.1.96 Email Reconciliation Stability Audit
 
@@ -240,7 +245,7 @@
 
 ## Remaining Product Slices
 
-- [ ] Brand-agnostic typography setup: add system-font pairing presets and an admin preview while preserving custom stacks and avoiding remote font dependencies.
+- [x] Brand-agnostic typography setup: add system-font pairing presets and an admin preview while preserving custom stacks and avoiding remote font dependencies.
 - [x] Settings readiness and onboarding checks: show whether required URL, registration, protection, branding, email, dashboard, WooCommerce, webhook, privacy, and frontend-output prerequisites are ready before site owners enable public output.
 - [x] Real-world WooCommerce dashboard polish: improve branded empty states, endpoint affordances, customer account copy, delegated WooCommerce form styling, order/address/payment-method edge states, and WooCommerce unavailable guidance.
 - [x] Settings UX refinement: improve setup grouping, tab-level guidance, validation hints, admin notices, and safe defaults for first-time configuration.
