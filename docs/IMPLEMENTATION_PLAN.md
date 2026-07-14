@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.92 release publication in progress
+- Current phase: v0.1.92 released and updater-verified; next slice ready
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.91 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.92 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -85,7 +85,7 @@
 - [x] Preserve preview and real test-send tools for all five templates, with clear saved-settings behavior and sample token data.
 - [x] Add focused coverage for editor rendering, safe HTML storage/output, unsafe markup removal, token replacement inside formatted content, and plain-text conversion.
 - [x] Run build, lint, full tests, POT generation, audits, package inspection, Plugin Tester email previews, and controlled test sends.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -106,6 +106,10 @@
 - Bumped final release metadata to `0.1.92` across the plugin header/constant, npm metadata, readme stable tag/changelog, sample version assertion, changelog, and generated POT.
 - Final release validation passed: `npm run build`; `npm run make-pot` (`982 strings`); `npm run lint`; `npm test -- --do-not-cache-result` (`269 tests, 1772 assertions`); `npm audit --audit-level=moderate` (`0 vulnerabilities`); and `composer audit` (no advisories).
 - Built final package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.92-20260714-134045\alynt-account-gateway-v0.1.92.zip` with SHA-256 `BB7827FCC8AC2EEAFA09A3B362828A47C3D51201A666468D75510DA0D1DB1630`. Inspection found 45 runtime files, zero backslash entries, zero unexpected roots, zero development/source leaks, aligned `0.1.92` header/constant/stable-tag/POT metadata, exactly one updater header, and all native-editor, sanitization, safe-renderer, and HTML-token-escaping markers present.
+- Published GitHub release `v0.1.92` at `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.92`; Build Release workflow run `29329920602` completed successfully.
+- Downloaded and inspected public asset `alynt-account-gateway-v0.1.92.zip` as 55 ZIP entries representing 45 runtime files, with zero backslash entries, zero unexpected roots, zero development/source leaks, aligned `0.1.92` metadata, exactly one updater header, all rich-text release markers present, and SHA-256 `a11f15128664bcb2a775b88bbce74cdd3005642ef257f00732c23043ab9a6361` matching GitHub's published digest.
+- Alynt Plugin Updater on local-only `plugin-tester.local` detected `0.1.91` to `0.1.92` from the public GitHub release asset URL. WordPress populated its normal plugin-update transient and installed the release through `Plugin_Upgrader::upgrade()`; final fresh runtime state is active header/constant `0.1.92`, 45 runtime files, no development files, all five rich-text schema keys, native editor/safe renderer/token escaping present, restored email settings, SureMails simulation disabled, and no update remaining.
+- Post-updater Playwright smoke confirmed the public installed copy renders five Visual/Code editors, no media controls, no document or editor overflow at `1440px`, the original password-reset body restored, and no console errors. WordPress emitted the same non-blocking `str_ends_with()` null deprecation from `wp-includes/load.php:1031` during `Automatic_Upgrader_Skin`; the update itself completed successfully.
 
 ### Guardrails
 
@@ -121,7 +125,7 @@
 - [x] Supported formatting survives save, preview, and delivered HTML test email without unsafe markup.
 - [x] Plain-text rendering remains readable and includes the applicable action URL.
 - [x] Full local validation and final package inspection pass.
-- [ ] Public release asset installs through Alynt Plugin Updater with no update remaining.
+- [x] Public release asset installs through Alynt Plugin Updater with no update remaining.
 
 ## v0.1.90 Small Release Cycle
 
