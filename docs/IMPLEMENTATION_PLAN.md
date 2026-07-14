@@ -2,11 +2,54 @@
 
 ## Status
 
-- Current phase: v0.1.93 released and updater-verified; next slice ready
+- Current phase: v0.1.94 final package validated; release approval pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.93 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.94 Unsaved Email Navigation Guard
+
+### Scope
+
+- [x] Start from the released and updater-verified `v0.1.93` baseline.
+- [x] Prompt before leaving the settings page when tracked Email tab settings have unsaved changes.
+- [x] Keep Code/Visual mode switching clean and preserve the existing ordinary-field and TinyMCE change detection.
+- [x] Suppress the leave-page prompt during a legitimate Save Settings submission.
+- [x] Keep the standalone test-recipient field independent from the saved-settings dirty state.
+- [x] Expand the accessible save-state notice so leaving-page risk is clear without relying on browser-dialog copy.
+- [x] Add focused regression coverage and run build, lint, full tests, POT generation, audits, package inspection, and Plugin Tester browser QA.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started from clean, released, and updater-verified `v0.1.93` on branch `release/0.1.94`.
+- Added an Email-settings-scoped native `beforeunload` guard that activates only after the existing saved-settings dirty detector runs and clears during a valid Save Settings submission.
+- Expanded the accessible save-state notice to explain that unsaved changes must be saved before previewing, test sending, or leaving the page.
+- Focused coverage now asserts the leave-page handler, browser event contract, save-submission bypass, and revised warning copy.
+- Full validation passed: build; POT generation (`984 strings`); PHPCS; `271 tests, 1796 assertions`; npm audit (`0 vulnerabilities`); Composer audit (no advisories); and `git diff --check`.
+- Playwright on local-only Plugin Tester verified clean tab navigation, clean Code/Visual mode switches, dirty saved recipient and subject fields, dirty Code and Visual editor content, cancel/accept behavior, browser Back protection, no prompt during Save Settings, a clean post-save reload, and zero console errors.
+- The standalone one-off Send Test Email recipient remained independent: editing it left the warning hidden and both email actions enabled, then tab navigation completed without a prompt.
+- At `390px`, the warning and both email actions stayed within the viewport with zero horizontal overflow.
+- Inspected release-style branch package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.94-branch-qa-final-20260714-161406\alynt-account-gateway-v0.1.93-branch-qa-navigation-guard-portable.zip`: 45 runtime files, zero backslash entries, zero development/source entries, aligned `0.1.93` baseline metadata, compiled leave-page/save-bypass guards, revised PHP/POT copy, and SHA-256 `7D2B5E36DCDABAEB6660F72DA96A5AEDD961F2BC96247F5BCDA92EAF9F3AD790`.
+- Restored Plugin Tester to the published `v0.1.93` asset after QA; the plugin remains active and both temporary administrator accounts and local helper scripts were removed.
+- Bumped final release metadata to `0.1.94` across the plugin header/constant, npm metadata, readme stable tag/changelog, sample version assertion, changelog, README feature summary, and generated POT.
+- Final release validation passed: build; POT generation (`984 strings`); PHPCS; `271 tests, 1796 assertions`; npm audit (`0 vulnerabilities`); Composer audit (no advisories); and `git diff --check`.
+- Built and inspected final package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.94-20260714-161851\alynt-account-gateway-v0.1.94.zip`: 45 runtime files, zero backslash entries, zero development/source entries, aligned header/constant/stable-tag/POT `0.1.94` metadata, exactly one updater header, compiled leave-page/save-bypass guards, revised PHP/POT copy, and SHA-256 `2676E6EB9FB4B1919D2E474FCB5CE98B2BBFA73CA0201056A45FEF07DE7A445F`.
+
+### Guardrails
+
+- Use the browser's standard `beforeunload` confirmation; do not create a custom modal that can conflict with WordPress navigation or accessibility behavior.
+- Keep the guard scoped to the Email settings form and activate it only after a real tracked change.
+- Preserve preview/test-send disabling, WordPress-native Visual/Text editing, saved email content, template sanitization, and all mail-provider behavior.
+
+### Completion Gate
+
+- [x] Dirty ordinary and Visual/Text email edits prompt before tab, browser, or external navigation.
+- [x] Canceling navigation preserves the dirty state and disabled email actions.
+- [x] Saving settings completes without a leave-page prompt and reloads into a clean state.
+- [x] Clean pages, editor mode switches, and standalone test-recipient edits do not prompt.
+- [ ] Full validation, final package inspection, and public updater verification pass.
 
 ## v0.1.93 Email Editor Save-State Guard
 

@@ -82,6 +82,7 @@ class SettingsPageEmailToolsTest extends TestCase {
 		$this->assertStringContainsString( 'role="status"', $output );
 		$this->assertStringContainsString( 'aria-live="polite"', $output );
 		$this->assertStringContainsString( 'You have unsaved email changes.', $output );
+		$this->assertStringContainsString( 'Save Settings before previewing, sending a test email, or leaving this page.', $output );
 		$this->assertSame( 2, substr_count( $output, 'data-alynt-ag-requires-saved-email-settings' ) );
 	}
 

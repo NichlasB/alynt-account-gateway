@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.94 - 2026-07-14
+
+### Added
+
+- Added a native leave-page warning for unsaved email settings while keeping clean navigation, editor mode switches, standalone test recipients, and valid saves interruption-free.
+
 ## 0.1.93 - 2026-07-14
 
 ### Added

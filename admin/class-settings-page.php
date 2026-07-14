@@ -3585,7 +3585,7 @@ class ALYNT_AG_Settings_Page {
 		<div class="notice notice-warning inline alynt-ag-email-save-state" data-alynt-ag-email-save-state role="status" aria-live="polite" hidden>
 			<p>
 				<strong><?php esc_html_e( 'You have unsaved email changes.', 'alynt-account-gateway' ); ?></strong>
-				<?php esc_html_e( 'Save Settings before previewing or sending a test email.', 'alynt-account-gateway' ); ?>
+				<?php esc_html_e( 'Save Settings before previewing, sending a test email, or leaving this page.', 'alynt-account-gateway' ); ?>
 			</p>
 		</div>
 
