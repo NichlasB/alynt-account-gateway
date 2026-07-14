@@ -73,8 +73,24 @@ function alyntAgInitEmailSaveState() {
 		setDirty();
 	}
 
+	function handleBeforeUnload( event ) {
+		if ( ! isDirty ) {
+			return;
+		}
+
+		event.preventDefault();
+		event.returnValue = '';
+	}
+
 	settingsForm.addEventListener( 'input', handleSettingsChange );
 	settingsForm.addEventListener( 'change', handleSettingsChange );
+	settingsForm.addEventListener(
+		'submit',
+		function () {
+			isDirty = false;
+		}
+	);
+	window.addEventListener( 'beforeunload', handleBeforeUnload );
 
 	if ( window.tinymce && Array.isArray( window.tinymce.editors ) ) {
 		window.tinymce.editors.forEach( trackTinyMceEditor );

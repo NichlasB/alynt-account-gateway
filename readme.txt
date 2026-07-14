@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 0.1.93
+Stable tag: 0.1.94
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,6 +43,10 @@ Core features include:
 Uninstalling the plugin removes plugin-owned settings, the stored database schema version, the retention cleanup schedule, rate-limit transients, and plugin-owned account gateway tables. WordPress users, WooCommerce orders, media-library files, and non-plugin data are not removed.
 
 == Changelog ==
+
+= 0.1.94 =
+
+* Added a native leave-page warning for unsaved email settings while keeping clean navigation, editor mode switches, standalone test recipients, and valid saves interruption-free.
 
 = 0.1.93 =
 

@@ -26,5 +26,9 @@ class AdminJsSourceTest extends TestCase {
 		$this->assertStringContainsString( 'submit.disabled = true', $js );
 		$this->assertStringContainsString( "submit.setAttribute( 'aria-disabled', 'true' )", $js );
 		$this->assertStringContainsString( 'notice.hidden = false', $js );
+		$this->assertStringContainsString( "window.addEventListener( 'beforeunload', handleBeforeUnload )", $js );
+		$this->assertStringContainsString( 'event.preventDefault()', $js );
+		$this->assertStringContainsString( "event.returnValue = ''", $js );
+		$this->assertMatchesRegularExpression( "/settingsForm\\.addEventListener\\(\\s*'submit'.*isDirty = false;/s", $js );
 	}
 }
