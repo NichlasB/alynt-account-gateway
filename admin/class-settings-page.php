@@ -135,6 +135,9 @@ class ALYNT_AG_Settings_Page {
 
 				<table class="form-table" role="presentation">
 					<tbody>
+						<?php if ( 'branding' === $active_tab ) : ?>
+							<?php $this->render_typography_preset_control( $settings ); ?>
+						<?php endif; ?>
 						<?php foreach ( $tab_fields as $key => $field ) : ?>
 							<tr>
 								<th scope="row">
@@ -303,6 +306,137 @@ class ALYNT_AG_Settings_Page {
 			$aria, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute().
 			$direction // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static attribute from field_direction_attribute().
 		);
+	}
+
+	/**
+	 * Render the non-persistent typography preset helper.
+	 *
+	 * Presets populate the existing font-stack settings so custom values and
+	 * import/export behavior retain one source of truth.
+	 *
+	 * @param array<string,mixed> $settings Current settings.
+	 * @return void
+	 */
+	private function render_typography_preset_control( $settings ) {
+		$presets        = $this->typography_presets();
+		$selected       = $this->selected_typography_preset( $settings, $presets );
+		$selected_label = 'custom' === $selected ? __( 'Custom', 'alynt-account-gateway' ) : $presets[ $selected ]['label'];
+		?>
+		<tr class="alynt-ag-typography-row">
+			<th scope="row">
+				<label for="alynt-ag-typography-preset">
+					<?php esc_html_e( 'Typography Preset', 'alynt-account-gateway' ); ?>
+				</label>
+			</th>
+			<td>
+				<div
+					class="alynt-ag-typography-control"
+					data-alynt-ag-typography-presets
+					data-status-prefix="<?php esc_attr_e( 'Current pairing:', 'alynt-account-gateway' ); ?>"
+				>
+					<select
+						id="alynt-ag-typography-preset"
+						aria-describedby="alynt-ag-typography-preset-help"
+						data-alynt-ag-typography-select
+					>
+						<?php foreach ( $presets as $preset_key => $preset ) : ?>
+							<option
+								value="<?php echo esc_attr( $preset_key ); ?>"
+								data-heading="<?php echo esc_attr( $preset['heading'] ); ?>"
+								data-body="<?php echo esc_attr( $preset['body'] ); ?>"
+								<?php echo $selected === $preset_key ? 'selected' : ''; ?>
+							>
+								<?php echo esc_html( $preset['label'] ); ?>
+							</option>
+						<?php endforeach; ?>
+						<option value="custom" <?php echo 'custom' === $selected ? 'selected' : ''; ?>>
+							<?php esc_html_e( 'Custom', 'alynt-account-gateway' ); ?>
+						</option>
+					</select>
+					<p id="alynt-ag-typography-preset-help" class="alynt-ag-field-help">
+						<?php esc_html_e( 'Choose a privacy-friendly system-font pairing, or edit either font stack below to use a custom pairing. No remote fonts are loaded.', 'alynt-account-gateway' ); ?>
+					</p>
+					<div class="alynt-ag-typography-preview" data-alynt-ag-typography-preview>
+						<p class="alynt-ag-typography-preview__status" aria-live="polite" data-alynt-ag-typography-status>
+							<?php
+							echo esc_html(
+								sprintf(
+									/* translators: %s: typography preset name. */
+									__( 'Current pairing: %s', 'alynt-account-gateway' ),
+									$selected_label
+								)
+							);
+							?>
+						</p>
+						<p class="alynt-ag-typography-preview__heading" data-alynt-ag-typography-heading>
+							<?php esc_html_e( 'Customer account', 'alynt-account-gateway' ); ?>
+						</p>
+						<p class="alynt-ag-typography-preview__body" data-alynt-ag-typography-body>
+							<?php esc_html_e( 'Manage your orders, details, and account preferences.', 'alynt-account-gateway' ); ?>
+						</p>
+					</div>
+					<noscript>
+						<p class="alynt-ag-field-help">
+							<?php esc_html_e( 'JavaScript is required to apply a preset. The custom font-stack fields remain available below.', 'alynt-account-gateway' ); ?>
+						</p>
+					</noscript>
+				</div>
+			</td>
+		</tr>
+		<?php
+	}
+
+	/**
+	 * Return privacy-friendly local/system typography pairings.
+	 *
+	 * @return array<string,array{label:string,heading:string,body:string}>
+	 */
+	private function typography_presets() {
+		$system_body = '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
+
+		return array(
+			'classic'   => array(
+				'label'   => __( 'Classic Contrast', 'alynt-account-gateway' ),
+				'heading' => 'Georgia, serif',
+				'body'    => $system_body,
+			),
+			'modern'    => array(
+				'label'   => __( 'Modern Sans', 'alynt-account-gateway' ),
+				'heading' => $system_body,
+				'body'    => $system_body,
+			),
+			'editorial' => array(
+				'label'   => __( 'Editorial Serif', 'alynt-account-gateway' ),
+				'heading' => '"Palatino Linotype", "Book Antiqua", Palatino, Georgia, serif',
+				'body'    => $system_body,
+			),
+			'humanist'  => array(
+				'label'   => __( 'Clear Humanist', 'alynt-account-gateway' ),
+				'heading' => '"Trebuchet MS", Arial, sans-serif',
+				'body'    => '"Segoe UI", Tahoma, Arial, sans-serif',
+			),
+		);
+	}
+
+	/**
+	 * Match current stacks to a known preset without changing saved settings.
+	 *
+	 * @param array<string,mixed>                                          $settings Current settings.
+	 * @param array<string,array{label:string,heading:string,body:string}> $presets Presets.
+	 * @return string
+	 */
+	private function selected_typography_preset( $settings, $presets = array() ) {
+		$presets = $presets ? $presets : $this->typography_presets();
+		$heading = isset( $settings['heading_font_family'] ) ? (string) $settings['heading_font_family'] : '';
+		$body    = isset( $settings['body_font_family'] ) ? (string) $settings['body_font_family'] : '';
+
+		foreach ( $presets as $preset_key => $preset ) {
+			if ( $heading === $preset['heading'] && $body === $preset['body'] ) {
+				return $preset_key;
+			}
+		}
+
+		return 'custom';
 	}
 
 	/**

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.97 - 2026-07-14
+
+### Added
+
+- Added four brand-agnostic local/system typography presets with an accessible live preview while preserving custom font stacks and avoiding remote font dependencies.
+
 ## 0.1.96 - 2026-07-14
 
 ### Changed

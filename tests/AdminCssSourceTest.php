@@ -65,4 +65,13 @@ class AdminCssSourceTest extends TestCase {
 		$this->assertMatchesRegularExpression( '/\.alynt-ag-email-save-state\s*\{[^}]*max-width:\s*78rem;/s', $css );
 		$this->assertMatchesRegularExpression( '/\.alynt-ag-email-save-state\[hidden\]\s*\{[^}]*display:\s*none;/s', $css );
 	}
+
+	public function test_typography_preview_is_stable_and_readable() {
+		$css = $this->get_admin_css();
+
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-typography-control\s*\{[^}]*max-width:\s*46rem;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-typography-preview\s*\{[^}]*border-radius:\s*4px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-typography-preview__heading\s*\{[^}]*font-size:\s*24px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-typography-preview__body\s*\{[^}]*font-size:\s*16px;/s', $css );
+	}
 }
