@@ -124,7 +124,13 @@ class ALYNT_AG_Settings_Page {
 				<?php $this->render_setup_readiness_panel( $settings ); ?>
 			<?php endif; ?>
 
-			<form method="post" action="options.php">
+			<form
+				method="post"
+				action="options.php"
+				<?php if ( 'emails' === $active_tab ) : ?>
+					data-alynt-ag-email-settings
+				<?php endif; ?>
+			>
 				<?php settings_fields( 'alynt_ag_settings' ); ?>
 
 				<table class="form-table" role="presentation">
@@ -3576,13 +3582,19 @@ class ALYNT_AG_Settings_Page {
 		<p class="description">
 			<?php esc_html_e( 'Use the saved template settings with sample account tokens before sending real account emails.', 'alynt-account-gateway' ); ?>
 		</p>
+		<div class="notice notice-warning inline alynt-ag-email-save-state" data-alynt-ag-email-save-state role="status" aria-live="polite" hidden>
+			<p>
+				<strong><?php esc_html_e( 'You have unsaved email changes.', 'alynt-account-gateway' ); ?></strong>
+				<?php esc_html_e( 'Save Settings before previewing or sending a test email.', 'alynt-account-gateway' ); ?>
+			</p>
+		</div>
 
 		<div class="alynt-ag-email-tools">
 			<?php $this->render_email_template_reference( $templates ); ?>
 			<?php $this->render_email_token_reference( $email_service ); ?>
 
 			<div class="alynt-ag-email-actions">
-				<form method="get" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" target="_blank" class="alynt-ag-inline-tool alynt-ag-email-action">
+				<form method="get" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" target="_blank" class="alynt-ag-inline-tool alynt-ag-email-action" data-alynt-ag-requires-saved-email-settings>
 					<input type="hidden" name="action" value="alynt_ag_preview_email">
 					<?php wp_nonce_field( 'alynt_ag_preview_email' ); ?>
 					<label for="alynt-ag-email-preview-template"><?php esc_html_e( 'Preview Template', 'alynt-account-gateway' ); ?></label>
@@ -3597,7 +3609,7 @@ class ALYNT_AG_Settings_Page {
 					<?php submit_button( __( 'Preview Email', 'alynt-account-gateway' ), 'secondary', 'submit', false ); ?>
 				</form>
 
-				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-inline-tool alynt-ag-email-action">
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-inline-tool alynt-ag-email-action" data-alynt-ag-requires-saved-email-settings>
 					<input type="hidden" name="action" value="alynt_ag_test_email">
 					<?php wp_nonce_field( 'alynt_ag_test_email' ); ?>
 					<label for="alynt-ag-email-test-template"><?php esc_html_e( 'Test Template', 'alynt-account-gateway' ); ?></label>

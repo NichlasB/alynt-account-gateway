@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.93 - 2026-07-14
+
+### Added
+
+- Added an accessible unsaved-change guard that prevents email previews and test sends from silently using stale saved template settings.
+
 ## 0.1.92 - 2026-07-14
 
 ### Added

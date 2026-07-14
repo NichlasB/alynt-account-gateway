@@ -469,6 +469,15 @@
 	max-width: 78rem;
 }
 
+.alynt-ag-email-save-state {
+	max-width: 78rem;
+	margin: 12px 0;
+}
+
+.alynt-ag-email-save-state[hidden] {
+	display: none;
+}
+
 .alynt-ag-email-reference,
 .alynt-ag-email-tokens,
 .alynt-ag-email-action {

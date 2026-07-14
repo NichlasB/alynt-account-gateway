@@ -2,11 +2,53 @@
 
 ## Status
 
-- Current phase: v0.1.92 released and updater-verified; next slice ready
+- Current phase: v0.1.93 release candidate complete and awaiting release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.92 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.93 Email Editor Save-State Guard
+
+### Scope
+
+- [x] Start from the released and updater-verified `v0.1.92` baseline.
+- [x] Detect unsaved changes to Email tab settings, including WordPress Visual-editor changes.
+- [x] Show an accessible status notice explaining that preview and test-send tools use saved settings.
+- [x] Disable Preview Email and Send Test Email while tracked email settings are unsaved, without treating the standalone test-recipient field as a saved setting.
+- [x] Add focused regression coverage for the settings-page hooks, admin JavaScript behavior markers, and notice styling.
+- [x] Run build, lint, full tests, POT generation, audits, package inspection, and Plugin Tester browser QA.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started from clean, released, and updater-verified `v0.1.92` on branch `release/0.1.93`.
+- Added Email-tab-only data hooks, an initially hidden `role="status"`/`aria-live="polite"` warning, and guards around both saved-settings email actions.
+- Added admin behavior that tracks ordinary settings fields plus all five WordPress TinyMCE editors, reveals the warning after a real edit, and disables Preview Email and Send Test Email with native and ARIA disabled states.
+- Kept the standalone test-recipient field independent because that field intentionally does not update the saved default recipient.
+- Plugin Tester QA caught and corrected a mode-switch edge case: synthetic textarea/editor initialization events emitted while returning from Code to Visual mode no longer create a false unsaved state.
+- Focused validation passed with `8 tests, 65 assertions`; full validation passed with build, POT generation (`984 strings`), PHPCS, `271 tests, 1791 assertions`, npm audit (`0 vulnerabilities`), and Composer audit (no advisories).
+- Installed a same-version branch-QA package on local-only Plugin Tester through WordPress `Plugin_Upgrader`; the plugin remained active at `0.1.92` and exposed the compiled save-state and synthetic-event guards.
+- Playwright verified clean Code/Visual mode switching, real Visual and Code edits, ordinary field edits, all five TinyMCE bindings, standalone recipient independence, saved-settings reload behavior, accessible warning semantics, disabled action states, and zero overflow at `390px`. Original email settings remained unchanged and temporary site artifacts were removed.
+- Inspected current release-style branch package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.93-branch-qa-20260714-141207\alynt-account-gateway-v0.1.92-branch-qa-email-save-state.zip`: 45 runtime files, zero backslash entries, zero development/source entries, translated warning strings and compiled save-state guards present, SHA-256 `C33F3600864243F575DE3FBC95AC9EBE700690164305DA743BB0E5110E8F5EE6`.
+- Bumped final release metadata to `0.1.93` across the plugin header/constant, npm metadata, readme stable tag/changelog, sample version assertion, changelog, README feature summary, and generated POT.
+- Final release validation passed: build; POT generation (`984 strings`); PHPCS; `271 tests, 1791 assertions`; npm audit (`0 vulnerabilities`); and Composer audit (no advisories).
+- Built and inspected final package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.93-20260714-141503\alynt-account-gateway-v0.1.93.zip` with SHA-256 `B6A7C84F010B578BBF1246CB9388BE7B988CA9BC0C9DE0C3B2D317F412D68C33`: 45 runtime files, zero backslash entries, zero development/source entries, aligned header/constant/stable-tag/POT metadata, exactly one updater header, and all save-state, synthetic-event, and translation markers present.
+- Installed that exact final package on Plugin Tester through WordPress `Plugin_Upgrader`; the plugin remained active at header/constant `0.1.93` with 45 runtime files. Final Playwright smoke verified clean/enabled initial state, visible warning and disabled actions after a real edit, clean restored state after reload, original subject retained, zero document overflow, and zero console errors. Temporary installer artifacts were removed.
+
+### Guardrails
+
+- Keep this behavior scoped to the Email settings tab and its existing preview/test-send tools.
+- Preserve WordPress-native Visual/Text editing, template sanitization, sample tokens, mail-provider delegation, and all actual account-email triggers.
+- Do not autosave, submit draft editor content to preview endpoints, or change the saved default test recipient from the standalone test-send form.
+
+### Completion Gate
+
+- [x] Ordinary email settings and all five Visual/Text body editors reliably enter the unsaved state.
+- [x] Saving and reloading restores the clean state and re-enables preview/test-send actions.
+- [x] The warning is keyboard/screen-reader accessible and the controls remain coherent at admin breakpoints.
+- [x] Full local validation and final package inspection pass.
+- [ ] Public release asset installs through Alynt Plugin Updater with no update remaining.
 
 ## Remaining Product Slices
 
