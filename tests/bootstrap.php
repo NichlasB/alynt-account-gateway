@@ -341,6 +341,19 @@ if ( ! function_exists( 'wp_footer' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_editor' ) ) {
+	function wp_editor( $content, $editor_id, $settings = array() ) {
+		$GLOBALS['alynt_ag_test_editors'][] = array(
+			'content'   => $content,
+			'editor_id' => $editor_id,
+			'settings'  => $settings,
+		);
+
+		$name = isset( $settings['textarea_name'] ) ? $settings['textarea_name'] : $editor_id;
+		echo '<div class="wp-editor-wrap"><textarea id="' . esc_attr( $editor_id ) . '" name="' . esc_attr( $name ) . '">' . esc_html( $content ) . '</textarea></div>';
+	}
+}
+
 if ( ! function_exists( 'wp_specialchars_decode' ) ) {
 	function wp_specialchars_decode( $value, $quote_style = ENT_QUOTES ) {
 		return html_entity_decode( (string) $value, $quote_style, 'UTF-8' );
@@ -734,6 +747,17 @@ if ( ! function_exists( 'wp_validate_redirect' ) ) {
 
 if ( ! function_exists( 'wp_kses_post' ) ) {
 	function wp_kses_post( $value ) {
+		$value = preg_replace( '#<(script|style|iframe|form)\b[^>]*>.*?</\1>#is', '', (string) $value );
+		$value = strip_tags( (string) $value, '<a><abbr><b><blockquote><br><cite><code><del><em><h1><h2><h3><h4><h5><h6><hr><i><ins><li><ol><p><pre><q><s><small><span><strong><sub><sup><u><ul>' );
+		$value = preg_replace_callback(
+			'/<[^>]+>/',
+			static function ( $matches ) {
+				$tag = preg_replace( '/\s+on[a-z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)/i', '', $matches[0] );
+				return preg_replace( '/\s+(href|src)\s*=\s*(["\'])\s*javascript:[^"\']*\2/i', '', (string) $tag );
+			},
+			(string) $value
+		);
+
 		return (string) $value;
 	}
 }

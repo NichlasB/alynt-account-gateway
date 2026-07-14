@@ -69,6 +69,56 @@ class EmailTemplateServiceTest extends TestCase {
 		$this->assertStringContainsString( 'https://example.test/account?action=setpassword&token=abc', $rendered['plain'] );
 	}
 
+	public function test_render_preserves_safe_rich_text_and_converts_it_to_plain_text() {
+		$service  = new ALYNT_AG_Email_Template_Service();
+		$settings = array_merge(
+			ALYNT_AG_Settings_Schema::defaults(),
+			array(
+				'email_password_reset_body' => '<h2>Hello {{first_name}}</h2><p><strong>Important</strong> <a href="https://example.test/help">Read more</a></p><ul><li>First step</li></ul>',
+			)
+		);
+		$rendered = $service->render(
+			'password_reset',
+			array(
+				'first_name' => 'Damon',
+				'reset_url'  => 'https://example.test/reset',
+			),
+			$settings
+		);
+
+		$this->assertStringContainsString( '<h2>Hello Damon</h2>', $rendered['html'] );
+		$this->assertStringContainsString( '<strong>Important</strong>', $rendered['html'] );
+		$this->assertStringContainsString( '<a href="https://example.test/help">Read more</a>', $rendered['html'] );
+		$this->assertStringContainsString( '<ul><li>First step</li></ul>', $rendered['html'] );
+		$this->assertStringNotContainsString( '<h2>', $rendered['plain'] );
+		$this->assertStringContainsString( 'Hello Damon', $rendered['plain'] );
+		$this->assertStringContainsString( 'https://example.test/reset', $rendered['plain'] );
+	}
+
+	public function test_render_strips_unsafe_markup_and_escapes_token_markup() {
+		$service  = new ALYNT_AG_Email_Template_Service();
+		$settings = array_merge(
+			ALYNT_AG_Settings_Schema::defaults(),
+			array(
+				'email_password_reset_body' => '<p onclick="bad()">Hello {{first_name}}</p><script>alert(1)</script><a href="javascript:alert(2)">Bad link</a>',
+			)
+		);
+		$rendered = $service->render(
+			'password_reset',
+			array(
+				'first_name' => '<img src=x onerror=bad()>Damon',
+				'reset_url'  => 'https://example.test/reset',
+			),
+			$settings
+		);
+
+		$this->assertStringNotContainsString( '<script', $rendered['html'] );
+		$this->assertStringNotContainsString( 'onclick=', $rendered['html'] );
+		$this->assertStringNotContainsString( 'javascript:', $rendered['html'] );
+		$this->assertStringNotContainsString( '<img', $rendered['html'] );
+		$this->assertStringContainsString( '&lt;img src=x onerror=bad()&gt;Damon', $rendered['html'] );
+	}
+
 	public function test_preview_tokens_render_every_supported_template() {
 		$service  = new ALYNT_AG_Email_Template_Service();
 		$settings = ALYNT_AG_Settings_Schema::defaults();

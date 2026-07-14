@@ -22,6 +22,11 @@ if ( ! function_exists( 'submit_button' ) ) {
  */
 class SettingsPageEmailToolsTest extends TestCase {
 
+	protected function setUp(): void {
+		parent::setUp();
+		$GLOBALS['alynt_ag_test_editors'] = array();
+	}
+
 	/**
 	 * Invoke a private settings page helper.
 	 *
@@ -73,5 +78,32 @@ class SettingsPageEmailToolsTest extends TestCase {
 		$this->assertStringContainsString( 'aria-describedby="alynt-ag-email-preview-help"', $output );
 		$this->assertStringContainsString( 'aria-describedby="alynt-ag-email-test-help"', $output );
 		$this->assertStringContainsString( 'Sends one real test email to this recipient.', $output );
+	}
+
+	public function test_rich_text_field_uses_wordpress_visual_and_text_editor_without_media_uploads() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		ob_start();
+		$this->invoke_helper(
+			$settings_page,
+			'render_field',
+			array(
+				'email_password_reset_body',
+				array( 'type' => 'rich_text' ),
+				'<h2>Reset {{first_name}}</h2>',
+			)
+		);
+		$output = ob_get_clean();
+
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_editors'] );
+		$editor = $GLOBALS['alynt_ag_test_editors'][0];
+		$this->assertSame( 'alynt-ag-email_password_reset_body', $editor['editor_id'] );
+		$this->assertSame( 'alynt_ag_settings[email_password_reset_body]', $editor['settings']['textarea_name'] );
+		$this->assertFalse( $editor['settings']['media_buttons'] );
+		$this->assertFalse( $editor['settings']['drag_drop_upload'] );
+		$this->assertIsArray( $editor['settings']['tinymce'] );
+		$this->assertIsArray( $editor['settings']['quicktags'] );
+		$this->assertStringContainsString( 'formatselect,bold,italic', $editor['settings']['tinymce']['toolbar1'] );
+		$this->assertStringContainsString( 'wp-editor-wrap', $output );
 	}
 }

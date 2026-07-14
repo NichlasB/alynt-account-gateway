@@ -131,17 +131,19 @@ class ALYNT_AG_Email_Template_Service {
 			return new WP_Error( 'alynt_ag_unknown_email_template', __( 'Unknown email template.', 'alynt-account-gateway' ) );
 		}
 
-		$tokens    = $this->normalize_tokens( $tokens );
-		$button    = $this->get_button_for_template( $template, $tokens );
-		$prefix    = $this->get_settings_prefix( $template );
-		$subject   = $this->replace_tokens( $settings[ "{$prefix}_subject" ] ?? '', $tokens );
-		$preheader = $this->replace_tokens( $settings[ "{$prefix}_preheader" ] ?? '', $tokens );
-		$body      = $this->replace_tokens( $settings[ "{$prefix}_body" ] ?? '', $tokens );
+		$tokens        = $this->normalize_tokens( $tokens );
+		$button        = $this->get_button_for_template( $template, $tokens );
+		$prefix        = $this->get_settings_prefix( $template );
+		$subject       = $this->replace_tokens( $settings[ "{$prefix}_subject" ] ?? '', $tokens );
+		$preheader     = $this->replace_tokens( $settings[ "{$prefix}_preheader" ] ?? '', $tokens );
+		$body_template = $settings[ "{$prefix}_body" ] ?? '';
+		$body          = $this->replace_tokens( $body_template, $tokens );
+		$body_html     = $this->replace_html_tokens( $body_template, $tokens );
 
 		return array(
 			'subject'   => $subject,
 			'preheader' => $preheader,
-			'html'      => $this->render_html( $template, $subject, $preheader, $body, $button, $settings ),
+			'html'      => $this->render_html( $template, $subject, $preheader, $body_html, $button, $settings ),
 			'plain'     => $this->render_plain( $body, $button ),
 		);
 	}
@@ -405,6 +407,25 @@ class ALYNT_AG_Email_Template_Service {
 	}
 
 	/**
+	 * Replace tokens for an HTML body without allowing token values to add markup.
+	 *
+	 * @param string              $content Content.
+	 * @param array<string,mixed> $tokens  Token values.
+	 * @return string
+	 */
+	private function replace_html_tokens( $content, $tokens ) {
+		$normalized = $this->normalize_tokens( $tokens );
+		$replace    = array();
+		$url_tokens = array( 'confirmation_url', 'reset_url', 'change_email_url', 'dashboard_url' );
+
+		foreach ( $normalized as $key => $value ) {
+			$replace[ '{{' . $key . '}}' ] = in_array( $key, $url_tokens, true ) ? esc_url( $value ) : esc_html( $value );
+		}
+
+		return strtr( (string) $content, $replace );
+	}
+
+	/**
 	 * Remove the pending email-change marker created immediately before core sends mail.
 	 *
 	 * @param array<string,mixed> $atts Mail arguments.
@@ -571,7 +592,7 @@ class ALYNT_AG_Email_Template_Service {
 		$text_color   = $settings['text_color'] ?? '#281408';
 		$background   = $settings['page_background_color'] ?? '#EAE4D6';
 		$surface      = $settings['surface_color'] ?? '#FFFFFF';
-		$body_html    = wpautop( esc_html( $body ) );
+		$body_html    = wpautop( wp_kses_post( $body ) );
 		$button_url   = ! empty( $button['url'] ) ? esc_url( $button['url'] ) : '';
 		$button_label = ! empty( $button['label'] ) ? $button['label'] : '';
 

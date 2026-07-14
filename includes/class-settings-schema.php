@@ -333,7 +333,7 @@ class ALYNT_AG_Settings_Schema {
 			),
 			'email_registration_confirmation_body'      => array(
 				'tab'     => 'emails',
-				'type'    => 'textarea',
+				'type'    => 'rich_text',
 				'default' => __( "Hi {{first_name}},\n\nWelcome to {{site_name}}. Confirm your email address and choose a password using the button below.\n\nThis link expires in {{expiry_hours}} hours.", 'alynt-account-gateway' ),
 				'label'   => __( 'Registration Confirmation Body', 'alynt-account-gateway' ),
 			),
@@ -351,7 +351,7 @@ class ALYNT_AG_Settings_Schema {
 			),
 			'email_password_reset_body'                 => array(
 				'tab'     => 'emails',
-				'type'    => 'textarea',
+				'type'    => 'rich_text',
 				'default' => __( "Hi {{first_name}},\n\nWe received a request to reset the password for your {{site_name}} account. Use the button below to choose a new password.\n\nIf you did not request this, you can ignore this email.", 'alynt-account-gateway' ),
 				'label'   => __( 'Password Reset Body', 'alynt-account-gateway' ),
 			),
@@ -375,7 +375,7 @@ class ALYNT_AG_Settings_Schema {
 			),
 			'email_password_changed_body'               => array(
 				'tab'     => 'emails',
-				'type'    => 'textarea',
+				'type'    => 'rich_text',
 				'default' => __( "Hi {{first_name}},\n\nThis is a confirmation that the password for your {{site_name}} account was changed.\n\nIf you did not make this change, please contact the site owner right away.", 'alynt-account-gateway' ),
 				'label'   => __( 'Password Changed Body', 'alynt-account-gateway' ),
 			),
@@ -399,7 +399,7 @@ class ALYNT_AG_Settings_Schema {
 			),
 			'email_new_user_welcome_body'               => array(
 				'tab'     => 'emails',
-				'type'    => 'textarea',
+				'type'    => 'rich_text',
 				'default' => __( "Hi {{first_name}},\n\nYour {{site_name}} account has been created successfully. You can now log in, manage your details, and access your customer dashboard.\n\nUse the button below to visit your account.", 'alynt-account-gateway' ),
 				'label'   => __( 'Account Created Welcome Body', 'alynt-account-gateway' ),
 			),
@@ -423,7 +423,7 @@ class ALYNT_AG_Settings_Schema {
 			),
 			'email_change_confirmation_body'            => array(
 				'tab'     => 'emails',
-				'type'    => 'textarea',
+				'type'    => 'rich_text',
 				'default' => __( "Hi {{first_name}},\n\nConfirm this email address for your {{site_name}} account using the button below.\n\nIf you did not request this change, you can ignore this email.", 'alynt-account-gateway' ),
 				'label'   => __( 'Email Change Confirmation Body', 'alynt-account-gateway' ),
 			),
@@ -775,6 +775,7 @@ class ALYNT_AG_Settings_Schema {
 				return $font_stack ? $font_stack : '';
 			case 'dashboard_links':
 				return self::sanitize_dashboard_links( $value );
+			case 'rich_text':
 			case 'textarea':
 				return wp_kses_post( wp_unslash( $value ) );
 			case 'select':

@@ -293,6 +293,37 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertFalse( $defaults['email_change_confirmation_disabled'] );
 	}
 
+	public function test_email_body_fields_use_rich_text_schema_type() {
+		$schema = ALYNT_AG_Settings_Schema::schema();
+		$keys   = array(
+			'email_registration_confirmation_body',
+			'email_password_reset_body',
+			'email_password_changed_body',
+			'email_new_user_welcome_body',
+			'email_change_confirmation_body',
+		);
+
+		foreach ( $keys as $key ) {
+			$this->assertSame( 'rich_text', $schema[ $key ]['type'] );
+		}
+	}
+
+	public function test_rich_text_email_body_keeps_formatting_and_removes_unsafe_markup() {
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array(
+				'email_password_reset_body' => '<h2>Reset</h2><p onclick="bad()"><strong>Safe</strong> <a href="https://example.test/help">Help</a></p><script>alert(1)</script><a href="javascript:alert(2)">Bad link</a>',
+			)
+		);
+		$body      = $sanitized['email_password_reset_body'];
+
+		$this->assertStringContainsString( '<h2>Reset</h2>', $body );
+		$this->assertStringContainsString( '<strong>Safe</strong>', $body );
+		$this->assertStringContainsString( 'href="https://example.test/help"', $body );
+		$this->assertStringNotContainsString( '<script', $body );
+		$this->assertStringNotContainsString( 'onclick=', $body );
+		$this->assertStringNotContainsString( 'javascript:', $body );
+	}
+
 	public function test_reoon_default_policy_blocks_expected_statuses() {
 		$client = new ALYNT_AG_Reoon_Client();
 
