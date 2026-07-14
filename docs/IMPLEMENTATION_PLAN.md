@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.94 final package validated; release approval pending
+- Current phase: v0.1.94 released and updater verified; next slice selection pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.93 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.94 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -19,7 +19,7 @@
 - [x] Keep the standalone test-recipient field independent from the saved-settings dirty state.
 - [x] Expand the accessible save-state notice so leaving-page risk is clear without relying on browser-dialog copy.
 - [x] Add focused regression coverage and run build, lint, full tests, POT generation, audits, package inspection, and Plugin Tester browser QA.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -36,6 +36,11 @@
 - Bumped final release metadata to `0.1.94` across the plugin header/constant, npm metadata, readme stable tag/changelog, sample version assertion, changelog, README feature summary, and generated POT.
 - Final release validation passed: build; POT generation (`984 strings`); PHPCS; `271 tests, 1796 assertions`; npm audit (`0 vulnerabilities`); Composer audit (no advisories); and `git diff --check`.
 - Built and inspected final package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.94-20260714-161851\alynt-account-gateway-v0.1.94.zip`: 45 runtime files, zero backslash entries, zero development/source entries, aligned header/constant/stable-tag/POT `0.1.94` metadata, exactly one updater header, compiled leave-page/save-bypass guards, revised PHP/POT copy, and SHA-256 `2676E6EB9FB4B1919D2E474FCB5CE98B2BBFA73CA0201056A45FEF07DE7A445F`.
+- Merged release commit `e740535` through merge commit `2dde4b1`, tagged `v0.1.94`, and published GitHub release `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.94`; Build Release workflow run `29340949616` completed successfully.
+- Downloaded and inspected public asset `alynt-account-gateway-v0.1.94.zip`: 55 ZIP entries representing 45 runtime files, zero backslash entries, zero unexpected roots, zero development/source files, aligned `0.1.94` metadata, exactly one updater header, compiled leave-page/save-bypass guards, revised PHP/POT copy, and SHA-256 `9BA9317CED3C4FBC02AAE2D3356917233D9FFECB312B40FDA7303EE38C181558` matching GitHub's published digest.
+- Alynt Plugin Updater on local-only Plugin Tester performed a fresh release check, detected public `0.1.93` to `0.1.94`, and populated WordPress's update transient with package URL `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.94/alynt-account-gateway-v0.1.94.zip`.
+- WordPress `Plugin_Upgrader::upgrade()` installed that public package. The headless updater left the plugin inactive after replacement, so the prior active state was restored explicitly; final state is active at `0.1.94`, 45 runtime files, unchanged settings fingerprint, compiled guard present, and no update remaining.
+- Post-updater Playwright smoke verified the clean initial state, revised notice copy, dirty warning and disabled actions after a tracked edit, native tab-navigation confirmation, and zero console errors. The temporary administrator and all local verifier scripts were removed.
 
 ### Guardrails
 
@@ -49,7 +54,7 @@
 - [x] Canceling navigation preserves the dirty state and disabled email actions.
 - [x] Saving settings completes without a leave-page prompt and reloads into a clean state.
 - [x] Clean pages, editor mode switches, and standalone test-recipient edits do not prompt.
-- [ ] Full validation, final package inspection, and public updater verification pass.
+- [x] Full validation, final package inspection, and public updater verification pass.
 
 ## v0.1.93 Email Editor Save-State Guard
 
