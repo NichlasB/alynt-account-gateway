@@ -78,6 +78,11 @@ class SettingsPageEmailToolsTest extends TestCase {
 		$this->assertStringContainsString( 'aria-describedby="alynt-ag-email-preview-help"', $output );
 		$this->assertStringContainsString( 'aria-describedby="alynt-ag-email-test-help"', $output );
 		$this->assertStringContainsString( 'Sends one real test email to this recipient.', $output );
+		$this->assertStringContainsString( 'data-alynt-ag-email-save-state', $output );
+		$this->assertStringContainsString( 'role="status"', $output );
+		$this->assertStringContainsString( 'aria-live="polite"', $output );
+		$this->assertStringContainsString( 'You have unsaved email changes.', $output );
+		$this->assertSame( 2, substr_count( $output, 'data-alynt-ag-requires-saved-email-settings' ) );
 	}
 
 	public function test_rich_text_field_uses_wordpress_visual_and_text_editor_without_media_uploads() {

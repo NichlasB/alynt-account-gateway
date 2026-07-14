@@ -12,6 +12,86 @@ if ( root ) {
 	root.classList.add( 'alynt-ag-admin--ready' );
 }
 
+function alyntAgInitEmailSaveState() {
+	const settingsForm = document.querySelector( '[data-alynt-ag-email-settings]' );
+	const notice       = document.querySelector( '[data-alynt-ag-email-save-state]' );
+	const actionForms  = document.querySelectorAll( '[data-alynt-ag-requires-saved-email-settings]' );
+
+	if ( ! settingsForm || ! notice || ! actionForms.length ) {
+		return;
+	}
+
+	let isDirty = false;
+
+	function setDirty() {
+		if ( isDirty ) {
+			return;
+		}
+
+		isDirty       = true;
+		notice.hidden = false;
+		settingsForm.classList.add( 'alynt-ag-email-settings--dirty' );
+
+		actionForms.forEach(
+			function ( form ) {
+				const submit = form.querySelector( 'button[type="submit"], input[type="submit"]' );
+
+				if ( submit ) {
+					submit.disabled = true;
+					submit.setAttribute( 'aria-disabled', 'true' );
+				}
+			}
+		);
+	}
+
+	function trackTinyMceEditor( editor ) {
+		if ( ! editor || editor.alyntAgEmailSaveStateTracked ) {
+			return;
+		}
+
+		const textarea = editor.getElement();
+
+		if ( ! textarea || ! settingsForm.contains( textarea ) ) {
+			return;
+		}
+
+		editor.alyntAgEmailSaveStateTracked = 'pending';
+		window.setTimeout(
+			function () {
+				editor.alyntAgEmailSaveStateTracked = true;
+				editor.on( 'change input undo redo', setDirty );
+			},
+			0
+		);
+	}
+
+	function handleSettingsChange( event ) {
+		if ( event.target.matches( '.wp-editor-area' ) && ! event.isTrusted ) {
+			return;
+		}
+
+		setDirty();
+	}
+
+	settingsForm.addEventListener( 'input', handleSettingsChange );
+	settingsForm.addEventListener( 'change', handleSettingsChange );
+
+	if ( window.tinymce && Array.isArray( window.tinymce.editors ) ) {
+		window.tinymce.editors.forEach( trackTinyMceEditor );
+	}
+
+	if ( window.jQuery ) {
+		window.jQuery( document ).on(
+			'tinymce-editor-init.alyntAgEmailSaveState',
+			function ( event, editor ) {
+				trackTinyMceEditor( editor );
+			}
+		);
+	}
+}
+
+alyntAgInitEmailSaveState();
+
 function alyntAgOpenMediaFrame( field ) {
 	const input        = field.querySelector( '[data-alynt-ag-media-input]' );
 	const preview      = field.querySelector( '[data-alynt-ag-media-preview]' );

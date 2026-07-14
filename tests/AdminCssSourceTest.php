@@ -58,4 +58,11 @@ class AdminCssSourceTest extends TestCase {
 		$this->assertMatchesRegularExpression( '/\.alynt-ag-admin \.nav-tab\s*\{[^}]*white-space:\s*nowrap;/s', $css );
 		$this->assertMatchesRegularExpression( '/\.alynt-ag-admin \.nav-tab-active\s*\{[^}]*box-shadow:\s*inset 0 3px #2271b1;/s', $css );
 	}
+
+	public function test_email_save_state_notice_respects_hidden_attribute() {
+		$css = $this->get_admin_css();
+
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-email-save-state\s*\{[^}]*max-width:\s*78rem;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-email-save-state\[hidden\]\s*\{[^}]*display:\s*none;/s', $css );
+	}
 }
