@@ -10,7 +10,7 @@ This is private Alynt-distributed software. The plugin header includes `GitHub P
 - Configurable login path, account action base, after-login redirect, and emergency bypass key for direct `wp-login.php` access.
 - Frontend output disabled by default so site owners can configure settings before public changes appear.
 - Setup readiness checks that summarize critical configuration before public frontend output is enabled.
-- Brand controls for logo, logo max width, background image, colors, button colors, and font stacks.
+- Brand controls for logo, logo max width, background image, colors, button colors, custom font stacks, and four local/system typography presets with an accessible live preview.
 - Screen-specific instruction copy for account gateway forms and states.
 - Confirmation-first registration flow that creates a WordPress user only after the visitor confirms email and sets a valid password.
 - Email-only login support with generated usernames for created accounts.
@@ -47,7 +47,7 @@ Recommended first pass:
 1. Set the Login URL Path and Account Action Base.
 2. Confirm the After Login Redirect.
 3. Upload the brand logo and optional gateway background image.
-4. Review colors, button colors, and font stacks.
+4. Review colors and button colors, then choose a typography preset or customize the font stacks.
 5. Configure Terms and Privacy relative paths.
 6. Decide whether public registration should be enabled.
 7. Configure Turnstile or Reoon before enabling registration on public sites.

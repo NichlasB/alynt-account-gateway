@@ -52,4 +52,21 @@ class AdminJsSourceTest extends TestCase {
 		$this->assertStringContainsString( "event.returnValue = ''", $js );
 		$this->assertMatchesRegularExpression( "/settingsForm\\.addEventListener\\(\\s*'submit'.*setDirtyState\\( false \\);/s", $js );
 	}
+
+	public function test_typography_presets_update_existing_stack_fields_and_preserve_custom_edits() {
+		$js = file_get_contents( dirname( __DIR__ ) . '/assets/src/admin/index.js' );
+
+		$this->assertIsString( $js );
+		$this->assertStringContainsString( "document.querySelector( '[data-alynt-ag-typography-presets]' )", $js );
+		$this->assertStringContainsString( "document.querySelector( '#alynt-ag-heading_font_family' )", $js );
+		$this->assertStringContainsString( "document.querySelector( '#alynt-ag-body_font_family' )", $js );
+		$this->assertStringContainsString( "if ( option.value !== 'custom' )", $js );
+		$this->assertStringContainsString( 'headingInput.value = option.dataset.heading', $js );
+		$this->assertStringContainsString( 'bodyInput.value    = option.dataset.body', $js );
+		$this->assertStringContainsString( "selector.value = 'custom'", $js );
+		$this->assertStringContainsString( "headingInput.addEventListener( 'input', markCustom )", $js );
+		$this->assertStringContainsString( "bodyInput.addEventListener( 'input', markCustom )", $js );
+		$this->assertStringContainsString( "previewHeading.style.fontFamily = headingInput.value || 'inherit'", $js );
+		$this->assertStringContainsString( "previewBody.style.fontFamily    = bodyInput.value || 'inherit'", $js );
+	}
 }

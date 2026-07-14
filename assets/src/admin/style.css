@@ -44,6 +44,48 @@
 	line-height: 1.5;
 }
 
+.alynt-ag-typography-control {
+	display: grid;
+	gap: 10px;
+	max-width: 46rem;
+}
+
+.alynt-ag-typography-control select {
+	width: min(100%, 24rem);
+}
+
+.alynt-ag-typography-control .alynt-ag-field-help {
+	margin: 0;
+}
+
+.alynt-ag-typography-preview {
+	padding: 16px;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	background: #fff;
+	color: #1d2327;
+}
+
+.alynt-ag-typography-preview__status {
+	margin: 0 0 14px;
+	color: #50575e;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.alynt-ag-typography-preview__heading {
+	margin: 0 0 6px;
+	font-size: 24px;
+	font-weight: 700;
+	line-height: 1.25;
+}
+
+.alynt-ag-typography-preview__body {
+	margin: 0;
+	font-size: 16px;
+	line-height: 1.5;
+}
+
 .alynt-ag-tab-guidance {
 	display: grid;
 	grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr) auto;
