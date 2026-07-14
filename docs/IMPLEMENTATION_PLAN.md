@@ -7,6 +7,7 @@
 - Plugin status: v0.1.97 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+- Next roadmap: Production acceptance and `v1.0.0` preparation are tracked in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md).
 
 ## v0.1.97 Brand-Agnostic Typography Presets
 
