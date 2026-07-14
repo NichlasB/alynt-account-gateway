@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.93 release candidate complete and awaiting release approval
+- Current phase: v0.1.93 released and updater-verified; next slice ready
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.92 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.93 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -18,7 +18,7 @@
 - [x] Disable Preview Email and Send Test Email while tracked email settings are unsaved, without treating the standalone test-recipient field as a saved setting.
 - [x] Add focused regression coverage for the settings-page hooks, admin JavaScript behavior markers, and notice styling.
 - [x] Run build, lint, full tests, POT generation, audits, package inspection, and Plugin Tester browser QA.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -35,6 +35,11 @@
 - Final release validation passed: build; POT generation (`984 strings`); PHPCS; `271 tests, 1791 assertions`; npm audit (`0 vulnerabilities`); and Composer audit (no advisories).
 - Built and inspected final package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.93-20260714-141503\alynt-account-gateway-v0.1.93.zip` with SHA-256 `B6A7C84F010B578BBF1246CB9388BE7B988CA9BC0C9DE0C3B2D317F412D68C33`: 45 runtime files, zero backslash entries, zero development/source entries, aligned header/constant/stable-tag/POT metadata, exactly one updater header, and all save-state, synthetic-event, and translation markers present.
 - Installed that exact final package on Plugin Tester through WordPress `Plugin_Upgrader`; the plugin remained active at header/constant `0.1.93` with 45 runtime files. Final Playwright smoke verified clean/enabled initial state, visible warning and disabled actions after a real edit, clean restored state after reload, original subject retained, zero document overflow, and zero console errors. Temporary installer artifacts were removed.
+- Published GitHub release `v0.1.93` at `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.93`; Build Release workflow run `29332973058` completed successfully.
+- Downloaded and inspected public asset `alynt-account-gateway-v0.1.93.zip` as 55 ZIP entries representing 45 runtime files, with zero backslash entries, zero unexpected roots, zero development/source files, aligned `0.1.93` metadata, exactly one updater header, all save-state/synthetic-event/translation markers present, and SHA-256 `160E9F3F5CDB4962F09DF77190870B4578685911D2C7EBC358C579A6BCE12D94` matching GitHub's published digest.
+- Alynt Plugin Updater on local-only Plugin Tester refreshed its repository cache, detected public `0.1.92` to `0.1.93`, and populated WordPress's normal update transient with package URL `https://github.com/NichlasB/alynt-account-gateway/releases/download/v0.1.93/alynt-account-gateway-v0.1.93.zip`.
+- WordPress `Plugin_Upgrader::upgrade()` installed the public asset with no update remaining. The headless `Automatic_Upgrader_Skin` harness left the plugin inactive after replacement, so the prior active state was restored explicitly; final state is active header/constant `0.1.93`, 45 runtime files, unchanged settings fingerprint, compiled guards present, and no update remaining.
+- Post-updater Playwright smoke verified five email editors, clean/enabled initial state, visible warning and disabled actions after a real edit, original subject restored after reload, zero overflow, and zero console errors. Temporary updater artifacts were removed. WordPress emitted the existing non-blocking `str_ends_with()` null deprecation from `wp-includes/load.php:1031` during the headless activation request.
 
 ### Guardrails
 
@@ -48,7 +53,7 @@
 - [x] Saving and reloading restores the clean state and re-enables preview/test-send actions.
 - [x] The warning is keyboard/screen-reader accessible and the controls remain coherent at admin breakpoints.
 - [x] Full local validation and final package inspection pass.
-- [ ] Public release asset installs through Alynt Plugin Updater with no update remaining.
+- [x] Public release asset installs through Alynt Plugin Updater with no update remaining.
 
 ## Remaining Product Slices
 
