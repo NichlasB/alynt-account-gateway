@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.92 - 2026-07-14
+
+### Added
+
+- Added WordPress-native Visual and Text editors for all five account email body templates, with safe rich formatting and plain-text fallbacks.
+
 ## 0.1.91 - 2026-07-14
 
 ### Changed

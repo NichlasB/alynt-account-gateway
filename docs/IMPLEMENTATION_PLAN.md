@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.92 rich-text email editor in progress
+- Current phase: v0.1.92 release publication in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.91 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -77,15 +77,35 @@
 ### Scope
 
 - [x] Start from the released and updater-verified `v0.1.91` baseline.
-- [ ] Replace the five email body textareas with WordPress-native visual editors that retain Visual and Text modes.
-- [ ] Support safely sanitized headings, bold, italic, links, blockquotes, and ordered/unordered lists in branded HTML emails.
-- [ ] Preserve template tokens in rich content and keep template-specific action buttons generated from their URL tokens.
-- [ ] Render approved body HTML instead of displaying tags as text, while stripping unsafe markup and preserving the existing plain-text fallback.
-- [ ] Keep subjects and preheaders as plain-text fields and keep the subject as the branded email's primary heading.
-- [ ] Preserve preview and real test-send tools for all five templates, with clear saved-settings behavior and sample token data.
-- [ ] Add focused coverage for editor rendering, safe HTML storage/output, unsafe markup removal, token replacement inside formatted content, and plain-text conversion.
-- [ ] Run build, lint, full tests, POT generation, audits, package inspection, Plugin Tester email previews, and controlled test sends.
+- [x] Replace the five email body textareas with WordPress-native visual editors that retain Visual and Text modes.
+- [x] Support safely sanitized headings, bold, italic, links, blockquotes, and ordered/unordered lists in branded HTML emails.
+- [x] Preserve template tokens in rich content and keep template-specific action buttons generated from their URL tokens.
+- [x] Render approved body HTML instead of displaying tags as text, while stripping unsafe markup and preserving the existing plain-text fallback.
+- [x] Keep subjects and preheaders as plain-text fields and keep the subject as the branded email's primary heading.
+- [x] Preserve preview and real test-send tools for all five templates, with clear saved-settings behavior and sample token data.
+- [x] Add focused coverage for editor rendering, safe HTML storage/output, unsafe markup removal, token replacement inside formatted content, and plain-text conversion.
+- [x] Run build, lint, full tests, POT generation, audits, package inspection, Plugin Tester email previews, and controlled test sends.
 - [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started from clean, released, and updater-verified `v0.1.91` on branch `release/0.1.92`.
+- Added a dedicated `rich_text` settings type only to the five email body fields; frontend screen-copy textareas and subject/preheader fields remain unchanged.
+- Added WordPress-native `wp_editor()` instances with Visual and Text modes, format selection, bold, italic, lists, blockquotes, alignment, links, undo/redo, and Quicktags; media buttons and drag/drop uploads are disabled.
+- Changed branded HTML rendering to retain `wp_kses_post()`-approved markup instead of escaping tags as text. Token values are escaped before HTML insertion, including URL-specific escaping for action URL tokens, and the plain-text fallback still strips formatting and appends the generated action URL.
+- Added focused schema, settings-page, and email-renderer coverage for all five rich-text field types, editor configuration, safe formatting, unsafe markup removal, token injection prevention, token replacement, and plain-text output.
+- Focused validation passed: PHP syntax for all touched PHP files; PHPCS; and `SettingsSchemaTest`, `SettingsPageEmailToolsTest`, and `EmailTemplateServiceTest` (`24 tests, 111 assertions`).
+- Full branch validation passed: `npm run build`; `npm run make-pot` (`982 strings`); `npm run lint`; `npm test -- --do-not-cache-result` (`269 tests, 1772 assertions`); `npm audit --audit-level=moderate` (`0 vulnerabilities`); and `composer audit` (no advisories).
+- Built and inspected branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.92-branch-qa-20260714-131848\alynt-account-gateway-v0.1.91-branch-qa-rich-text.zip` with SHA-256 `C537C3F3B510128B67933F88639DB7B0AA70DB9B9D43EB862E1B2CFDA9184567`: 45 runtime files, zero backslash entries, zero development/source entries, and all rich-text editor, sanitization, renderer, and token-escaping markers present.
+- Installed the same-version branch-QA package on local-only Plugin Tester through WordPress `Plugin_Upgrader`; the plugin remained active with 45 runtime files and the installed copy exposed the rich-text schema, native editor, safe HTML renderer, and HTML token-escaping implementation.
+- Playwright verified five WordPress-native editors with Visual and Code modes, Heading 1 through Heading 6, bold, italic, ordered/unordered lists, blockquotes, alignment, links, undo/redo, and no media-upload controls. Editor geometry had zero document/editor overflow at `1440`, `1024`, `782`, and `390px` widths.
+- Saved a formatted password-reset body through the real settings form and confirmed the heading, strong/emphasis, link, blockquote, list, and reset token survived sanitization. The browser preview rendered those elements, replaced sample tokens, and retained the generated Reset Password action button and fallback URL.
+- A read-only malicious-render probe retained approved headings/emphasis while stripping scripts, iframes, event-handler attributes, and JavaScript URLs. Its plain fallback contained no HTML tags and retained the action URL.
+- SureMails simulation mode was enabled only for controlled QA. All five template sends succeeded to the reserved `alynt-ag-v0192-qa@example.test` address and were logged as simulated with no external delivery; the formatted password-reset HTML was present in its log. SureMails simulation and the exact original password-reset body were then restored, and temporary QA packages were removed from Plugin Tester.
+- Browser evidence was retained as `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.92-branch-qa-20260714-131848\acg-v0.1.92-rich-email-editor.png` and `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.92-branch-qa-20260714-131848\acg-v0.1.92-rich-email-preview.png`. There were no browser console errors; the only warning was WordPress core's development React Refresh shim notice.
+- Bumped final release metadata to `0.1.92` across the plugin header/constant, npm metadata, readme stable tag/changelog, sample version assertion, changelog, and generated POT.
+- Final release validation passed: `npm run build`; `npm run make-pot` (`982 strings`); `npm run lint`; `npm test -- --do-not-cache-result` (`269 tests, 1772 assertions`); `npm audit --audit-level=moderate` (`0 vulnerabilities`); and `composer audit` (no advisories).
+- Built final package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.92-20260714-134045\alynt-account-gateway-v0.1.92.zip` with SHA-256 `BB7827FCC8AC2EEAFA09A3B362828A47C3D51201A666468D75510DA0D1DB1630`. Inspection found 45 runtime files, zero backslash entries, zero unexpected roots, zero development/source leaks, aligned `0.1.92` header/constant/stable-tag/POT metadata, exactly one updater header, and all native-editor, sanitization, safe-renderer, and HTML-token-escaping markers present.
 
 ### Guardrails
 
@@ -97,10 +117,10 @@
 
 ### Completion Gate
 
-- [ ] All five body fields provide keyboard-accessible Visual and Text editing modes.
-- [ ] Supported formatting survives save, preview, and delivered HTML test email without unsafe markup.
-- [ ] Plain-text rendering remains readable and includes the applicable action URL.
-- [ ] Full local validation and final package inspection pass.
+- [x] All five body fields provide keyboard-accessible Visual and Text editing modes.
+- [x] Supported formatting survives save, preview, and delivered HTML test email without unsafe markup.
+- [x] Plain-text rendering remains readable and includes the applicable action URL.
+- [x] Full local validation and final package inspection pass.
 - [ ] Public release asset installs through Alynt Plugin Updater with no update remaining.
 
 ## v0.1.90 Small Release Cycle

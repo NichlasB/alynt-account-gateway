@@ -230,6 +230,29 @@ class ALYNT_AG_Settings_Page {
 			return;
 		}
 
+		if ( 'rich_text' === $field['type'] ) {
+			wp_editor(
+				(string) $value,
+				$id,
+				array(
+					'textarea_name'    => $name,
+					'editor_class'     => 'alynt-ag-rich-text',
+					'editor_height'    => 280,
+					'media_buttons'    => false,
+					'teeny'            => false,
+					'drag_drop_upload' => false,
+					'tinymce'          => array(
+						'toolbar1' => 'formatselect,bold,italic,bullist,numlist,blockquote,alignleft,aligncenter,alignright,link,unlink,undo,redo',
+						'toolbar2' => '',
+					),
+					'quicktags'        => array(
+						'buttons' => 'strong,em,link,block,ul,ol,li,close',
+					),
+				)
+			);
+			return;
+		}
+
 		if ( 'dashboard_links' === $field['type'] ) {
 			$this->render_dashboard_links_field( $id, $name, $value );
 			return;
@@ -369,6 +392,18 @@ class ALYNT_AG_Settings_Page {
 	 * @return string
 	 */
 	private function settings_field_help_text( $key ) {
+		$email_body_keys = array(
+			'email_registration_confirmation_body',
+			'email_password_reset_body',
+			'email_password_changed_body',
+			'email_new_user_welcome_body',
+			'email_change_confirmation_body',
+		);
+
+		if ( in_array( $key, $email_body_keys, true ) ) {
+			return __( 'Use the Visual editor for headings, emphasis, links, blockquotes, and lists. Tokens remain available in Visual and Text modes.', 'alynt-account-gateway' );
+		}
+
 		$help = array(
 			'frontend_enabled'                   => __( 'Leave disabled until URLs, branding, registration, email, dashboard, privacy, and recovery settings have been reviewed.', 'alynt-account-gateway' ),
 			'login_path'                         => __( 'Use a relative path such as /login. This path becomes the clean public login URL.', 'alynt-account-gateway' ),

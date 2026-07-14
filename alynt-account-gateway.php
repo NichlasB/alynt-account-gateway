@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Alynt Account Gateway
  * Description:       Branded account gateway for WordPress login, registration, password flows, emails, dashboards, WooCommerce account handling, and integrations.
- * Version:           0.1.91
+ * Version:           0.1.92
  * Author:            Alynt
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'ALYNT_AG_VERSION', '0.1.91' );
+define( 'ALYNT_AG_VERSION', '0.1.92' );
 define( 'ALYNT_AG_PLUGIN_FILE', __FILE__ );
 define( 'ALYNT_AG_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ALYNT_AG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
