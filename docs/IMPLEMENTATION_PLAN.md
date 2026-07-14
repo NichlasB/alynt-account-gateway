@@ -245,6 +245,7 @@
 
 ## Remaining Product Slices
 
+- Tracker audit after `v0.1.97`: all planned product slices are complete, and historical unchecked release gates were reconciled against their recorded validation and updater evidence.
 - [x] Brand-agnostic typography setup: add system-font pairing presets and an admin preview while preserving custom stacks and avoiding remote font dependencies.
 - [x] Settings readiness and onboarding checks: show whether required URL, registration, protection, branding, email, dashboard, WooCommerce, webhook, privacy, and frontend-output prerequisites are ready before site owners enable public output.
 - [x] Real-world WooCommerce dashboard polish: improve branded empty states, endpoint affordances, customer account copy, delegated WooCommerce form styling, order/address/payment-method edge states, and WooCommerce unavailable guidance.
@@ -529,7 +530,7 @@
 - [x] Plugin Tester smoke validates installed-package markers.
 - [x] Public GitHub release asset inspection passes.
 - [x] Alynt Plugin Updater detects and installs `v0.1.87` from public `v0.1.86` on Plugin Tester with no update remaining.
-- [ ] Public release asset is installed through Alynt Plugin Updater.
+- [x] Public release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.86 Small Release Cycle
 
@@ -1899,7 +1900,7 @@
 - [x] Keep changes scoped to frontend navigation affordances; do not change endpoint routing, WooCommerce action delegation, dashboard settings, saved data, auth, registration, emails, updater behavior, or default frontend-output disabled behavior.
 - [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks before final release metadata bump.
 - [x] Publish the final `v0.1.49` release asset.
-- [ ] Verify the Alynt Plugin Updater path end to end.
+- [x] Verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -1924,7 +1925,7 @@
 
 - [x] Build, lint, test, audit, and POT generation pass.
 - [x] Plugin Tester smoke validates WooCommerce endpoint shortcut actions.
-- [ ] GitHub release asset is installed through Alynt Plugin Updater.
+- [x] GitHub release asset is installed through Alynt Plugin Updater.
 
 ## v0.1.48 Small Release Cycle
 
@@ -3309,7 +3310,7 @@
 - [x] Start the next low-risk structural slice from the released `master` baseline.
 - [x] Extract the registration screen renderer out of the large frontend renderer class without changing copy, form fields, nonce/action names, query parameters, terms/privacy links, verification slot output, registration-success handling, or accessibility attributes.
 - [x] Add focused test coverage around the extracted frontend registration screen service.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.13` release.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.13` release.
 
 ### Progress Notes
 
@@ -3347,7 +3348,7 @@
 - [x] Start the next low-risk structural slice from the released `master` baseline.
 - [x] Extract the login screen renderer out of the large frontend renderer class without changing copy, form fields, nonce/action names, query parameters, redirect handling, routes, password toggle markup, status handling, or accessibility attributes.
 - [x] Add focused test coverage around the extracted frontend login screen service.
-- [ ] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.12` release.
+- [x] Run build, lint, test, audit, POT, package, and Plugin Tester smoke checks as appropriate for the final `0.1.12` release.
 
 ### Progress Notes
 
