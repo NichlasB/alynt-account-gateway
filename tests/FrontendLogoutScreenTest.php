@@ -36,7 +36,8 @@ class FrontendLogoutScreenTest extends TestCase {
 		$screen->render_logout_screen( $this->settings );
 		$html = ob_get_clean();
 
-		$this->assertStringContainsString( '<h1 id="agw-screen-title" class="agw-title">Log Out</h1>', $html );
+		$this->assertStringContainsString( '<h1 id="agw-screen-title" class="agw-title">Confirm Logout</h1>', $html );
+		$this->assertSame( 1, substr_count( $html, '>Log Out<' ) );
 		$this->assertStringContainsString( '<div class="agw-notice" id="agw-logout-instructions">', $html );
 		$this->assertStringContainsString( 'You are about to log out.', $html );
 		$this->assertStringContainsString( 'href="https://example.test/account?action=logout&confirm=1&_wpnonce=test-nonce"', $html );

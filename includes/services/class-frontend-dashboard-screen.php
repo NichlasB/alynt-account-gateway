@@ -82,7 +82,8 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 		$user                     = wp_get_current_user();
 		$endpoint                 = $this->woocommerce->endpoint_from_path( $current_path, $settings );
 		$links                    = $this->dashboard->links_for_user( $user, $settings );
-		$name                     = $user->display_name ? $user->display_name : $user->user_email;
+		$name                     = trim( (string) get_user_meta( $user->ID, 'first_name', true ) );
+		$name                     = $name ? $name : __( 'there', 'alynt-account-gateway' );
 		$is_woocommerce_dashboard = ! empty( $settings['woocommerce_takeover'] )
 			&& $this->dashboard->woocommerce_available()
 			&& 'dashboard' === $endpoint['endpoint'];
@@ -93,7 +94,7 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 				<?php
 				echo esc_html(
 					sprintf(
-						/* translators: %s: user display name. */
+						/* translators: %s: user first name or a neutral fallback. */
 						__( 'Welcome, %s', 'alynt-account-gateway' ),
 						$name
 					)

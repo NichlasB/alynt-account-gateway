@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.1.91 - 2026-07-14
+
+### Changed
+
+- Raised frontend gateway and dashboard text to a 16px minimum, with notices, form controls, checkboxes, links, and buttons at 18px.
+- Changed the dashboard greeting to use the customer's first name with a neutral fallback, and clarified the logout screen heading.
+- Made the settings tab navigation wrap as visually independent controls across narrower admin widths.
+
 ## 0.1.90 - 2026-07-12
 
 ### Added

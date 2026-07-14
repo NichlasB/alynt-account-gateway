@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v0.1.90 admin observability snapshot released and updater-verified
+- Current phase: v0.1.91 frontend typography, personalized dashboard greeting, logout copy, and responsive admin tabs in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.90 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
@@ -20,6 +20,85 @@
 - [x] Admin observability: add clearer diagnostics for auth redirects, blocked wp-admin access, branded auth outcomes, provider verification failures, registration failures, email sends, and webhook failures.
 - [x] Import/export/reset experience: strengthen preset export/import, tab-level restore guidance, import validation, and configuration portability.
 - [x] Uninstall and data cleanup coverage: add explicit uninstall tests and verify plugin-owned tables/options/scheduled hooks cleanup policy.
+
+## v0.1.91 Small Release Cycle
+
+### Scope
+
+- [x] Raise all explicitly sized frontend gateway and dashboard text to a minimum of 16px.
+- [x] Set gateway notices, auth inputs, dashboard inputs, checkboxes, links, back links, and buttons to 18px.
+- [x] Keep the logout action labeled `Log Out` while changing the screen heading to `Confirm Logout`.
+- [x] Use the current user's stored first name in the dashboard greeting, with a neutral translated fallback instead of a username.
+- [x] Make the settings tabs wrap as independent controls so additional rows keep coherent borders and active-state styling.
+- [x] Add focused regression coverage for typography thresholds, requested 18px controls, logout copy, first-name greeting, and responsive tab CSS.
+- [x] Run build, lint, full tests, POT generation, audit, and diff checks.
+- [x] Install and browser-test the release candidate on LocalWP Plugin Tester at frontend and admin breakpoint widths.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started the v0.1.91 maintenance slice from clean, updater-verified `v0.1.90`.
+- Raised every explicit frontend gateway/dashboard pixel font size to at least 16px and set notices, auth and WooCommerce account inputs, checkbox copy, gateway links, back links, and buttons to 18px.
+- Increased the password-field end padding to preserve clearance for the now-16px password visibility control.
+- Changed the logout heading to `Confirm Logout` while preserving the `Log Out` action label and behavior.
+- Changed the dashboard greeting from `display_name` to the stored `first_name`, with translated `there` fallback for legacy accounts that have no first name.
+- Reworked the settings tab wrapper as a wrapping flex layout with standalone borders and an inset active indicator so wrapped rows remain visually coherent.
+- Focused validation passed: `25 tests, 260 assertions`; both touched PHP services passed syntax checks.
+- Full repository validation passed: `npm run build`; `npm run make-pot` (`981 strings`); `npm run lint`; `npm test -- --do-not-cache-result` (`264 tests, 1740 assertions`); `npm audit --audit-level=moderate` (`0 vulnerabilities`); and `git diff --check` with only the existing POT line-ending normalization warning.
+- Built and inspected branch-QA package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.90-branch-qa-20260713-220553\alynt-account-gateway-v0.1.90-branch-qa-forward-slash.zip`: 45 runtime files, zero backslash entries, zero dev/source entries, all typography/tab/copy/name markers present, and SHA-256 `653A2C03BA4D4A52880C74EC6F43F18B3FCF5C099859F8842BB5BD8240D62723`.
+- Created pre-install restore archive `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.90-branch-qa-20260713-220553\plugin-tester-acg-v0.1.90-before.zip`.
+- Installed the branch-QA package through WordPress `Plugin_Upgrader`; the plugin remained active at `0.1.90`, all installed typography/tab/copy/name markers were verified, and the temporary installer/package web artifacts were removed.
+- Novamira MCP became available and created a temporary one-time browser access exchange for the configured Playwright MCP; no WordPress credentials were requested, exposed, or changed.
+- Playwright verified the settings tabs at `1768`, `1440`, `1200`, `1024`, `800`, and `640px`: tabs wrapped into one, two, or three coherent rows as space required, with zero overlap, zero horizontal document overflow, 16px labels, intact standalone borders, and the active inset indicator retained.
+- Playwright verified all eight saved-setting previews (login, registration, lost password, set password, logout, registration disabled, invalid link, and dashboard) at `390x844` and `1440x1000`: all rendered the branded gateway, had zero horizontal overflow, zero clipped controls, no visible text below 16px, and every requested notice/input/checkbox/link/button/back-link group present computed to 18px.
+- Auth previews hid the media panel at `390px` and displayed the two-column media/form layout at `1440px`. Logout rendered `Confirm Logout` above the separate `Log Out` action. Dashboard rendered `Welcome, Alynt` from stored `first_name=Alynt` while the account login/display name remained `@user_alynt`.
+- Browser evidence was retained as `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.90-branch-qa-20260713-220553\acg-v0.1.91-admin-tabs-1440.png` and `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.90-branch-qa-20260713-220553\acg-v0.1.91-logout-1440.png`. The only console warning was WordPress core's development React Refresh shim notice; there were no plugin/runtime console errors.
+- Bumped final release metadata to `0.1.91` across the plugin header/constant, npm metadata, readme stable tag/changelog, sample version assertion, changelog, and generated POT.
+- Final release validation passed: `npm run build`; `npm run make-pot` (`981 strings`); `npm run lint`; `npm test -- --do-not-cache-result` (`264 tests, 1740 assertions`); `npm audit --audit-level=moderate` (`0 vulnerabilities`); and `composer audit` (no advisories).
+- Built final package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.91-20260714-121408\alynt-account-gateway-v0.1.91.zip` with SHA-256 `B48682889762913BDD878590DC551E8D81ABAA2D89D3A7771F39BFF32309882B`. Inspection found 45 runtime files, zero backslash entries, zero unexpected roots, zero development/source entries, aligned `0.1.91` header/constant/stable-tag/POT metadata, exactly one updater header, and all typography, responsive-tab, first-name greeting, and logout-copy markers present.
+
+### Guardrails
+
+- Keep frontend typography changes scoped to `.alynt-ag-gateway` and admin navigation changes scoped to `.alynt-ag-admin`.
+- Preserve auth, registration, password, logout action, dashboard/WooCommerce delegation, saved settings, provider decisions, diagnostics, privacy, database schema, and updater behavior.
+
+### Completion Gate
+
+- [x] Focused and full local validation pass.
+- [x] Plugin Tester frontend and admin responsive browser checks pass without overflow, clipped controls, or broken tab states.
+- [x] Final package inspection passes.
+- [ ] Public release asset installs through Alynt Plugin Updater with no update remaining.
+
+## v0.1.92 Rich-Text Email Editor Slice
+
+### Scope
+
+- [ ] Start from the released and updater-verified `v0.1.91` baseline.
+- [ ] Replace the five email body textareas with WordPress-native visual editors that retain Visual and Text modes.
+- [ ] Support safely sanitized headings, bold, italic, links, blockquotes, and ordered/unordered lists in branded HTML emails.
+- [ ] Preserve template tokens in rich content and keep template-specific action buttons generated from their URL tokens.
+- [ ] Render approved body HTML instead of displaying tags as text, while stripping unsafe markup and preserving the existing plain-text fallback.
+- [ ] Keep subjects and preheaders as plain-text fields and keep the subject as the branded email's primary heading.
+- [ ] Preserve preview and real test-send tools for all five templates, with clear saved-settings behavior and sample token data.
+- [ ] Add focused coverage for editor rendering, safe HTML storage/output, unsafe markup removal, token replacement inside formatted content, and plain-text conversion.
+- [ ] Run build, lint, full tests, POT generation, audits, package inspection, Plugin Tester email previews, and controlled test sends.
+- [ ] Publish release and complete updater verification.
+
+### Guardrails
+
+- Use WordPress-native editor and sanitization APIs; do not introduce a standalone editor dependency.
+- Do not allow scripts, iframes, forms, event-handler attributes, or other executable email-body markup.
+- Keep media uploads and arbitrary template-shell editing out of this first rich-text slice.
+- Preserve existing branded wrapper, logo, colors, action buttons, account-email triggers, disable toggles, registration flow, and mail-provider delegation.
+- Preserve the WordPress core pending profile email-change request's documented plain-text limitation.
+
+### Completion Gate
+
+- [ ] All five body fields provide keyboard-accessible Visual and Text editing modes.
+- [ ] Supported formatting survives save, preview, and delivered HTML test email without unsafe markup.
+- [ ] Plain-text rendering remains readable and includes the applicable action URL.
+- [ ] Full local validation and final package inspection pass.
+- [ ] Public release asset installs through Alynt Plugin Updater with no update remaining.
 
 ## v0.1.90 Small Release Cycle
 

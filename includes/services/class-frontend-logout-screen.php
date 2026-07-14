@@ -48,7 +48,7 @@ class ALYNT_AG_Frontend_Logout_Screen {
 			'log-out'
 		);
 		?>
-		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Log Out', 'alynt-account-gateway' ); ?></h1>
+		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Confirm Logout', 'alynt-account-gateway' ); ?></h1>
 		<?php $this->components->render_notice( $settings['logout_intro_text'], 'agw-logout-instructions' ); ?>
 		<div class="agw-actions">
 			<a class="agw-button agw-button--primary" href="<?php echo esc_url( $logout_url ); ?>"><?php esc_html_e( 'Log Out', 'alynt-account-gateway' ); ?></a>
