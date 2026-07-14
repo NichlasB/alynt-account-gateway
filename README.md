@@ -16,7 +16,7 @@ This is private Alynt-distributed software. The plugin header includes `GitHub P
 - Email-only login support with generated usernames for created accounts.
 - Password validation requiring at least 12 characters with uppercase, lowercase, number, and symbol characters.
 - Optional Cloudflare Turnstile and Reoon Email Verifier registration protection, plus transient-backed rate limiting.
-- Branded HTML account email templates with WordPress-native Visual/Text editors, preview and test-send tools, and a reversible unsaved-change guard that also protects against accidental navigation.
+- Branded HTML account email templates with WordPress-native Visual/Text editors, preview and test-send tools, and a reversible unsaved-change guard that stays stable across editor modes and canceled navigation.
 - Custom full-page dashboard with optional WooCommerce My Account takeover that delegates standard endpoints to WooCommerce.
 - Branded WooCommerce customer dashboard overview with quick links for orders, addresses, and account details.
 - Custom dashboard links with labels, icons, ordering, role visibility, and new-tab support.

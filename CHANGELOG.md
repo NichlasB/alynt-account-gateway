@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.96 - 2026-07-14
+
+### Changed
+
+- Stabilized Email tab unsaved-change reconciliation across canceled navigation, Visual/Code mode switching, and equivalent TinyMCE textarea synchronization.
+
 ## 0.1.95 - 2026-07-14
 
 ### Changed
