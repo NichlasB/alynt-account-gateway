@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v0.1.96 final package validated; release approval pending
+- Current phase: v0.1.96 released and updater-verified; next product slice selection pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.95 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.96 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 
@@ -17,7 +17,7 @@
 - [x] Keep restored Email settings clean after editor events settle and after a native leave-page dialog is canceled.
 - [x] Add focused regression coverage for any reproducible stability gap without broadening the saved-settings boundary.
 - [x] Run build, lint, full tests, POT generation, audits, package inspection, and focused Plugin Tester browser QA.
-- [ ] Publish release and complete updater verification.
+- [x] Publish release and complete updater verification.
 
 ### Progress Notes
 
@@ -36,6 +36,11 @@
 - Installed that exact final package on local-only Plugin Tester through WordPress `Plugin_Upgrader`; final-package state was active `0.1.96` with 45 runtime files, canonical normalization markers present, and unchanged settings fingerprint.
 - Final-package Playwright smoke verified canceled-navigation restoration, delayed Visual undo, Code edit/restoration, clean mode switching, native dirty-state prompting, restored disabled/ARIA states, and zero console errors.
 - Restored Plugin Tester to published public `v0.1.95`; the plugin is active with 45 runtime files, the settings fingerprint remains `2d0e919d2f2bc08590b34fcf6ffc6fdc24ebd8e97b6b778f0e67326636226a8e`, and the temporary administrator and verifier scripts were removed.
+- Published GitHub release `v0.1.96` after merging release commit `2ae0e73` into `master` as `226bca4`; Build Release workflow run `29355773892` completed successfully and attached the generated runtime ZIP.
+- Downloaded and inspected the exact public asset `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.96-public-20260714\alynt-account-gateway-v0.1.96.zip`: one expected plugin root, 45 runtime files, zero development/source entries, aligned `0.1.96` metadata, canonical editor normalization markers present, and SHA-256 `91F07C8105AB164D0BC27EAFA52046DFC425495EFCA7274943B78662E77CC8C8`.
+- Activated Alynt Plugin Updater on local-only Plugin Tester, forced an update check, confirmed WordPress offered `v0.1.96` over installed public `v0.1.95`, and completed the update through the standard WordPress update action. WordPress then reported Alynt Account Gateway `v0.1.96`.
+- Post-updater Playwright smoke passed for ordinary-field dirty detection/restoration, disabled and `aria-disabled` email action states, clean Visual/Code mode switching, and TinyMCE edit/undo reconciliation. The only console error was an unrelated pre-existing SureForms analytics stylesheet `404`.
+- Restored Alynt Account Gateway and Alynt Plugin Updater to their pre-test inactive state, deleted the temporary administrator, removed the local verifier helper, and closed the browser session. Plugin Tester retains the public `v0.1.96` package for the next updater cycle.
 
 ### Guardrails
 
@@ -48,7 +53,7 @@
 - [x] Exact ordinary-field restoration remains clean before and after canceling a native leave-page prompt.
 - [x] Visual editor undo remains clean after delayed editor events settle.
 - [x] Real differences still show the warning, disable both email actions, and prompt before navigation.
-- [ ] Full validation, final package inspection, and public updater verification pass.
+- [x] Full validation, final package inspection, and public updater verification pass.
 
 ## v0.1.95 Email Dirty-State Reconciliation
 
