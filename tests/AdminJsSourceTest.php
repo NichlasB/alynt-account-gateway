@@ -21,14 +21,24 @@ class AdminJsSourceTest extends TestCase {
 		$this->assertStringContainsString( "settingsForm.addEventListener( 'input', handleSettingsChange )", $js );
 		$this->assertStringContainsString( "settingsForm.addEventListener( 'change', handleSettingsChange )", $js );
 		$this->assertStringContainsString( "editor.alyntAgEmailSaveStateTracked = 'pending'", $js );
-		$this->assertStringContainsString( "editor.on( 'change input undo redo', setDirty )", $js );
+		$this->assertStringContainsString( 'new window.FormData( settingsForm ).entries()', $js );
+		$this->assertStringContainsString( 'let initialState = readSettings()', $js );
+		$this->assertStringContainsString( 'initialState = initialState.map(', $js );
+		$this->assertStringContainsString( 'return [ entry[0], field.value ]', $js );
+		$this->assertStringContainsString( 'setDirtyState( serializeSettings() !== serializeSettings( initialState ) )', $js );
+		$this->assertStringContainsString( 'updateInitialField( textarea )', $js );
+		$this->assertMatchesRegularExpression( "/window\\.setTimeout\\(.*editor\\.save\\(\\).*updateInitialField\\( textarea \\).*updateDirtyState\\(\\);/s", $js );
+		$this->assertStringContainsString( "'change input undo redo'", $js );
+		$this->assertStringContainsString( 'editor.save()', $js );
 		$this->assertStringContainsString( 'tinymce-editor-init.alyntAgEmailSaveState', $js );
-		$this->assertStringContainsString( 'submit.disabled = true', $js );
+		$this->assertStringContainsString( 'submit.disabled = isDirty', $js );
 		$this->assertStringContainsString( "submit.setAttribute( 'aria-disabled', 'true' )", $js );
-		$this->assertStringContainsString( 'notice.hidden = false', $js );
+		$this->assertStringContainsString( "submit.removeAttribute( 'aria-disabled' )", $js );
+		$this->assertStringContainsString( 'notice.hidden = ! isDirty', $js );
+		$this->assertStringContainsString( "settingsForm.classList.toggle( 'alynt-ag-email-settings--dirty', isDirty )", $js );
 		$this->assertStringContainsString( "window.addEventListener( 'beforeunload', handleBeforeUnload )", $js );
 		$this->assertStringContainsString( 'event.preventDefault()', $js );
 		$this->assertStringContainsString( "event.returnValue = ''", $js );
-		$this->assertMatchesRegularExpression( "/settingsForm\\.addEventListener\\(\\s*'submit'.*isDirty = false;/s", $js );
+		$this->assertMatchesRegularExpression( "/settingsForm\\.addEventListener\\(\\s*'submit'.*setDirtyState\\( false \\);/s", $js );
 	}
 }

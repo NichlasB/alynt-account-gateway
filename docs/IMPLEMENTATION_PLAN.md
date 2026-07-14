@@ -2,11 +2,50 @@
 
 ## Status
 
-- Current phase: v0.1.94 released and updater verified; next slice selection pending
+- Current phase: v0.1.95 final package validated; release approval pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.94 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.95 Email Dirty-State Reconciliation
+
+### Scope
+
+- [x] Start from the released and updater-verified `v0.1.94` baseline.
+- [x] Snapshot the saved Email settings form and treat it as dirty only while its current serialized values differ.
+- [x] Restore the clean state when ordinary fields or Visual/Text editor content return exactly to their initial values.
+- [x] Hide the warning, remove the dirty class, and re-enable Preview Email and Send Test Email when the form becomes clean again.
+- [x] Preserve clean editor mode switching, standalone test-recipient independence, valid-save behavior, and native leave-page protection for real unsaved differences.
+- [x] Add focused regression coverage and run build, lint, full tests, POT generation, audits, package inspection, and Plugin Tester browser QA.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started from clean, released, and updater-verified `v0.1.94` on branch `release/0.1.95`.
+- Replaced touch-only dirty tracking with a serialized snapshot of the saved Email settings form and symmetric dirty/clean rendering for the warning, form class, native disabled state, and `aria-disabled` state.
+- TinyMCE change/input/undo/redo events now save their editor content before reconciliation, allowing Visual undo and exact restoration to return clean.
+- Plugin Tester QA exposed WordPress Visual-editor HTML normalization after the initial page snapshot. The implementation now updates only the initializing editor field's baseline after TinyMCE settles, preserving unrelated unsaved fields while preventing normalization false positives.
+- Focused source coverage passed with `1 test, 25 assertions`; full branch validation passed with build, PHPCS, `271 tests, 1806 assertions`, npm audit (`0 vulnerabilities`), Composer audit (no advisories), and `git diff --check`.
+- Playwright on local-only Plugin Tester verified ordinary field change/restoration, Code editor change/restoration, Visual edit/undo, all-five-editor initialization, lazy Visual initialization while another field remained dirty, clean mode switching, standalone test-recipient independence, real-difference navigation prompting, cancel behavior, restored action/ARIA states, zero overflow at `390px`, and zero console errors.
+- Inspected branch package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.95-branch-qa-20260714-172446\alynt-account-gateway-v0.1.94-branch-qa-dirty-reconciliation.zip`: 45 runtime files, zero backslash entries, zero development/source entries, compiled form snapshot, settled per-editor baseline, clean-state restoration, and leave-page guards present, SHA-256 `6EB3A768A5511D08BA10BFBBBA0FD65A888C672CF02C0275B31FD9EE3F1CBB5D`.
+- Restored Plugin Tester to the published `v0.1.94` asset after QA; the plugin remains active, the settings fingerprint is unchanged, and the temporary administrator and helper scripts were removed.
+- Bumped final release metadata to `0.1.95` across the plugin header/constant, npm metadata, readme stable tag/changelog, sample version assertion, changelog, README feature summary, and generated POT.
+- Final release validation passed: build; POT generation (`984 strings`); PHPCS; `271 tests, 1806 assertions`; npm audit (`0 vulnerabilities`); Composer audit (no advisories); and `git diff --check`.
+- Built and inspected final package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.95-20260714-174026\alynt-account-gateway-v0.1.95.zip`: 45 runtime files, zero backslash entries, zero development/source entries, aligned header/constant/stable-tag/POT `0.1.95` metadata, exactly one updater header, compiled form snapshot, settled per-editor baseline, clean-state restoration, and leave-page guards present, SHA-256 `30254339B8546A52322E0B8B3A793EB5EF9A30FBAEAF3A05A2A79E7EA900C4FA`.
+
+### Guardrails
+
+- Compare only the saved Email settings form; do not include the standalone one-off test recipient or email action forms.
+- Keep reconciliation entirely client-side and do not autosave, mutate persisted settings, or send draft templates to preview/test endpoints.
+- Preserve WordPress-native Visual/Text editing, template sanitization, sample tokens, mail-provider delegation, and all actual account-email triggers.
+
+### Completion Gate
+
+- [x] Changing and exactly restoring an ordinary saved field returns to the clean state without a navigation prompt.
+- [x] Visual/Text editor changes and undo/restoration reconcile accurately without mode-switch false positives.
+- [x] Real unsaved differences still show the warning, disable both email actions, and prompt before navigation.
+- [ ] Full validation, final package inspection, and public updater verification pass.
 
 ## v0.1.94 Unsaved Email Navigation Guard
 
