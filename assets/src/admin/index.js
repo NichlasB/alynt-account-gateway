@@ -24,8 +24,51 @@ function alyntAgInitEmailSaveState() {
 	let isDirty      = false;
 	let initialState = readSettings();
 
+	function normalizeEditorContent( editor, content ) {
+		if (
+			! window.switchEditors ||
+			typeof window.switchEditors.wpautop !== 'function' ||
+			! window.tinymce.html
+		) {
+			return content;
+		}
+
+		const parser     = new window.tinymce.html.DomParser( {}, editor.schema );
+		const serializer = new window.tinymce.html.Serializer( {}, editor.schema );
+		const html       = window.switchEditors.wpautop( content );
+
+		return serializer.serialize( parser.parse( html ) );
+	}
+
+	function readFieldValue( field ) {
+		if ( ! field.matches( '.wp-editor-area' ) || ! window.tinymce ) {
+			return field.value;
+		}
+
+		const editor = window.tinymce.get( field.id );
+
+		if ( ! editor ) {
+			return field.value;
+		}
+
+		return normalizeEditorContent(
+			editor,
+			editor.isHidden() ? field.value : editor.getContent()
+		);
+	}
+
 	function readSettings() {
-		return Array.from( new window.FormData( settingsForm ).entries() );
+		return Array.from( new window.FormData( settingsForm ).entries() ).map(
+			function ( entry ) {
+				const field = settingsForm.elements.namedItem( entry[0] );
+
+				if ( ! field || typeof field.matches !== 'function' ) {
+					return entry;
+				}
+
+				return [ entry[0], readFieldValue( field ) ];
+			}
+		);
 	}
 
 	function serializeSettings( entries ) {
@@ -39,7 +82,7 @@ function alyntAgInitEmailSaveState() {
 					return entry;
 				}
 
-				return [ entry[0], field.value ];
+				return [ entry[0], readFieldValue( field ) ];
 			}
 		);
 	}

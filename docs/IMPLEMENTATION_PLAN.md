@@ -2,11 +2,53 @@
 
 ## Status
 
-- Current phase: v0.1.95 released and updater verified; next slice selection pending
+- Current phase: v0.1.96 final package validated; release approval pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.95 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
+
+## v0.1.96 Email Reconciliation Stability Audit
+
+### Scope
+
+- [x] Start from the released and updater-verified `v0.1.95` baseline.
+- [x] Reproduce the delayed TinyMCE undo and canceled-navigation sequence against the public installed package.
+- [x] Keep restored Email settings clean after editor events settle and after a native leave-page dialog is canceled.
+- [x] Add focused regression coverage for any reproducible stability gap without broadening the saved-settings boundary.
+- [x] Run build, lint, full tests, POT generation, audits, package inspection, and focused Plugin Tester browser QA.
+- [ ] Publish release and complete updater verification.
+
+### Progress Notes
+
+- Started from clean, released, and updater-verified `v0.1.95` on branch `release/0.1.96`.
+- Local-only target remains Plugin Tester at `http://plugin-tester.local/`; Novamira MCP is not exposed in the active tool list, so focused Playwright and LocalWP runtime checks remain the verification path.
+- Public-package reproduction confirmed Visual undo remains clean after delayed editor events, while a canceled native leave-page prompt synchronizes all five hidden editor textareas from saved plain paragraphs to equivalent HTML and prevents an ordinary restored field from returning clean.
+- Reconciliation now reads canonical TinyMCE content while an editor is visible and raw textarea content in Code mode, keeping representation-only hidden-textarea synchronization outside the dirty comparison without weakening real editor-change detection.
+- Initial branch QA confirmed the canceled-navigation restoration fix, then exposed that Visual and Code modes still needed one shared representation. Code and Visual values are now normalized through WordPress `wpautop` plus TinyMCE's DOM parser/serializer before comparison so equivalent formatting is stable across mode switches.
+- Focused source coverage passes with `1 test, 36 assertions`; build, PHPCS, and `git diff --check` pass after the canonical editor-value implementation.
+- Built and inspected same-version branch package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.96-branch-qa-20260714-193559\alynt-account-gateway-v0.1.95-branch-qa-v0.1.96.zip`: 45 runtime files, zero backslash entries, zero development/source entries, canonical Visual/Code normalization markers present, and SHA-256 `807BA49677D2849F25008CB400435E7491CFF8EA8CFE1AAA2D61F3F87108A524`.
+- Installed the branch package over public `v0.1.95` through WordPress `Plugin_Upgrader`; the plugin remained active with 45 runtime files and the settings fingerprint unchanged.
+- Playwright branch QA passed for Code-only startup, Code edit/restoration, standalone recipient independence, lazy initialization of all five Visual editors, canceled-navigation restoration, delayed Visual undo, clean Visual/Code mode switching, real-difference prompting, restored disabled/ARIA states, and zero console errors.
+- Bumped release-candidate metadata to `0.1.96` across the plugin header/constant, npm metadata, readme stable tag/changelog, sample version assertion, changelog, README feature summary, and generated POT.
+- Final release validation passed: build; POT generation (`984 strings`); PHPCS; `271 tests, 1817 assertions`; npm audit (`0 vulnerabilities`); Composer audit (no advisories); and `git diff --check`.
+- Built and inspected final package `C:\Users\Captain\Documents\AI Workflows\work\acg-v0.1.96-20260714-194326\alynt-account-gateway-v0.1.96.zip`: 45 runtime files, zero backslash entries, one expected plugin root, zero development/source entries, aligned header/constant/stable-tag/POT `0.1.96` metadata, exactly one updater header, canonical Visual/Code normalization markers, and existing leave-page/action-state guards present. SHA-256: `BFCF0B37321B92C3B37BC83BCF3C88E22C6630B694FC0ABDB7DA63A07CA15393`.
+- Installed that exact final package on local-only Plugin Tester through WordPress `Plugin_Upgrader`; final-package state was active `0.1.96` with 45 runtime files, canonical normalization markers present, and unchanged settings fingerprint.
+- Final-package Playwright smoke verified canceled-navigation restoration, delayed Visual undo, Code edit/restoration, clean mode switching, native dirty-state prompting, restored disabled/ARIA states, and zero console errors.
+- Restored Plugin Tester to published public `v0.1.95`; the plugin is active with 45 runtime files, the settings fingerprint remains `2d0e919d2f2bc08590b34fcf6ffc6fdc24ebd8e97b6b778f0e67326636226a8e`, and the temporary administrator and verifier scripts were removed.
+
+### Guardrails
+
+- Keep this slice limited to Email-tab client-side save-state reconciliation and its tests unless the runtime evidence identifies a different root cause.
+- Do not change persisted settings, template sanitization, preview/test-send endpoints, email delivery, account-email triggers, frontend auth flows, registration, dashboard/WooCommerce behavior, or updater behavior.
+- Preserve the standalone one-off test recipient outside the saved-settings dirty boundary.
+
+### Completion Gate
+
+- [x] Exact ordinary-field restoration remains clean before and after canceling a native leave-page prompt.
+- [x] Visual editor undo remains clean after delayed editor events settle.
+- [x] Real differences still show the warning, disable both email actions, and prompt before navigation.
+- [ ] Full validation, final package inspection, and public updater verification pass.
 
 ## v0.1.95 Email Dirty-State Reconciliation
 
