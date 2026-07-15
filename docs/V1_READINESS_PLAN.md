@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 1 is active. Public `v0.1.99` resolves `P1-001`, and its updater installation and disabled-output role-policy retest have passed on `hbf-staging`.
+- Current phase: Phase 1 is active. Public `v0.1.99` is updater-verified and representative HBF configuration is saved with all public-output switches disabled. Legal destinations, real email delivery, and approved integration credentials remain gated.
 - Product baseline: `v0.1.99`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -89,16 +89,16 @@ The Phase 1 handover sequence is: preserve a redacted incumbent-settings snapsho
 - [x] Install the current public release asset through the supported updater or package-install path.
 - [x] Verify Frontend Output remains disabled during initial configuration.
 - [ ] Configure and verify login path, account action base, after-login redirect, and emergency bypass.
-- [ ] Configure logo, logo width, background image, colors, button colors, and typography using representative branding.
-- [ ] Configure screen-specific welcome and instruction copy.
+- [x] Configure logo, logo width, background image, colors, button colors, and typography using representative branding.
+- [x] Configure screen-specific welcome and instruction copy.
 - [ ] Configure relative Terms and Privacy paths and verify both destinations.
-- [ ] Configure account-creation policy and confirm the default disabled behavior before deliberate enablement.
+- [x] Configure account-creation policy and confirm the default disabled behavior before deliberate enablement.
 - [ ] Configure email templates, enable/disable switches, sender expectations, and test recipient.
-- [ ] Configure dashboard, custom links, role visibility, icons, ordering, and new-tab behavior.
-- [ ] Configure WooCommerce takeover only when the site's account page and endpoints are ready.
+- [x] Configure dashboard, custom links, role visibility, icons, ordering, and new-tab behavior.
+- [x] Configure WooCommerce takeover only when the site's account page and endpoints are ready.
 - [ ] Configure Turnstile, Reoon, and webhook credentials only where acceptance requires them.
-- [ ] Review the plugin readiness summary and resolve every release-blocking item.
-- [ ] Export a redacted configuration snapshot for recovery and portability testing.
+- [x] Review the plugin readiness summary and record every remaining release-blocking item.
+- [x] Export a redacted configuration snapshot for recovery and portability testing.
 - [ ] Obtain approval before enabling Frontend Output on staging.
 
 ### Phase 1 Installation Evidence
@@ -144,7 +144,26 @@ The generated emergency bypass value was confirmed present but was not printed o
 | Disabled-output staging retest | Administrator, shop-manager, and customer toolbar values passed through unchanged and wp-admin policy evaluation returned without redirect | Passed |
 | Staging preservation and cleanup | Active at original position `4`; settings fingerprint unchanged; six tables empty; retention scheduled; incumbent routes unchanged; zero QA users; no remaining offer | Verified |
 
-The maintenance release is published, its public package is verified, and its updater installation and disabled-output role-policy retest have passed on `hbf-staging`. `P1-001` is closed. The next Phase 1 work is representative configuration with Frontend Output still disabled, followed by an explicit approval gate before controlled route handover.
+The maintenance release is published, its public package is verified, and its updater installation and disabled-output role-policy retest have passed on `hbf-staging`. `P1-001` is closed. Representative configuration is recorded below, with Frontend Output still disabled and route handover still behind an explicit approval gate.
+
+### Phase 1 Representative Configuration Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Safety state | Frontend Output, registration, dashboard, and WooCommerce takeover remain disabled | Verified |
+| Settings | 77 keys; SHA-256 `4BC5E9FEACE6CC434831606259E6BA8DB019343620D3D47B7D50F5883D44E180`; all secret fields preserved | Recorded |
+| Branding | Existing HBF logo and pomegranate background, 150px logo width, HBF palette, Noto Serif headings, and DM Sans body text | Configured |
+| Routes and copy | `/login/`, `/account`, `/my-account/`, HBF instructions, 24-hour registration expiry, and customer username format | Configured |
+| Legal destinations | `/terms/` and `/privacy/` retain the incumbent paths but neither resolves to a published page | Blocking before registration |
+| Email templates | Five rich-text templates render valid HTML and plain text with no unresolved tokens; zero test messages sent | Preview passed; delivery pending |
+| Dashboard | FAQ and Contact links configured with icons, ordering, customer/subscriber visibility, and same-tab behavior | Configured; dashboard disabled |
+| Integrations | Either-provider mode and safe defaults retained; Turnstile, Reoon, webhook, and test-recipient values remain unconfigured | Acceptance input required |
+| Gateway previews | Eight screen states render the HBF logo and no WordPress logo | Structural render passed |
+| Public behavior | Incumbent routes unchanged; zero Account Gateway assets on `/login/` | Verified |
+| Data and cleanup | Six tables empty; retention scheduled; zero QA users | Verified |
+| Redacted export | Non-secret settings and validation evidence stored locally; media IDs documented as site-specific | Verified |
+
+Representative configuration is complete for the inputs currently available. Frontend Output remains disabled. Before route handover, the legal-page decision, a site-owned email test recipient, integration credential decisions, and visual browser review of the saved previews remain open.
 
 ## Phase 2: Core Account Acceptance
 
@@ -307,6 +326,7 @@ Release is approved only when all statements below are true:
 | `P0-004` | 0 | Low | Unrelated Brizy, Brizy Pro, and Presto Player Pro updates were available during baseline capture. | Site owner | Freeze unrelated updates during acceptance unless separately approved; record any unavoidable drift. | Version comparison before each acceptance run | Monitoring |
 | `P0-005` | 0 / 1 | Low | The incumbent Turnstile script warns that its `onTurnstileReady` callback is unavailable at load time. | Incumbent plugin owner / site owner | Preserve as an incumbent-only baseline; zero Alynt Account Gateway assets were loaded when reproduced. | Browser console comparison after handover | Open baseline |
 | `P1-001` | 1 | Medium | Customer wp-admin blocking and admin-bar filtering were registered while Frontend Output was disabled. The existing `hbf-staging` stack masked the behavior, producing no active/inactive runtime delta. | Product owner | Frontend Output is the master safety toggle; both policies now honor it in `v0.1.99`. | Disposable-role comparison, isolated regression tests, exact-package Plugin Tester smoke, public asset verification, Alynt Plugin Updater installation, and installed-copy staging role retest | Closed |
+| `P1-002` | 1 | Medium | The incumbent `/terms/` and `/privacy/` paths do not resolve to published WordPress pages. | Site owner | Keep public registration disabled until approved legal destinations exist and both links are verified. | Published-page and frontend-link verification | Open configuration blocker |
 
 Severity guidance:
 
@@ -345,4 +365,6 @@ Severity guidance:
 - Public `v0.1.99` was published from release commit `8abe7f1` and merge commit `0271789`. Build Release run `29450943872` passed and attached a verified 45-runtime-file updater asset with SHA-256 `F87B79060043C6995A1FCD3ABE01C00BB410BF1A580B15D0B6D74F551D97BE4A`.
 - Alynt Plugin Updater `1.1.1` offered and installed the exact public `v0.1.99` asset on `hbf-staging`. The installed 45-file fingerprint exactly matches the public ZIP, the original active position and settings fingerprint were preserved, all six plugin tables remain empty, the retention schedule remains present, incumbent public routes and assets remain unchanged, and no update offer remains.
 - The installed-copy disabled-output retest passed for disposable administrator, shop-manager, and customer roles, with both toolbar input states preserved and wp-admin policy evaluation returning without redirect. Every QA identity was removed. `P1-001` is closed.
-- The next Phase 1 work is representative configuration while Frontend Output remains disabled. Route handover still requires a separate explicit approval.
+- Representative HBF branding, copy, routes, customer username format, rich email templates, retention settings, and dashboard links are configured while all public-output switches remain disabled. Eight saved preview states and five email previews render structurally, public routes remain unchanged, all six tables remain empty, and zero QA users remain.
+- Finding `P1-002` records that `/terms/` and `/privacy/` are not published destinations. A site-owned email test recipient and approved provider/webhook credentials or explicit disable decisions are also still required for later acceptance.
+- The next Phase 1 work is visual browser review of the saved Gateway Screen Preview states, followed by resolution of the legal and integration inputs. Route handover still requires a separate explicit approval.
