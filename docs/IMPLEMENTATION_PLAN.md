@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v0.1.98 pre-readiness settings UX polish fully validated; awaiting release approval
+- Current phase: v0.1.98 pre-readiness settings UX polish released and verified; v1.0 readiness Phase 0 is next
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.97 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.98 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Complete and release the v0.1.98 polish slice, then begin production acceptance and `v1.0.0` preparation in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md).
+- Next roadmap: Begin production acceptance and `v1.0.0` preparation in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md), starting with Phase 0 acceptance-environment selection and baseline evidence.
 
 ## v0.1.98 Pre-Readiness Settings UX Polish
 
@@ -21,7 +21,7 @@
 - [x] Change the default Terms path to `/legal/terms/` without overwriting existing saved settings.
 - [x] Regenerate translations and pass the production build, PHPCS, full PHPUnit suite, npm audit, and whitespace checks.
 - [x] Build and inspect the release candidate, complete focused Plugin Tester browser QA, and restore the test site.
-- [ ] Publish the approved release and verify the Alynt Plugin Updater path end to end.
+- [x] Publish the approved release and verify the Alynt Plugin Updater path end to end.
 
 ### Progress Notes
 
@@ -41,6 +41,10 @@
 - Built and inspected final package `alynt-account-gateway-v0.1.98.zip`: 45 runtime files, one expected plugin root, zero backslash entries, zero development/source entries, aligned header/constant/stable-tag/POT `0.1.98` metadata, exactly one updater header, all color-picker/font-guidance/default markers present, and SHA-256 `92E99C606A59DAB138512E85E0B455688CDDBAA5C5ECADC355C576B52651D75B`.
 - Installed that exact final package through WordPress's replace-current flow. Plugin Tester reported active header/constant `0.1.98`, 45 runtime files, all eight unnamed pickers and named hex inputs, rendered font guidance, and an unchanged settings fingerprint.
 - Restored public `0.1.97` after final-package smoke. The exact original installed-copy fingerprint, active-plugin hash, and settings hash match the baseline; zero disposable users and zero upgrade artifacts remain, and the browser session is closed.
+- Published GitHub release [`v0.1.98`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v0.1.98) after release commit `93fc9a4` was merged into `master` as `1dbb058`; Build Release workflow run `29408445194` completed successfully.
+- Downloaded and inspected the exact public asset `alynt-account-gateway-v0.1.98.zip`: 45 runtime files, one expected plugin root, zero backslash entries, zero development/source entries, aligned `0.1.98` metadata, exactly one updater header, and all settings-UX markers present. SHA-256: `63A5EAF0F573874E9D06AF8BDF819B989310DE388EE6639358D25218EFDF0585`.
+- Alynt Plugin Updater detected the public `0.1.97` to `0.1.98` update and supplied the exact GitHub release-asset URL to WordPress's native update screen. WordPress reported `Plugin updated successfully.` and the installed copy verified as `0.1.98` with 45 runtime files, preserved settings fingerprint `2d0e919d2f2bc08590b34fcf6ffc6fdc24ebd8e97b6b778f0e67326636226a8e`, and no remaining update offer.
+- The native updater left a `NULL` placeholder in the local test site's active-plugin array after replacement, matching the previously observed headless-updater activation edge case. The exact prior active position was restored, WordPress returned HTTP 200 with the plugin active, and the disposable administrator, authenticated test files, and upgrade artifacts were removed.
 
 ### Guardrails
 
@@ -53,7 +57,7 @@
 - [x] Picker changes update the hex field immediately, and valid typed hex values update the swatch.
 - [x] Each color retains exactly one named persisted input with an accessible picker label and keyboard focus treatment.
 - [x] Font-stack guidance gives copy-ready examples and accurately explains font loading ownership.
-- [ ] Public updater verification passes after release approval and publication.
+- [x] Public updater verification passes after release approval and publication.
 
 ## v0.1.97 Brand-Agnostic Typography Presets
 

@@ -2,8 +2,8 @@
 
 ## Status
 
-- Current phase: Readiness plan created; fully validated v0.1.98 pre-readiness settings UX polish awaits release approval before acceptance target selection.
-- Product baseline: `v0.1.97`, released and verified through Alynt Plugin Updater.
+- Current phase: Phase 0 acceptance-environment selection and baseline evidence is ready to begin.
+- Product baseline: `v0.1.98`, released and verified through Alynt Plugin Updater.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility.
@@ -11,7 +11,7 @@
 
 ## Purpose
 
-This is the living production-acceptance roadmap for Alynt Account Gateway. The implementation plan tracks one approved pre-readiness settings UX polish slice before this plan begins. This plan then determines whether the resulting product is ready to be called `v1.0.0` on real WordPress and WooCommerce sites.
+This is the living production-acceptance roadmap for Alynt Account Gateway. The completed implementation plan records the released `v0.1.98` product baseline. This plan determines whether that product is ready to be called `v1.0.0` on real WordPress and WooCommerce sites.
 
 Readiness work should prioritize runtime evidence, configuration safety, compatibility, documentation, and operational recovery. New product features belong in a separately approved roadmap unless they are required to resolve a release-blocking defect found during acceptance testing.
 
@@ -245,6 +245,7 @@ Severity guidance:
 
 ## Progress Notes
 
-- Created this production-readiness roadmap from the released and updater-verified `v0.1.97` baseline.
+- Created this production-readiness roadmap from the released and updater-verified `v0.1.97` baseline, then advanced the product baseline to released and updater-verified `v0.1.98` before acceptance began.
+- Public `v0.1.98` evidence: release commit `93fc9a4`, merge commit `1dbb058`, Build Release workflow run `29408445194`, public asset SHA-256 `63A5EAF0F573874E9D06AF8BDF819B989310DE388EE6639358D25218EFDF0585`, preserved Plugin Tester settings fingerprint, and no remaining update offer or QA artifacts.
 - The completed feature implementation history remains in `docs/IMPLEMENTATION_PLAN.md`.
 - The next natural step is Phase 0: confirm a production-like staging target, operating mode, restore point, baseline versions, test identities, and evidence/cleanup rules.
