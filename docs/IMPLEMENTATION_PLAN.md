@@ -2,12 +2,58 @@
 
 ## Status
 
-- Current phase: v0.1.97 released and updater-verified; ready for the next product slice
+- Current phase: v0.1.98 pre-readiness settings UX polish fully validated; awaiting release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.97 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Production acceptance and `v1.0.0` preparation are tracked in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md).
+- Next roadmap: Complete and release the v0.1.98 polish slice, then begin production acceptance and `v1.0.0` preparation in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md).
+
+## v0.1.98 Pre-Readiness Settings UX Polish
+
+### Scope
+
+- [x] Start from the released and updater-verified `v0.1.97` baseline.
+- [x] Pair every saved hex-color field with an accessible native color picker and live swatch while retaining the text field as the single persisted value.
+- [x] Add bidirectional picker/text synchronization, uppercase normalization, invalid-value feedback, focus styling, and source-level regression coverage.
+- [x] Expand heading and body font-stack guidance with concrete Blocksy-loaded Google Font examples and clarify that the plugin does not load fonts.
+- [x] Remove the downloads reference from the default login instruction text.
+- [x] Change the default Terms path to `/legal/terms/` without overwriting existing saved settings.
+- [x] Regenerate translations and pass the production build, PHPCS, full PHPUnit suite, npm audit, and whitespace checks.
+- [x] Build and inspect the release candidate, complete focused Plugin Tester browser QA, and restore the test site.
+- [ ] Publish the approved release and verify the Alynt Plugin Updater path end to end.
+
+### Progress Notes
+
+- Implemented on isolated branch `release/0.1.98`; the main checkout remains untouched.
+- Color fields now use an unnamed native picker as a modern live swatch beside the existing named hex input. JavaScript keeps both controls synchronized without introducing another saved setting or a third-party dependency.
+- Font guidance now demonstrates `"Poppins", Arial, sans-serif` and `"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif` when those fonts are already loaded by Blocksy.
+- Updated schema defaults and settings documentation for `/legal/terms/` and `Welcome back. Log in to manage your orders and account details.` Existing saved settings remain unchanged.
+- Local validation passes: production build; POT generation (`997 strings`); PHPCS; `283 tests, 1897 assertions`; npm audit (`0 vulnerabilities`); and `git diff --check`.
+- Built and inspected portable branch package `alynt-account-gateway-v0.1.97-branch-qa-v0.1.98.zip`: 45 runtime files, one expected plugin root, zero backslash entries, zero development/source entries, compiled picker synchronization and styling present, font guidance and updated defaults present, and SHA-256 `9AEDCB5AAD00D1ECB3D011138D594F27F59B6EBCBA7FACA957A005AB3CA7E5F8`.
+- Novamira MCP is not exposed in this side conversation; the configured Playwright MCP is available for focused browser QA after the required LocalWP target confirmation.
+- Installed the inspected branch package through WordPress's replace-current upload flow on confirmed local-only Plugin Tester. The plugin remained active with 45 runtime files and the exact pre-QA settings fingerprint `2d0e919d2f2bc08590b34fcf6ffc6fdc24ebd8e97b6b778f0e67326636226a8e`.
+- Packaged-runtime browser QA passed for all eight color controls: each picker is an unnamed accessible native color input with a 64-by-40-pixel live swatch, one named hex input, picker-to-text and text-to-picker synchronization, uppercase normalization, invalid-value `aria-invalid` feedback, and restored valid state. Both Blocksy font-stack examples rendered correctly.
+- Responsive QA passed at 1440 pixels and 390 pixels. All color controls remained within the viewport at mobile width with zero document overflow, and packaged admin CSS/JavaScript loaded with HTTP 200.
+- Restored the exact public `0.1.97` package through WordPress, returning the installed-copy fingerprint to `C0B1F4393139AF8C924B472E75E8E1CEC524FCC7EE78C77E2035DF066F563721`. Activation and settings hashes match the baseline, both disposable administrators were deleted, the browser was closed, and no upgrade artifacts remain.
+- Bumped release-candidate metadata to `0.1.98` across the plugin header/constant, npm metadata, WordPress stable tag and changelog, README, version assertion, and generated POT header.
+- Final release validation passes: production build; POT generation (`997 strings`); PHPCS; `283 tests, 1897 assertions`; npm audit (`0 vulnerabilities`); Composer audit (no advisories); PHP syntax; metadata alignment; and `git diff --check`.
+- Built and inspected final package `alynt-account-gateway-v0.1.98.zip`: 45 runtime files, one expected plugin root, zero backslash entries, zero development/source entries, aligned header/constant/stable-tag/POT `0.1.98` metadata, exactly one updater header, all color-picker/font-guidance/default markers present, and SHA-256 `92E99C606A59DAB138512E85E0B455688CDDBAA5C5ECADC355C576B52651D75B`.
+- Installed that exact final package through WordPress's replace-current flow. Plugin Tester reported active header/constant `0.1.98`, 45 runtime files, all eight unnamed pickers and named hex inputs, rendered font guidance, and an unchanged settings fingerprint.
+- Restored public `0.1.97` after final-package smoke. The exact original installed-copy fingerprint, active-plugin hash, and settings hash match the baseline; zero disposable users and zero upgrade artifacts remain, and the browser session is closed.
+
+### Guardrails
+
+- Preserve existing saved color values, import/export behavior, sanitization, frontend CSS variables, and brand-agnostic defaults.
+- Do not load remote fonts, add tracking, or add a JavaScript color-picker dependency.
+- Treat the changed Terms path and login instruction as defaults for fresh/default-restored configuration only; do not migrate established sites automatically.
+
+### Completion Gate
+
+- [x] Picker changes update the hex field immediately, and valid typed hex values update the swatch.
+- [x] Each color retains exactly one named persisted input with an accessible picker label and keyboard focus treatment.
+- [x] Font-stack guidance gives copy-ready examples and accurately explains font loading ownership.
+- [ ] Public updater verification passes after release approval and publication.
 
 ## v0.1.97 Brand-Agnostic Typography Presets
 

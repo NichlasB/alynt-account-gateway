@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Readiness plan created; acceptance target selection is next.
+- Current phase: Readiness plan created; fully validated v0.1.98 pre-readiness settings UX polish awaits release approval before acceptance target selection.
 - Product baseline: `v0.1.97`, released and verified through Alynt Plugin Updater.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -11,7 +11,7 @@
 
 ## Purpose
 
-This is the living production-acceptance roadmap for Alynt Account Gateway. The feature implementation plan is complete. This plan determines whether the existing product is ready to be called `v1.0.0` on real WordPress and WooCommerce sites.
+This is the living production-acceptance roadmap for Alynt Account Gateway. The implementation plan tracks one approved pre-readiness settings UX polish slice before this plan begins. This plan then determines whether the resulting product is ready to be called `v1.0.0` on real WordPress and WooCommerce sites.
 
 Readiness work should prioritize runtime evidence, configuration safety, compatibility, documentation, and operational recovery. New product features belong in a separately approved roadmap unless they are required to resolve a release-blocking defect found during acceptance testing.
 

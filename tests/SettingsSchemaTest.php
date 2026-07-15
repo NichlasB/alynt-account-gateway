@@ -37,6 +37,16 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertSame( 'allow', $defaults['reoon_flagged_policy'] );
 	}
 
+	public function test_terms_path_and_login_instruction_use_updated_defaults() {
+		$defaults = ALYNT_AG_Settings_Schema::defaults();
+
+		$this->assertSame( '/legal/terms/', $defaults['terms_path'] );
+		$this->assertSame(
+			'Welcome back. Log in to manage your orders and account details.',
+			$defaults['login_intro_text']
+		);
+	}
+
 	public function test_reoon_flagged_policy_sanitizes_to_known_options() {
 		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
 			array(

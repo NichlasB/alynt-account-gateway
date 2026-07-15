@@ -12,7 +12,7 @@ Settings are stored in the `alynt_ag_settings` option and defined in `ALYNT_AG_S
 - `registration_enabled`: `false`
 - `registration_token_hours`: `24`
 - `username_format`: `@User_{first_name}_{last_name}`
-- `terms_path`: `/terms/`
+- `terms_path`: `/legal/terms/`
 - `privacy_path`: `/legal/privacy/`
 - `brand_logo_id`: `0`
 - `brand_logo_max_width`: `220`
@@ -27,7 +27,7 @@ Settings are stored in the `alynt_ag_settings` option and defined in `ALYNT_AG_S
 - `button_text_color`: `#ffffff`
 - `heading_font_family`: `Georgia, serif`
 - `body_font_family`: `-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`
-- `login_intro_text`: configurable login instruction text
+- `login_intro_text`: `Welcome back. Log in to manage your orders and account details.`
 - `register_intro_text`: configurable registration instruction text
 - `lostpassword_intro_text`: configurable lost-password instruction text
 - `setpassword_intro_text`: configurable set-password instruction text

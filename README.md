@@ -10,7 +10,7 @@ This is private Alynt-distributed software. The plugin header includes `GitHub P
 - Configurable login path, account action base, after-login redirect, and emergency bypass key for direct `wp-login.php` access.
 - Frontend output disabled by default so site owners can configure settings before public changes appear.
 - Setup readiness checks that summarize critical configuration before public frontend output is enabled.
-- Brand controls for logo, logo max width, background image, colors, button colors, custom font stacks, and four local/system typography presets with an accessible live preview.
+- Brand controls for logo, logo max width, background image, accessible live color pickers and hex values, custom font stacks with concrete Blocksy-loaded font examples, and four local/system typography presets with an accessible live preview.
 - Screen-specific instruction copy for account gateway forms and states.
 - Confirmation-first registration flow that creates a WordPress user only after the visitor confirms email and sets a valid password.
 - Email-only login support with generated usernames for created accounts.

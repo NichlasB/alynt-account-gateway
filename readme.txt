@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 0.1.97
+Stable tag: 0.1.98
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,6 +18,7 @@ Frontend output is disabled by default so site owners can configure URL paths, b
 Core features include:
 
 * Branded login, registration, lost password, reset password, set password, and logout confirmation screens.
+* Accessible live color swatches and native color pickers alongside editable hex values.
 * Configurable login path, account action base, after-login redirect, and emergency bypass key.
 * Setup readiness checks before public frontend output is enabled.
 * Confirmation-first registration that creates the WordPress user only after email confirmation and password setup.
@@ -43,6 +44,10 @@ Core features include:
 Uninstalling the plugin removes plugin-owned settings, the stored database schema version, the retention cleanup schedule, rate-limit transients, and plugin-owned account gateway tables. WordPress users, WooCommerce orders, media-library files, and non-plugin data are not removed.
 
 == Changelog ==
+
+= 0.1.98 =
+
+* Added accessible live color pickers, clearer Blocksy-loaded font-stack examples, and updated login-instruction and Terms-path defaults.
 
 = 0.1.97 =
 

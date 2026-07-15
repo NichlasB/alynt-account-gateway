@@ -97,4 +97,16 @@ class SettingsPageTypographyPresetTest extends TestCase {
 		$this->assertStringContainsString( 'No remote fonts are loaded.', $output );
 		$this->assertStringNotContainsString( 'name="alynt_ag_settings[typography_preset]"', $output );
 	}
+
+	public function test_font_stack_help_includes_blocksy_loaded_google_font_examples() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$heading_help  = $this->invoke_helper( $settings_page, 'settings_field_help_text', array( 'heading_font_family' ) );
+		$body_help     = $this->invoke_helper( $settings_page, 'settings_field_help_text', array( 'body_font_family' ) );
+
+		$this->assertStringContainsString( 'Blocksy already loads the Google Font Poppins', $heading_help );
+		$this->assertStringContainsString( '"Poppins", Arial, sans-serif', $heading_help );
+		$this->assertStringContainsString( 'This plugin does not load fonts itself.', $heading_help );
+		$this->assertStringContainsString( 'Blocksy already loads Inter', $body_help );
+		$this->assertStringContainsString( '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', $body_help );
+	}
 }

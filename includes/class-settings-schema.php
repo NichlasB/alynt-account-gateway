@@ -94,7 +94,7 @@ class ALYNT_AG_Settings_Schema {
 			'terms_path'                                => array(
 				'tab'     => 'registration',
 				'type'    => 'relative_path',
-				'default' => '/terms/',
+				'default' => '/legal/terms/',
 				'label'   => __( 'Terms URL Path', 'alynt-account-gateway' ),
 			),
 			'privacy_path'                              => array(
@@ -106,7 +106,7 @@ class ALYNT_AG_Settings_Schema {
 			'login_intro_text'                          => array(
 				'tab'     => 'copy',
 				'type'    => 'textarea',
-				'default' => __( 'Welcome back. Log in to manage your orders, downloads, and account details.', 'alynt-account-gateway' ),
+				'default' => __( 'Welcome back. Log in to manage your orders and account details.', 'alynt-account-gateway' ),
 				'label'   => __( 'Login Instruction Text', 'alynt-account-gateway' ),
 			),
 			'register_intro_text'                       => array(
