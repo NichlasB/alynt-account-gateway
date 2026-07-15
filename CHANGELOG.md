@@ -2,6 +2,17 @@
 
 ## Unreleased
 
+## 0.1.98 - 2026-07-15
+
+### Added
+
+- Added accessible live color pickers and swatches beside editable hex values.
+- Added concrete Blocksy-loaded Google Font examples to the custom font-stack guidance.
+
+### Changed
+
+- Simplified the default login instruction and changed the default Terms path to `/legal/terms/` for new/default-restored configurations.
+
 ## 0.1.97 - 2026-07-14
 
 ### Added

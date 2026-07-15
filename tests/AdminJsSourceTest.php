@@ -69,4 +69,21 @@ class AdminJsSourceTest extends TestCase {
 		$this->assertStringContainsString( "previewHeading.style.fontFamily = headingInput.value || 'inherit'", $js );
 		$this->assertStringContainsString( "previewBody.style.fontFamily    = bodyInput.value || 'inherit'", $js );
 	}
+
+	public function test_color_controls_synchronize_picker_and_hex_text_in_both_directions() {
+		$js = file_get_contents( dirname( __DIR__ ) . '/assets/src/admin/index.js' );
+
+		$this->assertIsString( $js );
+		$this->assertStringContainsString( "document.querySelectorAll( '[data-alynt-ag-color-control]' )", $js );
+		$this->assertStringContainsString( "control.querySelector( '[data-alynt-ag-color-picker]' )", $js );
+		$this->assertStringContainsString( "control.querySelector( '[data-alynt-ag-color-text]' )", $js );
+		$this->assertStringContainsString( 'const hex    = /^#[0-9a-f]{6}$/i', $js );
+		$this->assertStringContainsString( 'picker.value = value', $js );
+		$this->assertStringContainsString( 'text.value = picker.value.toUpperCase()', $js );
+		$this->assertStringContainsString( "picker.addEventListener( 'input', updateText )", $js );
+		$this->assertStringContainsString( "text.addEventListener( 'input', updatePicker )", $js );
+		$this->assertStringContainsString( "text.addEventListener( 'change', normalizeText )", $js );
+		$this->assertStringContainsString( "text.setAttribute( 'aria-invalid', 'true' )", $js );
+		$this->assertStringContainsString( "control.classList.add( 'alynt-ag-color-control--invalid' )", $js );
+	}
 }

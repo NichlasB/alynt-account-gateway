@@ -218,13 +218,39 @@ class ALYNT_AG_Settings_Page {
 		}
 
 		if ( 'color' === $field['type'] ) {
-			printf(
-				'<input type="text" class="regular-text" id="%1$s" name="%2$s" value="%3$s" pattern="^#[a-fA-F0-9]{6}$"%4$s>',
-				esc_attr( $id ),
-				esc_attr( $name ),
-				esc_attr( $value ),
-				$aria // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute().
+			$picker_value = sanitize_hex_color( (string) $value );
+			$picker_value = $picker_value ? $picker_value : sanitize_hex_color( (string) $field['default'] );
+			$picker_label = sprintf(
+				/* translators: %s: settings field label. */
+				__( 'Choose %s', 'alynt-account-gateway' ),
+				$field['label']
 			);
+			?>
+			<div class="alynt-ag-color-control" data-alynt-ag-color-control>
+				<input
+					type="color"
+					class="alynt-ag-color-control__picker"
+					value="<?php echo esc_attr( $picker_value ); ?>"
+					aria-label="<?php echo esc_attr( $picker_label ); ?>"
+					title="<?php echo esc_attr( $picker_label ); ?>"
+					data-alynt-ag-color-picker
+				>
+				<input
+					type="text"
+					class="regular-text alynt-ag-color-control__text"
+					id="<?php echo esc_attr( $id ); ?>"
+					name="<?php echo esc_attr( $name ); ?>"
+					value="<?php echo esc_attr( $value ); ?>"
+					pattern="^#[a-fA-F0-9]{6}$"
+					placeholder="#3B5249"
+					autocomplete="off"
+					spellcheck="false"
+					dir="ltr"
+					data-alynt-ag-color-text
+					<?php echo $aria; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute(). ?>
+				>
+			</div>
+			<?php
 			return;
 		}
 
@@ -557,13 +583,13 @@ class ALYNT_AG_Settings_Page {
 			'privacy_path'                       => __( 'Use a relative URL path to the Privacy Policy page. Registration should not launch until this page exists.', 'alynt-account-gateway' ),
 			'brand_logo_id'                      => __( 'Shown on account gateway screens and the custom dashboard. Use a clear logo that remains readable at smaller sizes.', 'alynt-account-gateway' ),
 			'brand_logo_max_width'               => __( 'Controls the displayed logo width in pixels. Keep this modest so forms remain visible on small screens.', 'alynt-account-gateway' ),
-			'primary_color'                      => __( 'Used for primary accents, focus states, and branded UI elements. Check contrast against surface and background colors.', 'alynt-account-gateway' ),
+			'primary_color'                      => __( 'Use the color swatch to open the picker, or enter a six-digit hex value such as #3B5249. Used for primary accents and focus states; check contrast against surface and background colors.', 'alynt-account-gateway' ),
 			'accent_color'                       => __( 'Used for soft panels and supporting accents. Choose a color that supports the primary color without overpowering form content.', 'alynt-account-gateway' ),
 			'button_background_color'            => __( 'Check this together with the button text color so primary actions remain readable and accessible.', 'alynt-account-gateway' ),
 			'button_text_color'                  => __( 'Use enough contrast against the button background color for readable primary actions.', 'alynt-account-gateway' ),
 			'background_image_id'                => __( 'Used in the desktop two-column gateway layout. Choose a wide image that can crop gracefully as the viewport changes.', 'alynt-account-gateway' ),
-			'heading_font_family'                => __( 'Use a CSS font stack that is available on the site. Keep heading fonts readable at form-card sizes.', 'alynt-account-gateway' ),
-			'body_font_family'                   => __( 'Use a CSS font stack suitable for forms, dashboard content, and small helper text.', 'alynt-account-gateway' ),
+			'heading_font_family'                => __( 'Enter a comma-separated CSS font stack. For example, if Blocksy already loads the Google Font Poppins, use "Poppins", Arial, sans-serif. This plugin does not load fonts itself.', 'alynt-account-gateway' ),
+			'body_font_family'                   => __( 'Enter the preferred font first, followed by fallbacks. For example, if Blocksy already loads Inter, use "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif.', 'alynt-account-gateway' ),
 			'protection_mode'                    => __( 'Controls how configured anti-spam providers are evaluated during registration.', 'alynt-account-gateway' ),
 			'turnstile_site_key'                 => __( 'Pair this with the matching secret key. The widget is only trustworthy when the server-side token check succeeds.', 'alynt-account-gateway' ),
 			'turnstile_secret_key'               => __( 'Keep this private. The plugin uses it server-side to verify Turnstile tokens during registration.', 'alynt-account-gateway' ),

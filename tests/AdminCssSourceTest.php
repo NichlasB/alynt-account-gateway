@@ -74,4 +74,15 @@ class AdminCssSourceTest extends TestCase {
 		$this->assertMatchesRegularExpression( '/\.alynt-ag-typography-preview__heading\s*\{[^}]*font-size:\s*24px;/s', $css );
 		$this->assertMatchesRegularExpression( '/\.alynt-ag-typography-preview__body\s*\{[^}]*font-size:\s*16px;/s', $css );
 	}
+
+	public function test_color_control_has_stable_picker_and_accessible_focus_styles() {
+		$css = $this->get_admin_css();
+
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-color-control\s*\{[^}]*display:\s*flex;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-color-control\s*\{[^}]*max-width:\s*36rem;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-color-control__picker\s*\{[^}]*width:\s*64px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-color-control__picker\s*\{[^}]*min-height:\s*40px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-color-control__picker:focus\s*\{[^}]*box-shadow:\s*0 0 0 1px #2271b1;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-color-control--invalid \.alynt-ag-color-control__text\s*\{[^}]*border-color:\s*#d63638;/s', $css );
+	}
 }
