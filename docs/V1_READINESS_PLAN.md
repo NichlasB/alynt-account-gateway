@@ -2,8 +2,8 @@
 
 ## Status
 
-- Current phase: Phase 1 is active. Public `v0.1.99` resolves `P1-001` and its release asset is verified; `hbf-staging` remains on `v0.1.98` with Frontend Output disabled pending approved updater installation and authenticated retest.
-- Product baseline: `v0.1.99`, released with its public asset verified; staging updater verification remains pending.
+- Current phase: Phase 1 is active. Public `v0.1.99` resolves `P1-001`, and its updater installation and disabled-output role-policy retest have passed on `hbf-staging`.
+- Product baseline: `v0.1.99`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility.
@@ -139,8 +139,12 @@ The generated emergency bypass value was confirmed present but was not printed o
 | Build Release workflow | Run `29450943872`; build completed in 17 seconds with no substantive warning, deprecation, or error signal | Passed |
 | Public release asset | `alynt-account-gateway-v0.1.99.zip`; 157,682 bytes; 45 runtime files plus 10 directory entries; one plugin root; zero backslash entries; zero development leaks; aligned metadata; one updater header; both guards present | Verified |
 | Public asset SHA-256 | `F87B79060043C6995A1FCD3ABE01C00BB410BF1A580B15D0B6D74F551D97BE4A` | Matches GitHub digest |
+| Staging updater | Alynt Plugin Updater `1.1.1` offered and installed the exact public `v0.1.99` asset on `hbf-staging` | Passed |
+| Installed public-package identity | 45 files; installed and public-ZIP file-map SHA-256 `611E3571D88086F6F6D220B320E095F1F713C390D7C4DA520264858B6595DEE2` | Exact match |
+| Disabled-output staging retest | Administrator, shop-manager, and customer toolbar values passed through unchanged and wp-admin policy evaluation returned without redirect | Passed |
+| Staging preservation and cleanup | Active at original position `4`; settings fingerprint unchanged; six tables empty; retention scheduled; incumbent routes unchanged; zero QA users; no remaining offer | Verified |
 
-The maintenance release is published and its public package is verified. The temporary pre-release Plugin Tester installation remains fully rolled back to the exact public `0.1.98` baseline. The next approval-gated operation is to update `hbf-staging` through Alynt Plugin Updater and repeat the disabled-output authenticated role comparison before route handover.
+The maintenance release is published, its public package is verified, and its updater installation and disabled-output role-policy retest have passed on `hbf-staging`. `P1-001` is closed. The next Phase 1 work is representative configuration with Frontend Output still disabled, followed by an explicit approval gate before controlled route handover.
 
 ## Phase 2: Core Account Acceptance
 
@@ -302,7 +306,7 @@ Release is approved only when all statements below are true:
 | `P0-003` | 0 | Low | WP-CLI reports early text-domain loading for `wp-custom-login-manager`. | Incumbent plugin owner / site owner | Preserve as a pre-install baseline and keep it out of Alynt Account Gateway defect attribution. | Post-handover WP-CLI comparison | Open baseline |
 | `P0-004` | 0 | Low | Unrelated Brizy, Brizy Pro, and Presto Player Pro updates were available during baseline capture. | Site owner | Freeze unrelated updates during acceptance unless separately approved; record any unavoidable drift. | Version comparison before each acceptance run | Monitoring |
 | `P0-005` | 0 / 1 | Low | The incumbent Turnstile script warns that its `onTurnstileReady` callback is unavailable at load time. | Incumbent plugin owner / site owner | Preserve as an incumbent-only baseline; zero Alynt Account Gateway assets were loaded when reproduced. | Browser console comparison after handover | Open baseline |
-| `P1-001` | 1 | Medium | Customer wp-admin blocking and admin-bar filtering are registered while Frontend Output is disabled. The existing `hbf-staging` stack masks the behavior, producing no active/inactive runtime delta. | Product owner | Frontend Output is the master safety toggle; both policies must honor it. Prepare and verify a maintenance release before route handover. | Disposable-role comparison, isolated regression tests, exact-package Plugin Tester smoke, and public asset verification completed; staging updater retest required | Released; staging retest pending |
+| `P1-001` | 1 | Medium | Customer wp-admin blocking and admin-bar filtering were registered while Frontend Output was disabled. The existing `hbf-staging` stack masked the behavior, producing no active/inactive runtime delta. | Product owner | Frontend Output is the master safety toggle; both policies now honor it in `v0.1.99`. | Disposable-role comparison, isolated regression tests, exact-package Plugin Tester smoke, public asset verification, Alynt Plugin Updater installation, and installed-copy staging role retest | Closed |
 
 Severity guidance:
 
@@ -339,4 +343,6 @@ Severity guidance:
 - Local `v0.1.99` candidate work gates both policies on Frontend Output, adds direct regression coverage, passes 285 tests and 1,900 assertions, PHPCS, 108-file PHP syntax validation, npm and Composer audits, and build validation, and produces a verified 45-file runtime package with SHA-256 `55B989352D638BC18C4C35A167F10CE69ECAEFEAC09CBCD486EA877CF72323BB`.
 - The exact candidate package passed an installed-copy smoke on local-only Plugin Tester for disposable administrator, shop-manager, and customer roles. The public `0.1.98` package, activation position, 45-file fingerprint, settings fingerprint, disabled toggles, and retention schedule were then restored exactly; zero QA users or upload artifacts remain.
 - Public `v0.1.99` was published from release commit `8abe7f1` and merge commit `0271789`. Build Release run `29450943872` passed and attached a verified 45-runtime-file updater asset with SHA-256 `F87B79060043C6995A1FCD3ABE01C00BB410BF1A580B15D0B6D74F551D97BE4A`.
-- The next Phase 1 gate is approval to update `hbf-staging` through Alynt Plugin Updater and repeat the disabled-output role comparison. Configuration and route handover remain paused until that retest passes.
+- Alynt Plugin Updater `1.1.1` offered and installed the exact public `v0.1.99` asset on `hbf-staging`. The installed 45-file fingerprint exactly matches the public ZIP, the original active position and settings fingerprint were preserved, all six plugin tables remain empty, the retention schedule remains present, incumbent public routes and assets remain unchanged, and no update offer remains.
+- The installed-copy disabled-output retest passed for disposable administrator, shop-manager, and customer roles, with both toolbar input states preserved and wp-admin policy evaluation returning without redirect. Every QA identity was removed. `P1-001` is closed.
+- The next Phase 1 work is representative configuration while Frontend Output remains disabled. Route handover still requires a separate explicit approval.
