@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.99 - 2026-07-15
+
+### Fixed
+
+- Ensured customer wp-admin blocking and admin-bar filtering remain inactive while Frontend Output is disabled.
+
 ## 0.1.98 - 2026-07-15
 
 ### Added

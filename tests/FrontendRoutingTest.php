@@ -155,6 +155,15 @@ class FrontendRoutingTest extends TestCase {
 		$this->assertTrue( $frontend->filter_admin_bar( false ) );
 	}
 
+	public function test_toolbar_filter_respects_frontend_master_switch() {
+		$frontend = new ALYNT_AG_Frontend();
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings']['frontend_enabled'] = false;
+		$GLOBALS['alynt_ag_test_user_logged_in'] = true;
+
+		$this->assertTrue( $frontend->filter_admin_bar( true ) );
+		$this->assertFalse( $frontend->filter_admin_bar( false ) );
+	}
+
 	public function test_wp_admin_block_redirects_non_privileged_users() {
 		$frontend = new ALYNT_AG_Frontend();
 		$GLOBALS['alynt_ag_test_user_logged_in'] = true;
@@ -168,6 +177,17 @@ class FrontendRoutingTest extends TestCase {
 		}
 
 		$this->assertSame( 'https://example.test/my-account/', $GLOBALS['alynt_ag_test_redirects'][0]['location'] );
+	}
+
+	public function test_wp_admin_block_respects_frontend_master_switch() {
+		$frontend = new ALYNT_AG_Frontend();
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings']['frontend_enabled'] = false;
+		$GLOBALS['alynt_ag_test_user_logged_in'] = true;
+		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
+
+		$frontend->maybe_block_wp_admin();
+
+		$this->assertSame( array(), $GLOBALS['alynt_ag_test_redirects'] );
 	}
 
 	public function test_wp_admin_block_logs_diagnostics_when_enabled() {
