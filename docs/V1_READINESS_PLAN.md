@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 0 acceptance-environment selection and baseline evidence is ready to begin.
+- Current phase: Phase 1 is active. Public `v0.1.98` is installed and active on `hbf-staging` with Frontend Output disabled; local maintenance candidate `v0.1.99` resolves `P1-001` and awaits release approval and staging retest.
 - Product baseline: `v0.1.98`, released and verified through Alynt Plugin Updater.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility.
-- Acceptance target: To be confirmed through the WordPress site-operations workflow before testing begins.
+- Acceptance target: `hbf-staging` at `https://staging.handcraftedbotanicalformulas.com` in `live-only` operating mode. The production HBF site is explicitly excluded.
 
 ## Purpose
 
@@ -35,31 +35,59 @@ Readiness work should prioritize runtime evidence, configuration safety, compati
 
 ## Phase 0: Acceptance Environment
 
-- [ ] Confirm the staging site shorthand, domain, filesystem path, and operating mode.
-- [ ] Confirm whether a separate live target exists and keep it out of scope until staging passes.
-- [ ] Record WordPress, PHP, WooCommerce, theme, mail-provider, and relevant security/caching plugin versions.
-- [ ] Create and verify a restore point for files and database.
-- [ ] Record the starting Alynt Account Gateway version, activation state, settings fingerprint, and frontend-output state.
-- [ ] Define disposable administrator, shop-manager, customer, and pending-registration test identities.
-- [ ] Define cleanup steps for test users, orders, emails, logs, webhook records, uploads, and temporary helpers.
-- [ ] Store integration credentials outside the repository and confirm that evidence will be redacted.
-- [ ] Agree on browser viewport, language, RTL, assistive-technology, and transactional test coverage.
+- [x] Confirm the staging site shorthand, domain, filesystem path, and operating mode.
+- [x] Confirm whether a separate live target exists and keep it out of scope until staging passes.
+- [x] Record WordPress, PHP, WooCommerce, theme, mail-provider, and relevant security/caching plugin versions.
+- [x] Create and verify a restore point for files and database.
+- [x] Record the starting Alynt Account Gateway version, activation state, settings fingerprint, and frontend-output state.
+- [x] Define disposable administrator, shop-manager, customer, and pending-registration test identities.
+- [x] Define cleanup steps for test users, orders, emails, logs, webhook records, uploads, and temporary helpers.
+- [x] Store integration credentials outside the repository and confirm that evidence will be redacted.
+- [x] Agree on browser viewport, language, RTL, assistive-technology, and transactional test coverage.
 
 ### Environment Evidence
 
 | Item | Value | Evidence | Status |
 | --- | --- | --- | --- |
-| Staging target | To be confirmed |  | Pending |
-| Restore point |  |  | Pending |
-| WordPress / PHP |  |  | Pending |
-| WooCommerce / theme |  |  | Pending |
-| Installed gateway baseline |  |  | Pending |
-| Settings fingerprint |  |  | Pending |
+| Staging target | `hbf-staging`; `https://staging.handcraftedbotanicalformulas.com`; `live-only` mode | Site Operations registry, HTTP, and WP-CLI | Confirmed |
+| Production exclusion | Production HBF site is not an acceptance target | User confirmation dated 2026-07-15 | Confirmed |
+| Restore point | Locked, server-local WPvivid full backup; task `wpvivid-d6e76efae4340`; 680,105,457 bytes; SHA-256 `BE3835C433B6150C7A901CDE036C691E9F2E948F4F4F21206AB2930594A1D432` | WPvivid completed state, manifest/hash comparison, outer and six nested ZIP integrity checks, SQL-entry and package-metadata validation, and Drime non-transfer checks | Verified |
+| WordPress / PHP | WordPress `7.0.1`; PHP `8.2.32` | WP-CLI on target | Confirmed |
+| WooCommerce / theme | WooCommerce `10.9.4`; Blocksy child theme with Blocksy `2.1.48`; Blocksy Companion Pro `2.1.49`; HPOS disabled | WP-CLI on target | Confirmed |
+| Mail / cache / security | FluentSMTP `2.2.95`; Redis Cache `2.8.0`; BBQ Pro `3.9`; Blackhole for Bad Bots `3.8.2`; WP fail2ban `5.4.1`; Nginx Helper `9.9.10` | Active-plugin inventory on target | Confirmed |
+| Installed gateway baseline | Alynt Account Gateway is not installed or active | WP-CLI plugin query on target | Confirmed absent |
+| Settings fingerprint | Not applicable until installation; no Alynt Account Gateway options were present to fingerprint | WP-CLI plugin query and read-only baseline | Confirmed not applicable |
+| Current account-route owner | WP Custom Login Manager `1.2.0`, with Force Login `5.6.3` also active | Active-plugin inventory, source inspection, HTTP, and browser evidence | Handover required |
+
+### Acceptance Controls
+
+- Test identities use the `alynt_ag_v1_qa_` prefix and must never reuse or modify an existing customer, administrator, shop manager, order, or registration record.
+- Non-mail role checks use disposable administrator, shop-manager, and customer users. Real email-flow checks use site-owned acceptance mailbox aliases supplied outside the repository; reserved or invented addresses are not used for deliverability claims.
+- Pending registrations and representative WooCommerce orders receive the same QA prefix or marker plus a run identifier so cleanup can be deterministic.
+- Cleanup covers prefixed users, QA-marked orders, pending-registration records, plugin-owned logs, webhook records, diagnostics, test messages, uploaded packages, temporary helpers, and rotated acceptance secrets. Existing records are out of bounds.
+- Evidence may contain aggregate counts, version numbers, redacted settings, request outcomes, hashes, and screenshots. It must not retain credentials, bypass keys, cookies, private customer data, email bodies containing personal data, or full webhook payloads.
+- Baseline viewports are `390x844`, `800x900`, and `1440x1000`. Later acceptance adds keyboard-only checks, visible-focus review, Windows NVDA checks, `en_US`, one translated LTR locale, one RTL locale, and the browser matrix defined in Phase 6.
+- Transactional testing starts with empty/new-customer states and then uses only disposable QA orders. Existing production-clone orders remain read-only.
+- The target contains approximately 9,214 users and 13,698 legacy order posts. This production-data-clone scale makes strict namespacing, redaction, and cleanup mandatory.
+
+### Route Handover Constraint
+
+WP Custom Login Manager currently owns the site's `/login/` route, registration, email verification, Reoon and Turnstile integration, direct `wp-login.php` handling, account emails, and WooCommerce redirects. Force Login also participates in public access and redirect behavior. Alynt Account Gateway must therefore not be enabled beside the incumbent route owner without a controlled handover.
+
+The Phase 1 handover sequence is: preserve a redacted incumbent-settings snapshot; install and configure Alynt Account Gateway with Frontend Output disabled; verify emergency access; approve the route switch; deactivate or reconfigure the overlapping route owner during a controlled window; test the gateway routes; and retain a rollback path that restores the incumbent plugin state.
+
+### Read-Only Baseline Findings
+
+- Public route behavior: `/` redirects to native login through Force Login; `/wp-login.php` redirects to `/login/`; `/login/` returns `200`; `/my-account/` redirects to the branded login route.
+- The current login screen has no horizontal overflow at `390px` or `800px` and exposes email, password, remember-me, registration, and lost-password controls.
+- The incumbent login JavaScript throws `TypeError: this.initKeyboardNavigation is not a function`. This predates Alynt Account Gateway installation and remains a handover baseline issue.
+- WP-CLI emits a pre-existing early text-domain loading notice for `wp-custom-login-manager` on each bootstrap.
+- Brizy, Brizy Pro, and Presto Player Pro had unrelated updates available during baseline capture. They are recorded as environmental drift and must not be updated as part of gateway acceptance without a separate decision.
 
 ## Phase 1: Production-Like Configuration
 
-- [ ] Install the current public release asset through the supported updater or package-install path.
-- [ ] Verify Frontend Output remains disabled during initial configuration.
+- [x] Install the current public release asset through the supported updater or package-install path.
+- [x] Verify Frontend Output remains disabled during initial configuration.
 - [ ] Configure and verify login path, account action base, after-login redirect, and emergency bypass.
 - [ ] Configure logo, logo width, background image, colors, button colors, and typography using representative branding.
 - [ ] Configure screen-specific welcome and instruction copy.
@@ -72,6 +100,42 @@ Readiness work should prioritize runtime evidence, configuration safety, compati
 - [ ] Review the plugin readiness summary and resolve every release-blocking item.
 - [ ] Export a redacted configuration snapshot for recovery and portability testing.
 - [ ] Obtain approval before enabling Frontend Output on staging.
+
+### Phase 1 Installation Evidence
+
+| Item | Value | Evidence | Status |
+| --- | --- | --- | --- |
+| Incumbent snapshot | 45 `wpclm_*` options; SHA-256 `843FED4664D3A24EDA34119C2D3CDFDA2834EE5A7C0DAAEBF7E74C38E7E3757C` | Redacted local snapshot with configured-state, length, and hashes for sensitive values | Preserved |
+| Release package | Public `v0.1.98`; 157,635 bytes; SHA-256 `63A5EAF0F573874E9D06AF8BDF819B989310DE388EE6639358D25218EFDF0585` | GitHub release metadata, local hash, server-side hash, and WP-CLI install | Verified |
+| Activation state | Active; 45 runtime files | WP-CLI plugin status and filesystem inventory | Verified |
+| Frontend safety state | Frontend Output, registration, dashboard, and WooCommerce takeover disabled | Persisted activation settings and browser/HTTP checks | Verified |
+| Gateway settings | 77 keys; SHA-256 `659358CFB69611AEC993E124F2CBCD91F2D81C352F0BC18478789B486EAA2802`; redacted SHA-256 `C24BC7484BA1CAC9DBF25E262A49CF7CC8654B2348E293CB3BB706577C0B4AE0` | Redacted activation snapshot | Recorded |
+| Plugin data | Six plugin tables created and empty; retention cleanup scheduled | Database counts and cron-state check | Verified |
+| Incumbent preservation | WP Custom Login Manager and Force Login remain active; incumbent fingerprint unchanged | Pre/post activation option hashes and plugin status | Verified |
+| Public behavior | Existing `/login/`, `/wp-login.php`, `/account`, and `/my-account/` behavior unchanged; zero gateway assets on login | HTTP, Playwright DOM/assets, screenshot, and PHP-log review | Verified |
+| Disabled-output role policy | Administrator, shop-manager, and customer behavior was identical with the gateway inactive and active because the existing site stack applies equivalent policies | Disposable authenticated role comparison, cleanup verification, and `PHASE_1_ROLE_POLICY_TEST.json` | Site delta absent; product defect confirmed |
+
+The generated emergency bypass value was confirmed present but was not printed or stored in evidence. Turnstile, Reoon, and webhook credentials remain unconfigured in Alynt Account Gateway. No account, order, email, webhook, or gateway log record was created.
+
+### Phase 1 P1-001 Maintenance Candidate
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Candidate version | `0.1.99` | Prepared locally |
+| Behavior correction | Admin-bar filtering passes through unchanged and customer wp-admin blocking returns without redirect when Frontend Output is disabled | Implemented |
+| Regression coverage | Added direct disabled-toggle cases while retaining enabled customer, administrator, and shop-manager policy coverage | Verified |
+| Focused tests | 9 tests, 42 assertions | Passed |
+| Full tests | 285 tests, 1,900 assertions | Passed |
+| Coding standards | Full PHPCS/WPCS project scan | Passed |
+| PHP syntax | 108 project PHP files outside dependencies | Passed |
+| Dependency audits | npm audit: zero vulnerabilities; Composer audit: no advisories | Passed |
+| Build and translations | Production assets rebuilt; POT regenerated with 997 strings and `0.1.99` metadata | Passed |
+| Candidate package | 45 runtime files; one plugin root; zero backslash entries; zero development leaks; aligned header, constant, stable tag, and POT metadata; one updater header; both guards present | Verified |
+| Candidate SHA-256 | `55B989352D638BC18C4C35A167F10CE69ECAEFEAC09CBCD486EA877CF72323BB` | Recorded |
+| Installed-package smoke | Exact candidate installed on local-only Plugin Tester; administrator, shop-manager, and customer toolbar values passed through unchanged and wp-admin blocking returned without redirect while Frontend Output was disabled | Passed |
+| Plugin Tester restoration | Public `0.1.98` restored active at its original position with the original 45-file and settings fingerprints, disabled toggles, scheduled retention, zero QA users, and zero upload artifacts | Verified |
+
+The candidate has not been committed, tagged, pushed, or published. Its temporary local-only Plugin Tester installation was fully rolled back to the exact public `0.1.98` baseline. Release approval remains required. After publication, update `hbf-staging` through Alynt Plugin Updater and repeat the disabled-output authenticated role comparison before route handover.
 
 ## Phase 2: Core Account Acceptance
 
@@ -228,7 +292,12 @@ Release is approved only when all statements below are true:
 
 | ID | Phase | Severity | Finding | Owner | Decision | Retest Evidence | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-|  |  |  |  |  |  |  |  |
+| `P0-001` | 0 / 1 | High | WP Custom Login Manager and Force Login currently overlap Alynt Account Gateway routes and authentication redirects. | Product + site owner | Use a controlled handover with Frontend Output disabled, verified emergency access, and documented rollback. | Phase 1 route and rollback evidence | Open |
+| `P0-002` | 0 | Medium | The incumbent login page throws `this.initKeyboardNavigation is not a function`. | Incumbent plugin owner / site owner | Preserve as a pre-install baseline; verify it disappears with the controlled handover and does not recur in Alynt Account Gateway. | Browser console comparison after handover | Open baseline |
+| `P0-003` | 0 | Low | WP-CLI reports early text-domain loading for `wp-custom-login-manager`. | Incumbent plugin owner / site owner | Preserve as a pre-install baseline and keep it out of Alynt Account Gateway defect attribution. | Post-handover WP-CLI comparison | Open baseline |
+| `P0-004` | 0 | Low | Unrelated Brizy, Brizy Pro, and Presto Player Pro updates were available during baseline capture. | Site owner | Freeze unrelated updates during acceptance unless separately approved; record any unavoidable drift. | Version comparison before each acceptance run | Monitoring |
+| `P0-005` | 0 / 1 | Low | The incumbent Turnstile script warns that its `onTurnstileReady` callback is unavailable at load time. | Incumbent plugin owner / site owner | Preserve as an incumbent-only baseline; zero Alynt Account Gateway assets were loaded when reproduced. | Browser console comparison after handover | Open baseline |
+| `P1-001` | 1 | Medium | Customer wp-admin blocking and admin-bar filtering are registered while Frontend Output is disabled. The existing `hbf-staging` stack masks the behavior, producing no active/inactive runtime delta. | Product owner | Frontend Output is the master safety toggle; both policies must honor it. Prepare and verify a maintenance release before route handover. | Disposable-role comparison, isolated regression tests, and exact-package Plugin Tester smoke completed; staging updater retest required | Fix verified locally; release pending |
 
 Severity guidance:
 
@@ -242,10 +311,26 @@ Severity guidance:
 | Date | Decision | Rationale | Evidence / Reference |
 | --- | --- | --- | --- |
 | 2026-07-14 | Keep v1.0 readiness separate from the completed implementation plan. | Preserves the implementation record and gives production acceptance a focused living roadmap. | `docs/IMPLEMENTATION_PLAN.md` completed at `v0.1.97`. |
+| 2026-07-15 | Use `hbf-staging` in `live-only` operating mode for Phase 0 and exclude the production HBF site. | Provides production-like WooCommerce scale without authorizing production work. | User confirmation and Site Operations registry. |
+| 2026-07-15 | Keep detailed operational evidence local-only and publish only redacted acceptance facts in this plan. | Protects SSH details, credentials, cookies, customer data, and test identities while retaining auditable release evidence. | Local Phase 0 evidence record and repository privacy rules. |
+| 2026-07-15 | Require a controlled handover from WP Custom Login Manager and Force Login. | Both active plugins overlap gateway routes and authentication behavior, so concurrent public ownership would make testing unsafe and ambiguous. | Active-plugin inventory, source inspection, HTTP route checks, and browser baseline. |
+| 2026-07-15 | Keep the Phase 0 restore point server-local instead of transferring the production-clone archive to Drime. | Avoids moving private customer and order data to an external destination before encryption, access, retention, and data-processing controls are separately verified. | User approval, private quarantine manifest, and Drime queue/registry checks. |
+| 2026-07-15 | Install and activate the exact public `v0.1.98` package while retaining incumbent route ownership and disabled gateway output. | Establishes the production-like configuration baseline without switching public account journeys. | Package hashes, WP-CLI install/activation, settings fingerprints, empty-table counts, HTTP, Playwright, and log checks. |
+| 2026-07-15 | Require customer wp-admin blocking and admin-bar filtering to honor Frontend Output. | The master toggle exists so a site can configure the plugin before it changes public/account behavior. HBF staging masks the issue through equivalent incumbent policy, but the plugin contract remains violated on an otherwise neutral stack. | `PHASE_1_ROLE_POLICY_TEST.json`, source inspection, and requirement 24. |
 
 ## Progress Notes
 
 - Created this production-readiness roadmap from the released and updater-verified `v0.1.97` baseline, then advanced the product baseline to released and updater-verified `v0.1.98` before acceptance began.
 - Public `v0.1.98` evidence: release commit `93fc9a4`, merge commit `1dbb058`, Build Release workflow run `29408445194`, public asset SHA-256 `63A5EAF0F573874E9D06AF8BDF819B989310DE388EE6639358D25218EFDF0585`, preserved Plugin Tester settings fingerprint, and no remaining update offer or QA artifacts.
 - The completed feature implementation history remains in `docs/IMPLEMENTATION_PLAN.md`.
-- The next natural step is Phase 0: confirm a production-like staging target, operating mode, restore point, baseline versions, test identities, and evidence/cleanup rules.
+- Phase 0 selected and inventoried `hbf-staging`, explicitly excluded production, recorded the runtime and route-owner baseline, defined test identities, evidence rules, cleanup, viewports, accessibility/language coverage, and transactional boundaries, and captured responsive browser evidence without submitting forms or changing the site.
+- The approved Phase 0 restore point completed as WPvivid task `wpvivid-d6e76efae4340`. Its locked 680,105,457-byte package contains database, themes, plugins, uploads, content, core, and package metadata; the outer package and all six nested component archives passed integrity checks, the database component contains SQL, and the package metadata is valid JSON.
+- The package was moved immediately into a private server-local directory outside both the web root and Drime scan path. The source copy is absent, file and manifest permissions are `0600`, the directory is `0700`, the manifest hash matches the archive, and the task ID is absent from Drime queue, active-upload, uploaded, and failed registries. Drime automatic scanning remains enabled with its original behavior.
+- Post-backup checks confirmed Alynt Account Gateway remains absent and the existing `/login/`, `/wp-login.php`, and `/my-account/` route behavior is unchanged. Production was not accessed.
+- Phase 0 is complete.
+- Phase 1 preserved a redacted 45-option incumbent snapshot, installed and activated the exact public `v0.1.98` asset, verified its safe activation defaults, recorded gateway settings fingerprints, confirmed six empty plugin tables and the retention schedule, and proved incumbent routes, settings, plugins, and login assets remained unchanged.
+- The authenticated `P1-001` comparison created disposable administrator, shop-manager, and customer identities, measured toolbar and `/wp-admin/` behavior with the gateway inactive and active, and removed every identity afterward. The two matrices were identical because the existing site stack already applies equivalent policy; settings, plugin tables, cron, public routes, and activation state were preserved.
+- Finding `P1-001` is confirmed as a product-contract defect despite the absent HBF-staging runtime delta. Frontend Output must govern customer wp-admin blocking and admin-bar filtering so disabled output truly produces no plugin-owned account-policy change.
+- Local `v0.1.99` candidate work gates both policies on Frontend Output, adds direct regression coverage, passes 285 tests and 1,900 assertions, PHPCS, 108-file PHP syntax validation, npm and Composer audits, and build validation, and produces a verified 45-file runtime package with SHA-256 `55B989352D638BC18C4C35A167F10CE69ECAEFEAC09CBCD486EA877CF72323BB`.
+- The exact candidate package passed an installed-copy smoke on local-only Plugin Tester for disposable administrator, shop-manager, and customer roles. The public `0.1.98` package, activation position, 45-file fingerprint, settings fingerprint, disabled toggles, and retention schedule were then restored exactly; zero QA users or upload artifacts remain.
+- The next Phase 1 gate is explicit release approval for `v0.1.99`. After publication, update `hbf-staging` through Alynt Plugin Updater and repeat the disabled-output role comparison before configuration and route handover continue.

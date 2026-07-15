@@ -50,6 +50,11 @@ class ALYNT_AG_Frontend {
 	 * @return bool
 	 */
 	public function filter_admin_bar( $show ) {
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+		if ( empty( $settings['frontend_enabled'] ) ) {
+			return $show;
+		}
+
 		if ( ! is_user_logged_in() ) {
 			return $show;
 		}
@@ -64,6 +69,11 @@ class ALYNT_AG_Frontend {
 	 * @return void
 	 */
 	public function maybe_block_wp_admin() {
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+		if ( empty( $settings['frontend_enabled'] ) ) {
+			return;
+		}
+
 		if ( wp_doing_ajax() || ! is_user_logged_in() ) {
 			return;
 		}
@@ -73,7 +83,6 @@ class ALYNT_AG_Frontend {
 			return;
 		}
 
-		$settings    = ALYNT_AG_Settings_Schema::get_settings();
 		$destination = home_url( $settings['after_login_redirect'] );
 
 		$this->log_routing_event(
