@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 1 is active. Public `v0.1.104` is updater-verified, representative HBF configuration is saved with all public-output switches disabled, visual preview evidence is captured, and legal destinations are configured for staging. Real email delivery, provider/webhook configuration, live provider/webhook acceptance, and route handover remain gated.
+- Current phase: Phase 1 is active. Public `v0.1.104` is updater-verified, representative HBF configuration is saved with all public-output switches disabled, visual preview evidence is captured, legal destinations are configured for staging, and email test sends are accepted by the site mail path. Mailbox-side evidence, provider/webhook configuration, live provider/webhook acceptance, and route handover remain gated.
 - Product baseline: `v0.1.104`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -94,7 +94,7 @@ The Phase 1 handover sequence is: preserve a redacted incumbent-settings snapsho
 - [x] Configure screen-specific welcome and instruction copy.
 - [x] Configure relative Terms and Privacy paths and verify both destinations.
 - [x] Configure account-creation policy and confirm the default disabled behavior before deliberate enablement.
-- [ ] Configure email templates, enable/disable switches, sender expectations, and test recipient.
+- [x] Configure email templates, enable/disable switches, sender expectations, and test recipient.
 - [x] Configure dashboard, custom links, role visibility, icons, ordering, and new-tab behavior.
 - [x] Configure WooCommerce takeover only when the site's account page and endpoints are ready.
 - [ ] Configure Turnstile, Reoon, and webhook credentials only where acceptance requires them.
@@ -156,7 +156,7 @@ The maintenance release is published, its public package is verified, and its up
 | Branding | Existing HBF logo and pomegranate background, 150px logo width, HBF palette, Noto Serif headings, and DM Sans body text | Configured |
 | Routes and copy | `/login/`, `/account`, `/my-account/`, HBF instructions, 24-hour registration expiry, and customer username format | Configured |
 | Legal destinations | Saved settings use `/legal/terms/` and `/legal/privacy/`; both map to published custom `legal` posts. Anonymous requests remain intercepted by Force Login on staging by explicit site-owner decision. | Configured; staging access constraint accepted |
-| Email templates | Five rich-text templates render valid HTML and plain text with no unresolved tokens; zero test messages sent | Preview passed; delivery pending |
+| Email templates | Five rich-text templates render valid HTML and plain text with no unresolved tokens. A redacted site-owned test recipient is configured, and all five supported templates returned sent through `wp_mail()` while Frontend Output and registration stayed disabled. | Preview and site mail handoff passed; mailbox evidence pending |
 | Dashboard | FAQ and Contact links configured with icons, ordering, customer/subscriber visibility, and same-tab behavior | Configured; dashboard disabled |
 | Integrations | Either-provider mode, quick Reoon mode, and flagged-result allow policy are saved. The test recipient, Turnstile keys, Reoon API key, webhook URL, and signing secret are empty. | Configuration required before live provider, delivery, and webhook acceptance |
 | Gateway previews | Eight screen states render the HBF logo and no WordPress logo; 24 visual captures across `390x844`, `800x900`, and `1440x1000` show no horizontal overflow or obvious overlap. The authenticated compact-code preview endpoint renders standalone gateway markup on staging. | Structural, fallback visual, and live preview route checks passed |
@@ -242,7 +242,7 @@ The maintenance release is published, its public package is verified, and its up
 | Cleanup | Temporary MU trace, helper files, and temporary admin session tokens removed | Completed |
 | Finding status | `P1-003` | Closed |
 
-Representative configuration is complete for the inputs currently available. Frontend Output remains disabled. Before route handover, live email delivery, provider configuration and behavior, webhook configuration and delivery, and route-switch approval remain open.
+Representative configuration is complete for the inputs currently available. Frontend Output remains disabled. Before route handover, mailbox-side email evidence, provider configuration and behavior, webhook configuration and delivery, and route-switch approval remain open.
 
 ### Phase 1 Email, Provider, And Webhook Acceptance Attempt
 
@@ -254,6 +254,21 @@ Representative configuration is complete for the inputs currently available. Fro
 | Provider check | Registration protection returned pass because no Turnstile or Reoon credentials are saved, so no provider checks ran | Blocked by missing configuration |
 | Webhook test | Disposable QA user was created and deleted; test dispatch returned `alynt_ag_webhook_missing_url`; zero webhook log rows were deleted because no delivery was attempted | Blocked by missing configuration |
 | Cleanup | Remote helper removed; disposable QA user deleted; no email, provider, or webhook acceptance evidence was produced | Verified |
+
+### Phase 1 Email Acceptance
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Test recipient | Site-owned test recipient saved in Account Gateway settings; recipient value kept out of repository evidence | Configured |
+| Temporary helper | Local WP-CLI helper linted, copied to `/tmp`, executed once under the site user, and removed locally and from the server afterward | Completed |
+| Safety state | Frontend Output and registration remained disabled | Preserved |
+| Registration confirmation email | `wp_mail()` returned sent | Passed |
+| Password reset email | `wp_mail()` returned sent | Passed |
+| Password changed email | `wp_mail()` returned sent | Passed |
+| Account-created welcome email | `wp_mail()` returned sent | Passed |
+| Email-change confirmation email | `wp_mail()` returned sent | Passed |
+| Summary | Five sent, zero failed | Site mail handoff passed |
+| Remaining evidence | Confirm receipt/rendering in the mailbox without storing private message bodies in repository evidence | Pending |
 
 ## Phase 2: Core Account Acceptance
 
@@ -459,7 +474,7 @@ Severity guidance:
 - Alynt Plugin Updater `1.1.1` offered and installed the exact public `v0.1.99` asset on `hbf-staging`. The installed 45-file fingerprint exactly matches the public ZIP, the original active position and settings fingerprint were preserved, all six plugin tables remain empty, the retention schedule remains present, incumbent public routes and assets remain unchanged, and no update offer remains.
 - The installed-copy disabled-output retest passed for disposable administrator, shop-manager, and customer roles, with both toolbar input states preserved and wp-admin policy evaluation returning without redirect. Every QA identity was removed. `P1-001` is closed.
 - Representative HBF branding, copy, routes, customer username format, rich email templates, retention settings, and dashboard links are configured while all public-output switches remain disabled. Eight saved preview states and five email previews render structurally, public routes remain unchanged, all six tables remain empty, and zero QA users remain.
-- Finding `P1-002` is closed for staging: Account Gateway now saves `/legal/terms/` and `/legal/privacy/`, both paths map to published custom `legal` posts, and Force Login interception is accepted because it is staging-only. The first email/provider/webhook acceptance attempt produced no external acceptance evidence because the site-owned email test recipient, Turnstile keys, Reoon API key, webhook URL, and webhook signing secret are currently empty.
+- Finding `P1-002` is closed for staging: Account Gateway now saves `/legal/terms/` and `/legal/privacy/`, both paths map to published custom `legal` posts, and Force Login interception is accepted because it is staging-only. The first email/provider/webhook acceptance attempt produced no external acceptance evidence because the site-owned email test recipient, Turnstile keys, Reoon API key, webhook URL, and webhook signing secret were empty. The test recipient was then configured, and all five Account Gateway email templates were accepted by `wp_mail()` with Frontend Output and registration still disabled; mailbox-side evidence remains pending.
 - Visual review captured all eight gateway states across `390x844`, `800x900`, and `1440x1000` using current staging settings, installed frontend assets, and configured media while public output remained disabled. The fallback visual matrix passed for overflow, branding, WordPress-logo absence, and obvious layout overlap.
 - Finding `P1-003` initially recorded that the actual Gateway Screen Preview admin-post route redirected to `/wp-admin/` in authenticated browser testing. The issue is now closed by the `v0.1.104` compact-code front-end preview endpoint; legal, email, and integration inputs remain before route handover. Route handover still requires a separate explicit approval.
 - Local `v0.1.100` candidate work moves Gateway Screen Preview links to the settings-page admin route while retaining the legacy admin-post handler, adds focused route/link coverage, passes 287 tests and 1,908 assertions, PHPCS, changed-file PHP syntax validation, build validation, and POT regeneration. Release, updater installation, and staging retest are waiting for explicit approval.
