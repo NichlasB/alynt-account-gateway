@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 2 is active. Public `v0.1.111` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and a disposable pending registration now reaches `registration_sent=1` without creating a WordPress user before confirmation/password completion. Confirmation-link completion, permanent webhook receiver configuration, full frontend registration provider success with the live challenge path, and WooCommerce/customer dashboard journey acceptance remain gated.
+- Current phase: Phase 2 is active. Public `v0.1.111` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Permanent webhook receiver configuration, full frontend Turnstile challenge success, remaining negative account states, cleanup, and WooCommerce/customer dashboard journey acceptance remain gated.
 - Product baseline: `v0.1.111`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -366,10 +366,10 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [ ] Verify email-only login with valid, invalid, rate-limited, and inactive/pending account states.
 - [ ] Verify login redirects preserve only safe destinations and do not create loops.
 - [ ] Verify public registration is unavailable while account creation is disabled.
-- [ ] Verify the full confirmation-first registration flow when account creation is enabled.
+- [x] Verify the full confirmation-first registration flow when account creation is enabled.
 - [x] Confirm no WordPress user is created before email confirmation and password completion.
 - [ ] Verify pending-registration expiry, invalid tokens, used tokens, and resend behavior.
-- [ ] Verify generated usernames follow the configured pattern while login remains email-only.
+- [x] Verify generated usernames follow the configured pattern while login remains email-only.
 - [ ] Verify password creation requires matching fields and the configured minimum policy.
 - [ ] Verify password strength feedback is understandable and accessible.
 - [ ] Verify lost-password, reset-password, password-changed, and invalid/expired reset-link states.
@@ -396,6 +396,22 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | Provider policy | With the configured `turnstile_or_reoon` policy, the registration start logged Turnstile as blocked because no challenge token was submitted and Reoon as `valid` and unblocked, allowing the flow because one configured provider succeeded | Passed |
 | Pending state | Pending registration and consent counts now include the reachable `ai@mailastic.com` run; no WordPress user exists for that email before confirmation/password completion | Passed |
 | Completion state | Confirmation-link set-password completion is waiting on the `ai@mailastic.com` confirmation link and has not yet been executed | Pending user action |
+
+### Phase 2 Registration Completion Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Confirmation link | The real confirmation link delivered to `ai@mailastic.com` opened the branded set-password screen with Alynt Account Gateway shell/form markers, both password fields, a completion nonce, and zero native WordPress or WP Custom Login Manager markers | Passed |
+| Set-password completion | A one-off compliant password was submitted through the branded set-password form and redirected to `/login/?registration_complete=1` | Passed |
+| Delayed account creation | No WordPress user existed for `ai@mailastic.com` before confirmation/password completion; after set-password completion, the WordPress user was created | Passed |
+| User fields | Created user ID `9253`; email `ai@mailastic.com`; first name `Alynt`; last name `GatewayQAAI...`; role `subscriber` | Passed |
+| Generated username | The generated username used the configured customer pattern: `@Customer_Alynt_GatewayQAAI...` | Passed |
+| Pending registration state | Latest `ai@mailastic.com` pending registration row moved to `account_created`, stores user ID `9253`, and records a confirmation timestamp | Passed |
+| Consent attachment | Latest consent record for `ai@mailastic.com` is attached to user ID `9253` with registration context | Passed |
+| Webhook state | Webhook log count did not increase because no permanent webhook receiver is configured | Expected |
+| Email-only login | Branded login accepted `ai@mailastic.com` plus the chosen password, set a WordPress logged-in cookie, and redirected to `/my-account/` | Passed |
+| Temporary password handling | The generated acceptance password was stored only in a local temp file for the login check and removed after the login verification | Completed |
+| Cleanup state | The disposable user and plugin-owned test rows remain present temporarily so the next Phase 2 checks can reuse or intentionally clean the created account with evidence | Deferred |
 
 ## Phase 3: Email And Deliverability Acceptance
 
@@ -604,3 +620,4 @@ Severity guidance:
 - Public `v0.1.109` was published and updater-installed on `hbf-staging` to render the gateway before WordPress canonical redirects. The controlled handover then succeeded: WP Custom Login Manager was deactivated, Frontend Output and registration were enabled, `/login/`, `/account?action=lostpassword`, and `/account?action=register` rendered Alynt Account Gateway, `/wp-login.php` redirected to the branded login route, the emergency bypass returned only native login, `/my-account/` redirected safely to branded login, and legal pages remained protected by Force Login.
 - Public `v0.1.110` was published and updater-installed on `hbf-staging` to load the Cloudflare Turnstile API without a WordPress version query. Fresh browser smoke on the registration route showed the Turnstile widget, clean API URL, Alynt gateway shell, and no fresh console warnings or errors. Temporary helpers were removed, the temporary webhook receiver remains deleted, and current webhook settings are empty.
 - Phase 2 began with route/native-screen leakage checks passing for login, lost-password, registration, and logout. The first disposable registration-start POST on `v0.1.110` exposed `P2-001`: gateway rendering ran before form handlers, returning `200 OK` and creating zero pending/consent rows. Public `v0.1.111` moves auth and registration handlers before gateway rendering, passed the release checks, was installed through Alynt Plugin Updater, and retested successfully: registration start now redirects to `registration_sent=1`, creates pending and consent records, logs Turnstile missing plus Reoon valid under the either-provider policy, and creates no WordPress user before confirmation/password completion. A follow-up run used `ai@mailastic.com` after the original plus-address mailbox did not receive the message; confirmation-link set-password completion is waiting on that reachable mailbox link.
+- The `ai@mailastic.com` confirmation link completed the Phase 2 happy path: the branded set-password screen rendered without native/incumbent markers, a compliant password redirected to `/login/?registration_complete=1`, WordPress user `9253` was created only after password completion, first name, last name, email, subscriber role, generated username, pending-registration state, and consent attachment all matched expectations, and branded email-only login redirected to `/my-account/` with a logged-in cookie. The disposable user and related plugin rows remain temporarily for follow-up Phase 2 checks or a deliberate cleanup pass.
