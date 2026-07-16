@@ -594,7 +594,7 @@ class ALYNT_AG_Email_Template_Service {
 		$text_color   = $settings['text_color'] ?? '#281408';
 		$background   = $settings['page_background_color'] ?? '#EAE4D6';
 		$surface      = $settings['surface_color'] ?? '#FFFFFF';
-		$body_html    = wpautop( wp_kses_post( $body ) );
+		$body_html    = $this->style_email_body_html( wpautop( wp_kses_post( $body ) ) );
 		$button_url   = ! empty( $button['url'] ) ? esc_url( $button['url'] ) : '';
 		$button_label = ! empty( $button['label'] ) ? $button['label'] : '';
 
@@ -607,15 +607,19 @@ class ALYNT_AG_Email_Template_Service {
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<title><?php echo esc_html( $subject ); ?></title>
 			<style>
-				@media screen and (min-width: 600px) {
-					.agw-email-body {
-						font-size: 18px !important;
+				@media screen and (max-width: 599px) {
+					.agw-email-body,
+					.agw-email-body p,
+					.agw-email-body li {
+						font-size: 16px !important;
 					}
 				}
 
-				@media screen and (min-width: 960px) {
-					.agw-email-body {
-						font-size: 20px !important;
+				@media screen and (min-width: 600px) and (max-width: 959px) {
+					.agw-email-body,
+					.agw-email-body p,
+					.agw-email-body li {
+						font-size: 18px !important;
 					}
 				}
 			</style>
@@ -638,7 +642,7 @@ class ALYNT_AG_Email_Template_Service {
 							<tr>
 								<td style="padding:16px 32px 8px;">
 									<h1 style="margin:0 0 16px;font-family:Georgia,serif;font-size:26px;line-height:1.25;color:<?php echo esc_attr( $text_color ); ?>;"><?php echo esc_html( $subject ); ?></h1>
-									<div class="agw-email-body" style="font-size:16px;line-height:1.6;color:<?php echo esc_attr( $text_color ); ?>;"><?php echo wp_kses_post( $body_html ); ?></div>
+									<div class="agw-email-body" style="font-size:20px;line-height:1.6;color:<?php echo esc_attr( $text_color ); ?>;"><?php echo wp_kses_post( $body_html ); ?></div>
 									<?php if ( $button_url && $button_label ) : ?>
 										<p style="margin:28px 0;">
 											<a href="<?php echo esc_url( $button_url ); ?>" style="display:inline-block;padding:14px 22px;border-radius:6px;background:<?php echo esc_attr( $primary ); ?>;color:<?php echo esc_attr( $button_text ); ?>;font-weight:600;text-decoration:none;"><?php echo esc_html( $button_label ); ?></a>
@@ -669,6 +673,45 @@ class ALYNT_AG_Email_Template_Service {
 		</html>
 		<?php
 		return (string) ob_get_clean();
+	}
+
+	/**
+	 * Add email-client-safe inline sizing to generated body copy.
+	 *
+	 * @param string $body_html Sanitized body HTML.
+	 * @return string
+	 */
+	private function style_email_body_html( $body_html ) {
+		return (string) preg_replace_callback(
+			'/<(p|li)(\s[^>]*)?>/i',
+			function ( $matches ) {
+				$tag       = strtolower( $matches[1] );
+				$attrs     = isset( $matches[2] ) ? (string) $matches[2] : '';
+				$copy_css  = 'font-size:20px;line-height:1.6;';
+				$copy_css .= 'p' === $tag ? 'margin:0 0 16px;' : 'margin:0 0 8px;';
+
+				if ( preg_match( '/\sstyle=(["\'])(.*?)\1/i', $attrs ) ) {
+					$attrs = (string) preg_replace_callback(
+						'/\sstyle=(["\'])(.*?)\1/i',
+						function ( $style_matches ) use ( $copy_css ) {
+							$style = rtrim( (string) $style_matches[2] );
+							if ( '' !== $style && ';' !== substr( $style, -1 ) ) {
+								$style .= ';';
+							}
+
+							return ' style=' . $style_matches[1] . $style . $copy_css . $style_matches[1];
+						},
+						$attrs,
+						1
+					);
+				} else {
+					$attrs .= ' style="' . $copy_css . '"';
+				}
+
+				return '<' . $tag . $attrs . '>';
+			},
+			$body_html
+		);
 	}
 
 	/**

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.107 - 2026-07-16
+
+### Fixed
+
+- Changed account email body text sizing from wrapper-level media queries to inline paragraph and list-item sizing so mailbox clients that ignore embedded CSS still render larger readable copy.
+
 ## 0.1.106 - 2026-07-16
 
 ### Changed

@@ -90,7 +90,7 @@ class EmailTemplateServiceTest extends TestCase {
 		$this->assertStringContainsString( '<h2>Hello Damon</h2>', $rendered['html'] );
 		$this->assertStringContainsString( '<strong>Important</strong>', $rendered['html'] );
 		$this->assertStringContainsString( '<a href="https://example.test/help">Read more</a>', $rendered['html'] );
-		$this->assertStringContainsString( '<ul><li>First step</li></ul>', $rendered['html'] );
+		$this->assertStringContainsString( '<ul><li style="font-size:20px;line-height:1.6;margin:0 0 8px;">First step</li></ul>', $rendered['html'] );
 		$this->assertStringNotContainsString( '<h2>', $rendered['plain'] );
 		$this->assertStringContainsString( 'Hello Damon', $rendered['plain'] );
 		$this->assertStringContainsString( 'https://example.test/reset', $rendered['plain'] );
@@ -117,14 +117,21 @@ class EmailTemplateServiceTest extends TestCase {
 
 	public function test_email_body_uses_responsive_reading_sizes() {
 		$service  = new ALYNT_AG_Email_Template_Service();
-		$rendered = $service->render( 'password_changed', $service->preview_tokens(), ALYNT_AG_Settings_Schema::defaults() );
+		$settings = array_merge(
+			ALYNT_AG_Settings_Schema::defaults(),
+			array(
+				'email_password_changed_body' => "Hi {{first_name}},\n\nThis confirms your password was changed.",
+			)
+		);
+		$rendered = $service->render( 'password_changed', $service->preview_tokens(), $settings );
 
 		$this->assertStringContainsString( 'class="agw-email-body"', $rendered['html'] );
-		$this->assertStringContainsString( 'font-size:16px;line-height:1.6;', $rendered['html'] );
-		$this->assertStringContainsString( '@media screen and (min-width: 600px)', $rendered['html'] );
+		$this->assertStringContainsString( 'class="agw-email-body" style="font-size:20px;line-height:1.6;', $rendered['html'] );
+		$this->assertStringContainsString( '<p style="font-size:20px;line-height:1.6;margin:0 0 16px;">Hi Damon,</p>', $rendered['html'] );
+		$this->assertStringContainsString( '@media screen and (max-width: 599px)', $rendered['html'] );
+		$this->assertStringContainsString( 'font-size: 16px !important;', $rendered['html'] );
+		$this->assertStringContainsString( '@media screen and (min-width: 600px) and (max-width: 959px)', $rendered['html'] );
 		$this->assertStringContainsString( 'font-size: 18px !important;', $rendered['html'] );
-		$this->assertStringContainsString( '@media screen and (min-width: 960px)', $rendered['html'] );
-		$this->assertStringContainsString( 'font-size: 20px !important;', $rendered['html'] );
 	}
 
 	public function test_render_strips_unsafe_markup_and_escapes_token_markup() {
