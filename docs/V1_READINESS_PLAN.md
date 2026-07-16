@@ -3,7 +3,7 @@
 ## Status
 
 - Current phase: Phase 1 is active. Public `v0.1.106` is updater-verified, representative HBF configuration is saved with all public-output switches disabled, visual preview evidence is captured, legal destinations are configured for staging, and email test sends are accepted by the site mail path. `P1-004` email-logo correction is mailbox-confirmed. `P1-005` email body typography remains open because `v0.1.106` did not visibly change the real mailbox body copy; corrected inline-sizing `v0.1.107` is mailbox-confirmed; provider/webhook configuration, live provider/webhook acceptance, and route handover remain gated.
-- Product baseline: `v0.1.106`, released, public-asset verified, and updater-verified on production-like staging.
+- Product baseline: `v0.1.107`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility.
@@ -243,6 +243,15 @@ The maintenance release is published, its public package is verified, and its up
 | Finding status | `P1-003` | Closed |
 
 Representative configuration is complete for the inputs currently available. Frontend Output remains disabled. Before route handover, mailbox-side email evidence, provider configuration and behavior, webhook configuration and delivery, and route-switch approval remain open.
+
+### Phase 1 Integration Gate
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Turnstile | Site key and secret key are not saved in Alynt Account Gateway on `hbf-staging` | Waiting for credentials |
+| Reoon | API key is not saved in Alynt Account Gateway on `hbf-staging` | Waiting for credentials |
+| Account-created webhook | Receiver URL and signing secret are not saved in Alynt Account Gateway on `hbf-staging` | Waiting for receiver/approval |
+| Current safety state | Frontend Output and registration remain disabled, so missing provider credentials are not affecting public Account Gateway output | Safe to continue configuration |
 
 ### Phase 1 Email, Provider, And Webhook Acceptance Attempt
 
