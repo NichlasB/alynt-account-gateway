@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 1 is active. Public `v0.1.104` is updater-verified, representative HBF configuration is saved with all public-output switches disabled, visual preview evidence is captured, legal destinations are configured for staging, and redacted email/integration fields are present. Real email delivery, live provider/webhook acceptance, and route handover remain gated.
+- Current phase: Phase 1 is active. Public `v0.1.104` is updater-verified, representative HBF configuration is saved with all public-output switches disabled, visual preview evidence is captured, and legal destinations are configured for staging. Real email delivery, provider/webhook configuration, live provider/webhook acceptance, and route handover remain gated.
 - Product baseline: `v0.1.104`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -97,7 +97,7 @@ The Phase 1 handover sequence is: preserve a redacted incumbent-settings snapsho
 - [ ] Configure email templates, enable/disable switches, sender expectations, and test recipient.
 - [x] Configure dashboard, custom links, role visibility, icons, ordering, and new-tab behavior.
 - [x] Configure WooCommerce takeover only when the site's account page and endpoints are ready.
-- [x] Configure Turnstile, Reoon, and webhook credentials only where acceptance requires them.
+- [ ] Configure Turnstile, Reoon, and webhook credentials only where acceptance requires them.
 - [x] Review the plugin readiness summary and record every remaining release-blocking item.
 - [x] Export a redacted configuration snapshot for recovery and portability testing.
 - [ ] Obtain approval before enabling Frontend Output on staging.
@@ -158,7 +158,7 @@ The maintenance release is published, its public package is verified, and its up
 | Legal destinations | Saved settings use `/legal/terms/` and `/legal/privacy/`; both map to published custom `legal` posts. Anonymous requests remain intercepted by Force Login on staging by explicit site-owner decision. | Configured; staging access constraint accepted |
 | Email templates | Five rich-text templates render valid HTML and plain text with no unresolved tokens; zero test messages sent | Preview passed; delivery pending |
 | Dashboard | FAQ and Contact links configured with icons, ordering, customer/subscriber visibility, and same-tab behavior | Configured; dashboard disabled |
-| Integrations | Either-provider mode, quick Reoon mode, flagged-result allow policy, test recipient, Turnstile keys, Reoon API key, webhook URL, and signing secret are all present in settings. Values were checked only as redacted set/unset state. | Configured; live provider, delivery, and webhook acceptance pending |
+| Integrations | Either-provider mode, quick Reoon mode, and flagged-result allow policy are saved. The test recipient, Turnstile keys, Reoon API key, webhook URL, and signing secret are empty. | Configuration required before live provider, delivery, and webhook acceptance |
 | Gateway previews | Eight screen states render the HBF logo and no WordPress logo; 24 visual captures across `390x844`, `800x900`, and `1440x1000` show no horizontal overflow or obvious overlap. The authenticated compact-code preview endpoint renders standalone gateway markup on staging. | Structural, fallback visual, and live preview route checks passed |
 | Public behavior | Incumbent routes unchanged; zero Account Gateway assets on `/login/` | Verified |
 | Data and cleanup | Six tables empty; retention scheduled; zero QA users | Verified |
@@ -242,7 +242,18 @@ The maintenance release is published, its public package is verified, and its up
 | Cleanup | Temporary MU trace, helper files, and temporary admin session tokens removed | Completed |
 | Finding status | `P1-003` | Closed |
 
-Representative configuration is complete for the inputs currently available. Frontend Output remains disabled. Before route handover, live email delivery, provider behavior, webhook delivery, and route-switch approval remain open.
+Representative configuration is complete for the inputs currently available. Frontend Output remains disabled. Before route handover, live email delivery, provider configuration and behavior, webhook configuration and delivery, and route-switch approval remain open.
+
+### Phase 1 Email, Provider, And Webhook Acceptance Attempt
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Temporary helper | Local WP-CLI helper linted, copied to `/tmp`, executed once under the site user, and removed from the server afterward | Completed |
+| Safety state | Frontend Output and registration remained disabled | Preserved |
+| Email test sends | All five template sends returned `alynt_ag_invalid_email_recipient` because `email_test_recipient` is empty | Blocked by missing configuration |
+| Provider check | Registration protection returned pass because no Turnstile or Reoon credentials are saved, so no provider checks ran | Blocked by missing configuration |
+| Webhook test | Disposable QA user was created and deleted; test dispatch returned `alynt_ag_webhook_missing_url`; zero webhook log rows were deleted because no delivery was attempted | Blocked by missing configuration |
+| Cleanup | Remote helper removed; disposable QA user deleted; no email, provider, or webhook acceptance evidence was produced | Verified |
 
 ## Phase 2: Core Account Acceptance
 
@@ -448,7 +459,7 @@ Severity guidance:
 - Alynt Plugin Updater `1.1.1` offered and installed the exact public `v0.1.99` asset on `hbf-staging`. The installed 45-file fingerprint exactly matches the public ZIP, the original active position and settings fingerprint were preserved, all six plugin tables remain empty, the retention schedule remains present, incumbent public routes and assets remain unchanged, and no update offer remains.
 - The installed-copy disabled-output retest passed for disposable administrator, shop-manager, and customer roles, with both toolbar input states preserved and wp-admin policy evaluation returning without redirect. Every QA identity was removed. `P1-001` is closed.
 - Representative HBF branding, copy, routes, customer username format, rich email templates, retention settings, and dashboard links are configured while all public-output switches remain disabled. Eight saved preview states and five email previews render structurally, public routes remain unchanged, all six tables remain empty, and zero QA users remain.
-- Finding `P1-002` is closed for staging: Account Gateway now saves `/legal/terms/` and `/legal/privacy/`, both paths map to published custom `legal` posts, and Force Login interception is accepted because it is staging-only. Redacted inspection confirms the site-owned email test recipient, Turnstile keys, Reoon API key, webhook URL, and webhook signing secret are present; live email, provider, and webhook acceptance runs are still required.
+- Finding `P1-002` is closed for staging: Account Gateway now saves `/legal/terms/` and `/legal/privacy/`, both paths map to published custom `legal` posts, and Force Login interception is accepted because it is staging-only. The first email/provider/webhook acceptance attempt produced no external acceptance evidence because the site-owned email test recipient, Turnstile keys, Reoon API key, webhook URL, and webhook signing secret are currently empty.
 - Visual review captured all eight gateway states across `390x844`, `800x900`, and `1440x1000` using current staging settings, installed frontend assets, and configured media while public output remained disabled. The fallback visual matrix passed for overflow, branding, WordPress-logo absence, and obvious layout overlap.
 - Finding `P1-003` initially recorded that the actual Gateway Screen Preview admin-post route redirected to `/wp-admin/` in authenticated browser testing. The issue is now closed by the `v0.1.104` compact-code front-end preview endpoint; legal, email, and integration inputs remain before route handover. Route handover still requires a separate explicit approval.
 - Local `v0.1.100` candidate work moves Gateway Screen Preview links to the settings-page admin route while retaining the legacy admin-post handler, adds focused route/link coverage, passes 287 tests and 1,908 assertions, PHPCS, changed-file PHP syntax validation, build validation, and POT regeneration. Release, updater installation, and staging retest are waiting for explicit approval.
