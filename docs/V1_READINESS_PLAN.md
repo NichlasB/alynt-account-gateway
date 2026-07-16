@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 1 is active. Public `v0.1.107` is updater-verified, representative HBF configuration is saved with all public-output switches disabled, visual preview evidence is captured, legal destinations are configured for staging, and email test sends are accepted by the site mail path. `P1-004` email-logo correction and `P1-005` email body typography are mailbox-confirmed and closed. Turnstile/Reoon configuration and temporary webhook acceptance are recorded; permanent webhook receiver configuration, full frontend provider success, live route handover, and post-handover acceptance remain gated.
+- Current phase: Phase 1 is active. Public `v0.1.107` is updater-verified, representative HBF configuration is saved with all public-output switches disabled, visual preview evidence is captured, legal destinations are configured for staging, and email test sends are accepted by the site mail path. `P1-004` email-logo correction and `P1-005` email body typography are mailbox-confirmed and closed. Turnstile/Reoon configuration, temporary webhook acceptance, and route handover preflight are recorded; permanent webhook receiver configuration, full frontend provider success, live route handover, and post-handover acceptance remain gated.
 - Product baseline: `v0.1.107`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -265,6 +265,21 @@ Representative configuration is complete for the inputs currently available. Fro
 | Webhook delivery log | Latest webhook log records `account.created.test`, destination host `webhook.site`, HTTP 200, success `1`, and no stored payload body | Passed |
 | External receiver | Temporary receiver observed one POST with JSON content type, `X-Alynt-AG-Event: account.created.test`, and an HMAC signature header; raw payload and signature were not retained in evidence | Passed |
 | Cleanup | Temporary receiver token was deleted; temporary webhook URL/signing secret were cleared from staging settings; disposable QA user and temporary helper files were removed | Passed |
+
+### Phase 1 Route Handover Preflight
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Installed gateway | Alynt Account Gateway is active on `hbf-staging` at `v0.1.107` | Verified |
+| Incumbent route owner | WP Custom Login Manager `1.2.0` remains active and continues to own `/login/` before handover | Verified |
+| Force Login | Force Login is active as plugin slug `wp-force-login` at `5.6.3` | Verified |
+| Current public route behavior | `/login/` returns HTTP 200; `/account?action=lostpassword` redirects to native `wp-login.php` through the incumbent/Force Login stack before Alynt Account Gateway owns the route | Baseline preserved |
+| Configured routes | `login_path` is `/login/`, `account_action_base` is `/account`, and `after_login_redirect` is `/my-account/` | Configured |
+| Safety toggles | `frontend_enabled`, `registration_enabled`, `dashboard_enabled`, and `woocommerce_takeover` remain false-style stored values | Safe state preserved |
+| Emergency bypass | Emergency bypass key is present; runtime source and tests confirm `wp-login.php?alynt_ag_bypass={key}` bypasses only Alynt Account Gateway's native-login redirect and does not authenticate the visitor | Source/test verified; live behavior waits for frontend handover |
+| Provider credentials | Turnstile site key, Turnstile secret key, and Reoon API key remain present | Configured |
+| Webhook cleanup correction | A follow-up preflight found the current schema key `account_created_webhook` still held the temporary receiver value after the earlier legacy-key cleanup. The current schema webhook URL, signing secret, and debug payload setting now resolve to zero-byte values. | Corrected |
+| Next gate | Enabling Frontend Output, enabling registration, and changing/deactivating incumbent route ownership still require explicit route-handover approval and rollback steps | Gated |
 
 ### Phase 1 Email, Provider, And Webhook Acceptance Attempt
 
