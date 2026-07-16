@@ -4000,7 +4000,7 @@
 - [x] Privacy exporter/eraser and retention controls are present.
 - [x] Alynt Plugin Updater compatibility is verified end to end by updating the LocalWP Plugin Tester install from a GitHub release asset.
 
-Production-like `hbf-staging` v1 readiness has verified the first dashboard/WooCommerce route smoke: disabled/enabled dashboard routing, first-name greeting, customer-only custom links including new-tab accessibility text, WooCommerce takeover routing, no-order overview, Orders, Addresses, and Account Details endpoint embedding. It has also verified representative order-list, pagination, order-detail, native order-action behavior, and Downloads empty/available/limited/expired states with disposable WooCommerce data. POST validation, payment-method actions, and extension compatibility remain tracked in `docs/V1_READINESS_PLAN.md`.
+Production-like `hbf-staging` v1 readiness has verified the first dashboard/WooCommerce route smoke: disabled/enabled dashboard routing, first-name greeting, customer-only custom links including new-tab accessibility text, WooCommerce takeover routing, no-order overview, Orders, Addresses, and Account Details endpoint embedding. It has also verified representative order-list, pagination, order-detail, native order-action behavior, Downloads empty/available/limited/expired states, and address/account-details POST handling with disposable WooCommerce data. Account email/password changes, payment-method actions, unavailable endpoint fallback, role/admin policy recheck, and extension compatibility remain tracked in `docs/V1_READINESS_PLAN.md`.
 
 ## Pre-Release Audit Notes
 

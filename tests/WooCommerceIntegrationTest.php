@@ -143,4 +143,23 @@ class WooCommerceIntegrationTest extends TestCase {
 		$this->assertSame( 'woocommerce_account_orders_endpoint', $GLOBALS['alynt_ag_test_actions'][0]['hook'] );
 		$this->assertSame( array( '2' ), $GLOBALS['alynt_ag_test_actions'][0]['args'] );
 	}
+
+	public function test_account_form_post_handler_registers_before_gateway_render() {
+		$integration = new ALYNT_AG_WooCommerce_Integration();
+		$integration->register();
+
+		$hooks = array_values(
+			array_filter(
+				$GLOBALS['alynt_ag_test_actions'],
+				static function ( $hook ) {
+					return 'template_redirect' === $hook['hook']
+						&& is_array( $hook['callback'] )
+						&& 'maybe_handle_account_form_post' === $hook['callback'][1];
+				}
+			)
+		);
+
+		$this->assertCount( 1, $hooks );
+		$this->assertSame( 0, $hooks[0]['priority'] );
+	}
 }

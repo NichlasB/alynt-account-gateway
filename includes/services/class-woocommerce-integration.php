@@ -152,6 +152,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 */
 	public function register() {
 		add_action( 'plugins_loaded', array( $this, 'detect' ), 20 );
+		add_action( 'template_redirect', array( $this, 'maybe_handle_account_form_post' ), 0 );
 	}
 
 	/**
@@ -171,6 +172,42 @@ class ALYNT_AG_WooCommerce_Integration {
 	 */
 	public function takeover_enabled( $settings ) {
 		return ! empty( $settings['dashboard_enabled'] ) && ! empty( $settings['woocommerce_takeover'] ) && $this->detect();
+	}
+
+	/**
+	 * Let WooCommerce process My Account form POSTs before the branded shell renders.
+	 *
+	 * The gateway renders at template_redirect priority 1 to avoid canonical redirect
+	 * interference on custom account routes. WooCommerce account form handlers normally
+	 * run later, so delegated account POSTs need this early pass-through.
+	 *
+	 * @return void
+	 */
+	public function maybe_handle_account_form_post() {
+		$method = isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '';
+		if ( 'POST' !== strtoupper( $method ) ) {
+			return;
+		}
+
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+		if ( ! $this->takeover_enabled( $settings ) || ! is_user_logged_in() || ! class_exists( 'WC_Form_Handler' ) ) {
+			return;
+		}
+
+		$endpoint = $this->endpoint_from_path( $this->current_request_path(), $settings );
+		if ( empty( $endpoint['endpoint'] ) ) {
+			return;
+		}
+
+		if ( 'edit-address' === $endpoint['endpoint'] && $this->is_address_post() && method_exists( 'WC_Form_Handler', 'save_address' ) ) {
+			$this->prime_account_endpoint_query_var( 'edit-address', $endpoint['value'] );
+			WC_Form_Handler::save_address();
+			return;
+		}
+
+		if ( 'edit-account' === $endpoint['endpoint'] && $this->is_account_details_post() && method_exists( 'WC_Form_Handler', 'save_account_details' ) ) {
+			WC_Form_Handler::save_account_details();
+		}
 	}
 
 	/**
@@ -217,6 +254,65 @@ class ALYNT_AG_WooCommerce_Integration {
 	}
 
 	/**
+	 * Whether the request looks like a WooCommerce address form POST.
+	 *
+	 * @return bool
+	 */
+	private function is_address_post() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Delegated to WC_Form_Handler::save_address().
+		return isset( $_POST['save_address'] ) || ( isset( $_POST['action'] ) && 'edit_address' === sanitize_key( wp_unslash( $_POST['action'] ) ) );
+	}
+
+	/**
+	 * Whether the request looks like a WooCommerce account details form POST.
+	 *
+	 * @return bool
+	 */
+	private function is_account_details_post() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Delegated to WC_Form_Handler::save_account_details().
+		return isset( $_POST['save_account_details'] );
+	}
+
+	/**
+	 * Return the current request path without query args.
+	 *
+	 * @return string
+	 */
+	private function current_request_path() {
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '/';
+		$path        = wp_parse_url( $request_uri, PHP_URL_PATH );
+
+		return is_string( $path ) && '' !== $path ? $path : '/';
+	}
+
+	/**
+	 * Prime WooCommerce account endpoint query vars before delegated POST handling.
+	 *
+	 * @param string $endpoint Endpoint key.
+	 * @param string $value    Endpoint value.
+	 * @return void
+	 */
+	private function prime_account_endpoint_query_var( $endpoint, $value ) {
+		$value = sanitize_text_field( $value );
+		if ( '' === $value ) {
+			return;
+		}
+
+		if ( function_exists( 'set_query_var' ) ) {
+			set_query_var( $endpoint, $value );
+		}
+
+		global $wp;
+		if ( isset( $wp ) && is_object( $wp ) ) {
+			if ( ! isset( $wp->query_vars ) || ! is_array( $wp->query_vars ) ) {
+				$wp->query_vars = array();
+			}
+
+			$wp->query_vars[ $endpoint ] = $value;
+		}
+	}
+
+	/**
 	 * Render WooCommerce account endpoint content through WooCommerce handlers.
 	 *
 	 * @param string $endpoint Endpoint key.
@@ -231,6 +327,10 @@ class ALYNT_AG_WooCommerce_Integration {
 		/**
 		 * WooCommerce registers these actions for My Account endpoint content.
 		 */
+		if ( function_exists( 'woocommerce_output_all_notices' ) ) {
+			woocommerce_output_all_notices();
+		}
+
 		do_action( 'woocommerce_account_' . sanitize_key( $endpoint ) . '_endpoint', $value );
 
 		return true;
