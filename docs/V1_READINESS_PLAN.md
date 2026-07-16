@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 2 is active. Public `v0.1.111` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, and role access/admin-toolbar behavior passed for administrator, shop manager, and customer. Permanent webhook receiver configuration, full frontend Turnstile challenge success, remaining rate-limit/expired-token/password-policy states, and WooCommerce/customer dashboard journey acceptance remain gated.
+- Current phase: Phase 2 is active. Public `v0.1.111` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, role access/admin-toolbar behavior passed for administrator, shop manager, and customer, and rate-limit/password-policy failure states passed. Permanent webhook receiver configuration, full frontend Turnstile challenge success, remaining expired-token/pending-account/emergency-bypass states, and WooCommerce/customer dashboard journey acceptance remain gated.
 - Product baseline: `v0.1.111`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -370,7 +370,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [x] Confirm no WordPress user is created before email confirmation and password completion.
 - [ ] Verify pending-registration expiry, invalid tokens, used tokens, and resend behavior.
 - [x] Verify generated usernames follow the configured pattern while login remains email-only.
-- [ ] Verify password creation requires matching fields and the configured minimum policy.
+- [x] Verify password creation requires matching fields and the configured minimum policy.
 - [ ] Verify password strength feedback is understandable and accessible.
 - [x] Verify lost-password, reset-password, password-changed, and invalid/expired reset-link states.
 - [x] Verify logout confirmation, cancellation, successful logout, and safe redirect behavior.
@@ -453,6 +453,22 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | Customer access | Customer was redirected from `/wp-admin/` to `/my-account/` and did not see the frontend admin toolbar | Passed |
 | Native leakage | Logged-in frontend checks for all three roles returned zero native WordPress login or WP Custom Login Manager markers | Passed |
 | Cleanup | Deleted users `9255`, `9256`, and `9257`; removed the local temporary role-test credential file; verified zero `alynt_ag_role_qa_` users remain | Completed |
+
+### Phase 2 Rate Limit And Password Policy Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Baseline settings | Recorded original staging rate-limit values before testing: registration `5/60`, resend `5/60`, login `10/15`, and lost-password `5/60` | Verified |
+| Temporary test thresholds | Set all four buckets to `1` attempt for a `1` minute window, then restored the original values immediately after the rate-limit checks | Restored |
+| Login rate limit | Two branded login POSTs with the same disposable email produced a normal failed-login redirect first and a second redirect with `login_error=alynt_ag_rate_limited` | Passed |
+| Lost-password rate limit | Two branded lost-password POSTs with the same disposable email produced a neutral reset-sent redirect first and a second redirect with `reset_error=alynt_ag_rate_limited` | Passed |
+| Registration rate limit | Two branded registration POSTs with the same disposable email produced a registration-sent redirect first and a second redirect with `registration_error=alynt_ag_rate_limited` | Passed |
+| Confirmation resend rate limit | Two branded resend-confirmation POSTs with the same disposable email produced a confirmation-resent redirect first and a second redirect with `resend_error=alynt_ag_rate_limited` | Passed |
+| Password length failure | Disposable pending registration set-password POST with a short password redirected with `password_error=alynt_ag_password_length`, stayed branded, showed the password error region, and returned zero native markers | Passed |
+| Password complexity failure | Disposable pending registration set-password POST without required character classes redirected with `password_error=alynt_ag_password_complexity`, stayed branded, showed the password error region, and returned zero native markers | Passed |
+| Password mismatch failure | Disposable pending registration set-password POST with mismatched compliant passwords redirected with `password_error=password_mismatch`, stayed branded, showed the password error region, and returned zero native markers | Passed |
+| Account creation guard | The disposable password-policy pending registration never created a WordPress user while the password submissions failed | Passed |
+| Cleanup | Removed disposable `alynt_ag_rate_` and `alynt_ag_policy_` rows from plugin-owned pending, consent, and verification tables; removed temporary local and remote helper files | Completed |
 
 ## Phase 3: Email And Deliverability Acceptance
 
@@ -665,3 +681,4 @@ Severity guidance:
 - The disposable Phase 2 registration artifacts were cleaned up: user `9253`, the completed `ai@mailastic.com` pending/consent rows, and the stale undeliverable plus-address pending/consent rows are gone. Negative checks passed for invalid login, invalid set-password token branded handling, and registration-disabled behavior, with Frontend Output and registration restored afterward. Remaining Phase 2 negative states include rate limits, inactive/pending account login, expired/used token, password-policy failure, reset-password, logout, and role-access edge cases.
 - The Phase 2 password reset/logout slice passed: disposable user `9254` was created, branded lost-password request sent the reset email, stale reset link displayed the branded invalid state, fresh reset link rendered the branded password form, reset completion redirected to `/login/?password_reset=1`, old password failed, new password logged in by email and redirected to `/my-account/`, logout confirmation/cancel/confirm all behaved correctly, and the disposable user plus temporary password files were removed.
 - The Phase 2 role-access slice passed: disposable administrator, shop-manager, and customer users all logged in by email through the branded form. Administrator and shop manager reached `/wp-admin/` and saw the toolbar, while the customer was redirected to `/my-account/` and did not see the toolbar. All disposable role users and local temp credentials were removed.
+- The Phase 2 rate-limit and password-policy slice passed: registration, resend-confirmation, login, and lost-password buckets were temporarily lowered to `1/1`, each produced the expected branded rate-limit redirect on the second matching POST, and the original staging values were restored. A disposable pending registration then verified password length, complexity, and mismatch failures, each staying branded with zero native markers and no WordPress user creation. Disposable rows and temporary helper files were removed.
