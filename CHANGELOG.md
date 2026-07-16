@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.102 - 2026-07-16
+
+### Fixed
+
+- Isolated Gateway Screen Preview output from broad site head and footer hooks so authenticated previews can render on redirect-heavy staging stacks.
+
 ## 0.1.101 - 2026-07-16
 
 ### Fixed

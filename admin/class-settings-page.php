@@ -4837,13 +4837,41 @@ class ALYNT_AG_Settings_Page {
 		echo '<meta charset="' . esc_attr( get_bloginfo( 'charset' ) ) . '">';
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
 		echo '<title>' . esc_html( $frontend->get_screen_title( $screen ) ) . '</title>';
-		wp_head();
+		$this->print_gateway_preview_styles();
 		echo '</head>';
 		echo '<body class="alynt-ag-body alynt-ag-preview-body">';
 		$frontend->render_preview( $screen, $settings );
-		wp_footer();
+		$this->print_gateway_preview_scripts();
 		echo '</body></html>';
 		exit;
+	}
+
+	/**
+	 * Print only the assets needed by standalone gateway previews.
+	 *
+	 * @return void
+	 */
+	private function print_gateway_preview_styles() {
+		if ( function_exists( 'wp_styles' ) ) {
+			wp_styles()->do_items( array( 'alynt-ag-frontend' ) );
+			return;
+		}
+
+		wp_print_styles( array( 'alynt-ag-frontend' ) );
+	}
+
+	/**
+	 * Print only the scripts needed by standalone gateway previews.
+	 *
+	 * @return void
+	 */
+	private function print_gateway_preview_scripts() {
+		if ( function_exists( 'wp_scripts' ) ) {
+			wp_scripts()->do_items( array( 'alynt-ag-frontend' ) );
+			return;
+		}
+
+		wp_print_scripts( array( 'alynt-ag-frontend' ) );
 	}
 
 	/**
