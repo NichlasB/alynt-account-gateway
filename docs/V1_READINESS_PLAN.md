@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 2 is active. Public `v0.1.113` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, role access/admin-toolbar behavior passed for administrator, shop manager, and customer, rate-limit/password-policy failure states passed, pending-email/expired-token/used-token/resend states passed, emergency bypass behavior passed, the Frontend Output disable/restore safety switch passed, inactive-account scope was clarified, safe post-login redirect handling passed after the `v0.1.112` corrective release, the public account route shell matrix passed with native WordPress appearing only through the deliberate emergency bypass, password strength feedback accessibility passed after the `v0.1.113` corrective release, frontend Turnstile browser-token success passed on the public registration form, Turnstile invalid/replay/expiry server-side validation passed, Reoon policy mapping passed with live valid/invalid/disposable spot checks, either-provider/all-provider registration policy behavior passed, and provider outage/timeout behavior passed. Permanent webhook receiver configuration and WooCommerce/customer dashboard journey acceptance remain gated.
+- Current phase: Phase 2 is active. Public `v0.1.113` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, role access/admin-toolbar behavior passed for administrator, shop manager, and customer, rate-limit/password-policy failure states passed, pending-email/expired-token/used-token/resend states passed, emergency bypass behavior passed, the Frontend Output disable/restore safety switch passed, inactive-account scope was clarified, safe post-login redirect handling passed after the `v0.1.112` corrective release, the public account route shell matrix passed with native WordPress appearing only through the deliberate emergency bypass, password strength feedback accessibility passed after the `v0.1.113` corrective release, frontend Turnstile browser-token success passed on the public registration form, Turnstile invalid/replay/expiry server-side validation passed, Reoon policy mapping passed with live valid/invalid/disposable spot checks, either-provider/all-provider registration policy behavior passed, provider outage/timeout behavior passed, and temporary webhook receiver acceptance passed. WooCommerce/customer dashboard journey acceptance remains gated.
 - Product baseline: `v0.1.113`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -588,9 +588,9 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [ ] Verify registration, login, reset, resend, and provider rate limits under repeated requests.
 - [ ] Verify lockout and resend-throttling feedback does not disclose whether an account exists.
 - [ ] Verify manual-review decisions, audit records, and retention behavior where enabled.
-- [ ] Verify webhook delivery fires only when the account is created.
-- [ ] Verify the webhook includes the intended full user fields without secrets or password data.
-- [ ] Verify signing headers, receiver validation, failure metadata, and debug-payload controls.
+- [x] Verify webhook delivery fires only when the account is created.
+- [x] Verify the webhook includes the intended full user fields without secrets or password data.
+- [x] Verify signing headers, receiver validation, failure metadata, and debug-payload controls.
 - [ ] Verify credentials and bypass keys are redacted from diagnostics, exports, logs, and screenshots.
 - [ ] Rotate the emergency bypass key and integration test secrets after acceptance.
 
@@ -657,6 +657,22 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | Reoon timeout in all-provider mode | In `turnstile_and_reoon`, Turnstile passed, Reoon timeout logged `alynt_ag_reoon_request_failed`, and overall protection failed | Passed |
 | Diagnostics | Temporary verification logs exposed provider-specific compact statuses for administrator review without secrets or provider payload bodies | Passed |
 | Data and cleanup | The helper created only temporary verification-log rows, deleted all 9 rows it created, and post-cleanup counts for the test prefix returned zero pending, consent, and verification rows | Completed |
+
+### Phase 4 Webhook Receiver Acceptance Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Receiver | A temporary webhook.site HTTPS receiver was created for acceptance and deleted after testing | Completed |
+| Settings scope | The receiver URL and signing secret were used only through temporary in-memory settings copies; saved staging webhook URL and signing secret remained empty after testing | Verified |
+| Pending-registration guard | Creating a disposable pending registration did not create a webhook delivery log | Passed |
+| Account-created delivery | Completing the disposable registration created WordPress user `9261` and triggered exactly one `account.created` webhook delivery log | Passed |
+| Delivery metadata | The plugin logged destination host `webhook.site`, HTTP `200`, success `1`, event `account.created`, and no error message | Passed |
+| Default payload logging | Webhook log payload storage remained `null` with debug payload logging disabled | Passed |
+| Receiver payload | The receiver captured a JSON `account.created` payload with full user fields, site name, and site URL | Passed |
+| Payload safety | Local receiver verification found no `password` or `secret` fields in the raw JSON body | Passed |
+| HMAC headers | A second signed dispatch sent `X-Alynt-AG-Event`, `X-Alynt-AG-Time`, `X-Alynt-AG-Version`, and `X-Alynt-AG-Signature` headers | Passed |
+| Receiver HMAC validation | The captured signature matched `sha256=HMAC_SHA256({time}.{event}.{raw_json_body}, signing_secret)` using a temporary secret file that was not printed | Passed |
+| Cleanup | Disposable user `9261`, pending row, consent row, two webhook logs, temporary receiver token, temp secrets, request captures, and local/remote helpers were removed; post-cleanup counts returned zero | Completed |
 
 ## Phase 5: Dashboard And WooCommerce Acceptance
 
@@ -858,3 +874,4 @@ Severity guidance:
 - The Phase 4 Reoon policy matrix slice passed on `v0.1.113`: valid/safe outcomes pass, invalid/disabled/disposable/spamtrap hard-block, and catch-all/role-account/unknown/inbox-full follow the configurable flagged policy. Live API spot checks confirmed valid, invalid, and disposable behavior using masked disposable test addresses. The helper called the provider/client directly and created no account or plugin-owned rows; temporary helpers were removed.
 - The Phase 4 provider-combination policy slice passed on `v0.1.113`: in `turnstile_or_reoon`, either Turnstile pass/Reoon fail or Turnstile fail/Reoon pass allowed registration protection, while both providers failing blocked it. In `turnstile_and_reoon`, both providers had to pass; either provider failing blocked protection. Official Cloudflare Turnstile test credentials were used only in an isolated settings copy, saved staging settings were unchanged, all temporary verification rows were deleted, and cleanup counts returned zero.
 - The Phase 4 provider outage/timeout slice passed on `v0.1.113`: simulated Turnstile and Reoon HTTP timeouts generated provider-specific request-failed statuses, `turnstile_or_reoon` allowed one provider outage when the other provider passed and blocked when both timed out, and `turnstile_and_reoon` blocked when either provider timed out. Saved staging settings were unchanged, temporary verification rows were deleted, and cleanup counts returned zero.
+- The Phase 4 webhook receiver acceptance slice passed on `v0.1.113`: pending registration did not dispatch a webhook, account creation dispatched `account.created` to a temporary HTTPS receiver, delivery metadata logged HTTP 200/success without storing payload by default, receiver payload included expected user/site fields without password or secret data, HMAC signature validation passed against a temporary non-printed signing secret, saved staging webhook settings remained empty, and the disposable user, plugin rows, temp receiver, temp secrets, request captures, and helpers were removed.
