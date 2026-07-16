@@ -27,6 +27,7 @@ class ALYNT_AG_Settings_Page {
 		add_action( 'admin_post_alynt_ag_import_settings', array( $this, 'handle_import_settings' ) );
 		add_action( 'admin_post_alynt_ag_restore_tab_defaults', array( $this, 'handle_restore_tab_defaults' ) );
 		add_action( 'admin_post_alynt_ag_preview_gateway', array( $this, 'handle_preview_gateway' ) );
+		add_action( 'wp_ajax_alynt_ag_preview_gateway', array( $this, 'handle_preview_gateway' ) );
 		add_action( 'admin_post_alynt_ag_export_diagnostics', array( $this, 'handle_export_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_clear_diagnostics', array( $this, 'handle_clear_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_review_verification', array( $this, 'handle_review_verification' ) );
@@ -4322,11 +4323,10 @@ class ALYNT_AG_Settings_Page {
 				<?php
 				$preview_url = add_query_arg(
 					array(
-						'page'             => 'alynt-account-gateway',
-						'alynt_ag_preview' => '1',
-						'screen'           => $screen,
+						'action' => 'alynt_ag_preview_gateway',
+						'screen' => $screen,
 					),
-					admin_url( 'options-general.php' )
+					admin_url( 'admin-ajax.php' )
 				);
 				$preview_url = wp_nonce_url( $preview_url, 'alynt_ag_preview_gateway_' . $screen );
 				?>

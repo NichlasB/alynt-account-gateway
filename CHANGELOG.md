@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.101 - 2026-07-16
+
+### Fixed
+
+- Fixed Gateway Screen Preview links to use the authenticated admin AJAX route for better compatibility with wp-admin redirects.
+
 ## 0.1.100 - 2026-07-16
 
 ### Fixed

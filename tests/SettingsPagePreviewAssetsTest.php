@@ -51,7 +51,7 @@ class SettingsPagePreviewAssetsTest extends TestCase {
 		$this->assertSame( 'Password is hidden.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['passwordHidden'] );
 	}
 
-	public function test_register_adds_settings_page_preview_route_and_legacy_admin_post_route() {
+	public function test_register_adds_ajax_preview_route_and_compatibility_routes() {
 		$settings_page = new ALYNT_AG_Settings_Page();
 
 		$settings_page->register();
@@ -76,22 +76,33 @@ class SettingsPagePreviewAssetsTest extends TestCase {
 			)
 		);
 
+		$ajax_preview = array_values(
+			array_filter(
+				$GLOBALS['alynt_ag_test_actions'],
+				static function ( $action ) use ( $settings_page ) {
+					return 'wp_ajax_alynt_ag_preview_gateway' === $action['hook']
+						&& array( $settings_page, 'handle_preview_gateway' ) === $action['callback'];
+				}
+			)
+		);
+
 		$this->assertCount( 1, $admin_init_preview );
 		$this->assertSame( 1, $admin_init_preview[0]['priority'] );
 		$this->assertCount( 1, $admin_post_preview );
+		$this->assertCount( 1, $ajax_preview );
 	}
 
-	public function test_gateway_preview_links_use_settings_page_route() {
+	public function test_gateway_preview_links_use_ajax_route() {
 		$settings_page = new ALYNT_AG_Settings_Page();
 
 		ob_start();
 		$this->invoke_helper( $settings_page, 'render_gateway_preview_tools' );
 		$output = ob_get_clean();
 
-		$this->assertStringContainsString( 'options-general.php?page=alynt-account-gateway', $output );
-		$this->assertStringContainsString( 'alynt_ag_preview=1', $output );
+		$this->assertStringContainsString( 'admin-ajax.php?action=alynt_ag_preview_gateway', $output );
 		$this->assertStringContainsString( 'screen=login', $output );
 		$this->assertStringContainsString( '_wpnonce=test-nonce', $output );
+		$this->assertStringNotContainsString( 'options-general.php?page=alynt-account-gateway', $output );
 		$this->assertStringNotContainsString( 'admin-post.php?action=alynt_ag_preview_gateway', $output );
 	}
 }

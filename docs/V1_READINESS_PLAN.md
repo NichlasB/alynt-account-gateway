@@ -178,6 +178,21 @@ The maintenance release is published, its public package is verified, and its up
 | Build and translations | Production assets rebuilt; POT regenerated with 997 strings and `0.1.100` metadata | Passed |
 | Publication state | Not committed, tagged, pushed, published, or installed | Waiting for release approval |
 
+### Phase 1 P1-003 Corrective Candidate
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Candidate version | `0.1.101` | Prepared after `0.1.100` staging retest |
+| Staging retest finding | `0.1.100` installed through Alynt Plugin Updater, but authenticated settings-page preview requests still redirected before standalone preview output rendered | Corrective change required |
+| Behavior correction | Gateway Screen Preview buttons now use authenticated `admin-ajax.php?action=alynt_ag_preview_gateway`; settings-page and legacy admin-post handlers remain registered as compatibility fallbacks | Implemented |
+| Regression coverage | Added tests for `wp_ajax_alynt_ag_preview_gateway` registration and generated admin AJAX Preview button URLs | Verified |
+| Focused tests | 3 tests, 16 assertions | Passed |
+| Full tests | 287 tests, 1,909 assertions | Passed |
+| Coding standards | Full PHPCS/WPCS project scan | Passed |
+| PHP syntax | Changed PHP files | Passed |
+| Build and translations | Production assets rebuilt; POT regenerated with 997 strings and `0.1.101` metadata | Passed |
+| Publication state | Local corrective candidate prepared after release approval; public release and staging updater retest in progress | Active |
+
 Representative configuration is complete for the inputs currently available. Frontend Output remains disabled. Before route handover, the legal-page decision, a site-owned email test recipient, integration credential decisions, and the preview-route issue remain open.
 
 ## Phase 2: Core Account Acceptance
@@ -387,3 +402,4 @@ Severity guidance:
 - Visual review captured all eight gateway states across `390x844`, `800x900`, and `1440x1000` using current staging settings, installed frontend assets, and configured media while public output remained disabled. The fallback visual matrix passed for overflow, branding, WordPress-logo absence, and obvious layout overlap.
 - Finding `P1-003` records that the actual Gateway Screen Preview admin-post route redirected to `/wp-admin/` in authenticated browser testing. The next Phase 1 work is to fix or diagnose that preview-route feature, followed by resolution of legal, email, and integration inputs. Route handover still requires a separate explicit approval.
 - Local `v0.1.100` candidate work moves Gateway Screen Preview links to the settings-page admin route while retaining the legacy admin-post handler, adds focused route/link coverage, passes 287 tests and 1,908 assertions, PHPCS, changed-file PHP syntax validation, build validation, and POT regeneration. Release, updater installation, and staging retest are waiting for explicit approval.
+- Public `v0.1.100` installed through Alynt Plugin Updater on `hbf-staging`, but authenticated settings-page preview requests still redirected before standalone preview output rendered. Local `v0.1.101` corrective candidate moves preview buttons to authenticated admin AJAX while preserving both fallback handlers; focused tests, full suite, PHPCS, syntax checks, build, and POT regeneration passed.
