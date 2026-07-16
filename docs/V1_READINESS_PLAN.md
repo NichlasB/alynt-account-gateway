@@ -2,8 +2,8 @@
 
 ## Status
 
-- Current phase: Phase 2 is active. Public `v0.1.111` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, role access/admin-toolbar behavior passed for administrator, shop manager, and customer, rate-limit/password-policy failure states passed, pending-email/expired-token/used-token states passed, emergency bypass behavior passed, the Frontend Output disable/restore safety switch passed, and inactive-account scope was clarified. Permanent webhook receiver configuration, full frontend Turnstile challenge success, and WooCommerce/customer dashboard journey acceptance remain gated.
-- Product baseline: `v0.1.111`, released, public-asset verified, and updater-verified on production-like staging.
+- Current phase: Phase 2 is active. Public `v0.1.112` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, role access/admin-toolbar behavior passed for administrator, shop manager, and customer, rate-limit/password-policy failure states passed, pending-email/expired-token/used-token states passed, emergency bypass behavior passed, the Frontend Output disable/restore safety switch passed, inactive-account scope was clarified, and safe post-login redirect handling passed after the `v0.1.112` corrective release. Permanent webhook receiver configuration, full frontend Turnstile challenge success, and WooCommerce/customer dashboard journey acceptance remain gated.
+- Product baseline: `v0.1.112`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility.
@@ -364,7 +364,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 ## Phase 2: Core Account Acceptance
 
 - [x] Verify email-only login with valid, invalid, rate-limited, and pending account states; document inactive-account scope.
-- [ ] Verify login redirects preserve only safe destinations and do not create loops.
+- [x] Verify login redirects preserve only safe destinations and do not create loops.
 - [x] Verify public registration is unavailable while account creation is disabled.
 - [x] Verify the full confirmation-first registration flow when account creation is enabled.
 - [x] Confirm no WordPress user is created before email confirmation and password completion.
@@ -514,6 +514,21 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | Scope decision | Inactive-account blocking is not a v1 Alynt Account Gateway feature unless a separate account-approval, membership, commerce, or LMS integration defines an authoritative inactive state | Documented |
 | Cleanup | Deleted disposable user `9259` and removed temporary local and remote helper files | Completed |
 
+### Phase 2 Safe Redirect Matrix Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Initial matrix finding | `v0.1.111` preserved safe internal redirects and rejected external redirects, but a valid login submitted with `redirect_to=/login/` returned the logged-in user to the branded login form | Confirmed |
+| Corrective release | Public `v0.1.112` rejects post-login destinations that point to the configured branded login path, configured account action base, or native `wp-login.php`, falling back to the configured after-login URL | Released and updater-installed |
+| Release checks | Focused auth tests passed with 17 tests and 72 assertions; full PHPUnit passed with 295 tests and 1,941 assertions; PHPCS, PHP syntax sweep for 108 files, npm audit, Composer audit, build, POT regeneration, diff check, and public ZIP inspection passed | Passed |
+| Public package | `alynt-account-gateway-v0.1.112.zip`; one root item; 45 runtime files; zero development files; SHA-256 `1E53D6E0ED7CA39DA113E87BA0B93511F8AFB7DFA85349606C4A1DE1B4AA5579` | Verified |
+| Updater install | Alynt Plugin Updater refreshed managed release metadata and installed `0.1.111 -> 0.1.112` on `hbf-staging`; installed plugin reports `0.1.112`, remains active, and contains 45 runtime files with no development files | Passed |
+| Valid safe redirect | Branded email login with `redirect_to=/my-account/` returned `302` to `/my-account/` and set a logged-in cookie | Passed |
+| Unsafe external redirect | Branded email login with an external `redirect_to` returned `302` to the configured `/my-account/` fallback and set a logged-in cookie | Passed |
+| Auth-surface redirect fallback | Branded email login with `redirect_to` set to `/login/`, `/account?action=lostpassword`, or `/wp-login.php` returned `302` to `/my-account/` and set a logged-in cookie | Passed |
+| Anonymous redirect chains | Anonymous `/my-account/` and `/wp-login.php` each resolved in one redirect to a branded account route; anonymous `/account?action=lostpassword` rendered directly with zero redirects | Passed |
+| Cleanup | Disposable redirect-test user `9260` and temporary local/remote helper files were removed | Completed |
+
 ## Phase 3: Email And Deliverability Acceptance
 
 - [ ] Preview every supported account email using representative tokens and branding.
@@ -661,6 +676,7 @@ Release is approved only when all statements below are true:
 | `P1-004` | 1 / 3 | Medium | Account-email logo rendered at raw source-image scale in a real mailbox, overwhelming the email layout. | Product owner | Closed by `v0.1.105`: explicit email logo width attributes and inline constrained dimensions were released, installed, resent, and accepted in a real mailbox screenshot. | Local candidate tests, package inspection, updater install `0.1.104 -> 0.1.105`, installed-file verification, five resent account-email templates, and mailbox screenshot confirmation | Closed |
 | `P1-005` | 1 / 3 | Low | Account-email body text felt too small during real mailbox review after logo correction. `v0.1.106` did not visibly change the real mailbox because the client ignored the wrapper/media-query approach. | Product owner | Closed by `v0.1.107`: inline paragraph/list-item body sizing was released, installed, resent, and accepted in real mailbox review on mobile and desktop. | Focused and full candidate tests, PHPCS, syntax sweep, build, POT regeneration, package inspection, updater install `0.1.106 -> 0.1.107`, installed-file verification, five resent account-email templates, and mailbox screenshot confirmation | Closed |
 | `P2-001` | 2 | High | Branded auth and registration form POSTs were rendered before they could be processed after the `v0.1.109` canonical-redirect fix moved gateway rendering earlier. | Product owner | Closed by `v0.1.111`: auth and registration POST handlers now run at `template_redirect` priority `0`, ahead of gateway rendering at priority `1`, with regression coverage preserving both handler order and canonical redirect behavior. | Failed `v0.1.110` disposable registration POST with zero pending/consent rows; focused and full tests; PHPCS; build; POT; syntax sweep; public ZIP inspection; updater install `0.1.110 -> 0.1.111`; successful registration POST redirecting to `registration_sent=1` with pending/consent rows and zero created user accounts | Closed |
+| `P2-002` | 2 | Medium | A validated same-site `redirect_to=/login/` target could send a successfully logged-in user back to the branded login form. | Product owner | Closed by `v0.1.112`: post-login destinations pointing to branded login, the account action base, or native `wp-login.php` now fall back to the configured after-login URL. | Initial redirect matrix finding; focused auth tests; full release checks; public ZIP inspection; Alynt Plugin Updater install `0.1.111 -> 0.1.112`; safe/external/auth-surface redirect matrix retest; disposable-user cleanup | Closed |
 
 Severity guidance:
 
@@ -684,6 +700,7 @@ Severity guidance:
 | 2026-07-16 | Use `/legal/terms/` and `/legal/privacy/` for the staging Account Gateway legal links, without exempting those paths from Force Login. | The legal entries are published custom `legal` posts, and Force Login is intentionally staging-only, so anonymous interception is an accepted staging constraint rather than a plugin blocker. | Saved Account Gateway settings, `url-to-id` checks, published post metadata, and anonymous HTTP 302 responses. |
 | 2026-07-16 | Complete the route handover on `hbf-staging` after releasing targeted compatibility fixes through `v0.1.110`. | Force Login needed a narrow gateway-route bypass, WordPress canonical redirects needed to yield to the gateway renderer, and the Turnstile API URL needed to avoid WordPress version query warnings before public route ownership could be accepted. | Public releases `v0.1.108`, `v0.1.109`, and `v0.1.110`; Alynt Plugin Updater installs; HTTP route checks; browser smoke evidence. |
 | 2026-07-16 | Treat `v0.1.111` as a blocking Phase 2 corrective release before continuing full account-flow testing. | The first real registration-start POST proved that screen rendering could preempt form handlers, so completing Phase 2 on `v0.1.110` would test a broken submission path. | `P2-001` finding, hook-priority regression test, public release `v0.1.111`, updater install, and successful disposable registration-start retest. |
+| 2026-07-16 | Treat `v0.1.112` as a Phase 2 redirect-safety corrective release before marking safe redirect handling complete. | The redirect matrix found same-site auth-surface destinations were host-valid but could return a logged-in user to account/login screens, which violates the no-loop account gateway goal. | `P2-002` finding, redirect regression tests, public release `v0.1.112`, updater install, and safe redirect matrix retest. |
 
 ## Progress Notes
 
@@ -730,3 +747,4 @@ Severity guidance:
 - The Phase 2 emergency-bypass slice passed: normal anonymous `/wp-login.php` redirected to branded `/login/`; the redacted emergency bypass returned only native WordPress login markup, no Alynt Account Gateway form markup, no logged-in cookie, and no `/wp-admin/` access. The bypass key was never printed or retained in evidence, and the temporary helper was removed.
 - The Phase 2 Frontend Output safety-switch slice passed: disabling Frontend Output removed Alynt Account Gateway markup from the public gateway routes and restored native `/wp-login.php` output while preserving registration settings; restoring Frontend Output brought branded login, lost-password, registration, and native-login redirect behavior back.
 - The Phase 2 inactive-account scope check clarified that WordPress core does not provide a meaningful inactive customer flag for Alynt Account Gateway to enforce: a disposable user with `user_status = 1` still logged in through `wp_signon()`. Inactive-account blocking is therefore documented as out of v1 scope unless a separate integration defines an authoritative inactive state. The disposable user and helpers were removed.
+- The Phase 2 safe redirect matrix found `P2-002` on `v0.1.111`: a same-site `redirect_to=/login/` target could return a logged-in user to the branded login form. Public `v0.1.112` now rejects branded login, account-action, and native `wp-login.php` post-login destinations, falls back to `/my-account/`, passed focused and full release checks, was installed on `hbf-staging` through Alynt Plugin Updater, and passed the safe/internal, external/unsafe, auth-surface fallback, and anonymous-chain redirect matrix. The disposable redirect-test user and helpers were removed.
