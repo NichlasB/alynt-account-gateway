@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 2 is active. Public `v0.1.111` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, role access/admin-toolbar behavior passed for administrator, shop manager, and customer, rate-limit/password-policy failure states passed, and pending-email/expired-token/used-token states passed. Permanent webhook receiver configuration, full frontend Turnstile challenge success, remaining inactive-account/emergency-bypass/frontend-output restore states, and WooCommerce/customer dashboard journey acceptance remain gated.
+- Current phase: Phase 2 is active. Public `v0.1.111` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, role access/admin-toolbar behavior passed for administrator, shop manager, and customer, rate-limit/password-policy failure states passed, pending-email/expired-token/used-token states passed, and emergency bypass behavior passed. Permanent webhook receiver configuration, full frontend Turnstile challenge success, remaining inactive-account/frontend-output restore states, and WooCommerce/customer dashboard journey acceptance remain gated.
 - Product baseline: `v0.1.111`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -376,7 +376,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [x] Verify logout confirmation, cancellation, successful logout, and safe redirect behavior.
 - [x] Verify administrators and shop managers retain intended wp-admin and toolbar access.
 - [x] Verify other roles are redirected away from wp-admin without redirect loops.
-- [ ] Verify the emergency bypass exposes only native login and never authenticates a visitor.
+- [x] Verify the emergency bypass exposes only native login and never authenticates a visitor.
 - [ ] Verify all public account routes avoid the native WordPress shell except through deliberate bypass.
 - [ ] Verify frontend output can be disabled to restore native behavior without losing settings.
 
@@ -480,6 +480,17 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | Used confirmation token | The consumed confirmation link rendered the branded invalid/expired state with HTTP 200, no password fields, and zero native WordPress or WP Custom Login Manager markers | Passed |
 | Used-token account guard | The consumed-token setup created one disposable user to represent a real completed registration; that user was deleted after the token-state check | Completed |
 | Cleanup | Removed disposable `alynt_ag_pending_`, `alynt_ag_expired_`, and `alynt_ag_used_` rows from plugin-owned pending, consent, and verification tables; removed temporary local and remote helper files | Completed |
+
+### Phase 2 Emergency Bypass Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Secret handling | The bypass key was read only into a server-side shell variable, was not printed, and was not stored in repository evidence | Protected |
+| Normal native login | Anonymous `/wp-login.php` returned HTTP 302 and redirected to the configured branded `/login/` route | Passed |
+| Bypass native login | Anonymous `wp-login.php` with the emergency bypass query returned HTTP 200 with native `loginform` and `wp-submit` markers, no redirect, and no Alynt Account Gateway form markup | Passed |
+| No authentication | The bypass response did not set a `wordpress_logged_in` cookie | Passed |
+| Admin still protected | Reusing the bypass visit cookie jar against `/wp-admin/` returned a redirect and no dashboard/admin-bar markers | Passed |
+| Cleanup | Temporary bypass-check helper was removed from `/tmp` on staging and from the local workflow work folder | Completed |
 
 ## Phase 3: Email And Deliverability Acceptance
 
@@ -694,3 +705,4 @@ Severity guidance:
 - The Phase 2 role-access slice passed: disposable administrator, shop-manager, and customer users all logged in by email through the branded form. Administrator and shop manager reached `/wp-admin/` and saw the toolbar, while the customer was redirected to `/my-account/` and did not see the toolbar. All disposable role users and local temp credentials were removed.
 - The Phase 2 rate-limit and password-policy slice passed: registration, resend-confirmation, login, and lost-password buckets were temporarily lowered to `1/1`, each produced the expected branded rate-limit redirect on the second matching POST, and the original staging values were restored. A disposable pending registration then verified password length, complexity, and mismatch failures, each staying branded with zero native markers and no WordPress user creation. Disposable rows and temporary helper files were removed.
 - The Phase 2 pending-account and token-state slice passed: a pending-only email could not log in and did not create a WordPress user, an expired confirmation link rendered the branded invalid/expired state without password fields or native markers, and a consumed confirmation link did the same after a real disposable registration completion. The disposable user, plugin-owned rows, and temporary helper files were removed.
+- The Phase 2 emergency-bypass slice passed: normal anonymous `/wp-login.php` redirected to branded `/login/`; the redacted emergency bypass returned only native WordPress login markup, no Alynt Account Gateway form markup, no logged-in cookie, and no `/wp-admin/` access. The bypass key was never printed or retained in evidence, and the temporary helper was removed.
