@@ -86,6 +86,7 @@ class FrontendAssetsTest extends TestCase {
 			array_column( $GLOBALS['alynt_ag_test_enqueued_scripts'], 'handle' )
 		);
 		$this->assertSame( 'https://challenges.cloudflare.com/turnstile/v0/api.js', $GLOBALS['alynt_ag_test_enqueued_scripts'][1]['src'] );
+		$this->assertNull( $GLOBALS['alynt_ag_test_enqueued_scripts'][1]['ver'] );
 		$this->assertTrue( $GLOBALS['alynt_ag_test_enqueued_scripts'][1]['in_footer'] );
 	}
 }

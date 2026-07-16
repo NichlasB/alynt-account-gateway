@@ -98,7 +98,7 @@ class ALYNT_AG_Frontend_Assets {
 			'alynt-ag-turnstile',
 			'https://challenges.cloudflare.com/turnstile/v0/api.js',
 			array(),
-			ALYNT_AG_VERSION,
+			null, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Cloudflare warns when API URL receives a WordPress version query.
 			true
 		);
 	}
