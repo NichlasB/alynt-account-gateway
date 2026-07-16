@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 2 is active. Public `v0.1.113` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, role access/admin-toolbar behavior passed for administrator, shop manager, and customer, rate-limit/password-policy failure states passed, pending-email/expired-token/used-token/resend states passed, emergency bypass behavior passed, the Frontend Output disable/restore safety switch passed, inactive-account scope was clarified, safe post-login redirect handling passed after the `v0.1.112` corrective release, the public account route shell matrix passed with native WordPress appearing only through the deliberate emergency bypass, password strength feedback accessibility passed after the `v0.1.113` corrective release, frontend Turnstile browser-token success passed on the public registration form, Turnstile invalid/replay/expiry server-side validation passed, Reoon policy mapping passed with live valid/invalid/disposable spot checks, either-provider/all-provider registration policy behavior passed, provider outage/timeout behavior passed, and temporary webhook receiver acceptance passed. WooCommerce/customer dashboard journey acceptance remains gated.
+- Current phase: Phase 5 is active. Public `v0.1.113` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, role access/admin-toolbar behavior passed for administrator, shop manager, and customer, rate-limit/password-policy failure states passed, pending-email/expired-token/used-token/resend states passed, emergency bypass behavior passed, the Frontend Output disable/restore safety switch passed, inactive-account scope was clarified, safe post-login redirect handling passed after the `v0.1.112` corrective release, the public account route shell matrix passed with native WordPress appearing only through the deliberate emergency bypass, password strength feedback accessibility passed after the `v0.1.113` corrective release, frontend Turnstile browser-token success passed on the public registration form, Turnstile invalid/replay/expiry server-side validation passed, Reoon policy mapping passed with live valid/invalid/disposable spot checks, either-provider/all-provider registration policy behavior passed, provider outage/timeout behavior passed, temporary webhook receiver acceptance passed, and the first dashboard/WooCommerce route smoke passed with temporary settings restored. Representative-order, downloads, POST-validation, payment-method, and extension compatibility coverage remains open.
 - Product baseline: `v0.1.113`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -676,11 +676,12 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 
 ## Phase 5: Dashboard And WooCommerce Acceptance
 
-- [ ] Verify the custom dashboard disabled and enabled states.
-- [ ] Verify customer greeting uses first name with the neutral fallback.
-- [ ] Verify custom dashboard links, icons, ordering, role visibility, and new-tab settings.
-- [ ] Verify WooCommerce takeover disabled and enabled states.
-- [ ] Verify dashboard overview and navigation with no orders and with representative orders.
+- [x] Verify the custom dashboard disabled and enabled states.
+- [x] Verify customer greeting uses first name with the neutral fallback.
+- [x] Verify custom dashboard links, icons, ordering, role visibility, and new-tab settings.
+- [x] Verify WooCommerce takeover disabled and enabled states.
+- [x] Verify dashboard overview and navigation with no orders.
+- [ ] Verify dashboard overview and navigation with representative orders.
 - [ ] Verify order list, pagination, order details, and available order actions.
 - [ ] Verify downloads with empty, available, expired, and limited-download states.
 - [ ] Verify billing and shipping address view/edit flows and validation errors.
@@ -690,6 +691,18 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [ ] Verify unavailable WooCommerce endpoint guidance and recovery links.
 - [ ] Verify shop-manager administration remains available while customer wp-admin access remains blocked.
 - [ ] Confirm checkout, payment, subscription, membership, or other extension behavior used by the target site is not disrupted.
+
+### Phase 5 Dashboard And WooCommerce Route Smoke Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Baseline state | Alynt Account Gateway `0.1.113` and WooCommerce `10.9.4` were active on `hbf-staging`; Frontend Output was enabled; saved dashboard and WooCommerce takeover switches were disabled | Verified |
+| In-memory routing matrix | Disabled dashboard returned no gateway screen for `/my-account/`; dashboard enabled routed `/my-account/`; WooCommerce endpoint routes such as `/my-account/orders/` routed only when takeover was enabled | Passed |
+| In-memory dashboard render | Disposable customer and administrator users were created and deleted; customer output included `Welcome, AlyntDash`, the customer email, WooCommerce overview, logout, orders, addresses, account details, FAQ, and Contact; administrator output excluded the customer/subscriber-only custom links | Passed |
+| Public dashboard route | Temporarily enabled dashboard/takeover and added one temporary customer-only new-tab custom link; browser login as disposable customer landed on `/my-account/` with the branded dashboard, first-name greeting, WooCommerce overview, account navigation, configured custom links, and screen-reader text for the new-tab link | Passed |
+| Public WooCommerce endpoints | Browser checks confirmed `/my-account/orders/` rendered branded shell, Account section shortcuts, Order History guidance, WooCommerce native empty-orders notice, and Browse products action; `/my-account/edit-address/` rendered WooCommerce address content; `/my-account/edit-account/` rendered WooCommerce first name, last name, display name, email, password-change fields, and Save changes button | Passed |
+| Cleanup and restore | Original `alynt_ag_settings` were restored exactly from snapshot; disposable user `9264` was deleted; temporary snapshot options and remote helpers were removed; final baseline again showed dashboard and takeover disabled with the two original custom links only | Completed |
+| Remaining coverage | Representative orders, order details/actions, downloads edge states, form POST validation, saved-payment add/delete/default flows, and target extension compatibility still require separate Phase 5 slices | Open |
 
 ## Phase 6: Compatibility And Experience Matrix
 
