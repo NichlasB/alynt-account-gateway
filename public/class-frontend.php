@@ -30,6 +30,7 @@ class ALYNT_AG_Frontend {
 		add_filter( 'lostpassword_url', array( $this, 'filter_lostpassword_url' ), 10, 2 );
 		add_filter( 'register_url', array( $this, 'filter_register_url' ) );
 		add_filter( 'logout_url', array( $this, 'filter_logout_url' ), 10, 2 );
+		add_filter( 'v_forcelogin_bypass', array( $this, 'filter_force_login_bypass' ), 10, 2 );
 	}
 
 	/**
@@ -302,6 +303,32 @@ class ALYNT_AG_Frontend {
 	}
 
 	/**
+	 * Let Force Login pass through the public gateway routes when enabled.
+	 *
+	 * @param bool   $bypass Whether Force Login already intends to bypass.
+	 * @param string $url    Visited URL.
+	 * @return bool
+	 */
+	public function filter_force_login_bypass( $bypass, $url ) {
+		if ( $bypass ) {
+			return true;
+		}
+
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+		if ( empty( $settings['frontend_enabled'] ) ) {
+			return false;
+		}
+
+		$path = $this->relative_path_from_url( $url );
+		if ( '' === $path ) {
+			return false;
+		}
+
+		return $this->routes()->paths_match( $path, $settings['login_path'] )
+			|| $this->routes()->paths_match( $path, $settings['account_action_base'] );
+	}
+
+	/**
 	 * Determine whether the current request is the emergency native-login bypass.
 	 *
 	 * @param array<string,mixed> $settings Settings.
@@ -367,6 +394,28 @@ class ALYNT_AG_Frontend {
 		$path = wp_parse_url( $url, PHP_URL_PATH );
 
 		return $path ? sanitize_text_field( $path ) : '';
+	}
+
+	/**
+	 * Return a URL path relative to the site's home path.
+	 *
+	 * @param string $url URL.
+	 * @return string
+	 */
+	private function relative_path_from_url( $url ) {
+		$path = wp_parse_url( $url, PHP_URL_PATH );
+		if ( ! $path ) {
+			return '';
+		}
+
+		$home_path = wp_parse_url( home_url( '/' ), PHP_URL_PATH );
+		$home_path = $home_path ? rtrim( $home_path, '/' ) : '';
+
+		if ( $home_path && 0 === strpos( $path, $home_path ) ) {
+			$path = substr( $path, strlen( $home_path ) );
+		}
+
+		return '/' . ltrim( sanitize_text_field( $path ), '/' );
 	}
 
 	/**

@@ -142,6 +142,27 @@ class FrontendRoutingTest extends TestCase {
 		$this->assertSame( array(), $GLOBALS['alynt_ag_test_redirects'] );
 	}
 
+	public function test_force_login_bypass_allows_gateway_routes_only_when_frontend_enabled() {
+		$frontend = new ALYNT_AG_Frontend();
+
+		$this->assertTrue( $frontend->filter_force_login_bypass( false, 'https://example.test/login/' ) );
+		$this->assertTrue( $frontend->filter_force_login_bypass( false, 'https://example.test/account?action=lostpassword' ) );
+		$this->assertFalse( $frontend->filter_force_login_bypass( false, 'https://example.test/legal/terms/' ) );
+		$this->assertFalse( $frontend->filter_force_login_bypass( false, 'https://example.test/my-account/' ) );
+
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings']['frontend_enabled'] = false;
+
+		$this->assertFalse( $frontend->filter_force_login_bypass( false, 'https://example.test/login/' ) );
+		$this->assertFalse( $frontend->filter_force_login_bypass( false, 'https://example.test/account?action=lostpassword' ) );
+	}
+
+	public function test_force_login_bypass_preserves_existing_bypass_decision() {
+		$frontend = new ALYNT_AG_Frontend();
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings']['frontend_enabled'] = false;
+
+		$this->assertTrue( $frontend->filter_force_login_bypass( true, 'https://example.test/legal/terms/' ) );
+	}
+
 	public function test_toolbar_is_limited_to_admins_and_shop_managers() {
 		$frontend = new ALYNT_AG_Frontend();
 		$GLOBALS['alynt_ag_test_user_logged_in'] = true;
