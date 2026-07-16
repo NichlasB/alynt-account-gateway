@@ -363,7 +363,48 @@ class ALYNT_AG_Auth_Service {
 			return $default;
 		}
 
-		return wp_validate_redirect( $redirect_to, $default );
+		$destination = wp_validate_redirect( $redirect_to, $default );
+
+		if ( $this->is_auth_surface_redirect_destination( $destination, $settings ) ) {
+			return $default;
+		}
+
+		return $destination;
+	}
+
+	/**
+	 * Determine whether a post-login destination points back to an auth surface.
+	 *
+	 * @param string              $destination Validated redirect destination.
+	 * @param array<string,mixed> $settings    Settings.
+	 * @return bool
+	 */
+	private function is_auth_surface_redirect_destination( $destination, $settings ) {
+		$path = wp_parse_url( $destination, PHP_URL_PATH );
+
+		if ( ! is_string( $path ) || '' === $path ) {
+			return false;
+		}
+
+		$path          = $this->normalize_redirect_path( $path );
+		$login_path    = $this->normalize_redirect_path( isset( $settings['login_path'] ) ? (string) $settings['login_path'] : '/login/' );
+		$account_base  = $this->normalize_redirect_path( isset( $settings['account_action_base'] ) ? (string) $settings['account_action_base'] : '/account' );
+		$wp_login_path = $this->normalize_redirect_path( '/wp-login.php' );
+
+		return in_array( $path, array( $login_path, $account_base, $wp_login_path ), true );
+	}
+
+	/**
+	 * Normalize a URL path for redirect-surface comparison.
+	 *
+	 * @param string $path URL path.
+	 * @return string
+	 */
+	private function normalize_redirect_path( $path ) {
+		$path = '/' . ltrim( $path, '/' );
+		$path = untrailingslashit( $path );
+
+		return '' === $path ? '/' : $path;
 	}
 
 	/**

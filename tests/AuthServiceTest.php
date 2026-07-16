@@ -93,6 +93,44 @@ class AuthServiceTest extends TestCase {
 		);
 	}
 
+	public function test_login_redirect_allows_safe_internal_redirects() {
+		$service  = new ALYNT_AG_Auth_Service();
+		$settings = array(
+			'after_login_redirect' => '/my-account/',
+			'login_path'           => '/login/',
+			'account_action_base'  => '/account',
+		);
+
+		$this->assertSame(
+			'https://example.test/my-account/orders/',
+			$service->get_login_redirect_url( 'https://example.test/my-account/orders/', $settings )
+		);
+	}
+
+	public function test_login_redirect_rejects_auth_surface_redirects() {
+		$service  = new ALYNT_AG_Auth_Service();
+		$settings = array(
+			'after_login_redirect' => '/my-account/',
+			'login_path'           => '/login/',
+			'account_action_base'  => '/account',
+		);
+
+		$expected = 'https://example.test/my-account/';
+
+		$this->assertSame(
+			$expected,
+			$service->get_login_redirect_url( 'https://example.test/login/', $settings )
+		);
+		$this->assertSame(
+			$expected,
+			$service->get_login_redirect_url( 'https://example.test/account?action=lostpassword', $settings )
+		);
+		$this->assertSame(
+			$expected,
+			$service->get_login_redirect_url( 'https://example.test/wp-login.php', $settings )
+		);
+	}
+
 	public function test_login_submission_requires_email_identifier() {
 		$service = new ALYNT_AG_Auth_Service();
 		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;

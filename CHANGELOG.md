@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.112 - 2026-07-16
+
+### Fixed
+
+- Prevented post-login redirects back to branded or native authentication screens, falling back to the configured after-login URL instead.
+
 ## 0.1.107 - 2026-07-16
 
 ### Fixed
