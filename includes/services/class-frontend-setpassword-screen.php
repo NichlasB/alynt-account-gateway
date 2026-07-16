@@ -200,12 +200,12 @@ class ALYNT_AG_Frontend_Setpassword_Screen {
 				<strong id="agw-password-status" data-agw-strength-label><?php esc_html_e( 'Enter a password to begin.', 'alynt-account-gateway' ); ?></strong>
 			</div>
 			<ul id="agw-password-requirements" class="agw-requirements" data-agw-password-requirements>
-				<li data-agw-requirement="length" role="checkbox" aria-checked="false" aria-disabled="true"><?php esc_html_e( 'At least 12 characters', 'alynt-account-gateway' ); ?></li>
-				<li data-agw-requirement="uppercase" role="checkbox" aria-checked="false" aria-disabled="true"><?php esc_html_e( 'At least one uppercase letter', 'alynt-account-gateway' ); ?></li>
-				<li data-agw-requirement="lowercase" role="checkbox" aria-checked="false" aria-disabled="true"><?php esc_html_e( 'At least one lowercase letter', 'alynt-account-gateway' ); ?></li>
-				<li data-agw-requirement="number" role="checkbox" aria-checked="false" aria-disabled="true"><?php esc_html_e( 'At least one number', 'alynt-account-gateway' ); ?></li>
-				<li data-agw-requirement="symbol" role="checkbox" aria-checked="false" aria-disabled="true"><?php esc_html_e( 'At least one special symbol', 'alynt-account-gateway' ); ?></li>
-				<li data-agw-requirement="match" role="checkbox" aria-checked="false" aria-disabled="true"><?php esc_html_e( 'Passwords match', 'alynt-account-gateway' ); ?></li>
+				<li data-agw-requirement="length" data-agw-requirement-label="<?php esc_attr_e( 'At least 12 characters', 'alynt-account-gateway' ); ?>" aria-label="<?php esc_attr_e( 'Not met: At least 12 characters', 'alynt-account-gateway' ); ?>"><?php esc_html_e( 'At least 12 characters', 'alynt-account-gateway' ); ?></li>
+				<li data-agw-requirement="uppercase" data-agw-requirement-label="<?php esc_attr_e( 'At least one uppercase letter', 'alynt-account-gateway' ); ?>" aria-label="<?php esc_attr_e( 'Not met: At least one uppercase letter', 'alynt-account-gateway' ); ?>"><?php esc_html_e( 'At least one uppercase letter', 'alynt-account-gateway' ); ?></li>
+				<li data-agw-requirement="lowercase" data-agw-requirement-label="<?php esc_attr_e( 'At least one lowercase letter', 'alynt-account-gateway' ); ?>" aria-label="<?php esc_attr_e( 'Not met: At least one lowercase letter', 'alynt-account-gateway' ); ?>"><?php esc_html_e( 'At least one lowercase letter', 'alynt-account-gateway' ); ?></li>
+				<li data-agw-requirement="number" data-agw-requirement-label="<?php esc_attr_e( 'At least one number', 'alynt-account-gateway' ); ?>" aria-label="<?php esc_attr_e( 'Not met: At least one number', 'alynt-account-gateway' ); ?>"><?php esc_html_e( 'At least one number', 'alynt-account-gateway' ); ?></li>
+				<li data-agw-requirement="symbol" data-agw-requirement-label="<?php esc_attr_e( 'At least one special symbol', 'alynt-account-gateway' ); ?>" aria-label="<?php esc_attr_e( 'Not met: At least one special symbol', 'alynt-account-gateway' ); ?>"><?php esc_html_e( 'At least one special symbol', 'alynt-account-gateway' ); ?></li>
+				<li data-agw-requirement="match" data-agw-requirement-label="<?php esc_attr_e( 'Passwords match', 'alynt-account-gateway' ); ?>" aria-label="<?php esc_attr_e( 'Not met: Passwords match', 'alynt-account-gateway' ); ?>"><?php esc_html_e( 'Passwords match', 'alynt-account-gateway' ); ?></li>
 			</ul>
 			<button class="agw-button agw-button--primary" type="submit" data-agw-password-submit disabled aria-disabled="true"><?php esc_html_e( 'Save Password', 'alynt-account-gateway' ); ?></button>
 		</form>

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.113 - 2026-07-16
+
+### Changed
+
+- Improved set-password strength feedback accessibility with read-only requirement labels and live progress counts.
+
 ## 0.1.112 - 2026-07-16
 
 ### Fixed

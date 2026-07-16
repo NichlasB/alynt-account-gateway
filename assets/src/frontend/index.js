@@ -64,14 +64,16 @@ function alyntAgUpdatePasswordPolicy( form ) {
 		return;
 	}
 
-	const password = passwordInput.value;
-	const confirm  = confirmInput.value;
-	const checks   = alyntAgGetPasswordChecks( password, confirm );
-	const coreKeys = [ 'length', 'uppercase', 'lowercase', 'number', 'symbol' ];
-	const corePass = coreKeys.filter( ( key ) => checks[ key ] ).length;
-	const isValid  = corePass === coreKeys.length && checks.match;
-	const score    = password.length === 0 ? 0 : Math.min( 4, Math.max( 1, Math.ceil( ( corePass / coreKeys.length ) * 4 ) ) );
-	const messages = {
+	const password          = passwordInput.value;
+	const confirm           = confirmInput.value;
+	const checks            = alyntAgGetPasswordChecks( password, confirm );
+	const coreKeys          = [ 'length', 'uppercase', 'lowercase', 'number', 'symbol' ];
+	const corePass          = coreKeys.filter( ( key ) => checks[ key ] ).length;
+	const totalRequirements = coreKeys.length + 1;
+	const metRequirements   = corePass + ( checks.match ? 1 : 0 );
+	const isValid           = corePass === coreKeys.length && checks.match;
+	const score             = password.length === 0 ? 0 : Math.min( 4, Math.max( 1, Math.ceil( ( corePass / coreKeys.length ) * 4 ) ) );
+	const messages          = {
 		empty: strength.dataset.agwMessageEmpty || '',
 		weak: strength.dataset.agwMessageWeak || '',
 		good: strength.dataset.agwMessageGood || '',
@@ -79,11 +81,13 @@ function alyntAgUpdatePasswordPolicy( form ) {
 	};
 
 	for ( const item of requirements ) {
-		const key    = item.getAttribute( 'data-agw-requirement' );
-		const passed = Boolean( checks[ key ] );
+		const key              = item.getAttribute( 'data-agw-requirement' );
+		const passed           = Boolean( checks[ key ] );
+		const requirementLabel = item.getAttribute( 'data-agw-requirement-label' ) || item.textContent.trim();
+		const requirementState = passed ? 'Met' : 'Not met';
 
 		item.classList.toggle( 'is-met', passed );
-		item.setAttribute( 'aria-checked', passed ? 'true' : 'false' );
+		item.setAttribute( 'aria-label', `${ requirementState }: ${ requirementLabel }` );
 	}
 
 	strength.setAttribute( 'data-agw-strength-score', String( isValid ? 4 : score ) );
@@ -91,6 +95,8 @@ function alyntAgUpdatePasswordPolicy( form ) {
 
 	if ( password.length === 0 ) {
 		label.textContent = messages.empty;
+	} else {
+		label.textContent = `${ label.textContent } ${ metRequirements } of ${ totalRequirements } requirements met.`;
 	}
 
 	passwordInput.setAttribute( 'aria-invalid', password.length > 0 && corePass !== coreKeys.length ? 'true' : 'false' );

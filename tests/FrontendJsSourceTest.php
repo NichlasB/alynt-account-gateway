@@ -31,10 +31,13 @@ class FrontendJsSourceTest extends TestCase {
 		$this->assertStringContainsString( 'submit.disabled = ! isValid;', $js );
 		$this->assertStringContainsString( "submit.setAttribute( 'aria-disabled', isValid ? 'false' : 'true' );", $js );
 	}
-	public function test_password_requirements_use_aria_checked_state() {
+	public function test_password_requirements_use_readable_accessibility_labels() {
 		$js = $this->get_frontend_js();
 
-		$this->assertStringContainsString( "item.setAttribute( 'aria-checked', passed ? 'true' : 'false' );", $js );
+		$this->assertStringContainsString( "item.getAttribute( 'data-agw-requirement-label' )", $js );
+		$this->assertStringContainsString( "item.setAttribute( 'aria-label', `\${ requirementState }: \${ requirementLabel }` );", $js );
+		$this->assertStringContainsString( "label.textContent = `\${ label.textContent } \${ metRequirements } of \${ totalRequirements } requirements met.`;", $js );
+		$this->assertStringNotContainsString( "item.setAttribute( 'aria-checked'", $js );
 		$this->assertStringNotContainsString( "item.setAttribute( 'aria-current'", $js );
 	}
 

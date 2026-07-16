@@ -110,7 +110,10 @@ class FrontendSetpasswordScreenTest extends TestCase {
 		$this->assertStringContainsString( 'data-agw-strength', $html );
 		$this->assertStringContainsString( 'role="status" aria-live="polite" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'data-agw-password-requirements', $html );
-		$this->assertSame( 6, substr_count( $html, 'role="checkbox" aria-checked="false" aria-disabled="true"' ) );
+		$this->assertSame( 6, substr_count( $html, 'data-agw-requirement-label="' ) );
+		$this->assertSame( 6, substr_count( $html, 'aria-label="Not met:' ) );
+		$this->assertStringNotContainsString( 'role="checkbox"', $html );
+		$this->assertStringNotContainsString( 'aria-checked="false"', $html );
 		$this->assertStringNotContainsString( 'aria-current="true"', $html );
 		$this->assertStringNotContainsString( 'aria-current="false"', $html );
 		$this->assertStringContainsString( 'At least 12 characters', $html );
