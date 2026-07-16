@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.106 - 2026-07-16
+
+### Changed
+
+- Increased account email body text readability with a 16px mobile fallback, 18px tablet sizing, and 20px desktop sizing.
+
 ## 0.1.105 - 2026-07-16
 
 ### Fixed

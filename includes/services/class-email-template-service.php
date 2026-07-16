@@ -606,6 +606,19 @@ class ALYNT_AG_Email_Template_Service {
 			<meta charset="utf-8">
 			<meta name="viewport" content="width=device-width, initial-scale=1">
 			<title><?php echo esc_html( $subject ); ?></title>
+			<style>
+				@media screen and (min-width: 600px) {
+					.agw-email-body {
+						font-size: 18px !important;
+					}
+				}
+
+				@media screen and (min-width: 960px) {
+					.agw-email-body {
+						font-size: 20px !important;
+					}
+				}
+			</style>
 		</head>
 		<body style="margin:0;padding:0;background:<?php echo esc_attr( $background ); ?>;color:<?php echo esc_attr( $text_color ); ?>;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
 			<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;"><?php echo esc_html( $preheader ); ?></div>
@@ -625,7 +638,7 @@ class ALYNT_AG_Email_Template_Service {
 							<tr>
 								<td style="padding:16px 32px 8px;">
 									<h1 style="margin:0 0 16px;font-family:Georgia,serif;font-size:26px;line-height:1.25;color:<?php echo esc_attr( $text_color ); ?>;"><?php echo esc_html( $subject ); ?></h1>
-									<div style="font-size:16px;line-height:1.6;color:<?php echo esc_attr( $text_color ); ?>;"><?php echo wp_kses_post( $body_html ); ?></div>
+									<div class="agw-email-body" style="font-size:16px;line-height:1.6;color:<?php echo esc_attr( $text_color ); ?>;"><?php echo wp_kses_post( $body_html ); ?></div>
 									<?php if ( $button_url && $button_label ) : ?>
 										<p style="margin:28px 0;">
 											<a href="<?php echo esc_url( $button_url ); ?>" style="display:inline-block;padding:14px 22px;border-radius:6px;background:<?php echo esc_attr( $primary ); ?>;color:<?php echo esc_attr( $button_text ); ?>;font-weight:600;text-decoration:none;"><?php echo esc_html( $button_label ); ?></a>

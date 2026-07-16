@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 1 is active. Public `v0.1.105` is updater-verified, representative HBF configuration is saved with all public-output switches disabled, visual preview evidence is captured, legal destinations are configured for staging, and email test sends are accepted by the site mail path. `P1-004` email-logo correction has been released and resent for mailbox review; mailbox-side confirmation, provider/webhook configuration, live provider/webhook acceptance, and route handover remain gated.
+- Current phase: Phase 1 is active. Public `v0.1.105` is updater-verified, representative HBF configuration is saved with all public-output switches disabled, visual preview evidence is captured, legal destinations are configured for staging, and email test sends are accepted by the site mail path. `P1-004` email-logo correction is mailbox-confirmed. `P1-005` email body typography, provider/webhook configuration, live provider/webhook acceptance, and route handover remain gated.
 - Product baseline: `v0.1.105`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -268,14 +268,14 @@ Representative configuration is complete for the inputs currently available. Fro
 | Account-created welcome email | `wp_mail()` returned sent | Passed |
 | Email-change confirmation email | `wp_mail()` returned sent | Passed |
 | Summary | Five sent, zero failed | Site mail handoff passed |
-| Resend after SMTP simulation note | After the first run was observed as simulated by the mail stack, all five supported templates were resent. Each returned sent through `wp_mail()` with Frontend Output and registration still disabled. | Passed; mailbox evidence pending |
-| Mailbox rendering | User confirmed receipt, but the brand logo rendered massively and overwhelmed the email layout | Failed; see `P1-004` |
+| Resend after SMTP simulation note | After the first run was observed as simulated by the mail stack, all five supported templates were resent. Each returned sent through `wp_mail()` with Frontend Output and registration still disabled. | Passed |
+| Mailbox rendering | User confirmed receipt after `v0.1.105`; the brand logo rendered centered and proportionate in the real mailbox. Body text readability should be improved in a follow-up typography correction. | Logo passed; see `P1-005` |
 
 ### Phase 1 P1-004 Email Logo Corrective Candidate
 
 | Item | Result | Status |
 | --- | --- | --- |
-| Candidate version | `0.1.105` | Prepared locally |
+| Candidate version | `0.1.105` | Released |
 | Defect | Account-email logo rendered at the raw source image size in at least one mailbox client despite the previous CSS-only max-width | Confirmed |
 | Behavior correction | Email logo output now honors `brand_logo_max_width`, clamps email logo width between 80px and 220px, and emits both a `width` attribute and inline `width`, `max-width`, `height`, `display`, and border-reset styles | Implemented |
 | Regression coverage | Added email renderer coverage for explicit logo `width` attribute and inline constrained dimensions | Verified |
@@ -284,7 +284,22 @@ Representative configuration is complete for the inputs currently available. Fro
 | Coding standards | Full PHPCS/WPCS project scan | Passed |
 | PHP syntax | 83 project PHP files outside dependencies | Passed |
 | Build and translations | Production assets rebuilt; POT regenerated with 997 strings and `0.1.105` metadata | Passed |
-| Publication state | `v0.1.105` committed, tagged, pushed, published, public ZIP inspected, installed on `hbf-staging` through Alynt Plugin Updater, and all five account-email templates resent through the site mail path | Mailbox confirmation pending |
+| Publication state | `v0.1.105` committed, tagged, pushed, published, public ZIP inspected, installed on `hbf-staging` through Alynt Plugin Updater, all five account-email templates resent through the site mail path, and mailbox screenshot accepted by the product owner | Closed |
+
+### Phase 1 P1-005 Email Body Typography Candidate
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Candidate version | `0.1.106` | Prepared locally |
+| Finding | Real mailbox review showed the corrected logo, but account-email body text still felt too small on larger screens | Confirmed |
+| Behavior correction | Account email body text now uses a 16px mobile/default fallback, 18px at tablet width, and 20px at desktop width through email-safe media queries while preserving the 16px fallback for clients that ignore responsive CSS | Implemented |
+| Regression coverage | Added email renderer coverage for the `agw-email-body` class, 16px inline fallback, and tablet/desktop media-query sizes | Verified |
+| Focused tests | 19 tests, 135 assertions | Passed |
+| Full tests | 289 tests, 1,921 assertions | Passed |
+| Coding standards | Full PHPCS/WPCS project scan | Passed |
+| PHP syntax | Project PHP syntax sweep outside dependencies | Passed |
+| Build and translations | Production assets rebuilt; POT regenerated with 997 strings and `0.1.106` metadata | Passed |
+| Publication state | Not committed, tagged, pushed, published, installed, or retested on staging | Waiting for release approval |
 
 ## Phase 2: Core Account Acceptance
 
@@ -449,7 +464,8 @@ Release is approved only when all statements below are true:
 | `P1-001` | 1 | Medium | Customer wp-admin blocking and admin-bar filtering were registered while Frontend Output was disabled. The existing `hbf-staging` stack masked the behavior, producing no active/inactive runtime delta. | Product owner | Frontend Output is the master safety toggle; both policies now honor it in `v0.1.99`. | Disposable-role comparison, isolated regression tests, exact-package Plugin Tester smoke, public asset verification, Alynt Plugin Updater installation, and installed-copy staging role retest | Closed |
 | `P1-002` | 1 | Medium | The configured `/terms/` and `/privacy/` paths did not resolve directly, and their redirected `/legal/terms/` and `/legal/privacy/` destinations were not anonymously reachable while Force Login owned public access. | Site owner | Use `/legal/terms/` and `/legal/privacy/` as the Account Gateway settings. Do not exempt them from Force Login on `hbf-staging`, because Force Login is staging-only. | Saved settings, published custom `legal` post mappings, and anonymous HTTP 302 confirmation | Closed for staging |
 | `P1-003` | 1 | Medium | Gateway Screen Preview links on `hbf-staging` redirected to `/wp-admin/` instead of rendering the standalone preview page. | Product owner | Closed by `v0.1.104`: preview links use a nonce-protected front-end endpoint with compact screen codes to avoid incumbent login-redirect substring matching. | Public release inspection, Alynt Plugin Updater install, and authenticated compact-code preview retest returning `HTTP/1.1 200 OK` with zero redirects | Closed |
-| `P1-004` | 1 / 3 | Medium | Account-email logo rendered at raw source-image scale in a real mailbox, overwhelming the email layout. | Product owner | Confirm the resent `v0.1.105` mailbox rendering after explicit email logo width attributes and inline constrained dimensions were released and installed. | Local candidate tests, package inspection, updater install `0.1.104 -> 0.1.105`, installed-file verification, and five resent account-email templates | Open mailbox confirmation |
+| `P1-004` | 1 / 3 | Medium | Account-email logo rendered at raw source-image scale in a real mailbox, overwhelming the email layout. | Product owner | Closed by `v0.1.105`: explicit email logo width attributes and inline constrained dimensions were released, installed, resent, and accepted in a real mailbox screenshot. | Local candidate tests, package inspection, updater install `0.1.104 -> 0.1.105`, installed-file verification, five resent account-email templates, and mailbox screenshot confirmation | Closed |
+| `P1-005` | 1 / 3 | Low | Account-email body text felt too small during real mailbox review after logo correction. | Product owner | Prepare `v0.1.106` with responsive account email body text: 16px mobile/default fallback, 18px tablet, and 20px desktop. | Local candidate tests, package inspection, updater install, and resent mailbox evidence | Open corrective release |
 
 Severity guidance:
 
@@ -492,7 +508,8 @@ Severity guidance:
 - The installed-copy disabled-output retest passed for disposable administrator, shop-manager, and customer roles, with both toolbar input states preserved and wp-admin policy evaluation returning without redirect. Every QA identity was removed. `P1-001` is closed.
 - Representative HBF branding, copy, routes, customer username format, rich email templates, retention settings, and dashboard links are configured while all public-output switches remain disabled. Eight saved preview states and five email previews render structurally, public routes remain unchanged, all six tables remain empty, and zero QA users remain.
 - Finding `P1-002` is closed for staging: Account Gateway now saves `/legal/terms/` and `/legal/privacy/`, both paths map to published custom `legal` posts, and Force Login interception is accepted because it is staging-only. The first email/provider/webhook acceptance attempt produced no external acceptance evidence because the site-owned email test recipient, Turnstile keys, Reoon API key, webhook URL, and webhook signing secret were empty. The test recipient was then configured, and all five Account Gateway email templates were accepted by `wp_mail()` with Frontend Output and registration still disabled. After the first email run was observed as simulated by the mail stack, the five templates were resent successfully; mailbox-side evidence remains pending.
-- Finding `P1-004` records that the real mailbox render showed the brand logo at raw source scale. Public `v0.1.105` constrains email logos with explicit width attributes and inline dimensions, adds regression coverage, passes focused and full PHPUnit, PHPCS, PHP syntax checks, build, and POT regeneration, has been installed on `hbf-staging` through Alynt Plugin Updater, and resent all five account-email templates with `email_logo_max_width` set to 150px. Mailbox-side confirmation remains pending.
+- Finding `P1-004` is closed: public `v0.1.105` constrains email logos with explicit width attributes and inline dimensions, adds regression coverage, passes focused and full PHPUnit, PHPCS, PHP syntax checks, build, and POT regeneration, has been installed on `hbf-staging` through Alynt Plugin Updater, resent all five account-email templates with `email_logo_max_width` set to 150px, and was accepted in real mailbox review.
+- Finding `P1-005` records that the real mailbox render now has acceptable logo sizing but the email body copy should be more readable. Local `v0.1.106` candidate work adds responsive body text sizing with a 16px mobile/default fallback, 18px tablet sizing, and 20px desktop sizing, plus focused regression coverage. Release, updater installation, resend, and mailbox retest are pending approval.
 - Visual review captured all eight gateway states across `390x844`, `800x900`, and `1440x1000` using current staging settings, installed frontend assets, and configured media while public output remained disabled. The fallback visual matrix passed for overflow, branding, WordPress-logo absence, and obvious layout overlap.
 - Finding `P1-003` initially recorded that the actual Gateway Screen Preview admin-post route redirected to `/wp-admin/` in authenticated browser testing. The issue is now closed by the `v0.1.104` compact-code front-end preview endpoint; legal, email, and integration inputs remain before route handover. Route handover still requires a separate explicit approval.
 - Local `v0.1.100` candidate work moves Gateway Screen Preview links to the settings-page admin route while retaining the legacy admin-post handler, adds focused route/link coverage, passes 287 tests and 1,908 assertions, PHPCS, changed-file PHP syntax validation, build validation, and POT regeneration. Release, updater installation, and staging retest are waiting for explicit approval.

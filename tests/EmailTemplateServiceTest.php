@@ -115,6 +115,18 @@ class EmailTemplateServiceTest extends TestCase {
 		$this->assertStringContainsString( 'display:block;margin:0 auto;', $rendered['html'] );
 	}
 
+	public function test_email_body_uses_responsive_reading_sizes() {
+		$service  = new ALYNT_AG_Email_Template_Service();
+		$rendered = $service->render( 'password_changed', $service->preview_tokens(), ALYNT_AG_Settings_Schema::defaults() );
+
+		$this->assertStringContainsString( 'class="agw-email-body"', $rendered['html'] );
+		$this->assertStringContainsString( 'font-size:16px;line-height:1.6;', $rendered['html'] );
+		$this->assertStringContainsString( '@media screen and (min-width: 600px)', $rendered['html'] );
+		$this->assertStringContainsString( 'font-size: 18px !important;', $rendered['html'] );
+		$this->assertStringContainsString( '@media screen and (min-width: 960px)', $rendered['html'] );
+		$this->assertStringContainsString( 'font-size: 20px !important;', $rendered['html'] );
+	}
+
 	public function test_render_strips_unsafe_markup_and_escapes_token_markup() {
 		$service  = new ALYNT_AG_Email_Template_Service();
 		$settings = array_merge(
