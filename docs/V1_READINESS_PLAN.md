@@ -2,8 +2,8 @@
 
 ## Status
 
-- Current phase: Phase 1 is active. Public `v0.1.110` is updater-verified on `hbf-staging`, representative HBF configuration is saved, visual preview evidence is captured, legal destinations are configured for staging, email test sends are accepted by the site mail path, and `P1-004` email-logo plus `P1-005` email typography corrections are mailbox-confirmed and closed. Turnstile/Reoon configuration, temporary webhook acceptance, route handover, and post-handover browser acceptance are recorded. Permanent webhook receiver configuration, full frontend registration provider success, and WooCommerce/customer dashboard journey acceptance remain gated.
-- Product baseline: `v0.1.110`, released, public-asset verified, and updater-verified on production-like staging.
+- Current phase: Phase 2 is active. Public `v0.1.111` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and a disposable pending registration now reaches `registration_sent=1` without creating a WordPress user before confirmation/password completion. Confirmation-link completion, permanent webhook receiver configuration, full frontend registration provider success with the live challenge path, and WooCommerce/customer dashboard journey acceptance remain gated.
+- Product baseline: `v0.1.111`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility.
@@ -367,7 +367,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [ ] Verify login redirects preserve only safe destinations and do not create loops.
 - [ ] Verify public registration is unavailable while account creation is disabled.
 - [ ] Verify the full confirmation-first registration flow when account creation is enabled.
-- [ ] Confirm no WordPress user is created before email confirmation and password completion.
+- [x] Confirm no WordPress user is created before email confirmation and password completion.
 - [ ] Verify pending-registration expiry, invalid tokens, used tokens, and resend behavior.
 - [ ] Verify generated usernames follow the configured pattern while login remains email-only.
 - [ ] Verify password creation requires matching fields and the configured minimum policy.
@@ -379,6 +379,23 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [ ] Verify the emergency bypass exposes only native login and never authenticates a visitor.
 - [ ] Verify all public account routes avoid the native WordPress shell except through deliberate bypass.
 - [ ] Verify frontend output can be disabled to restore native behavior without losing settings.
+
+### Phase 2 Initial Account Acceptance Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Installed gateway | Alynt Account Gateway is active on `hbf-staging` at `v0.1.111` after updater installation from the public release asset | Verified |
+| Public route shell | `/login/`, `/account?action=lostpassword`, `/account?action=register`, and `/account?action=logout` render Alynt Account Gateway markup and return zero native WordPress or WP Custom Login Manager markers | Passed |
+| Native redirects | `/wp-login.php` redirects to the branded login route, `/my-account/` redirects to branded login with `redirect_to`, and unauthenticated `/wp-admin/` redirects to the configured after-login destination | Passed |
+| Regression found | The first disposable registration-start POST on `v0.1.110` returned `200 OK` and created zero pending/consent rows because gateway rendering ran before auth/registration POST handlers | Confirmed |
+| Corrective release | Public `v0.1.111` moves auth and registration POST handlers to `template_redirect` priority `0`, before the gateway renderer at priority `1`, while preserving the canonical redirect fix | Released and updater-installed |
+| Release checks | `v0.1.111` passed focused routing tests, full PHPUnit with 293 tests and 1,937 assertions, PHPCS, build, POT regeneration, PHP syntax checks for 108 files, and public ZIP inspection | Passed |
+| Public package | `alynt-account-gateway-v0.1.111.zip`; one root item; 45 runtime files; zero development files; SHA-256 `45386200DB17501C006CBF9F17EDBCACA4A8EE1765CD9156DAFB9EDFB1085621` | Verified |
+| Updater install | Alynt Plugin Updater refreshed the managed release metadata and installed `0.1.110 -> 0.1.111` on `hbf-staging` | Passed |
+| Registration start | A fresh disposable registration POST redirected to `/account?action=register&registration_sent=1` | Passed |
+| Provider policy | With the configured `turnstile_or_reoon` policy, the registration start logged Turnstile as blocked because no challenge token was submitted and Reoon as `valid` and unblocked, allowing the flow because one configured provider succeeded | Passed |
+| Pending state | Pending registration count moved from `0` to `1`; consent record count moved from `0` to `1`; no WordPress user exists for the disposable QA registration prefix | Passed |
+| Completion state | Confirmation-link set-password completion is waiting on the real mailbox confirmation link and has not yet been executed | Pending user action |
 
 ## Phase 3: Email And Deliverability Acceptance
 
@@ -526,6 +543,7 @@ Release is approved only when all statements below are true:
 | `P1-003` | 1 | Medium | Gateway Screen Preview links on `hbf-staging` redirected to `/wp-admin/` instead of rendering the standalone preview page. | Product owner | Closed by `v0.1.104`: preview links use a nonce-protected front-end endpoint with compact screen codes to avoid incumbent login-redirect substring matching. | Public release inspection, Alynt Plugin Updater install, and authenticated compact-code preview retest returning `HTTP/1.1 200 OK` with zero redirects | Closed |
 | `P1-004` | 1 / 3 | Medium | Account-email logo rendered at raw source-image scale in a real mailbox, overwhelming the email layout. | Product owner | Closed by `v0.1.105`: explicit email logo width attributes and inline constrained dimensions were released, installed, resent, and accepted in a real mailbox screenshot. | Local candidate tests, package inspection, updater install `0.1.104 -> 0.1.105`, installed-file verification, five resent account-email templates, and mailbox screenshot confirmation | Closed |
 | `P1-005` | 1 / 3 | Low | Account-email body text felt too small during real mailbox review after logo correction. `v0.1.106` did not visibly change the real mailbox because the client ignored the wrapper/media-query approach. | Product owner | Closed by `v0.1.107`: inline paragraph/list-item body sizing was released, installed, resent, and accepted in real mailbox review on mobile and desktop. | Focused and full candidate tests, PHPCS, syntax sweep, build, POT regeneration, package inspection, updater install `0.1.106 -> 0.1.107`, installed-file verification, five resent account-email templates, and mailbox screenshot confirmation | Closed |
+| `P2-001` | 2 | High | Branded auth and registration form POSTs were rendered before they could be processed after the `v0.1.109` canonical-redirect fix moved gateway rendering earlier. | Product owner | Closed by `v0.1.111`: auth and registration POST handlers now run at `template_redirect` priority `0`, ahead of gateway rendering at priority `1`, with regression coverage preserving both handler order and canonical redirect behavior. | Failed `v0.1.110` disposable registration POST with zero pending/consent rows; focused and full tests; PHPCS; build; POT; syntax sweep; public ZIP inspection; updater install `0.1.110 -> 0.1.111`; successful registration POST redirecting to `registration_sent=1` with pending/consent rows and zero created user accounts | Closed |
 
 Severity guidance:
 
@@ -548,6 +566,7 @@ Severity guidance:
 | 2026-07-16 | Use renderer-generated local HTML with inline staging assets and media for visual review when the authenticated admin preview route redirected to `/wp-admin/`. | Preserves disabled public output and allows responsive visual evidence to proceed, while keeping the broken admin preview route open as `P1-003`. | `visual-review/visual-review-results.json`, contact sheets, and authenticated browser redirect observation. |
 | 2026-07-16 | Use `/legal/terms/` and `/legal/privacy/` for the staging Account Gateway legal links, without exempting those paths from Force Login. | The legal entries are published custom `legal` posts, and Force Login is intentionally staging-only, so anonymous interception is an accepted staging constraint rather than a plugin blocker. | Saved Account Gateway settings, `url-to-id` checks, published post metadata, and anonymous HTTP 302 responses. |
 | 2026-07-16 | Complete the route handover on `hbf-staging` after releasing targeted compatibility fixes through `v0.1.110`. | Force Login needed a narrow gateway-route bypass, WordPress canonical redirects needed to yield to the gateway renderer, and the Turnstile API URL needed to avoid WordPress version query warnings before public route ownership could be accepted. | Public releases `v0.1.108`, `v0.1.109`, and `v0.1.110`; Alynt Plugin Updater installs; HTTP route checks; browser smoke evidence. |
+| 2026-07-16 | Treat `v0.1.111` as a blocking Phase 2 corrective release before continuing full account-flow testing. | The first real registration-start POST proved that screen rendering could preempt form handlers, so completing Phase 2 on `v0.1.110` would test a broken submission path. | `P2-001` finding, hook-priority regression test, public release `v0.1.111`, updater install, and successful disposable registration-start retest. |
 
 ## Progress Notes
 
@@ -584,3 +603,4 @@ Severity guidance:
 - Public `v0.1.108` was published and updater-installed on `hbf-staging` to add a narrow Force Login bypass for configured Alynt Account Gateway routes while Frontend Output is enabled. The first handover attempt proved `/account` action routes rendered correctly but exposed a canonical redirect issue for `/login/`, so the route switch was rolled back before the corrective release.
 - Public `v0.1.109` was published and updater-installed on `hbf-staging` to render the gateway before WordPress canonical redirects. The controlled handover then succeeded: WP Custom Login Manager was deactivated, Frontend Output and registration were enabled, `/login/`, `/account?action=lostpassword`, and `/account?action=register` rendered Alynt Account Gateway, `/wp-login.php` redirected to the branded login route, the emergency bypass returned only native login, `/my-account/` redirected safely to branded login, and legal pages remained protected by Force Login.
 - Public `v0.1.110` was published and updater-installed on `hbf-staging` to load the Cloudflare Turnstile API without a WordPress version query. Fresh browser smoke on the registration route showed the Turnstile widget, clean API URL, Alynt gateway shell, and no fresh console warnings or errors. Temporary helpers were removed, the temporary webhook receiver remains deleted, and current webhook settings are empty.
+- Phase 2 began with route/native-screen leakage checks passing for login, lost-password, registration, and logout. The first disposable registration-start POST on `v0.1.110` exposed `P2-001`: gateway rendering ran before form handlers, returning `200 OK` and creating zero pending/consent rows. Public `v0.1.111` moves auth and registration handlers before gateway rendering, passed the release checks, was installed through Alynt Plugin Updater, and retested successfully: registration start now redirects to `registration_sent=1`, creates one pending row and one consent row, logs Turnstile missing plus Reoon valid under the either-provider policy, and creates no WordPress user before confirmation/password completion. The confirmation-link set-password step is waiting on the real mailbox link.
