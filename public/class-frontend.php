@@ -184,13 +184,15 @@ class ALYNT_AG_Frontend {
 	 */
 	public function maybe_render_gateway_preview() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Verified after screen normalization.
-		$screen = isset( $_GET['alynt_ag_preview_gateway'] ) ? sanitize_key( wp_unslash( $_GET['alynt_ag_preview_gateway'] ) ) : '';
-		if ( '' === $screen ) {
+		$preview = isset( $_GET['alynt_ag_preview_gateway'] ) ? sanitize_key( wp_unslash( $_GET['alynt_ag_preview_gateway'] ) ) : '';
+		if ( '1' !== $preview ) {
 			return;
 		}
 
-		$screens = $this->preview_screens();
-		$screen  = isset( $screens[ $screen ] ) ? $screen : 'login';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Verified after screen normalization.
+		$screen_code = isset( $_GET['alynt_ag_preview_screen'] ) ? sanitize_key( wp_unslash( $_GET['alynt_ag_preview_screen'] ) ) : 'l';
+		$screens     = $this->preview_screen_codes();
+		$screen      = isset( $screens[ $screen_code ] ) ? $screens[ $screen_code ] : 'login';
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( esc_html__( 'You do not have permission to preview gateway screens.', 'alynt-account-gateway' ) );
@@ -462,16 +464,16 @@ class ALYNT_AG_Frontend {
 	 *
 	 * @return array<string,bool>
 	 */
-	private function preview_screens() {
+	private function preview_screen_codes() {
 		return array(
-			'dashboard'             => true,
-			'login'                 => true,
-			'register'              => true,
-			'lostpassword'          => true,
-			'setpassword'           => true,
-			'logout'                => true,
-			'registration_disabled' => true,
-			'invalidlink'           => true,
+			'b' => 'dashboard',
+			'l' => 'login',
+			'r' => 'register',
+			'p' => 'lostpassword',
+			's' => 'setpassword',
+			'o' => 'logout',
+			'd' => 'registration_disabled',
+			'i' => 'invalidlink',
 		);
 	}
 

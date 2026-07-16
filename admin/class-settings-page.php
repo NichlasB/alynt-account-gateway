@@ -4323,7 +4323,8 @@ class ALYNT_AG_Settings_Page {
 				<?php
 				$preview_url = add_query_arg(
 					array(
-						'alynt_ag_preview_gateway' => $screen,
+						'alynt_ag_preview_gateway' => '1',
+						'alynt_ag_preview_screen'  => $this->gateway_preview_screen_code( $screen ),
 					),
 					home_url( '/' )
 				);
@@ -4400,6 +4401,27 @@ class ALYNT_AG_Settings_Page {
 			'invalidlink'           => __( 'Invalid Link', 'alynt-account-gateway' ),
 			'dashboard'             => __( 'Dashboard', 'alynt-account-gateway' ),
 		);
+	}
+
+	/**
+	 * Return compact preview screen code for URLs.
+	 *
+	 * @param string $screen Screen key.
+	 * @return string
+	 */
+	private function gateway_preview_screen_code( $screen ) {
+		$codes = array(
+			'login'                 => 'l',
+			'register'              => 'r',
+			'lostpassword'          => 'p',
+			'setpassword'           => 's',
+			'logout'                => 'o',
+			'registration_disabled' => 'd',
+			'invalidlink'           => 'i',
+			'dashboard'             => 'b',
+		);
+
+		return isset( $codes[ $screen ] ) ? $codes[ $screen ] : 'l';
 	}
 
 	/**

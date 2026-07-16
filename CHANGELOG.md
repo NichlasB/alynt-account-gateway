@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.104 - 2026-07-16
+
+### Fixed
+
+- Changed Gateway Screen Preview URLs to use compact screen codes so incumbent login-redirect plugins do not preempt the login preview.
+
 ## 0.1.103 - 2026-07-16
 
 ### Fixed

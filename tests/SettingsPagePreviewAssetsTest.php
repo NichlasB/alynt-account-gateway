@@ -99,7 +99,9 @@ class SettingsPagePreviewAssetsTest extends TestCase {
 		$this->invoke_helper( $settings_page, 'render_gateway_preview_tools' );
 		$output = ob_get_clean();
 
-		$this->assertStringContainsString( 'https://example.test/?alynt_ag_preview_gateway=login', $output );
+		$this->assertStringContainsString( 'https://example.test/?alynt_ag_preview_gateway=1', $output );
+		$this->assertStringContainsString( 'alynt_ag_preview_screen=l', $output );
+		$this->assertStringNotContainsString( 'alynt_ag_preview_gateway=login', $output );
 		$this->assertStringContainsString( 'alynt_ag_preview_nonce=test-nonce', $output );
 		$this->assertStringNotContainsString( 'admin-ajax.php?action=alynt_ag_preview_gateway', $output );
 		$this->assertStringNotContainsString( 'options-general.php?page=alynt-account-gateway', $output );

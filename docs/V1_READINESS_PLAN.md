@@ -223,6 +223,21 @@ The maintenance release is published, its public package is verified, and its up
 | Build and translations | Production assets rebuilt; POT regenerated with 997 strings and `0.1.103` metadata | Passed |
 | Publication state | Local final corrective candidate prepared after release approval; public release and staging updater retest in progress | Active |
 
+### Phase 1 P1-003 URL Code Corrective Candidate
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Candidate version | `0.1.104` | Prepared after `0.1.103` staging retest |
+| Staging retest finding | The front-end preview endpoint still redirected because WP Custom Login Manager redirects logged-in administrators when the request URI contains `login`; the login preview URL contained `alynt_ag_preview_gateway=login` | Root cause refined |
+| Behavior correction | Gateway Screen Preview URLs now use compact screen codes, e.g. `alynt_ag_preview_gateway=1&alynt_ag_preview_screen=l` | Implemented |
+| Rationale | Compact codes keep previews admin-only and nonce-protected while avoiding incumbent substring-based login redirects | Recorded |
+| Focused tests | 3 tests, 18 assertions | Passed |
+| Full tests | 287 tests, 1,911 assertions | Passed |
+| Coding standards | Full PHPCS/WPCS project scan | Passed |
+| PHP syntax | Changed PHP files | Passed |
+| Build and translations | Production assets rebuilt; POT regenerated with 997 strings and `0.1.104` metadata | Passed |
+| Publication state | Local compact-code corrective candidate prepared after release approval; public release and staging updater retest in progress | Active |
+
 Representative configuration is complete for the inputs currently available. Frontend Output remains disabled. Before route handover, the legal-page decision, a site-owned email test recipient, integration credential decisions, and the preview-route issue remain open.
 
 ## Phase 2: Core Account Acceptance
@@ -435,3 +450,4 @@ Severity guidance:
 - Public `v0.1.100` installed through Alynt Plugin Updater on `hbf-staging`, but authenticated settings-page preview requests still redirected before standalone preview output rendered. Local `v0.1.101` corrective candidate moves preview buttons to authenticated admin AJAX while preserving both fallback handlers; focused tests, full suite, PHPCS, syntax checks, build, and POT regeneration passed.
 - Public `v0.1.101` installed through Alynt Plugin Updater on `hbf-staging`; admin AJAX was reachable, but the preview action still redirected before standalone output rendered. Local `v0.1.102` second corrective candidate isolates preview output from broad site head/footer hooks; focused tests, full suite, PHPCS, syntax checks, build, and POT regeneration passed.
 - Temporary staging-only redirect tracing identified WP Custom Login Manager as the preempting redirect source at `plugins_loaded`. Local `v0.1.103` final corrective candidate moves preview links to a nonce-protected front-end endpoint guarded by `manage_options`; focused tests, full suite, PHPCS, syntax checks, build, and POT regeneration passed.
+- Public `v0.1.103` installed through Alynt Plugin Updater on `hbf-staging`, but the login preview still redirected because the incumbent redirect plugin matches the substring `login` anywhere in the request URI. Local `v0.1.104` compact-code candidate removes screen names from preview URLs; focused tests, full suite, PHPCS, syntax checks, build, and POT regeneration passed.
