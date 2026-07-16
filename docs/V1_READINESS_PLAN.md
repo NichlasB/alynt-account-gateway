@@ -2,8 +2,8 @@
 
 ## Status
 
-- Current phase: Phase 1 is active. Public `v0.1.107` is updater-verified, representative HBF configuration is saved with all public-output switches disabled, visual preview evidence is captured, legal destinations are configured for staging, and email test sends are accepted by the site mail path. `P1-004` email-logo correction and `P1-005` email body typography are mailbox-confirmed and closed. Turnstile/Reoon configuration, temporary webhook acceptance, and route handover preflight are recorded; permanent webhook receiver configuration, full frontend provider success, live route handover, and post-handover acceptance remain gated.
-- Product baseline: `v0.1.107`, released, public-asset verified, and updater-verified on production-like staging.
+- Current phase: Phase 1 is active. Public `v0.1.110` is updater-verified on `hbf-staging`, representative HBF configuration is saved, visual preview evidence is captured, legal destinations are configured for staging, email test sends are accepted by the site mail path, and `P1-004` email-logo plus `P1-005` email typography corrections are mailbox-confirmed and closed. Turnstile/Reoon configuration, temporary webhook acceptance, route handover, and post-handover browser acceptance are recorded. Permanent webhook receiver configuration, full frontend registration provider success, and WooCommerce/customer dashboard journey acceptance remain gated.
+- Product baseline: `v0.1.110`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility.
@@ -19,7 +19,7 @@ Readiness work should prioritize runtime evidence, configuration safety, compati
 
 - Test the exact packaged build that would be released.
 - Use a production-like staging site before any live-site rollout.
-- Keep Frontend Output disabled until configuration and readiness checks pass.
+- Keep Frontend Output disabled until configuration and readiness checks pass, then enable it only through an approved handover window with rollback evidence.
 - Record versions, settings fingerprints, package hashes, browser evidence, and cleanup results.
 - Use site-owned test credentials and disposable test accounts; never commit secrets or personal data.
 - Preserve a restore point before package installation, configuration import, or transactional testing.
@@ -88,7 +88,7 @@ The Phase 1 handover sequence is: preserve a redacted incumbent-settings snapsho
 
 - [x] Install the current public release asset through the supported updater or package-install path.
 - [x] Verify Frontend Output remains disabled during initial configuration.
-- [ ] Configure and verify login path, account action base, after-login redirect, and emergency bypass.
+- [x] Configure and verify login path, account action base, after-login redirect, and emergency bypass.
 - [x] Configure logo, logo width, background image, colors, button colors, and typography using representative branding.
 - [x] Visually review saved gateway screen states at `390x844`, `800x900`, and `1440x1000` while public output remains disabled.
 - [x] Configure screen-specific welcome and instruction copy.
@@ -100,7 +100,7 @@ The Phase 1 handover sequence is: preserve a redacted incumbent-settings snapsho
 - [x] Configure Turnstile, Reoon, and webhook credentials only where acceptance requires them.
 - [x] Review the plugin readiness summary and record every remaining release-blocking item.
 - [x] Export a redacted configuration snapshot for recovery and portability testing.
-- [ ] Obtain approval before enabling Frontend Output on staging.
+- [x] Obtain approval before enabling Frontend Output on staging.
 
 ### Phase 1 Installation Evidence
 
@@ -242,7 +242,7 @@ The maintenance release is published, its public package is verified, and its up
 | Cleanup | Temporary MU trace, helper files, and temporary admin session tokens removed | Completed |
 | Finding status | `P1-003` | Closed |
 
-Representative configuration is complete for the inputs currently available. Frontend Output remains disabled. Before route handover, mailbox-side email evidence, provider configuration and behavior, webhook configuration and delivery, and route-switch approval remain open.
+Representative configuration is complete for the inputs currently available. This statement captured the pre-handover state; later Phase 1 evidence supersedes it for current staging status. Before route handover, mailbox-side email evidence, provider configuration and behavior, webhook configuration and delivery, and route-switch approval remained open.
 
 ### Phase 1 Integration Gate
 
@@ -270,7 +270,7 @@ Representative configuration is complete for the inputs currently available. Fro
 
 | Item | Result | Status |
 | --- | --- | --- |
-| Installed gateway | Alynt Account Gateway is active on `hbf-staging` at `v0.1.107` | Verified |
+| Installed gateway | Alynt Account Gateway is active on `hbf-staging` at `v0.1.107` during preflight; later handover evidence advances the installed version to `v0.1.110` | Verified; superseded by handover evidence |
 | Incumbent route owner | WP Custom Login Manager `1.2.0` remains active and continues to own `/login/` before handover | Verified |
 | Force Login | Force Login is active as plugin slug `wp-force-login` at `5.6.3` | Verified |
 | Current public route behavior | `/login/` returns HTTP 200; `/account?action=lostpassword` redirects to native `wp-login.php` through the incumbent/Force Login stack before Alynt Account Gateway owns the route | Baseline preserved |
@@ -279,8 +279,29 @@ Representative configuration is complete for the inputs currently available. Fro
 | Emergency bypass | Emergency bypass key is present; runtime source and tests confirm `wp-login.php?alynt_ag_bypass={key}` bypasses only Alynt Account Gateway's native-login redirect and does not authenticate the visitor | Source/test verified; live behavior waits for frontend handover |
 | Provider credentials | Turnstile site key, Turnstile secret key, and Reoon API key remain present | Configured |
 | Webhook cleanup correction | A follow-up preflight found the current schema key `account_created_webhook` still held the temporary receiver value after the earlier legacy-key cleanup. The current schema webhook URL, signing secret, and debug payload setting now resolve to zero-byte values. | Corrected |
-| Next gate | Enabling Frontend Output, enabling registration, and changing/deactivating incumbent route ownership still require explicit route-handover approval and rollback steps | Gated |
+| Next gate | Enabling Frontend Output, enabling registration, and changing/deactivating incumbent route ownership required explicit route-handover approval and rollback steps; approval was later granted and acceptance is recorded below | Completed |
 
+### Phase 1 Route Handover Acceptance
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Approval and scope | Route handover was approved for `hbf-staging` only. The production HBF site remained excluded. | Passed |
+| Compatibility release | Public `v0.1.108` added a Force Login compatibility bypass for only the configured login and account-action routes, and only while Frontend Output is enabled. Legal pages and the dashboard remain protected by Force Login. | Released and updater-installed |
+| Canonical redirect release | Public `v0.1.109` moved gateway rendering ahead of WordPress canonical redirects so `/login/` renders the gateway instead of redirecting to `/`. | Released and updater-installed |
+| Turnstile script release | Public `v0.1.110` loads the Cloudflare Turnstile API without a WordPress version query, removing the provider console warning on a fresh registration-page load. | Released and updater-installed |
+| Package and release checks | `v0.1.110` passed the full PHPUnit suite with 292 tests and 1,932 assertions, PHPCS, build, POT regeneration, PHP syntax checks, and public ZIP inspection. The public runtime ZIP contains 45 runtime files and no development files; SHA-256 `99C6648853AAEDD1BC79B01ED97DBB77082B0F0AB33B98114A23DFEADF397C13`. | Passed |
+| Installed state | Alynt Account Gateway is active at `0.1.110`; WP Custom Login Manager is inactive; Force Login remains active at `5.6.3`; Frontend Output and registration are enabled for acceptance. | Verified |
+| Webhook state | The current schema webhook URL and signing secret resolve to empty values after temporary receiver cleanup. Debug payload logging is disabled. | Verified |
+| Login route | `/login/` returns HTTP 200 with Alynt Account Gateway markup and no WP Custom Login Manager markup. | Passed |
+| Account action routes | `/account?action=lostpassword` and `/account?action=register` return HTTP 200 with Alynt Account Gateway forms and no native WordPress shell. | Passed |
+| Native login redirect | `/wp-login.php` redirects to the configured branded login route. | Passed |
+| Emergency bypass | `wp-login.php?alynt_ag_bypass={redacted}` returns the native WordPress login form without authenticating the visitor and without Alynt Account Gateway form markup. | Passed |
+| Account redirect | `/my-account/` redirects unauthenticated visitors to the branded login route with a safe `redirect_to` value. | Passed |
+| Staging-only Force Login boundary | `/legal/terms/` and `/legal/privacy/` continue to redirect to the branded login route under Force Login, matching the approved staging-only constraint. | Passed |
+| Browser smoke | Fresh browser checks confirmed Alynt gateway body/shell/form output for login, lost-password, and registration. Registration shows the Turnstile widget, uses the clean Cloudflare API URL, and produced no fresh console warnings or errors. | Passed |
+| Cleanup | Temporary updater helper files were removed. No webhook receiver, payload body, bypass key, or credential evidence was retained in the repository. | Passed |
+
+Post-handover route acceptance is complete for `hbf-staging`. Full form submission, real Turnstile challenge success, permanent webhook delivery, and WooCommerce/customer dashboard journeys remain in later phases.
 ### Phase 1 Email, Provider, And Webhook Acceptance Attempt
 
 | Item | Result | Status |
@@ -495,11 +516,11 @@ Release is approved only when all statements below are true:
 
 | ID | Phase | Severity | Finding | Owner | Decision | Retest Evidence | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| `P0-001` | 0 / 1 | High | WP Custom Login Manager and Force Login currently overlap Alynt Account Gateway routes and authentication redirects. | Product + site owner | Use a controlled handover with Frontend Output disabled, verified emergency access, and documented rollback. | Phase 1 route and rollback evidence | Open |
+| `P0-001` | 0 / 1 | High | WP Custom Login Manager and Force Login overlapped Alynt Account Gateway routes and authentication redirects before handover. | Product + site owner | Closed for `hbf-staging` by controlled handover: ACG owns configured gateway routes, WP Custom Login Manager is inactive, Force Login remains active with a narrow route bypass, and the emergency bypass is verified. | `v0.1.108` Force Login compatibility, `v0.1.109` canonical redirect correction, `v0.1.110` Turnstile script cleanup, route checks, browser smoke, and updater installation evidence | Closed for staging |
 | `P0-002` | 0 | Medium | The incumbent login page throws `this.initKeyboardNavigation is not a function`. | Incumbent plugin owner / site owner | Preserve as a pre-install baseline; verify it disappears with the controlled handover and does not recur in Alynt Account Gateway. | Browser console comparison after handover | Open baseline |
 | `P0-003` | 0 | Low | WP-CLI reports early text-domain loading for `wp-custom-login-manager`. | Incumbent plugin owner / site owner | Preserve as a pre-install baseline and keep it out of Alynt Account Gateway defect attribution. | Post-handover WP-CLI comparison | Open baseline |
 | `P0-004` | 0 | Low | Unrelated Brizy, Brizy Pro, and Presto Player Pro updates were available during baseline capture. | Site owner | Freeze unrelated updates during acceptance unless separately approved; record any unavoidable drift. | Version comparison before each acceptance run | Monitoring |
-| `P0-005` | 0 / 1 | Low | The incumbent Turnstile script warns that its `onTurnstileReady` callback is unavailable at load time. | Incumbent plugin owner / site owner | Preserve as an incumbent-only baseline; zero Alynt Account Gateway assets were loaded when reproduced. | Browser console comparison after handover | Open baseline |
+| `P0-005` | 0 / 1 | Low | The incumbent Turnstile script warned that its `onTurnstileReady` callback was unavailable at load time. | Incumbent plugin owner / site owner | Preserve as an incumbent-only baseline; zero Alynt Account Gateway assets were loaded when reproduced. ACG registration now loads Turnstile without a fresh console warning after `v0.1.110`. | Browser console comparison after handover | Closed baseline |
 | `P1-001` | 1 | Medium | Customer wp-admin blocking and admin-bar filtering were registered while Frontend Output was disabled. The existing `hbf-staging` stack masked the behavior, producing no active/inactive runtime delta. | Product owner | Frontend Output is the master safety toggle; both policies now honor it in `v0.1.99`. | Disposable-role comparison, isolated regression tests, exact-package Plugin Tester smoke, public asset verification, Alynt Plugin Updater installation, and installed-copy staging role retest | Closed |
 | `P1-002` | 1 | Medium | The configured `/terms/` and `/privacy/` paths did not resolve directly, and their redirected `/legal/terms/` and `/legal/privacy/` destinations were not anonymously reachable while Force Login owned public access. | Site owner | Use `/legal/terms/` and `/legal/privacy/` as the Account Gateway settings. Do not exempt them from Force Login on `hbf-staging`, because Force Login is staging-only. | Saved settings, published custom `legal` post mappings, and anonymous HTTP 302 confirmation | Closed for staging |
 | `P1-003` | 1 | Medium | Gateway Screen Preview links on `hbf-staging` redirected to `/wp-admin/` instead of rendering the standalone preview page. | Product owner | Closed by `v0.1.104`: preview links use a nonce-protected front-end endpoint with compact screen codes to avoid incumbent login-redirect substring matching. | Public release inspection, Alynt Plugin Updater install, and authenticated compact-code preview retest returning `HTTP/1.1 200 OK` with zero redirects | Closed |
@@ -526,6 +547,7 @@ Severity guidance:
 | 2026-07-15 | Require customer wp-admin blocking and admin-bar filtering to honor Frontend Output. | The master toggle exists so a site can configure the plugin before it changes public/account behavior. HBF staging masks the issue through equivalent incumbent policy, but the plugin contract remains violated on an otherwise neutral stack. | `PHASE_1_ROLE_POLICY_TEST.json`, source inspection, and requirement 24. |
 | 2026-07-16 | Use renderer-generated local HTML with inline staging assets and media for visual review when the authenticated admin preview route redirected to `/wp-admin/`. | Preserves disabled public output and allows responsive visual evidence to proceed, while keeping the broken admin preview route open as `P1-003`. | `visual-review/visual-review-results.json`, contact sheets, and authenticated browser redirect observation. |
 | 2026-07-16 | Use `/legal/terms/` and `/legal/privacy/` for the staging Account Gateway legal links, without exempting those paths from Force Login. | The legal entries are published custom `legal` posts, and Force Login is intentionally staging-only, so anonymous interception is an accepted staging constraint rather than a plugin blocker. | Saved Account Gateway settings, `url-to-id` checks, published post metadata, and anonymous HTTP 302 responses. |
+| 2026-07-16 | Complete the route handover on `hbf-staging` after releasing targeted compatibility fixes through `v0.1.110`. | Force Login needed a narrow gateway-route bypass, WordPress canonical redirects needed to yield to the gateway renderer, and the Turnstile API URL needed to avoid WordPress version query warnings before public route ownership could be accepted. | Public releases `v0.1.108`, `v0.1.109`, and `v0.1.110`; Alynt Plugin Updater installs; HTTP route checks; browser smoke evidence. |
 
 ## Progress Notes
 
@@ -558,3 +580,7 @@ Severity guidance:
 - Public `v0.1.103` installed through Alynt Plugin Updater on `hbf-staging`, but the login preview still redirected because the incumbent redirect plugin matches the substring `login` anywhere in the request URI. Local `v0.1.104` compact-code candidate removes screen names from preview URLs; focused tests, full suite, PHPCS, syntax checks, build, and POT regeneration passed.
 - Public `v0.1.104` was published from release commit `f449fba`. Build Release run `29490491996` passed and attached a verified 45-runtime-file updater asset with SHA-256 `A88D61F830A9C909A2ABCAB0BE569B23ED3555AB954144D3CB8ED2B2B65E60E3`.
 - Alynt Plugin Updater detected and installed `0.1.103 -> 0.1.104` on `hbf-staging`. The installed plugin is active at `0.1.104`, no update offer remains, no NULL activation placeholder appeared, and the compact-code authenticated login preview returned `HTTP/1.1 200 OK` with zero redirects and standalone gateway markup. Temporary trace files and admin session tokens were removed. `P1-003` is closed.
+
+- Public `v0.1.108` was published and updater-installed on `hbf-staging` to add a narrow Force Login bypass for configured Alynt Account Gateway routes while Frontend Output is enabled. The first handover attempt proved `/account` action routes rendered correctly but exposed a canonical redirect issue for `/login/`, so the route switch was rolled back before the corrective release.
+- Public `v0.1.109` was published and updater-installed on `hbf-staging` to render the gateway before WordPress canonical redirects. The controlled handover then succeeded: WP Custom Login Manager was deactivated, Frontend Output and registration were enabled, `/login/`, `/account?action=lostpassword`, and `/account?action=register` rendered Alynt Account Gateway, `/wp-login.php` redirected to the branded login route, the emergency bypass returned only native login, `/my-account/` redirected safely to branded login, and legal pages remained protected by Force Login.
+- Public `v0.1.110` was published and updater-installed on `hbf-staging` to load the Cloudflare Turnstile API without a WordPress version query. Fresh browser smoke on the registration route showed the Turnstile widget, clean API URL, Alynt gateway shell, and no fresh console warnings or errors. Temporary helpers were removed, the temporary webhook receiver remains deleted, and current webhook settings are empty.
