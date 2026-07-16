@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 2 is active. Public `v0.1.111` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, role access/admin-toolbar behavior passed for administrator, shop manager, and customer, rate-limit/password-policy failure states passed, pending-email/expired-token/used-token states passed, and emergency bypass behavior passed. Permanent webhook receiver configuration, full frontend Turnstile challenge success, remaining inactive-account/frontend-output restore states, and WooCommerce/customer dashboard journey acceptance remain gated.
+- Current phase: Phase 2 is active. Public `v0.1.111` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, role access/admin-toolbar behavior passed for administrator, shop manager, and customer, rate-limit/password-policy failure states passed, pending-email/expired-token/used-token states passed, emergency bypass behavior passed, and the Frontend Output disable/restore safety switch passed. Permanent webhook receiver configuration, full frontend Turnstile challenge success, remaining inactive-account and WooCommerce/customer dashboard journey acceptance remain gated.
 - Product baseline: `v0.1.111`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -378,7 +378,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [x] Verify other roles are redirected away from wp-admin without redirect loops.
 - [x] Verify the emergency bypass exposes only native login and never authenticates a visitor.
 - [ ] Verify all public account routes avoid the native WordPress shell except through deliberate bypass.
-- [ ] Verify frontend output can be disabled to restore native behavior without losing settings.
+- [x] Verify frontend output can be disabled to restore native behavior without losing settings.
 
 ### Phase 2 Initial Account Acceptance Evidence
 
@@ -491,6 +491,18 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | No authentication | The bypass response did not set a `wordpress_logged_in` cookie | Passed |
 | Admin still protected | Reusing the bypass visit cookie jar against `/wp-admin/` returned a redirect and no dashboard/admin-bar markers | Passed |
 | Cleanup | Temporary bypass-check helper was removed from `/tmp` on staging and from the local workflow work folder | Completed |
+
+### Phase 2 Frontend Output Safety Switch Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Baseline enabled state | With Frontend Output enabled, `/login/`, `/account?action=lostpassword`, and `/account?action=register` rendered Alynt Account Gateway markup, while `/wp-login.php` redirected to branded `/login/` | Passed |
+| Disabled setting | `frontend_enabled` was temporarily changed from `1` to `0`; `registration_enabled` remained `1` | Verified |
+| Disabled public routes | `/login/`, `/account?action=lostpassword`, and `/account?action=register` returned no Alynt Account Gateway markup while Frontend Output was disabled | Passed |
+| Disabled native login | `/wp-login.php` returned native WordPress login markup while Frontend Output was disabled | Passed |
+| Restored setting | `frontend_enabled` was restored to `1`; `registration_enabled` remained `1` | Restored |
+| Restored branded routes | `/login/`, `/account?action=lostpassword`, and `/account?action=register` again rendered Alynt Account Gateway markup, and `/wp-login.php` again redirected to branded `/login/` | Passed |
+| Settings retention | The safety-switch test changed only the Frontend Output toggle and preserved the registration toggle and route ownership after restoration | Passed |
 
 ## Phase 3: Email And Deliverability Acceptance
 
@@ -706,3 +718,4 @@ Severity guidance:
 - The Phase 2 rate-limit and password-policy slice passed: registration, resend-confirmation, login, and lost-password buckets were temporarily lowered to `1/1`, each produced the expected branded rate-limit redirect on the second matching POST, and the original staging values were restored. A disposable pending registration then verified password length, complexity, and mismatch failures, each staying branded with zero native markers and no WordPress user creation. Disposable rows and temporary helper files were removed.
 - The Phase 2 pending-account and token-state slice passed: a pending-only email could not log in and did not create a WordPress user, an expired confirmation link rendered the branded invalid/expired state without password fields or native markers, and a consumed confirmation link did the same after a real disposable registration completion. The disposable user, plugin-owned rows, and temporary helper files were removed.
 - The Phase 2 emergency-bypass slice passed: normal anonymous `/wp-login.php` redirected to branded `/login/`; the redacted emergency bypass returned only native WordPress login markup, no Alynt Account Gateway form markup, no logged-in cookie, and no `/wp-admin/` access. The bypass key was never printed or retained in evidence, and the temporary helper was removed.
+- The Phase 2 Frontend Output safety-switch slice passed: disabling Frontend Output removed Alynt Account Gateway markup from the public gateway routes and restored native `/wp-login.php` output while preserving registration settings; restoring Frontend Output brought branded login, lost-password, registration, and native-login redirect behavior back.
