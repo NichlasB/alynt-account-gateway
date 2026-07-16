@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 2 is active. Public `v0.1.111` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, and lost-password/reset-password/logout happy paths passed. Permanent webhook receiver configuration, full frontend Turnstile challenge success, remaining rate-limit/expired-token/role edge states, and WooCommerce/customer dashboard journey acceptance remain gated.
+- Current phase: Phase 2 is active. Public `v0.1.111` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, and role access/admin-toolbar behavior passed for administrator, shop manager, and customer. Permanent webhook receiver configuration, full frontend Turnstile challenge success, remaining rate-limit/expired-token/password-policy states, and WooCommerce/customer dashboard journey acceptance remain gated.
 - Product baseline: `v0.1.111`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -374,8 +374,8 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [ ] Verify password strength feedback is understandable and accessible.
 - [x] Verify lost-password, reset-password, password-changed, and invalid/expired reset-link states.
 - [x] Verify logout confirmation, cancellation, successful logout, and safe redirect behavior.
-- [ ] Verify administrators and shop managers retain intended wp-admin and toolbar access.
-- [ ] Verify other roles are redirected away from wp-admin without redirect loops.
+- [x] Verify administrators and shop managers retain intended wp-admin and toolbar access.
+- [x] Verify other roles are redirected away from wp-admin without redirect loops.
 - [ ] Verify the emergency bypass exposes only native login and never authenticates a visitor.
 - [ ] Verify all public account routes avoid the native WordPress shell except through deliberate bypass.
 - [ ] Verify frontend output can be disabled to restore native behavior without losing settings.
@@ -441,6 +441,18 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | Logout confirm | Confirmed logout used the nonce URL, redirected to `/login/`, removed the logged-in cookie, and made `/my-account/` redirect back to branded login | Passed |
 | Cleanup | Deleted disposable user `9254`; removed local temporary old/new password files; verified `ai@mailastic.com` no longer resolves to a WordPress user | Completed |
 | Remaining account negatives | Rate limits, inactive/pending account login, expired/used registration token states, password-policy failure states, and role-access edge cases remain for later Phase 2 slices | Pending |
+
+### Phase 2 Role Access And Toolbar Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Disposable users | Created administrator `9255`, shop manager `9256`, and customer `9257` with `alynt_ag_role_qa_` identifiers for role-access testing | Created |
+| Branded login | All three roles logged in by email through the branded login form, received a logged-in cookie, and redirected to `/my-account/` | Passed |
+| Administrator access | Administrator reached `/wp-admin/` with HTTP 200 and saw the frontend admin toolbar | Passed |
+| Shop manager access | Shop manager reached `/wp-admin/` with HTTP 200 and saw the frontend admin toolbar | Passed |
+| Customer access | Customer was redirected from `/wp-admin/` to `/my-account/` and did not see the frontend admin toolbar | Passed |
+| Native leakage | Logged-in frontend checks for all three roles returned zero native WordPress login or WP Custom Login Manager markers | Passed |
+| Cleanup | Deleted users `9255`, `9256`, and `9257`; removed the local temporary role-test credential file; verified zero `alynt_ag_role_qa_` users remain | Completed |
 
 ## Phase 3: Email And Deliverability Acceptance
 
@@ -652,3 +664,4 @@ Severity guidance:
 - The `ai@mailastic.com` confirmation link completed the Phase 2 happy path: the branded set-password screen rendered without native/incumbent markers, a compliant password redirected to `/login/?registration_complete=1`, WordPress user `9253` was created only after password completion, first name, last name, email, subscriber role, generated username, pending-registration state, and consent attachment all matched expectations, and branded email-only login redirected to `/my-account/` with a logged-in cookie. The disposable user and related plugin rows remain temporarily for follow-up Phase 2 checks or a deliberate cleanup pass.
 - The disposable Phase 2 registration artifacts were cleaned up: user `9253`, the completed `ai@mailastic.com` pending/consent rows, and the stale undeliverable plus-address pending/consent rows are gone. Negative checks passed for invalid login, invalid set-password token branded handling, and registration-disabled behavior, with Frontend Output and registration restored afterward. Remaining Phase 2 negative states include rate limits, inactive/pending account login, expired/used token, password-policy failure, reset-password, logout, and role-access edge cases.
 - The Phase 2 password reset/logout slice passed: disposable user `9254` was created, branded lost-password request sent the reset email, stale reset link displayed the branded invalid state, fresh reset link rendered the branded password form, reset completion redirected to `/login/?password_reset=1`, old password failed, new password logged in by email and redirected to `/my-account/`, logout confirmation/cancel/confirm all behaved correctly, and the disposable user plus temporary password files were removed.
+- The Phase 2 role-access slice passed: disposable administrator, shop-manager, and customer users all logged in by email through the branded form. Administrator and shop manager reached `/wp-admin/` and saw the toolbar, while the customer was redirected to `/my-account/` and did not see the toolbar. All disposable role users and local temp credentials were removed.
