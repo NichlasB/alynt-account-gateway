@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 1 is active. Public `v0.1.99` is updater-verified and representative HBF configuration is saved with all public-output switches disabled. Legal destinations, real email delivery, and approved integration credentials remain gated.
+- Current phase: Phase 1 is active. Public `v0.1.99` is updater-verified, representative HBF configuration is saved with all public-output switches disabled, and visual preview evidence is captured. Legal destinations, real email delivery, approved integration credentials, and a preview-route fix remain gated.
 - Product baseline: `v0.1.99`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -90,6 +90,7 @@ The Phase 1 handover sequence is: preserve a redacted incumbent-settings snapsho
 - [x] Verify Frontend Output remains disabled during initial configuration.
 - [ ] Configure and verify login path, account action base, after-login redirect, and emergency bypass.
 - [x] Configure logo, logo width, background image, colors, button colors, and typography using representative branding.
+- [x] Visually review saved gateway screen states at `390x844`, `800x900`, and `1440x1000` while public output remains disabled.
 - [x] Configure screen-specific welcome and instruction copy.
 - [ ] Configure relative Terms and Privacy paths and verify both destinations.
 - [x] Configure account-creation policy and confirm the default disabled behavior before deliberate enablement.
@@ -158,12 +159,12 @@ The maintenance release is published, its public package is verified, and its up
 | Email templates | Five rich-text templates render valid HTML and plain text with no unresolved tokens; zero test messages sent | Preview passed; delivery pending |
 | Dashboard | FAQ and Contact links configured with icons, ordering, customer/subscriber visibility, and same-tab behavior | Configured; dashboard disabled |
 | Integrations | Either-provider mode and safe defaults retained; Turnstile, Reoon, webhook, and test-recipient values remain unconfigured | Acceptance input required |
-| Gateway previews | Eight screen states render the HBF logo and no WordPress logo | Structural render passed |
+| Gateway previews | Eight screen states render the HBF logo and no WordPress logo; 24 visual captures across `390x844`, `800x900`, and `1440x1000` show no horizontal overflow or obvious overlap | Structural and fallback visual render passed; preview route finding open |
 | Public behavior | Incumbent routes unchanged; zero Account Gateway assets on `/login/` | Verified |
 | Data and cleanup | Six tables empty; retention scheduled; zero QA users | Verified |
 | Redacted export | Non-secret settings and validation evidence stored locally; media IDs documented as site-specific | Verified |
 
-Representative configuration is complete for the inputs currently available. Frontend Output remains disabled. Before route handover, the legal-page decision, a site-owned email test recipient, integration credential decisions, and visual browser review of the saved previews remain open.
+Representative configuration is complete for the inputs currently available. Frontend Output remains disabled. Before route handover, the legal-page decision, a site-owned email test recipient, integration credential decisions, and the preview-route issue remain open.
 
 ## Phase 2: Core Account Acceptance
 
@@ -327,6 +328,7 @@ Release is approved only when all statements below are true:
 | `P0-005` | 0 / 1 | Low | The incumbent Turnstile script warns that its `onTurnstileReady` callback is unavailable at load time. | Incumbent plugin owner / site owner | Preserve as an incumbent-only baseline; zero Alynt Account Gateway assets were loaded when reproduced. | Browser console comparison after handover | Open baseline |
 | `P1-001` | 1 | Medium | Customer wp-admin blocking and admin-bar filtering were registered while Frontend Output was disabled. The existing `hbf-staging` stack masked the behavior, producing no active/inactive runtime delta. | Product owner | Frontend Output is the master safety toggle; both policies now honor it in `v0.1.99`. | Disposable-role comparison, isolated regression tests, exact-package Plugin Tester smoke, public asset verification, Alynt Plugin Updater installation, and installed-copy staging role retest | Closed |
 | `P1-002` | 1 | Medium | The incumbent `/terms/` and `/privacy/` paths do not resolve to published WordPress pages. | Site owner | Keep public registration disabled until approved legal destinations exist and both links are verified. | Published-page and frontend-link verification | Open configuration blocker |
+| `P1-003` | 1 | Medium | Gateway Screen Preview links on `hbf-staging` redirect to `/wp-admin/` instead of rendering the standalone `admin-post.php?action=alynt_ag_preview_gateway` preview page. | Product owner | Fix or diagnose the preview-route registration before v1.0; fallback visual evidence may support design review but does not close the admin preview feature. | Authenticated browser click/direct-navigation retest plus visual screenshot evidence | Open product blocker |
 
 Severity guidance:
 
@@ -346,6 +348,7 @@ Severity guidance:
 | 2026-07-15 | Keep the Phase 0 restore point server-local instead of transferring the production-clone archive to Drime. | Avoids moving private customer and order data to an external destination before encryption, access, retention, and data-processing controls are separately verified. | User approval, private quarantine manifest, and Drime queue/registry checks. |
 | 2026-07-15 | Install and activate the exact public `v0.1.98` package while retaining incumbent route ownership and disabled gateway output. | Establishes the production-like configuration baseline without switching public account journeys. | Package hashes, WP-CLI install/activation, settings fingerprints, empty-table counts, HTTP, Playwright, and log checks. |
 | 2026-07-15 | Require customer wp-admin blocking and admin-bar filtering to honor Frontend Output. | The master toggle exists so a site can configure the plugin before it changes public/account behavior. HBF staging masks the issue through equivalent incumbent policy, but the plugin contract remains violated on an otherwise neutral stack. | `PHASE_1_ROLE_POLICY_TEST.json`, source inspection, and requirement 24. |
+| 2026-07-16 | Use renderer-generated local HTML with inline staging assets and media for visual review when the authenticated admin preview route redirected to `/wp-admin/`. | Preserves disabled public output and allows responsive visual evidence to proceed, while keeping the broken admin preview route open as `P1-003`. | `visual-review/visual-review-results.json`, contact sheets, and authenticated browser redirect observation. |
 
 ## Progress Notes
 
@@ -367,4 +370,5 @@ Severity guidance:
 - The installed-copy disabled-output retest passed for disposable administrator, shop-manager, and customer roles, with both toolbar input states preserved and wp-admin policy evaluation returning without redirect. Every QA identity was removed. `P1-001` is closed.
 - Representative HBF branding, copy, routes, customer username format, rich email templates, retention settings, and dashboard links are configured while all public-output switches remain disabled. Eight saved preview states and five email previews render structurally, public routes remain unchanged, all six tables remain empty, and zero QA users remain.
 - Finding `P1-002` records that `/terms/` and `/privacy/` are not published destinations. A site-owned email test recipient and approved provider/webhook credentials or explicit disable decisions are also still required for later acceptance.
-- The next Phase 1 work is visual browser review of the saved Gateway Screen Preview states, followed by resolution of the legal and integration inputs. Route handover still requires a separate explicit approval.
+- Visual review captured all eight gateway states across `390x844`, `800x900`, and `1440x1000` using current staging settings, installed frontend assets, and configured media while public output remained disabled. The fallback visual matrix passed for overflow, branding, WordPress-logo absence, and obvious layout overlap.
+- Finding `P1-003` records that the actual Gateway Screen Preview admin-post route redirected to `/wp-admin/` in authenticated browser testing. The next Phase 1 work is to fix or diagnose that preview-route feature, followed by resolution of legal, email, and integration inputs. Route handover still requires a separate explicit approval.
