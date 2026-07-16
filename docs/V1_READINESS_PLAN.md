@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 1 is active. Public `v0.1.106` is updater-verified, representative HBF configuration is saved with all public-output switches disabled, visual preview evidence is captured, legal destinations are configured for staging, and email test sends are accepted by the site mail path. `P1-004` email-logo correction is mailbox-confirmed. `P1-005` email body typography remains open because `v0.1.106` did not visibly change the real mailbox body copy; corrected inline-sizing `v0.1.107` is mailbox-confirmed; provider/webhook configuration, live provider/webhook acceptance, and route handover remain gated.
+- Current phase: Phase 1 is active. Public `v0.1.107` is updater-verified, representative HBF configuration is saved with all public-output switches disabled, visual preview evidence is captured, legal destinations are configured for staging, and email test sends are accepted by the site mail path. `P1-004` email-logo correction and `P1-005` email body typography are mailbox-confirmed and closed. Turnstile/Reoon configuration and temporary webhook acceptance are recorded; permanent webhook receiver configuration, full frontend provider success, live route handover, and post-handover acceptance remain gated.
 - Product baseline: `v0.1.107`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -97,7 +97,7 @@ The Phase 1 handover sequence is: preserve a redacted incumbent-settings snapsho
 - [x] Configure email templates, enable/disable switches, sender expectations, and test recipient.
 - [x] Configure dashboard, custom links, role visibility, icons, ordering, and new-tab behavior.
 - [x] Configure WooCommerce takeover only when the site's account page and endpoints are ready.
-- [ ] Configure Turnstile, Reoon, and webhook credentials only where acceptance requires them.
+- [x] Configure Turnstile, Reoon, and webhook credentials only where acceptance requires them.
 - [x] Review the plugin readiness summary and record every remaining release-blocking item.
 - [x] Export a redacted configuration snapshot for recovery and portability testing.
 - [ ] Obtain approval before enabling Frontend Output on staging.
@@ -248,10 +248,23 @@ Representative configuration is complete for the inputs currently available. Fro
 
 | Item | Result | Status |
 | --- | --- | --- |
-| Turnstile | Site key and secret key are not saved in Alynt Account Gateway on `hbf-staging` | Waiting for credentials |
-| Reoon | API key is not saved in Alynt Account Gateway on `hbf-staging` | Waiting for credentials |
-| Account-created webhook | Receiver URL and signing secret are not saved in Alynt Account Gateway on `hbf-staging` | Waiting for receiver/approval |
-| Current safety state | Frontend Output and registration remain disabled, so missing provider credentials are not affecting public Account Gateway output | Safe to continue configuration |
+| Turnstile | Site key and secret key are saved in Alynt Account Gateway on `hbf-staging`; direct invalid-token server-side verification returns `alynt_ag_turnstile_failed` with provider error `invalid-input-response` | Configured; negative server-side check passed |
+| Reoon | API key is saved in Alynt Account Gateway on `hbf-staging`; quick-mode policy check returned `valid` and unblocked under the configured `turnstile_or_reoon` mode | Configured; valid-path check passed |
+| Account-created webhook | Temporary receiver URL and generated staging signing secret were saved for acceptance; `account.created.test` delivered HTTP 200 with HMAC signature header present; temporary receiver and saved temporary webhook settings were then removed | Temporary delivery passed; permanent receiver still needed |
+| Current safety state | Frontend Output and registration remain disabled, debug payload logging remains disabled, and no stale temporary webhook URL remains saved | Safe configuration state preserved |
+| Cleanup | Disposable QA user was deleted, temporary helper files were removed locally and remotely, and the temporary external receiver token was deleted after evidence capture | Completed |
+
+### Phase 1 Integration Acceptance
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Redacted settings status | Turnstile site key, Turnstile secret key, and Reoon API key are present. Temporary webhook URL and signing secret were present during the acceptance dispatch, then cleared after the temporary receiver was deleted. Frontend Output and registration are disabled. Debug payload logging is disabled. | Passed |
+| Provider policy | Direct invalid Turnstile token failed server-side, Reoon quick-mode check returned `valid`, and the configured `turnstile_or_reoon` registration policy returned pass because one configured provider succeeded | Passed |
+| Verification logs | Latest acceptance rows recorded `turnstile` blocked with `alynt_ag_turnstile_failed` and `reoon` unblocked with `valid` | Passed |
+| Webhook dispatch | Built-in `account.created.test` dispatch returned success to a temporary HTTPS receiver | Passed |
+| Webhook delivery log | Latest webhook log records `account.created.test`, destination host `webhook.site`, HTTP 200, success `1`, and no stored payload body | Passed |
+| External receiver | Temporary receiver observed one POST with JSON content type, `X-Alynt-AG-Event: account.created.test`, and an HMAC signature header; raw payload and signature were not retained in evidence | Passed |
+| Cleanup | Temporary receiver token was deleted; temporary webhook URL/signing secret were cleared from staging settings; disposable QA user and temporary helper files were removed | Passed |
 
 ### Phase 1 Email, Provider, And Webhook Acceptance Attempt
 
