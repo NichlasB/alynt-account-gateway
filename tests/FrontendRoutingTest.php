@@ -49,6 +49,27 @@ class FrontendRoutingTest extends TestCase {
 		parent::tearDown();
 	}
 
+	public function test_gateway_render_hook_runs_before_canonical_redirects() {
+		$GLOBALS['alynt_ag_test_actions'] = array();
+
+		$frontend = new ALYNT_AG_Frontend();
+		$frontend->register();
+
+		$gateway_hooks = array_values(
+			array_filter(
+				$GLOBALS['alynt_ag_test_actions'],
+				static function ( $hook ) {
+					return 'template_redirect' === $hook['hook']
+						&& is_array( $hook['callback'] )
+						&& 'maybe_render_gateway' === $hook['callback'][1];
+				}
+			)
+		);
+
+		$this->assertCount( 1, $gateway_hooks );
+		$this->assertSame( 1, $gateway_hooks[0]['priority'] );
+	}
+
 	public function test_url_filters_respect_frontend_master_switch() {
 		$frontend = new ALYNT_AG_Frontend();
 

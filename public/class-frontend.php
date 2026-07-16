@@ -25,7 +25,7 @@ class ALYNT_AG_Frontend {
 		add_action( 'admin_init', array( $this, 'maybe_block_wp_admin' ) );
 		add_action( 'login_init', array( $this, 'maybe_redirect_native_login' ) );
 		add_action( 'template_redirect', array( $this, 'maybe_render_gateway_preview' ), 0 );
-		add_action( 'template_redirect', array( $this, 'maybe_render_gateway' ) );
+		add_action( 'template_redirect', array( $this, 'maybe_render_gateway' ), 1 );
 		add_filter( 'login_url', array( $this, 'filter_login_url' ), 10, 3 );
 		add_filter( 'lostpassword_url', array( $this, 'filter_lostpassword_url' ), 10, 2 );
 		add_filter( 'register_url', array( $this, 'filter_register_url' ) );
