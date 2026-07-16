@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.103 - 2026-07-16
+
+### Fixed
+
+- Moved Gateway Screen Preview links to a nonce-protected front-end preview endpoint so redirect-heavy wp-admin stacks cannot preempt preview rendering.
+
 ## 0.1.102 - 2026-07-16
 
 ### Fixed

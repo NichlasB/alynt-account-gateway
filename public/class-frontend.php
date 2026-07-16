@@ -24,6 +24,7 @@ class ALYNT_AG_Frontend {
 		add_filter( 'show_admin_bar', array( $this, 'filter_admin_bar' ) );
 		add_action( 'admin_init', array( $this, 'maybe_block_wp_admin' ) );
 		add_action( 'login_init', array( $this, 'maybe_redirect_native_login' ) );
+		add_action( 'template_redirect', array( $this, 'maybe_render_gateway_preview' ), 0 );
 		add_action( 'template_redirect', array( $this, 'maybe_render_gateway' ) );
 		add_filter( 'login_url', array( $this, 'filter_login_url' ), 10, 3 );
 		add_filter( 'lostpassword_url', array( $this, 'filter_lostpassword_url' ), 10, 2 );
@@ -173,6 +174,53 @@ class ALYNT_AG_Frontend {
 		}
 
 		$this->document_renderer()->render_gateway_document( $screen, $settings, $this->get_current_relative_path() );
+		exit;
+	}
+
+	/**
+	 * Render a nonce-protected gateway preview outside wp-admin.
+	 *
+	 * @return void
+	 */
+	public function maybe_render_gateway_preview() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Verified after screen normalization.
+		$screen = isset( $_GET['alynt_ag_preview_gateway'] ) ? sanitize_key( wp_unslash( $_GET['alynt_ag_preview_gateway'] ) ) : '';
+		if ( '' === $screen ) {
+			return;
+		}
+
+		$screens = $this->preview_screens();
+		$screen  = isset( $screens[ $screen ] ) ? $screen : 'login';
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to preview gateway screens.', 'alynt-account-gateway' ) );
+		}
+
+		check_admin_referer( 'alynt_ag_preview_gateway_' . $screen, 'alynt_ag_preview_nonce' );
+
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+
+		$this->assets()->enqueue( $settings, $screen );
+		show_admin_bar( false );
+		add_filter( 'show_admin_bar', '__return_false', PHP_INT_MAX );
+
+		status_header( 200 );
+		nocache_headers();
+
+		echo '<!doctype html>';
+		echo '<html ';
+		language_attributes();
+		echo '>';
+		echo '<head>';
+		echo '<meta charset="' . esc_attr( get_bloginfo( 'charset' ) ) . '">';
+		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
+		echo '<title>' . esc_html( $this->get_screen_title( $screen ) ) . '</title>';
+		$this->print_gateway_preview_styles();
+		echo '</head>';
+		echo '<body class="alynt-ag-body alynt-ag-preview-body">';
+		$this->render_preview( $screen, $settings );
+		$this->print_gateway_preview_scripts();
+		echo '</body></html>';
 		exit;
 	}
 
@@ -407,6 +455,52 @@ class ALYNT_AG_Frontend {
 	 */
 	private function assets() {
 		return new ALYNT_AG_Frontend_Assets();
+	}
+
+	/**
+	 * Return supported preview screens.
+	 *
+	 * @return array<string,bool>
+	 */
+	private function preview_screens() {
+		return array(
+			'dashboard'             => true,
+			'login'                 => true,
+			'register'              => true,
+			'lostpassword'          => true,
+			'setpassword'           => true,
+			'logout'                => true,
+			'registration_disabled' => true,
+			'invalidlink'           => true,
+		);
+	}
+
+	/**
+	 * Print only the assets needed by standalone gateway previews.
+	 *
+	 * @return void
+	 */
+	private function print_gateway_preview_styles() {
+		if ( function_exists( 'wp_styles' ) ) {
+			wp_styles()->do_items( array( 'alynt-ag-frontend' ) );
+			return;
+		}
+
+		wp_print_styles( array( 'alynt-ag-frontend' ) );
+	}
+
+	/**
+	 * Print only the scripts needed by standalone gateway previews.
+	 *
+	 * @return void
+	 */
+	private function print_gateway_preview_scripts() {
+		if ( function_exists( 'wp_scripts' ) ) {
+			wp_scripts()->do_items( array( 'alynt-ag-frontend' ) );
+			return;
+		}
+
+		wp_print_scripts( array( 'alynt-ag-frontend' ) );
 	}
 
 	/**

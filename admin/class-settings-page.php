@@ -4323,12 +4323,11 @@ class ALYNT_AG_Settings_Page {
 				<?php
 				$preview_url = add_query_arg(
 					array(
-						'action' => 'alynt_ag_preview_gateway',
-						'screen' => $screen,
+						'alynt_ag_preview_gateway' => $screen,
 					),
-					admin_url( 'admin-ajax.php' )
+					home_url( '/' )
 				);
-				$preview_url = wp_nonce_url( $preview_url, 'alynt_ag_preview_gateway_' . $screen );
+				$preview_url = wp_nonce_url( $preview_url, 'alynt_ag_preview_gateway_' . $screen, 'alynt_ag_preview_nonce' );
 				?>
 				<a class="button" target="_blank" rel="noopener noreferrer" href="<?php echo esc_url( $preview_url ); ?>">
 					<?php echo esc_html( $label ); ?>

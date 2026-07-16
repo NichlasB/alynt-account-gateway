@@ -208,6 +208,21 @@ The maintenance release is published, its public package is verified, and its up
 | Build and translations | Production assets rebuilt; POT regenerated with 997 strings and `0.1.102` metadata | Passed |
 | Publication state | Local second corrective candidate prepared after release approval; public release and staging updater retest in progress | Active |
 
+### Phase 1 P1-003 Final Corrective Candidate
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Candidate version | `0.1.103` | Prepared after `0.1.102` staging retest |
+| Diagnostic finding | Temporary staging-only MU trace showed WP Custom Login Manager redirecting preview requests to `/wp-admin/` at `plugins_loaded`, before ACG admin/admin-ajax handlers could run | Root cause identified |
+| Behavior correction | Gateway Screen Preview buttons now use a nonce-protected front-end endpoint guarded by `manage_options` | Implemented |
+| Rationale | The endpoint stays admin-only and nonce-protected while avoiding wp-admin transports that incumbent redirect plugins can preempt | Recorded |
+| Focused tests | 3 tests, 16 assertions | Passed |
+| Full tests | 287 tests, 1,909 assertions | Passed |
+| Coding standards | Full PHPCS/WPCS project scan | Passed |
+| PHP syntax | Changed PHP files | Passed |
+| Build and translations | Production assets rebuilt; POT regenerated with 997 strings and `0.1.103` metadata | Passed |
+| Publication state | Local final corrective candidate prepared after release approval; public release and staging updater retest in progress | Active |
+
 Representative configuration is complete for the inputs currently available. Frontend Output remains disabled. Before route handover, the legal-page decision, a site-owned email test recipient, integration credential decisions, and the preview-route issue remain open.
 
 ## Phase 2: Core Account Acceptance
@@ -419,3 +434,4 @@ Severity guidance:
 - Local `v0.1.100` candidate work moves Gateway Screen Preview links to the settings-page admin route while retaining the legacy admin-post handler, adds focused route/link coverage, passes 287 tests and 1,908 assertions, PHPCS, changed-file PHP syntax validation, build validation, and POT regeneration. Release, updater installation, and staging retest are waiting for explicit approval.
 - Public `v0.1.100` installed through Alynt Plugin Updater on `hbf-staging`, but authenticated settings-page preview requests still redirected before standalone preview output rendered. Local `v0.1.101` corrective candidate moves preview buttons to authenticated admin AJAX while preserving both fallback handlers; focused tests, full suite, PHPCS, syntax checks, build, and POT regeneration passed.
 - Public `v0.1.101` installed through Alynt Plugin Updater on `hbf-staging`; admin AJAX was reachable, but the preview action still redirected before standalone output rendered. Local `v0.1.102` second corrective candidate isolates preview output from broad site head/footer hooks; focused tests, full suite, PHPCS, syntax checks, build, and POT regeneration passed.
+- Temporary staging-only redirect tracing identified WP Custom Login Manager as the preempting redirect source at `plugins_loaded`. Local `v0.1.103` final corrective candidate moves preview links to a nonce-protected front-end endpoint guarded by `manage_options`; focused tests, full suite, PHPCS, syntax checks, build, and POT regeneration passed.
