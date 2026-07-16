@@ -22,6 +22,7 @@ class ALYNT_AG_Settings_Page {
 	public function register() {
 		add_action( 'admin_menu', array( $this, 'add_menu_page' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'admin_init', array( $this, 'maybe_handle_preview_gateway_request' ), 1 );
 		add_action( 'admin_post_alynt_ag_export_settings', array( $this, 'handle_export_settings' ) );
 		add_action( 'admin_post_alynt_ag_import_settings', array( $this, 'handle_import_settings' ) );
 		add_action( 'admin_post_alynt_ag_restore_tab_defaults', array( $this, 'handle_restore_tab_defaults' ) );
@@ -4321,10 +4322,11 @@ class ALYNT_AG_Settings_Page {
 				<?php
 				$preview_url = add_query_arg(
 					array(
-						'action' => 'alynt_ag_preview_gateway',
-						'screen' => $screen,
+						'page'             => 'alynt-account-gateway',
+						'alynt_ag_preview' => '1',
+						'screen'           => $screen,
 					),
-					admin_url( 'admin-post.php' )
+					admin_url( 'options-general.php' )
 				);
 				$preview_url = wp_nonce_url( $preview_url, 'alynt_ag_preview_gateway_' . $screen );
 				?>
@@ -4399,6 +4401,28 @@ class ALYNT_AG_Settings_Page {
 			'invalidlink'           => __( 'Invalid Link', 'alynt-account-gateway' ),
 			'dashboard'             => __( 'Dashboard', 'alynt-account-gateway' ),
 		);
+	}
+
+	/**
+	 * Render a standalone gateway preview from the settings page route.
+	 *
+	 * Some sites intercept or normalize admin-post.php requests. The settings
+	 * page route keeps preview output behind wp-admin authentication while
+	 * avoiding those front-controller collisions.
+	 *
+	 * @return void
+	 */
+	public function maybe_handle_preview_gateway_request() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is verified by handle_preview_gateway().
+		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is verified by handle_preview_gateway().
+		$preview = isset( $_GET['alynt_ag_preview'] ) ? sanitize_key( wp_unslash( $_GET['alynt_ag_preview'] ) ) : '';
+
+		if ( 'alynt-account-gateway' !== $page || '1' !== $preview ) {
+			return;
+		}
+
+		$this->handle_preview_gateway();
 	}
 
 	/**

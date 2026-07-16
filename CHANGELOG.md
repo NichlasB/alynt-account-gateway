@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.100 - 2026-07-16
+
+### Fixed
+
+- Fixed Gateway Screen Preview links to use the settings-page admin route for better compatibility on sites that intercept `admin-post.php`.
+
 ## 0.1.99 - 2026-07-15
 
 ### Fixed
