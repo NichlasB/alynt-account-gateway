@@ -587,6 +587,8 @@ class ALYNT_AG_Email_Template_Service {
 	private function render_html( $template, $subject, $preheader, $body, $button, $settings ) {
 		$site_name    = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
 		$logo_url     = ! empty( $settings['brand_logo_id'] ) ? wp_get_attachment_image_url( (int) $settings['brand_logo_id'], 'full' ) : '';
+		$logo_width   = ! empty( $settings['brand_logo_max_width'] ) ? absint( $settings['brand_logo_max_width'] ) : 180;
+		$logo_width   = max( 80, min( 220, $logo_width ) );
 		$primary      = $settings['button_background_color'] ?? '#3B5249';
 		$button_text  = $settings['button_text_color'] ?? '#ffffff';
 		$text_color   = $settings['text_color'] ?? '#281408';
@@ -614,7 +616,7 @@ class ALYNT_AG_Email_Template_Service {
 							<tr>
 								<td style="padding:32px 32px 16px;text-align:center;">
 									<?php if ( $logo_url ) : ?>
-										<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( $site_name ); ?>" style="max-width:220px;height:auto;">
+										<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( $site_name ); ?>" width="<?php echo esc_attr( (string) $logo_width ); ?>" style="display:block;margin:0 auto;width:<?php echo esc_attr( (string) $logo_width ); ?>px;max-width:100%;height:auto;border:0;outline:none;text-decoration:none;">
 									<?php else : ?>
 										<div style="font-family:Georgia,serif;font-size:24px;font-weight:600;"><?php echo esc_html( $site_name ); ?></div>
 									<?php endif; ?>

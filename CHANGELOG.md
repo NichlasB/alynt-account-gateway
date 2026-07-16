@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.105 - 2026-07-16
+
+### Fixed
+
+- Constrained account-email logo rendering with explicit width attributes and inline dimensions so large source logos do not overwhelm mailbox layouts.
+
 ## 0.1.104 - 2026-07-16
 
 ### Fixed

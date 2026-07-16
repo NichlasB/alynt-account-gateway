@@ -17,6 +17,7 @@ class EmailTemplateServiceTest extends TestCase {
 		$GLOBALS['alynt_ag_test_mail'] = array();
 		$GLOBALS['alynt_ag_test_options'] = array();
 		$GLOBALS['alynt_ag_test_deleted_user_meta'] = array();
+		$GLOBALS['alynt_ag_test_attachment_urls'] = array();
 		$_POST = array();
 	}
 
@@ -93,6 +94,25 @@ class EmailTemplateServiceTest extends TestCase {
 		$this->assertStringNotContainsString( '<h2>', $rendered['plain'] );
 		$this->assertStringContainsString( 'Hello Damon', $rendered['plain'] );
 		$this->assertStringContainsString( 'https://example.test/reset', $rendered['plain'] );
+	}
+
+	public function test_email_logo_uses_explicit_constrained_dimensions() {
+		$GLOBALS['alynt_ag_test_attachment_urls']['123:full'] = 'https://example.test/logo.png';
+
+		$service  = new ALYNT_AG_Email_Template_Service();
+		$settings = array_merge(
+			ALYNT_AG_Settings_Schema::defaults(),
+			array(
+				'brand_logo_id'        => 123,
+				'brand_logo_max_width' => 150,
+			)
+		);
+		$rendered = $service->render( 'password_changed', $service->preview_tokens(), $settings );
+
+		$this->assertStringContainsString( 'src="https://example.test/logo.png"', $rendered['html'] );
+		$this->assertStringContainsString( 'width="150"', $rendered['html'] );
+		$this->assertStringContainsString( 'width:150px;max-width:100%;height:auto;', $rendered['html'] );
+		$this->assertStringContainsString( 'display:block;margin:0 auto;', $rendered['html'] );
 	}
 
 	public function test_render_strips_unsafe_markup_and_escapes_token_markup() {
