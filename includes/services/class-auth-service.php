@@ -20,7 +20,7 @@ class ALYNT_AG_Auth_Service {
 	 * @return void
 	 */
 	public function register() {
-		add_action( 'template_redirect', array( $this, 'maybe_handle_auth_request' ), 4 );
+		add_action( 'template_redirect', array( $this, 'maybe_handle_auth_request' ), 0 );
 	}
 
 	/**

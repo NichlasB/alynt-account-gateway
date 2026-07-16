@@ -25,7 +25,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return void
 	 */
 	public function register() {
-		add_action( 'template_redirect', array( $this, 'maybe_handle_registration_request' ), 5 );
+		add_action( 'template_redirect', array( $this, 'maybe_handle_registration_request' ), 0 );
 	}
 
 	/**

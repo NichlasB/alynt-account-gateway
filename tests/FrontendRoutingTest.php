@@ -70,6 +70,33 @@ class FrontendRoutingTest extends TestCase {
 		$this->assertSame( 1, $gateway_hooks[0]['priority'] );
 	}
 
+	public function test_auth_and_registration_post_handlers_run_before_gateway_render() {
+		$GLOBALS['alynt_ag_test_actions'] = array();
+
+		$auth         = new ALYNT_AG_Auth_Service();
+		$registration = new ALYNT_AG_Registration_Service();
+		$frontend     = new ALYNT_AG_Frontend();
+
+		$auth->register();
+		$registration->register();
+		$frontend->register();
+
+		$priorities = array();
+		foreach ( $GLOBALS['alynt_ag_test_actions'] as $hook ) {
+			if ( 'template_redirect' !== $hook['hook'] || ! is_array( $hook['callback'] ) ) {
+				continue;
+			}
+
+			$priorities[ $hook['callback'][1] ] = $hook['priority'];
+		}
+
+		$this->assertSame( 0, $priorities['maybe_handle_auth_request'] );
+		$this->assertSame( 0, $priorities['maybe_handle_registration_request'] );
+		$this->assertSame( 1, $priorities['maybe_render_gateway'] );
+		$this->assertLessThan( $priorities['maybe_render_gateway'], $priorities['maybe_handle_auth_request'] );
+		$this->assertLessThan( $priorities['maybe_render_gateway'], $priorities['maybe_handle_registration_request'] );
+	}
+
 	public function test_url_filters_respect_frontend_master_switch() {
 		$frontend = new ALYNT_AG_Frontend();
 
