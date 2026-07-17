@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 5 is complete. Public `v0.1.116` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, role access/admin-toolbar behavior passed for administrator, shop manager, and customer, rate-limit/password-policy failure states passed, pending-email/expired-token/used-token/resend states passed, emergency bypass behavior passed, the Frontend Output disable/restore safety switch passed, inactive-account scope was clarified, safe post-login redirect handling passed after the `v0.1.112` corrective release, the public account route shell matrix passed with native WordPress appearing only through the deliberate emergency bypass, password strength feedback accessibility passed after the `v0.1.113` corrective release, frontend Turnstile browser-token success passed on the public registration form, Turnstile invalid/replay/expiry server-side validation passed, Reoon policy mapping passed with live valid/invalid/disposable spot checks, either-provider/all-provider registration policy behavior passed, provider outage/timeout behavior passed, temporary webhook receiver acceptance passed, the first dashboard/WooCommerce route smoke passed with temporary settings restored, representative order-list/pagination/order-detail/action behavior passed with temporary settings restored, downloads empty/available/expired/limited behavior passed with temporary settings restored, address/account POST handling passed after the `v0.1.114` delegated WooCommerce form-handler correction, account email/password changes passed on `v0.1.114`, saved payment-method list/default/delete plus add-unavailable behavior passed on `v0.1.114`, unavailable endpoint fallback passed after the `v0.1.116` empty-notices-wrapper correction, the post-dashboard role/admin policy recheck passed on `v0.1.116`, and target checkout/payment/shipping extension compatibility passed without placing an order.
+- Current phase: Phase 6 is active. Public `v0.1.116` is updater-verified on `hbf-staging`, Phase 5 dashboard/WooCommerce acceptance is complete, and the first Phase 6 target-current environment inventory passed on WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. Minimum-version, default-theme, responsive, accessibility, RTL/multilingual, third-party-request, and error-log/console coverage remain open.
 - Product baseline: `v0.1.116`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -823,9 +823,9 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 ## Phase 6: Compatibility And Experience Matrix
 
 - [ ] Test the minimum supported WordPress and PHP versions.
-- [ ] Test the current supported WordPress, PHP, and WooCommerce versions.
+- [x] Test the current supported WordPress, PHP, and WooCommerce versions.
 - [ ] Test at least one default WordPress theme and the target site's production theme/builder.
-- [ ] Test with representative caching, security, SMTP, and WooCommerce extension combinations.
+- [x] Test with representative caching, security, SMTP, and WooCommerce extension combinations.
 - [ ] Verify login, registration, reset, logout, dashboard, and WooCommerce routes at mobile and desktop widths.
 - [ ] Verify the 800px gateway layout boundary and narrow admin settings layouts.
 - [ ] Verify keyboard-only navigation, visible focus, error association, live regions, and password controls.
@@ -838,9 +838,22 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 
 | Environment | WordPress | PHP | WooCommerce | Theme / Builder | Locale / RTL | Status | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Minimum supported |  |  |  |  |  | Pending |  |
-| Current supported |  |  |  |  |  | Pending |  |
-| Target staging |  |  |  |  |  | Pending |  |
+| Minimum supported | `6.0` declared | `7.4` declared | TBD | Default theme TBD | TBD | Pending | Requires isolated compatibility runtime; do not infer from `hbf-staging` |
+| Current supported | `7.0.1` | `8.2.32` | `10.9.4` | Blocksy Child / Blocksy `2.1.48`; Brizy `2.8.16` and Brizy Pro `2.8.9` active | `en_US` / LTR | Passed target-current baseline | Phase 6 target-current environment evidence |
+| Target staging | `7.0.1` | `8.2.32` | `10.9.4`; HPOS disabled | Blocksy Child / Blocksy `2.1.48`; Blocksy Companion Pro `2.1.49` | `en_US` / LTR | Passed target-current baseline | Phase 6 target-current environment evidence |
+
+### Phase 6 Target-Current Environment Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Declared support floor | Plugin header and readme declare `Requires at least: 6.0` and `Requires PHP: 7.4`; stable tag and runtime version are `0.1.116`. | Recorded |
+| Runtime versions | `hbf-staging` reports WordPress `7.0.1`, PHP `8.2.32`, MySQL/MariaDB `10.11.18`, WooCommerce `10.9.4`, and Alynt Account Gateway `0.1.116`. | Passed |
+| Theme and locale | Active theme is Blocksy Child using parent Blocksy `2.1.48`; locale is `en_US`; RTL is false. No default Twenty Twenty-Four/Twenty Twenty-Five/Twenty Twenty-Six theme is installed on the target. | Recorded |
+| WooCommerce mode | WooCommerce HPOS/custom orders table usage is disabled on the target. | Recorded |
+| Cache/security/mail stack | Representative active stack includes Redis Object Cache `2.8.0`, Nginx Helper `9.9.10`, Force Login `5.6.3`, BBQ Pro `3.9`, Blackhole for Bad Bots `3.8.2`, WP fail2ban `5.4.1`, and FluentSMTP `2.2.95`. | Passed as target-current stack |
+| Builder/account/payment/shipping stack | Representative active stack includes Blocksy Companion Pro `2.1.49`, Brizy `2.8.16`, Brizy Pro `2.8.9`, WooCommerce `10.9.4`, PayPal Payments `2.0.22`, NMI gateway `1.2.11`, USPS Shipping `5.5.8`, Shipping Insurance Manager `1.8`, WooCommerce PDF invoices `5.15.2`, and Alynt WooCommerce companion plugins. | Passed as target-current stack |
+| Enabled payment and shipping runtime | Enabled gateways are PayPal (`ppcp`) and NMI (`nmi`); registered shipping methods include flat rate, free shipping, local pickup, and USPS. | Recorded |
+| Scope boundary | Default-theme and minimum-supported-version testing are intentionally not claimed from this staging pass because switching the live staging theme or changing WordPress/PHP versions would be disruptive; those remain separate Phase 6 work. | Preserved |
 
 ## Phase 7: Privacy, Data, And Lifecycle Acceptance
 
