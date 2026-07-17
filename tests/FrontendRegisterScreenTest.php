@@ -112,6 +112,7 @@ class FrontendRegisterScreenTest extends TestCase {
 
 		$this->assertStringContainsString( 'aria-label="Account verification"', $html );
 		$this->assertStringContainsString( 'class="cf-turnstile"', $html );
+		$this->assertStringContainsString( 'data-agw-turnstile-widget', $html );
 		$this->assertStringContainsString( 'data-sitekey="site-key-123"', $html );
 		$this->assertStringNotContainsString( 'Verification will appear here when enabled.', $html );
 	}

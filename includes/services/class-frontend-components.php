@@ -24,7 +24,7 @@ class ALYNT_AG_Frontend_Components {
 		if ( ! empty( $settings['turnstile_site_key'] ) ) {
 			?>
 			<div class="agw-verification-slot" aria-label="<?php esc_attr_e( 'Account verification', 'alynt-account-gateway' ); ?>">
-				<div class="cf-turnstile" data-sitekey="<?php echo esc_attr( $settings['turnstile_site_key'] ); ?>"></div>
+				<div class="cf-turnstile" data-agw-turnstile-widget data-sitekey="<?php echo esc_attr( $settings['turnstile_site_key'] ); ?>"></div>
 			</div>
 			<?php
 			return;

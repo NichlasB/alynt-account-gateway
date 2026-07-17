@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.119 - 2026-07-17
+
+### Fixed
+
+- Prevented narrow registration-screen overflow by rendering Cloudflare Turnstile in compact mode when the verification slot is under 300px wide.
+
 ## 0.1.118 - 2026-07-17
 
 ### Fixed
