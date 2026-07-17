@@ -51,19 +51,27 @@
 
 #### Scope
 
-- [ ] Widen the gateway card from `420px` to `540px` so login, registration, password, logout, and state screens have more comfortable form width.
-- [ ] Reduce gateway card horizontal padding to `24px` and panel padding to `24px` for a calmer, less cramped layout.
-- [ ] Remove trailing paragraph margin inside `.agw-notice` so single-paragraph instruction boxes align cleanly.
-- [ ] Update the Gateway Background Image help text to recommend tall portrait imagery for the desktop two-column media panel.
-- [ ] Use `1280 x 1920px` or a similar `2:3` portrait ratio as the recommended background-image size.
+- [x] Widen the gateway card from `420px` to `540px` so login, registration, password, logout, and state screens have more comfortable form width.
+- [x] Reduce gateway card horizontal padding to `24px` and panel padding to `24px` for a calmer, less cramped layout.
+- [x] Remove trailing paragraph margin inside `.agw-notice` so single-paragraph instruction boxes align cleanly.
+- [x] Update the Gateway Background Image help text to recommend tall portrait imagery for the desktop two-column media panel.
+- [x] Use `1280 x 1920px` or a similar `2:3` portrait ratio as the recommended background-image size.
 
 #### Acceptance Criteria
 
-- [ ] Gateway screens render with `.agw-card` max-width `540px` and padding `40px 24px`.
-- [ ] `.agw-panel` uses `24px` padding across desktop and mobile unless narrower breakpoints intentionally override it.
-- [ ] `.agw-notice p:last-child` has zero margin.
-- [ ] The admin help text no longer recommends a wide image for the gateway background and instead recommends portrait imagery.
-- [ ] Frontend source tests and build pass.
+- [x] Gateway screens render with `.agw-card` max-width `540px` and padding `40px 24px`.
+- [x] `.agw-panel` uses `24px` padding across desktop and mobile unless narrower breakpoints intentionally override it.
+- [x] `.agw-notice p:last-child` has zero margin.
+- [x] The admin help text no longer recommends a wide image for the gateway background and instead recommends portrait imagery.
+- [x] Frontend source tests and build pass.
+
+#### Progress Notes
+
+- Released as [`v1.0.2`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.0.2) from commit `28be7a1`; Build Release workflow run `29603139608` passed.
+- Public asset `alynt-account-gateway-v1.0.2.zip` inspected cleanly: 46 runtime files, one plugin root, zero development-file hits, aligned `1.0.2` metadata, one updater header, compiled layout markers present, portrait-image help marker present, and SHA-256 `E86E6465576E6DEBE6957DC9FC2ABD0F730EFA726AB1436610FDAA65EAA34900`.
+- Local validation passed: `npm.cmd run make-pot`, `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` (`314 tests`, `2020 assertions`), `npm.cmd audit --audit-level=high`, `php .\composer.phar audit`, and `git diff --check` with only expected text-file line-ending warnings.
+- Plugin Tester updater verification passed: Alynt Plugin Updater offered `1.0.1 -> 1.0.2`, WordPress installed the public GitHub asset, settings hash stayed `2d0e919d2f2bc08590b34fcf6ffc6fdc24ebd8e97b6b778f0e67326636226a8e`, ACG was restored active at position `1` after the known headless-upgrader deactivation, 46 runtime files were present, no development files were present, layout/help markers were present, HTTP home returned `200`, and no ACG update offer remained.
+- hbf-staging updater verification passed: Alynt Plugin Updater offered `1.0.0 -> 1.0.2`, WordPress installed the public GitHub asset, settings hash stayed `a126b2db3ad6ab1ef5c1e7a40ab8ddfb531d3c8aa5e3999ff4fafd86d4ee2fc1`, ACG was restored active at baseline position `5` after the known headless-upgrader deactivation, 46 runtime files were present, no development files were present, layout/help markers were present, HTTP home returned `200`, and no ACG update offer remained.
 
 ### Slice 3 - Deeper Provider Admin UX
 
