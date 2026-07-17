@@ -91,6 +91,47 @@ class WooCommerceIntegrationTest extends TestCase {
 		$this->assertSame( 'link', $links[2]['icon'] );
 	}
 
+	public function test_account_menu_links_exclude_explicitly_hidden_items() {
+		$integration = new class() extends ALYNT_AG_WooCommerce_Integration {
+			public function account_menu_items() {
+				return array(
+					'dashboard'       => 'Dashboard',
+					'orders'          => 'Orders',
+					'loyalty-points'  => 'Loyalty Points',
+					'customer-logout' => 'Log Out',
+				);
+			}
+		};
+		$links = $integration->account_menu_links(
+			array(
+				'after_login_redirect'          => '/my-account/',
+				'login_path'                    => '/login',
+				'woocommerce_hidden_menu_items' => array( 'orders', 'customer-logout' ),
+			)
+		);
+		$labels = array_column( $links, 'label' );
+
+		$this->assertSame( array( 'Dashboard', 'Loyalty Points' ), $labels );
+		$this->assertTrue(
+			$integration->is_account_menu_item_visible(
+				'loyalty-points',
+				array( 'woocommerce_hidden_menu_items' => array( 'orders' ) )
+			)
+		);
+	}
+
+	public function test_hidden_navigation_item_does_not_disable_direct_endpoint_routing() {
+		$integration = new ALYNT_AG_WooCommerce_Integration();
+		$settings    = array(
+			'after_login_redirect'          => '/my-account/',
+			'woocommerce_hidden_menu_items' => array( 'orders' ),
+		);
+		$endpoint = $integration->endpoint_from_path( '/my-account/orders/', $settings );
+
+		$this->assertFalse( $integration->is_account_menu_item_visible( 'orders', $settings ) );
+		$this->assertSame( 'orders', $endpoint['endpoint'] );
+	}
+
 	public function test_account_menu_items_restore_required_standard_items_when_wc_omits_them() {
 		$integration = new ALYNT_AG_WooCommerce_Integration();
 		$method      = new ReflectionMethod( $integration, 'merge_standard_account_menu_items' );

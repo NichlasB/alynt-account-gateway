@@ -44,6 +44,26 @@
 	line-height: 1.5;
 }
 
+.alynt-ag-checkbox-list {
+	display: grid;
+	gap: 8px;
+	max-width: 36rem;
+	margin: 0;
+	padding: 0;
+	border: 0;
+}
+
+.alynt-ag-checkbox-list label {
+	display: flex;
+	gap: 8px;
+	align-items: flex-start;
+	margin: 0;
+}
+
+.alynt-ag-checkbox-list input[type="checkbox"] {
+	margin-top: 2px;
+}
+
 .alynt-ag-color-control {
 	display: flex;
 	align-items: stretch;

@@ -541,6 +541,43 @@ html.agw-offcanvas-open {
 	margin: 0 auto;
 }
 
+.agw-dashboard-footer {
+	margin-top: 36px;
+	padding-top: 20px;
+	border-top: 1px solid rgb(40 20 8 / 14%);
+}
+
+.agw-dashboard-footer__menu {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 20px;
+	align-items: center;
+	justify-content: center;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-align: center;
+}
+
+.agw-dashboard-footer__menu li {
+	margin: 0;
+	padding: 0;
+}
+
+.agw-dashboard-footer__menu a {
+	color: var(--agw-color-primary);
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1.5;
+	text-decoration: underline;
+	text-decoration-thickness: 1px;
+	text-underline-offset: 3px;
+}
+
+.agw-dashboard-footer__menu a:hover {
+	color: var(--agw-color-text);
+}
+
 .agw-dashboard__header {
 	display: flex;
 	gap: 24px;
@@ -862,6 +899,10 @@ html.agw-has-admin-bar .agw-offcanvas {
 	box-shadow: 0 1px 2px rgb(40 20 8 / 5%);
 }
 
+.agw-dashboard-overview--without-actions {
+	grid-template-columns: minmax(0, 1fr);
+}
+
 .agw-dashboard-overview__copy {
 	display: flex;
 	flex-direction: column;
@@ -963,7 +1004,8 @@ html.agw-has-admin-bar .agw-offcanvas {
 .agw-dashboard-action:focus,
 .agw-offcanvas__close:focus,
 .agw-offcanvas__submenu-toggle:focus,
-.agw-offcanvas__menu a:focus {
+.agw-offcanvas__menu a:focus,
+.agw-dashboard-footer__menu a:focus {
 	outline: 2px solid var(--agw-color-primary);
 	outline-offset: 2px;
 }
@@ -1336,6 +1378,7 @@ html.agw-has-admin-bar .agw-offcanvas {
 .agw-offcanvas__close:focus-visible,
 .agw-offcanvas__submenu-toggle:focus-visible,
 .agw-offcanvas__menu a:focus-visible,
+.agw-dashboard-footer__menu a:focus-visible,
 .agw-dashboard-affordance a:focus-visible,
 .agw-dashboard-content input:focus-visible,
 .agw-dashboard-content select:focus-visible,
@@ -1396,6 +1439,15 @@ html.agw-has-admin-bar .agw-offcanvas {
 	.agw-dashboard__header {
 		align-items: flex-start;
 		margin-bottom: 32px;
+	}
+
+	.agw-dashboard-footer {
+		margin-top: 28px;
+		padding-top: 18px;
+	}
+
+	.agw-dashboard-footer__menu {
+		gap: 8px 16px;
 	}
 
 	.agw-offcanvas__panel {

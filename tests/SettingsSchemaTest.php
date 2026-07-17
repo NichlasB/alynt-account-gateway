@@ -114,6 +114,7 @@ class SettingsSchemaTest extends TestCase {
 			'email_test_recipient'   => 'owner@example.test',
 			'brand_logo_id'          => 123,
 			'background_image_id'    => 456,
+			'dashboard_footer_menu_id' => 789,
 		);
 
 		$package = ALYNT_AG_Settings_Schema::export_package();
@@ -131,6 +132,7 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertArrayNotHasKey( 'brand_logo_id', $package['settings'] );
 		$this->assertArrayNotHasKey( 'background_image_id', $package['settings'] );
 		$this->assertArrayNotHasKey( 'dashboard_offcanvas_menu_id', $package['settings'] );
+		$this->assertArrayNotHasKey( 'dashboard_footer_menu_id', $package['settings'] );
 	}
 
 	public function test_import_package_sanitizes_known_settings_and_discards_unknown_keys() {
@@ -274,10 +276,16 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertArrayHasKey( 'dashboard_custom_links', $defaults );
 		$this->assertArrayHasKey( 'dashboard_offcanvas_enabled', $defaults );
 		$this->assertArrayHasKey( 'dashboard_offcanvas_menu_id', $defaults );
+		$this->assertArrayHasKey( 'dashboard_footer_menu_enabled', $defaults );
+		$this->assertArrayHasKey( 'dashboard_footer_menu_id', $defaults );
+		$this->assertArrayHasKey( 'woocommerce_hidden_menu_items', $defaults );
 		$this->assertFalse( $defaults['dashboard_enabled'] );
 		$this->assertSame( '[]', $defaults['dashboard_custom_links'] );
 		$this->assertFalse( $defaults['dashboard_offcanvas_enabled'] );
 		$this->assertSame( 0, $defaults['dashboard_offcanvas_menu_id'] );
+		$this->assertFalse( $defaults['dashboard_footer_menu_enabled'] );
+		$this->assertSame( 0, $defaults['dashboard_footer_menu_id'] );
+		$this->assertSame( array(), $defaults['woocommerce_hidden_menu_items'] );
 	}
 
 	public function test_dashboard_offcanvas_settings_are_sanitized() {
@@ -285,11 +293,46 @@ class SettingsSchemaTest extends TestCase {
 			array(
 				'dashboard_offcanvas_enabled' => '1',
 				'dashboard_offcanvas_menu_id' => '-42',
+				'dashboard_footer_menu_enabled' => '1',
+				'dashboard_footer_menu_id' => '-84',
 			)
 		);
 
 		$this->assertTrue( $sanitized['dashboard_offcanvas_enabled'] );
 		$this->assertSame( 42, $sanitized['dashboard_offcanvas_menu_id'] );
+		$this->assertTrue( $sanitized['dashboard_footer_menu_enabled'] );
+		$this->assertSame( 84, $sanitized['dashboard_footer_menu_id'] );
+	}
+
+	public function test_woocommerce_dashboard_visibility_is_sanitized_to_hidden_endpoint_keys() {
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array(
+				'woocommerce_hidden_menu_items' => array(
+					'orders'          => '1',
+					'downloads'       => '0',
+					'loyalty_points'  => '1',
+					'<script>'        => '1',
+				),
+			)
+		);
+
+		$this->assertSame(
+			array( 'orders', 'loyalty_points', 'script' ),
+			$sanitized['woocommerce_hidden_menu_items']
+		);
+	}
+
+	public function test_woocommerce_dashboard_visibility_accepts_indexed_import_values() {
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array(
+				'woocommerce_hidden_menu_items' => array( 'orders', 'loyalty-points', 'orders' ),
+			)
+		);
+
+		$this->assertSame(
+			array( 'orders', 'loyalty-points' ),
+			$sanitized['woocommerce_hidden_menu_items']
+		);
 	}
 
 	public function test_dashboard_custom_links_are_sanitized_to_json() {

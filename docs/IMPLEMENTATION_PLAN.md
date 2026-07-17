@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.0.3 released and updater-verified; final evidence synchronized
+- Current phase: v1.1.0 dashboard navigation and footer-menu release candidate approved
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.0.3 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
+- Plugin status: v1.0.3 remains the current public baseline; v1.1.0 is acceptance-tested on LocalWP `plugin-tester` and `hbf-staging` and is being prepared for public release.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Begin the approved post-v1 product roadmap below, starting with the Alynt Plugin Updater follow-up unless a higher-priority production rollout need appears.
+- Next roadmap: Publish and updater-verify v1.1.0, then continue with Deeper Provider Admin UX unless a higher-priority production rollout need appears.
 
 ## Post-v1 Product Roadmap
 
@@ -26,10 +26,11 @@
 2. Gateway layout and background-image guidance tweak.
 3. Delegated WooCommerce notice normalization.
 4. Dashboard action icons and optional off-canvas navigation.
-5. Deeper provider admin UX.
-6. Dashboard UX expansion.
-7. Production rollout playbook, when the first production rollout is ready to be operationalized.
-8. Inactive-account integration only if a concrete inactive/suspended-user source is identified.
+5. Dashboard navigation visibility and optional footer menu. Completed locally and acceptance-tested; release pending.
+6. Deeper provider admin UX.
+7. Richer dashboard UX expansion.
+8. Production rollout playbook, when the first production rollout is ready to be operationalized.
+9. Inactive-account integration only if a concrete inactive/suspended-user source is identified.
 
 ### Slice 1 - Alynt Plugin Updater Follow-Up
 
@@ -164,6 +165,39 @@
 - [ ] Existing security and anti-spam tests pass, and new UI markers are covered by focused tests.
 
 ### Slice 6 - Dashboard UX Expansion
+
+#### Immediate Approved Scope - Navigation Visibility And Footer Menu
+
+- [x] Add settings-backed visibility controls for every currently detected WooCommerce account navigation item.
+- [x] Keep all standard and extension-provided items visible by default until an administrator explicitly hides one.
+- [x] Hide disabled items from the Manage Account grid and matching dashboard-overview shortcuts without unregistering WooCommerce endpoints or blocking direct URLs.
+- [x] Keep the dashboard header Log Out icon available even when the larger Log Out grid item is hidden.
+- [x] Preserve WooCommerce form handlers, endpoint rendering, extension-added endpoints, bookmarks, email links, and contextual recovery links.
+- [x] Add an optional Dashboard Footer Menu, disabled by default, with its own WordPress navigation-menu selector.
+- [x] Render the selected footer menu as compact horizontal navigation that wraps cleanly on smaller screens.
+- [x] Support WordPress pages, `legal` custom-post-type posts, custom links, translated menu items, and normal Appearance > Menus ordering without duplicating legal URL settings.
+- [x] Keep the footer menu independent from the off-canvas menu while allowing an administrator to select the same WordPress menu for both.
+- [x] Add focused schema, sanitization, dashboard-link, rendering, responsive, RTL, and accessibility coverage.
+
+#### Immediate Acceptance Criteria
+
+- [x] Fresh/default settings show all available WooCommerce navigation items.
+- [x] Turning off Orders, Downloads, Addresses, Payment Methods, Account Details, Dashboard, Log Out, or an extension endpoint removes only its dashboard navigation affordance.
+- [x] Hidden endpoint URLs remain usable directly and WooCommerce continues handling account forms and actions.
+- [x] The dashboard overview omits shortcuts for hidden Orders, Addresses, or Account Details items without leaving broken or empty markup.
+- [x] The Dashboard Footer Menu renders only when enabled and a valid WordPress menu is selected.
+- [x] Footer navigation is horizontal on larger screens, wraps without overflow, remains keyboard accessible, and supports RTL.
+- [x] Existing custom dashboard links, header actions, off-canvas behavior, WooCommerce takeover, and frontend-output defaults remain unchanged.
+
+#### Immediate Progress Notes
+
+- Added schema-backed WooCommerce account-item visibility settings that default to visible, preserve extension-provided endpoints, and filter only dashboard navigation affordances.
+- Added an independent, default-disabled Dashboard Footer Menu setting rendered through `wp_nav_menu()`, with responsive wrapping, keyboard focus, RTL-safe layout, and support for ordinary pages, `legal` posts, and custom links.
+- Added focused settings-page, schema, WooCommerce integration, and dashboard rendering tests. Local validation passed: `npm.cmd test` (`324 tests`, `2091 assertions`), `npm.cmd run lint`, `npm.cmd run build`, `npm.cmd run make-pot` (`1028 strings`), and `git diff --check`.
+- QA package inspected cleanly: 47 runtime files, one plugin root, zero development-file, source-map, backslash-path, or unexpected-root hits, and SHA-256 `20E055B31FF2A380144182C1B7AB76261EC617DC9603E45D62236AFE4CBEC40F`.
+- Plugin Tester acceptance passed with a temporary menu and hidden Orders, Downloads, and Payment Methods: default controls rendered correctly, hidden items and the matching Orders overview shortcut disappeared, direct `/my-account/orders/` remained usable, the footer rendered on desktop and mobile without overflow, keyboard focus and simulated RTL passed, and the exact settings/active-state baseline was restored afterward.
+- `hbf-staging` acceptance passed with the real Legal Menu (`Terms`, `Cookies`, `Privacy`, `Disclaimer`, `Shipping & Delivery`, and `Sitemap`) and the same hidden-item set. Desktop and mobile had no horizontal overflow, keyboard focus remained visible, the direct Orders endpoint rendered normally, and the only browser-console entry was an unrelated existing Independent Analytics `401` from `/wp-json/iawp/search`.
+- `hbf-staging` cleanup restored the exact settings SHA-256 `54e36bc37efca76534867cbe1c783d55b50495c73e896ca5bb5379b328ea4426` and active-plugin SHA-256 `4f9816b3e3612e06ada6d45e9a98ac8c54b5d22b4d54e110e60125d412fbb233`; the disposable customer, snapshots, rollback archives, scripts, upload package, and displaced plugin directory were removed. ACG remains active at `1.0.3`, and `/login` returns HTTP `200`.
 
 #### Scope
 

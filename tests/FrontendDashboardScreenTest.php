@@ -164,6 +164,9 @@ class FrontendDashboardScreenTest extends TestCase {
 			'dashboard_custom_links' => '[]',
 			'dashboard_offcanvas_enabled' => false,
 			'dashboard_offcanvas_menu_id' => 0,
+			'dashboard_footer_menu_enabled' => false,
+			'dashboard_footer_menu_id' => 0,
+			'woocommerce_hidden_menu_items' => array(),
 		);
 	}
 
@@ -211,6 +214,7 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringContainsString( 'aria-label="Log out"', $html );
 		$this->assertStringNotContainsString( 'data-agw-offcanvas-open', $html );
 		$this->assertStringNotContainsString( 'id="agw-dashboard-offcanvas"', $html );
+		$this->assertStringNotContainsString( 'class="agw-dashboard-footer"', $html );
 		$this->assertStringContainsString( 'redirect_to=https%3A%2F%2Fexample.test%2Flogin', $html );
 		$this->assertStringContainsString( 'Account Dashboard', $html );
 		$this->assertStringContainsString( 'Welcome, Damon', $html );
@@ -250,6 +254,32 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringContainsString( 'class="agw-offcanvas__menu"', $html );
 		$this->assertStringContainsString( 'Shop', $html );
 		$this->assertStringContainsString( 'Contact', $html );
+	}
+
+	public function test_render_dashboard_shell_outputs_independent_footer_menu_when_enabled() {
+		$screen   = new ALYNT_AG_Frontend_Dashboard_Screen(
+			new ALYNT_AG_Test_Frontend_Dashboard_Service(),
+			new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce(),
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array(
+				'dashboard_footer_menu_enabled' => true,
+				'dashboard_footer_menu_id'      => 456,
+			)
+		);
+
+		ob_start();
+		$screen->render_dashboard_shell( $settings, '/my-account/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'class="agw-dashboard-footer"', $html );
+		$this->assertStringContainsString( 'aria-label="Dashboard footer navigation"', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-footer__menu"', $html );
+		$this->assertStringContainsString( 'Shop', $html );
+		$this->assertStringContainsString( 'Contact', $html );
+		$this->assertStringNotContainsString( 'data-agw-offcanvas-open', $html );
 	}
 
 	public function test_render_dashboard_shell_uses_rtl_direction_when_site_is_rtl() {
@@ -519,6 +549,33 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringContainsString( 'href="/my-account/edit-address/"', $html );
 		$this->assertStringContainsString( 'href="/my-account/edit-account/"', $html );
 		$this->assertStringNotContainsString( 'class="agw-dashboard-content"', $html );
+	}
+
+	public function test_woocommerce_overview_omits_hidden_shortcuts_without_empty_actions_markup() {
+		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->available = true;
+		$screen               = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce(),
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array(
+				'woocommerce_takeover'          => true,
+				'woocommerce_hidden_menu_items' => array( 'orders', 'edit-address', 'edit-account' ),
+			)
+		);
+
+		ob_start();
+		$screen->render_dashboard_screen( $settings, '/my-account/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'agw-dashboard-overview--without-actions', $html );
+		$this->assertStringNotContainsString( 'class="agw-dashboard-overview__actions"', $html );
+		$this->assertStringNotContainsString( 'href="/my-account/orders/"', $html );
+		$this->assertStringNotContainsString( 'href="/my-account/edit-address/"', $html );
+		$this->assertStringNotContainsString( 'href="/my-account/edit-account/"', $html );
 	}
 
 	public function test_render_dashboard_screen_outputs_endpoint_fallback_when_render_fails() {

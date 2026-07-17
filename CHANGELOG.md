@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.0 - 2026-07-18
+
+### Added
+
+- Added settings-backed visibility controls for standard and extension-provided WooCommerce account navigation items.
+- Added an optional, independent dashboard footer menu powered by WordPress navigation menus.
+
+### Changed
+
+- Hidden dashboard navigation items now also remove matching overview shortcuts without disabling their WooCommerce endpoints or direct URLs.
+- Added responsive, RTL-safe, and keyboard-accessible footer navigation styling.
+
 ## 1.0.3 - 2026-07-17
 
 ### Added

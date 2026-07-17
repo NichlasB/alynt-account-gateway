@@ -295,6 +295,11 @@ class ALYNT_AG_Settings_Page {
 			return;
 		}
 
+		if ( 'woocommerce_menu_visibility' === $field['type'] ) {
+			$this->render_woocommerce_menu_visibility_field( $id, $name, $value, $aria );
+			return;
+		}
+
 		if ( 'nav_menu' === $field['type'] ) {
 			$this->render_nav_menu_field( $id, $name, (int) $value, $aria );
 			return;
@@ -494,10 +499,59 @@ class ALYNT_AG_Settings_Page {
 		</select>
 		<?php if ( empty( $menus ) ) : ?>
 			<p class="description alynt-ag-field-help">
-				<?php esc_html_e( 'Create a WordPress navigation menu first, then return here to attach it to the dashboard menu panel.', 'alynt-account-gateway' ); ?>
+				<?php esc_html_e( 'Create a WordPress navigation menu first, then return here to attach it to the dashboard.', 'alynt-account-gateway' ); ?>
 			</p>
 			<?php
 		endif;
+	}
+
+	/**
+	 * Render WooCommerce dashboard navigation visibility controls.
+	 *
+	 * @param string            $id    Field ID.
+	 * @param string            $name  Field name.
+	 * @param array<int,string> $value Hidden endpoint keys.
+	 * @param string            $aria  Escaped aria-describedby attribute.
+	 * @return void
+	 */
+	private function render_woocommerce_menu_visibility_field( $id, $name, $value, $aria = '' ) {
+		$integration = new ALYNT_AG_WooCommerce_Integration();
+		$items       = $integration->account_menu_items();
+		$hidden      = is_array( $value ) ? array_map( 'sanitize_key', $value ) : array();
+		$index       = 0;
+		?>
+		<fieldset class="alynt-ag-checkbox-list"<?php echo $aria; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute(). ?>>
+			<legend class="screen-reader-text"><?php esc_html_e( 'WooCommerce dashboard navigation visibility', 'alynt-account-gateway' ); ?></legend>
+			<?php foreach ( $items as $endpoint => $label ) : ?>
+				<?php
+				$endpoint    = sanitize_key( $endpoint );
+				$checkbox_id = 0 === $index ? $id : $id . '-item-' . $index;
+				++$index;
+
+				if ( ! $endpoint ) {
+					continue;
+				}
+				?>
+				<label for="<?php echo esc_attr( $checkbox_id ); ?>">
+					<input type="hidden" name="<?php echo esc_attr( $name . '[' . $endpoint . ']' ); ?>" value="1">
+					<input
+						type="checkbox"
+						id="<?php echo esc_attr( $checkbox_id ); ?>"
+						name="<?php echo esc_attr( $name . '[' . $endpoint . ']' ); ?>"
+						value="0"
+						<?php checked( ! in_array( $endpoint, $hidden, true ) ); ?>
+					>
+					<?php
+					printf(
+						/* translators: %s: WooCommerce account navigation item label. */
+						esc_html__( 'Show %s', 'alynt-account-gateway' ),
+						esc_html( $label )
+					);
+					?>
+				</label>
+			<?php endforeach; ?>
+		</fieldset>
+		<?php
 	}
 
 	/**
@@ -645,7 +699,10 @@ class ALYNT_AG_Settings_Page {
 			'dashboard_custom_links'             => __( 'Add only links that are useful to the selected roles. Ordering and icons help repeated account tasks stay scannable.', 'alynt-account-gateway' ),
 			'dashboard_offcanvas_enabled'        => __( 'Optional. When enabled, the dashboard header can open a right-side menu panel using a selected WordPress navigation menu.', 'alynt-account-gateway' ),
 			'dashboard_offcanvas_menu_id'        => __( 'Select a menu created under Appearance > Menus. The hamburger icon appears only when the menu panel is enabled and a menu is selected.', 'alynt-account-gateway' ),
+			'dashboard_footer_menu_enabled'      => __( 'Optional. Display a compact navigation menu below the dashboard for legal, privacy, cookie, and policy links.', 'alynt-account-gateway' ),
+			'dashboard_footer_menu_id'           => __( 'Select a menu created under Appearance > Menus. This assignment is independent from the dashboard menu panel, but both may use the same menu.', 'alynt-account-gateway' ),
 			'woocommerce_takeover'               => __( 'Requires the custom dashboard. WooCommerce still handles account forms and endpoint actions inside the branded shell.', 'alynt-account-gateway' ),
+			'woocommerce_hidden_menu_items'      => __( 'All detected items are shown by default. Clear an item to remove its dashboard card and overview shortcut without disabling the WooCommerce endpoint or direct URL.', 'alynt-account-gateway' ),
 			'account_created_webhook'            => __( 'Receives account-created events after the user confirms email and sets a password.', 'alynt-account-gateway' ),
 			'webhook_signing_secret'             => __( 'Add this when the receiving system can verify timestamped HMAC headers.', 'alynt-account-gateway' ),
 			'debug_payload_logging'              => __( 'Enable only while debugging. Payload logging may store personal account data in webhook logs.', 'alynt-account-gateway' ),

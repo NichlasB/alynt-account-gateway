@@ -457,11 +457,29 @@ class ALYNT_AG_Settings_Schema {
 				'default' => 0,
 				'label'   => __( 'Dashboard Menu Panel Menu', 'alynt-account-gateway' ),
 			),
+			'dashboard_footer_menu_enabled'             => array(
+				'tab'     => 'dashboard',
+				'type'    => 'boolean',
+				'default' => false,
+				'label'   => __( 'Enable Dashboard Footer Menu', 'alynt-account-gateway' ),
+			),
+			'dashboard_footer_menu_id'                  => array(
+				'tab'     => 'dashboard',
+				'type'    => 'nav_menu',
+				'default' => 0,
+				'label'   => __( 'Dashboard Footer Menu', 'alynt-account-gateway' ),
+			),
 			'woocommerce_takeover'                      => array(
 				'tab'     => 'woocommerce',
 				'type'    => 'boolean',
 				'default' => false,
 				'label'   => __( 'Take Over WooCommerce My Account', 'alynt-account-gateway' ),
+			),
+			'woocommerce_hidden_menu_items'             => array(
+				'tab'     => 'woocommerce',
+				'type'    => 'woocommerce_menu_visibility',
+				'default' => array(),
+				'label'   => __( 'Dashboard Navigation Items', 'alynt-account-gateway' ),
 			),
 			'account_created_webhook'                   => array(
 				'tab'     => 'webhooks',
@@ -807,6 +825,8 @@ class ALYNT_AG_Settings_Schema {
 				return $font_stack ? $font_stack : '';
 			case 'dashboard_links':
 				return self::sanitize_dashboard_links( $value );
+			case 'woocommerce_menu_visibility':
+				return self::sanitize_woocommerce_hidden_menu_items( $value );
 			case 'rich_text':
 			case 'textarea':
 				return wp_kses_post( wp_unslash( $value ) );
@@ -871,5 +891,38 @@ class ALYNT_AG_Settings_Schema {
 		$json = wp_json_encode( $links, JSON_UNESCAPED_SLASHES );
 
 		return is_string( $json ) ? $json : '[]';
+	}
+
+	/**
+	 * Sanitize WooCommerce endpoint visibility into a list of hidden keys.
+	 *
+	 * Associative checkbox input uses a truthy value for hidden items. Indexed
+	 * input is also accepted so portable imports remain straightforward.
+	 *
+	 * @param mixed $value Raw endpoint visibility input.
+	 * @return array<int,string>
+	 */
+	private static function sanitize_woocommerce_hidden_menu_items( $value ) {
+		if ( ! is_array( $value ) ) {
+			return array();
+		}
+
+		$hidden = array();
+
+		foreach ( $value as $key => $flag ) {
+			if ( is_int( $key ) ) {
+				$endpoint  = sanitize_key( wp_unslash( $flag ) );
+				$is_hidden = true;
+			} else {
+				$endpoint  = sanitize_key( wp_unslash( $key ) );
+				$is_hidden = ! empty( $flag );
+			}
+
+			if ( $endpoint && $is_hidden ) {
+				$hidden[] = $endpoint;
+			}
+		}
+
+		return array_values( array_unique( $hidden ) );
 	}
 }

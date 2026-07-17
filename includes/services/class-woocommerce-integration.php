@@ -114,6 +114,53 @@ class ALYNT_AG_WooCommerce_Integration {
 	}
 
 	/**
+	 * Return sanitized endpoint keys hidden from dashboard navigation.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return array<int,string>
+	 */
+	public function hidden_account_menu_items( $settings ) {
+		$items = isset( $settings['woocommerce_hidden_menu_items'] ) && is_array( $settings['woocommerce_hidden_menu_items'] )
+			? $settings['woocommerce_hidden_menu_items']
+			: array();
+
+		return array_values( array_unique( array_filter( array_map( 'sanitize_key', $items ) ) ) );
+	}
+
+	/**
+	 * Return whether an endpoint should appear in dashboard navigation.
+	 *
+	 * This does not disable the endpoint or its direct URL.
+	 *
+	 * @param string              $endpoint Endpoint key.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return bool
+	 */
+	public function is_account_menu_item_visible( $endpoint, $settings ) {
+		$endpoint = sanitize_key( $endpoint );
+
+		return $endpoint && ! in_array( $endpoint, $this->hidden_account_menu_items( $settings ), true );
+	}
+
+	/**
+	 * Return account menu items that should appear in dashboard navigation.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return array<string,string>
+	 */
+	public function visible_account_menu_items( $settings ) {
+		return array_filter(
+			$this->account_menu_items(),
+			function ( $label, $endpoint ) use ( $settings ) {
+				unset( $label );
+
+				return $this->is_account_menu_item_visible( $endpoint, $settings );
+			},
+			ARRAY_FILTER_USE_BOTH
+		);
+	}
+
+	/**
 	 * Build dashboard links from WooCommerce account menu items.
 	 *
 	 * @param array<string,mixed> $settings Settings.
@@ -124,7 +171,7 @@ class ALYNT_AG_WooCommerce_Integration {
 		$links = array();
 		$order = 10;
 
-		foreach ( $this->account_menu_items() as $endpoint => $label ) {
+		foreach ( $this->visible_account_menu_items( $settings ) as $endpoint => $label ) {
 			$endpoint = sanitize_key( $endpoint );
 			if ( ! $endpoint ) {
 				continue;
