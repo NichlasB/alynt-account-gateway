@@ -40,6 +40,8 @@ Core features include:
 3. Configure Settings -> Account Gateway.
 4. Enable Frontend Output only after confirming the settings.
 
+Review `docs/OPERATIONS.md` for the full installation, update, rollback, emergency-disable, support-boundary, and launch-acceptance checklist.
+
 == Uninstall ==
 
 Uninstalling the plugin removes plugin-owned settings, the stored database schema version, the retention cleanup schedule, rate-limit transients, and plugin-owned account gateway tables. WordPress users, WooCommerce orders, media-library files, and non-plugin data are not removed.
@@ -53,6 +55,7 @@ Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile
 = Unreleased =
 
 * Added a site-owner privacy and GDPR review guide for plugin-owned records, retention settings, processor boundaries, and data-subject request support.
+* Added an operations guide covering installation, updates, rollback, emergency disable, emergency bypass, support boundaries, versioning, and launch acceptance.
 
 = 0.1.120 =
 

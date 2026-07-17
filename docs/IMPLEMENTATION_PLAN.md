@@ -7,7 +7,7 @@
 - Plugin status: v0.1.120 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Continue Phase 8 documentation and operations polish in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md), beginning with installation/update/rollback, emergency-disable, and support-boundary documentation.
+- Next roadmap: Continue Phase 8 final documentation sync in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md), confirming README, settings reference, hooks reference, changelog, POT, and release notes are current before the v1.0 release-candidate phase.
 
 ## v1.0 Readiness Phase 7 Data Inventory And Minimization
 
@@ -39,6 +39,7 @@
 - Terms/Privacy consent ownership acceptance passed on `hbf-staging` with disposable run `20260717135710`: saved settings use `/legal/terms/` and `/legal/privacy/`, the registration screen links both configured paths and renders the required `name="terms"` checkbox, both legal paths map to published site-owned `legal` posts, staging Force Login continues to protect those paths by explicit site-owner decision, the disposable consent row stored the configured legal paths, registration context, `0.1.120` consent version, settings hash, `user_id = 0`, and no IP address field, and cleanup left zero disposable consent rows or helper files.
 - Disable/uninstall lifecycle acceptance passed on `hbf-staging` with disposable run `20260717140847`: deactivation removed only the retention schedule, uninstall-script execution removed documented plugin-owned settings, version option, tables, schedule, and rate-limit transient option rows, and disposable WordPress user, WooCommerce order, media attachment, unrelated control option, active-plugin state, settings hash, retention schedule, and pre-existing plugin table rows were preserved or restored. Cleanup left zero disposable fixtures or helper files, and the site stayed active on Alynt Account Gateway `0.1.120` with `/account` returning HTTP 200.
 - GDPR-facing documentation preparation added `docs/PRIVACY_AND_GDPR.md` and linked it from README, `readme.txt`, and `docs/SETTINGS.md`. The guide covers plugin-owned records, default retention, role boundaries, provider/processor review points, privacy notice prompts, WordPress exporter/eraser support, uninstall boundaries, debug payload logging cautions, and operational launch checks. Qualified legal review remains a site-owner responsibility where required.
+- Phase 8 operations documentation added `docs/OPERATIONS.md` and linked it from README, `readme.txt`, and `docs/SETTINGS.md`. The guide covers installation, activation, initial configuration, updates, rollback, frontend-output staging, emergency disable, emergency bypass, account creation, email operations, integration/provider ownership boundaries, dashboard/WooCommerce operations, operational tools, launch acceptance, extension interactions, versioning, defect severity, security reporting, and release rollback.
 
 ## v0.1.98 Pre-Readiness Settings UX Polish
 

@@ -5,6 +5,7 @@
 ### Added
 
 - Added a site-owner privacy and GDPR review guide for plugin-owned records, retention settings, processor boundaries, and data-subject request support.
+- Added an operations guide covering installation, updates, rollback, emergency disable, emergency bypass, support boundaries, versioning, and launch acceptance.
 
 ## 0.1.120 - 2026-07-17
 

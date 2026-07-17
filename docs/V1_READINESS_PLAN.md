@@ -992,18 +992,22 @@ Additional source evidence:
 
 ## Phase 8: Documentation And Operations
 
-- [ ] Document installation, update, rollback, activation, and initial configuration.
-- [ ] Document frontend-output staging and emergency-disable procedures.
-- [ ] Document emergency bypass purpose, storage, rotation, and recovery limitations.
-- [ ] Document account-creation, username-generation, email, dashboard, and WooCommerce settings.
-- [ ] Document Turnstile, Reoon, webhook, SMTP, and DNS ownership boundaries.
-- [ ] Document preview, test-send, diagnostics, import/export, reset, retention, and privacy tools.
-- [ ] Document known limitations, extension interactions, and support boundaries.
-- [ ] Create a site-owner acceptance checklist using non-technical language.
-- [ ] Define supported WordPress, PHP, WooCommerce, browser, and updater versions.
-- [ ] Define semantic-versioning, backward-compatibility, migration, and deprecation policy.
-- [ ] Define defect severity, support response, security-reporting, and release rollback procedures.
+- [x] Document installation, update, rollback, activation, and initial configuration.
+- [x] Document frontend-output staging and emergency-disable procedures.
+- [x] Document emergency bypass purpose, storage, rotation, and recovery limitations.
+- [x] Document account-creation, username-generation, email, dashboard, and WooCommerce settings.
+- [x] Document Turnstile, Reoon, webhook, SMTP, and DNS ownership boundaries.
+- [x] Document preview, test-send, diagnostics, import/export, reset, retention, and privacy tools.
+- [x] Document known limitations, extension interactions, and support boundaries.
+- [x] Create a site-owner acceptance checklist using non-technical language.
+- [x] Define supported WordPress, PHP, WooCommerce, browser, and updater versions.
+- [x] Define semantic-versioning, backward-compatibility, migration, and deprecation policy.
+- [x] Define defect severity, support response, security-reporting, and release rollback procedures.
 - [ ] Confirm the README, settings reference, hooks reference, changelog, POT, and release notes are current.
+
+### Phase 8 Documentation Evidence
+
+- Operations documentation added `docs/OPERATIONS.md` and linked it from the README, `readme.txt`, and settings reference. The guide covers installation, activation, initial configuration order, update procedure, rollback, frontend-output staging, emergency disable, emergency bypass purpose and limitations, account creation, email operations, Turnstile/Reoon/webhook/SMTP/DNS boundaries, dashboard/WooCommerce operations, preview/test-send/diagnostics/import-export/reset/retention/privacy tools, site-owner launch acceptance, known extension interactions, versioning, defect severity, security reporting, and release rollback.
 
 ## Phase 9: v1.0 Release Candidate
 

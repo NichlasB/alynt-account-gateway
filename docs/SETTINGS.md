@@ -87,6 +87,8 @@ Secrets must never be committed to documentation. Store Turnstile, Reoon, webhoo
 
 The General tab includes a read-only Setup Readiness panel. It summarizes whether frontend output, gateway URLs, emergency access, branding, public registration, email testing, dashboard configuration, WooCommerce takeover, webhook signing, and retention windows are ready, need review, or need action before public launch.
 
+Review `docs/OPERATIONS.md` for the recommended install, update, rollback, emergency-disable, staging, support-boundary, and production launch process.
+
 Email templates support token placeholders such as `{{site_name}}`, `{{first_name}}`, `{{last_name}}`, `{{user_email}}`, `{{confirmation_url}}`, `{{reset_url}}`, `{{change_email_url}}`, and `{{expiry_hours}}`.
 
 All five email body fields use the WordPress Visual and Text editor. Supported post-safe formatting includes headings, bold and italic emphasis, links, blockquotes, and ordered or unordered lists. Executable or unsafe markup is removed during settings sanitization and again before HTML rendering. Media uploads and arbitrary edits to the branded email wrapper are not exposed. Subjects and preheaders remain plain text, template-specific action buttons continue to use their URL tokens, and the plain-text fallback strips formatting while retaining the applicable action URL.
