@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 6 is active. Public `v0.1.119` is updater-verified on `hbf-staging`, Phase 5 dashboard/WooCommerce acceptance is complete, and Phase 6 target-current environment inventory, mobile/desktop route-matrix testing, 800px frontend boundary testing, narrow admin layout testing, keyboard/focus/live-region/password-control coverage, registration agreement-link focus, zoom/reflow/high-contrast/reduced-motion checks, third-party-request attribution, and console/log/diagnostics coverage passed on WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. Minimum-version, default-theme, and RTL/multilingual coverage remain open.
+- Current phase: Phase 6 is active. Public `v0.1.119` is updater-verified on `hbf-staging`, Phase 5 dashboard/WooCommerce acceptance is complete, and Phase 6 target-current environment inventory, mobile/desktop route-matrix testing, 800px frontend boundary testing, narrow admin layout testing, keyboard/focus/live-region/password-control coverage, registration agreement-link focus, zoom/reflow/high-contrast/reduced-motion checks, RTL/multilingual coverage, third-party-request attribution, and console/log/diagnostics coverage passed on WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. Minimum-version and default-theme coverage remain open.
 - Product baseline: `v0.1.119`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -830,7 +830,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [x] Verify the 800px gateway layout boundary and narrow admin settings layouts.
 - [x] Verify keyboard-only navigation, visible focus, error association, live regions, and password controls.
 - [x] Verify zoom, reflow, high contrast, reduced motion, and resilient color contrast.
-- [ ] Verify RTL layout and at least one translated locale across frontend and admin screens.
+- [x] Verify RTL layout and at least one translated locale across frontend and admin screens.
 - [x] Verify no unexpected remote font, tracking, or third-party request is introduced by default.
 - [x] Verify browser console, PHP logs, diagnostics, and network responses contain no plugin-caused errors.
 
@@ -840,7 +840,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Minimum supported | `6.0` declared | `7.4` declared | TBD | Default theme TBD | TBD | Pending | Requires isolated compatibility runtime; do not infer from `hbf-staging` |
 | Current supported | `7.0.1` | `8.2.32` | `10.9.4` | Blocksy Child / Blocksy `2.1.48`; Brizy `2.8.16` and Brizy Pro `2.8.9` active | `en_US` / LTR | Passed target-current baseline | Phase 6 target-current environment evidence |
-| Target staging | `7.0.1` | `8.2.32` | `10.9.4`; HPOS disabled | Blocksy Child / Blocksy `2.1.48`; Blocksy Companion Pro `2.1.49` | `en_US` / LTR | Passed target-current baseline | Phase 6 target-current environment evidence |
+| Target staging | `7.0.1` | `8.2.32` | `10.9.4`; HPOS disabled | Blocksy Child / Blocksy `2.1.48`; Blocksy Companion Pro `2.1.49` | `en_US` / LTR baseline; `es_ES` / LTR QA; `ar` / RTL QA | Passed target-current baseline and locale QA | Phase 6 target-current and multilingual/RTL evidence |
 
 ### Phase 6 Target-Current Environment Evidence
 
@@ -914,6 +914,18 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | Console/network attribution | The repeated unauthenticated `wp-json/iawp/search` HTTP 401 console error is attributed to active Independent Analytics Pro. Registration also showed Cloudflare Turnstile challenge warnings/errors, including a provider challenge request failure in the test browser environment. No failing request was attributed to an Account Gateway local asset. | Passed with documented external noise |
 | PHP and server logs | `wp-content/debug.log` had no recent output from the pass. The Nginx error log tail showed blocked external probes for sensitive files such as `.git`, `.env`, SQL dumps, and `wp-config` variants; no Account Gateway path, PHP warning, fatal, or notice appeared. | Passed |
 | Plugin-owned records | Plugin-owned table counts after the pass: pending registrations `0`, consent records `0`, diagnostics logs `0`, verification logs `6`, webhook logs `1`, and audit logs `1`. The non-empty records are existing acceptance artifacts, and this read-only pass created no new plugin diagnostics rows. | Recorded |
+
+### Phase 6 Multilingual And RTL Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Setup | Public `v0.1.119` remained installed and active on `hbf-staging`. WordPress `es_ES` and `ar` language packs were installed, temporary QA-only Account Gateway `.mo` files were placed in the plugin language paths, and a temporary MU plugin switched locale only for requests carrying the QA query parameter. The site baseline language stayed `en_US`. | Completed |
+| Translated LTR frontend | Login, registration, lost-password, and invalid-link routes rendered Spanish QA translations for Account Gateway screen titles, returned HTTP 200, kept `lang="es"` and LTR direction, rendered the Alynt gateway shell, avoided native WordPress login markers, and had no horizontal overflow at `390x844`. | Passed |
+| Translated LTR admin | The authenticated Account Gateway settings page rendered Spanish QA translations for the plugin title and Save Settings action, returned HTTP 200, and did not show the native login form. | Passed |
+| RTL frontend | Login, registration, lost-password, and invalid-link routes rendered Arabic QA translations at `390x844` and `1440x1000`, returned HTTP 200, kept `lang="ar"`, set document and gateway direction to RTL, kept email fields LTR, rendered the Alynt gateway shell, avoided native WordPress login markers, and had no horizontal overflow. | Passed |
+| RTL admin | The authenticated Account Gateway settings page rendered Arabic QA translations for the plugin title and Save Settings action, returned HTTP 200, exposed RTL markers, and did not show the native login form. | Passed |
+| Scope boundary | This pass proves runtime textdomain loading and RTL resilience with temporary QA translations. It does not claim that Spanish or Arabic production translations ship with the plugin. Permanent bundled translations remain a separate localization-content decision. | Preserved |
+| Cleanup and restore | The temporary MU plugin, temporary plugin/global `.mo` files, temporary remote helpers, local helper files, and disposable administrator `9290` were removed. Final checks returned `WPLANG` as `en_US`, Account Gateway active at `0.1.119`, zero matching locale QA users, and no QA locale files left on staging. | Completed |
 
 ## Phase 7: Privacy, Data, And Lifecycle Acceptance
 
