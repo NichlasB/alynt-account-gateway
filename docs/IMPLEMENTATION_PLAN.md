@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.0 readiness Phase 8 documentation and operations polish
+- Current phase: v1.0 release-candidate gate
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.120 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Continue Phase 8 final documentation sync in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md), confirming README, settings reference, hooks reference, changelog, POT, and release notes are current before the v1.0 release-candidate phase.
+- Next roadmap: Begin Phase 9 v1.0 release-candidate gate in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md), starting with open-finding review, release-candidate branch preparation, metadata alignment, full validation, package inspection, staging install, and explicit release approval.
 
 ## v1.0 Readiness Phase 7 Data Inventory And Minimization
 
@@ -40,6 +40,7 @@
 - Disable/uninstall lifecycle acceptance passed on `hbf-staging` with disposable run `20260717140847`: deactivation removed only the retention schedule, uninstall-script execution removed documented plugin-owned settings, version option, tables, schedule, and rate-limit transient option rows, and disposable WordPress user, WooCommerce order, media attachment, unrelated control option, active-plugin state, settings hash, retention schedule, and pre-existing plugin table rows were preserved or restored. Cleanup left zero disposable fixtures or helper files, and the site stayed active on Alynt Account Gateway `0.1.120` with `/account` returning HTTP 200.
 - GDPR-facing documentation preparation added `docs/PRIVACY_AND_GDPR.md` and linked it from README, `readme.txt`, and `docs/SETTINGS.md`. The guide covers plugin-owned records, default retention, role boundaries, provider/processor review points, privacy notice prompts, WordPress exporter/eraser support, uninstall boundaries, debug payload logging cautions, and operational launch checks. Qualified legal review remains a site-owner responsibility where required.
 - Phase 8 operations documentation added `docs/OPERATIONS.md` and linked it from README, `readme.txt`, and `docs/SETTINGS.md`. The guide covers installation, activation, initial configuration, updates, rollback, frontend-output staging, emergency disable, emergency bypass, account creation, email operations, integration/provider ownership boundaries, dashboard/WooCommerce operations, operational tools, launch acceptance, extension interactions, versioning, defect severity, security reporting, and release rollback.
+- Final Phase 8 documentation sync confirmed README, `readme.txt`, settings reference, hooks reference, changelog, POT, and readiness/release notes are current for the `0.1.120` baseline and the privacy/operations guides. POT regeneration produced the same `1004` strings with only timestamp metadata changed.
 
 ## v0.1.98 Pre-Readiness Settings UX Polish
 

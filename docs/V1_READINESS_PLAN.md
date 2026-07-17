@@ -1003,11 +1003,12 @@ Additional source evidence:
 - [x] Define supported WordPress, PHP, WooCommerce, browser, and updater versions.
 - [x] Define semantic-versioning, backward-compatibility, migration, and deprecation policy.
 - [x] Define defect severity, support response, security-reporting, and release rollback procedures.
-- [ ] Confirm the README, settings reference, hooks reference, changelog, POT, and release notes are current.
+- [x] Confirm the README, settings reference, hooks reference, changelog, POT, and release notes are current.
 
 ### Phase 8 Documentation Evidence
 
 - Operations documentation added `docs/OPERATIONS.md` and linked it from the README, `readme.txt`, and settings reference. The guide covers installation, activation, initial configuration order, update procedure, rollback, frontend-output staging, emergency disable, emergency bypass purpose and limitations, account creation, email operations, Turnstile/Reoon/webhook/SMTP/DNS boundaries, dashboard/WooCommerce operations, preview/test-send/diagnostics/import-export/reset/retention/privacy tools, site-owner launch acceptance, known extension interactions, versioning, defect severity, security reporting, and release rollback.
+- Final documentation sync confirmed README, `readme.txt`, settings reference, hooks reference, changelog, POT, and readiness/release notes are current for the `0.1.120` public baseline and the newly added privacy/operations guides. `npm.cmd run make-pot` regenerated `languages/alynt-account-gateway.pot` with the same `1004` strings and only timestamp metadata changed.
 
 ## Phase 9: v1.0 Release Candidate
 
