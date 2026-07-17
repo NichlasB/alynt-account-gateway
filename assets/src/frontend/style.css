@@ -269,7 +269,8 @@
 .agw-checkbox input:focus,
 .agw-button:focus,
 .agw-back-link:focus,
-.agw-links a:focus {
+.agw-links a:focus,
+.agw-checkbox a:focus {
 	outline: 2px solid var(--agw-color-primary);
 	outline-offset: 2px;
 }
@@ -279,7 +280,8 @@
 .agw-password__toggle:focus-visible,
 .agw-button:focus-visible,
 .agw-back-link:focus-visible,
-.agw-links a:focus-visible {
+.agw-links a:focus-visible,
+.agw-checkbox a:focus-visible {
 	outline: 3px solid var(--agw-color-primary);
 	outline-offset: 3px;
 }
@@ -1289,6 +1291,7 @@
 	.agw-button:focus,
 	.agw-back-link:focus,
 	.agw-links a:focus,
+	.agw-checkbox a:focus,
 	.agw-dashboard-section-actions a:focus,
 	.agw-dashboard-overview__action:focus,
 	.agw-dashboard-link:focus,

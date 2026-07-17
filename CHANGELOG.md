@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.118 - 2026-07-17
+
+### Fixed
+
+- Improved visible keyboard focus for registration Terms and Privacy Policy links inside the agreement checkbox.
+
 ## 0.1.117 - 2026-07-17
 
 ### Fixed
