@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 6 is active. Public `v0.1.119` is updater-verified on `hbf-staging`, Phase 5 dashboard/WooCommerce acceptance is complete, and Phase 6 target-current environment inventory, mobile/desktop route-matrix testing, 800px frontend boundary testing, narrow admin layout testing, registration agreement-link focus, and zoom/reflow/high-contrast/reduced-motion checks passed on WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. Minimum-version, default-theme, remaining accessibility coverage, RTL/multilingual, third-party-request, and error-log/console coverage remain open.
+- Current phase: Phase 6 is active. Public `v0.1.119` is updater-verified on `hbf-staging`, Phase 5 dashboard/WooCommerce acceptance is complete, and Phase 6 target-current environment inventory, mobile/desktop route-matrix testing, 800px frontend boundary testing, narrow admin layout testing, registration agreement-link focus, zoom/reflow/high-contrast/reduced-motion checks, third-party-request attribution, and console/log/diagnostics coverage passed on WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. Minimum-version, default-theme, remaining accessibility coverage, and RTL/multilingual coverage remain open.
 - Product baseline: `v0.1.119`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -831,8 +831,8 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [ ] Verify keyboard-only navigation, visible focus, error association, live regions, and password controls.
 - [x] Verify zoom, reflow, high contrast, reduced motion, and resilient color contrast.
 - [ ] Verify RTL layout and at least one translated locale across frontend and admin screens.
-- [ ] Verify no unexpected remote font, tracking, or third-party request is introduced by default.
-- [ ] Verify browser console, PHP logs, diagnostics, and network responses contain no plugin-caused errors.
+- [x] Verify no unexpected remote font, tracking, or third-party request is introduced by default.
+- [x] Verify browser console, PHP logs, diagnostics, and network responses contain no plugin-caused errors.
 
 ### Compatibility Matrix
 
@@ -902,6 +902,18 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | Reduced motion | Login, registration, and lost-password screens were checked with browser `prefers-reduced-motion: reduce`; forced-colors emulation was off, reduced-motion was active, transition and animation durations collapsed to near-zero timing, and there was no horizontal overflow at `390x844`. | Passed |
 | Corrective release | Public `v0.1.119` marks plugin-owned Turnstile containers and the frontend bundle sets `data-size="compact"` only when the verification slot is under `300px` wide. The GitHub Build Release workflow passed; the public ZIP had one plugin root, 55 runtime entries, zero development files, aligned `0.1.119` metadata, SHA-256 `569B50E68A63254152AD708C9B8E7CCA3291A6CA3FC3A34DD95930085C51D814`, the packaged Turnstile marker, and bundled compact/normal sizing logic. Alynt Plugin Updater detected `0.1.118 -> 0.1.119` and installed the public release asset on `hbf-staging`. | Released and updater-verified |
 | Installed retest | The installed `v0.1.119` registration screen at `320x1000` rendered the Alynt gateway marker, avoided native WordPress account markers, set the Turnstile widget to `data-size="compact"`, kept the verification slot inside the viewport, and had no page-level horizontal overflow. | Passed |
+
+### Phase 6 Request, Console, Log, And Diagnostics Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Setup | Public `v0.1.119` remained installed and active on `hbf-staging`; Frontend Output and registration were enabled. The pass used read-only browser, WP-CLI, and server-log checks without changing settings, users, orders, plugin records, or site files. | Completed |
+| Browser route sweep | Login, registration, lost-password, logout, and invalid-link routes returned HTTP 200, rendered the Alynt gateway shell, and avoided native WordPress login markers. No page-level JavaScript exception was raised by Account Gateway assets. | Passed |
+| Account Gateway asset attribution | Static source review found no Account Gateway remote font, analytics, or tracking enqueue. The plugin enqueues local frontend/admin assets, Cloudflare Turnstile only on the registration screen when configured, and server-side Reoon/Turnstile verification only during registration validation. | Passed |
+| Staging request attribution | Current staging pages load site-stack third-party assets from GetTerms, visitor tracking, Font Awesome CDNs, Bunny Fonts, and a browser-local AdGuard endpoint, plus Cloudflare Turnstile on the configured registration screen. These requests were not introduced by the plugin's default output and are attributed to existing site plugins/theme, browser environment, or the explicitly configured Turnstile provider. | Recorded |
+| Console/network attribution | The repeated unauthenticated `wp-json/iawp/search` HTTP 401 console error is attributed to active Independent Analytics Pro. Registration also showed Cloudflare Turnstile challenge warnings/errors, including a provider challenge request failure in the test browser environment. No failing request was attributed to an Account Gateway local asset. | Passed with documented external noise |
+| PHP and server logs | `wp-content/debug.log` had no recent output from the pass. The Nginx error log tail showed blocked external probes for sensitive files such as `.git`, `.env`, SQL dumps, and `wp-config` variants; no Account Gateway path, PHP warning, fatal, or notice appeared. | Passed |
+| Plugin-owned records | Plugin-owned table counts after the pass: pending registrations `0`, consent records `0`, diagnostics logs `0`, verification logs `6`, webhook logs `1`, and audit logs `1`. The non-empty records are existing acceptance artifacts, and this read-only pass created no new plugin diagnostics rows. | Recorded |
 
 ## Phase 7: Privacy, Data, And Lifecycle Acceptance
 
