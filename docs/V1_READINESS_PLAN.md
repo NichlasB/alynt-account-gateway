@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 6 is active. Public `v0.1.119` is updater-verified on `hbf-staging`, Phase 5 dashboard/WooCommerce acceptance is complete, and Phase 6 target-current environment inventory, mobile/desktop route-matrix testing, 800px frontend boundary testing, narrow admin layout testing, registration agreement-link focus, zoom/reflow/high-contrast/reduced-motion checks, third-party-request attribution, and console/log/diagnostics coverage passed on WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. Minimum-version, default-theme, remaining accessibility coverage, and RTL/multilingual coverage remain open.
+- Current phase: Phase 6 is active. Public `v0.1.119` is updater-verified on `hbf-staging`, Phase 5 dashboard/WooCommerce acceptance is complete, and Phase 6 target-current environment inventory, mobile/desktop route-matrix testing, 800px frontend boundary testing, narrow admin layout testing, keyboard/focus/live-region/password-control coverage, registration agreement-link focus, zoom/reflow/high-contrast/reduced-motion checks, third-party-request attribution, and console/log/diagnostics coverage passed on WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. Minimum-version, default-theme, and RTL/multilingual coverage remain open.
 - Product baseline: `v0.1.119`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -828,7 +828,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [x] Test with representative caching, security, SMTP, and WooCommerce extension combinations.
 - [x] Verify login, registration, reset, logout, dashboard, and WooCommerce routes at mobile and desktop widths.
 - [x] Verify the 800px gateway layout boundary and narrow admin settings layouts.
-- [ ] Verify keyboard-only navigation, visible focus, error association, live regions, and password controls.
+- [x] Verify keyboard-only navigation, visible focus, error association, live regions, and password controls.
 - [x] Verify zoom, reflow, high contrast, reduced motion, and resilient color contrast.
 - [ ] Verify RTL layout and at least one translated locale across frontend and admin screens.
 - [x] Verify no unexpected remote font, tracking, or third-party request is introduced by default.
