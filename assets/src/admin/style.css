@@ -788,4 +788,11 @@
 	.alynt-ag-dashboard-link-row__grid {
 		grid-template-columns: 1fr;
 	}
+
+	.alynt-ag-admin .widefat {
+		display: block;
+		max-width: 100%;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
 }

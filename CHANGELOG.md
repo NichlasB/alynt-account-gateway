@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.117 - 2026-07-17
+
+### Fixed
+
+- Contained narrow admin Webhooks log tables so they scroll inside the plugin settings page instead of causing page-level horizontal overflow.
+
 ## 0.1.116 - 2026-07-17
 
 ### Fixed
