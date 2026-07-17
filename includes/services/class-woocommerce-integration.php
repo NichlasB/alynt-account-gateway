@@ -335,8 +335,11 @@ class ALYNT_AG_WooCommerce_Integration {
 
 		do_action( 'woocommerce_account_' . sanitize_key( $endpoint ) . '_endpoint', $value );
 
-		$output = ob_get_clean();
-		if ( ! is_string( $output ) || '' === trim( $output ) ) {
+		$output        = ob_get_clean();
+		$content_check = is_string( $output ) ? trim( $output ) : '';
+		$content_check = preg_replace( '#<div\s+class=(["\'])woocommerce-notices-wrapper\1>\s*</div>#i', '', $content_check );
+
+		if ( ! is_string( $output ) || '' === trim( (string) $content_check ) ) {
 			return false;
 		}
 

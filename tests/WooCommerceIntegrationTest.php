@@ -145,6 +145,23 @@ class WooCommerceIntegrationTest extends TestCase {
 		$this->assertSame( array( '2' ), $GLOBALS['alynt_ag_test_actions'][0]['args'] );
 	}
 
+	public function test_render_endpoint_returns_false_when_only_empty_notice_wrapper_outputs() {
+		$integration = new class() extends ALYNT_AG_WooCommerce_Integration {
+			public function detect() {
+				return true;
+			}
+		};
+
+		$GLOBALS['alynt_ag_test_action_output']['woocommerce_account_orders_endpoint'] = '<div class="woocommerce-notices-wrapper"></div>';
+
+		ob_start();
+		$result = $integration->render_endpoint( 'orders', '2' );
+		$html   = ob_get_clean();
+
+		$this->assertFalse( $result );
+		$this->assertSame( '', $html );
+	}
+
 	public function test_render_endpoint_outputs_woocommerce_action_content_when_available() {
 		$integration = new class() extends ALYNT_AG_WooCommerce_Integration {
 			public function detect() {
