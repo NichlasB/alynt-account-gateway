@@ -946,8 +946,8 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [ ] Verify Terms and Privacy consent capture and the site's legal copy ownership.
 - [x] Verify WordPress personal-data exporter output for plugin-owned records.
 - [x] Verify WordPress personal-data eraser behavior and documented exceptions.
-- [ ] Verify configured retention cleanup schedules and manual cleanup controls.
-- [ ] Verify webhook payload-body storage remains disabled unless debugging is deliberately enabled.
+- [x] Verify configured retention cleanup schedules and manual cleanup controls.
+- [x] Verify webhook payload-body storage remains disabled unless debugging is deliberately enabled.
 - [ ] Verify disabling or uninstalling the plugin does not remove WordPress users, WooCommerce orders, or unrelated media.
 - [ ] Verify uninstall removes only documented plugin-owned options, tables, scheduled hooks, and transient data.
 - [ ] Review GDPR-facing documentation with the site owner or qualified adviser where required.
@@ -983,6 +983,8 @@ Additional source evidence:
 - Updater evidence: Alynt Plugin Updater `1.1.1` force-refreshed managed release metadata and installed `0.1.119 -> 0.1.120` on `hbf-staging` from the public GitHub asset. The installed plugin remained active at `0.1.120`, `/account` returned HTTP 200, and non-secret settings plus active-plugin hashes matched the pre-update baselines.
 - Runtime exporter evidence on `hbf-staging` used disposable run `20260717133148` against the registered WordPress privacy callbacks. The pending/non-user subject exported exactly the expected Account Gateway consent, pending registration, and email-verification groups, and it omitted an unrelated `user_id = 0` consent control row. The real disposable user subject exported Account Gateway consent and webhook delivery metadata and did not export audit-log context.
 - Runtime eraser evidence for the same run passed: pending registration, verification, consent, webhook, and audit plugin-owned rows were removed as documented; the WordPress user was retained after the eraser to preserve WordPress ownership boundaries; and fixture cleanup then explicitly deleted the disposable user and unrelated control row. Follow-up cleanup verification reported zero matching pending, consent, verification, webhook, audit, and user records.
+- Runtime retention evidence on `hbf-staging` used disposable run `20260717134338`. The daily `alynt_ag_retention_cleanup` schedule was present, diagnostics manual-clear capability was available, and saved retention windows were success webhook `7`, failed webhook `30`, verification `30`, diagnostics `30`, consent `365`, and audit `180` days. After invoking the real cleanup service, expired fixture rows were removed from pending registrations, success and failed webhook logs, verification logs, diagnostics logs, consent records, and audit logs, while fresh fixture rows in each store were preserved.
+- Runtime webhook payload-storage evidence for the same run confirmed `debug_payload_logging` is disabled by default, default webhook metadata rows store `NULL` payloads, and payload JSON is stored only when debug payload logging is explicitly enabled. Follow-up cleanup verification reported zero matching pending, webhook, verification, diagnostics, consent, and audit fixture rows; temporary local and remote helpers were removed, and `hbf-staging` still reported Alynt Account Gateway active at `0.1.120` with `/account` returning HTTP 200.
 
 ## Phase 8: Documentation And Operations
 
