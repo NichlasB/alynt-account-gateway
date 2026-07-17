@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 7 privacy, data, and lifecycle acceptance is in progress. The data inventory, runtime exporter/eraser, retention cleanup, webhook payload-storage, Terms/Privacy consent ownership, disable/uninstall lifecycle, and GDPR-facing documentation preparation slices have passed on public `v0.1.120`, installed through Alynt Plugin Updater on `hbf-staging`. Phase 5 dashboard/WooCommerce acceptance is complete, and Phase 6 compatibility acceptance passed. The production-like staging stack is WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. The local default-theme smoke used Plugin Tester with Twenty Twenty-Five.
+- Current phase: Phase 9 v1.0 release-candidate gate is in progress. Phase 7 data/privacy/lifecycle acceptance and Phase 8 documentation sync are complete on public `v0.1.120`, installed through Alynt Plugin Updater on `hbf-staging`. Local branch `release/1.0.0` has aligned release-candidate metadata and passed build, PHPCS, PHPUnit, POT, npm audit, Composer audit, PHP syntax, and diff checks. Staging release-candidate installation, final smoke, explicit release approval, public asset inspection, and updater verification remain pending.
 - Product baseline: `v0.1.120`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -1012,13 +1012,13 @@ Additional source evidence:
 
 ## Phase 9: v1.0 Release Candidate
 
-- [ ] Resolve or formally defer every acceptance finding with owner, severity, rationale, and retest evidence.
-- [ ] Confirm no critical or high-severity defects remain open.
-- [ ] Confirm the repository starts from clean, released, and updater-verified `master`.
-- [ ] Create the `release/1.0.0` branch only after acceptance scope is approved.
-- [ ] Align plugin header, constant, npm metadata, stable tag, changelog, README, tests, and POT at `1.0.0`.
-- [ ] Run production build, PHPCS, full PHPUnit suite, POT generation, npm audit, Composer audit, and diff checks.
-- [ ] Build and inspect the runtime ZIP for one root, forward-slash entries, runtime-only contents, aligned metadata, and updater headers.
+- [x] Resolve or formally defer every acceptance finding with owner, severity, rationale, and retest evidence.
+- [x] Confirm no critical or high-severity defects remain open.
+- [x] Confirm the repository starts from clean, released, and updater-verified `master`.
+- [x] Create the `release/1.0.0` branch only after acceptance scope is approved.
+- [x] Align plugin header, constant, npm metadata, stable tag, changelog, README, tests, and POT at `1.0.0`.
+- [x] Run production build, PHPCS, full PHPUnit suite, POT generation, npm audit, Composer audit, and diff checks.
+- [x] Build and inspect the runtime ZIP for one root, forward-slash entries, runtime-only contents, aligned metadata, and updater headers.
 - [ ] Install the exact release candidate on the acceptance target and repeat critical account, email, integration, and WooCommerce smoke tests.
 - [ ] Verify the settings fingerprint, activation state, test-data cleanup, and rollback package.
 - [ ] Complete privacy and secret preflight before publication.
@@ -1029,6 +1029,17 @@ Additional source evidence:
 - [ ] Run post-updater browser and runtime smoke tests.
 - [ ] Remove temporary users, orders, credentials, helper files, packages, and evidence containing sensitive data.
 - [ ] Record release, workflow, public-asset, updater, cleanup, and final-site-state evidence in this plan.
+
+### Phase 9 Release Candidate Evidence
+
+| Item | Evidence | Status |
+| --- | --- | --- |
+| Open finding review | `P0-002`, `P0-003`, and `P0-004` are incumbent or environment baselines, assigned to the site/incumbent owners, and formally deferred as non-blocking for `v1.0.0`. All product-owned critical and high findings are closed. | Passed |
+| Clean release branch | Work started from the clean, released, and updater-verified `master` baseline `v0.1.120`; branch `release/1.0.0` was created for the release candidate. | Passed |
+| Metadata alignment | Plugin header, `ALYNT_AG_VERSION`, npm metadata, lockfile metadata, WordPress stable tag, changelog, sample version assertion, and POT project header are aligned to `1.0.0`. | Passed |
+| Local validation | `npm.cmd run build`; `npm.cmd run make-pot` (`1004` strings); `npm.cmd run lint`; `npm.cmd test` (`299 tests`, `1973 assertions`); `npm.cmd audit --audit-level=high`; `php .\composer.phar audit`; PHP syntax sweep (`108` files); and `git diff --check` all passed. | Passed |
+| Runtime ZIP inspection | Local release-candidate package `C:\Users\Captain\Documents\AI Workflows\work\acg-v1.0.0-rc-20260717\alynt-account-gateway-v1.0.0-rc.zip` contains 45 runtime files under one `alynt-account-gateway` root, zero backslash entries, zero development-file hits, aligned `1.0.0` header/constant/stable-tag/POT metadata, and exactly one updater header. SHA-256 `4467B664F3C8FFE79FDF138BAED4B4FC9FBD61C94523FB03E5B86014674173EF`. | Passed |
+| Remaining RC gate | Exact RC install on `hbf-staging`, critical smoke retest, privacy/secret preflight, explicit release approval, GitHub publication, public asset inspection, Alynt Plugin Updater verification, final cleanup, and release evidence are still pending. | Pending |
 
 ## v1.0 Go / No-Go Gate
 
@@ -1051,9 +1062,9 @@ Release is approved only when all statements below are true:
 | ID | Phase | Severity | Finding | Owner | Decision | Retest Evidence | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `P0-001` | 0 / 1 | High | WP Custom Login Manager and Force Login overlapped Alynt Account Gateway routes and authentication redirects before handover. | Product + site owner | Closed for `hbf-staging` by controlled handover: ACG owns configured gateway routes, WP Custom Login Manager is inactive, Force Login remains active with a narrow route bypass, and the emergency bypass is verified. | `v0.1.108` Force Login compatibility, `v0.1.109` canonical redirect correction, `v0.1.110` Turnstile script cleanup, route checks, browser smoke, and updater installation evidence | Closed for staging |
-| `P0-002` | 0 | Medium | The incumbent login page throws `this.initKeyboardNavigation is not a function`. | Incumbent plugin owner / site owner | Preserve as a pre-install baseline; verify it disappears with the controlled handover and does not recur in Alynt Account Gateway. | Browser console comparison after handover | Open baseline |
-| `P0-003` | 0 | Low | WP-CLI reports early text-domain loading for `wp-custom-login-manager`. | Incumbent plugin owner / site owner | Preserve as a pre-install baseline and keep it out of Alynt Account Gateway defect attribution. | Post-handover WP-CLI comparison | Open baseline |
-| `P0-004` | 0 | Low | Unrelated Brizy, Brizy Pro, and Presto Player Pro updates were available during baseline capture. | Site owner | Freeze unrelated updates during acceptance unless separately approved; record any unavoidable drift. | Version comparison before each acceptance run | Monitoring |
+| `P0-002` | 0 | Medium | The incumbent login page throws `this.initKeyboardNavigation is not a function`. | Incumbent plugin owner / site owner | Formally deferred for `v1.0.0` as an incumbent baseline, not an Alynt Account Gateway defect. Handover and later gateway smoke did not attribute the error to ACG assets. | Browser console comparison after handover and no product-owned critical/high findings open at Phase 9 review | Deferred non-blocking |
+| `P0-003` | 0 | Low | WP-CLI reports early text-domain loading for `wp-custom-login-manager`. | Incumbent plugin owner / site owner | Formally deferred for `v1.0.0` as an incumbent plugin baseline outside the ACG release scope. | Post-handover WP-CLI comparison and Phase 9 open-finding review | Deferred non-blocking |
+| `P0-004` | 0 | Low | Unrelated Brizy, Brizy Pro, and Presto Player Pro updates were available during baseline capture. | Site owner | Formally deferred for `v1.0.0` as environment monitoring. Unrelated updates remain frozen during the RC gate unless separately approved. | Version comparison before acceptance runs and Phase 9 open-finding review | Deferred non-blocking |
 | `P0-005` | 0 / 1 | Low | The incumbent Turnstile script warned that its `onTurnstileReady` callback was unavailable at load time. | Incumbent plugin owner / site owner | Preserve as an incumbent-only baseline; zero Alynt Account Gateway assets were loaded when reproduced. ACG registration now loads Turnstile without a fresh console warning after `v0.1.110`. | Browser console comparison after handover | Closed baseline |
 | `P1-001` | 1 | Medium | Customer wp-admin blocking and admin-bar filtering were registered while Frontend Output was disabled. The existing `hbf-staging` stack masked the behavior, producing no active/inactive runtime delta. | Product owner | Frontend Output is the master safety toggle; both policies now honor it in `v0.1.99`. | Disposable-role comparison, isolated regression tests, exact-package Plugin Tester smoke, public asset verification, Alynt Plugin Updater installation, and installed-copy staging role retest | Closed |
 | `P1-002` | 1 | Medium | The configured `/terms/` and `/privacy/` paths did not resolve directly, and their redirected `/legal/terms/` and `/legal/privacy/` destinations were not anonymously reachable while Force Login owned public access. | Site owner | Use `/legal/terms/` and `/legal/privacy/` as the Account Gateway settings. Do not exempt them from Force Login on `hbf-staging`, because Force Login is staging-only. | Saved settings, published custom `legal` post mappings, and anonymous HTTP 302 confirmation | Closed for staging |
