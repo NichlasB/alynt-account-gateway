@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.0.2 - 2026-07-17
+
+### Changed
+
+- Widened gateway cards, reduced panel/card horizontal padding, and removed trailing paragraph spacing inside instruction notices for a calmer account-screen layout.
+- Updated Gateway Background Image guidance to recommend tall portrait imagery around 1280 x 1920px for the desktop two-column layout.
+
 ## 1.0.1 - 2026-07-17
 
 ### Security

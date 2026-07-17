@@ -119,13 +119,13 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 48px;
+	padding: 24px;
 }
 
 .agw-card {
 	width: 100%;
-	max-width: 420px;
-	padding: 40px 36px;
+	max-width: 540px;
+	padding: 40px 24px;
 	border-radius: 8px;
 	background: var(--agw-color-surface);
 	box-shadow: 0 1px 2px rgb(40 20 8 / 5%), 0 16px 32px -16px rgb(40 20 8 / 14%);
@@ -169,6 +169,10 @@
 	color: var(--agw-color-text);
 	font-size: 18px;
 	line-height: 1.5;
+}
+
+.agw-notice p:last-child {
+	margin: 0;
 }
 
 .agw-status {

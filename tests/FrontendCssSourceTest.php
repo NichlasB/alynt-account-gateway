@@ -144,4 +144,12 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertMatchesRegularExpression( '/\.agw-back-link\s*\{[^}]*font-size:\s*18px;/s', $css );
 		$this->assertMatchesRegularExpression( '/\.agw-dashboard-content input,[^}]*font-size:\s*18px;/s', $css );
 	}
+
+	public function test_gateway_card_spacing_matches_post_v1_visual_tweak() {
+		$css = $this->get_frontend_css();
+
+		$this->assertMatchesRegularExpression( '/\.agw-panel\s*\{[^}]*padding:\s*24px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-card\s*\{[^}]*max-width:\s*540px;[^}]*padding:\s*40px 24px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-notice p:last-child\s*\{[^}]*margin:\s*0;/s', $css );
+	}
 }

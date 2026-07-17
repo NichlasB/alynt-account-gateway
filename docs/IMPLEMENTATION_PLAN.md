@@ -7,7 +7,120 @@
 - Plugin status: v1.0.1 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Continue with post-v1 maintenance only after a new, separately scoped product or maintenance slice is approved.
+- Next roadmap: Begin the approved post-v1 product roadmap below, starting with the Alynt Plugin Updater follow-up unless a higher-priority production rollout need appears.
+
+## Post-v1 Product Roadmap
+
+### Status
+
+- Current v1 product baseline: `v1.0.1`, released and updater-verified.
+- Original v1 implementation slices: Complete.
+- New approved post-v1 slices: Alynt Plugin Updater follow-up, deeper provider admin UX, and dashboard UX expansion.
+- New approved visual/admin-help tweak: widen gateway cards, reduce panel/card horizontal padding, remove trailing notice paragraph margin, and correct background-image guidance toward tall portrait imagery.
+- Deferred for later: production rollout playbook.
+- Exploratory/deferred: inactive-account integration until a real site or companion plugin defines the authoritative inactive/suspended-account signal.
+
+### Recommended Sequence
+
+1. Alynt Plugin Updater follow-up.
+2. Gateway layout and background-image guidance tweak.
+3. Deeper provider admin UX.
+4. Dashboard UX expansion.
+5. Production rollout playbook, when the first production rollout is ready to be operationalized.
+6. Inactive-account integration only if a concrete inactive/suspended-user source is identified.
+
+### Slice 1 - Alynt Plugin Updater Follow-Up
+
+#### Scope
+
+- [ ] Investigate why headless or programmatic WordPress upgrader flows can leave Alynt Account Gateway inactive after replacement, even when the package install succeeds.
+- [ ] Determine whether the fix belongs in Alynt Account Gateway, Alynt Plugin Updater, the updater verification harness, or documented operator procedure.
+- [ ] Prefer an updater-level fix if the activation-state issue affects more than one Alynt-distributed plugin.
+- [ ] Preserve native WordPress updater behavior, public GitHub release compatibility, source-directory correction, and rollback safety.
+- [ ] Add regression coverage or a repeatable verifier that proves the active plugin list is preserved after an Alynt Plugin Updater install.
+- [ ] Publish and updater-verify the corrective release in the appropriate repository before continuing to broader product UX work.
+
+#### Acceptance Criteria
+
+- [ ] ACG can be updated from a prior public release through Alynt Plugin Updater without requiring manual active-plugin restoration.
+- [ ] Settings, active-plugin order, runtime file count, and no-update state are verified after update.
+- [ ] The known stale release-cache behavior is either fixed, documented with a safe refresh path, or covered by an updater UI/operation affordance.
+- [ ] The result is validated on LocalWP Plugin Tester and recorded in the relevant plan.
+
+### Slice 2 - Gateway Layout And Background-Image Guidance Tweak
+
+#### Scope
+
+- [ ] Widen the gateway card from `420px` to `540px` so login, registration, password, logout, and state screens have more comfortable form width.
+- [ ] Reduce gateway card horizontal padding to `24px` and panel padding to `24px` for a calmer, less cramped layout.
+- [ ] Remove trailing paragraph margin inside `.agw-notice` so single-paragraph instruction boxes align cleanly.
+- [ ] Update the Gateway Background Image help text to recommend tall portrait imagery for the desktop two-column media panel.
+- [ ] Use `1280 x 1920px` or a similar `2:3` portrait ratio as the recommended background-image size.
+
+#### Acceptance Criteria
+
+- [ ] Gateway screens render with `.agw-card` max-width `540px` and padding `40px 24px`.
+- [ ] `.agw-panel` uses `24px` padding across desktop and mobile unless narrower breakpoints intentionally override it.
+- [ ] `.agw-notice p:last-child` has zero margin.
+- [ ] The admin help text no longer recommends a wide image for the gateway background and instead recommends portrait imagery.
+- [ ] Frontend source tests and build pass.
+
+### Slice 3 - Deeper Provider Admin UX
+
+#### Scope
+
+- [ ] Improve Turnstile and Reoon setup visibility on the Security tab without exposing secrets.
+- [ ] Add clearer configured/missing/warning/pass/fail provider states for site owners.
+- [ ] Add safe provider test tools where possible, including server-side Turnstile validation guidance and Reoon test-result interpretation.
+- [ ] Surface either-provider versus both-provider behavior in plain operational language.
+- [ ] Improve recent verification logs with next-step guidance for provider timeout, outage, invalid token, disposable, invalid, role-account, catch-all, and unknown outcomes.
+- [ ] Keep provider decisions, registration flow, rate-limit enforcement, and saved secret handling backward-compatible unless a specific release note calls out a change.
+
+#### Acceptance Criteria
+
+- [ ] An administrator can tell whether Turnstile, Reoon, both, or neither is configured without submitting a registration.
+- [ ] Provider test or guidance output avoids leaking API keys, site keys, tokens, email addresses, or raw payloads.
+- [ ] Recent verification rows provide actionable next steps for common failure modes.
+- [ ] Existing security and anti-spam tests pass, and new UI markers are covered by focused tests.
+
+### Slice 4 - Dashboard UX Expansion
+
+#### Scope
+
+- [ ] Add richer branded dashboard widgets while preserving WooCommerce's delegated account-management actions.
+- [ ] Consider order-summary, recent-order, account-health, saved-address, downloads, payment-method, and helpful-link modules.
+- [ ] Keep the dashboard brand-agnostic by relying on existing color, typography, logo, custom-link, and WooCommerce settings.
+- [ ] Preserve WooCommerce endpoint compatibility, native nonce handling, account form submission behavior, and plugin-added endpoint support.
+- [ ] Keep empty, unavailable, and extension-dependent states calm and helpful.
+- [ ] Add responsive and accessibility checks for dashboard modules at mobile, tablet, and desktop widths.
+
+#### Acceptance Criteria
+
+- [ ] Customers see useful account context on the first dashboard screen without losing access to Orders, Downloads, Addresses, Payment Methods, and Account Details.
+- [ ] Dashboard modules do not replace or bypass sensitive WooCommerce form handlers.
+- [ ] Dashboard layout has no horizontal overflow or clipped controls down to 320px.
+- [ ] Custom links, role visibility, ordering, icons, and new-tab behavior remain intact.
+
+### Deferred Slice - Production Rollout Playbook
+
+#### Scope
+
+- [ ] Create a concise operational launch checklist for installing and configuring ACG on a production site.
+- [ ] Cover backups, rollback, frontend-output staging, route handover, emergency bypass, email deliverability, provider keys, webhook receiver, legal URLs, and post-launch smoke tests.
+- [ ] Keep this deferred until there is an actual first production rollout or the user explicitly asks for the playbook.
+
+### Exploratory Slice - Inactive Account Integration
+
+#### Current Decision
+
+- [ ] Defer by default because WordPress core does not provide a reliable inactive/suspended-user state.
+- [ ] Revisit only when a target site, membership plugin, CRM, LMS, subscription system, or custom user-meta convention defines the authoritative inactive-account signal.
+
+#### Possible Future Scope
+
+- [ ] Add a filter-first integration point for inactive-account checks.
+- [ ] Optionally add settings for a site-owned user-meta key/value rule if a generic need emerges.
+- [ ] Ensure any blocking behavior uses branded, neutral messaging and does not reveal account status to unauthenticated attackers.
 
 ## v1.0.1 Client-IP Hardening Maintenance Release
 

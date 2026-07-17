@@ -589,7 +589,7 @@ class ALYNT_AG_Settings_Page {
 			'accent_color'                       => __( 'Used for soft panels and supporting accents. Choose a color that supports the primary color without overpowering form content.', 'alynt-account-gateway' ),
 			'button_background_color'            => __( 'Check this together with the button text color so primary actions remain readable and accessible.', 'alynt-account-gateway' ),
 			'button_text_color'                  => __( 'Use enough contrast against the button background color for readable primary actions.', 'alynt-account-gateway' ),
-			'background_image_id'                => __( 'Used in the desktop two-column gateway layout. Choose a wide image that can crop gracefully as the viewport changes.', 'alynt-account-gateway' ),
+			'background_image_id'                => __( 'Used in the desktop two-column gateway layout. Choose a tall portrait image that can crop gracefully as the viewport changes. Recommended size: about 1280 x 1920px or similar 2:3 portrait ratio.', 'alynt-account-gateway' ),
 			'heading_font_family'                => __( 'Enter a comma-separated CSS font stack. For example, if Blocksy already loads the Google Font Poppins, use "Poppins", Arial, sans-serif. This plugin does not load fonts itself.', 'alynt-account-gateway' ),
 			'body_font_family'                   => __( 'Enter the preferred font first, followed by fallbacks. For example, if Blocksy already loads Inter, use "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif.', 'alynt-account-gateway' ),
 			'protection_mode'                    => __( 'Controls how configured anti-spam providers are evaluated during registration.', 'alynt-account-gateway' ),
