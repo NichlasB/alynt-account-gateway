@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 6 is active. Public `v0.1.116` is updater-verified on `hbf-staging`, Phase 5 dashboard/WooCommerce acceptance is complete, and the first Phase 6 target-current environment inventory passed on WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. Minimum-version, default-theme, responsive, accessibility, RTL/multilingual, third-party-request, and error-log/console coverage remain open.
+- Current phase: Phase 6 is active. Public `v0.1.116` is updater-verified on `hbf-staging`, Phase 5 dashboard/WooCommerce acceptance is complete, and Phase 6 target-current environment inventory plus mobile/desktop route-matrix testing passed on WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. Minimum-version, default-theme, 800px boundary, narrow admin layout, accessibility, RTL/multilingual, third-party-request, and error-log/console coverage remain open.
 - Product baseline: `v0.1.116`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -826,7 +826,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [x] Test the current supported WordPress, PHP, and WooCommerce versions.
 - [ ] Test at least one default WordPress theme and the target site's production theme/builder.
 - [x] Test with representative caching, security, SMTP, and WooCommerce extension combinations.
-- [ ] Verify login, registration, reset, logout, dashboard, and WooCommerce routes at mobile and desktop widths.
+- [x] Verify login, registration, reset, logout, dashboard, and WooCommerce routes at mobile and desktop widths.
 - [ ] Verify the 800px gateway layout boundary and narrow admin settings layouts.
 - [ ] Verify keyboard-only navigation, visible focus, error association, live regions, and password controls.
 - [ ] Verify zoom, reflow, high contrast, reduced motion, and resilient color contrast.
@@ -854,6 +854,17 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | Builder/account/payment/shipping stack | Representative active stack includes Blocksy Companion Pro `2.1.49`, Brizy `2.8.16`, Brizy Pro `2.8.9`, WooCommerce `10.9.4`, PayPal Payments `2.0.22`, NMI gateway `1.2.11`, USPS Shipping `5.5.8`, Shipping Insurance Manager `1.8`, WooCommerce PDF invoices `5.15.2`, and Alynt WooCommerce companion plugins. | Passed as target-current stack |
 | Enabled payment and shipping runtime | Enabled gateways are PayPal (`ppcp`) and NMI (`nmi`); registered shipping methods include flat rate, free shipping, local pickup, and USPS. | Recorded |
 | Scope boundary | Default-theme and minimum-supported-version testing are intentionally not claimed from this staging pass because switching the live staging theme or changing WordPress/PHP versions would be disruptive; those remain separate Phase 6 work. | Preserved |
+
+### Phase 6 Mobile/Desktop Route Matrix Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Setup | Public `v0.1.116` remained installed on `hbf-staging`; Frontend Output, registration, dashboard, and WooCommerce takeover were temporarily enabled from a settings snapshot for one disposable customer. | Completed |
+| Viewports | Browser automation covered `390x844` mobile and `1440x1000` desktop widths. | Passed |
+| Public auth routes | `/login/`, `/account?action=register`, `/account?action=lostpassword`, `/account?action=setpassword`, and `/account?action=logout` returned HTTP 200, rendered the Alynt gateway marker, avoided native WordPress login/admin-bar output, and had no horizontal overflow. Mobile auth routes hid the split media panel; desktop auth routes displayed it. | Passed |
+| Set-password validation | An initial stale reset key rendered the branded invalid/reset-request fallback; server-side validation returned `invalid_key`. A fresh disposable reset key then rendered the expected `Set New Password` screen with two password fields, password-strength UI, requirements list, and `Save Password` button at both mobile and desktop widths. | Passed |
+| Dashboard and WooCommerce routes | Authenticated `/my-account/`, `/my-account/orders/`, `/my-account/edit-address/`, and `/my-account/edit-account/` returned HTTP 200, rendered the Alynt dashboard shell, avoided native login/admin-bar output for the customer, displayed expected dashboard/WooCommerce copy, and had no horizontal overflow. | Passed |
+| Cleanup and restore | Original settings were restored; disposable user `9285`, temporary remote helpers, local helpers, snapshot option, and reset-key helpers were removed. Final cleanup returned plugin `0.1.116`, zero matching route-matrix QA users, no snapshot option, and no helper leftovers. | Completed |
 
 ## Phase 7: Privacy, Data, And Lifecycle Acceptance
 
