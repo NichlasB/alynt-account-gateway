@@ -944,8 +944,8 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [x] Confirm the data inventory for pending registrations, consent, verification, webhooks, diagnostics, and audit records.
 - [x] Verify data minimization and redaction in settings, logs, exports, webhooks, and support evidence.
 - [ ] Verify Terms and Privacy consent capture and the site's legal copy ownership.
-- [ ] Verify WordPress personal-data exporter output for plugin-owned records.
-- [ ] Verify WordPress personal-data eraser behavior and documented exceptions.
+- [x] Verify WordPress personal-data exporter output for plugin-owned records.
+- [x] Verify WordPress personal-data eraser behavior and documented exceptions.
 - [ ] Verify configured retention cleanup schedules and manual cleanup controls.
 - [ ] Verify webhook payload-body storage remains disabled unless debugging is deliberately enabled.
 - [ ] Verify disabling or uninstalling the plugin does not remove WordPress users, WooCommerce orders, or unrelated media.
@@ -981,6 +981,8 @@ Additional source evidence:
 - The inspected 45-file runtime package at `C:\Users\Captain\Desktop\alynt-account-gateway-0.1.120.zip` contains no development files or stale `build/` artifacts, aligns all `0.1.120` metadata, includes the three privacy-hardening markers, and has SHA-256 `7F405592AEF58CC336B22BCB8005027E6CBDB4818B819DF6F21B29CAE5B1ACE2`.
 - Public `v0.1.120` release evidence: GitHub Build Release workflow `29583500288` passed, the public asset `alynt-account-gateway-v0.1.120.zip` contains 45 runtime files under one plugin root with no development files, all `0.1.120` metadata is aligned, and the public ZIP SHA-256 is `9CA485D6502820806A44D11C540621EBA07C1B74852D8470663A0AF863C5CB3B`.
 - Updater evidence: Alynt Plugin Updater `1.1.1` force-refreshed managed release metadata and installed `0.1.119 -> 0.1.120` on `hbf-staging` from the public GitHub asset. The installed plugin remained active at `0.1.120`, `/account` returned HTTP 200, and non-secret settings plus active-plugin hashes matched the pre-update baselines.
+- Runtime exporter evidence on `hbf-staging` used disposable run `20260717133148` against the registered WordPress privacy callbacks. The pending/non-user subject exported exactly the expected Account Gateway consent, pending registration, and email-verification groups, and it omitted an unrelated `user_id = 0` consent control row. The real disposable user subject exported Account Gateway consent and webhook delivery metadata and did not export audit-log context.
+- Runtime eraser evidence for the same run passed: pending registration, verification, consent, webhook, and audit plugin-owned rows were removed as documented; the WordPress user was retained after the eraser to preserve WordPress ownership boundaries; and fixture cleanup then explicitly deleted the disposable user and unrelated control row. Follow-up cleanup verification reported zero matching pending, consent, verification, webhook, audit, and user records.
 
 ## Phase 8: Documentation And Operations
 
