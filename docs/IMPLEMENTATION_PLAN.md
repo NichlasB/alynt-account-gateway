@@ -7,7 +7,7 @@
 - Plugin status: v0.1.120 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Continue Phase 7 acceptance in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md), beginning with Terms/Privacy consent ownership, disable/uninstall lifecycle, and GDPR-facing documentation review after the retention cleanup and webhook payload-storage slice.
+- Next roadmap: Continue Phase 7 acceptance in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md), beginning with disable/uninstall lifecycle checks and GDPR-facing documentation review after the Terms/Privacy consent ownership slice.
 
 ## v1.0 Readiness Phase 7 Data Inventory And Minimization
 
@@ -36,6 +36,7 @@
 - Runtime eraser acceptance passed for the same disposable run: pending, verification, consent, webhook, and audit plugin-owned rows were removed as documented; the WordPress user remained after the eraser and was then explicitly deleted as fixture cleanup. Follow-up cleanup verification reported zero matching pending, consent, verification, webhook, audit, and user records.
 - Runtime retention and webhook payload acceptance passed on `hbf-staging` with disposable run `20260717134338`: the daily `alynt_ag_retention_cleanup` schedule was present, diagnostics manual-clear capability was available, saved retention windows were success webhook `7`, failed webhook `30`, verification `30`, diagnostics `30`, consent `365`, and audit `180` days, expired fixture rows were removed from each plugin-owned table, fresh fixture rows were preserved, and fixture cleanup verification reported zero matching rows.
 - Webhook payload-storage acceptance for the same run confirmed the default `debug_payload_logging` setting is disabled, normal webhook metadata rows store `NULL` payloads, and payload bodies are stored only when debug payload logging is explicitly enabled.
+- Terms/Privacy consent ownership acceptance passed on `hbf-staging` with disposable run `20260717135710`: saved settings use `/legal/terms/` and `/legal/privacy/`, the registration screen links both configured paths and renders the required `name="terms"` checkbox, both legal paths map to published site-owned `legal` posts, staging Force Login continues to protect those paths by explicit site-owner decision, the disposable consent row stored the configured legal paths, registration context, `0.1.120` consent version, settings hash, `user_id = 0`, and no IP address field, and cleanup left zero disposable consent rows or helper files.
 
 ## v0.1.98 Pre-Readiness Settings UX Polish
 

@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 7 privacy, data, and lifecycle acceptance is in progress. The data inventory and source-level minimization/redaction slice is released as public `v0.1.120`, installed through Alynt Plugin Updater on `hbf-staging`, and ready for runtime exporter/eraser acceptance. Phase 5 dashboard/WooCommerce acceptance is complete, and Phase 6 compatibility acceptance passed. The production-like staging stack is WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. The local default-theme smoke used Plugin Tester with Twenty Twenty-Five.
+- Current phase: Phase 7 privacy, data, and lifecycle acceptance is in progress. The data inventory, runtime exporter/eraser, retention cleanup, webhook payload-storage, and Terms/Privacy consent ownership slices have passed on public `v0.1.120`, installed through Alynt Plugin Updater on `hbf-staging`. Phase 5 dashboard/WooCommerce acceptance is complete, and Phase 6 compatibility acceptance passed. The production-like staging stack is WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. The local default-theme smoke used Plugin Tester with Twenty Twenty-Five.
 - Product baseline: `v0.1.120`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -943,7 +943,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 
 - [x] Confirm the data inventory for pending registrations, consent, verification, webhooks, diagnostics, and audit records.
 - [x] Verify data minimization and redaction in settings, logs, exports, webhooks, and support evidence.
-- [ ] Verify Terms and Privacy consent capture and the site's legal copy ownership.
+- [x] Verify Terms and Privacy consent capture and the site's legal copy ownership.
 - [x] Verify WordPress personal-data exporter output for plugin-owned records.
 - [x] Verify WordPress personal-data eraser behavior and documented exceptions.
 - [x] Verify configured retention cleanup schedules and manual cleanup controls.
@@ -985,6 +985,7 @@ Additional source evidence:
 - Runtime eraser evidence for the same run passed: pending registration, verification, consent, webhook, and audit plugin-owned rows were removed as documented; the WordPress user was retained after the eraser to preserve WordPress ownership boundaries; and fixture cleanup then explicitly deleted the disposable user and unrelated control row. Follow-up cleanup verification reported zero matching pending, consent, verification, webhook, audit, and user records.
 - Runtime retention evidence on `hbf-staging` used disposable run `20260717134338`. The daily `alynt_ag_retention_cleanup` schedule was present, diagnostics manual-clear capability was available, and saved retention windows were success webhook `7`, failed webhook `30`, verification `30`, diagnostics `30`, consent `365`, and audit `180` days. After invoking the real cleanup service, expired fixture rows were removed from pending registrations, success and failed webhook logs, verification logs, diagnostics logs, consent records, and audit logs, while fresh fixture rows in each store were preserved.
 - Runtime webhook payload-storage evidence for the same run confirmed `debug_payload_logging` is disabled by default, default webhook metadata rows store `NULL` payloads, and payload JSON is stored only when debug payload logging is explicitly enabled. Follow-up cleanup verification reported zero matching pending, webhook, verification, diagnostics, consent, and audit fixture rows; temporary local and remote helpers were removed, and `hbf-staging` still reported Alynt Account Gateway active at `0.1.120` with `/account` returning HTTP 200.
+- Terms/Privacy consent ownership evidence on `hbf-staging` used disposable run `20260717135710`. Saved settings used `/legal/terms/` and `/legal/privacy/`; the registration screen returned HTTP 200, linked both configured legal paths, and rendered the required `name="terms"` checkbox. Both legal paths mapped to published site-owned `legal` posts and remained Force Login protected on staging with anonymous HTTP 302 responses to `/login/`, matching the site-owner decision not to exempt them on a staging-only Force Login setup. The disposable consent row captured the email, Terms path, Privacy path, registration context, `0.1.120` consent version, a 64-character settings hash, and `user_id = 0`, while storing no IP address field. The helper deleted the disposable consent row, removed local and remote helper files, and confirmed Alynt Account Gateway remained active at `0.1.120` with `/account` returning HTTP 200.
 
 ## Phase 8: Documentation And Operations
 
