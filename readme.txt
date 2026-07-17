@@ -30,6 +30,7 @@ Core features include:
 * Custom dashboard links with icons, ordering, role visibility, and new-tab behavior.
 * Account-created webhook delivery with optional request signing and admin delivery summaries.
 * Privacy exporter/eraser integration and retention cleanup.
+* Site-owner privacy and GDPR review guide covering plugin-owned records, retention, processor boundaries, and data-subject request support.
 * Multilingual-ready strings and generated POT file.
 
 == Installation ==
@@ -43,7 +44,15 @@ Core features include:
 
 Uninstalling the plugin removes plugin-owned settings, the stored database schema version, the retention cleanup schedule, rate-limit transients, and plugin-owned account gateway tables. WordPress users, WooCommerce orders, media-library files, and non-plugin data are not removed.
 
+== Privacy And GDPR Review ==
+
+Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile, Reoon, webhooks, diagnostics, or WooCommerce takeover on production sites. The plugin provides WordPress personal-data exporter and eraser callbacks for plugin-owned records, but site owners remain responsible for privacy notice wording, lawful-basis decisions, processor contracts, retention policy, and qualified legal review where required.
+
 == Changelog ==
+
+= Unreleased =
+
+* Added a site-owner privacy and GDPR review guide for plugin-owned records, retention settings, processor boundaries, and data-subject request support.
 
 = 0.1.120 =
 

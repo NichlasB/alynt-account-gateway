@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.0 readiness Phase 7 privacy, data, and lifecycle acceptance
+- Current phase: v1.0 readiness Phase 8 documentation and operations polish
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v0.1.120 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Continue Phase 7 acceptance in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md), beginning with GDPR-facing documentation review after the disable/uninstall lifecycle slice.
+- Next roadmap: Continue Phase 8 documentation and operations polish in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md), beginning with installation/update/rollback, emergency-disable, and support-boundary documentation.
 
 ## v1.0 Readiness Phase 7 Data Inventory And Minimization
 
@@ -38,6 +38,7 @@
 - Webhook payload-storage acceptance for the same run confirmed the default `debug_payload_logging` setting is disabled, normal webhook metadata rows store `NULL` payloads, and payload bodies are stored only when debug payload logging is explicitly enabled.
 - Terms/Privacy consent ownership acceptance passed on `hbf-staging` with disposable run `20260717135710`: saved settings use `/legal/terms/` and `/legal/privacy/`, the registration screen links both configured paths and renders the required `name="terms"` checkbox, both legal paths map to published site-owned `legal` posts, staging Force Login continues to protect those paths by explicit site-owner decision, the disposable consent row stored the configured legal paths, registration context, `0.1.120` consent version, settings hash, `user_id = 0`, and no IP address field, and cleanup left zero disposable consent rows or helper files.
 - Disable/uninstall lifecycle acceptance passed on `hbf-staging` with disposable run `20260717140847`: deactivation removed only the retention schedule, uninstall-script execution removed documented plugin-owned settings, version option, tables, schedule, and rate-limit transient option rows, and disposable WordPress user, WooCommerce order, media attachment, unrelated control option, active-plugin state, settings hash, retention schedule, and pre-existing plugin table rows were preserved or restored. Cleanup left zero disposable fixtures or helper files, and the site stayed active on Alynt Account Gateway `0.1.120` with `/account` returning HTTP 200.
+- GDPR-facing documentation preparation added `docs/PRIVACY_AND_GDPR.md` and linked it from README, `readme.txt`, and `docs/SETTINGS.md`. The guide covers plugin-owned records, default retention, role boundaries, provider/processor review points, privacy notice prompts, WordPress exporter/eraser support, uninstall boundaries, debug payload logging cautions, and operational launch checks. Qualified legal review remains a site-owner responsibility where required.
 
 ## v0.1.98 Pre-Readiness Settings UX Polish
 

@@ -105,6 +105,8 @@ When `dashboard_enabled` and `woocommerce_takeover` are both enabled and WooComm
 
 Registration consent is stored without IP addresses by default. Consent records include email, user ID when available, terms path, privacy path, consent context, plugin version, settings hash, and timestamp. WordPress personal data exporter/eraser callbacks cover pending registrations, consent records, email verification logs, webhook metadata, and audit entries.
 
+Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile, Reoon, webhooks, diagnostics, or WooCommerce takeover on production sites. It summarizes plugin-owned records, default retention, data-subject request support, processor/third-party boundaries, and site-owner review responsibilities.
+
 The emergency bypass key allows a site owner to visit `wp-login.php?alynt_ag_bypass={key}` when frontend output is enabled. It only bypasses the branded screen redirect and does not authenticate the visitor or grant admin access.
 
 ## Diagnostics

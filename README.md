@@ -63,6 +63,12 @@ Recommended first pass:
 - Webhook payload bodies are stored only when Debug Payload Logging is enabled.
 - Secrets must be stored in plugin settings, not in code or documentation.
 
+## Privacy Notes
+
+- Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile, Reoon, webhooks, diagnostics, or WooCommerce takeover on production sites.
+- The plugin provides WordPress personal-data exporter and eraser callbacks for plugin-owned records, but WordPress users, WooCommerce orders, media-library files, and third-party provider records remain under their owning systems.
+- Site owners remain responsible for privacy notice wording, lawful-basis decisions, processor contracts, retention policy, and qualified legal review where required.
+
 ## Development
 
 ```powershell
@@ -79,6 +85,7 @@ If Composer is available globally, `composer install` can be used instead of `ph
 
 - `docs/IMPLEMENTATION_PLAN.md`
 - `docs/V1_READINESS_PLAN.md`
+- `docs/PRIVACY_AND_GDPR.md`
 - `docs/SCAFFOLD_MASTER_PROMPT.md`
 - `docs/SETTINGS.md`
 - `docs/HOOKS.md`

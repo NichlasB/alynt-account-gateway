@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Added
+
+- Added a site-owner privacy and GDPR review guide for plugin-owned records, retention settings, processor boundaries, and data-subject request support.
+
 ## 0.1.120 - 2026-07-17
 
 ### Fixed
