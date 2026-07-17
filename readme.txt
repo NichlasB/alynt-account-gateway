@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 0.1.120
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,10 +52,10 @@ Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile
 
 == Changelog ==
 
-= Unreleased =
+= 1.0.0 =
 
-* Added a site-owner privacy and GDPR review guide for plugin-owned records, retention settings, processor boundaries, and data-subject request support.
-* Added an operations guide covering installation, updates, rollback, emergency disable, emergency bypass, support boundaries, versioning, and launch acceptance.
+* Promoted Alynt Account Gateway to the v1.0 release candidate after production-like staging acceptance.
+* Added site-owner privacy/GDPR and operations guides for launch, rollback, retention, support boundaries, and data-subject request review.
 
 = 0.1.120 =
 

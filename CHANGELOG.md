@@ -1,9 +1,10 @@
 # Changelog
 
-## Unreleased
+## 1.0.0 - 2026-07-17
 
 ### Added
 
+- Promoted Alynt Account Gateway to the v1.0 release candidate after production-like staging acceptance.
 - Added a site-owner privacy and GDPR review guide for plugin-owned records, retention settings, processor boundaries, and data-subject request support.
 - Added an operations guide covering installation, updates, rollback, emergency disable, emergency bypass, support boundaries, versioning, and launch acceptance.
 
