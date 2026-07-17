@@ -4190,6 +4190,7 @@
 - [x] Verify release-style zip locally with GitHub workflow exclusions.
 - [x] Verify generated release zip through GitHub release workflow.
 - [x] Verify install/update from the GitHub release asset through Alynt Plugin Updater on LocalWP Plugin Tester.
+- [x] Verify Alynt Plugin Updater `1.1.2` preserves active managed plugins during programmatic/headless updates by downgrading LocalWP Plugin Tester to Alynt Account Gateway `1.0.1`, updating back to `1.0.2`, and confirming the plugin remains active in the same active-plugin position.
 
 ## Release Gates
 
@@ -4202,6 +4203,9 @@
 - [x] Multilingual/i18n acceptance criteria pass for implemented strings and generated POT.
 - [x] Privacy exporter/eraser and retention controls are present.
 - [x] Alynt Plugin Updater compatibility is verified end to end by updating the LocalWP Plugin Tester install from a GitHub release asset.
+- [x] Alynt Plugin Updater active-state restoration is verified end to end with the public `v1.0.2` Account Gateway asset.
+
+Post-v1 maintenance status: Alynt Account Gateway `v1.0.2` is the current released baseline. It is installed and active on LocalWP Plugin Tester and `hbf-staging`; the public asset digest is `E86E6465576E6DEBE6957DC9FC2ABD0F730EFA726AB1436610FDAA65EAA34900`. Alynt Plugin Updater `v1.1.2` is installed and active on both targets; its public asset digest is `1DBA6CBC86671B059F02628F2E2BFF6B6243AC27215C47700276462770071A0D`. The updater regression test passed by downgrading Plugin Tester to Account Gateway `1.0.1`, updating through the native WordPress upgrader path to `1.0.2`, and confirming Account Gateway stayed active at the same active-plugin option position. Temporary ZIPs, extracts, upload artifacts, rollback backups, and stale updater result state were cleaned up afterward.
 
 Production-like `hbf-staging` v1 readiness has completed Phase 5. It verified the first dashboard/WooCommerce route smoke: disabled/enabled dashboard routing, first-name greeting, customer-only custom links including new-tab accessibility text, WooCommerce takeover routing, no-order overview, Orders, Addresses, and Account Details endpoint embedding. It has also verified representative order-list, pagination, order-detail, native order-action behavior, Downloads empty/available/limited/expired states, address/account-details POST handling, account email/password changes, saved payment-method list/default/delete behavior, unavailable endpoint fallback behavior, post-dashboard role/admin policy behavior, and checkout/payment/shipping extension compatibility with disposable WooCommerce data. The delegated WooCommerce form-handling correction was released and updater-verified as `v0.1.114`; the empty WooCommerce notices-wrapper fallback correction was released and updater-verified as `v0.1.116`. Standalone add-payment-method is documented as unsupported by the currently enabled staging gateways, and checkout compatibility was verified without placing an order.
 

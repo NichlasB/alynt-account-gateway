@@ -2,8 +2,8 @@
 
 ## Status
 
-- Current phase: `v1.0.1` is released, public-asset inspected, and updater-verified on LocalWP `plugin-tester` after the production-like `v1.0.0` staging release.
-- Product baseline: `v1.0.1`, released, public-asset verified, and updater-verified on LocalWP Plugin Tester.
+- Current phase: `v1.0.2` is released, public-asset inspected, and installed on LocalWP `plugin-tester` and production-like `hbf-staging`.
+- Product baseline: `v1.0.2`, released, public-asset verified, and updater-regression verified with Alynt Plugin Updater `1.1.2` on LocalWP Plugin Tester.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility.
@@ -16,6 +16,30 @@ This is the living production-acceptance roadmap for Alynt Account Gateway. The 
 Readiness work should prioritize runtime evidence, configuration safety, compatibility, documentation, and operational recovery. New product features belong in a separately approved roadmap unless they are required to resolve a release-blocking defect found during acceptance testing.
 
 ## Post-v1 Maintenance Evidence
+
+### v1.0.2 Gateway Layout Polish
+
+| Item | Value | Evidence | Status |
+| --- | --- | --- | --- |
+| Release | [`v1.0.2`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.0.2) | GitHub release from `master` | Published |
+| Build Release workflow | Run `29603139608` | GitHub Actions | Passed |
+| Public asset | `alynt-account-gateway-v1.0.2.zip`; runtime release asset attached by Build Release workflow | GitHub release inspection | Verified |
+| Public asset SHA-256 | `E86E6465576E6DEBE6957DC9FC2ABD0F730EFA726AB1436610FDAA65EAA34900` | GitHub release asset digest | Recorded |
+| Product change | Gateway cards widened to `540px`, card/panel horizontal padding reduced, instruction notice trailing paragraph spacing removed, and background-image guidance updated to recommend tall portrait imagery around `1280 x 1920px`. | `CHANGELOG.md`, `readme.txt`, and packaged runtime | Completed |
+| Installed targets | LocalWP `plugin-tester` and `hbf-staging` | WordPress Site Operations evidence | Verified |
+| Staging runtime | `hbf-staging` reports Alynt Account Gateway active at `1.0.2`; `/account?action=lostpassword` returns HTTP `200`. | WP-CLI and HTTP smoke | Passed |
+
+### Alynt Plugin Updater v1.1.2 Operational Hardening
+
+| Item | Value | Evidence | Status |
+| --- | --- | --- | --- |
+| Release | [`v1.1.2`](https://github.com/NichlasB/alynt-plugin-updater/releases/tag/v1.1.2) | GitHub release from `main` | Published |
+| Build Release workflow | Run `29605152197` | GitHub Actions | Passed |
+| Public asset | `alynt-plugin-updater-v1.1.2.zip`; `43` runtime files; zero development-file hits | Public asset inspection | Verified |
+| Public asset SHA-256 | `1DBA6CBC86671B059F02628F2E2BFF6B6243AC27215C47700276462770071A0D` | GitHub release asset digest and local ZIP inspection | Recorded |
+| Installed targets | LocalWP `plugin-tester` and `hbf-staging` both report Alynt Plugin Updater active at `1.1.2`. | Novamira MCP, WP-CLI, and Site Operations evidence | Passed |
+| Regression test | Plugin Tester was deliberately downgraded to Alynt Account Gateway `1.0.1`; Alynt Plugin Updater `1.1.2` detected `1.0.2`, WordPress native upgrader installed the public `v1.0.2` asset, and Account Gateway remained active in the same active-plugin position. | Novamira execution evidence | Passed |
+| Cleanup | Plugin Tester updater result cache was refreshed to no-update state; temporary ZIPs, extracts, remote upload artifact, and rollback backups were removed. | Cleanup checks | Completed |
 
 ### v1.0.1 Client-IP Hardening
 
