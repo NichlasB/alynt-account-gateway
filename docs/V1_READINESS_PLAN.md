@@ -2,8 +2,8 @@
 
 ## Status
 
-- Current phase: `v1.0.0` is released, public-asset inspected, and updater-verified on `hbf-staging`. Final documentation evidence is being synchronized after publication.
-- Product baseline: `v1.0.0`, released, public-asset verified, and updater-verified on production-like staging.
+- Current phase: `v1.0.1` is released, public-asset inspected, and updater-verified on LocalWP `plugin-tester` after the production-like `v1.0.0` staging release.
+- Product baseline: `v1.0.1`, released, public-asset verified, and updater-verified on LocalWP Plugin Tester.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility.
@@ -14,6 +14,22 @@
 This is the living production-acceptance roadmap for Alynt Account Gateway. The implementation plan records the released product history and current candidate work. This plan determines whether the plugin is ready to be called `v1.0.0` on real WordPress and WooCommerce sites.
 
 Readiness work should prioritize runtime evidence, configuration safety, compatibility, documentation, and operational recovery. New product features belong in a separately approved roadmap unless they are required to resolve a release-blocking defect found during acceptance testing.
+
+## Post-v1 Maintenance Evidence
+
+### v1.0.1 Client-IP Hardening
+
+| Item | Value | Evidence | Status |
+| --- | --- | --- | --- |
+| Release | [`v1.0.1`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.0.1) | GitHub release from commit `494592c` | Published |
+| Build Release workflow | Run `29599227507` | GitHub Actions | Passed |
+| Public asset | `alynt-account-gateway-v1.0.1.zip`; 46 runtime files; one plugin root; zero development-file hits | Public asset inspection | Verified |
+| Public asset SHA-256 | `9481FFBAFA79A90594DF0F5A82EEA341A6AA1482DEB6C5657D27EA2641D6E385` | Local hash of downloaded release asset | Recorded |
+| Updater target | `plugin-tester`; LocalWP; `http://plugin-tester.local/` | WordPress Site Operations profile and Novamira MCP | Confirmed |
+| Updater result | Alynt Plugin Updater refreshed stale `v1.0.0` cache, offered `1.0.1`, and WordPress native upgrader installed the public GitHub asset from `0.1.119` to `1.0.1` | Novamira execution evidence | Passed |
+| Activation state | Plugin active at original position `1`; headless upgrader deactivation was restored immediately | Active-plugin option hash and position check | Verified |
+| Settings preservation | Settings hash `2d0e919d2f2bc08590b34fcf6ffc6fdc24ebd8e97b6b778f0e67326636226a8e` unchanged | Pre/post settings fingerprint | Verified |
+| Runtime verification | Installed `1.0.1`, 46 runtime files, zero development-file hits, no remaining ACG update offer, HTTP `200` for local home URL | Post-update smoke | Passed |
 
 ## Readiness Principles
 

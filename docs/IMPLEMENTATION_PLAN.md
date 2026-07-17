@@ -2,12 +2,31 @@
 
 ## Status
 
-- Current phase: v1.0.0 released and updater-verified; final evidence synchronized
+- Current phase: v1.0.1 released and updater-verified; final evidence synchronized
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.0.0 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on `hbf-staging`.
+- Plugin status: v1.0.1 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 - Next roadmap: Continue with post-v1 maintenance only after a new, separately scoped product or maintenance slice is approved.
+
+## v1.0.1 Client-IP Hardening Maintenance Release
+
+### Scope
+
+- [x] Harden client-IP resolution for registration/login/lost-password rate limits and Cloudflare Turnstile remote-IP forwarding.
+- [x] Ignore forwarded IP headers by default unless the immediate proxy is explicitly trusted through `alynt_ag_is_trusted_proxy`.
+- [x] Allow trusted deployments to control forwarded-header order through `alynt_ag_trusted_proxy_headers`.
+- [x] Expand regression coverage for forwarded-header spoof resistance, trusted-proxy behavior, registration-token failures, and webhook failures.
+- [x] Publish the approved maintenance release and verify the public GitHub asset through Alynt Plugin Updater on LocalWP Plugin Tester.
+
+### Progress Notes
+
+- Release commit `494592c` bumped metadata to `1.0.1`, added `includes/services/class-client-ip.php`, wired rate limiting and Turnstile to the hardened resolver, regenerated translations, and passed local validation: `npm.cmd run make-pot`, `npm.cmd run lint`, `npm.cmd test` (`313 tests`, `2016 assertions`), `npm.cmd run build`, `npm.cmd audit --audit-level=high`, `php .\composer.phar audit`, and `git diff --check`.
+- GitHub release [`v1.0.1`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.0.1) was published, and Build Release workflow run `29599227507` completed successfully.
+- Public asset `alynt-account-gateway-v1.0.1.zip` was downloaded and inspected: 46 runtime files, one expected plugin root, zero development files, aligned `1.0.1` plugin header/constant/stable-tag metadata, exactly one updater header, and SHA-256 `9481FFBAFA79A90594DF0F5A82EEA341A6AA1482DEB6C5657D27EA2641D6E385`.
+- Alynt Plugin Updater on LocalWP `plugin-tester` initially held a stale `v1.0.0` release cache; after clearing updater release cache and forcing the plugin's own fresh update check, it offered the exact public `v1.0.1` package URL.
+- WordPress' native upgrader installed the public GitHub release asset from `0.1.119` to `1.0.1` on LocalWP `plugin-tester`. The headless upgrader deactivated the plugin during replacement, so the exact prior active position `1` was restored immediately.
+- Final updater verification passed: installed ACG `1.0.1`, active at position `1`, settings hash preserved as `2d0e919d2f2bc08590b34fcf6ffc6fdc24ebd8e97b6b778f0e67326636226a8e`, active-plugin hash restored to `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9`, runtime file count `46`, zero development-file hits, HTTP `200` for `http://plugin-tester.local/`, and no remaining ACG update offer.
 
 ## v1.0 Release Candidate Gate
 
