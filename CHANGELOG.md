@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.114 - 2026-07-17
+
+### Fixed
+
+- Fixed delegated WooCommerce My Account address and account-details form POST handling inside the branded dashboard shell.
+
 ## 0.1.113 - 2026-07-16
 
 ### Changed
