@@ -164,13 +164,22 @@ class ALYNT_AG_Privacy_Service {
 		$data    = array();
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Exporter reads plugin-owned tables.
-		$consents     = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM {$tables['consent_records']} WHERE email = %s OR user_id = %d ORDER BY created_at DESC",
-				$email,
-				$user_id
-			)
-		);
+		if ( $user_id ) {
+			$consents = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM {$tables['consent_records']} WHERE email = %s OR user_id = %d ORDER BY created_at DESC",
+					$email,
+					$user_id
+				)
+			);
+		} else {
+			$consents = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT * FROM {$tables['consent_records']} WHERE email = %s ORDER BY created_at DESC",
+					$email
+				)
+			);
+		}
 		$pending      = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT * FROM {$tables['pending_registrations']} WHERE email = %s ORDER BY created_at DESC",

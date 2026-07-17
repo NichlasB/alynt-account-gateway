@@ -4279,12 +4279,13 @@ class ALYNT_AG_Settings_Page {
 		?>
 		<h2><?php esc_html_e( 'Settings Import / Export', 'alynt-account-gateway' ); ?></h2>
 		<p class="description">
-			<?php esc_html_e( 'Export all plugin-owned settings as JSON, or import a JSON settings package from another site. Imported values are sanitized through the active settings schema.', 'alynt-account-gateway' ); ?>
+			<?php esc_html_e( 'Export portable plugin settings as JSON, or import a JSON settings package from another site. Imported values are sanitized through the active settings schema.', 'alynt-account-gateway' ); ?>
 		</p>
 		<div class="notice notice-info inline">
 			<p><strong><?php esc_html_e( 'Configuration portability notes', 'alynt-account-gateway' ); ?></strong></p>
 			<ul class="ul-disc">
 				<li><?php esc_html_e( 'Exports include saved plugin settings only. Media-library files, pending registrations, diagnostics, webhook delivery logs, and WordPress users are not included.', 'alynt-account-gateway' ); ?></li>
+				<li><?php esc_html_e( 'Secret credentials, the test email recipient, and site-specific media selections are omitted. Configure those values separately on the destination site.', 'alynt-account-gateway' ); ?></li>
 				<li><?php esc_html_e( 'Imports validate JSON before saving, keep recognized settings, sanitize each value, and ignore settings that do not belong to the current schema.', 'alynt-account-gateway' ); ?></li>
 				<li><?php esc_html_e( 'Use the restore button at the bottom of each tab when you only want to reset that tab instead of replacing the full configuration.', 'alynt-account-gateway' ); ?></li>
 			</ul>

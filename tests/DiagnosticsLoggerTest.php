@@ -17,14 +17,20 @@ class DiagnosticsLoggerTest extends TestCase {
 			array(
 				'api_key' => 'secret-value',
 				'nested'  => array(
-					'token' => 'token-value',
+					'token'      => 'token-value',
+					'user_email' => 'customer@example.test',
 				),
-				'safe'    => 'visible',
+				'email'         => 'customer@example.test',
+				'email_address' => 'customer@example.test',
+				'safe'          => 'visible',
 			)
 		);
 
 		$this->assertSame( '[redacted]', $redacted['api_key'] );
 		$this->assertSame( '[redacted]', $redacted['nested']['token'] );
+		$this->assertSame( '[redacted]', $redacted['nested']['user_email'] );
+		$this->assertSame( '[redacted]', $redacted['email'] );
+		$this->assertSame( '[redacted]', $redacted['email_address'] );
 		$this->assertSame( 'visible', $redacted['safe'] );
 	}
 

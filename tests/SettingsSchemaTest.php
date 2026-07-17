@@ -105,8 +105,15 @@ class SettingsSchemaTest extends TestCase {
 
 	public function test_export_package_contains_plugin_metadata_and_settings() {
 		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
-			'frontend_enabled' => true,
-			'login_path'       => '/member-login',
+			'frontend_enabled'       => true,
+			'login_path'             => '/member-login',
+			'emergency_bypass_key'   => 'private-bypass',
+			'turnstile_secret_key'   => 'private-turnstile',
+			'reoon_api_key'          => 'private-reoon',
+			'webhook_signing_secret' => 'private-webhook',
+			'email_test_recipient'   => 'owner@example.test',
+			'brand_logo_id'          => 123,
+			'background_image_id'    => 456,
 		);
 
 		$package = ALYNT_AG_Settings_Schema::export_package();
@@ -116,12 +123,22 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertArrayHasKey( 'exportedAt', $package );
 		$this->assertTrue( $package['settings']['frontend_enabled'] );
 		$this->assertSame( '/member-login', $package['settings']['login_path'] );
+		$this->assertArrayNotHasKey( 'emergency_bypass_key', $package['settings'] );
+		$this->assertArrayNotHasKey( 'turnstile_secret_key', $package['settings'] );
+		$this->assertArrayNotHasKey( 'reoon_api_key', $package['settings'] );
+		$this->assertArrayNotHasKey( 'webhook_signing_secret', $package['settings'] );
+		$this->assertArrayNotHasKey( 'email_test_recipient', $package['settings'] );
+		$this->assertArrayNotHasKey( 'brand_logo_id', $package['settings'] );
+		$this->assertArrayNotHasKey( 'background_image_id', $package['settings'] );
 	}
 
 	public function test_import_package_sanitizes_known_settings_and_discards_unknown_keys() {
 		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
-			'frontend_enabled' => false,
-			'login_path'       => '/login',
+			'frontend_enabled'     => false,
+			'login_path'           => '/login',
+			'reoon_api_key'        => 'destination-secret',
+			'email_test_recipient' => 'destination@example.test',
+			'brand_logo_id'        => 789,
 		);
 
 		$imported = ALYNT_AG_Settings_Schema::import_package(
@@ -141,6 +158,9 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertTrue( $imported['frontend_enabled'] );
 		$this->assertSame( '/members', $imported['login_path'] );
 		$this->assertSame( '', $imported['primary_color'] );
+		$this->assertSame( 'destination-secret', $imported['reoon_api_key'] );
+		$this->assertSame( 'destination@example.test', $imported['email_test_recipient'] );
+		$this->assertSame( 789, $imported['brand_logo_id'] );
 		$this->assertArrayNotHasKey( 'unknown_setting', $imported );
 	}
 

@@ -45,6 +45,7 @@ class SettingsPageSettingsToolsTest extends TestCase {
 
 		$this->assertStringContainsString( 'Configuration portability notes', $output );
 		$this->assertStringContainsString( 'Media-library files, pending registrations, diagnostics, webhook delivery logs, and WordPress users are not included.', $output );
+		$this->assertStringContainsString( 'Secret credentials, the test email recipient, and site-specific media selections are omitted.', $output );
 		$this->assertStringContainsString( 'Imports validate JSON before saving', $output );
 		$this->assertStringContainsString( 'Use the restore button at the bottom of each tab', $output );
 		$this->assertStringContainsString( 'Export Settings JSON', $output );

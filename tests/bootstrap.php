@@ -881,6 +881,10 @@ if ( ! function_exists( 'get_user_by' ) ) {
 			return false;
 		}
 
+		if ( ! empty( $GLOBALS['alynt_ag_test_missing_user_emails'] ) && in_array( $value, $GLOBALS['alynt_ag_test_missing_user_emails'], true ) ) {
+			return false;
+		}
+
 		$user = new WP_User( $value );
 		$user->ID = 123;
 

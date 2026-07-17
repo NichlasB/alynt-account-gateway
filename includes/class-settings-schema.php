@@ -627,8 +627,27 @@ class ALYNT_AG_Settings_Schema {
 			'plugin'     => 'alynt-account-gateway',
 			'version'    => defined( 'ALYNT_AG_VERSION' ) ? ALYNT_AG_VERSION : '',
 			'exportedAt' => gmdate( 'c' ),
-			'settings'   => self::get_settings(),
+			'settings'   => self::portable_settings(),
 		);
+	}
+
+	/**
+	 * Return settings that are safe and useful to move between sites.
+	 *
+	 * @return array<string,mixed>
+	 */
+	private static function portable_settings() {
+		$settings = self::get_settings();
+
+		foreach ( self::schema() as $key => $field ) {
+			$type = isset( $field['type'] ) ? (string) $field['type'] : '';
+
+			if ( in_array( $type, array( 'secret', 'email', 'attachment_id' ), true ) ) {
+				unset( $settings[ $key ] );
+			}
+		}
+
+		return $settings;
 	}
 
 	/**

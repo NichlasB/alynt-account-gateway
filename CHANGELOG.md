@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 0.1.120 - 2026-07-17
+
+### Fixed
+
+- Prevented personal-data exports for pending registrants from matching unrelated unattached consent records.
+- Omitted secret credentials, the test email recipient, and site-specific media IDs from portable settings exports.
+- Redacted direct email-address fields recursively from audit and diagnostics context before storage.
+
 ## 0.1.119 - 2026-07-17
 
 ### Fixed

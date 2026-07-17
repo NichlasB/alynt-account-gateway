@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 6 is complete; Phase 7 privacy, data, and lifecycle acceptance is next. Public `v0.1.119` is updater-verified on `hbf-staging`, Phase 5 dashboard/WooCommerce acceptance is complete, and Phase 6 target-current environment inventory, mobile/desktop route-matrix testing, 800px frontend boundary testing, narrow admin layout testing, keyboard/focus/live-region/password-control coverage, registration agreement-link focus, zoom/reflow/high-contrast/reduced-motion checks, RTL/multilingual coverage, third-party-request attribution, console/log/diagnostics coverage, support-floor static compatibility, and default-theme smoke coverage passed. The production-like staging stack is WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. The local default-theme smoke used Plugin Tester with Twenty Twenty-Five.
+- Current phase: Phase 7 privacy, data, and lifecycle acceptance is in progress. The data inventory and source-level minimization/redaction slice is complete in the local `v0.1.120` candidate; publication, updater installation, and runtime exporter/eraser acceptance remain. Public `v0.1.119` is updater-verified on `hbf-staging`, Phase 5 dashboard/WooCommerce acceptance is complete, and Phase 6 compatibility acceptance passed. The production-like staging stack is WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. The local default-theme smoke used Plugin Tester with Twenty Twenty-Five.
 - Product baseline: `v0.1.119`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -11,7 +11,7 @@
 
 ## Purpose
 
-This is the living production-acceptance roadmap for Alynt Account Gateway. The completed implementation plan records the released `v0.1.98` product baseline. This plan determines whether that product is ready to be called `v1.0.0` on real WordPress and WooCommerce sites.
+This is the living production-acceptance roadmap for Alynt Account Gateway. The implementation plan records the released product history and current candidate work. This plan determines whether the plugin is ready to be called `v1.0.0` on real WordPress and WooCommerce sites.
 
 Readiness work should prioritize runtime evidence, configuration safety, compatibility, documentation, and operational recovery. New product features belong in a separately approved roadmap unless they are required to resolve a release-blocking defect found during acceptance testing.
 
@@ -941,8 +941,8 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 
 ## Phase 7: Privacy, Data, And Lifecycle Acceptance
 
-- [ ] Confirm the data inventory for pending registrations, consent, verification, webhooks, diagnostics, and audit records.
-- [ ] Verify data minimization and redaction in settings, logs, exports, webhooks, and support evidence.
+- [x] Confirm the data inventory for pending registrations, consent, verification, webhooks, diagnostics, and audit records.
+- [x] Verify data minimization and redaction in settings, logs, exports, webhooks, and support evidence.
 - [ ] Verify Terms and Privacy consent capture and the site's legal copy ownership.
 - [ ] Verify WordPress personal-data exporter output for plugin-owned records.
 - [ ] Verify WordPress personal-data eraser behavior and documented exceptions.
@@ -951,6 +951,34 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [ ] Verify disabling or uninstalling the plugin does not remove WordPress users, WooCommerce orders, or unrelated media.
 - [ ] Verify uninstall removes only documented plugin-owned options, tables, scheduled hooks, and transient data.
 - [ ] Review GDPR-facing documentation with the site owner or qualified adviser where required.
+
+### Phase 7 Data Inventory And Minimization Evidence
+
+| Store | Data and ownership | Retention / removal | Export / erasure boundary |
+| --- | --- | --- | --- |
+| `alynt_ag_settings` option | Plugin configuration, including routes, branding references, email templates, provider credentials, webhook configuration, and retention values | Kept while installed; removed on uninstall | Portable JSON now omits schema fields typed as secret, email, or attachment ID; the WordPress personal-data exporter does not treat site configuration as customer data |
+| `alynt_ag_db_version` option | Plugin schema version only | Kept while installed; removed on uninstall | No personal data |
+| Pending registrations table | Email, first/last name, optional created user ID, one-way confirmation-token hash, lifecycle status, and timestamps | Expired rows removed by daily retention cleanup; uninstall drops the table | WordPress exporter returns the matching email's non-secret fields; eraser deletes matching rows |
+| Verification logs table | Email, provider, result/status, blocked flag, manual review decision, reviewing administrator ID, and timestamps | Default 30 days; configurable daily cleanup; uninstall drops the table | WordPress exporter returns the subject's result and review outcome but omits the reviewing administrator ID; eraser deletes matching rows |
+| Consent records table | User ID when available, email, Terms/Privacy paths, registration context, plugin version, settings hash, and timestamp | Default 365 days; configurable daily cleanup; uninstall drops the table | WordPress exporter returns the subject's legal paths, context, version, and timestamp; eraser deletes by email and by user ID |
+| Webhook logs table | Event, user ID, destination host, response status/success, retry count, optional debug payload, sanitized error, and timestamp | Successful rows default to 7 days; failed rows default to 30 days; uninstall drops the table | WordPress exporter returns delivery metadata only; eraser deletes rows linked to the user ID |
+| Audit logs table | Acting user ID, action, recursively redacted context, and timestamp | Default 180 days; configurable daily cleanup; uninstall drops the table | Eraser deletes rows linked to the user ID; exporter acceptance remains in the dedicated exporter slice |
+| Diagnostics logs table | Severity, category, event code, summary, recursively redacted context, correlation ID, and timestamp | Disabled by default; default 30 days when enabled; manual clear and daily cleanup; uninstall drops the table | Support CSV is administrator-only; direct email keys are redacted before storage; personal-data exporter/eraser scope remains in the dedicated runtime slice |
+| Rate-limit transients | HMAC bucket derived from action, normalized identifier, and source IP; separate aggregate metadata contains action/count/limit/window/lock state without raw identifiers | Expires with the configured action window; uninstall removes only `alynt_ag_rl_` and `alynt_ag_rl_meta_` transient families | Raw email/IP values are not stored; no personal-data export is produced for non-reversible bucket keys |
+| Daily retention event | Scheduled hook name and next-run timestamp | Unschedule on deactivation; clear on uninstall | No personal data |
+| WordPress users, WooCommerce data, and media | WordPress user/account records are created through core; WooCommerce owns orders/account data; plugin settings reference media attachment IDs | Not removed on disable, deactivation, or uninstall | Remain under WordPress/WooCommerce privacy and lifecycle ownership |
+
+Additional source evidence:
+
+- Registration confirmation tokens are stored only as password hashes; raw confirmation tokens exist only for link delivery.
+- Registration consent deliberately stores no IP address.
+- Admin registration tables mask email addresses, and webhook logs retain only the destination host rather than the full delivery URL.
+- Webhook payload bodies remain `NULL` unless Debug Payload Logging is deliberately enabled; the default is disabled.
+- Portable settings exports no longer carry the emergency bypass, Turnstile secret, Reoon API key, webhook signing secret, test recipient, logo ID, or background-image ID.
+- The personal-data exporter now uses email-only consent lookup when no WordPress user exists, preventing an `OR user_id = 0` match from including unrelated pending registrants.
+- Audit and diagnostics context redaction now masks `email`, `user_email`, and `email_address` recursively before storage.
+- Local `v0.1.120` candidate validation passed the production build, POT generation (`1004 strings`), PHPCS, full PHPUnit (`299 tests, 1973 assertions`), npm audit, Composer audit, and diff checks.
+- The inspected 45-file runtime package at `C:\Users\Captain\Desktop\alynt-account-gateway-0.1.120.zip` contains no development files or stale `build/` artifacts, aligns all `0.1.120` metadata, includes the three privacy-hardening markers, and has SHA-256 `7F405592AEF58CC336B22BCB8005027E6CBDB4818B819DF6F21B29CAE5B1ACE2`.
 
 ## Phase 8: Documentation And Operations
 
@@ -1025,6 +1053,7 @@ Release is approved only when all statements below are true:
 | `P6-001` | 6 | Low | The narrow Webhooks settings tab could create page-level horizontal overflow at `480px` because the plugin-owned `widefat` webhook log table exceeded the viewport. | Product owner | Closed by `v0.1.117`: plugin-owned admin `widefat` tables become internally scrollable at narrow widths instead of causing page-level overflow. | Initial `480px` Webhooks tab browser check; offender inspection identified the `widefat` table; exact-rule browser injection removed page-level overflow; local build, PHPCS, PHPUnit, POT, and diff checks passed; public ZIP inspection; Alynt Plugin Updater install `0.1.116 -> 0.1.117`; installed Webhooks `480px` retest | Closed |
 | `P6-002` | 6 | Low | Registration Terms and Privacy Policy links inside the agreement checkbox used only the browser default dotted focus outline instead of the plugin's visible gateway focus treatment. | Product owner | Closed by `v0.1.118`: agreement links now receive the same normal, focus-visible, and forced-colors frontend focus treatment as other gateway links and controls. | Initial registration focus inspection at `390x844`; local source patch; build, PHPCS, PHPUnit, POT, and diff checks passed; browser injection of candidate rules; public ZIP inspection; Alynt Plugin Updater install `0.1.117 -> 0.1.118`; installed registration retest at `390x844` and `1440x1000` | Closed |
 | `P6-003` | 6 | Low | At `320px`, the registration screen could create page-level horizontal overflow because Cloudflare Turnstile rendered the normal 300px widget inside a narrower verification slot. | Product owner | Closed by `v0.1.119`: plugin-owned Turnstile containers are marked and the frontend bundle sets `data-size="compact"` before Cloudflare renders when the verification slot is under `300px` wide. | Initial `320x1000` registration reflow check; offender inspection identified `.agw-verification-slot` / `.cf-turnstile`; local source patch; build, PHPCS, PHPUnit, POT, and diff checks passed; synthetic built-bundle browser check; public ZIP inspection; Alynt Plugin Updater install `0.1.118 -> 0.1.119`; installed registration retest at `320x1000`; clean reduced-motion retest | Closed |
+| `P7-001` | 7 | High | A personal-data export for a valid email with no WordPress user could query consent rows with `email = requested OR user_id = 0`, allowing unrelated unattached consent records to enter the export. | Product owner | Corrected in the `v0.1.120` Phase 7 privacy-hardening candidate: user-ID matching is added only when the requested email resolves to an existing WordPress user; pending registrants use email-only lookup. | Source review and focused privacy exporter regression test; release and installed runtime acceptance pending | Closed in source; release pending |
 
 Severity guidance:
 

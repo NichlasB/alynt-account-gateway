@@ -218,7 +218,7 @@ class ALYNT_AG_Diagnostics_Logger {
 	 */
 	public static function redact_context( $context ) {
 		$redacted       = $context;
-		$sensitive_keys = array( 'secret', 'secret_key', 'api_key', 'token', 'password', 'webhook_secret', 'authorization', 'cookie', 'nonce', 'raw_body' );
+		$sensitive_keys = array( 'secret', 'secret_key', 'api_key', 'token', 'password', 'webhook_secret', 'authorization', 'cookie', 'nonce', 'raw_body', 'email', 'user_email', 'email_address' );
 
 		foreach ( $redacted as $key => $value ) {
 			if ( in_array( strtolower( (string) $key ), $sensitive_keys, true ) ) {

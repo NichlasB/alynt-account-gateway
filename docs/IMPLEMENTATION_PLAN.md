@@ -2,12 +2,34 @@
 
 ## Status
 
-- Current phase: v0.1.98 pre-readiness settings UX polish released and verified; v1.0 readiness Phase 0 is next
+- Current phase: v1.0 readiness Phase 7 privacy, data, and lifecycle acceptance
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.98 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.119 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Begin production acceptance and `v1.0.0` preparation in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md), starting with Phase 0 acceptance-environment selection and baseline evidence.
+- Next roadmap: Continue Phase 7 acceptance in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md), beginning with personal-data exporter and eraser runtime evidence after the source-level data inventory and minimization slice.
+
+## v1.0 Readiness Phase 7 Data Inventory And Minimization
+
+### Scope
+
+- [x] Inventory plugin-owned options, tables, transients, schedules, and WordPress-owned records referenced by the plugin.
+- [x] Review pending-registration, consent, verification, webhook, diagnostics, and audit fields for data minimization and retention ownership.
+- [x] Prevent privacy exports for non-users from matching unrelated unattached consent records.
+- [x] Omit secret credentials, personal test-email settings, and site-specific media IDs from portable settings exports.
+- [x] Redact direct email fields from audit and diagnostics context.
+- [x] Add focused regression coverage and operator-facing settings-export guidance.
+- [ ] Publish and updater-verify the corrective release.
+- [ ] Continue Phase 7 with real WordPress personal-data exporter and eraser acceptance.
+
+### Progress Notes
+
+- The source inventory confirms six plugin-owned custom tables, one settings option, one database-version option, transient-backed rate-limit buckets, and one daily retention schedule. WordPress users, WooCommerce records, and media-library files remain WordPress or WooCommerce owned.
+- The privacy exporter consent query now includes `user_id` matching only when the requested email resolves to a real WordPress user. A pending registrant with no user account is matched by email only, preventing unrelated `user_id = 0` consent rows from entering the export.
+- Portable settings exports now omit every schema field typed as `secret`, `email`, or `attachment_id`. Imports preserve the destination site's existing omitted values because settings sanitization merges supplied keys into the current configuration.
+- Diagnostics redaction now masks `email`, `user_email`, and `email_address` keys recursively in addition to credentials, tokens, authorization data, cookies, nonces, and raw request bodies.
+- Release-candidate validation passed: production build; POT generation (`1004 strings`); PHPCS; full PHPUnit (`299 tests, 1973 assertions`); npm audit (`0 vulnerabilities`); Composer audit (no advisories); and `git diff --check`.
+- Built and inspected `C:\Users\Captain\Desktop\alynt-account-gateway-0.1.120.zip`: 45 runtime files under one plugin root, forward-slash paths, no development files or stale `build/` artifacts, aligned `0.1.120` metadata, all three privacy-hardening markers present, and SHA-256 `7F405592AEF58CC336B22BCB8005027E6CBDB4818B819DF6F21B29CAE5B1ACE2`.
 
 ## v0.1.98 Pre-Readiness Settings UX Polish
 

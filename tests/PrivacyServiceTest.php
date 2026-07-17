@@ -19,6 +19,13 @@ class PrivacyServiceTest extends TestCase {
 		$GLOBALS['alynt_ag_test_db_deletes'] = array();
 		$GLOBALS['alynt_ag_test_db_results'] = array();
 		$GLOBALS['alynt_ag_test_filters'] = array();
+		$GLOBALS['alynt_ag_test_missing_user_emails'] = array();
+	}
+
+	protected function tearDown(): void {
+		unset( $GLOBALS['alynt_ag_test_missing_user_emails'] );
+
+		parent::tearDown();
 	}
 
 	public function test_register_adds_exporter_and_eraser_filters() {
@@ -118,6 +125,36 @@ class PrivacyServiceTest extends TestCase {
 		$this->assertSame( 'monitor', $verification_values['Review Decision'] );
 		$this->assertSame( '2026-07-03 12:30:00', $verification_values['Reviewed At'] );
 		$this->assertArrayNotHasKey( 'Reviewed By', $verification_values );
+	}
+
+	public function test_export_for_email_without_user_does_not_match_unattached_consent_rows() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$capture_wpdb  = new class() extends ALYNT_AG_Test_WPDB {
+			public $select_queries = array();
+
+			public function get_results( $query ) {
+				$this->select_queries[] = $query;
+
+				return parent::get_results( $query );
+			}
+		};
+
+		$wpdb = $capture_wpdb;
+		$GLOBALS['alynt_ag_test_missing_user_emails'] = array( 'pending@example.test' );
+
+		try {
+			$service = new ALYNT_AG_Privacy_Service();
+			$service->export_personal_data( 'pending@example.test' );
+
+			$consent_query = $capture_wpdb->select_queries[0];
+
+			$this->assertStringContainsString( "WHERE email = 'pending@example.test'", $consent_query );
+			$this->assertStringNotContainsString( 'OR user_id = 0', $consent_query );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
 	}
 
 	public function test_erase_personal_data_deletes_plugin_records() {
