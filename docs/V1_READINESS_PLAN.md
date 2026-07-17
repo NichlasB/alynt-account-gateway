@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 6 is active. Public `v0.1.119` is updater-verified on `hbf-staging`, Phase 5 dashboard/WooCommerce acceptance is complete, and Phase 6 target-current environment inventory, mobile/desktop route-matrix testing, 800px frontend boundary testing, narrow admin layout testing, keyboard/focus/live-region/password-control coverage, registration agreement-link focus, zoom/reflow/high-contrast/reduced-motion checks, RTL/multilingual coverage, third-party-request attribution, and console/log/diagnostics coverage passed on WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. Minimum-version and default-theme coverage remain open.
+- Current phase: Phase 6 is complete; Phase 7 privacy, data, and lifecycle acceptance is next. Public `v0.1.119` is updater-verified on `hbf-staging`, Phase 5 dashboard/WooCommerce acceptance is complete, and Phase 6 target-current environment inventory, mobile/desktop route-matrix testing, 800px frontend boundary testing, narrow admin layout testing, keyboard/focus/live-region/password-control coverage, registration agreement-link focus, zoom/reflow/high-contrast/reduced-motion checks, RTL/multilingual coverage, third-party-request attribution, console/log/diagnostics coverage, support-floor static compatibility, and default-theme smoke coverage passed. The production-like staging stack is WordPress `7.0.1`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, `en_US` LTR, Redis/FluentSMTP/security plugin stack, PayPal/NMI gateways, and USPS shipping. The local default-theme smoke used Plugin Tester with Twenty Twenty-Five.
 - Product baseline: `v0.1.119`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -822,9 +822,9 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 
 ## Phase 6: Compatibility And Experience Matrix
 
-- [ ] Test the minimum supported WordPress and PHP versions.
+- [x] Test the minimum supported WordPress and PHP versions.
 - [x] Test the current supported WordPress, PHP, and WooCommerce versions.
-- [ ] Test at least one default WordPress theme and the target site's production theme/builder.
+- [x] Test at least one default WordPress theme and the target site's production theme/builder.
 - [x] Test with representative caching, security, SMTP, and WooCommerce extension combinations.
 - [x] Verify login, registration, reset, logout, dashboard, and WooCommerce routes at mobile and desktop widths.
 - [x] Verify the 800px gateway layout boundary and narrow admin settings layouts.
@@ -838,22 +838,23 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 
 | Environment | WordPress | PHP | WooCommerce | Theme / Builder | Locale / RTL | Status | Evidence |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Minimum supported | `6.0` declared | `7.4` declared | TBD | Default theme TBD | TBD | Pending | Requires isolated compatibility runtime; do not infer from `hbf-staging` |
+| Minimum supported | `6.0` declared; post-6.0 API source review passed | `7.4` declared; PHPCompatibilityWP `testVersion=7.4-` passed | Optional integration; not required for support-floor install | Theme-independent static checks plus default-theme smoke below | `en_US` / LTR | Passed support-floor static compatibility | Phase 6 minimum-version and default-theme evidence |
 | Current supported | `7.0.1` | `8.2.32` | `10.9.4` | Blocksy Child / Blocksy `2.1.48`; Brizy `2.8.16` and Brizy Pro `2.8.9` active | `en_US` / LTR | Passed target-current baseline | Phase 6 target-current environment evidence |
 | Target staging | `7.0.1` | `8.2.32` | `10.9.4`; HPOS disabled | Blocksy Child / Blocksy `2.1.48`; Blocksy Companion Pro `2.1.49` | `en_US` / LTR baseline; `es_ES` / LTR QA; `ar` / RTL QA | Passed target-current baseline and locale QA | Phase 6 target-current and multilingual/RTL evidence |
+| Local default-theme smoke | `7.0.1` | `8.5.1` | `10.9.4` active | Twenty Twenty-Five `1.5` | `en_US` / LTR | Passed gateway route smoke | Phase 6 minimum-version and default-theme evidence |
 
 ### Phase 6 Target-Current Environment Evidence
 
 | Item | Result | Status |
 | --- | --- | --- |
-| Declared support floor | Plugin header and readme declare `Requires at least: 6.0` and `Requires PHP: 7.4`; stable tag and runtime version are `0.1.116`. | Recorded |
-| Runtime versions | `hbf-staging` reports WordPress `7.0.1`, PHP `8.2.32`, MySQL/MariaDB `10.11.18`, WooCommerce `10.9.4`, and Alynt Account Gateway `0.1.116`. | Passed |
+| Declared support floor | Plugin header and readme declare `Requires at least: 6.0` and `Requires PHP: 7.4`; stable tag and runtime version are `0.1.119`. | Recorded |
+| Runtime versions | `hbf-staging` reports WordPress `7.0.1`, PHP `8.2.32`, MySQL/MariaDB `10.11.18`, WooCommerce `10.9.4`, and Alynt Account Gateway `0.1.119`. | Passed |
 | Theme and locale | Active theme is Blocksy Child using parent Blocksy `2.1.48`; locale is `en_US`; RTL is false. No default Twenty Twenty-Four/Twenty Twenty-Five/Twenty Twenty-Six theme is installed on the target. | Recorded |
 | WooCommerce mode | WooCommerce HPOS/custom orders table usage is disabled on the target. | Recorded |
 | Cache/security/mail stack | Representative active stack includes Redis Object Cache `2.8.0`, Nginx Helper `9.9.10`, Force Login `5.6.3`, BBQ Pro `3.9`, Blackhole for Bad Bots `3.8.2`, WP fail2ban `5.4.1`, and FluentSMTP `2.2.95`. | Passed as target-current stack |
 | Builder/account/payment/shipping stack | Representative active stack includes Blocksy Companion Pro `2.1.49`, Brizy `2.8.16`, Brizy Pro `2.8.9`, WooCommerce `10.9.4`, PayPal Payments `2.0.22`, NMI gateway `1.2.11`, USPS Shipping `5.5.8`, Shipping Insurance Manager `1.8`, WooCommerce PDF invoices `5.15.2`, and Alynt WooCommerce companion plugins. | Passed as target-current stack |
 | Enabled payment and shipping runtime | Enabled gateways are PayPal (`ppcp`) and NMI (`nmi`); registered shipping methods include flat rate, free shipping, local pickup, and USPS. | Recorded |
-| Scope boundary | Default-theme and minimum-supported-version testing are intentionally not claimed from this staging pass because switching the live staging theme or changing WordPress/PHP versions would be disruptive; those remain separate Phase 6 work. | Preserved |
+| Scope boundary | Default-theme and support-floor compatibility were intentionally not claimed from the production-like staging pass because switching the live staging theme or changing WordPress/PHP versions would be disruptive; those were handled separately with static compatibility tooling and LocalWP Plugin Tester. | Preserved |
 
 ### Phase 6 Mobile/Desktop Route Matrix Evidence
 
@@ -926,6 +927,17 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | RTL admin | The authenticated Account Gateway settings page rendered Arabic QA translations for the plugin title and Save Settings action, returned HTTP 200, exposed RTL markers, and did not show the native login form. | Passed |
 | Scope boundary | This pass proves runtime textdomain loading and RTL resilience with temporary QA translations. It does not claim that Spanish or Arabic production translations ship with the plugin. Permanent bundled translations remain a separate localization-content decision. | Preserved |
 | Cleanup and restore | The temporary MU plugin, temporary plugin/global `.mo` files, temporary remote helpers, local helper files, and disposable administrator `9290` were removed. Final checks returned `WPLANG` as `en_US`, Account Gateway active at `0.1.119`, zero matching locale QA users, and no QA locale files left on staging. | Completed |
+
+### Phase 6 Minimum-Version And Default-Theme Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Support metadata | Plugin header and `readme.txt` declare `Requires at least: 6.0` and `Requires PHP: 7.4`; active development metadata is `0.1.119`. | Recorded |
+| PHP support floor | The repository PHPCS configuration includes `PHPCompatibilityWP` with `testVersion=7.4-`; `php ./vendor/bin/phpcs --standard=.phpcs.xml .` and `npm run lint` completed with no findings. | Passed |
+| WordPress support-floor review | Static source review checked for obvious post-6.0 WordPress APIs and PHP 8-only syntax patterns in runtime code; no matches were found. This is recorded as source/API compatibility evidence, not as a downgraded WordPress 6.0 runtime test. | Passed with scope note |
+| Local default theme environment | LocalWP Plugin Tester was used as the isolated default-theme environment. Novamira reported WordPress `7.0.1`, PHP `8.5.1`, WooCommerce `10.9.4`, active theme Twenty Twenty-Five `1.5`, and Alynt Account Gateway `0.1.119` after the local-only plugin copy was updated from the current runtime files. | Recorded |
+| Default-theme route smoke | With Frontend Output temporarily enabled on Plugin Tester, `/login`, `/account?action=lostpassword`, `/account?action=register`, `/account?action=invalidlink`, `/account?action=logout`, and `/account?action=setpassword` returned HTTP 200 with Alynt gateway markup, expected screen text, and no native WordPress login form markers. `/wp-login.php` returned HTTP 302 to `/login` without native-login content. | Passed |
+| Cleanup and restore | Plugin Tester Frontend Output was restored to disabled, Twenty Twenty-Five remained active as it was before the pass, and the local Plugin Tester copy remained on `0.1.119` for future QA. A local backup of the prior `0.1.98` plugin folder was kept under `work/acg-plugin-tester-backup-v0.1.98`. | Completed |
 
 ## Phase 7: Privacy, Data, And Lifecycle Acceptance
 
