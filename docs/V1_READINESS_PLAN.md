@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 5 is active. Public `v0.1.114` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, role access/admin-toolbar behavior passed for administrator, shop manager, and customer, rate-limit/password-policy failure states passed, pending-email/expired-token/used-token/resend states passed, emergency bypass behavior passed, the Frontend Output disable/restore safety switch passed, inactive-account scope was clarified, safe post-login redirect handling passed after the `v0.1.112` corrective release, the public account route shell matrix passed with native WordPress appearing only through the deliberate emergency bypass, password strength feedback accessibility passed after the `v0.1.113` corrective release, frontend Turnstile browser-token success passed on the public registration form, Turnstile invalid/replay/expiry server-side validation passed, Reoon policy mapping passed with live valid/invalid/disposable spot checks, either-provider/all-provider registration policy behavior passed, provider outage/timeout behavior passed, temporary webhook receiver acceptance passed, the first dashboard/WooCommerce route smoke passed with temporary settings restored, representative order-list/pagination/order-detail/action behavior passed with temporary settings restored, downloads empty/available/expired/limited behavior passed with temporary settings restored, address/account POST handling passed after the `v0.1.114` delegated WooCommerce form-handler correction, and account email/password changes passed on `v0.1.114`. Payment-method actions, unavailable endpoint fallback, role/admin policy recheck, and extension compatibility coverage remain open.
+- Current phase: Phase 5 is active. Public `v0.1.114` is updater-verified on `hbf-staging`, route/native-screen leakage checks passed, the first registration-start POST regression found in Phase 2 was fixed, and the confirmation-first registration happy path completed: pending registration, consent, email confirmation, set-password, delayed WordPress user creation, generated username, and email-only login all passed. Disposable registration artifacts were cleaned up, invalid login passed, invalid set-password token handling stayed branded, registration-disabled behavior passed, lost-password/reset-password/logout happy paths passed, role access/admin-toolbar behavior passed for administrator, shop manager, and customer, rate-limit/password-policy failure states passed, pending-email/expired-token/used-token/resend states passed, emergency bypass behavior passed, the Frontend Output disable/restore safety switch passed, inactive-account scope was clarified, safe post-login redirect handling passed after the `v0.1.112` corrective release, the public account route shell matrix passed with native WordPress appearing only through the deliberate emergency bypass, password strength feedback accessibility passed after the `v0.1.113` corrective release, frontend Turnstile browser-token success passed on the public registration form, Turnstile invalid/replay/expiry server-side validation passed, Reoon policy mapping passed with live valid/invalid/disposable spot checks, either-provider/all-provider registration policy behavior passed, provider outage/timeout behavior passed, temporary webhook receiver acceptance passed, the first dashboard/WooCommerce route smoke passed with temporary settings restored, representative order-list/pagination/order-detail/action behavior passed with temporary settings restored, downloads empty/available/expired/limited behavior passed with temporary settings restored, address/account POST handling passed after the `v0.1.114` delegated WooCommerce form-handler correction, account email/password changes passed on `v0.1.114`, and saved payment-method list/default/delete plus add-unavailable behavior passed on `v0.1.114`. Unavailable endpoint fallback, role/admin policy recheck, and extension compatibility coverage remain open.
 - Product baseline: `v0.1.114`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -687,7 +687,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 - [x] Verify billing and shipping address view/edit flows and validation errors.
 - [x] Verify account-details name/display editing and validation errors.
 - [x] Verify account email changes and password changes.
-- [ ] Verify saved payment-method list, add, delete, and default-method flows where supported.
+- [x] Verify saved payment-method list, add, delete, and default-method flows where supported.
 - [x] Verify delegated WooCommerce notices, forms, nonces, and errors remain functional for address and account-details forms.
 - [ ] Verify unavailable WooCommerce endpoint guidance and recovery links.
 - [ ] Verify shop-manager administration remains available while customer wp-admin access remains blocked.
@@ -703,7 +703,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | Public dashboard route | Temporarily enabled dashboard/takeover and added one temporary customer-only new-tab custom link; browser login as disposable customer landed on `/my-account/` with the branded dashboard, first-name greeting, WooCommerce overview, account navigation, configured custom links, and screen-reader text for the new-tab link | Passed |
 | Public WooCommerce endpoints | Browser checks confirmed `/my-account/orders/` rendered branded shell, Account section shortcuts, Order History guidance, WooCommerce native empty-orders notice, and Browse products action; `/my-account/edit-address/` rendered WooCommerce address content; `/my-account/edit-account/` rendered WooCommerce first name, last name, display name, email, password-change fields, and Save changes button | Passed |
 | Cleanup and restore | Original `alynt_ag_settings` were restored exactly from snapshot; disposable user `9264` was deleted; temporary snapshot options and remote helpers were removed; final baseline again showed dashboard and takeover disabled with the two original custom links only | Completed |
-| Remaining coverage | Saved-payment add/delete/default flows, unavailable endpoint fallback, role/admin policy recheck, and target extension compatibility still require separate Phase 5 slices | Open |
+| Remaining coverage | Unavailable endpoint fallback, role/admin policy recheck, and target extension compatibility still require separate Phase 5 slices | Open |
 
 ### Phase 5 Representative Orders Evidence
 
@@ -717,7 +717,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | Order details | `/my-account/view-order/22304/` rendered inside the branded dashboard shell with Back to orders/Manage addresses shortcuts, Order Details guidance, order status/date, product line, subtotal, total, billing address, and Pay/Cancel actions | Passed |
 | Pagination | The first orders page exposed `Next` to `/my-account/orders/2/`; page 2 rendered the remaining orders and exposed `Previous` back to page 1 | Passed |
 | Cleanup and restore | Original settings were restored; orders `22287`-`22304`, product `22286`, user `9265`, temp snapshot options, and remote helpers were removed; final read-only check returned zero matching QA users/products/order markers and dashboard/takeover disabled | Completed |
-| Remaining coverage | Saved-payment actions, unavailable endpoint fallback, role/admin policy recheck, and extension compatibility remain open | Open |
+| Remaining coverage | Unavailable endpoint fallback, role/admin policy recheck, and extension compatibility remain open | Open |
 
 ### Phase 5 Downloads Evidence
 
@@ -731,7 +731,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | Unlimited download | The available unlimited download displayed `∞` in the Downloads remaining column and `Never` for expiry | Passed |
 | Expired permission | The expired permission row remained present in setup evidence but was excluded from WooCommerce's available-downloads API and did not appear in the frontend table | Passed |
 | Cleanup and restore | Original settings and approved-directory rows were restored; users `9272` and `9273`, products `22305`-`22307`, orders `22308`-`22310`, three permission rows, temp options, remote helpers, and upload files were removed; final read-only check returned zero QA rows/files and dashboard/takeover disabled | Completed |
-| Remaining coverage | Saved-payment actions, unavailable endpoint fallback, role/admin policy recheck, and extension compatibility remain open | Open |
+| Remaining coverage | Unavailable endpoint fallback, role/admin policy recheck, and extension compatibility remain open | Open |
 
 ### Phase 5 Address And Account Form Evidence
 
@@ -745,7 +745,7 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | Account-details validation | Empty display name on `/my-account/edit-account/` rendered the WooCommerce `Display name is a required field.` error inside the branded shell and kept the existing display name. | Passed |
 | Account-details save | Valid first name, last name, and display-name update saved `AlyntAccount FormsQA`; WP-CLI confirmed user display name and first/last name meta. Email and password changes were intentionally left for a separate slice. | Passed |
 | Cleanup and restore | Original settings were restored; disposable user `9274`, temporary snapshot/debug options, and local/remote helpers were removed; final compact cleanup check returned dashboard/takeover disabled, zero QA users, and zero temporary options. | Completed |
-| Remaining coverage | Saved-payment actions, unavailable endpoint fallback, role/admin policy recheck, and extension compatibility remain open | Open |
+| Remaining coverage | Unavailable endpoint fallback, role/admin policy recheck, and extension compatibility remain open | Open |
 
 ### Phase 5 Delegated Form Corrective Release Evidence
 
@@ -771,7 +771,21 @@ Post-handover route acceptance is complete for `hbf-staging`. Full form submissi
 | Password change | Browser Account Details accepted the current password plus matching new password fields, rendered `Account details changed successfully.`, then a full logout and email-only login with the changed email and new password landed back on the branded dashboard. | Passed |
 | Logout wording spot-check | The branded logout confirmation screen used `Confirm Logout` as the screen title and `Log Out` for the action button, avoiding duplicated title/button wording. | Passed |
 | Cleanup and restore | Original settings were restored; disposable user `9276`, temporary snapshot option, local helpers, and remote helpers were removed; final cleanup check returned `0.1.114`, zero matching QA users, and no helper files. | Completed |
-| Remaining coverage | Saved-payment actions, unavailable endpoint fallback, role/admin policy recheck, and extension compatibility remain open. | Open |
+| Remaining coverage | Unavailable endpoint fallback, role/admin policy recheck, and extension compatibility remain open. | Open |
+
+### Phase 5 Saved Payment Methods Evidence
+
+| Item | Result | Status |
+| --- | --- | --- |
+| Baseline | Alynt Account Gateway `0.1.114` and WooCommerce `10.9.4` were active on `hbf-staging`; enabled gateways were PayPal (`ppcp`) and NMI (`nmi`), neither of which advertised standalone add-payment-method/tokenization support. | Verified |
+| Temporary data | One disposable customer and two WooCommerce card tokens were created under the enabled `nmi` gateway; dashboard and WooCommerce takeover were enabled only from a settings snapshot. | Created and removed |
+| Saved-method list | Browser login through `/login/` rendered `/my-account/payment-methods/` inside the branded dashboard with WooCommerce's native table, Visa ending in `1111`, MasterCard ending in `4242`, expiry `12/30`, and native action links. | Passed |
+| Set default | Browser `Make default` action on MasterCard ending in `4242` redirected back to the branded saved-methods page, showed WooCommerce's success notice, moved the `Make default` action to the old Visa token, and WP-CLI confirmed token `4242` became default. | Passed |
+| Delete non-default | Browser `Delete` action removed the old Visa token, showed WooCommerce's `Payment method deleted.` notice inside the branded shell, and WP-CLI confirmed only token `4242` remained. | Passed |
+| Add-payment-method availability | `/my-account/add-payment-method/` rendered inside the branded dashboard with Add Payment Method guidance and WooCommerce's provider message: `New payment methods can only be added during checkout. Please contact us if you require assistance.` No payment-provider settings were changed. | Passed as unsupported on this staging configuration |
+| Delete default and empty state | Browser `Delete` action removed the remaining default token, rendered WooCommerce's `No saved methods found.` empty state inside the branded shell, and WP-CLI confirmed zero customer tokens remained. | Passed |
+| Cleanup and restore | Original settings were restored; disposable user `9277`, temporary snapshot option, local helpers, and remote helpers were removed; final cleanup check returned `0.1.114`, zero matching QA users, and no helper files. | Completed |
+| Remaining coverage | Unavailable endpoint fallback, role/admin policy recheck, and extension compatibility remain open. | Open |
 
 ## Phase 6: Compatibility And Experience Matrix
 
