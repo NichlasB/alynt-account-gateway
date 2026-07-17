@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.0 release-candidate gate: RC installed and smoke-tested on hbf-staging; explicit release approval pending
+- Current phase: v1.0.0 released and updater-verified; final evidence synchronized
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.120 remains the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on `hbf-staging`; `release/1.0.0` is prepared locally as the v1.0 release candidate.
+- Plugin status: v1.0.0 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Wait for explicit release approval before tagging or publishing `v1.0.0`; after publication, inspect the public asset and verify Alynt Plugin Updater installs it from the previous public baseline.
+- Next roadmap: Continue with post-v1 maintenance only after a new, separately scoped product or maintenance slice is approved.
 
 ## v1.0 Release Candidate Gate
 
@@ -22,8 +22,8 @@
 - [x] Build and inspect the runtime ZIP.
 - [x] Install the exact RC on `hbf-staging` and repeat critical account, email, integration, and WooCommerce smoke tests.
 - [x] Complete privacy/secret preflight and final cleanup.
-- [ ] Wait for explicit release approval before merge, tag, push, or publication.
-- [ ] Verify the public GitHub asset and Alynt Plugin Updater path after publication.
+- [x] Wait for explicit release approval before merge, tag, push, or publication.
+- [x] Verify the public GitHub asset and Alynt Plugin Updater path after publication.
 
 ### Progress Notes
 
@@ -35,6 +35,9 @@
 - Installed the exact RC zip on `hbf-staging` using WP-CLI as `handcraftedbotanicalformulas-com`. Remote hash matched the inspected package; installed state reports active `1.0.0`, 45 runtime files, unchanged settings hash `f62d5ae8925e2500bd8b239b875cbc59ec43dc6b6560cd8fa125b11522427541`, unchanged active-plugin hash `749368765eb92d517af259c49e8f4233db055f8b5cdcc8c26a78391122405606`, `/account` HTTP 200, and public gateway login/register/lost-password routes render ACG markup with no native WordPress markers.
 - Non-destructive staging smoke confirmed anonymous My Account redirects to branded login, WooCommerce is active, email and dashboard services are loaded, Turnstile and Reoon are configured, webhook remains unset, and debug payload logging is off. Temporary staging helper and RC package were removed from `/tmp`.
 - Privacy/secret preflight passed: targeted local scan found no credential-like material, and public rollback asset `v0.1.120` remains available on GitHub with SHA-256 `9ca485d6502820806a44d11c540621eba07c1b74852d8470663a0af863c5cb3b`.
+- Published GitHub release [`v1.0.0`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.0.0) from merge commit `a144e2a`; Build Release workflow run `29589749955` completed successfully.
+- Downloaded and inspected public asset `alynt-account-gateway-v1.0.0.zip`: 45 runtime files, one expected plugin root, forward-slash ZIP entries, zero development/source files, aligned `1.0.0` metadata, exactly one updater header, and SHA-256 `AF0AB93375F3CF3C3266AFFB7ECE4905DD97F9C2082B1E8D2EDF3C3C172D688F`.
+- Public updater verification passed on `hbf-staging`: the site was temporarily restored to public `v0.1.120`, Alynt Plugin Updater detected `0.1.120 -> 1.0.0`, WordPress downloaded `https://github.com/NichlasB/alynt-account-gateway/releases/download/v1.0.0/alynt-account-gateway-v1.0.0.zip`, and final state reports active `1.0.0`, 45 runtime files, unchanged settings and active-plugin hashes, `/account` HTTP 200, and no remaining ACG update offer.
 
 ## v1.0 Readiness Phase 7 Data Inventory And Minimization
 
