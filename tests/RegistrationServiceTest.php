@@ -21,6 +21,8 @@ class RegistrationServiceTest extends TestCase {
 		$GLOBALS['alynt_ag_test_created_users'] = array();
 		$GLOBALS['alynt_ag_test_user_updates'] = array();
 		$GLOBALS['alynt_ag_test_db_updates'] = array();
+		$GLOBALS['alynt_ag_test_db_rows'] = array();
+		$GLOBALS['alynt_ag_test_db_queries'] = array();
 		unset( $GLOBALS['alynt_ag_test_remote_get_response'] );
 	}
 
@@ -44,6 +46,73 @@ class RegistrationServiceTest extends TestCase {
 		$this->assertStringStartsWith( 'https://example.test/account?', $url );
 		$this->assertStringContainsString( 'action=setpassword', $url );
 		$this->assertStringContainsString( 'alynt_ag_token=abc123', $url );
+	}
+
+	public function test_confirm_pending_token_rejects_invalid_or_expired_token() {
+		$service = new ALYNT_AG_Registration_Service();
+		$result  = $service->confirm_pending_token( 'invalid-or-expired-token' );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'invalid_or_expired_token', $result->get_error_code() );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_db_updates'] );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_queries'] );
+		$this->assertStringContainsString( $service->hash_token( 'invalid-or-expired-token' ), $GLOBALS['alynt_ag_test_db_queries'][0] );
+		$this->assertStringContainsString( "status IN ('pending', 'email_confirmed')", $GLOBALS['alynt_ag_test_db_queries'][0] );
+		$this->assertStringContainsString( 'expires_at >=', $GLOBALS['alynt_ag_test_db_queries'][0] );
+	}
+
+	public function test_confirm_pending_token_marks_pending_registration_confirmed() {
+		$GLOBALS['alynt_ag_test_db_rows'][] = (object) array(
+			'id'         => 42,
+			'email'      => 'customer@example.test',
+			'first_name' => 'Damon',
+			'last_name'  => 'Paulo',
+			'status'     => 'pending',
+		);
+
+		$service = new ALYNT_AG_Registration_Service();
+		$result  = $service->confirm_pending_token( 'valid-token' );
+
+		$this->assertSame( 'email_confirmed', $result->status );
+		$this->assertNotEmpty( $result->confirmed_at );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_updates'] );
+		$this->assertSame( 'email_confirmed', $GLOBALS['alynt_ag_test_db_updates'][0]['data']['status'] );
+		$this->assertSame( array( 'id' => 42 ), $GLOBALS['alynt_ag_test_db_updates'][0]['where'] );
+	}
+
+	public function test_confirm_pending_token_does_not_update_already_confirmed_registration() {
+		$pending = (object) array(
+			'id'           => 43,
+			'email'        => 'customer@example.test',
+			'first_name'   => 'Damon',
+			'last_name'    => 'Paulo',
+			'status'       => 'email_confirmed',
+			'confirmed_at' => '2026-07-17 10:00:00',
+		);
+
+		$GLOBALS['alynt_ag_test_db_rows'][] = $pending;
+
+		$service = new ALYNT_AG_Registration_Service();
+		$result  = $service->confirm_pending_token( 'already-confirmed-token' );
+
+		$this->assertSame( $pending, $result );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_db_updates'] );
+	}
+
+	public function test_completed_registration_token_cannot_be_replayed() {
+		$service = new ALYNT_AG_Registration_Service();
+		$result  = $service->complete_pending_registration(
+			'account-created-token',
+			'StrongPassword1!',
+			'StrongPassword1!',
+			ALYNT_AG_Settings_Schema::defaults()
+		);
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'invalid_or_expired_token', $result->get_error_code() );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_created_users'] );
+		$this->assertStringContainsString( "status IN ('pending', 'email_confirmed')", $GLOBALS['alynt_ag_test_db_queries'][0] );
+		$this->assertStringNotContainsString( 'account_created', $GLOBALS['alynt_ag_test_db_queries'][0] );
 	}
 
 	public function test_generated_username_uses_format_and_collision_suffix() {

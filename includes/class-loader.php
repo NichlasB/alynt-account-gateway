@@ -17,6 +17,7 @@ $alynt_ag_files = array(
 	'includes/class-i18n.php',
 	'includes/class-activator.php',
 	'includes/class-deactivator.php',
+	'includes/services/class-client-ip.php',
 	'includes/services/class-rate-limiter.php',
 	'includes/services/class-auth-service.php',
 	'includes/services/class-registration-service.php',

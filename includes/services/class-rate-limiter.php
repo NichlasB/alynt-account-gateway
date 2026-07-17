@@ -120,7 +120,7 @@ class ALYNT_AG_Rate_Limiter {
 		$parts = array(
 			sanitize_key( $action ),
 			strtolower( sanitize_text_field( $identifier ) ),
-			$this->get_remote_ip(),
+			ALYNT_AG_Client_IP::resolve(),
 		);
 
 		return 'alynt_ag_rl_' . hash_hmac( 'sha256', implode( '|', $parts ), wp_salt( 'auth' ) );
@@ -168,22 +168,5 @@ class ALYNT_AG_Rate_Limiter {
 			),
 			max( 1, $expires_at - time() )
 		);
-	}
-
-	/**
-	 * Return best-effort visitor IP.
-	 *
-	 * @return string
-	 */
-	private function get_remote_ip() {
-		foreach ( array( 'HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR' ) as $key ) {
-			if ( ! empty( $_SERVER[ $key ] ) ) {
-				$value = sanitize_text_field( wp_unslash( $_SERVER[ $key ] ) );
-				$parts = explode( ',', $value );
-				return trim( $parts[0] );
-			}
-		}
-
-		return '';
 	}
 }

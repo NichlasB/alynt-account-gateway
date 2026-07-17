@@ -22,6 +22,7 @@ $GLOBALS['alynt_ag_test_remote_posts'] = array();
 $GLOBALS['alynt_ag_test_db_inserts'] = array();
 $GLOBALS['alynt_ag_test_db_updates'] = array();
 $GLOBALS['alynt_ag_test_db_deletes'] = array();
+$GLOBALS['alynt_ag_test_db_rows'] = array();
 $GLOBALS['alynt_ag_test_db_results'] = array();
 $GLOBALS['alynt_ag_test_db_queries'] = array();
 $GLOBALS['alynt_ag_test_filters'] = array();
@@ -84,6 +85,16 @@ class ALYNT_AG_Test_WPDB {
 		}
 
 		return array();
+	}
+
+	public function get_row( $query ) {
+		$GLOBALS['alynt_ag_test_db_queries'][] = $query;
+
+		if ( empty( $GLOBALS['alynt_ag_test_db_rows'] ) ) {
+			return null;
+		}
+
+		return array_shift( $GLOBALS['alynt_ag_test_db_rows'] );
 	}
 
 	public function prepare( $query, ...$args ) {
@@ -875,6 +886,32 @@ if ( ! function_exists( 'add_filter' ) ) {
 	}
 }
 
+if ( ! function_exists( 'apply_filters' ) ) {
+	function apply_filters( $hook_name, $value, ...$args ) {
+		$filters = array_filter(
+			$GLOBALS['alynt_ag_test_filters'],
+			static function ( $filter ) use ( $hook_name ) {
+				return $hook_name === $filter['hook'];
+			}
+		);
+
+		usort(
+			$filters,
+			static function ( $left, $right ) {
+				return $left['priority'] <=> $right['priority'];
+			}
+		);
+
+		foreach ( $filters as $filter ) {
+			$accepted_args = max( 1, (int) $filter['accepted_args'] );
+			$filter_args   = array_slice( array_merge( array( $value ), $args ), 0, $accepted_args );
+			$value         = call_user_func_array( $filter['callback'], $filter_args );
+		}
+
+		return $value;
+	}
+}
+
 if ( ! function_exists( 'get_user_by' ) ) {
 	function get_user_by( $field, $value ) {
 		if ( 'email' !== $field || ! is_email( $value ) ) {
@@ -940,6 +977,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-database.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-deactivator.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-diagnostics-logger.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-retention-cleanup.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-client-ip.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-rate-limiter.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-template-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-auth-service.php';

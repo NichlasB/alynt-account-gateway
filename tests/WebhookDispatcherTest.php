@@ -94,6 +94,58 @@ class WebhookDispatcherTest extends TestCase {
 		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
 	}
 
+	public function test_dispatch_account_created_returns_error_and_logs_non_2xx_response() {
+		$GLOBALS['alynt_ag_test_remote_post_response'] = array(
+			'body'     => '{"error":"temporarily unavailable"}',
+			'response' => array(
+				'code'    => 503,
+				'message' => 'Service Unavailable',
+			),
+		);
+
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+		$result     = $dispatcher->dispatch_account_created(
+			321,
+			array(
+				'account_created_webhook' => 'https://hooks.example.test/account-created',
+				'debug_payload_logging'   => false,
+			)
+		);
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'alynt_ag_webhook_http_error', $result->get_error_code() );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+
+		$row = $GLOBALS['alynt_ag_test_db_inserts'][0]['data'];
+		$this->assertSame( 503, $row['http_status'] );
+		$this->assertSame( 0, $row['success'] );
+		$this->assertSame( 'Service Unavailable', $row['error_message'] );
+		$this->assertNull( $row['payload'] );
+	}
+
+	public function test_dispatch_account_created_returns_and_logs_transport_error() {
+		$GLOBALS['alynt_ag_test_remote_post_response'] = new WP_Error( 'http_request_failed', 'Connection timed out.' );
+
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+		$result     = $dispatcher->dispatch_account_created(
+			321,
+			array(
+				'account_created_webhook' => 'https://hooks.example.test/account-created',
+				'debug_payload_logging'   => false,
+			)
+		);
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'http_request_failed', $result->get_error_code() );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+
+		$row = $GLOBALS['alynt_ag_test_db_inserts'][0]['data'];
+		$this->assertSame( 0, $row['http_status'] );
+		$this->assertSame( 0, $row['success'] );
+		$this->assertSame( 'Connection timed out.', $row['error_message'] );
+		$this->assertNull( $row['payload'] );
+	}
+
 	public function test_dispatch_account_created_signs_json_body_when_secret_is_configured() {
 		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
 		$result     = $dispatcher->dispatch_account_created(

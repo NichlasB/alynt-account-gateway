@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.1 - 2026-07-17
+
+### Security
+
+- Hardened client-IP resolution so rate limiting and Turnstile ignore spoofable forwarded headers unless the immediate proxy is explicitly trusted.
+- Centralized validated client-IP handling behind explicit trusted-proxy extension hooks.
+
+### Tests
+
+- Expanded regression coverage for pending registration token lifecycle handling, webhook failures, client-IP spoofing, malformed addresses, and trusted-proxy behavior.
+
 ## 1.0.0 - 2026-07-17
 
 ### Added

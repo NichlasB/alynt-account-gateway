@@ -15,7 +15,9 @@ class RateLimiterTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$GLOBALS['alynt_ag_test_transients'] = array();
+		$GLOBALS['alynt_ag_test_filters']    = array();
 		$_SERVER['REMOTE_ADDR'] = '203.0.113.10';
+		unset( $_SERVER['HTTP_CF_CONNECTING_IP'], $_SERVER['HTTP_X_FORWARDED_FOR'] );
 	}
 
 	public function test_bucket_key_does_not_expose_identifier_or_ip() {
@@ -25,6 +27,30 @@ class RateLimiterTest extends TestCase {
 		$this->assertStringStartsWith( 'alynt_ag_rl_', $key );
 		$this->assertStringNotContainsString( 'damon', $key );
 		$this->assertStringNotContainsString( '203.0.113.10', $key );
+	}
+
+	public function test_bucket_key_normalizes_identifier_case() {
+		$limiter = new ALYNT_AG_Rate_Limiter();
+
+		$this->assertSame(
+			$limiter->get_bucket_key( 'registration', 'Damon@Example.Test' ),
+			$limiter->get_bucket_key( 'registration', 'damon@example.test' )
+		);
+	}
+
+	public function test_spoofed_forwarded_headers_do_not_change_bucket_by_default() {
+		$limiter = new ALYNT_AG_Rate_Limiter();
+		$key     = $limiter->get_bucket_key( 'login', 'damon@example.test' );
+
+		$_SERVER['HTTP_CF_CONNECTING_IP'] = '198.51.100.21';
+		$_SERVER['HTTP_X_FORWARDED_FOR'] = '198.51.100.22';
+
+		$this->assertSame( $key, $limiter->get_bucket_key( 'login', 'damon@example.test' ) );
+
+		$_SERVER['HTTP_CF_CONNECTING_IP'] = '192.0.2.31';
+		$_SERVER['HTTP_X_FORWARDED_FOR'] = '192.0.2.32';
+
+		$this->assertSame( $key, $limiter->get_bucket_key( 'login', 'damon@example.test' ) );
 	}
 
 	public function test_check_and_increment_blocks_after_limit() {
