@@ -2,8 +2,8 @@
 
 ## Status
 
-- Current phase: `v1.0.2` is released, public-asset inspected, and installed on LocalWP `plugin-tester` and production-like `hbf-staging`.
-- Product baseline: `v1.0.2`, released, public-asset verified, and updater-regression verified with Alynt Plugin Updater `1.1.2` on LocalWP Plugin Tester.
+- Current phase: `v1.0.3` is released, public-asset inspected, and installed on LocalWP `plugin-tester` and production-like `hbf-staging`.
+- Product baseline: `v1.0.3`, released, public-asset verified, and updater-verified with Alynt Plugin Updater `1.1.2` on LocalWP Plugin Tester and `hbf-staging`.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility.
@@ -16,6 +16,19 @@ This is the living production-acceptance roadmap for Alynt Account Gateway. The 
 Readiness work should prioritize runtime evidence, configuration safety, compatibility, documentation, and operational recovery. New product features belong in a separately approved roadmap unless they are required to resolve a release-blocking defect found during acceptance testing.
 
 ## Post-v1 Maintenance Evidence
+
+### v1.0.3 Dashboard Off-Canvas Navigation Refinement
+
+| Item | Value | Evidence | Status |
+| --- | --- | --- | --- |
+| Release | [`v1.0.3`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.0.3) | GitHub release from commit `462470a` | Published |
+| Build Release workflow | Run `29613796461` | GitHub Actions | Passed |
+| Public asset | `alynt-account-gateway-v1.0.3.zip`; `47` runtime files; one plugin root; zero development-file or backslash-path hits | Public asset inspection | Verified |
+| Public asset SHA-256 | `085009D911ACA3CE76CA2A4FC618D1CE2B788A3E978721FBC2A390E62917CAD7` | Local hash of downloaded release asset | Recorded |
+| Product change | Optional dashboard off-canvas navigation now respects the WordPress admin bar and offers accessible, separate plus/minus submenu controls while preserving parent links. Menu spacing and full-screen mobile presentation were refined. | `CHANGELOG.md`, `readme.txt`, and packaged runtime | Completed |
+| Plugin Tester updater | Alynt Plugin Updater refreshed release metadata and the native WordPress updater installed `1.0.2` to active `1.0.3`; no update row remained. | Novamira MCP and browser evidence | Passed |
+| Staging updater | `hbf-staging` force-fresh checked the public release and the native WordPress updater installed `1.0.2` to active `1.0.3`; no update offer remained. Branded lost-password route returned HTTP `200`. | WP-CLI, HTTP smoke, and Site Operations evidence | Passed |
+| Production scope | Production HBF excluded. | Task approval boundary | Preserved |
 
 ### v1.0.2 Gateway Layout Polish
 

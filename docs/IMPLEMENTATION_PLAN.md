@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v1.0.2 released and updater-verified; final evidence synchronized
+- Current phase: v1.0.3 released and updater-verified; final evidence synchronized
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.0.2 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
+- Plugin status: v1.0.3 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 - Next roadmap: Begin the approved post-v1 product roadmap below, starting with the Alynt Plugin Updater follow-up unless a higher-priority production rollout need appears.
@@ -13,7 +13,7 @@
 
 ### Status
 
-- Current v1 product baseline: `v1.0.2`, released and updater-verified.
+- Current v1 product baseline: `v1.0.3`, released and updater-verified.
 - Original v1 implementation slices: Complete.
 - New approved post-v1 slices: Alynt Plugin Updater follow-up, deeper provider admin UX, dashboard UX expansion, dashboard action icons/off-canvas navigation, and delegated WooCommerce notice normalization.
 - New approved visual/admin-help tweak: widen gateway cards, reduce panel/card horizontal padding, remove trailing notice paragraph margin, and correct background-image guidance toward tall portrait imagery.
@@ -140,6 +140,10 @@
 - Plugin Tester refinement QA package inspected cleanly: 47 runtime files, zero development-file hits, forward-slash ZIP entries, and SHA-256 `435605C7A43334EF1FA50696288AEAA54220566AEEDAE871429D279F8FEF336C`.
 - Plugin Tester refinement smoke passed after installing the inspected QA package: desktop panel top offset matched the 32px admin bar, mobile panel top offset matched the 46px admin bar, submenu was hidden by default, the More toggle changed `aria-expanded` and labels from expand to collapse, child links opened and re-collapsed correctly, menu gap computed to `5px`, link vertical padding computed to `8px`, and temporary nested menu/settings/upload artifacts were removed afterward.
 - hbf-staging refinement smoke passed after installing the inspected QA package: desktop panel started at `y=32` below the admin bar, mobile panel started at `y=46`, parent menu item More stayed linked while the separate toggle controlled child visibility, the submenu was hidden by default, the expanded state changed from `Expand submenu for More` to `Collapse submenu for More`, child links rendered on desktop and mobile, and the disposable admin, temporary nested menu, snapshot, local scripts, and remote `/tmp` artifacts were removed afterward. Cleanup restored the staging baseline settings, including its real off-canvas menu ID `36`.
+- Released as [`v1.0.3`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.0.3) from commit `462470a`; Build Release workflow run `29613796461` passed.
+- Public asset `alynt-account-gateway-v1.0.3.zip` inspected cleanly: 47 runtime files, one plugin root, zero development-file or backslash-path hits, aligned `1.0.3` metadata, and SHA-256 `085009D911ACA3CE76CA2A4FC618D1CE2B788A3E978721FBC2A390E62917CAD7`.
+- Plugin Tester updater verification passed: Alynt Plugin Updater refreshed its release metadata, offered `1.0.3`, and the native WordPress updater installed the public GitHub asset from `1.0.2` to active `1.0.3` with no remaining update row.
+- hbf-staging updater verification passed: Alynt Plugin Updater force-fresh checked the public release, offered `1.0.3`, and the native WordPress updater installed the public GitHub asset from active `1.0.2` to active `1.0.3` with no remaining update offer. `/account?action=lostpassword` returned HTTP `200`; production HBF was not touched.
 
 ### Slice 5 - Deeper Provider Admin UX
 
