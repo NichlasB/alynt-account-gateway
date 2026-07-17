@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: Phase 9 v1.0 release-candidate gate is in progress. Phase 7 data/privacy/lifecycle acceptance and Phase 8 documentation sync are complete on public `v0.1.120`, installed through Alynt Plugin Updater on `hbf-staging`. Local branch `release/1.0.0` has aligned release-candidate metadata and passed build, PHPCS, PHPUnit, POT, npm audit, Composer audit, PHP syntax, and diff checks. Staging release-candidate installation, final smoke, explicit release approval, public asset inspection, and updater verification remain pending.
+- Current phase: Phase 9 v1.0 release-candidate gate is in progress. Phase 7 data/privacy/lifecycle acceptance and Phase 8 documentation sync are complete on public `v0.1.120`, installed through Alynt Plugin Updater on `hbf-staging`. Local branch `release/1.0.0` has aligned release-candidate metadata and passed build, PHPCS, PHPUnit, POT, npm audit, Composer audit, PHP syntax, and diff checks. Explicit release approval, public asset inspection, and updater verification remain pending.
 - Product baseline: `v0.1.120`, released, public-asset verified, and updater-verified on production-like staging.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
@@ -1019,9 +1019,9 @@ Additional source evidence:
 - [x] Align plugin header, constant, npm metadata, stable tag, changelog, README, tests, and POT at `1.0.0`.
 - [x] Run production build, PHPCS, full PHPUnit suite, POT generation, npm audit, Composer audit, and diff checks.
 - [x] Build and inspect the runtime ZIP for one root, forward-slash entries, runtime-only contents, aligned metadata, and updater headers.
-- [ ] Install the exact release candidate on the acceptance target and repeat critical account, email, integration, and WooCommerce smoke tests.
-- [ ] Verify the settings fingerprint, activation state, test-data cleanup, and rollback package.
-- [ ] Complete privacy and secret preflight before publication.
+- [x] Install the exact release candidate on the acceptance target and repeat critical account, email, integration, and WooCommerce smoke tests.
+- [x] Verify the settings fingerprint, activation state, test-data cleanup, and rollback package.
+- [x] Complete privacy and secret preflight before publication.
 - [ ] Obtain explicit release approval.
 - [ ] Commit, merge, tag, push, and publish the GitHub release.
 - [ ] Inspect the generated public release asset and record its SHA-256 digest.
@@ -1039,7 +1039,9 @@ Additional source evidence:
 | Metadata alignment | Plugin header, `ALYNT_AG_VERSION`, npm metadata, lockfile metadata, WordPress stable tag, changelog, sample version assertion, and POT project header are aligned to `1.0.0`. | Passed |
 | Local validation | `npm.cmd run build`; `npm.cmd run make-pot` (`1004` strings); `npm.cmd run lint`; `npm.cmd test` (`299 tests`, `1973 assertions`); `npm.cmd audit --audit-level=high`; `php .\composer.phar audit`; PHP syntax sweep (`108` files); and `git diff --check` all passed. | Passed |
 | Runtime ZIP inspection | Local release-candidate package `C:\Users\Captain\Documents\AI Workflows\work\acg-v1.0.0-rc-20260717\alynt-account-gateway-v1.0.0-rc.zip` contains 45 runtime files under one `alynt-account-gateway` root, zero backslash entries, zero development-file hits, aligned `1.0.0` header/constant/stable-tag/POT metadata, and exactly one updater header. SHA-256 `4467B664F3C8FFE79FDF138BAED4B4FC9FBD61C94523FB03E5B86014674173EF`. | Passed |
-| Remaining RC gate | Exact RC install on `hbf-staging`, critical smoke retest, privacy/secret preflight, explicit release approval, GitHub publication, public asset inspection, Alynt Plugin Updater verification, final cleanup, and release evidence are still pending. | Pending |
+| Staging RC install and smoke | The exact remote package hash matched `4467B664F3C8FFE79FDF138BAED4B4FC9FBD61C94523FB03E5B86014674173EF`, then WP-CLI installed it on `hbf-staging` as the site user. Installed plugin reports `1.0.0`, active status, 45 files, unchanged settings hash `f62d5ae8925e2500bd8b239b875cbc59ec43dc6b6560cd8fa125b11522427541`, unchanged active-plugin hash `749368765eb92d517af259c49e8f4233db055f8b5cdcc8c26a78391122405606`, `/account` HTTP 200, branded login/register/lost-password output with no native markers, anonymous My Account redirect to branded login, WooCommerce active, email/dashboard services loaded, Turnstile/Reoon configured, webhook unset, and debug payload logging off. | Passed |
+| Cleanup, rollback, and preflight | Temporary staging helper and RC zip were removed from `/tmp`. The previous public rollback package `v0.1.120` remains available on GitHub with SHA-256 `9ca485d6502820806a44d11c540621eba07c1b74852d8470663a0af863c5cb3b`. Targeted local secret preflight found no credential-like material. | Passed |
+| Remaining RC gate | Explicit release approval, GitHub publication, public asset inspection, Alynt Plugin Updater verification from the previous public baseline, final release evidence, and any post-publication cleanup are still pending. | Pending |
 
 ## v1.0 Go / No-Go Gate
 
