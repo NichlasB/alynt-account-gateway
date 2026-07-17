@@ -489,6 +489,28 @@ if ( ! function_exists( 'admin_url' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_get_nav_menus' ) ) {
+	function wp_get_nav_menus() {
+		return isset( $GLOBALS['alynt_ag_test_nav_menus'] ) ? $GLOBALS['alynt_ag_test_nav_menus'] : array();
+	}
+}
+
+if ( ! function_exists( 'wp_nav_menu' ) ) {
+	function wp_nav_menu( $args = array() ) {
+		$class = isset( $args['menu_class'] ) ? $args['menu_class'] : 'menu';
+		$html  = '<ul class="' . esc_attr( $class ) . '">';
+		$html .= '<li class="menu-item"><a href="https://example.test/shop/">Shop</a></li>';
+		$html .= '<li class="menu-item"><a href="https://example.test/contact/">Contact</a></li>';
+		$html .= '</ul>';
+
+		if ( isset( $args['echo'] ) && false === $args['echo'] ) {
+			return $html;
+		}
+
+		echo $html;
+	}
+}
+
 if ( ! function_exists( 'trailingslashit' ) ) {
 	function trailingslashit( $value ) {
 		return rtrim( (string) $value, '/' ) . '/';

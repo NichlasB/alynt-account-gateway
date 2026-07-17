@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.3 - 2026-07-17
+
+### Added
+
+- Added accessible plus/minus controls for off-canvas menu items with child navigation, preserving each parent item as a working link.
+
+### Changed
+
+- Made the optional dashboard off-canvas panel respect the WordPress admin bar for logged-in administrators and shop managers.
+- Tightened off-canvas menu spacing and refined the centered full-screen mobile presentation.
+
 ## 1.0.2 - 2026-07-17
 
 ### Changed

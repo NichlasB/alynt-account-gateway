@@ -63,12 +63,120 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 			<div class="agw-dashboard__inner">
 				<header class="agw-dashboard__header">
 					<?php $this->branding->render_brand_block( $settings ); ?>
-					<a class="agw-dashboard__logout" href="<?php echo esc_url( wp_logout_url( home_url( $settings['login_path'] ) ) ); ?>"><?php esc_html_e( 'Log Out', 'alynt-account-gateway' ); ?></a>
+					<?php $this->render_dashboard_actions( $settings ); ?>
 				</header>
+				<?php $this->render_offcanvas_menu( $settings ); ?>
 				<?php $this->render_dashboard_screen( $settings, $current_path ); ?>
 			</div>
 		</main>
 		<?php
+	}
+
+	/**
+	 * Render dashboard header icon actions.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_dashboard_actions( $settings ) {
+		$logout_url        = wp_logout_url( home_url( $settings['login_path'] ) );
+		$offcanvas_enabled = $this->offcanvas_enabled( $settings );
+		?>
+		<nav class="agw-dashboard-actions" aria-label="<?php esc_attr_e( 'Dashboard actions', 'alynt-account-gateway' ); ?>">
+			<?php if ( $offcanvas_enabled ) : ?>
+				<button
+					type="button"
+					class="agw-dashboard-action agw-dashboard-action--menu"
+					aria-label="<?php esc_attr_e( 'Open account menu', 'alynt-account-gateway' ); ?>"
+					aria-controls="agw-dashboard-offcanvas"
+					aria-expanded="false"
+					data-agw-offcanvas-open
+				>
+					<?php $this->render_dashboard_icon( 'menu' ); ?>
+				</button>
+			<?php endif; ?>
+			<a class="agw-dashboard-action agw-dashboard-action--home" href="<?php echo esc_url( home_url( '/' ) ); ?>" aria-label="<?php esc_attr_e( 'Go to homepage', 'alynt-account-gateway' ); ?>">
+				<?php $this->render_dashboard_icon( 'home' ); ?>
+			</a>
+			<a class="agw-dashboard__logout agw-dashboard-action agw-dashboard-action--logout" href="<?php echo esc_url( $logout_url ); ?>" aria-label="<?php esc_attr_e( 'Log out', 'alynt-account-gateway' ); ?>">
+				<?php $this->render_dashboard_icon( 'logout' ); ?>
+			</a>
+		</nav>
+		<?php
+	}
+
+	/**
+	 * Render the optional dashboard off-canvas menu.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_offcanvas_menu( $settings ) {
+		if ( ! $this->offcanvas_enabled( $settings ) ) {
+			return;
+		}
+
+		$menu_id = absint( $settings['dashboard_offcanvas_menu_id'] ?? 0 );
+		?>
+		<div class="agw-offcanvas" id="agw-dashboard-offcanvas" aria-hidden="true" data-agw-offcanvas>
+			<div class="agw-offcanvas__backdrop" data-agw-offcanvas-close></div>
+			<aside class="agw-offcanvas__panel" role="dialog" aria-modal="true" aria-labelledby="agw-offcanvas-title" tabindex="-1" data-agw-offcanvas-panel>
+				<div class="agw-offcanvas__header">
+					<h2 id="agw-offcanvas-title"><?php esc_html_e( 'Menu', 'alynt-account-gateway' ); ?></h2>
+					<button type="button" class="agw-offcanvas__close" aria-label="<?php esc_attr_e( 'Close account menu', 'alynt-account-gateway' ); ?>" data-agw-offcanvas-close>
+						<?php $this->render_dashboard_icon( 'close' ); ?>
+					</button>
+				</div>
+				<nav class="agw-offcanvas__nav" aria-label="<?php esc_attr_e( 'Account menu', 'alynt-account-gateway' ); ?>">
+					<?php
+					wp_nav_menu(
+						array(
+							'menu'        => $menu_id,
+							'container'   => false,
+							'menu_class'  => 'agw-offcanvas__menu',
+							'fallback_cb' => false,
+							'depth'       => 2,
+							'walker'      => class_exists( 'ALYNT_AG_Offcanvas_Menu_Walker' ) ? new ALYNT_AG_Offcanvas_Menu_Walker() : '',
+						)
+					);
+					?>
+				</nav>
+			</aside>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Return whether the off-canvas dashboard menu is configured.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return bool
+	 */
+	private function offcanvas_enabled( $settings ) {
+		return ! empty( $settings['dashboard_offcanvas_enabled'] )
+			&& ! empty( $settings['dashboard_offcanvas_menu_id'] )
+			&& function_exists( 'wp_nav_menu' );
+	}
+
+	/**
+	 * Render an inline dashboard icon.
+	 *
+	 * @param string $icon Icon key.
+	 * @return void
+	 */
+	private function render_dashboard_icon( $icon ) {
+		$paths = array(
+			'menu'   => '<path d="M4 7h16M4 12h16M4 17h16" />',
+			'home'   => '<path d="M4 11.5 12 5l8 6.5" /><path d="M6.5 10.5V20h11v-9.5" /><path d="M10 20v-5h4v5" />',
+			'logout' => '<path d="M10 6H6.5A1.5 1.5 0 0 0 5 7.5v9A1.5 1.5 0 0 0 6.5 18H10" /><path d="M14 8l4 4-4 4" /><path d="M9 12h9" />',
+			'close'  => '<path d="m7 7 10 10" /><path d="M17 7 7 17" />',
+		);
+
+		if ( empty( $paths[ $icon ] ) ) {
+			return;
+		}
+
+		echo '<svg class="agw-dashboard-action__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' . $paths[ $icon ] . '</svg>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static SVG paths selected by key.
 	}
 
 	/**

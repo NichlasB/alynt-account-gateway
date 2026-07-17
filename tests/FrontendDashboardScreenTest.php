@@ -162,6 +162,8 @@ class FrontendDashboardScreenTest extends TestCase {
 			'login_path'            => '/login',
 			'woocommerce_takeover'  => false,
 			'dashboard_custom_links' => '[]',
+			'dashboard_offcanvas_enabled' => false,
+			'dashboard_offcanvas_menu_id' => 0,
 		);
 	}
 
@@ -202,7 +204,13 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringContainsString( 'dir="ltr"', $html );
 		$this->assertStringContainsString( 'style="--test-color:#123;"', $html );
 		$this->assertStringContainsString( 'Test Store', $html );
-		$this->assertStringContainsString( 'class="agw-dashboard__logout"', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-actions"', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-action agw-dashboard-action--home"', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard__logout agw-dashboard-action agw-dashboard-action--logout"', $html );
+		$this->assertStringContainsString( 'aria-label="Go to homepage"', $html );
+		$this->assertStringContainsString( 'aria-label="Log out"', $html );
+		$this->assertStringNotContainsString( 'data-agw-offcanvas-open', $html );
+		$this->assertStringNotContainsString( 'id="agw-dashboard-offcanvas"', $html );
 		$this->assertStringContainsString( 'redirect_to=https%3A%2F%2Fexample.test%2Flogin', $html );
 		$this->assertStringContainsString( 'Account Dashboard', $html );
 		$this->assertStringContainsString( 'Welcome, Damon', $html );
@@ -212,6 +220,36 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringContainsString( 'Support', $html );
 		$this->assertStringContainsString( 'target="_blank" rel="noopener noreferrer"', $html );
 		$this->assertStringContainsString( 'opens in a new tab', $html );
+	}
+
+	public function test_render_dashboard_shell_outputs_offcanvas_menu_when_enabled() {
+		$screen   = new ALYNT_AG_Frontend_Dashboard_Screen(
+			new ALYNT_AG_Test_Frontend_Dashboard_Service(),
+			new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce(),
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array(
+				'dashboard_offcanvas_enabled' => true,
+				'dashboard_offcanvas_menu_id' => 123,
+			)
+		);
+
+		ob_start();
+		$screen->render_dashboard_shell( $settings, '/my-account/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'data-agw-offcanvas-open', $html );
+		$this->assertStringContainsString( 'aria-controls="agw-dashboard-offcanvas"', $html );
+		$this->assertStringContainsString( 'aria-expanded="false"', $html );
+		$this->assertStringContainsString( 'id="agw-dashboard-offcanvas"', $html );
+		$this->assertStringContainsString( 'aria-hidden="true"', $html );
+		$this->assertStringContainsString( 'role="dialog" aria-modal="true"', $html );
+		$this->assertStringContainsString( 'data-agw-offcanvas-close', $html );
+		$this->assertStringContainsString( 'class="agw-offcanvas__menu"', $html );
+		$this->assertStringContainsString( 'Shop', $html );
+		$this->assertStringContainsString( 'Contact', $html );
 	}
 
 	public function test_render_dashboard_shell_uses_rtl_direction_when_site_is_rtl() {

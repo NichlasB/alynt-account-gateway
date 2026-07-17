@@ -295,6 +295,11 @@ class ALYNT_AG_Settings_Page {
 			return;
 		}
 
+		if ( 'nav_menu' === $field['type'] ) {
+			$this->render_nav_menu_field( $id, $name, (int) $value, $aria );
+			return;
+		}
+
 		if ( 'email' === $field['type'] ) {
 			printf(
 				'<input type="email" class="regular-text" id="%1$s" name="%2$s" value="%3$s" autocomplete="email"%4$s>',
@@ -468,6 +473,34 @@ class ALYNT_AG_Settings_Page {
 	}
 
 	/**
+	 * Render a WordPress navigation menu selector.
+	 *
+	 * @param string $id    Field ID.
+	 * @param string $name  Field name.
+	 * @param int    $value Selected menu ID.
+	 * @param string $aria  Escaped aria-describedby attribute.
+	 * @return void
+	 */
+	private function render_nav_menu_field( $id, $name, $value, $aria = '' ) {
+		$menus = function_exists( 'wp_get_nav_menus' ) ? wp_get_nav_menus() : array();
+		?>
+		<select id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>"<?php echo $aria; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute(). ?>>
+			<option value="0"><?php esc_html_e( 'Select a menu', 'alynt-account-gateway' ); ?></option>
+			<?php foreach ( $menus as $menu ) : ?>
+				<option value="<?php echo esc_attr( (string) $menu->term_id ); ?>" <?php selected( $value, (int) $menu->term_id ); ?>>
+					<?php echo esc_html( $menu->name ); ?>
+				</option>
+			<?php endforeach; ?>
+		</select>
+		<?php if ( empty( $menus ) ) : ?>
+			<p class="description alynt-ag-field-help">
+				<?php esc_html_e( 'Create a WordPress navigation menu first, then return here to attach it to the dashboard menu panel.', 'alynt-account-gateway' ); ?>
+			</p>
+			<?php
+		endif;
+	}
+
+	/**
 	 * Return text direction for machine-readable settings fields.
 	 *
 	 * @param string              $key   Field key.
@@ -610,6 +643,8 @@ class ALYNT_AG_Settings_Page {
 			'email_change_confirmation_disabled' => __( 'Disable only when another trusted system handles email-change confirmation.', 'alynt-account-gateway' ),
 			'dashboard_enabled'                  => __( 'Enable this when logged-in users should see the branded full-page account dashboard.', 'alynt-account-gateway' ),
 			'dashboard_custom_links'             => __( 'Add only links that are useful to the selected roles. Ordering and icons help repeated account tasks stay scannable.', 'alynt-account-gateway' ),
+			'dashboard_offcanvas_enabled'        => __( 'Optional. When enabled, the dashboard header can open a right-side menu panel using a selected WordPress navigation menu.', 'alynt-account-gateway' ),
+			'dashboard_offcanvas_menu_id'        => __( 'Select a menu created under Appearance > Menus. The hamburger icon appears only when the menu panel is enabled and a menu is selected.', 'alynt-account-gateway' ),
 			'woocommerce_takeover'               => __( 'Requires the custom dashboard. WooCommerce still handles account forms and endpoint actions inside the branded shell.', 'alynt-account-gateway' ),
 			'account_created_webhook'            => __( 'Receives account-created events after the user confirms email and sets a password.', 'alynt-account-gateway' ),
 			'webhook_signing_secret'             => __( 'Add this when the receiving system can verify timestamped HMAC headers.', 'alynt-account-gateway' ),

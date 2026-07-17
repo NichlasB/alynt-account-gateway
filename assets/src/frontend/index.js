@@ -10,6 +10,8 @@ document.documentElement.classList.add( 'alynt-ag-frontend-ready' );
 
 const alyntAgLabels = window.alyntAgFrontend && window.alyntAgFrontend.labels ? window.alyntAgFrontend.labels : {};
 
+let alyntAgLastOffcanvasTrigger = null;
+
 function alyntAgTogglePassword( event ) {
 	const toggle = event.target.closest( '[data-agw-password-toggle]' );
 
@@ -156,7 +158,148 @@ function alyntAgPrepareTurnstileWidgets() {
 	}
 }
 
+function alyntAgFocusableElements( container ) {
+	return Array.from(
+		container.querySelectorAll(
+			'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+		)
+	).filter( ( element ) => element.offsetParent !== null || element === document.activeElement );
+}
+
+function alyntAgOpenOffcanvas( trigger ) {
+	const controlledId = trigger.getAttribute( 'aria-controls' );
+	const offcanvas    = controlledId ? document.getElementById( controlledId ) : document.querySelector( '[data-agw-offcanvas]' );
+	const panel        = offcanvas ? offcanvas.querySelector( '[data-agw-offcanvas-panel]' ) : null;
+
+	if ( ! offcanvas || ! panel ) {
+		return;
+	}
+
+	alyntAgLastOffcanvasTrigger = trigger;
+	offcanvas.classList.add( 'is-open' );
+	offcanvas.setAttribute( 'aria-hidden', 'false' );
+	trigger.setAttribute( 'aria-expanded', 'true' );
+	document.documentElement.classList.add( 'agw-offcanvas-open' );
+	document.documentElement.classList.toggle( 'agw-has-admin-bar', Boolean( document.getElementById( 'wpadminbar' ) ) );
+
+	const focusPanel    = () => {
+		const focusable = alyntAgFocusableElements( panel );
+		( focusable[0] || panel ).focus();
+	};
+
+	window.setTimeout( focusPanel, 0 );
+}
+
+function alyntAgCloseOffcanvas( offcanvas ) {
+	const panel = offcanvas ? offcanvas.querySelector( '[data-agw-offcanvas-panel]' ) : null;
+
+	if ( ! offcanvas || ! panel ) {
+		return;
+	}
+
+	offcanvas.classList.remove( 'is-open' );
+	offcanvas.setAttribute( 'aria-hidden', 'true' );
+	document.documentElement.classList.remove( 'agw-offcanvas-open' );
+
+	if ( alyntAgLastOffcanvasTrigger ) {
+		alyntAgLastOffcanvasTrigger.setAttribute( 'aria-expanded', 'false' );
+		alyntAgLastOffcanvasTrigger.focus();
+	}
+
+	alyntAgLastOffcanvasTrigger = null;
+}
+
+function alyntAgToggleOffcanvasSubmenu( toggle ) {
+	const menuItem  = toggle.closest( '.agw-offcanvas__menu-item' );
+	const submenuId = toggle.getAttribute( 'aria-controls' );
+	const submenu   = submenuId ? document.getElementById( submenuId ) : null;
+	const isOpen    = toggle.getAttribute( 'aria-expanded' ) === 'true';
+
+	if ( ! menuItem || ! submenu ) {
+		return;
+	}
+
+	toggle.setAttribute( 'aria-expanded', isOpen ? 'false' : 'true' );
+	toggle.setAttribute(
+		'aria-label',
+		isOpen ?
+			toggle.dataset.agwExpandLabel || toggle.getAttribute( 'aria-label' ) || '' :
+			toggle.dataset.agwCollapseLabel || toggle.getAttribute( 'aria-label' ) || ''
+	);
+	submenu.hidden = isOpen;
+	menuItem.classList.toggle( 'is-open', ! isOpen );
+}
+
+function alyntAgHandleOffcanvasClick( event ) {
+	const openTrigger = event.target.closest( '[data-agw-offcanvas-open]' );
+
+	if ( openTrigger ) {
+		event.preventDefault();
+		alyntAgOpenOffcanvas( openTrigger );
+		return;
+	}
+
+	const submenuToggle = event.target.closest( '[data-agw-submenu-toggle]' );
+
+	if ( submenuToggle ) {
+		event.preventDefault();
+		alyntAgToggleOffcanvasSubmenu( submenuToggle );
+		return;
+	}
+
+	const closeTrigger = event.target.closest( '[data-agw-offcanvas-close]' );
+
+	if ( closeTrigger ) {
+		event.preventDefault();
+		alyntAgCloseOffcanvas( closeTrigger.closest( '[data-agw-offcanvas]' ) );
+	}
+}
+
+function alyntAgHandleOffcanvasKeydown( event ) {
+	const openOffcanvas = document.querySelector( '[data-agw-offcanvas].is-open' );
+
+	if ( ! openOffcanvas ) {
+		return;
+	}
+
+	if ( event.key === 'Escape' ) {
+		event.preventDefault();
+		alyntAgCloseOffcanvas( openOffcanvas );
+		return;
+	}
+
+	if ( event.key !== 'Tab' ) {
+		return;
+	}
+
+	const panel     = openOffcanvas.querySelector( '[data-agw-offcanvas-panel]' );
+	const focusable = panel ? alyntAgFocusableElements( panel ) : [];
+
+	if ( ! panel ) {
+		return;
+	}
+
+	if ( ! focusable.length ) {
+		event.preventDefault();
+		panel.focus();
+		return;
+	}
+
+	const first = focusable[0];
+	const last  = focusable[ focusable.length - 1 ];
+
+	if ( event.shiftKey && document.activeElement === first ) {
+		event.preventDefault();
+		last.focus();
+	} else if ( ! event.shiftKey && document.activeElement === last ) {
+		event.preventDefault();
+		first.focus();
+	}
+}
+
 document.addEventListener( 'click', alyntAgTogglePassword );
+document.addEventListener( 'click', alyntAgHandleOffcanvasClick );
+document.addEventListener( 'keydown', alyntAgHandleOffcanvasKeydown );
 
 function alyntAgInitFrontend() {
 	alyntAgPrepareTurnstileWidgets();

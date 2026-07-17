@@ -130,6 +130,7 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertArrayNotHasKey( 'email_test_recipient', $package['settings'] );
 		$this->assertArrayNotHasKey( 'brand_logo_id', $package['settings'] );
 		$this->assertArrayNotHasKey( 'background_image_id', $package['settings'] );
+		$this->assertArrayNotHasKey( 'dashboard_offcanvas_menu_id', $package['settings'] );
 	}
 
 	public function test_import_package_sanitizes_known_settings_and_discards_unknown_keys() {
@@ -271,8 +272,24 @@ class SettingsSchemaTest extends TestCase {
 
 		$this->assertArrayHasKey( 'dashboard_enabled', $defaults );
 		$this->assertArrayHasKey( 'dashboard_custom_links', $defaults );
+		$this->assertArrayHasKey( 'dashboard_offcanvas_enabled', $defaults );
+		$this->assertArrayHasKey( 'dashboard_offcanvas_menu_id', $defaults );
 		$this->assertFalse( $defaults['dashboard_enabled'] );
 		$this->assertSame( '[]', $defaults['dashboard_custom_links'] );
+		$this->assertFalse( $defaults['dashboard_offcanvas_enabled'] );
+		$this->assertSame( 0, $defaults['dashboard_offcanvas_menu_id'] );
+	}
+
+	public function test_dashboard_offcanvas_settings_are_sanitized() {
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array(
+				'dashboard_offcanvas_enabled' => '1',
+				'dashboard_offcanvas_menu_id' => '-42',
+			)
+		);
+
+		$this->assertTrue( $sanitized['dashboard_offcanvas_enabled'] );
+		$this->assertSame( 42, $sanitized['dashboard_offcanvas_menu_id'] );
 	}
 
 	public function test_dashboard_custom_links_are_sanitized_to_json() {

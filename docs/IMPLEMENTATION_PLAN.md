@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v1.0.1 released and updater-verified; final evidence synchronized
+- Current phase: v1.0.2 released and updater-verified; final evidence synchronized
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.0.1 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester`.
+- Plugin status: v1.0.2 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 - Next roadmap: Begin the approved post-v1 product roadmap below, starting with the Alynt Plugin Updater follow-up unless a higher-priority production rollout need appears.
@@ -13,9 +13,9 @@
 
 ### Status
 
-- Current v1 product baseline: `v1.0.1`, released and updater-verified.
+- Current v1 product baseline: `v1.0.2`, released and updater-verified.
 - Original v1 implementation slices: Complete.
-- New approved post-v1 slices: Alynt Plugin Updater follow-up, deeper provider admin UX, and dashboard UX expansion.
+- New approved post-v1 slices: Alynt Plugin Updater follow-up, deeper provider admin UX, dashboard UX expansion, dashboard action icons/off-canvas navigation, and delegated WooCommerce notice normalization.
 - New approved visual/admin-help tweak: widen gateway cards, reduce panel/card horizontal padding, remove trailing notice paragraph margin, and correct background-image guidance toward tall portrait imagery.
 - Deferred for later: production rollout playbook.
 - Exploratory/deferred: inactive-account integration until a real site or companion plugin defines the authoritative inactive/suspended-account signal.
@@ -24,10 +24,12 @@
 
 1. Alynt Plugin Updater follow-up.
 2. Gateway layout and background-image guidance tweak.
-3. Deeper provider admin UX.
-4. Dashboard UX expansion.
-5. Production rollout playbook, when the first production rollout is ready to be operationalized.
-6. Inactive-account integration only if a concrete inactive/suspended-user source is identified.
+3. Delegated WooCommerce notice normalization.
+4. Dashboard action icons and optional off-canvas navigation.
+5. Deeper provider admin UX.
+6. Dashboard UX expansion.
+7. Production rollout playbook, when the first production rollout is ready to be operationalized.
+8. Inactive-account integration only if a concrete inactive/suspended-user source is identified.
 
 ### Slice 1 - Alynt Plugin Updater Follow-Up
 
@@ -73,7 +75,73 @@
 - Plugin Tester updater verification passed: Alynt Plugin Updater offered `1.0.1 -> 1.0.2`, WordPress installed the public GitHub asset, settings hash stayed `2d0e919d2f2bc08590b34fcf6ffc6fdc24ebd8e97b6b778f0e67326636226a8e`, ACG was restored active at position `1` after the known headless-upgrader deactivation, 46 runtime files were present, no development files were present, layout/help markers were present, HTTP home returned `200`, and no ACG update offer remained.
 - hbf-staging updater verification passed: Alynt Plugin Updater offered `1.0.0 -> 1.0.2`, WordPress installed the public GitHub asset, settings hash stayed `a126b2db3ad6ab1ef5c1e7a40ab8ddfb531d3c8aa5e3999ff4fafd86d4ee2fc1`, ACG was restored active at baseline position `5` after the known headless-upgrader deactivation, 46 runtime files were present, no development files were present, layout/help markers were present, HTTP home returned `200`, and no ACG update offer remained.
 
-### Slice 3 - Deeper Provider Admin UX
+### Slice 3 - Delegated WooCommerce Notice Normalization
+
+#### Scope
+
+- [x] Normalize WooCommerce delegated notice styles inside the branded dashboard shell.
+- [x] Prevent WooCommerce/theme pseudo-icons from overlapping notice text in endpoints such as Payment Methods.
+- [x] Keep the fix scoped to `.agw-dashboard-content` so it does not alter checkout, product pages, or native WooCommerce templates outside the gateway dashboard.
+- [x] Preserve readable notice spacing, borders, colors, links, and high-contrast behavior.
+- [x] Treat this as a product-level compatibility fix because themes and WooCommerce extensions can inject icons through `.woocommerce-info::before`, `.woocommerce-message::before`, and `.woocommerce-error::before`.
+
+#### Acceptance Criteria
+
+- [x] Empty Payment Methods state no longer shows a cramped or overlapping icon next to `No saved methods found.`.
+- [x] WooCommerce success/info/error notices inside the dashboard reserve stable icon space or neutralize inherited theme icons consistently.
+- [x] The change is limited to dashboard delegated content and does not change global WooCommerce styling.
+- [x] Frontend build and focused quality checks pass.
+
+#### Progress Notes
+
+- Added a scoped pseudo-element reset for `.agw-dashboard-content .woocommerce-message::before`, `.agw-dashboard-content .woocommerce-info::before`, and `.agw-dashboard-content .woocommerce-error::before`.
+- The fix neutralizes inherited WooCommerce/theme notice icons inside delegated dashboard content while leaving checkout, product, and native WooCommerce pages untouched.
+- Local validation passed: `npm.cmd run build`, `npm.cmd run lint`, and `npm.cmd test` (`314 tests`, `2020 assertions`).
+
+### Slice 4 - Dashboard Action Icons And Optional Off-Canvas Navigation
+
+#### Scope
+
+- [x] Replace the dashboard header text logout link with modern SVG icon actions for Home and Log Out.
+- [x] Add an optional hamburger SVG icon action when the dashboard off-canvas menu is enabled and a WordPress nav menu is selected.
+- [x] Add Dashboard settings for off-canvas enablement and selected nav menu, defaulting to disabled.
+- [x] Render the selected WordPress nav menu through `wp_nav_menu()` inside the branded dashboard shell.
+- [x] Add accessible open/close behavior with `aria-label`, `aria-expanded`, focus return, Escape close, overlay close, and keyboard-reachable close control.
+- [x] Desktop behavior: fixed right-side slide-out panel with left-aligned vertical navigation.
+- [x] Mobile behavior: full-screen fade-in panel with center-aligned vertical navigation.
+- [x] Keep Home and Log Out available even when the off-canvas feature is disabled.
+- [x] Add responsive CSS, RTL-safe positioning, reduced-motion handling, and high-contrast styles.
+- [x] Account for the frontend WordPress admin toolbar so administrator/shop-manager sessions do not cover the panel header.
+- [x] Add accessible parent-menu submenu toggles with plus/minus state, hidden submenus by default, and preserved parent links.
+- [x] Tighten off-canvas menu spacing for a more compact navigation rhythm.
+
+#### Acceptance Criteria
+
+- [x] Fresh installs keep the off-canvas menu disabled by default.
+- [x] Dashboard header actions render as accessible SVG icon controls with visible focus states.
+- [x] The hamburger control is absent or inert unless the feature is enabled and a menu is configured.
+- [x] The selected nav menu opens and closes predictably on desktop and mobile.
+- [x] Browser smoke verifies desktop, mobile, keyboard, Escape key, overlay close, and logout/home behavior.
+- [x] Browser smoke verifies admin-bar offset, submenu toggle open/close behavior, and updated compact menu spacing on LocalWP Plugin Tester.
+- [x] Browser smoke verifies admin-bar offset, submenu toggle open/close behavior, and updated compact menu spacing on `hbf-staging`.
+
+#### Progress Notes
+
+- Added Dashboard settings for `dashboard_offcanvas_enabled` and `dashboard_offcanvas_menu_id`, including nav-menu sanitization, admin help text, and a WordPress nav-menu selector.
+- Replaced the dashboard text logout action with accessible SVG icon actions for Home and Log Out; the hamburger SVG appears only when the off-canvas feature is enabled with a selected menu.
+- Added optional off-canvas markup rendered through `wp_nav_menu()`, desktop right-side slide-in styling, mobile full-screen fade styling, RTL/high-contrast/reduced-motion CSS, and frontend JS for open, close, Escape, overlay close, focus return, and focus trapping.
+- Added focused tests for default-disabled settings, menu-ID sanitization, default dashboard action markup, and enabled off-canvas menu output.
+- Local validation passed: `npm.cmd run build`, `npm.cmd run lint`, `npm.cmd test` (`316 tests`, `2049 assertions`), `npm.cmd run make-pot`, PHP syntax checks for changed PHP files, and `git diff --check`.
+- Packaged a QA ZIP with 46 runtime files, zero development-file hits, forward-slash ZIP entries, and SHA-256 `57DEE38F555204DE89DF02E56F4D894C8087C944CEC91A85AD0A4295492B3F62`.
+- Installed the QA package on LocalWP Plugin Tester through the WordPress upgrader path. A temporary nav menu confirmed the dashboard renders Home, Log Out, and hamburger SVG actions; the selected menu opens on desktop and mobile; Escape and the close button close the panel; `aria-expanded` resets; and temporary settings, menu, and upload artifacts were removed afterward.
+- Installed the same QA package on `hbf-staging`, verified active `1.0.2` plus off-canvas PHP/CSS/JS markers, temporarily enabled a staging nav menu and disposable customer, and completed browser smoke through the branded `/login/` and `/my-account/` flow. Desktop verified Home, Log Out, hamburger actions, right-side off-canvas panel, left-aligned selected menu items, Escape close, and backdrop close. Mobile verified full-screen off-canvas rendering, centered selected menu items, and close-button behavior. The Home icon reached the site homepage, the Log Out icon reached the branded logout confirmation screen, and temporary settings, menu, user, snapshot, and `/tmp` artifacts were removed afterward.
+- Added the final off-canvas refinement pass: `body.admin-bar` top offsets for 32px desktop and 46px mobile admin bars, reduced menu/list gap to `5px`, smaller menu-item vertical padding, and a dedicated `ALYNT_AG_Offcanvas_Menu_Walker` that renders parent menu items with separate accessible submenu toggle buttons while keeping the parent link clickable.
+- Hardened the admin-bar offset for custom shells that render `#wpadminbar` without `body.admin-bar`: frontend JS now adds `html.agw-has-admin-bar` when the admin bar exists, and the off-canvas panel offsets from that class as well.
+- Plugin Tester refinement QA package inspected cleanly: 47 runtime files, zero development-file hits, forward-slash ZIP entries, and SHA-256 `435605C7A43334EF1FA50696288AEAA54220566AEEDAE871429D279F8FEF336C`.
+- Plugin Tester refinement smoke passed after installing the inspected QA package: desktop panel top offset matched the 32px admin bar, mobile panel top offset matched the 46px admin bar, submenu was hidden by default, the More toggle changed `aria-expanded` and labels from expand to collapse, child links opened and re-collapsed correctly, menu gap computed to `5px`, link vertical padding computed to `8px`, and temporary nested menu/settings/upload artifacts were removed afterward.
+- hbf-staging refinement smoke passed after installing the inspected QA package: desktop panel started at `y=32` below the admin bar, mobile panel started at `y=46`, parent menu item More stayed linked while the separate toggle controlled child visibility, the submenu was hidden by default, the expanded state changed from `Expand submenu for More` to `Collapse submenu for More`, child links rendered on desktop and mobile, and the disposable admin, temporary nested menu, snapshot, local scripts, and remote `/tmp` artifacts were removed afterward. Cleanup restored the staging baseline settings, including its real off-canvas menu ID `36`.
+
+### Slice 5 - Deeper Provider Admin UX
 
 #### Scope
 
@@ -91,7 +159,7 @@
 - [ ] Recent verification rows provide actionable next steps for common failure modes.
 - [ ] Existing security and anti-spam tests pass, and new UI markers are covered by focused tests.
 
-### Slice 4 - Dashboard UX Expansion
+### Slice 6 - Dashboard UX Expansion
 
 #### Scope
 

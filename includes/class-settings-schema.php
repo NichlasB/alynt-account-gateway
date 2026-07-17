@@ -445,6 +445,18 @@ class ALYNT_AG_Settings_Schema {
 				'default' => '[]',
 				'label'   => __( 'Custom Dashboard Links', 'alynt-account-gateway' ),
 			),
+			'dashboard_offcanvas_enabled'               => array(
+				'tab'     => 'dashboard',
+				'type'    => 'boolean',
+				'default' => false,
+				'label'   => __( 'Enable Dashboard Menu Panel', 'alynt-account-gateway' ),
+			),
+			'dashboard_offcanvas_menu_id'               => array(
+				'tab'     => 'dashboard',
+				'type'    => 'nav_menu',
+				'default' => 0,
+				'label'   => __( 'Dashboard Menu Panel Menu', 'alynt-account-gateway' ),
+			),
 			'woocommerce_takeover'                      => array(
 				'tab'     => 'woocommerce',
 				'type'    => 'boolean',
@@ -642,7 +654,7 @@ class ALYNT_AG_Settings_Schema {
 		foreach ( self::schema() as $key => $field ) {
 			$type = isset( $field['type'] ) ? (string) $field['type'] : '';
 
-			if ( in_array( $type, array( 'secret', 'email', 'attachment_id' ), true ) ) {
+			if ( in_array( $type, array( 'secret', 'email', 'attachment_id', 'nav_menu' ), true ) ) {
 				unset( $settings[ $key ] );
 			}
 		}
@@ -777,6 +789,7 @@ class ALYNT_AG_Settings_Schema {
 				return (bool) $value;
 			case 'integer':
 			case 'attachment_id':
+			case 'nav_menu':
 				return max( 0, absint( $value ) );
 			case 'relative_path':
 				$path = '/' . ltrim( sanitize_text_field( wp_unslash( $value ) ), '/' );
