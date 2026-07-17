@@ -327,12 +327,20 @@ class ALYNT_AG_WooCommerce_Integration {
 		/**
 		 * WooCommerce registers these actions for My Account endpoint content.
 		 */
+		ob_start();
+
 		if ( function_exists( 'woocommerce_output_all_notices' ) ) {
 			woocommerce_output_all_notices();
 		}
 
 		do_action( 'woocommerce_account_' . sanitize_key( $endpoint ) . '_endpoint', $value );
 
+		$output = ob_get_clean();
+		if ( ! is_string( $output ) || '' === trim( $output ) ) {
+			return false;
+		}
+
+		echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WooCommerce endpoint handlers render trusted account template output.
 		return true;
 	}
 

@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.1.115 - 2026-07-17
+
+### Fixed
+
+- Fixed empty WooCommerce account endpoints so the branded dashboard shows unavailable-section guidance and recovery links instead of a blank content area.
+
 ## 0.1.114 - 2026-07-17
 
 ### Fixed

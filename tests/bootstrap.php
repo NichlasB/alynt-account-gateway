@@ -842,6 +842,10 @@ if ( ! function_exists( 'do_action' ) ) {
 			'hook' => $hook_name,
 			'args' => $args,
 		);
+
+		if ( isset( $GLOBALS['alynt_ag_test_action_output'][ $hook_name ] ) ) {
+			echo $GLOBALS['alynt_ag_test_action_output'][ $hook_name ]; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Test fixture output.
+		}
 	}
 }
 

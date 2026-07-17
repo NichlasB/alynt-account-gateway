@@ -14,7 +14,8 @@ class WooCommerceIntegrationTest extends TestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
-		$GLOBALS['alynt_ag_test_actions'] = array();
+		$GLOBALS['alynt_ag_test_actions']       = array();
+		$GLOBALS['alynt_ag_test_action_output'] = array();
 	}
 
 	public function test_endpoint_from_path_detects_base_dashboard() {
@@ -132,14 +133,33 @@ class WooCommerceIntegrationTest extends TestCase {
 		$this->assertSame( '/customer-area/', $integration->endpoint_url( 'dashboard', $settings ) );
 	}
 
-	public function test_render_endpoint_delegates_to_woocommerce_action_when_available() {
+	public function test_render_endpoint_returns_false_when_woocommerce_action_outputs_nothing() {
 		$integration = new class() extends ALYNT_AG_WooCommerce_Integration {
 			public function detect() {
 				return true;
 			}
 		};
 
-		$this->assertTrue( $integration->render_endpoint( 'orders', '2' ) );
+		$this->assertFalse( $integration->render_endpoint( 'orders', '2' ) );
+		$this->assertSame( 'woocommerce_account_orders_endpoint', $GLOBALS['alynt_ag_test_actions'][0]['hook'] );
+		$this->assertSame( array( '2' ), $GLOBALS['alynt_ag_test_actions'][0]['args'] );
+	}
+
+	public function test_render_endpoint_outputs_woocommerce_action_content_when_available() {
+		$integration = new class() extends ALYNT_AG_WooCommerce_Integration {
+			public function detect() {
+				return true;
+			}
+		};
+
+		$GLOBALS['alynt_ag_test_action_output']['woocommerce_account_orders_endpoint'] = '<div class="wc-output">Orders output</div>';
+
+		ob_start();
+		$result = $integration->render_endpoint( 'orders', '2' );
+		$html   = ob_get_clean();
+
+		$this->assertTrue( $result );
+		$this->assertSame( '<div class="wc-output">Orders output</div>', $html );
 		$this->assertSame( 'woocommerce_account_orders_endpoint', $GLOBALS['alynt_ag_test_actions'][0]['hook'] );
 		$this->assertSame( array( '2' ), $GLOBALS['alynt_ag_test_actions'][0]['args'] );
 	}
