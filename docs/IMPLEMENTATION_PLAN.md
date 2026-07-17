@@ -4,7 +4,7 @@
 
 - Current phase: v1.0 readiness Phase 7 privacy, data, and lifecycle acceptance
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v0.1.119 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification.
+- Plugin status: v0.1.120 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 - Next roadmap: Continue Phase 7 acceptance in [`V1_READINESS_PLAN.md`](V1_READINESS_PLAN.md), beginning with personal-data exporter and eraser runtime evidence after the source-level data inventory and minimization slice.
@@ -19,7 +19,7 @@
 - [x] Omit secret credentials, personal test-email settings, and site-specific media IDs from portable settings exports.
 - [x] Redact direct email fields from audit and diagnostics context.
 - [x] Add focused regression coverage and operator-facing settings-export guidance.
-- [ ] Publish and updater-verify the corrective release.
+- [x] Publish and updater-verify the corrective release.
 - [ ] Continue Phase 7 with real WordPress personal-data exporter and eraser acceptance.
 
 ### Progress Notes
@@ -30,6 +30,8 @@
 - Diagnostics redaction now masks `email`, `user_email`, and `email_address` keys recursively in addition to credentials, tokens, authorization data, cookies, nonces, and raw request bodies.
 - Release-candidate validation passed: production build; POT generation (`1004 strings`); PHPCS; full PHPUnit (`299 tests, 1973 assertions`); npm audit (`0 vulnerabilities`); Composer audit (no advisories); and `git diff --check`.
 - Built and inspected `C:\Users\Captain\Desktop\alynt-account-gateway-0.1.120.zip`: 45 runtime files under one plugin root, forward-slash paths, no development files or stale `build/` artifacts, aligned `0.1.120` metadata, all three privacy-hardening markers present, and SHA-256 `7F405592AEF58CC336B22BCB8005027E6CBDB4818B819DF6F21B29CAE5B1ACE2`.
+- Public `v0.1.120` release passed the GitHub Build Release workflow, and the GitHub asset `alynt-account-gateway-v0.1.120.zip` was inspected with 45 runtime files, one plugin root, zero development files, aligned `0.1.120` metadata, and SHA-256 `9CA485D6502820806A44D11C540621EBA07C1B74852D8470663A0AF863C5CB3B`.
+- Alynt Plugin Updater refreshed managed release metadata and installed `0.1.119 -> 0.1.120` on `hbf-staging` from the public GitHub asset. The installed plugin remained active, `/account` returned HTTP 200, and the non-secret settings and active-plugin hashes matched their pre-update baselines.
 
 ## v0.1.98 Pre-Readiness Settings UX Polish
 
