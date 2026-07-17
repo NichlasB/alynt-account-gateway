@@ -2,8 +2,8 @@
 
 ## Status
 
-- Current phase: `v1.0.3` is released, public-asset inspected, and installed on LocalWP `plugin-tester` and production-like `hbf-staging`.
-- Product baseline: `v1.0.3`, released, public-asset verified, and updater-verified with Alynt Plugin Updater `1.1.2` on LocalWP Plugin Tester and `hbf-staging`.
+- Current phase: `v1.1.0` is released, public-asset inspected, and installed on LocalWP `plugin-tester` and production-like `hbf-staging`.
+- Product baseline: `v1.1.0`, released, public-asset verified, and updater-verified with Alynt Plugin Updater `1.1.2` on LocalWP Plugin Tester and `hbf-staging`.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility.
@@ -16,6 +16,19 @@ This is the living production-acceptance roadmap for Alynt Account Gateway. The 
 Readiness work should prioritize runtime evidence, configuration safety, compatibility, documentation, and operational recovery. New product features belong in a separately approved roadmap unless they are required to resolve a release-blocking defect found during acceptance testing.
 
 ## Post-v1 Maintenance Evidence
+
+### v1.1.0 Dashboard Navigation Visibility And Footer Menu
+
+| Item | Value | Evidence | Status |
+| --- | --- | --- | --- |
+| Release | [`v1.1.0`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.0) | GitHub release from commit `6cd85d0` | Published |
+| Build Release workflow | Run `29618490321` | GitHub Actions | Passed |
+| Public asset | `alynt-account-gateway-v1.1.0.zip`; `47` runtime files; one plugin root; zero development-file hits; aligned `1.1.0` metadata | Public asset inspection | Verified |
+| Public asset SHA-256 | `A8537AD8317F9D216400DEBE0FD39982AD5F30AB6D25CC23ADC9199945C9CD2A` | GitHub digest and local hash of downloaded release asset | Recorded |
+| Product change | Administrators can hide individual standard or extension-provided WooCommerce account navigation items without disabling endpoints, and can optionally render an independent WordPress-menu-powered dashboard footer. | `CHANGELOG.md`, `readme.txt`, packaged runtime, and acceptance evidence | Completed |
+| Plugin Tester updater | Alynt Plugin Updater force-fresh detected `1.1.0`; the native WordPress upgrader installed `1.0.3` to active `1.1.0` in the same active-plugin position with unchanged settings and active-plugin hashes and no remaining update. | Novamira MCP execution evidence | Passed |
+| Staging updater | `hbf-staging` installed the public asset from `1.0.3` to active `1.1.0`; settings and active-plugin hashes remained exact, 47 runtime files and both feature markers were present, no update remained, and `/login` returned HTTP `200`. | WP-CLI, filesystem, HTTP smoke, and Site Operations evidence | Passed |
+| Production scope | Production HBF excluded. | Task approval boundary | Preserved |
 
 ### v1.0.3 Dashboard Off-Canvas Navigation Refinement
 

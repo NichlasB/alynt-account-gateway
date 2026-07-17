@@ -2,18 +2,18 @@
 
 ## Status
 
-- Current phase: v1.1.0 dashboard navigation and footer-menu release candidate approved
+- Current phase: v1.1.0 released and updater-verified; final evidence synchronized
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.0.3 remains the current public baseline; v1.1.0 is acceptance-tested on LocalWP `plugin-tester` and `hbf-staging` and is being prepared for public release.
+- Plugin status: v1.1.0 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Publish and updater-verify v1.1.0, then continue with Deeper Provider Admin UX unless a higher-priority production rollout need appears.
+- Next roadmap: Continue with Deeper Provider Admin UX unless a higher-priority production rollout need appears.
 
 ## Post-v1 Product Roadmap
 
 ### Status
 
-- Current v1 product baseline: `v1.0.3`, released and updater-verified.
+- Current v1 product baseline: `v1.1.0`, released and updater-verified.
 - Original v1 implementation slices: Complete.
 - New approved post-v1 slices: Alynt Plugin Updater follow-up, deeper provider admin UX, dashboard UX expansion, dashboard action icons/off-canvas navigation, and delegated WooCommerce notice normalization.
 - New approved visual/admin-help tweak: widen gateway cards, reduce panel/card horizontal padding, remove trailing notice paragraph margin, and correct background-image guidance toward tall portrait imagery.
@@ -26,7 +26,7 @@
 2. Gateway layout and background-image guidance tweak.
 3. Delegated WooCommerce notice normalization.
 4. Dashboard action icons and optional off-canvas navigation.
-5. Dashboard navigation visibility and optional footer menu. Completed locally and acceptance-tested; release pending.
+5. Dashboard navigation visibility and optional footer menu. Released and updater-verified as v1.1.0.
 6. Deeper provider admin UX.
 7. Richer dashboard UX expansion.
 8. Production rollout playbook, when the first production rollout is ready to be operationalized.
@@ -198,6 +198,10 @@
 - Plugin Tester acceptance passed with a temporary menu and hidden Orders, Downloads, and Payment Methods: default controls rendered correctly, hidden items and the matching Orders overview shortcut disappeared, direct `/my-account/orders/` remained usable, the footer rendered on desktop and mobile without overflow, keyboard focus and simulated RTL passed, and the exact settings/active-state baseline was restored afterward.
 - `hbf-staging` acceptance passed with the real Legal Menu (`Terms`, `Cookies`, `Privacy`, `Disclaimer`, `Shipping & Delivery`, and `Sitemap`) and the same hidden-item set. Desktop and mobile had no horizontal overflow, keyboard focus remained visible, the direct Orders endpoint rendered normally, and the only browser-console entry was an unrelated existing Independent Analytics `401` from `/wp-json/iawp/search`.
 - `hbf-staging` cleanup restored the exact settings SHA-256 `54e36bc37efca76534867cbe1c783d55b50495c73e896ca5bb5379b328ea4426` and active-plugin SHA-256 `4f9816b3e3612e06ada6d45e9a98ac8c54b5d22b4d54e110e60125d412fbb233`; the disposable customer, snapshots, rollback archives, scripts, upload package, and displaced plugin directory were removed. ACG remains active at `1.0.3`, and `/login` returns HTTP `200`.
+- Released as [`v1.1.0`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.0) from commit `6cd85d0`; Build Release workflow run `29618490321` passed.
+- Public asset `alynt-account-gateway-v1.1.0.zip` inspected cleanly: 47 runtime files, one plugin root, zero development-file hits, aligned `1.1.0` metadata, and SHA-256 `A8537AD8317F9D216400DEBE0FD39982AD5F30AB6D25CC23ADC9199945C9CD2A`.
+- Plugin Tester updater verification passed: Alynt Plugin Updater force-fresh checked the public release and the native WordPress upgrader installed `1.0.3` to active `1.1.0` while preserving active position `1`, settings hash `4c9c362f34b69a693030000a806bb55f172ce98601d4398b9b8fd75555e90a0f`, and active-plugin hash `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9`; no update offer remained.
+- `hbf-staging` updater verification passed: Alynt Plugin Updater offered the public `1.1.0` asset and WP-CLI installed `1.0.3` to active `1.1.0`. Settings hash `54e36bc37efca76534867cbe1c783d55b50495c73e896ca5bb5379b328ea4426` and active-plugin hash `4f9816b3e3612e06ada6d45e9a98ac8c54b5d22b4d54e110e60125d412fbb233` remained exact; 47 runtime files and both feature markers were present, no update remained, and `/login` returned HTTP `200`. Production HBF was not touched.
 
 #### Scope
 
