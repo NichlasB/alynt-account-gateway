@@ -466,6 +466,65 @@ class ALYNT_AG_WooCommerce_Integration {
 	}
 
 	/**
+	 * Return normalized available downloads for a customer.
+	 *
+	 * @param int $user_id WordPress user ID.
+	 * @param int $limit   Maximum downloads to return.
+	 * @return array<int,array<string,mixed>>
+	 */
+	public function available_downloads( $user_id, $limit = 3 ) {
+		$user_id = absint( $user_id );
+		$limit   = max( 1, min( 5, absint( $limit ) ) );
+
+		if ( ! $user_id || ! function_exists( 'wc_get_customer_available_downloads' ) ) {
+			return array();
+		}
+
+		$downloads = wc_get_customer_available_downloads( $user_id );
+		if ( ! is_array( $downloads ) ) {
+			return array();
+		}
+
+		$normalized = array();
+		foreach ( $downloads as $download ) {
+			if ( ! is_array( $download ) ) {
+				continue;
+			}
+
+			$url          = isset( $download['download_url'] ) ? esc_url_raw( $download['download_url'] ) : '';
+			$name         = isset( $download['download_name'] ) ? sanitize_text_field( $download['download_name'] ) : '';
+			$product_name = isset( $download['product_name'] ) ? sanitize_text_field( $download['product_name'] ) : '';
+
+			if ( '' === $url || ( '' === $name && '' === $product_name ) ) {
+				continue;
+			}
+
+			$timestamp = ! empty( $download['access_expires'] )
+				? strtotime( (string) $download['access_expires'] )
+				: false;
+			$expires   = $timestamp
+				? date_i18n( get_option( 'date_format', 'F j, Y' ), $timestamp )
+				: '';
+
+			$normalized[] = array(
+				'name'         => '' !== $name ? $name : $product_name,
+				'product_name' => $product_name,
+				'url'          => $url,
+				'remaining'    => isset( $download['downloads_remaining'] ) && is_numeric( $download['downloads_remaining'] )
+					? max( 0, (int) $download['downloads_remaining'] )
+					: null,
+				'expires'      => sanitize_text_field( $expires ),
+			);
+
+			if ( count( $normalized ) >= $limit ) {
+				break;
+			}
+		}
+
+		return $normalized;
+	}
+
+	/**
 	 * Return normalized billing and shipping address lines for a customer.
 	 *
 	 * @param int $user_id WordPress user ID.

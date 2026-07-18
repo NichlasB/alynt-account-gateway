@@ -20,6 +20,8 @@ class WooCommerceIntegrationTest extends TestCase {
 		$GLOBALS['alynt_ag_test_wc_orders']           = array();
 		$GLOBALS['alynt_ag_test_wc_order_statuses']   = array();
 		$GLOBALS['alynt_ag_test_wc_format_datetime_calls'] = array();
+		$GLOBALS['alynt_ag_test_wc_available_downloads'] = array();
+		$GLOBALS['alynt_ag_test_wc_available_download_calls'] = array();
 		$GLOBALS['alynt_ag_test_wc_formatted_addresses'] = array();
 		$GLOBALS['alynt_ag_test_wc_formatted_address_calls'] = array();
 	}
@@ -30,6 +32,8 @@ class WooCommerceIntegrationTest extends TestCase {
 			$GLOBALS['alynt_ag_test_wc_orders'],
 			$GLOBALS['alynt_ag_test_wc_order_statuses'],
 			$GLOBALS['alynt_ag_test_wc_format_datetime_calls'],
+			$GLOBALS['alynt_ag_test_wc_available_downloads'],
+			$GLOBALS['alynt_ag_test_wc_available_download_calls'],
 			$GLOBALS['alynt_ag_test_wc_formatted_addresses'],
 			$GLOBALS['alynt_ag_test_wc_formatted_address_calls']
 		);
@@ -142,12 +146,15 @@ class WooCommerceIntegrationTest extends TestCase {
 		$integration = new ALYNT_AG_WooCommerce_Integration();
 		$settings    = array(
 			'after_login_redirect'          => '/my-account/',
-			'woocommerce_hidden_menu_items' => array( 'orders' ),
+			'woocommerce_hidden_menu_items' => array( 'orders', 'downloads' ),
 		);
-		$endpoint = $integration->endpoint_from_path( '/my-account/orders/', $settings );
+		$order_endpoint    = $integration->endpoint_from_path( '/my-account/orders/', $settings );
+		$download_endpoint = $integration->endpoint_from_path( '/my-account/downloads/', $settings );
 
 		$this->assertFalse( $integration->is_account_menu_item_visible( 'orders', $settings ) );
-		$this->assertSame( 'orders', $endpoint['endpoint'] );
+		$this->assertSame( 'orders', $order_endpoint['endpoint'] );
+		$this->assertFalse( $integration->is_account_menu_item_visible( 'downloads', $settings ) );
+		$this->assertSame( 'downloads', $download_endpoint['endpoint'] );
 	}
 
 	public function test_account_menu_items_restore_required_standard_items_when_wc_omits_them() {
@@ -249,6 +256,81 @@ class WooCommerceIntegrationTest extends TestCase {
 			$GLOBALS['alynt_ag_test_wc_get_orders_args'][0]
 		);
 		$this->assertSame( 'F j, Y', $GLOBALS['alynt_ag_test_wc_format_datetime_calls'][0]['format'] );
+	}
+
+	public function test_available_downloads_returns_normalized_customer_download_data() {
+		$GLOBALS['alynt_ag_test_options']['date_format'] = 'F j, Y';
+		$GLOBALS['alynt_ag_test_wc_available_downloads'] = array(
+			array(
+				'download_url'        => 'https://example.test/?download_file=42&key=private',
+				'download_name'       => 'Digital Guide',
+				'product_name'        => 'Complete Course',
+				'downloads_remaining' => '2',
+				'access_expires'      => '2026-08-01 12:00:00',
+				'file'                => array( 'file' => 'private-file.pdf' ),
+				'order_key'           => 'wc_order_private',
+			),
+			array(
+				'download_url'        => 'https://example.test/?download_file=43&key=lifetime',
+				'download_name'       => '',
+				'product_name'        => 'Lifetime Reference',
+				'downloads_remaining' => '',
+				'access_expires'      => '',
+			),
+			array(
+				'download_url'  => '',
+				'download_name' => 'Invalid file',
+			),
+		);
+
+		$integration = new ALYNT_AG_WooCommerce_Integration();
+		$downloads   = $integration->available_downloads( 9, 3 );
+
+		$this->assertSame(
+			array(
+				array(
+					'name'         => 'Digital Guide',
+					'product_name' => 'Complete Course',
+					'url'          => 'https://example.test/?download_file=42&key=private',
+					'remaining'    => 2,
+					'expires'      => 'August 1, 2026',
+				),
+				array(
+					'name'         => 'Lifetime Reference',
+					'product_name' => 'Lifetime Reference',
+					'url'          => 'https://example.test/?download_file=43&key=lifetime',
+					'remaining'    => null,
+					'expires'      => '',
+				),
+			),
+			$downloads
+		);
+		$this->assertSame( array( 9 ), $GLOBALS['alynt_ag_test_wc_available_download_calls'] );
+		$this->assertArrayNotHasKey( 'file', $downloads[0] );
+		$this->assertArrayNotHasKey( 'order_key', $downloads[0] );
+	}
+
+	public function test_available_downloads_caps_results_and_rejects_invalid_user() {
+		$GLOBALS['alynt_ag_test_wc_available_downloads'] = array(
+			array(
+				'download_url'  => 'https://example.test/one',
+				'download_name' => 'One',
+			),
+			array(
+				'download_url'  => 'https://example.test/two',
+				'download_name' => 'Two',
+			),
+			array(
+				'download_url'  => 'https://example.test/three',
+				'download_name' => 'Three',
+			),
+		);
+
+		$integration = new ALYNT_AG_WooCommerce_Integration();
+
+		$this->assertCount( 2, $integration->available_downloads( 9, 2 ) );
+		$this->assertSame( array(), $integration->available_downloads( 0, 3 ) );
+		$this->assertSame( array( 9 ), $GLOBALS['alynt_ag_test_wc_available_download_calls'] );
 	}
 
 	public function test_recent_orders_skips_invalid_results_and_caps_query_limit() {

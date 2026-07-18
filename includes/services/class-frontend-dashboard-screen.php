@@ -268,6 +268,7 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 		<?php if ( $is_woocommerce_dashboard ) : ?>
 			<?php $this->render_woocommerce_dashboard_overview( $settings ); ?>
 			<?php $this->render_recent_orders( $user->ID, $settings ); ?>
+			<?php $this->render_available_downloads( $user->ID, $settings ); ?>
 			<?php $this->render_saved_addresses( $user->ID, $settings ); ?>
 		<?php endif; ?>
 
@@ -704,6 +705,87 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 										<span class="agw-dashboard-recent-order__total"><?php echo esc_html( $order['total'] ); ?></span>
 									<?php endif; ?>
 								</span>
+							</a>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			<?php endif; ?>
+		</section>
+		<?php
+	}
+
+	/**
+	 * Render a read-only available-downloads module on the WooCommerce dashboard.
+	 *
+	 * @param int                 $user_id  WordPress user ID.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_available_downloads( $user_id, $settings ) {
+		if ( ! $this->woocommerce->is_account_menu_item_visible( 'downloads', $settings ) ) {
+			return;
+		}
+
+		$downloads = $this->woocommerce->available_downloads( $user_id, 3 );
+		?>
+		<section class="agw-dashboard-section agw-dashboard-downloads" aria-labelledby="agw-dashboard-downloads-title">
+			<div class="agw-dashboard-downloads__header">
+				<h2 id="agw-dashboard-downloads-title"><?php esc_html_e( 'Available Downloads', 'alynt-account-gateway' ); ?></h2>
+				<a href="<?php echo esc_url( $this->woocommerce->endpoint_url( 'downloads', $settings ) ); ?>">
+					<?php esc_html_e( 'View all downloads', 'alynt-account-gateway' ); ?>
+				</a>
+			</div>
+			<?php if ( empty( $downloads ) ) : ?>
+				<p class="agw-dashboard-downloads__empty">
+					<?php esc_html_e( 'Your available files will appear here after a downloadable purchase.', 'alynt-account-gateway' ); ?>
+				</p>
+			<?php else : ?>
+				<ul class="agw-dashboard-downloads__list" role="list">
+					<?php foreach ( $downloads as $download ) : ?>
+						<?php
+						$download_label = sprintf(
+							/* translators: %s: downloadable file name. */
+							__( 'Download %s', 'alynt-account-gateway' ),
+							$download['name']
+						);
+						?>
+						<li class="agw-dashboard-download">
+							<span class="agw-dashboard-download__identity">
+								<strong><?php echo esc_html( $download['name'] ); ?></strong>
+								<?php if ( ! empty( $download['product_name'] ) && $download['product_name'] !== $download['name'] ) : ?>
+									<span><?php echo esc_html( $download['product_name'] ); ?></span>
+								<?php endif; ?>
+							</span>
+							<span class="agw-dashboard-download__meta">
+								<span>
+									<?php
+									echo esc_html(
+										null === $download['remaining']
+											? __( 'Unlimited downloads', 'alynt-account-gateway' )
+											: sprintf(
+												/* translators: %s: number of downloads remaining. */
+												__( 'Downloads remaining: %s', 'alynt-account-gateway' ),
+												(string) $download['remaining']
+											)
+									);
+									?>
+								</span>
+								<span>
+									<?php
+									echo esc_html(
+										empty( $download['expires'] )
+											? __( 'No expiry', 'alynt-account-gateway' )
+											: sprintf(
+												/* translators: %s: download expiry date. */
+												__( 'Expires: %s', 'alynt-account-gateway' ),
+												$download['expires']
+											)
+									);
+									?>
+								</span>
+							</span>
+							<a class="agw-dashboard-download__action" href="<?php echo esc_url( $download['url'] ); ?>" aria-label="<?php echo esc_attr( $download_label ); ?>">
+								<?php esc_html_e( 'Download', 'alynt-account-gateway' ); ?>
 							</a>
 						</li>
 					<?php endforeach; ?>

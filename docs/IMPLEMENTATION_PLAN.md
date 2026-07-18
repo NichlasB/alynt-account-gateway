@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Richer Dashboard UX Expansion in progress; Saved Addresses increment released as v1.1.3 and updater-verified
+- Current phase: Richer Dashboard UX Expansion in progress; Available Downloads implementation and exact-package acceptance complete, release pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.3 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Select the next bounded dashboard module.
+- Next roadmap: Release the accepted Available Downloads increment, then select the next bounded dashboard module.
 
 ## Post-v1 Product Roadmap
 
@@ -202,6 +202,42 @@
 - Staging's active list remained valid and Account Gateway remained active, but the headless attempts normalized its cached active-list ordering from the initial observed position `6` to current position `7`; this positional change is documented rather than represented as an exact active-list-hash preservation result. Production HBF was not touched.
 
 ### Slice 6 - Dashboard UX Expansion
+
+#### Immediate Increment - Available Downloads
+
+##### Scope
+
+- [x] Add a read-only Available Downloads module to the base WooCommerce dashboard.
+- [x] Use WooCommerce's customer-available-downloads API so native order, product, expiry, remaining-count, and file-enable rules remain authoritative.
+- [x] Normalize only customer-facing scalar fields before renderer output and cap the dashboard preview at three files.
+- [x] Provide WooCommerce-owned direct Download actions plus a View all downloads link to the delegated Downloads endpoint.
+- [x] Show a calm empty state when the customer has no currently available files.
+- [x] Omit the entire module when the administrator hides the Downloads dashboard navigation item.
+- [x] Add responsive, visible-focus, RTL-safe, long-label, and forced-colors styling.
+
+##### Acceptance Criteria
+
+- [x] The module never exposes raw permission, order, product, or file objects to the renderer.
+- [x] Download actions use only URLs returned by WooCommerce and continue through WooCommerce's native authorization/delivery path.
+- [x] Numeric remaining counts, unlimited access, dated expiry, and no-expiry states render clearly.
+- [x] Empty and long-name states remain readable without clipped controls or horizontal overflow down to 320px.
+- [x] Hiding Downloads removes the module and navigation affordance while leaving the direct Downloads endpoint available.
+- [x] Focused and full automated checks pass.
+- [x] Exact-package desktop/mobile acceptance passes on Plugin Tester and `hbf-staging`.
+
+##### Progress Notes
+
+- Selected as the next bounded dashboard increment after Saved Addresses because WooCommerce already owns the complete customer-download permission and delivery boundary.
+- Added a WooCommerce integration boundary that consumes `wc_get_customer_available_downloads()`, skips invalid entries, converts each permitted download into a five-field scalar array, and caps the dashboard preview at three files.
+- Added the Available Downloads dashboard module with finite/unlimited remaining-count states, dated/no-expiry states, direct WooCommerce-owned Download actions, distinct accessible link labels, a View all action, and a calm empty state.
+- Added responsive one-column mobile layout, minimum 44px actions, visible focus, long-name wrapping, RTL-safe logical layout, and forced-colors support.
+- Focused verification passed with `51 tests` and `414 assertions`. Full PHPUnit passed with `346 tests` and `2,234 assertions`; PHPCS, production build, npm audit, Composer audit, and POT regeneration (`1,073 strings`) also passed.
+- Exact QA package inspected cleanly: 47 runtime files, one plugin root, zero development-file or backslash-path hits, Available Downloads integration/renderer/compiled-CSS markers present, all packaged PHP files syntax-valid, and SHA-256 `0DF163099701493E2BF9C781F7C2982AEA85A8D0D5AB2982F6AD374C55DD1E16`.
+- Installed that exact 47-file package on LocalWP Plugin Tester and live-only `hbf-staging`, with production HBF explicitly excluded. Plugin Tester retained active position `1`, settings hash `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e`, and active-plugin hash `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e`. Staging retained active position `7`, settings JSON hash `07C3E10868E0F20119FDF5FE9AC48C6435A995DEB92B85EC38DA6476AFAC409C`, and active-plugin JSON hash `C1576C22EDB3110BD0EA1A3DF379CE454F2E2E0F7D427E25D3211EA00AA462DF`.
+- Browser acceptance passed on both targets at desktop, `390px`, and `320px`: the populated module capped its preview at three rows; finite, unlimited, dated-expiry, and no-expiry states rendered correctly; long names wrapped without horizontal overflow; mobile rows collapsed to one column; module text stayed at least `16px`; and Download/View all actions stayed at least `44px` high.
+- Keyboard and authorization-boundary checks passed on both targets: visible focus moved from View all downloads to the first distinctly labelled Download action, each action used a signed WooCommerce-owned URL, and the delegated Downloads endpoint displayed the fourth file omitted from the dashboard preview.
+- Visibility and empty-state checks passed on both targets: hiding Downloads removed both the dashboard module and navigation item while the direct endpoint remained available; restoring the setting returned the module; and an account without downloads rendered the calm empty state at `320px` with no overflow or console errors.
+- Cleanup and reconciliation passed: disposable customers, products, order, permissions, temporary files, MU fixtures, uploaded packages, rollback archives, verifier files, and setting snapshots were removed. Both sites returned to their exact recorded settings and active-plugin baselines, retained active `1.1.3`, matched the exact 47-file package tree, and returned HTTP `200` from `/login/`.
 
 #### Immediate Increment - Saved Addresses
 

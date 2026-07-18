@@ -158,6 +158,18 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertStringContainsString( '@media (forced-colors: active)', $css );
 	}
 
+	public function test_available_downloads_module_has_responsive_accessible_styles() {
+		$css = $this->get_frontend_css();
+
+		$this->assertStringContainsString( '.agw-dashboard-downloads__list', $css );
+		$this->assertStringContainsString( '.agw-dashboard-download__action:focus-visible', $css );
+		$this->assertStringContainsString( '.agw-dashboard-download__meta', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-dashboard-downloads__header a,[^{]*\.agw-dashboard-download__action\s*\{[^}]*min-height:\s*44px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-dashboard-download__identity strong\s*\{[^}]*overflow-wrap:\s*anywhere;/s', $css );
+		$this->assertMatchesRegularExpression( '/@media \(max-width: 800px\)[\s\S]*\.agw-dashboard-download\s*\{[^}]*grid-template-columns:\s*1fr;/s', $css );
+		$this->assertMatchesRegularExpression( '/@media \(forced-colors: active\)[\s\S]*\.agw-dashboard-download,[\s\S]*\.agw-dashboard-download__action,/s', $css );
+	}
+
 	public function test_saved_addresses_module_has_responsive_accessible_styles() {
 		$css = $this->get_frontend_css();
 

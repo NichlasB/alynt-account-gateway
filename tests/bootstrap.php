@@ -401,6 +401,16 @@ if ( ! function_exists( 'wc_get_orders' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wc_get_customer_available_downloads' ) ) {
+	function wc_get_customer_available_downloads( $user_id ) {
+		$GLOBALS['alynt_ag_test_wc_available_download_calls'][] = absint( $user_id );
+
+		return isset( $GLOBALS['alynt_ag_test_wc_available_downloads'] )
+			? $GLOBALS['alynt_ag_test_wc_available_downloads']
+			: array();
+	}
+}
+
 if ( ! function_exists( 'wc_get_account_formatted_address' ) ) {
 	function wc_get_account_formatted_address( $type = 'billing', $user_id = 0 ) {
 		$key = sanitize_key( $type ) . ':' . absint( $user_id );

@@ -77,6 +77,13 @@ class ALYNT_AG_Test_Frontend_Dashboard_WooCommerce extends ALYNT_AG_WooCommerce_
 	public $recent_orders = array();
 
 	/**
+	 * Available downloads to return.
+	 *
+	 * @var array<int,array<string,mixed>>
+	 */
+	public $available_downloads = array();
+
+	/**
 	 * Saved addresses to return.
 	 *
 	 * @var array<string,array<int,string>>
@@ -140,6 +147,17 @@ class ALYNT_AG_Test_Frontend_Dashboard_WooCommerce extends ALYNT_AG_WooCommerce_
 	 */
 	public function recent_orders( $user_id, $limit = 3 ) {
 		return $this->recent_orders;
+	}
+
+	/**
+	 * Return configured available downloads.
+	 *
+	 * @param int $user_id User ID.
+	 * @param int $limit   Maximum downloads.
+	 * @return array<int,array<string,mixed>>
+	 */
+	public function available_downloads( $user_id, $limit = 3 ) {
+		return $this->available_downloads;
 	}
 
 	/**
@@ -589,6 +607,8 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringNotContainsString( 'class="agw-dashboard-content"', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-recent-orders"', $html );
 		$this->assertStringContainsString( 'Your recent orders will appear here after your first purchase.', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-downloads"', $html );
+		$this->assertStringContainsString( 'Your available files will appear here after a downloadable purchase.', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-addresses"', $html );
 		$this->assertStringContainsString( 'No billing address is saved yet.', $html );
 		$this->assertStringContainsString( 'No shipping address is saved yet.', $html );
@@ -629,6 +649,56 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringContainsString( 'Processing', $html );
 		$this->assertStringContainsString( '£42.00', $html );
 		$this->assertStringNotContainsString( 'Your recent orders will appear here', $html );
+	}
+
+	public function test_woocommerce_dashboard_available_downloads_render_normalized_rows() {
+		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->available = true;
+		$woocommerce          = new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce();
+		$woocommerce->available_downloads = array(
+			array(
+				'name'         => 'Digital Guide',
+				'product_name' => 'Complete Course',
+				'url'          => 'https://example.test/?download_file=42&key=private',
+				'remaining'    => 2,
+				'expires'      => 'August 1, 2026',
+			),
+			array(
+				'name'         => 'Lifetime Reference',
+				'product_name' => 'Lifetime Reference',
+				'url'          => 'https://example.test/?download_file=43&key=lifetime',
+				'remaining'    => null,
+				'expires'      => '',
+			),
+		);
+		$screen = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			$woocommerce,
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array( 'woocommerce_takeover' => true )
+		);
+
+		ob_start();
+		$screen->render_dashboard_screen( $settings, '/my-account/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'Available Downloads', $html );
+		$this->assertStringContainsString( 'View all downloads', $html );
+		$this->assertStringContainsString( 'href="/my-account/downloads/"', $html );
+		$this->assertStringContainsString( 'Digital Guide', $html );
+		$this->assertStringContainsString( 'Complete Course', $html );
+		$this->assertStringContainsString( 'Downloads remaining: 2', $html );
+		$this->assertStringContainsString( 'Expires: August 1, 2026', $html );
+		$this->assertStringContainsString( 'Unlimited downloads', $html );
+		$this->assertStringContainsString( 'No expiry', $html );
+		$this->assertStringContainsString( 'href="https://example.test/?download_file=42&key=private"', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-download__action"', $html );
+		$this->assertStringContainsString( 'aria-label="Download Digital Guide"', $html );
+		$this->assertStringContainsString( 'Download', $html );
+		$this->assertStringNotContainsString( 'Your available files will appear here', $html );
 	}
 
 	public function test_woocommerce_dashboard_saved_addresses_render_normalized_lines_and_actions() {
@@ -686,7 +756,7 @@ class FrontendDashboardScreenTest extends TestCase {
 			$this->settings,
 			array(
 				'woocommerce_takeover'          => true,
-				'woocommerce_hidden_menu_items' => array( 'orders', 'edit-address', 'edit-account' ),
+				'woocommerce_hidden_menu_items' => array( 'orders', 'downloads', 'edit-address', 'edit-account' ),
 			)
 		);
 
@@ -700,6 +770,7 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringNotContainsString( 'href="/my-account/edit-address/"', $html );
 		$this->assertStringNotContainsString( 'href="/my-account/edit-account/"', $html );
 		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-recent-orders"', $html );
+		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-downloads"', $html );
 		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-addresses"', $html );
 	}
 
