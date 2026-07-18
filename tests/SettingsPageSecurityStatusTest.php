@@ -53,6 +53,68 @@ class SettingsPageSecurityStatusTest extends TestCase {
 		return $reflection->invokeArgs( $settings_page, $args );
 	}
 
+	public function test_provider_connection_checks_render_without_credentials() {
+		$settings                         = ALYNT_AG_Settings_Schema::defaults();
+		$settings['turnstile_site_key']   = 'visible-site-key';
+		$settings['turnstile_secret_key'] = 'private-turnstile-secret';
+		$settings['reoon_api_key']        = 'private-reoon-key';
+		$settings_page                    = new ALYNT_AG_Settings_Page();
+
+		ob_start();
+		$this->invoke_helper( $settings_page, 'render_security_provider_checks', array( $settings ) );
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( 'Provider Connection Checks', $output );
+		$this->assertStringContainsString( 'Check Turnstile Connection', $output );
+		$this->assertStringContainsString( 'Check Reoon Account', $output );
+		$this->assertStringContainsString( 'name="provider" value="turnstile"', $output );
+		$this->assertStringContainsString( 'name="provider" value="reoon"', $output );
+		$this->assertStringContainsString( 'does not submit an email address', $output );
+		$this->assertStringNotContainsString( 'visible-site-key', $output );
+		$this->assertStringNotContainsString( 'private-turnstile-secret', $output );
+		$this->assertStringNotContainsString( 'private-reoon-key', $output );
+		$this->assertStringNotContainsString( 'disabled="disabled"', $output );
+	}
+
+	public function test_provider_connection_checks_disable_unconfigured_providers() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		ob_start();
+		$this->invoke_helper(
+			$settings_page,
+			'render_security_provider_checks',
+			array( ALYNT_AG_Settings_Schema::defaults() )
+		);
+		$output = ob_get_clean();
+
+		$this->assertSame( 2, substr_count( $output, 'disabled="disabled"' ) );
+	}
+
+	public function test_provider_connection_check_notice_keys_are_fixed() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		$this->assertSame(
+			'turnstile_check_ready',
+			$this->invoke_helper( $settings_page, 'security_provider_check_notice_key', array( 'turnstile', true ) )
+		);
+		$this->assertSame(
+			'turnstile_check_invalid_secret',
+			$this->invoke_helper(
+				$settings_page,
+				'security_provider_check_notice_key',
+				array( 'turnstile', new WP_Error( 'alynt_ag_turnstile_invalid_secret', 'Sensitive provider detail.' ) )
+			)
+		);
+		$this->assertSame(
+			'reoon_check_request_failed',
+			$this->invoke_helper(
+				$settings_page,
+				'security_provider_check_notice_key',
+				array( 'reoon', new WP_Error( 'alynt_ag_reoon_request_failed', 'Sensitive provider detail.' ) )
+			)
+		);
+	}
+
 	public function test_security_status_panel_warns_when_providers_are_missing() {
 		$settings      = ALYNT_AG_Settings_Schema::defaults();
 		$settings_page = new ALYNT_AG_Settings_Page();

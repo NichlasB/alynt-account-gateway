@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.0 released and updater-verified; final evidence synchronized
+- Current phase: v1.1.1 Deeper Provider Admin UX release approved; final release gate and publication in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.0 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Continue with Deeper Provider Admin UX unless a higher-priority production rollout need appears.
+- Next roadmap: Complete the v1.1.1 release gate, publish the public asset, and verify Alynt Plugin Updater on Plugin Tester and `hbf-staging`.
 
 ## Post-v1 Product Roadmap
 
@@ -150,19 +150,36 @@
 
 #### Scope
 
-- [ ] Improve Turnstile and Reoon setup visibility on the Security tab without exposing secrets.
-- [ ] Add clearer configured/missing/warning/pass/fail provider states for site owners.
-- [ ] Add safe provider test tools where possible, including server-side Turnstile validation guidance and Reoon test-result interpretation.
-- [ ] Surface either-provider versus both-provider behavior in plain operational language.
-- [ ] Improve recent verification logs with next-step guidance for provider timeout, outage, invalid token, disposable, invalid, role-account, catch-all, and unknown outcomes.
-- [ ] Keep provider decisions, registration flow, rate-limit enforcement, and saved secret handling backward-compatible unless a specific release note calls out a change.
+- [x] Improve Turnstile and Reoon setup visibility on the Security tab without exposing secrets.
+- [x] Add clearer configured/missing/warning/pass/fail provider states for site owners.
+- [x] Add safe provider test tools where possible, including server-side Turnstile validation guidance and Reoon test-result interpretation.
+- [x] Surface either-provider versus both-provider behavior in plain operational language.
+- [x] Improve recent verification logs with next-step guidance for provider timeout, outage, invalid token, disposable, invalid, role-account, catch-all, and unknown outcomes.
+- [x] Keep provider decisions, registration flow, rate-limit enforcement, and saved secret handling backward-compatible unless a specific release note calls out a change.
 
 #### Acceptance Criteria
 
-- [ ] An administrator can tell whether Turnstile, Reoon, both, or neither is configured without submitting a registration.
-- [ ] Provider test or guidance output avoids leaking API keys, site keys, tokens, email addresses, or raw payloads.
-- [ ] Recent verification rows provide actionable next steps for common failure modes.
-- [ ] Existing security and anti-spam tests pass, and new UI markers are covered by focused tests.
+- [x] An administrator can tell whether Turnstile, Reoon, both, or neither is configured without submitting a registration.
+- [x] Provider test or guidance output avoids leaking API keys, site keys, tokens, email addresses, or raw payloads.
+- [x] Recent verification rows provide actionable next steps for common failure modes.
+- [x] Existing security and anti-spam tests pass, and new UI markers are covered by focused tests.
+
+#### Progress Notes
+
+- Existing Security-tab provider readiness cards, protection-mode guidance, Reoon policy interpretation, provider health signals, failure triage, masked verification activity, and row-level next-step guidance satisfied the informational portions of this slice before the connection-check cycle began.
+- Added two explicit administrator-only connection checks that use saved credentials and return fixed, non-sensitive notices.
+- The Turnstile check calls Cloudflare Siteverify with a deliberately invalid fixed probe token. It can confirm outbound connectivity and secret acceptance far enough for Cloudflare to reject the token, while the UI clearly states that a real registration challenge is still required to validate the site key, hostname, widget, and secret together.
+- The Reoon check calls the account-balance endpoint to confirm that the saved API account is active without submitting an email address or running a customer verification.
+- Provider responses are reduced to allowlisted status values and integer credit counts inside the client boundary. Raw payloads, credentials, customer tokens, and email addresses are not rendered, logged, or stored by the checks.
+- Added responsive admin UI, capability and nonce enforcement, strict provider allowlisting, fixed notice mapping, disabled actions for missing configuration, and focused privacy-safe request/output coverage.
+- Local validation passed: PHP syntax checks, `npm.cmd run build`, `npm.cmd run make-pot`, `npm.cmd test` (`333 tests`, `2122 assertions`), `npm.cmd run lint`, and `git diff --check` with only the repository's expected POT line-ending warning.
+- Portable acceptance package `alynt-account-gateway-v1.1.0-provider-admin-qa-portable.zip` inspected cleanly: 47 runtime files, one expected plugin root, zero development-file or backslash-path hits, all four provider-admin PHP/CSS markers present, and SHA-256 `AA48340798744F08A939354ADBD5FF801293ED4B35001A79B1F91364848D6BA6`.
+- Plugin Tester QA passed through Novamira MCP and Playwright after installing the exact inspected package: ACG stayed active at position `1`, active-plugin SHA-256 stayed `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e`, settings SHA-256 stayed `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e`, 47 runtime files and all four markers were present, both unconfigured checks were disabled, credentials were absent from rendered output, and desktop/narrow layouts had no overflow.
+- `hbf-staging` QA passed after the WP-CLI upgrader safely refused a permissions-mismatched replacement without disturbing the baseline and the registered SCP/filesystem deployment method installed the same inspected package. ACG remained active at position `6`; active-plugin SHA-256 stayed `72ea29d47928415ad228ac80c0efe2f0819482156b179e70b31b9b22b84fe05a`; settings SHA-256 stayed `c4c48c5d3bfec3198069f9c541df853add2f1e2e5c385755b1cfe6eb9b889bb7`; the remote package SHA-256 matched `AA48340798744F08A939354ADBD5FF801293ED4B35001A79B1F91364848D6BA6`; and 47 runtime files plus the new markers were present.
+- Real administrator-button smoke on `hbf-staging` returned `turnstile_check_ready` and the fixed notice explaining that a real challenge still validates the complete widget/hostname flow. Reoon returned `reoon_check_ready` and the fixed notice confirming an active account and that no email address was submitted. Both checks remained enabled, rendered no provider payload elements, and the 600px admin layout was single-column and overflow-free.
+- The staging console's existing GetTerms `addEventListener` null error was reproduced and attributed to `wp-content/plugins/getterms/js/getterms.js`, not Account Gateway.
+- Cleanup passed: the Plugin Tester upload tree, staging disposable administrator, baseline helper, uploaded package, and rollback archive were removed; both target hashes remained exact; and the staging branded `/login/` endpoint returned HTTP `200`.
+- Release publication was explicitly approved; v1.1.1 metadata, final validation, public asset inspection, and updater verification are in progress.
 
 ### Slice 6 - Dashboard UX Expansion
 

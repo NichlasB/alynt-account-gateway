@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,10 @@ Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile
 
 == Changelog ==
 
+= 1.1.1 =
+
+* Added safe administrator-only connection checks for configured Cloudflare Turnstile and Reoon accounts.
+* Added fixed readiness notices and responsive controls without displaying or storing credentials, email addresses, customer tokens, or raw provider payloads.
 = 1.1.0 =
 
 * Added settings to hide individual standard or extension-provided WooCommerce account navigation items without disabling their endpoints.

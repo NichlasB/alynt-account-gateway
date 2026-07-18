@@ -408,6 +408,50 @@
 	font-size: 13px;
 }
 
+.alynt-ag-provider-checks {
+	display: grid;
+	gap: 12px;
+	margin: 18px 0 16px;
+	padding: 14px;
+	border: 1px solid #dcdcde;
+	border-inline-start: 4px solid #2271b1;
+	background: #f6f7f7;
+}
+
+.alynt-ag-provider-checks h3,
+.alynt-ag-provider-checks h4,
+.alynt-ag-provider-checks p {
+	margin: 0;
+}
+
+.alynt-ag-provider-checks__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 12px;
+}
+
+.alynt-ag-provider-check {
+	display: grid;
+	gap: 10px;
+	align-content: start;
+	padding: 12px;
+	border: 1px solid #dcdcde;
+	background: #fff;
+}
+
+.alynt-ag-provider-check p {
+	color: #50575e;
+	line-height: 1.5;
+}
+
+.alynt-ag-provider-check .button {
+	width: max-content;
+	max-width: 100%;
+	height: auto;
+	min-height: 32px;
+	white-space: normal;
+}
+
 .alynt-ag-reoon-policy-guide {
 	display: grid;
 	gap: 12px;

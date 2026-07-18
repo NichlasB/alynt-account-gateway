@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.1.1 - 2026-07-18
+
+### Added
+
+- Added administrator-only Turnstile and Reoon connection checks to the Security tab using saved provider credentials.
+- Added fixed, privacy-safe readiness notices and responsive provider-check controls.
+
+### Security
+
+- Turnstile checks use a deliberately invalid fixed probe token and clearly require a real registration challenge for full widget and hostname validation.
+- Reoon account checks submit no email address, and neither provider check displays or stores credentials, customer tokens, email addresses, or raw provider payloads.
+
+### Tests
+
+- Added focused coverage for provider response handling, request construction, missing configuration, safe notice mapping, and credential-free admin rendering.
 ## 1.1.0 - 2026-07-18
 
 ### Added

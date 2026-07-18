@@ -438,11 +438,28 @@ if ( ! function_exists( 'wp_remote_post' ) ) {
 
 if ( ! function_exists( 'wp_remote_get' ) ) {
 	function wp_remote_get( $url, $args = array() ) {
+		$GLOBALS['alynt_ag_test_remote_gets'][] = array(
+			'url'  => $url,
+			'args' => $args,
+		);
+
 		if ( isset( $GLOBALS['alynt_ag_test_remote_get_response'] ) ) {
 			return $GLOBALS['alynt_ag_test_remote_get_response'];
 		}
 
 		return array( 'body' => '{"status":"safe"}' );
+	}
+}
+
+if ( ! function_exists( 'disabled' ) ) {
+	function disabled( $disabled, $current = true, $display = true ) {
+		$result = $disabled === $current ? ' disabled="disabled"' : '';
+
+		if ( $display ) {
+			echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Test stub mirrors WordPress core.
+		}
+
+		return $result;
 	}
 }
 

@@ -31,6 +31,7 @@ class ALYNT_AG_Settings_Page {
 		add_action( 'admin_post_alynt_ag_export_diagnostics', array( $this, 'handle_export_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_clear_diagnostics', array( $this, 'handle_clear_diagnostics' ) );
 		add_action( 'admin_post_alynt_ag_review_verification', array( $this, 'handle_review_verification' ) );
+		add_action( 'admin_post_alynt_ag_test_security_provider', array( $this, 'handle_test_security_provider' ) );
 		add_action( 'admin_post_alynt_ag_preview_email', array( $this, 'handle_preview_email' ) );
 		add_action( 'admin_post_alynt_ag_test_email', array( $this, 'handle_test_email' ) );
 		add_action( 'admin_post_alynt_ag_test_webhook', array( $this, 'handle_test_webhook' ) );
@@ -726,7 +727,18 @@ class ALYNT_AG_Settings_Page {
 	 */
 	private function render_admin_notice() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin notice flag.
-		$notice = isset( $_GET['alynt_ag_notice'] ) ? sanitize_key( wp_unslash( $_GET['alynt_ag_notice'] ) ) : '';
+		$notice                 = isset( $_GET['alynt_ag_notice'] ) ? sanitize_key( wp_unslash( $_GET['alynt_ag_notice'] ) ) : '';
+		$provider_check_notices = $this->security_provider_check_notices();
+
+		if ( isset( $provider_check_notices[ $notice ] ) ) {
+			$provider_notice = $provider_check_notices[ $notice ];
+			?>
+			<div class="notice notice-<?php echo esc_attr( $provider_notice['type'] ); ?> is-dismissible">
+				<p><?php echo esc_html( $provider_notice['message'] ); ?></p>
+			</div>
+			<?php
+			return;
+		}
 
 		if ( 'settings_imported' === $notice ) {
 			?>
@@ -843,6 +855,56 @@ class ALYNT_AG_Settings_Page {
 			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'The review decision could not be recorded. Refresh the Security tab and try again.', 'alynt-account-gateway' ); ?></p></div>
 			<?php
 		}
+	}
+
+	/**
+	 * Return safe admin notices for provider connection checks.
+	 *
+	 * @return array<string,array{type:string,message:string}>
+	 */
+	private function security_provider_check_notices() {
+		return array(
+			'turnstile_check_ready'            => array(
+				'type'    => 'success',
+				'message' => __( 'Turnstile reached Cloudflare and the saved secret was accepted for a deliberately invalid test token. Complete a real registration challenge to confirm the site key, hostname, widget, and secret together.', 'alynt-account-gateway' ),
+			),
+			'turnstile_check_missing'          => array(
+				'type'    => 'warning',
+				'message' => __( 'Save both the Turnstile site key and secret key before running the connection check.', 'alynt-account-gateway' ),
+			),
+			'turnstile_check_invalid_secret'   => array(
+				'type'    => 'error',
+				'message' => __( 'Cloudflare rejected the saved Turnstile secret. Confirm the secret is current and belongs to the configured widget.', 'alynt-account-gateway' ),
+			),
+			'turnstile_check_request_failed'   => array(
+				'type'    => 'error',
+				'message' => __( 'The site could not reach Cloudflare Siteverify. Check outbound HTTPS, DNS, firewall rules, and provider availability.', 'alynt-account-gateway' ),
+			),
+			'turnstile_check_invalid_response' => array(
+				'type'    => 'error',
+				'message' => __( 'Cloudflare returned an unexpected response to the Turnstile connection check. Retry later and confirm the saved secret in Cloudflare.', 'alynt-account-gateway' ),
+			),
+			'reoon_check_ready'                => array(
+				'type'    => 'success',
+				'message' => __( 'Reoon responded successfully and reports the saved API account as active. No email address was submitted during this check.', 'alynt-account-gateway' ),
+			),
+			'reoon_check_missing'              => array(
+				'type'    => 'warning',
+				'message' => __( 'Save a Reoon API key before running the account connection check.', 'alynt-account-gateway' ),
+			),
+			'reoon_check_inactive'             => array(
+				'type'    => 'error',
+				'message' => __( 'Reoon responded, but the saved API account is not active. Review the account and API key in Reoon.', 'alynt-account-gateway' ),
+			),
+			'reoon_check_request_failed'       => array(
+				'type'    => 'error',
+				'message' => __( 'The site could not reach Reoon. Check outbound HTTPS, DNS, firewall rules, provider availability, and API-key permissions.', 'alynt-account-gateway' ),
+			),
+			'reoon_check_invalid_response'     => array(
+				'type'    => 'error',
+				'message' => __( 'Reoon returned an unexpected account response. Retry later and confirm the saved API key in Reoon.', 'alynt-account-gateway' ),
+			),
+		);
 	}
 
 	/**
@@ -1387,6 +1449,7 @@ class ALYNT_AG_Settings_Page {
 				<?php endforeach; ?>
 			</div>
 
+			<?php $this->render_security_provider_checks( $settings ); ?>
 			<?php $this->render_security_reoon_policy_guide( $settings ); ?>
 
 			<h3><?php esc_html_e( 'Rate Limit Posture', 'alynt-account-gateway' ); ?></h3>
@@ -1514,6 +1577,81 @@ class ALYNT_AG_Settings_Page {
 				'message' => $this->security_reoon_flagged_policy_message( $reoon_flagged_policy ),
 			),
 		);
+	}
+
+	/**
+	 * Render safe provider connection checks using saved settings.
+	 *
+	 * @param array<string,mixed> $settings Current settings.
+	 * @return void
+	 */
+	private function render_security_provider_checks( $settings ) {
+		$turnstile_ready = ! empty( $settings['turnstile_site_key'] ) && ! empty( $settings['turnstile_secret_key'] );
+		$reoon_ready     = ! empty( $settings['reoon_api_key'] );
+		?>
+		<div class="alynt-ag-provider-checks" aria-labelledby="alynt-ag-provider-checks-title">
+			<div>
+				<h3 id="alynt-ag-provider-checks-title"><?php esc_html_e( 'Provider Connection Checks', 'alynt-account-gateway' ); ?></h3>
+				<p class="description"><?php esc_html_e( 'These checks use saved credentials and return only a fixed readiness result. Credentials, provider payloads, and customer data are not displayed or stored.', 'alynt-account-gateway' ); ?></p>
+			</div>
+			<div class="alynt-ag-provider-checks__grid">
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-provider-check">
+					<input type="hidden" name="action" value="alynt_ag_test_security_provider">
+					<input type="hidden" name="provider" value="turnstile">
+					<?php wp_nonce_field( 'alynt_ag_test_security_provider_turnstile' ); ?>
+					<h4><?php esc_html_e( 'Cloudflare Turnstile', 'alynt-account-gateway' ); ?></h4>
+					<p id="alynt-ag-turnstile-check-help"><?php esc_html_e( 'Checks outbound Siteverify connectivity and whether Cloudflare accepts the saved secret far enough to reject a fixed invalid token. A real registration challenge is still required to prove the complete widget and hostname flow.', 'alynt-account-gateway' ); ?></p>
+					<button type="submit" class="button button-secondary" aria-describedby="alynt-ag-turnstile-check-help" <?php disabled( $turnstile_ready, false ); ?>>
+						<?php esc_html_e( 'Check Turnstile Connection', 'alynt-account-gateway' ); ?>
+					</button>
+				</form>
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-provider-check">
+					<input type="hidden" name="action" value="alynt_ag_test_security_provider">
+					<input type="hidden" name="provider" value="reoon">
+					<?php wp_nonce_field( 'alynt_ag_test_security_provider_reoon' ); ?>
+					<h4><?php esc_html_e( 'Reoon Email Verifier', 'alynt-account-gateway' ); ?></h4>
+					<p id="alynt-ag-reoon-check-help"><?php esc_html_e( 'Checks the saved API key against Reoon account status. It does not submit an email address or run a customer verification.', 'alynt-account-gateway' ); ?></p>
+					<button type="submit" class="button button-secondary" aria-describedby="alynt-ag-reoon-check-help" <?php disabled( $reoon_ready, false ); ?>>
+						<?php esc_html_e( 'Check Reoon Account', 'alynt-account-gateway' ); ?>
+					</button>
+				</form>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Map a provider check result to a fixed, non-sensitive notice key.
+	 *
+	 * @param string              $provider Provider key.
+	 * @param true|array|WP_Error $result   Provider check result.
+	 * @return string
+	 */
+	private function security_provider_check_notice_key( $provider, $result ) {
+		$provider = sanitize_key( $provider );
+		if ( ! is_wp_error( $result ) ) {
+			return $provider . '_check_ready';
+		}
+
+		$error_code = sanitize_key( $result->get_error_code() );
+		$maps       = array(
+			'turnstile' => array(
+				'alynt_ag_turnstile_missing'          => 'turnstile_check_missing',
+				'alynt_ag_turnstile_invalid_secret'   => 'turnstile_check_invalid_secret',
+				'alynt_ag_turnstile_request_failed'   => 'turnstile_check_request_failed',
+				'alynt_ag_turnstile_invalid_response' => 'turnstile_check_invalid_response',
+			),
+			'reoon'     => array(
+				'alynt_ag_reoon_missing'          => 'reoon_check_missing',
+				'alynt_ag_reoon_account_inactive' => 'reoon_check_inactive',
+				'alynt_ag_reoon_request_failed'   => 'reoon_check_request_failed',
+				'alynt_ag_reoon_invalid_response' => 'reoon_check_invalid_response',
+			),
+		);
+
+		return isset( $maps[ $provider ][ $error_code ] )
+			? $maps[ $provider ][ $error_code ]
+			: $provider . '_check_invalid_response';
 	}
 
 	/**
@@ -5110,6 +5248,45 @@ class ALYNT_AG_Settings_Page {
 					'page'            => 'alynt-account-gateway',
 					'tab'             => 'security',
 					'alynt_ag_notice' => $status,
+				),
+				admin_url( 'options-general.php' )
+			)
+		);
+		exit;
+	}
+
+	/**
+	 * Run a safe provider connection check using saved credentials.
+	 *
+	 * @return void
+	 */
+	public function handle_test_security_provider() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to test security providers.', 'alynt-account-gateway' ) );
+		}
+
+		$provider = isset( $_POST['provider'] ) ? sanitize_key( wp_unslash( $_POST['provider'] ) ) : '';
+		if ( ! in_array( $provider, array( 'turnstile', 'reoon' ), true ) ) {
+			wp_die( esc_html__( 'Choose a supported security provider.', 'alynt-account-gateway' ) );
+		}
+
+		check_admin_referer( 'alynt_ag_test_security_provider_' . $provider );
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+
+		if ( 'turnstile' === $provider ) {
+			$result = empty( $settings['turnstile_site_key'] ) || empty( $settings['turnstile_secret_key'] )
+				? new WP_Error( 'alynt_ag_turnstile_missing', __( 'Turnstile verification is not configured.', 'alynt-account-gateway' ) )
+				: ( new ALYNT_AG_Turnstile_Client() )->check_configuration( $settings['turnstile_secret_key'] );
+		} else {
+			$result = ( new ALYNT_AG_Reoon_Client() )->check_account( $settings['reoon_api_key'] );
+		}
+
+		wp_safe_redirect(
+			add_query_arg(
+				array(
+					'page'            => 'alynt-account-gateway',
+					'tab'             => 'security',
+					'alynt_ag_notice' => $this->security_provider_check_notice_key( $provider, $result ),
 				),
 				admin_url( 'options-general.php' )
 			)

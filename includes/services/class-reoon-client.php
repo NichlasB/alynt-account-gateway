@@ -14,7 +14,48 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ALYNT_AG_Reoon_Client {
 
-	const VERIFY_URL = 'https://emailverifier.reoon.com/api/v1/verify';
+	const VERIFY_URL  = 'https://emailverifier.reoon.com/api/v1/verify';
+	const BALANCE_URL = 'https://emailverifier.reoon.com/api/v1/check-account-balance/';
+
+	/**
+	 * Check Reoon account connectivity without submitting an email address.
+	 *
+	 * @param string $api_key API key.
+	 * @return array<string,mixed>|WP_Error
+	 */
+	public function check_account( $api_key ) {
+		if ( empty( $api_key ) ) {
+			return new WP_Error( 'alynt_ag_reoon_missing', __( 'Reoon verification is not configured.', 'alynt-account-gateway' ) );
+		}
+
+		$response = wp_remote_get(
+			add_query_arg( 'key', $api_key, self::BALANCE_URL ),
+			array( 'timeout' => 10 )
+		);
+
+		if ( is_wp_error( $response ) ) {
+			return new WP_Error( 'alynt_ag_reoon_request_failed', __( 'Email verification failed. Please try again.', 'alynt-account-gateway' ) );
+		}
+
+		$body = json_decode( wp_remote_retrieve_body( $response ), true );
+		if ( ! is_array( $body ) ) {
+			return new WP_Error( 'alynt_ag_reoon_invalid_response', __( 'Email verification failed. Please try again.', 'alynt-account-gateway' ) );
+		}
+
+		$status     = isset( $body['status'] ) ? sanitize_key( $body['status'] ) : '';
+		$api_status = isset( $body['api_status'] ) ? sanitize_key( $body['api_status'] ) : '';
+
+		if ( 'success' !== $status || 'active' !== $api_status ) {
+			return new WP_Error( 'alynt_ag_reoon_account_inactive', __( 'The Reoon API account is not active.', 'alynt-account-gateway' ) );
+		}
+
+		return array(
+			'status'                    => $status,
+			'api_status'                => $api_status,
+			'remaining_daily_credits'   => isset( $body['remaining_daily_credits'] ) ? absint( $body['remaining_daily_credits'] ) : 0,
+			'remaining_instant_credits' => isset( $body['remaining_instant_credits'] ) ? absint( $body['remaining_instant_credits'] ) : 0,
+		);
+	}
 
 	/**
 	 * Verify an email address with Reoon.
