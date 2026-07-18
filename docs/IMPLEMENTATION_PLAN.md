@@ -2,18 +2,18 @@
 
 ## Status
 
-- Current phase: Richer Dashboard UX Expansion in progress; Payment Methods v1.1.5 candidate passed exact-package acceptance and awaits release approval
+- Current phase: Richer Dashboard UX Expansion in progress; Payment Methods v1.1.5 is released and updater-verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.4 is the current public baseline; the v1.1.5 Payment Methods candidate has passed local validation, package inspection, and exact-package Plugin Tester acceptance.
+- Plugin status: v1.1.5 is the current public baseline; its Payment Methods module passed local validation, exact-package acceptance, public release inspection, and Alynt Plugin Updater verification.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Request release approval for the accepted v1.1.5 Payment Methods candidate.
+- Next roadmap: Select the next bounded richer-dashboard increment while preserving WooCommerce-owned account actions and endpoint compatibility.
 
 ## Post-v1 Product Roadmap
 
 ### Status
 
-- Current v1 product baseline: `v1.1.4`, released and updater-verified.
+- Current v1 product baseline: `v1.1.5`, released and updater-verified.
 - Original v1 implementation slices: Complete.
 - New approved post-v1 slices: Alynt Plugin Updater follow-up, deeper provider admin UX, dashboard UX expansion, dashboard action icons/off-canvas navigation, and delegated WooCommerce notice normalization.
 - New approved visual/admin-help tweak: widen gateway cards, reduce panel/card horizontal padding, remove trailing notice paragraph margin, and correct background-image guidance toward tall portrait imagery.
@@ -253,6 +253,9 @@
 - Empty-state, hidden-navigation, and direct-endpoint acceptance passed. The empty module rendered calm provider-aware copy; hiding Payment Methods removed both its module and dashboard navigation affordance; and the direct `/my-account/payment-methods/` endpoint remained available.
 - Responsive browser acceptance passed at `1440px`, `390px`, and `320px`: desktop used a three-card preview, mobile used one column, the long provider label wrapped without overflow, page-level horizontal overflow remained absent, module and action text computed to at least `16px`, the Manage link retained a `44px` target, and keyboard focus rendered a visible solid outline. Browser console inspection found no Account Gateway errors.
 - Cleanup removed both disposable customers, all eight QA token rows and token metadata from the initial and corrected fixture runs, the temporary settings backup, uploaded ZIP, rollback copy, authenticated browser sessions, and MU helper. Final active-plugin SHA-256 `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e` and settings SHA-256 `c9a39358a9ccb267bfe1ae2f1dbab982b8d0222a9b13f40fa3b036d48c945df7` exactly match the pre-test baseline; the local homepage returns HTTP `200`.
+- Released as [`v1.1.5`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.5) from commit `b687110`; Build Release workflow run `29653435766` passed.
+- Public asset `alynt-account-gateway-v1.1.5.zip` inspected cleanly: `57` ZIP entries, `47` runtime files, one expected plugin root, zero development-file or backslash-path hits, all `41` packaged PHP files syntax-clean, aligned `1.1.5` metadata, and SHA-256 `6E1861D1AFB044488FAE7B37E5AC732D5D96F3CCBB36512CE2D0BAC3C68B0CF1`.
+- Plugin Tester updater verification passed through Alynt Plugin Updater's force-fresh UI and WordPress's native update action: the public `1.1.4 -> 1.1.5` offer installed successfully, all `47` installed runtime files byte-matched the public ZIP, Account Gateway remained active at position `1` of `15`, active-plugin SHA-256 remained `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e`, settings SHA-256 remained `c9a39358a9ccb267bfe1ae2f1dbab982b8d0222a9b13f40fa3b036d48c945df7`, no update remained, and home plus `/login` returned HTTP `200`. The authenticated browser session was logged out and closed, and the temporary administrator plus all seven user-meta rows were removed.
 
 #### Immediate Increment - Available Downloads
 
