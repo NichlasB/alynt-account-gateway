@@ -2,8 +2,8 @@
 
 ## Status
 
-- Current phase: `v1.1.1` is released, public-asset inspected, and installed on LocalWP `plugin-tester` and production-like `hbf-staging`.
-- Product baseline: `v1.1.1`, released, public-asset verified, and updater-verified with Alynt Plugin Updater `1.1.2` on LocalWP Plugin Tester and `hbf-staging`.
+- Current phase: `v1.1.2` is released, public-asset inspected, and installed on LocalWP `plugin-tester` and production-like `hbf-staging`.
+- Product baseline: `v1.1.2`, released, public-asset verified, and updater-verified with Alynt Plugin Updater `1.1.2` on LocalWP Plugin Tester and `hbf-staging`.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility.
@@ -16,6 +16,19 @@ This is the living production-acceptance roadmap for Alynt Account Gateway. The 
 Readiness work should prioritize runtime evidence, configuration safety, compatibility, documentation, and operational recovery. New product features belong in a separately approved roadmap unless they are required to resolve a release-blocking defect found during acceptance testing.
 
 ## Post-v1 Maintenance Evidence
+
+### v1.1.2 Recent Orders Dashboard Module
+
+| Item | Value | Evidence | Status |
+| --- | --- | --- | --- |
+| Release | [`v1.1.2`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.2) | GitHub release from commit `6d0d74c` | Published |
+| Build Release workflow | Run `29642028855` | GitHub Actions | Passed |
+| Public asset | `alynt-account-gateway-v1.1.2.zip`; `47` runtime files; one plugin root; zero development-file or backslash-path hits; aligned `1.1.2` metadata | Public asset inspection | Verified |
+| Public asset SHA-256 | `689F260ADC1E6BD2A33EC3214A519DC738B30FA3467BA8DCFB9E558166F81D62` | Local hash of downloaded public release asset | Recorded |
+| Product change | The WooCommerce dashboard now shows a bounded, customer-scoped Recent Orders module with status, total, date, and order-detail links while preserving native endpoint delegation. | `CHANGELOG.md`, `readme.txt`, packaged runtime, and acceptance evidence | Completed |
+| Plugin Tester updater | Alynt Plugin Updater force-fresh offered the exact public asset and WordPress installed `1.1.1 -> 1.1.2`; the plugin stayed active at position `1`, settings hash remained exact, feature markers were present, no update remained, and the home route returned `200`. | Novamira MCP execution evidence | Passed |
+| Staging updater | `hbf-staging` installed the exact public updater offer `1.1.1 -> 1.1.2`; settings remained exact, 47 runtime files and feature markers were present, no update remained, and the staging home route returned `200`. The headless updater normalized the active-plugin list from position `7` to `8`; the original position `7` was restored before final verification. | WP-CLI, filesystem, HTTP smoke, and Site Operations evidence | Passed with positional note |
+| Production scope | Production HBF excluded. | Task approval boundary | Preserved |
 
 ### v1.1.1 Deeper Provider Admin UX
 

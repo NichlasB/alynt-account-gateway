@@ -2,18 +2,18 @@
 
 ## Status
 
-- Current phase: Richer Dashboard UX Expansion in progress; Recent Orders increment implemented and exact-package accepted on the v1.1.1 baseline
+- Current phase: Richer Dashboard UX Expansion in progress; Recent Orders increment released as v1.1.2 and updater-verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.1 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
+- Plugin status: v1.1.2 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Prepare the approval-gated Recent Orders release, then select the next bounded dashboard module.
+- Next roadmap: Select the next bounded dashboard module.
 
 ## Post-v1 Product Roadmap
 
 ### Status
 
-- Current v1 product baseline: `v1.1.1`, released and updater-verified.
+- Current v1 product baseline: `v1.1.2`, released and updater-verified.
 - Original v1 implementation slices: Complete.
 - New approved post-v1 slices: Alynt Plugin Updater follow-up, deeper provider admin UX, dashboard UX expansion, dashboard action icons/off-canvas navigation, and delegated WooCommerce notice normalization.
 - New approved visual/admin-help tweak: widen gateway cards, reduce panel/card horizontal padding, remove trailing notice paragraph margin, and correct background-image guidance toward tall portrait imagery.
@@ -31,6 +31,13 @@
 7. Richer dashboard UX expansion.
 8. Production rollout playbook, when the first production rollout is ready to be operationalized.
 9. Inactive-account integration only if a concrete inactive/suspended-user source is identified.
+
+#### Recent Orders Increment Progress Notes
+
+- Released as [`v1.1.2`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.2) from commit `6d0d74c`; Build Release workflow run `29642028855` passed.
+- Public asset `alynt-account-gateway-v1.1.2.zip` inspected cleanly: 47 runtime files, one plugin root, zero development-file or backslash-path hits, aligned `1.1.2` metadata, and SHA-256 `689F260ADC1E6BD2A33EC3214A519DC738B30FA3467BA8DCFB9E558166F81D62`.
+- Plugin Tester updater verification passed: Alynt Plugin Updater force-fresh offered `1.1.1 -> 1.1.2` from the public GitHub ZIP, WordPress installed it successfully, the plugin remained active at position `1`, settings hash remained `4c9c362f34b69a693030000a806bb55f172ce98601d4398b9b8fd75555e90a0f`, Recent Orders renderer/CSS markers were present, no update remained, and the local home route returned `200`.
+- HBF staging updater verification passed: Alynt Plugin Updater force-fresh offered `1.1.1 -> 1.1.2` from the public GitHub ZIP, WordPress installed it successfully, settings hash remained `07c3e10868e0f20119fdf5fe9ac48c6435a995deb92b85ec38da6476afac409c`, Recent Orders renderer/CSS markers and 47 runtime files were present, no development files remained, no update remained, and the staging home route returned `200`. The headless update normalized the active-plugin list from position `7` to `8`; the exact original position `7` was restored before final verification.
 
 ### Slice 1 - Alynt Plugin Updater Follow-Up
 
