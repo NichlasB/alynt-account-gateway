@@ -268,6 +268,7 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 		<?php if ( $is_woocommerce_dashboard ) : ?>
 			<?php $this->render_woocommerce_dashboard_overview( $settings ); ?>
 			<?php $this->render_recent_orders( $user->ID, $settings ); ?>
+			<?php $this->render_saved_addresses( $user->ID, $settings ); ?>
 		<?php endif; ?>
 
 		<section class="agw-dashboard-section" aria-labelledby="agw-dashboard-links-title">
@@ -708,6 +709,65 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 					<?php endforeach; ?>
 				</ul>
 			<?php endif; ?>
+		</section>
+		<?php
+	}
+
+	/**
+	 * Render a read-only saved-addresses module on the WooCommerce dashboard.
+	 *
+	 * @param int                 $user_id  WordPress user ID.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_saved_addresses( $user_id, $settings ) {
+		if ( ! $this->woocommerce->is_account_menu_item_visible( 'edit-address', $settings ) ) {
+			return;
+		}
+
+		$addresses = $this->woocommerce->saved_addresses( $user_id );
+		$cards     = array(
+			'billing'  => array(
+				'title'      => __( 'Billing Address', 'alynt-account-gateway' ),
+				'empty'      => __( 'No billing address is saved yet. Add one to keep checkout details ready.', 'alynt-account-gateway' ),
+				'add_label'  => __( 'Add billing address', 'alynt-account-gateway' ),
+				'edit_label' => __( 'Edit billing address', 'alynt-account-gateway' ),
+			),
+			'shipping' => array(
+				'title'      => __( 'Shipping Address', 'alynt-account-gateway' ),
+				'empty'      => __( 'No shipping address is saved yet. Add one to keep delivery details ready.', 'alynt-account-gateway' ),
+				'add_label'  => __( 'Add shipping address', 'alynt-account-gateway' ),
+				'edit_label' => __( 'Edit shipping address', 'alynt-account-gateway' ),
+			),
+		);
+		?>
+		<section class="agw-dashboard-section agw-dashboard-addresses" aria-labelledby="agw-dashboard-addresses-title">
+			<div class="agw-dashboard-addresses__header">
+				<h2 id="agw-dashboard-addresses-title"><?php esc_html_e( 'Saved Addresses', 'alynt-account-gateway' ); ?></h2>
+				<a href="<?php echo esc_url( $this->woocommerce->endpoint_url( 'edit-address', $settings ) ); ?>">
+					<?php esc_html_e( 'Manage all addresses', 'alynt-account-gateway' ); ?>
+				</a>
+			</div>
+			<div class="agw-dashboard-addresses__grid">
+				<?php foreach ( $cards as $type => $card ) : ?>
+					<?php $lines = isset( $addresses[ $type ] ) && is_array( $addresses[ $type ] ) ? $addresses[ $type ] : array(); ?>
+					<article class="agw-dashboard-address">
+						<h3><?php echo esc_html( $card['title'] ); ?></h3>
+						<?php if ( empty( $lines ) ) : ?>
+							<p class="agw-dashboard-address__empty"><?php echo esc_html( $card['empty'] ); ?></p>
+						<?php else : ?>
+							<address class="agw-dashboard-address__details">
+								<?php foreach ( $lines as $line ) : ?>
+									<span><?php echo esc_html( $line ); ?></span>
+								<?php endforeach; ?>
+							</address>
+						<?php endif; ?>
+						<a class="agw-dashboard-address__action" href="<?php echo esc_url( $this->woocommerce->address_url( $type, $settings ) ); ?>">
+							<?php echo esc_html( empty( $lines ) ? $card['add_label'] : $card['edit_label'] ); ?>
+						</a>
+					</article>
+				<?php endforeach; ?>
+			</div>
 		</section>
 		<?php
 	}

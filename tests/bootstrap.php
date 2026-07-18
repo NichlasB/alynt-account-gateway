@@ -401,6 +401,20 @@ if ( ! function_exists( 'wc_get_orders' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wc_get_account_formatted_address' ) ) {
+	function wc_get_account_formatted_address( $type = 'billing', $user_id = 0 ) {
+		$key = sanitize_key( $type ) . ':' . absint( $user_id );
+		$GLOBALS['alynt_ag_test_wc_formatted_address_calls'][] = array(
+			'type'    => sanitize_key( $type ),
+			'user_id' => absint( $user_id ),
+		);
+
+		return isset( $GLOBALS['alynt_ag_test_wc_formatted_addresses'][ $key ] )
+			? $GLOBALS['alynt_ag_test_wc_formatted_addresses'][ $key ]
+			: '';
+	}
+}
+
 if ( ! function_exists( 'wc_get_order_status_name' ) ) {
 	function wc_get_order_status_name( $status ) {
 		$statuses = isset( $GLOBALS['alynt_ag_test_wc_order_statuses'] )

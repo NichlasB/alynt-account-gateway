@@ -195,6 +195,39 @@
 
 ### Slice 6 - Dashboard UX Expansion
 
+#### Immediate Increment - Saved Addresses
+
+##### Scope
+
+- [x] Add a read-only Saved Addresses module to the base WooCommerce dashboard.
+- [x] Show separate Billing and Shipping summaries using WooCommerce-formatted customer address data.
+- [x] Normalize formatted addresses into sanitized text lines before renderer output.
+- [x] Link each card to WooCommerce's delegated Billing or Shipping address editor without recreating address forms or save handling.
+- [x] Show calm per-address empty states with Add address actions.
+- [x] Omit the entire module when the administrator hides the Addresses dashboard navigation item.
+- [x] Add responsive, visible-focus, RTL-safe, and forced-colors styling.
+
+##### Acceptance Criteria
+
+- [x] Address summaries contain no raw customer objects or unescaped provider/theme HTML.
+- [x] Billing and Shipping links resolve through the configured WooCommerce account base.
+- [x] Empty and partially completed customer profiles render useful, non-broken states.
+- [x] Hiding Addresses removes the overview shortcut and Saved Addresses module while leaving direct address endpoints available.
+- [x] Focused and full automated checks pass.
+- [x] Exact-package desktop/mobile acceptance passes on Plugin Tester and `hbf-staging`.
+
+##### Progress Notes
+
+- Added a WooCommerce integration boundary that converts WooCommerce-formatted Billing and Shipping addresses into sanitized text-line arrays, including non-breaking-space normalization, before renderer output.
+- Added a two-card Saved Addresses dashboard module with empty states, Add/Edit actions, direct WooCommerce Billing and Shipping editor links, and complete omission when Addresses navigation is hidden.
+- Added two-column desktop and single-column mobile layout, minimum 44px action targets, visible focus, long-line wrapping, RTL-safe logical layout, and forced-colors support.
+- Focused verification passed with `47 tests` and `370 assertions`. Full PHPUnit passed with `342 tests` and `2,192 assertions`; PHPCS, production build, npm audit, Composer audit, and POT regeneration (`1,064 strings`) also passed.
+- Exact QA package inspected cleanly: 47 runtime files, one plugin root, zero development-file or backslash-path hits, aligned `1.1.2` metadata, Saved Addresses renderer/integration/compiled-CSS markers present, and SHA-256 `7545A83A01DF99F2A05428DDBFF107D3CF95BB5C84C7138A425ACA8916F85B23`.
+- Installed the exact QA package on Plugin Tester and `hbf-staging`; both retained active `1.1.2` state and matched the package's 47-file runtime tree. HBF staging's settings and active-plugin hashes remained identical before and after replacement.
+- Browser acceptance passed for populated Billing and Shipping summaries, per-address empty states, Add/Edit and Manage actions, hidden-Addresses suppression, and direct delegated WooCommerce address endpoints.
+- Desktop, 390px, and 320px checks passed on both targets with two-column/one-column behavior, 16px minimum card text, 44px action targets, visible keyboard focus, long-address wrapping, and no horizontal overflow.
+- Restored both sites after acceptance. Disposable customers, settings backups, MU fixtures, uploaded packages, restore archives, and temporary authentication helpers were removed; HBF staging returned HTTP 200.
+
 #### Immediate Increment - Recent Orders
 
 ##### Scope

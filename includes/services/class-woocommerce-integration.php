@@ -466,6 +466,51 @@ class ALYNT_AG_WooCommerce_Integration {
 	}
 
 	/**
+	 * Return normalized billing and shipping address lines for a customer.
+	 *
+	 * @param int $user_id WordPress user ID.
+	 * @return array<string,array<int,string>>
+	 */
+	public function saved_addresses( $user_id ) {
+		$addresses = array(
+			'billing'  => array(),
+			'shipping' => array(),
+		);
+		$user_id   = absint( $user_id );
+
+		if ( ! $user_id || ! function_exists( 'wc_get_account_formatted_address' ) ) {
+			return $addresses;
+		}
+
+		foreach ( array_keys( $addresses ) as $type ) {
+			$formatted = wc_get_account_formatted_address( $type, $user_id );
+			if ( ! is_string( $formatted ) || '' === trim( $formatted ) ) {
+				continue;
+			}
+
+			$with_lines = preg_replace( '#<br\s*/?>#i', "\n", $formatted );
+			$plain      = html_entity_decode( wp_strip_all_tags( (string) $with_lines ), ENT_QUOTES, 'UTF-8' );
+			$plain      = str_replace( "\xc2\xa0", ' ', $plain );
+			$lines      = preg_split( '/\r\n|\r|\n/', $plain );
+
+			if ( ! is_array( $lines ) ) {
+				continue;
+			}
+
+			$addresses[ $type ] = array_values(
+				array_filter(
+					array_map( 'sanitize_text_field', $lines ),
+					static function ( $line ) {
+						return '' !== $line;
+					}
+				)
+			);
+		}
+
+		return $addresses;
+	}
+
+	/**
 	 * Build an order-details URL inside the configured account area.
 	 *
 	 * @param int                 $order_id Order ID.
@@ -474,6 +519,20 @@ class ALYNT_AG_WooCommerce_Integration {
 	 */
 	public function order_url( $order_id, $settings ) {
 		return trailingslashit( $this->endpoint_url( 'view-order', $settings ) ) . trailingslashit( absint( $order_id ) );
+	}
+
+	/**
+	 * Build a billing or shipping address-editor URL.
+	 *
+	 * @param string              $type     Address type.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return string
+	 */
+	public function address_url( $type, $settings ) {
+		$type = sanitize_key( $type );
+		$type = in_array( $type, array( 'billing', 'shipping' ), true ) ? $type : 'billing';
+
+		return trailingslashit( $this->endpoint_url( 'edit-address', $settings ) ) . trailingslashit( $type );
 	}
 
 	/**

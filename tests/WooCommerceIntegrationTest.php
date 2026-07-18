@@ -20,6 +20,8 @@ class WooCommerceIntegrationTest extends TestCase {
 		$GLOBALS['alynt_ag_test_wc_orders']           = array();
 		$GLOBALS['alynt_ag_test_wc_order_statuses']   = array();
 		$GLOBALS['alynt_ag_test_wc_format_datetime_calls'] = array();
+		$GLOBALS['alynt_ag_test_wc_formatted_addresses'] = array();
+		$GLOBALS['alynt_ag_test_wc_formatted_address_calls'] = array();
 	}
 
 	protected function tearDown(): void {
@@ -27,7 +29,9 @@ class WooCommerceIntegrationTest extends TestCase {
 			$GLOBALS['alynt_ag_test_wc_get_orders_args'],
 			$GLOBALS['alynt_ag_test_wc_orders'],
 			$GLOBALS['alynt_ag_test_wc_order_statuses'],
-			$GLOBALS['alynt_ag_test_wc_format_datetime_calls']
+			$GLOBALS['alynt_ag_test_wc_format_datetime_calls'],
+			$GLOBALS['alynt_ag_test_wc_formatted_addresses'],
+			$GLOBALS['alynt_ag_test_wc_formatted_address_calls']
 		);
 		parent::tearDown();
 	}
@@ -266,6 +270,52 @@ class WooCommerceIntegrationTest extends TestCase {
 		);
 
 		$this->assertSame( '/customer-area/view-order/42/', $url );
+	}
+
+	public function test_saved_addresses_returns_sanitized_text_lines() {
+		$GLOBALS['alynt_ag_test_wc_formatted_addresses'] = array(
+			'billing:9'  => '<strong>Damon Example</strong><br>12 Main Street<br>Paris&nbsp;75001',
+			'shipping:9' => '',
+		);
+
+		$integration = new ALYNT_AG_WooCommerce_Integration();
+		$addresses   = $integration->saved_addresses( 9 );
+
+		$this->assertSame(
+			array(
+				'billing'  => array( 'Damon Example', '12 Main Street', 'Paris 75001' ),
+				'shipping' => array(),
+			),
+			$addresses
+		);
+		$this->assertSame(
+			array(
+				array(
+					'type'    => 'billing',
+					'user_id' => 9,
+				),
+				array(
+					'type'    => 'shipping',
+					'user_id' => 9,
+				),
+			),
+			$GLOBALS['alynt_ag_test_wc_formatted_address_calls']
+		);
+		$this->assertSame(
+			array(
+				'billing'  => array(),
+				'shipping' => array(),
+			),
+			$integration->saved_addresses( 0 )
+		);
+	}
+
+	public function test_address_url_uses_configured_account_base_and_allowed_type() {
+		$integration = new ALYNT_AG_WooCommerce_Integration();
+		$settings    = array( 'after_login_redirect' => '/customer-area/' );
+
+		$this->assertSame( '/customer-area/edit-address/shipping/', $integration->address_url( 'shipping', $settings ) );
+		$this->assertSame( '/customer-area/edit-address/billing/', $integration->address_url( 'not-valid', $settings ) );
 	}
 
 	public function test_render_endpoint_returns_false_when_woocommerce_action_outputs_nothing() {

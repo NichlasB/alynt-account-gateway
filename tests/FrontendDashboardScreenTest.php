@@ -77,6 +77,16 @@ class ALYNT_AG_Test_Frontend_Dashboard_WooCommerce extends ALYNT_AG_WooCommerce_
 	public $recent_orders = array();
 
 	/**
+	 * Saved addresses to return.
+	 *
+	 * @var array<string,array<int,string>>
+	 */
+	public $saved_addresses = array(
+		'billing'  => array(),
+		'shipping' => array(),
+	);
+
+	/**
 	 * Return configured endpoint.
 	 *
 	 * @param string              $path     Current relative path.
@@ -130,6 +140,16 @@ class ALYNT_AG_Test_Frontend_Dashboard_WooCommerce extends ALYNT_AG_WooCommerce_
 	 */
 	public function recent_orders( $user_id, $limit = 3 ) {
 		return $this->recent_orders;
+	}
+
+	/**
+	 * Return configured saved addresses.
+	 *
+	 * @param int $user_id User ID.
+	 * @return array<string,array<int,string>>
+	 */
+	public function saved_addresses( $user_id ) {
+		return $this->saved_addresses;
 	}
 }
 
@@ -569,6 +589,9 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringNotContainsString( 'class="agw-dashboard-content"', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-recent-orders"', $html );
 		$this->assertStringContainsString( 'Your recent orders will appear here after your first purchase.', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-addresses"', $html );
+		$this->assertStringContainsString( 'No billing address is saved yet.', $html );
+		$this->assertStringContainsString( 'No shipping address is saved yet.', $html );
 	}
 
 	public function test_woocommerce_dashboard_recent_orders_render_normalized_rows() {
@@ -608,6 +631,40 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringNotContainsString( 'Your recent orders will appear here', $html );
 	}
 
+	public function test_woocommerce_dashboard_saved_addresses_render_normalized_lines_and_actions() {
+		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->available = true;
+		$woocommerce          = new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce();
+		$woocommerce->saved_addresses = array(
+			'billing'  => array( 'Damon Example', '12 Main Street', 'Paris 75001' ),
+			'shipping' => array(),
+		);
+		$screen = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			$woocommerce,
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array( 'woocommerce_takeover' => true )
+		);
+
+		ob_start();
+		$screen->render_dashboard_screen( $settings, '/my-account/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'Saved Addresses', $html );
+		$this->assertStringContainsString( 'Manage all addresses', $html );
+		$this->assertStringContainsString( 'Billing Address', $html );
+		$this->assertStringContainsString( 'Damon Example', $html );
+		$this->assertStringContainsString( '12 Main Street', $html );
+		$this->assertStringContainsString( 'href="/my-account/edit-address/billing/"', $html );
+		$this->assertStringContainsString( 'Edit billing address', $html );
+		$this->assertStringContainsString( 'No shipping address is saved yet.', $html );
+		$this->assertStringContainsString( 'href="/my-account/edit-address/shipping/"', $html );
+		$this->assertStringContainsString( 'Add shipping address', $html );
+	}
+
 	public function test_woocommerce_overview_omits_hidden_shortcuts_without_empty_actions_markup() {
 		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
 		$dashboard->available = true;
@@ -643,6 +700,7 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringNotContainsString( 'href="/my-account/edit-address/"', $html );
 		$this->assertStringNotContainsString( 'href="/my-account/edit-account/"', $html );
 		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-recent-orders"', $html );
+		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-addresses"', $html );
 	}
 
 	public function test_render_dashboard_screen_outputs_endpoint_fallback_when_render_fails() {

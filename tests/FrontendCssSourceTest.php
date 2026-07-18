@@ -158,6 +158,19 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertStringContainsString( '@media (forced-colors: active)', $css );
 	}
 
+	public function test_saved_addresses_module_has_responsive_accessible_styles() {
+		$css = $this->get_frontend_css();
+
+		$this->assertStringContainsString( '.agw-dashboard-addresses__grid', $css );
+		$this->assertStringContainsString( 'grid-template-columns: repeat(2, minmax(0, 1fr));', $css );
+		$this->assertStringContainsString( '.agw-dashboard-address__action:focus-visible', $css );
+		$this->assertStringContainsString( '.agw-dashboard-address__details', $css );
+		$this->assertStringContainsString( 'overflow-wrap: anywhere;', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-dashboard-addresses__header a,[^{]*\.agw-dashboard-address__action\s*\{[^}]*min-height:\s*44px;/s', $css );
+		$this->assertMatchesRegularExpression( '/@media \(max-width: 800px\)[\s\S]*\.agw-dashboard-addresses__header\s*\{[^}]*flex-direction:\s*column;/s', $css );
+		$this->assertStringContainsString( '.agw-dashboard-address {', $css );
+	}
+
 	public function test_gateway_card_spacing_matches_post_v1_visual_tweak() {
 		$css = $this->get_frontend_css();
 
