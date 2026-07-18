@@ -621,6 +621,14 @@ class FrontendDashboardScreenTest extends TestCase {
 	public function test_render_dashboard_screen_outputs_woocommerce_overview_on_base_dashboard() {
 		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
 		$dashboard->available = true;
+		$dashboard->links     = array(
+			array(
+				'label'  => 'Customer Support',
+				'url'    => 'https://support.example.test/',
+				'icon'   => 'help',
+				'target' => '_blank',
+			),
+		);
 		$woocommerce          = new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce();
 		$screen               = new ALYNT_AG_Frontend_Dashboard_Screen(
 			$dashboard,
@@ -657,6 +665,11 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringContainsString( 'Customer since', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-payment-methods"', $html );
 		$this->assertStringContainsString( 'Saved payment methods will appear here when your payment provider supports secure account storage.', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-grid"', $html );
+		$this->assertStringContainsString( 'href="https://support.example.test/" target="_blank" rel="noopener noreferrer"', $html );
+		$this->assertStringContainsString( 'agw-dashboard-link__icon--help', $html );
+		$this->assertStringContainsString( 'Customer Support', $html );
+		$this->assertStringContainsString( 'opens in a new tab', $html );
 	}
 
 	public function test_woocommerce_dashboard_recent_orders_render_normalized_rows() {

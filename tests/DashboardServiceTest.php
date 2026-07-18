@@ -48,6 +48,14 @@ class DashboardServiceTest extends TestCase {
 							'roles'  => array( 'vip' ),
 						),
 						array(
+							'label'  => 'Documentation',
+							'url'    => 'https://docs.example.test/account/',
+							'icon'   => 'book',
+							'order'  => 10,
+							'target' => '_blank',
+							'roles'  => array( 'customer' ),
+						),
+						array(
 							'label' => 'Support',
 							'url'   => '/support/',
 							'icon'  => 'help',
@@ -62,9 +70,13 @@ class DashboardServiceTest extends TestCase {
 		$labels = array_column( $links, 'label' );
 
 		$this->assertNotContains( 'VIP Area', $labels );
-		$this->assertContains( 'Support', $labels );
-		$this->assertSame( 'Support', $labels[0] );
-		$this->assertSame( 'https://example.test/support/', $links[0]['url'] );
+		$this->assertSame( array( 'Documentation', 'Support', 'Account Details', 'Log Out' ), $labels );
+		$this->assertSame( 'https://docs.example.test/account/', $links[0]['url'] );
+		$this->assertSame( 'book', $links[0]['icon'] );
+		$this->assertSame( '_blank', $links[0]['target'] );
+		$this->assertSame( 'https://example.test/support/', $links[1]['url'] );
+		$this->assertSame( 'help', $links[1]['icon'] );
+		$this->assertSame( '_self', $links[1]['target'] );
 	}
 
 	public function test_woocommerce_available_is_false_without_woocommerce() {

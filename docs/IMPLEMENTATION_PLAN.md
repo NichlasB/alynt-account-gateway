@@ -2,18 +2,18 @@
 
 ## Status
 
-- Current phase: Richer Dashboard UX Expansion in progress; Account Details Summary is released and updater-verified
+- Current phase: Richer Dashboard UX Expansion complete; all five dashboard modules are released and updater-verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.6 is the current public baseline, released and updater-verified.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Begin the next bounded dashboard expansion increment.
+- Next roadmap: Resolve the separate updater stale-release-cache follow-up when scheduled; production rollout and inactive-account integration remain intentionally deferred.
 
 ## Post-v1 Product Roadmap
 
 ### Status
 
-- Current v1 product baseline: `v1.1.5`, released and updater-verified.
+- Current v1 product baseline: `v1.1.6`, released and updater-verified.
 - Original v1 implementation slices: Complete.
 - New approved post-v1 slices: Alynt Plugin Updater follow-up, deeper provider admin UX, dashboard UX expansion, dashboard action icons/off-canvas navigation, and delegated WooCommerce notice normalization.
 - New approved visual/admin-help tweak: widen gateway cards, reduce panel/card horizontal padding, remove trailing notice paragraph margin, and correct background-image guidance toward tall portrait imagery.
@@ -28,7 +28,7 @@
 4. Dashboard action icons and optional off-canvas navigation.
 5. Dashboard navigation visibility and optional footer menu. Released and updater-verified as v1.1.0.
 6. Deeper provider admin UX. Released and updater-verified as v1.1.1.
-7. Richer dashboard UX expansion.
+7. Richer dashboard UX expansion. Completed across v1.1.2 through v1.1.6; aggregate regression closure verified without a runtime release.
 8. Production rollout playbook, when the first production rollout is ready to be operationalized.
 9. Inactive-account integration only if a concrete inactive/suspended-user source is identified.
 
@@ -445,19 +445,28 @@
 
 #### Scope
 
-- [ ] Add richer branded dashboard widgets while preserving WooCommerce's delegated account-management actions.
-- [ ] Consider order-summary, recent-order, account-health, saved-address, downloads, payment-method, and helpful-link modules.
-- [ ] Keep the dashboard brand-agnostic by relying on existing color, typography, logo, custom-link, and WooCommerce settings.
-- [ ] Preserve WooCommerce endpoint compatibility, native nonce handling, account form submission behavior, and plugin-added endpoint support.
-- [ ] Keep empty, unavailable, and extension-dependent states calm and helpful.
-- [ ] Add responsive and accessibility checks for dashboard modules at mobile, tablet, and desktop widths.
+- [x] Add richer branded dashboard widgets while preserving WooCommerce's delegated account-management actions.
+- [x] Consider order-summary, recent-order, account-health, saved-address, downloads, payment-method, and helpful-link modules.
+- [x] Keep the dashboard brand-agnostic by relying on existing color, typography, logo, custom-link, and WooCommerce settings.
+- [x] Preserve WooCommerce endpoint compatibility, native nonce handling, account form submission behavior, and plugin-added endpoint support.
+- [x] Keep empty, unavailable, and extension-dependent states calm and helpful.
+- [x] Add responsive and accessibility checks for dashboard modules at mobile, tablet, and desktop widths.
 
 #### Acceptance Criteria
 
-- [ ] Customers see useful account context on the first dashboard screen without losing access to Orders, Downloads, Addresses, Payment Methods, and Account Details.
-- [ ] Dashboard modules do not replace or bypass sensitive WooCommerce form handlers.
-- [ ] Dashboard layout has no horizontal overflow or clipped controls down to 320px.
-- [ ] Custom links, role visibility, ordering, icons, and new-tab behavior remain intact.
+- [x] Customers see useful account context on the first dashboard screen without losing access to Orders, Downloads, Addresses, Payment Methods, and Account Details.
+- [x] Dashboard modules do not replace or bypass sensitive WooCommerce form handlers.
+- [x] Dashboard layout has no horizontal overflow or clipped controls down to 320px.
+- [x] Custom links, role visibility, ordering, icons, and new-tab behavior remain intact.
+
+#### Dashboard Expansion Closure Notes
+
+- The base WooCommerce dashboard now combines the branded overview with Recent Orders, Available Downloads, Saved Addresses, Account Details, and Saved Payment Methods modules. Each module remains read-only and delegates sensitive views, forms, downloads, and actions to WooCommerce.
+- Existing custom dashboard links satisfy the helpful-links use case without adding a competing settings model. They retain administrator-defined ordering, role visibility, icons, internal or external URLs, and safe new-tab output.
+- Aggregate renderer coverage now proves that all five modules coexist with a configured custom link, including its icon, accessible new-tab text, and `noopener noreferrer` protection. Dashboard service coverage also proves role filtering, ordering, URL normalization, icons, and target normalization together.
+- Existing source-CSS and browser acceptance evidence covers responsive stacking, minimum control targets, long-content wrapping, visible focus, forced-colors support, RTL-safe layout, and no horizontal overflow down to `320px`.
+- Closure validation passed: dashboard service PHPUnit (`3 tests`, `12 assertions`), dashboard renderer PHPUnit (`20 tests`, `187 assertions`), frontend CSS PHPUnit (`15 tests`, `245 assertions`), full PHPUnit (`354 tests`, `2,324 assertions`), PHPCS, and `git diff --check`.
+- This closure changes tests and documentation only. The released `v1.1.6` runtime remains the accepted implementation, so no new plugin release is required for this checkpoint.
 
 ### Deferred Slice - Production Rollout Playbook
 
