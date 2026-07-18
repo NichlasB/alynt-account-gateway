@@ -2,18 +2,18 @@
 
 ## Status
 
-- Current phase: v1.1.1 Deeper Provider Admin UX release approved; final release gate and publication in progress
+- Current phase: v1.1.1 Deeper Provider Admin UX released, public-asset inspected, and updater-verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.0 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
+- Plugin status: v1.1.1 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Complete the v1.1.1 release gate, publish the public asset, and verify Alynt Plugin Updater on Plugin Tester and `hbf-staging`.
+- Next roadmap: Continue with the richer Dashboard UX Expansion slice unless a higher-priority production rollout need appears.
 
 ## Post-v1 Product Roadmap
 
 ### Status
 
-- Current v1 product baseline: `v1.1.0`, released and updater-verified.
+- Current v1 product baseline: `v1.1.1`, released and updater-verified.
 - Original v1 implementation slices: Complete.
 - New approved post-v1 slices: Alynt Plugin Updater follow-up, deeper provider admin UX, dashboard UX expansion, dashboard action icons/off-canvas navigation, and delegated WooCommerce notice normalization.
 - New approved visual/admin-help tweak: widen gateway cards, reduce panel/card horizontal padding, remove trailing notice paragraph margin, and correct background-image guidance toward tall portrait imagery.
@@ -27,7 +27,7 @@
 3. Delegated WooCommerce notice normalization.
 4. Dashboard action icons and optional off-canvas navigation.
 5. Dashboard navigation visibility and optional footer menu. Released and updater-verified as v1.1.0.
-6. Deeper provider admin UX.
+6. Deeper provider admin UX. Released and updater-verified as v1.1.1.
 7. Richer dashboard UX expansion.
 8. Production rollout playbook, when the first production rollout is ready to be operationalized.
 9. Inactive-account integration only if a concrete inactive/suspended-user source is identified.
@@ -179,7 +179,12 @@
 - Real administrator-button smoke on `hbf-staging` returned `turnstile_check_ready` and the fixed notice explaining that a real challenge still validates the complete widget/hostname flow. Reoon returned `reoon_check_ready` and the fixed notice confirming an active account and that no email address was submitted. Both checks remained enabled, rendered no provider payload elements, and the 600px admin layout was single-column and overflow-free.
 - The staging console's existing GetTerms `addEventListener` null error was reproduced and attributed to `wp-content/plugins/getterms/js/getterms.js`, not Account Gateway.
 - Cleanup passed: the Plugin Tester upload tree, staging disposable administrator, baseline helper, uploaded package, and rollback archive were removed; both target hashes remained exact; and the staging branded `/login/` endpoint returned HTTP `200`.
-- Release publication was explicitly approved; v1.1.1 metadata, final validation, public asset inspection, and updater verification are in progress.
+- Released as [`v1.1.1`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.1) from commit `3aad57b`; Build Release workflow run `29640133533` passed.
+- Public asset `alynt-account-gateway-v1.1.1.zip` inspected cleanly: 47 runtime files, one plugin root, zero development-file or backslash-path hits, aligned `1.1.1` metadata, all provider-check markers present, and SHA-256 `57EBC8D4B62E3888B8F0160F2E6DB8B7E33D13CE98106C612737B9487C2177BA`.
+- Final local release gate passed: PHP syntax checks, `npm.cmd run build`, `npm.cmd run make-pot`, `npm.cmd test` (`333 tests`, `2122 assertions`), `npm.cmd run lint`, `npm.cmd audit --audit-level=high` (zero vulnerabilities), `php .\composer.phar audit` (no advisories), and `git diff --check` with only expected line-ending warnings.
+- Plugin Tester updater verification passed: Alynt Plugin Updater force-fresh offered the exact public `1.1.1` asset, WordPress installed `1.1.0 -> 1.1.1`, Account Gateway remained active at position `1`, settings hash `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e` and active-plugin hash `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9` remained exact, 47 runtime files and all markers were present, and no update offer remained.
+- `hbf-staging` updater verification passed through the GridPane root WP-CLI path after the site-owner retry correctly reported root-owned file-permission refusal. Alynt Plugin Updater supplied the exact public `1.1.1` URL, WordPress installed `1.1.0 -> 1.1.1`, settings hash `c4c48c5d3bfec3198069f9c541df853add2f1e2e5c385755b1cfe6eb9b889bb7` remained exact, 47 runtime files and all markers were present, no update remained, maintenance mode cleared, and `/login/` returned HTTP `200`.
+- Staging's active list remained valid and Account Gateway remained active, but the headless attempts normalized its cached active-list ordering from the initial observed position `6` to current position `7`; this positional change is documented rather than represented as an exact active-list-hash preservation result. Production HBF was not touched.
 
 ### Slice 6 - Dashboard UX Expansion
 

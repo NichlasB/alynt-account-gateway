@@ -2,8 +2,8 @@
 
 ## Status
 
-- Current phase: `v1.1.0` is released, public-asset inspected, and installed on LocalWP `plugin-tester` and production-like `hbf-staging`.
-- Product baseline: `v1.1.0`, released, public-asset verified, and updater-verified with Alynt Plugin Updater `1.1.2` on LocalWP Plugin Tester and `hbf-staging`.
+- Current phase: `v1.1.1` is released, public-asset inspected, and installed on LocalWP `plugin-tester` and production-like `hbf-staging`.
+- Product baseline: `v1.1.1`, released, public-asset verified, and updater-verified with Alynt Plugin Updater `1.1.2` on LocalWP Plugin Tester and `hbf-staging`.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility.
@@ -16,6 +16,19 @@ This is the living production-acceptance roadmap for Alynt Account Gateway. The 
 Readiness work should prioritize runtime evidence, configuration safety, compatibility, documentation, and operational recovery. New product features belong in a separately approved roadmap unless they are required to resolve a release-blocking defect found during acceptance testing.
 
 ## Post-v1 Maintenance Evidence
+
+### v1.1.1 Deeper Provider Admin UX
+
+| Item | Value | Evidence | Status |
+| --- | --- | --- | --- |
+| Release | [`v1.1.1`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.1) | GitHub release from commit `3aad57b` | Published |
+| Build Release workflow | Run `29640133533` | GitHub Actions | Passed |
+| Public asset | `alynt-account-gateway-v1.1.1.zip`; `47` runtime files; one plugin root; zero development-file or backslash-path hits; aligned `1.1.1` metadata | Public asset inspection | Verified |
+| Public asset SHA-256 | `57EBC8D4B62E3888B8F0160F2E6DB8B7E33D13CE98106C612737B9487C2177BA` | Local hash of downloaded public release asset | Recorded |
+| Product change | Administrators can run privacy-safe connection checks for configured Turnstile and Reoon accounts from the Security tab, with fixed notices and no credential, token, email-address, or raw-payload output. | `CHANGELOG.md`, `readme.txt`, packaged runtime, and acceptance evidence | Completed |
+| Plugin Tester updater | Alynt Plugin Updater force-fresh offered the exact public asset and WordPress installed `1.1.0 -> 1.1.1`; active position, settings hash, and active-plugin hash remained exact; no update remained. | Novamira MCP execution evidence | Passed |
+| Staging updater | The site-owner attempt correctly exposed root-owned file permissions; the established GridPane root WP-CLI path then installed the exact Alynt Plugin Updater public offer `1.1.0 -> 1.1.1`. Settings remained exact, Account Gateway remained active, 47 files and feature markers were present, no update remained, maintenance mode cleared, and `/login/` returned `200`. The cached active-list ordering normalized from observed position `6` to `7`, so exact active-list hash preservation is not claimed. | WP-CLI, filesystem, HTTP smoke, and Site Operations evidence | Passed with positional note |
+| Production scope | Production HBF excluded. | Task approval boundary | Preserved |
 
 ### v1.1.0 Dashboard Navigation Visibility And Footer Menu
 
