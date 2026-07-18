@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: Richer Dashboard UX Expansion in progress; Saved Addresses increment approved as the v1.1.3 release candidate
+- Current phase: Richer Dashboard UX Expansion in progress; Saved Addresses increment released as v1.1.3 and updater-verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.2 remains the current public baseline; v1.1.3 Saved Addresses is approved, exact-package accepted on LocalWP `plugin-tester` and `hbf-staging`, and awaiting publication.
+- Plugin status: v1.1.3 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 - Next roadmap: Select the next bounded dashboard module.
@@ -13,7 +13,7 @@
 
 ### Status
 
-- Current v1 product baseline: `v1.1.2`, released and updater-verified.
+- Current v1 product baseline: `v1.1.3`, released and updater-verified.
 - Original v1 implementation slices: Complete.
 - New approved post-v1 slices: Alynt Plugin Updater follow-up, deeper provider admin UX, dashboard UX expansion, dashboard action icons/off-canvas navigation, and delegated WooCommerce notice normalization.
 - New approved visual/admin-help tweak: widen gateway cards, reduce panel/card horizontal padding, remove trailing notice paragraph margin, and correct background-image guidance toward tall portrait imagery.
@@ -31,6 +31,14 @@
 7. Richer dashboard UX expansion.
 8. Production rollout playbook, when the first production rollout is ready to be operationalized.
 9. Inactive-account integration only if a concrete inactive/suspended-user source is identified.
+
+#### Saved Addresses Increment Progress Notes
+
+- Released as [`v1.1.3`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.3) from commit `a604ec9`; Build Release workflow run `29643945157` passed.
+- Public asset `alynt-account-gateway-v1.1.3.zip` inspected cleanly: 47 runtime files, one plugin root, zero development-file or backslash-path hits, aligned `1.1.3` metadata, Saved Addresses renderer/CSS markers present, and SHA-256 `A2DD227FA193F6DA3F8A4C4DEA27224D766074C9F71D61871CFCA23E877B9C9F`.
+- Plugin Tester updater verification passed: Alynt Plugin Updater force-fresh offered `1.1.2 -> 1.1.3` from the exact public GitHub ZIP, WordPress installed it successfully, active position remained `1`, active-plugin hash remained `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9`, settings hash remained `4c9c362f34b69a693030000a806bb55f172ce98601d4398b9b8fd75555e90a0f`, all 47 installed files byte-matched the public ZIP, feature markers were present, and no update remained.
+- HBF staging updater verification passed: Alynt Plugin Updater force-fresh offered `1.1.2 -> 1.1.3` from the exact public GitHub ZIP, WP-CLI installed it successfully, active-plugin hash remained `21ec5cf67ee2ff4ce874dcc7a5953eedde05e34ba32757cfc6f7ddc0dfcd2f57`, settings hash remained `54e36bc37efca76534867cbe1c783d55b50495c73e896ca5bb5379b328ea4426`, all 47 installed files byte-matched the public ZIP, normal site ownership was restored, no update remained, and `/login` returned `200`.
+- Temporary state helpers, uploaded ZIPs, extracts, manifests, diffs, restore archives, and server-side release artifacts were removed. The production HBF site was not touched.
 
 #### Recent Orders Increment Progress Notes
 
@@ -227,6 +235,7 @@
 - Browser acceptance passed for populated Billing and Shipping summaries, per-address empty states, Add/Edit and Manage actions, hidden-Addresses suppression, and direct delegated WooCommerce address endpoints.
 - Desktop, 390px, and 320px checks passed on both targets with two-column/one-column behavior, 16px minimum card text, 44px action targets, visible keyboard focus, long-address wrapping, and no horizontal overflow.
 - Restored both sites after acceptance. Disposable customers, settings backups, MU fixtures, uploaded packages, restore archives, and temporary authentication helpers were removed; HBF staging returned HTTP 200.
+- Public `v1.1.3` release and Alynt Plugin Updater verification completed on Plugin Tester and `hbf-staging`; release details are recorded in the Saved Addresses increment progress notes and v1 readiness plan.
 
 #### Immediate Increment - Recent Orders
 
