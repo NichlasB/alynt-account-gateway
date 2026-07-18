@@ -109,6 +109,21 @@ Readiness work should prioritize runtime evidence, configuration safety, compati
 | Installed targets | LocalWP `plugin-tester` and `hbf-staging` | WordPress Site Operations evidence | Verified |
 | Staging runtime | `hbf-staging` reports Alynt Account Gateway active at `1.0.2`; `/account?action=lostpassword` returns HTTP `200`. | WP-CLI and HTTP smoke | Passed |
 
+### Alynt Plugin Updater v1.1.3 Corrective Candidate
+
+| Item | Value | Evidence | Status |
+| --- | --- | --- | --- |
+| Candidate | `v1.1.3`; commit `f5280f6` | Local Alynt Plugin Updater repository | Awaiting publication approval |
+| Root cause | Released `v1.1.2` restored managed plugins at priority `20`, allowing a later update-complete callback to reorder the active-plugin list afterward. | Controlled Plugin Tester lifecycle reproduction | Reproduced |
+| Correction | Primary restoration now runs at `PHP_INT_MAX`; completed active snapshots receive one final `shutdown` reconciliation. | Runtime source and executable lifecycle tests | Implemented |
+| Regression tests | Core deactivation, updater reactivation, exact original position, late competing reorder, latest update priority, and shutdown reconciliation | PHPUnit `5 tests`, `21 assertions` | Passed |
+| Candidate asset | `alynt-plugin-updater-1.1.3.zip`; `43` runtime files; one plugin root; zero development-file hits | Local package inspection | Verified |
+| Candidate SHA-256 | `933688E199D2EB4A6FF17F7C083BE69602B1B576A54CAF6E7314704141885311` | Local package hash | Recorded |
+| Plugin Tester lifecycle proof | Released `v1.1.2` failed the synthetic late-reorder case at position `14`; patched lifecycle restored exact position `1` and exact 15-plugin hash. | Secret-gated disposable lifecycle verifier | Passed |
+| Plugin Tester candidate install | WordPress installed `1.1.3`; updater remained active at position `4`; all 15 active plugins and SHA-256 `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9` remained exact; HTTP home returned `200`. | Core upgrader, active-list fingerprints, filesystem, and HTTP smoke | Passed |
+| Cleanup | Disposable MU helpers, rollback copy, source archive, package staging tree, and verifier artifacts removed; candidate ZIP retained for approval. | Local filesystem checks | Completed |
+| Environment scope | LocalWP `plugin-tester` only; `hbf-staging` and production HBF excluded. | Site Operations boundary | Preserved |
+
 ### Alynt Plugin Updater v1.1.2 Operational Hardening
 
 | Item | Value | Evidence | Status |

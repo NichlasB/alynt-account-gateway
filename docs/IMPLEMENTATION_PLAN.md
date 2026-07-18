@@ -7,13 +7,13 @@
 - Plugin status: v1.1.4 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Select the next bounded dashboard module.
+- Next roadmap: Publish and updater-verify the Alynt Plugin Updater `v1.1.3` corrective release, then begin the Payment Methods dashboard module.
 
 ## Post-v1 Product Roadmap
 
 ### Status
 
-- Current v1 product baseline: `v1.1.3`, released and updater-verified.
+- Current v1 product baseline: `v1.1.4`, released and updater-verified.
 - Original v1 implementation slices: Complete.
 - New approved post-v1 slices: Alynt Plugin Updater follow-up, deeper provider admin UX, dashboard UX expansion, dashboard action icons/off-canvas navigation, and delegated WooCommerce notice normalization.
 - New approved visual/admin-help tweak: widen gateway cards, reduce panel/card horizontal padding, remove trailing notice paragraph margin, and correct background-image guidance toward tall portrait imagery.
@@ -51,11 +51,11 @@
 
 #### Scope
 
-- [ ] Investigate why headless or programmatic WordPress upgrader flows can leave Alynt Account Gateway inactive after replacement, even when the package install succeeds.
-- [ ] Determine whether the fix belongs in Alynt Account Gateway, Alynt Plugin Updater, the updater verification harness, or documented operator procedure.
-- [ ] Prefer an updater-level fix if the activation-state issue affects more than one Alynt-distributed plugin.
-- [ ] Preserve native WordPress updater behavior, public GitHub release compatibility, source-directory correction, and rollback safety.
-- [ ] Add regression coverage or a repeatable verifier that proves the active plugin list is preserved after an Alynt Plugin Updater install.
+- [x] Investigate why headless or programmatic WordPress upgrader flows can leave Alynt Account Gateway inactive after replacement, even when the package install succeeds.
+- [x] Determine whether the fix belongs in Alynt Account Gateway, Alynt Plugin Updater, the updater verification harness, or documented operator procedure.
+- [x] Prefer an updater-level fix if the activation-state issue affects more than one Alynt-distributed plugin.
+- [x] Preserve native WordPress updater behavior, public GitHub release compatibility, source-directory correction, and rollback safety.
+- [x] Add regression coverage or a repeatable verifier that proves the active plugin list is preserved after an Alynt Plugin Updater install.
 - [ ] Publish and updater-verify the corrective release in the appropriate repository before continuing to broader product UX work.
 
 #### Acceptance Criteria
@@ -63,7 +63,17 @@
 - [ ] ACG can be updated from a prior public release through Alynt Plugin Updater without requiring manual active-plugin restoration.
 - [ ] Settings, active-plugin order, runtime file count, and no-update state are verified after update.
 - [ ] The known stale release-cache behavior is either fixed, documented with a safe refresh path, or covered by an updater UI/operation affordance.
-- [ ] The result is validated on LocalWP Plugin Tester and recorded in the relevant plan.
+- [x] The result is validated on LocalWP Plugin Tester and recorded in the relevant plan.
+
+#### Progress Notes
+
+- Root cause was reproduced against released Alynt Plugin Updater `v1.1.2`: a competing callback after the updater's priority-20 restore moved Account Gateway from active position `1` to `14`, changing the active-plugin hash.
+- The updater-level correction runs primary restoration at `PHP_INT_MAX` and retains completed snapshots for a final `shutdown` reconciliation, while preserving the existing native upgrader, package, source-directory, and rollback paths.
+- Executable PHPUnit coverage now simulates core deactivation, updater reactivation, exact position restoration, and a late callback reorder. Local validation passed with `5 tests`, `21 assertions`, clean changed-file PHPCS, clean PHP syntax, clean JavaScript lint/build, zero Composer advisories, zero npm vulnerabilities, and a clean diff check.
+- The patched lifecycle reproduced exact preservation on LocalWP Plugin Tester: original and final position `1`, `15` active plugins, and matching active-plugin SHA-256 `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9`.
+- Alynt Plugin Updater `v1.1.3` candidate commit `f5280f6` was packaged as `43` runtime files with one plugin root and zero development-file hits. Candidate SHA-256: `933688E199D2EB4A6FF17F7C083BE69602B1B576A54CAF6E7314704141885311`.
+- WordPress installed the exact candidate ZIP on Plugin Tester as active `1.1.3`; all `15` active plugins, updater position `4`, and active-plugin hash remained exact. Plugin Tester returned HTTP `200`, and all disposable helpers, backups, extracts, and source archives were removed.
+- Publication, public-asset inspection, and a true `1.1.2 -> 1.1.3` Alynt Plugin Updater cycle remain at the release approval gate. `hbf-staging` and production HBF were not touched during candidate validation.
 
 ### Slice 2 - Gateway Layout And Background-Image Guidance Tweak
 
