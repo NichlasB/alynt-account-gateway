@@ -109,19 +109,21 @@ Readiness work should prioritize runtime evidence, configuration safety, compati
 | Installed targets | LocalWP `plugin-tester` and `hbf-staging` | WordPress Site Operations evidence | Verified |
 | Staging runtime | `hbf-staging` reports Alynt Account Gateway active at `1.0.2`; `/account?action=lostpassword` returns HTTP `200`. | WP-CLI and HTTP smoke | Passed |
 
-### Alynt Plugin Updater v1.1.3 Corrective Candidate
+### Alynt Plugin Updater v1.1.3 Corrective Release
 
 | Item | Value | Evidence | Status |
 | --- | --- | --- | --- |
-| Candidate | `v1.1.3`; commit `f5280f6` | Local Alynt Plugin Updater repository | Awaiting publication approval |
+| Release | [`v1.1.3`](https://github.com/NichlasB/alynt-plugin-updater/releases/tag/v1.1.3); commit `f5280f6` | GitHub release | Published |
+| Build Release workflow | Run `29648679835` | GitHub Actions | Passed |
 | Root cause | Released `v1.1.2` restored managed plugins at priority `20`, allowing a later update-complete callback to reorder the active-plugin list afterward. | Controlled Plugin Tester lifecycle reproduction | Reproduced |
 | Correction | Primary restoration now runs at `PHP_INT_MAX`; completed active snapshots receive one final `shutdown` reconciliation. | Runtime source and executable lifecycle tests | Implemented |
 | Regression tests | Core deactivation, updater reactivation, exact original position, late competing reorder, latest update priority, and shutdown reconciliation | PHPUnit `5 tests`, `21 assertions` | Passed |
-| Candidate asset | `alynt-plugin-updater-1.1.3.zip`; `43` runtime files; one plugin root; zero development-file hits | Local package inspection | Verified |
-| Candidate SHA-256 | `933688E199D2EB4A6FF17F7C083BE69602B1B576A54CAF6E7314704141885311` | Local package hash | Recorded |
+| Public asset | `alynt-plugin-updater-v1.1.3.zip`; `43` runtime files; one plugin root; zero development-file hits; aligned metadata; `34` packaged PHP files syntax-clean | Public asset inspection | Verified |
+| Public SHA-256 | `936EBDBCFF305E4421665814865A862D1D90EAA4BA034814B83B50897A52C61E` | GitHub asset digest and local public ZIP inspection | Recorded |
 | Plugin Tester lifecycle proof | Released `v1.1.2` failed the synthetic late-reorder case at position `14`; patched lifecycle restored exact position `1` and exact 15-plugin hash. | Secret-gated disposable lifecycle verifier | Passed |
-| Plugin Tester candidate install | WordPress installed `1.1.3`; updater remained active at position `4`; all 15 active plugins and SHA-256 `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9` remained exact; HTTP home returned `200`. | Core upgrader, active-list fingerprints, filesystem, and HTTP smoke | Passed |
-| Cleanup | Disposable MU helpers, rollback copy, source archive, package staging tree, and verifier artifacts removed; candidate ZIP retained for approval. | Local filesystem checks | Completed |
+| Plugin Tester public updater cycle | Public `1.1.2 -> 1.1.3` update used the GitHub release URL; updater stayed at position `4`; all 15 active plugins and SHA-256 `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9` remained exact; no update remained. | Native WordPress updater and fresh release check | Passed |
+| Account Gateway regression | Public Account Gateway `1.1.3 -> 1.1.4` update through updater `1.1.3` preserved its position `1`, exact active-plugin hash, and settings SHA-256 `4c9c362f34b69a693030000a806bb55f172ce98601d4398b9b8fd75555e90a0f`. | Native WordPress updater and post-shutdown fingerprint | Passed |
+| Cleanup | Disposable MU helpers, rollback copies, source archive, package staging tree, public downloads, and verifier artifacts removed. | Local filesystem checks | Completed |
 | Environment scope | LocalWP `plugin-tester` only; `hbf-staging` and production HBF excluded. | Site Operations boundary | Preserved |
 
 ### Alynt Plugin Updater v1.1.2 Operational Hardening

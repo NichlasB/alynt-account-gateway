@@ -7,7 +7,7 @@
 - Plugin status: v1.1.4 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Publish and updater-verify the Alynt Plugin Updater `v1.1.3` corrective release, then begin the Payment Methods dashboard module.
+- Next roadmap: Begin the Payment Methods dashboard module.
 
 ## Post-v1 Product Roadmap
 
@@ -22,7 +22,7 @@
 
 ### Recommended Sequence
 
-1. Alynt Plugin Updater follow-up.
+1. Payment Methods dashboard module.
 2. Gateway layout and background-image guidance tweak.
 3. Delegated WooCommerce notice normalization.
 4. Dashboard action icons and optional off-canvas navigation.
@@ -56,12 +56,12 @@
 - [x] Prefer an updater-level fix if the activation-state issue affects more than one Alynt-distributed plugin.
 - [x] Preserve native WordPress updater behavior, public GitHub release compatibility, source-directory correction, and rollback safety.
 - [x] Add regression coverage or a repeatable verifier that proves the active plugin list is preserved after an Alynt Plugin Updater install.
-- [ ] Publish and updater-verify the corrective release in the appropriate repository before continuing to broader product UX work.
+- [x] Publish and updater-verify the corrective release in the appropriate repository before continuing to broader product UX work.
 
 #### Acceptance Criteria
 
-- [ ] ACG can be updated from a prior public release through Alynt Plugin Updater without requiring manual active-plugin restoration.
-- [ ] Settings, active-plugin order, runtime file count, and no-update state are verified after update.
+- [x] ACG can be updated from a prior public release through Alynt Plugin Updater without requiring manual active-plugin restoration.
+- [x] Settings, active-plugin order, runtime file count, and no-update state are verified after update.
 - [ ] The known stale release-cache behavior is either fixed, documented with a safe refresh path, or covered by an updater UI/operation affordance.
 - [x] The result is validated on LocalWP Plugin Tester and recorded in the relevant plan.
 
@@ -73,7 +73,11 @@
 - The patched lifecycle reproduced exact preservation on LocalWP Plugin Tester: original and final position `1`, `15` active plugins, and matching active-plugin SHA-256 `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9`.
 - Alynt Plugin Updater `v1.1.3` candidate commit `f5280f6` was packaged as `43` runtime files with one plugin root and zero development-file hits. Candidate SHA-256: `933688E199D2EB4A6FF17F7C083BE69602B1B576A54CAF6E7314704141885311`.
 - WordPress installed the exact candidate ZIP on Plugin Tester as active `1.1.3`; all `15` active plugins, updater position `4`, and active-plugin hash remained exact. Plugin Tester returned HTTP `200`, and all disposable helpers, backups, extracts, and source archives were removed.
-- Publication, public-asset inspection, and a true `1.1.2 -> 1.1.3` Alynt Plugin Updater cycle remain at the release approval gate. `hbf-staging` and production HBF were not touched during candidate validation.
+- Alynt Plugin Updater `v1.1.3` was published from commit `f5280f6`; GitHub Build Release workflow run `29648679835` passed.
+- The public `alynt-plugin-updater-v1.1.3.zip` was inspected cleanly: `43` runtime files, one plugin root, zero development-file hits, aligned `1.1.3` metadata, and all `34` packaged PHP files syntax-clean. Public SHA-256: `936EBDBCFF305E4421665814865A862D1D90EAA4BA034814B83B50897A52C61E`.
+- Plugin Tester completed the true public `1.1.2 -> 1.1.3` Alynt Plugin Updater cycle through the GitHub release URL. All `15` active plugins, updater position `4`, and active-plugin hash `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9` remained exact; the next fresh check reported no update.
+- Plugin Tester then completed public Account Gateway `1.1.3 -> 1.1.4` through Alynt Plugin Updater. Account Gateway remained at position `1`; the exact active-plugin hash and settings hash `4c9c362f34b69a693030000a806bb55f172ce98601d4398b9b8fd75555e90a0f` remained unchanged. Home and `/login/` both returned HTTP `200`.
+- All public downloads, extracts, rollback copies, and disposable local helpers were removed. `hbf-staging` and production HBF were not touched.
 
 ### Slice 2 - Gateway Layout And Background-Image Guidance Tweak
 
