@@ -94,6 +94,18 @@ class ALYNT_AG_Test_Frontend_Dashboard_WooCommerce extends ALYNT_AG_WooCommerce_
 	);
 
 	/**
+	 * Account details to return.
+	 *
+	 * @var array<string,mixed>
+	 */
+	public $account_details = array(
+		'name'         => 'Damon Paulo',
+		'email'        => 'damon@example.test',
+		'member_since' => 'July 3, 2026',
+		'is_complete'  => true,
+	);
+
+	/**
 	 * Saved payment methods to return.
 	 *
 	 * @var array<int,array<string,mixed>>
@@ -175,6 +187,16 @@ class ALYNT_AG_Test_Frontend_Dashboard_WooCommerce extends ALYNT_AG_WooCommerce_
 	 */
 	public function saved_addresses( $user_id ) {
 		return $this->saved_addresses;
+	}
+
+	/**
+	 * Return configured account details.
+	 *
+	 * @param int $user_id User ID.
+	 * @return array<string,mixed>
+	 */
+	public function account_details( $user_id ) {
+		return $this->account_details;
 	}
 
 	/**
@@ -630,6 +652,9 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-addresses"', $html );
 		$this->assertStringContainsString( 'No billing address is saved yet.', $html );
 		$this->assertStringContainsString( 'No shipping address is saved yet.', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-account-details"', $html );
+		$this->assertStringContainsString( 'Details ready', $html );
+		$this->assertStringContainsString( 'Customer since', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-payment-methods"', $html );
 		$this->assertStringContainsString( 'Saved payment methods will appear here when your payment provider supports secure account storage.', $html );
 	}
@@ -793,6 +818,75 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringNotContainsString( 'Saved payment methods will appear here', $html );
 	}
 
+	public function test_woocommerce_dashboard_account_details_render_complete_summary() {
+		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->available = true;
+		$woocommerce          = new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce();
+		$woocommerce->account_details = array(
+			'name'         => 'Damon Paulo',
+			'email'        => 'damon@example.test',
+			'member_since' => 'July 3, 2026',
+			'is_complete'  => true,
+		);
+		$screen = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			$woocommerce,
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array( 'woocommerce_takeover' => true )
+		);
+
+		ob_start();
+		$screen->render_dashboard_screen( $settings, '/my-account/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-account-details"', $html );
+		$this->assertStringContainsString( 'Edit account details', $html );
+		$this->assertStringContainsString( 'href="/my-account/edit-account/"', $html );
+		$this->assertStringContainsString( '<dt>Name</dt>', $html );
+		$this->assertStringContainsString( 'Damon Paulo', $html );
+		$this->assertStringContainsString( '<dt>Email address</dt>', $html );
+		$this->assertStringContainsString( 'damon@example.test', $html );
+		$this->assertStringContainsString( '<dt>Customer since</dt>', $html );
+		$this->assertStringContainsString( 'July 3, 2026', $html );
+		$this->assertStringContainsString( 'Details ready', $html );
+		$this->assertStringContainsString( 'Your name and email are ready', $html );
+		$this->assertStringNotContainsString( 'damon-account-username', $html );
+	}
+
+	public function test_woocommerce_dashboard_account_details_render_review_state_without_username_fallback() {
+		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->available = true;
+		$woocommerce          = new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce();
+		$woocommerce->account_details = array(
+			'name'         => '',
+			'email'        => 'customer@example.test',
+			'member_since' => '',
+			'is_complete'  => false,
+		);
+		$screen = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			$woocommerce,
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array( 'woocommerce_takeover' => true )
+		);
+
+		ob_start();
+		$screen->render_dashboard_screen( $settings, '/my-account/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'Needs review', $html );
+		$this->assertStringContainsString( 'Not added yet', $html );
+		$this->assertStringContainsString( 'Not available', $html );
+		$this->assertStringContainsString( 'Add your first and last name', $html );
+		$this->assertStringContainsString( 'customer@example.test', $html );
+	}
+
 	public function test_woocommerce_overview_omits_hidden_shortcuts_without_empty_actions_markup() {
 		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
 		$dashboard->available = true;
@@ -830,6 +924,7 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-recent-orders"', $html );
 		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-downloads"', $html );
 		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-addresses"', $html );
+		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-account-details"', $html );
 		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-payment-methods"', $html );
 	}
 

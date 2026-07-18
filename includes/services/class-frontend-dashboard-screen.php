@@ -270,6 +270,7 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 			<?php $this->render_recent_orders( $user->ID, $settings ); ?>
 			<?php $this->render_available_downloads( $user->ID, $settings ); ?>
 			<?php $this->render_saved_addresses( $user->ID, $settings ); ?>
+			<?php $this->render_account_details( $user->ID, $settings ); ?>
 			<?php $this->render_saved_payment_methods( $user->ID, $settings ); ?>
 		<?php endif; ?>
 
@@ -851,6 +852,90 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 					</article>
 				<?php endforeach; ?>
 			</div>
+		</section>
+		<?php
+	}
+
+	/**
+	 * Render a read-only account-details summary on the WooCommerce dashboard.
+	 *
+	 * @param int                 $user_id  WordPress user ID.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_account_details( $user_id, $settings ) {
+		if ( ! $this->woocommerce->is_account_menu_item_visible( 'edit-account', $settings ) ) {
+			return;
+		}
+
+		$details = $this->woocommerce->account_details( $user_id );
+		if ( empty( $details ) ) {
+			return;
+		}
+
+		$is_complete  = ! empty( $details['is_complete'] );
+		$status       = $is_complete
+			? __( 'Details ready', 'alynt-account-gateway' )
+			: __( 'Needs review', 'alynt-account-gateway' );
+		$guidance     = $is_complete
+			? __( 'Your name and email are ready for account notices and future order updates.', 'alynt-account-gateway' )
+			: __( 'Add your first and last name so account notices and future orders use the right details.', 'alynt-account-gateway' );
+		$status_class = 'agw-dashboard-account-details__status';
+		if ( $is_complete ) {
+			$status_class .= ' agw-dashboard-account-details__status--ready';
+		}
+		?>
+		<section class="agw-dashboard-section agw-dashboard-account-details" aria-labelledby="agw-dashboard-account-details-title">
+			<div class="agw-dashboard-account-details__header">
+				<h2 id="agw-dashboard-account-details-title"><?php esc_html_e( 'Account Details', 'alynt-account-gateway' ); ?></h2>
+				<div class="agw-dashboard-account-details__actions">
+					<span class="<?php echo esc_attr( $status_class ); ?>">
+						<?php echo esc_html( $status ); ?>
+					</span>
+					<a href="<?php echo esc_url( $this->woocommerce->endpoint_url( 'edit-account', $settings ) ); ?>">
+						<?php esc_html_e( 'Edit account details', 'alynt-account-gateway' ); ?>
+					</a>
+				</div>
+			</div>
+			<dl class="agw-dashboard-account-details__grid">
+				<div class="agw-dashboard-account-detail">
+					<dt><?php esc_html_e( 'Name', 'alynt-account-gateway' ); ?></dt>
+					<dd>
+						<?php
+						echo esc_html(
+							! empty( $details['name'] )
+								? $details['name']
+								: __( 'Not added yet', 'alynt-account-gateway' )
+						);
+						?>
+					</dd>
+				</div>
+				<div class="agw-dashboard-account-detail">
+					<dt><?php esc_html_e( 'Email address', 'alynt-account-gateway' ); ?></dt>
+					<dd>
+						<?php
+						echo esc_html(
+							! empty( $details['email'] )
+								? $details['email']
+								: __( 'Not available', 'alynt-account-gateway' )
+						);
+						?>
+					</dd>
+				</div>
+				<div class="agw-dashboard-account-detail">
+					<dt><?php esc_html_e( 'Customer since', 'alynt-account-gateway' ); ?></dt>
+					<dd>
+						<?php
+						echo esc_html(
+							! empty( $details['member_since'] )
+								? $details['member_since']
+								: __( 'Not available', 'alynt-account-gateway' )
+						);
+						?>
+					</dd>
+				</div>
+			</dl>
+			<p class="agw-dashboard-account-details__guidance"><?php echo esc_html( $guidance ); ?></p>
 		</section>
 		<?php
 	}

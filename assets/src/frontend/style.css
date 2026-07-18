@@ -1236,6 +1236,102 @@ html.agw-has-admin-bar .agw-offcanvas {
 	margin-top: auto;
 }
 
+.agw-dashboard-account-details__header {
+	display: flex;
+	gap: 16px;
+	align-items: baseline;
+	justify-content: space-between;
+}
+
+.agw-dashboard-account-details__header h2 {
+	margin: 0;
+}
+
+.agw-dashboard-account-details__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px 16px;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.agw-dashboard-account-details__header a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	color: var(--agw-color-primary);
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.4;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.agw-dashboard-account-details__status {
+	display: inline-flex;
+	gap: 8px;
+	align-items: center;
+	color: color-mix(in srgb, var(--agw-color-text) 72%, var(--agw-color-surface));
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.4;
+}
+
+.agw-dashboard-account-details__status::before {
+	width: 10px;
+	height: 10px;
+	border: 2px solid currentcolor;
+	border-radius: 50%;
+	content: "";
+}
+
+.agw-dashboard-account-details__status--ready {
+	color: var(--agw-color-primary);
+}
+
+.agw-dashboard-account-details__status--ready::before {
+	background: currentcolor;
+}
+
+.agw-dashboard-account-details__grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 14px;
+	margin: 16px 0 0;
+}
+
+.agw-dashboard-account-detail {
+	min-width: 0;
+	padding: 16px;
+	border: 1px solid rgb(40 20 8 / 14%);
+	border-radius: 8px;
+	background: var(--agw-color-surface);
+}
+
+.agw-dashboard-account-detail dt {
+	margin: 0 0 6px;
+	color: var(--agw-color-primary);
+	font-size: 16px;
+	font-weight: 800;
+	line-height: 1.35;
+}
+
+.agw-dashboard-account-detail dd {
+	margin: 0;
+	color: var(--agw-color-text);
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.45;
+	overflow-wrap: anywhere;
+}
+
+.agw-dashboard-account-details__guidance {
+	margin: 14px 0 0;
+	color: color-mix(in srgb, var(--agw-color-text) 78%, var(--agw-color-surface));
+	font-size: 16px;
+	line-height: 1.55;
+}
+
 .agw-dashboard-payment-methods__header {
 	display: flex;
 	gap: 16px;
@@ -1716,6 +1812,7 @@ html.agw-has-admin-bar .agw-offcanvas {
 .agw-dashboard-download__action:focus-visible,
 .agw-dashboard-addresses__header a:focus-visible,
 .agw-dashboard-address__action:focus-visible,
+.agw-dashboard-account-details__header a:focus-visible,
 .agw-dashboard-payment-methods__header a:focus-visible,
 .agw-dashboard-link:focus-visible,
 .agw-dashboard__logout:focus-visible,
@@ -1858,6 +1955,7 @@ html.agw-has-admin-bar .agw-offcanvas {
 
 	.agw-dashboard-downloads__header,
 	.agw-dashboard-addresses__header,
+	.agw-dashboard-account-details__header,
 	.agw-dashboard-payment-methods__header {
 		flex-direction: column;
 		gap: 8px;
@@ -1880,6 +1978,14 @@ html.agw-has-admin-bar .agw-offcanvas {
 	}
 
 	.agw-dashboard-addresses__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.agw-dashboard-account-details__actions {
+		justify-content: flex-start;
+	}
+
+	.agw-dashboard-account-details__grid {
 		grid-template-columns: 1fr;
 	}
 
@@ -1977,6 +2083,7 @@ html.agw-has-admin-bar .agw-offcanvas {
 	.agw-dashboard-downloads__empty,
 	.agw-dashboard-download__action,
 	.agw-dashboard-address,
+	.agw-dashboard-account-detail,
 	.agw-dashboard-payment-method,
 	.agw-dashboard-payment-methods__empty,
 	.agw-dashboard-payment-method__default,
@@ -2042,6 +2149,7 @@ html.agw-has-admin-bar .agw-offcanvas {
 	.agw-dashboard-download__action:focus,
 	.agw-dashboard-addresses__header a:focus,
 	.agw-dashboard-address__action:focus,
+	.agw-dashboard-account-details__header a:focus,
 	.agw-dashboard-payment-methods__header a:focus,
 	.agw-dashboard-link:focus,
 	.agw-dashboard__logout:focus,
@@ -2058,6 +2166,10 @@ html.agw-has-admin-bar .agw-offcanvas {
 	.agw-dashboard-content input[type="submit"]:focus {
 		outline: 3px solid Highlight;
 		outline-offset: 3px;
+	}
+
+	.agw-dashboard-account-details__status {
+		color: CanvasText;
 	}
 }
 

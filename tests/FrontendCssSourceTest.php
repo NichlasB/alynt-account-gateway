@@ -195,6 +195,19 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertMatchesRegularExpression( '/@media \(forced-colors: active\)[\s\S]*\.agw-dashboard-payment-method,[\s\S]*\.agw-dashboard-payment-method__default,/s', $css );
 	}
 
+	public function test_account_details_module_has_responsive_accessible_styles() {
+		$css = $this->get_frontend_css();
+
+		$this->assertStringContainsString( '.agw-dashboard-account-details__grid', $css );
+		$this->assertStringContainsString( '.agw-dashboard-account-details__header a:focus-visible', $css );
+		$this->assertStringContainsString( '.agw-dashboard-account-details__status--ready', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-dashboard-account-details__header a\s*\{[^}]*min-height:\s*44px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-dashboard-account-detail dd\s*\{[^}]*font-size:\s*16px;[^}]*overflow-wrap:\s*anywhere;/s', $css );
+		$this->assertMatchesRegularExpression( '/@media \(max-width: 800px\)[\s\S]*\.agw-dashboard-account-details__grid\s*\{[^}]*grid-template-columns:\s*1fr;/s', $css );
+		$this->assertMatchesRegularExpression( '/@media \(forced-colors: active\)[\s\S]*\.agw-dashboard-account-detail,/s', $css );
+		$this->assertMatchesRegularExpression( '/@media \(forced-colors: active\)[\s\S]*\.agw-dashboard-account-details__status\s*\{[^}]*color:\s*CanvasText;/s', $css );
+	}
+
 	public function test_gateway_card_spacing_matches_post_v1_visual_tweak() {
 		$css = $this->get_frontend_css();
 

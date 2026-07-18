@@ -150,15 +150,18 @@ class WooCommerceIntegrationTest extends TestCase {
 		$integration = new ALYNT_AG_WooCommerce_Integration();
 		$settings    = array(
 			'after_login_redirect'          => '/my-account/',
-			'woocommerce_hidden_menu_items' => array( 'orders', 'downloads' ),
+			'woocommerce_hidden_menu_items' => array( 'orders', 'downloads', 'edit-account' ),
 		);
 		$order_endpoint    = $integration->endpoint_from_path( '/my-account/orders/', $settings );
 		$download_endpoint = $integration->endpoint_from_path( '/my-account/downloads/', $settings );
+		$account_endpoint  = $integration->endpoint_from_path( '/my-account/edit-account/', $settings );
 
 		$this->assertFalse( $integration->is_account_menu_item_visible( 'orders', $settings ) );
 		$this->assertSame( 'orders', $order_endpoint['endpoint'] );
 		$this->assertFalse( $integration->is_account_menu_item_visible( 'downloads', $settings ) );
 		$this->assertSame( 'downloads', $download_endpoint['endpoint'] );
+		$this->assertFalse( $integration->is_account_menu_item_visible( 'edit-account', $settings ) );
+		$this->assertSame( 'edit-account', $account_endpoint['endpoint'] );
 	}
 
 	public function test_account_menu_items_restore_required_standard_items_when_wc_omits_them() {
@@ -383,6 +386,27 @@ class WooCommerceIntegrationTest extends TestCase {
 		$this->assertSame( array( 9 ), $GLOBALS['alynt_ag_test_wc_payment_token_calls'] );
 		$this->assertArrayNotHasKey( 'token', $methods[0] );
 		$this->assertArrayNotHasKey( 'gateway_id', $methods[0] );
+	}
+
+	public function test_account_details_returns_only_normalized_customer_summary_data() {
+		$GLOBALS['alynt_ag_test_options']['date_format'] = 'F j, Y';
+
+		$integration = new ALYNT_AG_WooCommerce_Integration();
+		$details     = $integration->account_details( 9 );
+
+		$this->assertSame(
+			array(
+				'name'         => 'Damon Paulo',
+				'email'        => 'customer@example.test',
+				'member_since' => 'July 3, 2026',
+				'is_complete'  => true,
+			),
+			$details
+		);
+		$this->assertArrayNotHasKey( 'user_login', $details );
+		$this->assertArrayNotHasKey( 'display_name', $details );
+		$this->assertArrayNotHasKey( 'roles', $details );
+		$this->assertSame( array(), $integration->account_details( 0 ) );
 	}
 
 	public function test_saved_payment_methods_caps_results_and_rejects_invalid_user() {

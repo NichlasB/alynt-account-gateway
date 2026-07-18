@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,13 @@ Uninstalling the plugin removes plugin-owned settings, the stored database schem
 Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile, Reoon, webhooks, diagnostics, or WooCommerce takeover on production sites. The plugin provides WordPress personal-data exporter and eraser callbacks for plugin-owned records, but site owners remain responsible for privacy notice wording, lawful-basis decisions, processor contracts, retention policy, and qualified legal review where required.
 
 == Changelog ==
+
+= 1.1.6 =
+
+* Added a read-only Account Details summary to the branded WooCommerce dashboard with customer name, email address, customer-since date, and neutral readiness guidance.
+* Limited renderer data to normalized first name, last name, email, registration date, and completion state; usernames, display-name fallbacks, user IDs, roles, and password data are excluded.
+* Kept the summary synchronized with the existing Account Details navigation visibility setting while preserving the direct WooCommerce endpoint and native profile controls.
+* Added responsive single-column mobile layout, long-value wrapping, visible focus, 44px action targets, RTL-safe styling, and high-contrast support.
 
 = 1.1.5 =
 

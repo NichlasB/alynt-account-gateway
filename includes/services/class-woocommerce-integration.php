@@ -525,6 +525,35 @@ class ALYNT_AG_WooCommerce_Integration {
 	}
 
 	/**
+	 * Return normalized account-summary data for a customer.
+	 *
+	 * @param int $user_id WordPress user ID.
+	 * @return array<string,mixed>
+	 */
+	public function account_details( $user_id ) {
+		$user_id = absint( $user_id );
+		$user    = $user_id ? get_userdata( $user_id ) : false;
+
+		if ( ! $user instanceof WP_User ) {
+			return array();
+		}
+
+		$first_name = sanitize_text_field( get_user_meta( $user_id, 'first_name', true ) );
+		$last_name  = sanitize_text_field( get_user_meta( $user_id, 'last_name', true ) );
+		$email      = sanitize_email( $user->user_email );
+		$registered = isset( $user->user_registered ) ? strtotime( (string) $user->user_registered ) : false;
+
+		return array(
+			'name'         => trim( $first_name . ' ' . $last_name ),
+			'email'        => $email,
+			'member_since' => $registered
+				? sanitize_text_field( date_i18n( get_option( 'date_format', 'F j, Y' ), $registered ) )
+				: '',
+			'is_complete'  => '' !== $first_name && '' !== $last_name && '' !== $email,
+		);
+	}
+
+	/**
 	 * Return normalized saved payment-method display data for a customer.
 	 *
 	 * @param int $user_id WordPress user ID.
