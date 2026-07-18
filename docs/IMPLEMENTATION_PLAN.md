@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Richer Dashboard UX Expansion in progress; Account Details Summary is implemented and exact-package accepted
+- Current phase: Richer Dashboard UX Expansion in progress; Account Details Summary is released and updater-verified
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.5 is the current public baseline; the accepted v1.1.6 Account Details Summary candidate is awaiting release approval.
+- Plugin status: v1.1.6 is the current public baseline, released and updater-verified.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Publish and updater-verify the accepted v1.1.6 Account Details Summary candidate after explicit release approval.
+- Next roadmap: Begin the next bounded dashboard expansion increment.
 
 ## Post-v1 Product Roadmap
 
@@ -250,6 +250,10 @@
 - Browser acceptance verified the complete state with customer name, email, customer-since date, Details ready status, and WooCommerce-owned edit endpoint; the incomplete state with Needs review, Not added yet, calm guidance, and no username fallback; and the hidden state with zero Account Details modules or navigation links while direct `/my-account/edit-account/` continued to render WooCommerce's delegated form.
 - Responsive acceptance passed at `1440px`, `390px`, and `320px`: desktop used three columns, mobile used one column, the long fixture email wrapped, document-level horizontal overflow remained absent, action and module text computed to at least `16px`, the action retained a `44px` target, and keyboard focus rendered a visible solid outline.
 - Cleanup and reconciliation passed: the disposable administrator and customer, session/user metadata, WooCommerce customer lookup row, authenticated browser, and upload artifacts were removed. Plugin Tester retained the exact settings and active-plugin baselines, the installed tree still byte-matches the inspected package, and the home route returned HTTP `200` while native `wp-login.php` continued redirecting to the branded `/login` route.
+- Released as [`v1.1.6`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.6) from commit `de11711`; Build Release workflow run `29655930438` passed.
+- Public asset `alynt-account-gateway-v1.1.6.zip` inspected cleanly: `57` ZIP entries, `47` runtime files, one expected plugin root, zero development-file or backslash-path hits, all `41` packaged PHP files syntax-clean, aligned `1.1.6` metadata, and SHA-256 `E076CE789FE09FE35407DEBC7B159A41244760A63F1A0354B0704C1AA38E4856`.
+- Plugin Tester updater verification passed: after the native installer restored public `1.1.5`, Alynt Plugin Updater force-fresh offered the exact public `1.1.6` GitHub asset and WordPress installed it successfully. The plugin reports active `1.1.6`; all `47` installed runtime files byte-match the public ZIP; active-plugin SHA-256 remained `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e`; settings SHA-256 remained `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e`; and a fresh check showed no remaining update offer.
+- Final release cleanup removed the temporary local administrator, session metadata, browser session, native-upload artifacts, and test copies. Plugin Tester retained the public `1.1.6` package with its exact active-plugin and settings baselines; HBF staging and production HBF were not touched.
 
 #### Immediate Increment - Payment Methods
 
