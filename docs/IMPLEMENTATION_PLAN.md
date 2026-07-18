@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Richer Dashboard UX Expansion in progress; Available Downloads v1.1.4 release candidate preparation in progress
+- Current phase: Richer Dashboard UX Expansion in progress; Available Downloads released and updater-verified as v1.1.4
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.3 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
+- Plugin status: v1.1.4 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Release and updater-verify v1.1.4, then select the next bounded dashboard module.
+- Next roadmap: Select the next bounded dashboard module.
 
 ## Post-v1 Product Roadmap
 
@@ -238,6 +238,11 @@
 - Keyboard and authorization-boundary checks passed on both targets: visible focus moved from View all downloads to the first distinctly labelled Download action, each action used a signed WooCommerce-owned URL, and the delegated Downloads endpoint displayed the fourth file omitted from the dashboard preview.
 - Visibility and empty-state checks passed on both targets: hiding Downloads removed both the dashboard module and navigation item while the direct endpoint remained available; restoring the setting returned the module; and an account without downloads rendered the calm empty state at `320px` with no overflow or console errors.
 - Cleanup and reconciliation passed: disposable customers, products, order, permissions, temporary files, MU fixtures, uploaded packages, rollback archives, verifier files, and setting snapshots were removed. Both sites returned to their exact recorded settings and active-plugin baselines, retained active `1.1.3`, matched the exact 47-file package tree, and returned HTTP `200` from `/login/`.
+- Released as [`v1.1.4`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.4) from commit `93411d2`; Build Release workflow run `29646939926` passed.
+- Public asset `alynt-account-gateway-v1.1.4.zip` inspected cleanly: 47 runtime files, one plugin root, zero development-file or backslash-path hits, aligned `1.1.4` metadata, Available Downloads runtime/compiled-CSS markers present, all 41 packaged PHP files syntax-clean, and SHA-256 `3F40999D9BB927DD6C61036BC13E527DDBB8DC52DEDEACAC418734C77FF59991`.
+- Plugin Tester updater verification passed: Alynt Plugin Updater force-fresh offered the exact public `1.1.4` asset and WordPress installed `1.1.3 -> 1.1.4`; active position `1`, active-plugin hash `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e`, and settings hash `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e` remained exact; all 47 installed files byte-matched the public asset; no update remained; and `/login/` returned HTTP `200`.
+- `hbf-staging` updater verification passed: Alynt Plugin Updater offered the exact public `1.1.4` asset and the site-owner WordPress upgrader installed `1.1.3 -> 1.1.4`; settings hash `07C3E10868E0F20119FDF5FE9AC48C6435A995DEB92B85EC38DA6476AFAC409C` remained exact. The headless upgrader moved Account Gateway from active position `7` to `8`; the guarded reconciliation restored position `7` and exact active-plugin hash `C1576C22EDB3110BD0EA1A3DF379CE454F2E2E0F7D427E25D3211EA00AA462DF`. Final state retained normal site ownership, 47 runtime files, the public main-file digest, no update offer, and HTTP `200` from `/login/`.
+- Release cleanup passed: temporary local and remote updater helpers, reconciliation scripts, authentication material, and server artifacts were removed; production HBF was not touched.
 
 #### Immediate Increment - Saved Addresses
 

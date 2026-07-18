@@ -2,8 +2,8 @@
 
 ## Status
 
-- Current phase: `v1.1.3` is released, public-asset inspected, and installed on LocalWP `plugin-tester` and production-like `hbf-staging`.
-- Product baseline: `v1.1.3`, released, public-asset verified, and updater-verified with Alynt Plugin Updater `1.1.2` on LocalWP Plugin Tester and `hbf-staging`.
+- Current phase: `v1.1.4` is released, public-asset inspected, and installed on LocalWP `plugin-tester` and production-like `hbf-staging`.
+- Product baseline: `v1.1.4`, released, public-asset verified, and updater-verified with Alynt Plugin Updater on LocalWP Plugin Tester and `hbf-staging`.
 - Release goal: `v1.0.0`.
 - Frontend output default: Disabled.
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility.
@@ -16,6 +16,20 @@ This is the living production-acceptance roadmap for Alynt Account Gateway. The 
 Readiness work should prioritize runtime evidence, configuration safety, compatibility, documentation, and operational recovery. New product features belong in a separately approved roadmap unless they are required to resolve a release-blocking defect found during acceptance testing.
 
 ## Post-v1 Maintenance Evidence
+
+### v1.1.4 Available Downloads Dashboard Module
+
+| Item | Value | Evidence | Status |
+| --- | --- | --- | --- |
+| Release | [`v1.1.4`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.4) | GitHub release from commit `93411d2` | Published |
+| Build Release workflow | Run `29646939926` | GitHub Actions | Passed |
+| Public asset | `alynt-account-gateway-v1.1.4.zip`; `47` runtime files; one plugin root; zero development-file or backslash-path hits; aligned `1.1.4` metadata and Available Downloads feature markers; all `41` packaged PHP files syntax-clean | Public asset inspection | Verified |
+| Public asset SHA-256 | `3F40999D9BB927DD6C61036BC13E527DDBB8DC52DEDEACAC418734C77FF59991` | GitHub digest and local hash of downloaded public release asset | Recorded |
+| Product change | The WooCommerce dashboard now shows a bounded, read-only three-file Available Downloads preview with finite/unlimited and expiry states, calm empty guidance, and delegated WooCommerce-owned actions. | `CHANGELOG.md`, `readme.txt`, packaged runtime, and acceptance evidence | Completed |
+| Plugin Tester updater | Alynt Plugin Updater force-fresh offered the exact public asset and WordPress installed `1.1.3 -> 1.1.4`; active position, active-plugin hash, and settings hash remained exact, all 47 files byte-matched the public ZIP, feature markers were present, no update remained, and `/login/` returned `200`. | Updater probe, filesystem hash comparison, and HTTP smoke | Passed |
+| Staging updater | `hbf-staging` installed the exact public updater offer `1.1.3 -> 1.1.4` through the site-owner WordPress upgrader. Settings remained exact. The upgrader moved Account Gateway from active position `7` to `8`; guarded reconciliation restored exact position `7` and the recorded active-plugin hash. Final state retained 47 runtime files, matching public main-file digest, normal site ownership, no update offer, and `/login/` returned `200`. | WP-CLI, filesystem digest, HTTP smoke, and Site Operations evidence | Passed with positional reconciliation |
+| Cleanup | Temporary updater helpers, reconciliation scripts, release-note scratch file, ZIP extracts, and remote `/tmp` artifacts were removed after evidence capture. | Local and remote cleanup verification | Completed |
+| Production scope | Production HBF excluded. | Task approval boundary | Preserved |
 
 ### v1.1.3 Saved Addresses Dashboard Module
 
