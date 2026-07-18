@@ -267,6 +267,7 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 
 		<?php if ( $is_woocommerce_dashboard ) : ?>
 			<?php $this->render_woocommerce_dashboard_overview( $settings ); ?>
+			<?php $this->render_recent_orders( $user->ID, $settings ); ?>
 		<?php endif; ?>
 
 		<section class="agw-dashboard-section" aria-labelledby="agw-dashboard-links-title">
@@ -645,6 +646,67 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 						</a>
 					<?php endforeach; ?>
 				</div>
+			<?php endif; ?>
+		</section>
+		<?php
+	}
+
+	/**
+	 * Render a read-only recent-orders module on the WooCommerce dashboard.
+	 *
+	 * @param int                 $user_id  WordPress user ID.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_recent_orders( $user_id, $settings ) {
+		if ( ! $this->woocommerce->is_account_menu_item_visible( 'orders', $settings ) ) {
+			return;
+		}
+
+		$orders = $this->woocommerce->recent_orders( $user_id, 3 );
+		?>
+		<section class="agw-dashboard-section agw-dashboard-recent-orders" aria-labelledby="agw-dashboard-recent-orders-title">
+			<div class="agw-dashboard-recent-orders__header">
+				<h2 id="agw-dashboard-recent-orders-title"><?php esc_html_e( 'Recent Orders', 'alynt-account-gateway' ); ?></h2>
+				<a href="<?php echo esc_url( $this->woocommerce->endpoint_url( 'orders', $settings ) ); ?>">
+					<?php esc_html_e( 'View all orders', 'alynt-account-gateway' ); ?>
+				</a>
+			</div>
+			<?php if ( empty( $orders ) ) : ?>
+				<p class="agw-dashboard-recent-orders__empty">
+					<?php esc_html_e( 'Your recent orders will appear here after your first purchase.', 'alynt-account-gateway' ); ?>
+				</p>
+			<?php else : ?>
+				<ul class="agw-dashboard-recent-orders__list" role="list">
+					<?php foreach ( $orders as $order ) : ?>
+						<li>
+							<a class="agw-dashboard-recent-order" href="<?php echo esc_url( $this->woocommerce->order_url( $order['id'], $settings ) ); ?>">
+								<span class="agw-dashboard-recent-order__identity">
+									<strong>
+										<?php
+										echo esc_html(
+											sprintf(
+												/* translators: %s: customer-facing order number. */
+												__( 'Order #%s', 'alynt-account-gateway' ),
+												$order['number']
+											)
+										);
+										?>
+									</strong>
+									<?php if ( ! empty( $order['date'] ) ) : ?>
+										<span><?php echo esc_html( $order['date'] ); ?></span>
+									<?php endif; ?>
+								</span>
+								<span class="agw-dashboard-recent-order__summary">
+									<span class="agw-dashboard-recent-order__status"><?php echo esc_html( $order['status'] ); ?></span>
+									<?php if ( ! empty( $order['total'] ) ) : ?>
+										<span class="agw-dashboard-recent-order__total"><?php echo esc_html( $order['total'] ); ?></span>
+									<?php endif; ?>
+								</span>
+							</a>
+						</li>
+					<?php endforeach; ?>
+				</ul>
 			<?php endif; ?>
 		</section>
 		<?php

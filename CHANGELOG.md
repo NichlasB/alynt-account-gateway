@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.1.2 - 2026-07-18
+
+### Added
+
+- Added a read-only Recent Orders module to the branded WooCommerce dashboard with customer-scoped rows, dates, translated statuses, totals, an empty state, and delegated View Order links.
+
+### Changed
+
+- Recent Orders now respects the existing Orders navigation visibility setting without disabling the direct WooCommerce endpoint.
+- Improved dashboard resilience for long account email addresses and added responsive, visible-focus, RTL-safe, high-contrast order-row styling.
+- Use WooCommerce's timezone-aware date formatter for order dates when available.
+
+### Tests
+
+- Added integration, renderer, and CSS regression coverage for normalized order data, hidden navigation behavior, responsive rows, long email addresses, and date formatting.
+
 ## 1.1.1 - 2026-07-18
 
 ### Added

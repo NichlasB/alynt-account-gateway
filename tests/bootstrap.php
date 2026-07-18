@@ -391,6 +391,37 @@ if ( ! function_exists( 'wp_strip_all_tags' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wc_get_orders' ) ) {
+	function wc_get_orders( $args = array() ) {
+		$GLOBALS['alynt_ag_test_wc_get_orders_args'][] = $args;
+
+		return isset( $GLOBALS['alynt_ag_test_wc_orders'] )
+			? $GLOBALS['alynt_ag_test_wc_orders']
+			: array();
+	}
+}
+
+if ( ! function_exists( 'wc_get_order_status_name' ) ) {
+	function wc_get_order_status_name( $status ) {
+		$statuses = isset( $GLOBALS['alynt_ag_test_wc_order_statuses'] )
+			? $GLOBALS['alynt_ag_test_wc_order_statuses']
+			: array();
+
+		return isset( $statuses[ $status ] ) ? $statuses[ $status ] : ucfirst( (string) $status );
+	}
+}
+
+if ( ! function_exists( 'wc_format_datetime' ) ) {
+	function wc_format_datetime( $date, $format = '' ) {
+		$GLOBALS['alynt_ag_test_wc_format_datetime_calls'][] = array(
+			'date'   => $date,
+			'format' => $format,
+		);
+
+		return date_i18n( $format, $date->getTimestamp() );
+	}
+}
+
 if ( ! function_exists( 'wp_get_attachment_image_url' ) ) {
 	function wp_get_attachment_image_url( $attachment_id, $size = 'thumbnail' ) {
 		$key = (int) $attachment_id . ':' . (string) $size;

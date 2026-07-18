@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,12 @@ Uninstalling the plugin removes plugin-owned settings, the stored database schem
 Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile, Reoon, webhooks, diagnostics, or WooCommerce takeover on production sites. The plugin provides WordPress personal-data exporter and eraser callbacks for plugin-owned records, but site owners remain responsible for privacy notice wording, lawful-basis decisions, processor contracts, retention policy, and qualified legal review where required.
 
 == Changelog ==
+
+= 1.1.2 =
+
+* Added a read-only Recent Orders module to the branded WooCommerce dashboard, with customer-scoped order rows, empty-state guidance, and delegated View Order links.
+* Kept the module in sync with the existing Orders navigation visibility setting while preserving direct WooCommerce account endpoints.
+* Improved narrow dashboard resilience by wrapping long account email addresses and added responsive, focus-visible, RTL-safe, high-contrast order-row styling.
 
 = 1.1.1 =
 

@@ -70,6 +70,13 @@ class ALYNT_AG_Test_Frontend_Dashboard_WooCommerce extends ALYNT_AG_WooCommerce_
 	public $rendered = true;
 
 	/**
+	 * Recent orders to return.
+	 *
+	 * @var array<int,array<string,mixed>>
+	 */
+	public $recent_orders = array();
+
+	/**
 	 * Return configured endpoint.
 	 *
 	 * @param string              $path     Current relative path.
@@ -112,6 +119,17 @@ class ALYNT_AG_Test_Frontend_Dashboard_WooCommerce extends ALYNT_AG_WooCommerce_
 		}
 
 		return $this->rendered;
+	}
+
+	/**
+	 * Return configured recent orders.
+	 *
+	 * @param int $user_id User ID.
+	 * @param int $limit   Maximum orders.
+	 * @return array<int,array<string,mixed>>
+	 */
+	public function recent_orders( $user_id, $limit = 3 ) {
+		return $this->recent_orders;
 	}
 }
 
@@ -549,6 +567,45 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringContainsString( 'href="/my-account/edit-address/"', $html );
 		$this->assertStringContainsString( 'href="/my-account/edit-account/"', $html );
 		$this->assertStringNotContainsString( 'class="agw-dashboard-content"', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-recent-orders"', $html );
+		$this->assertStringContainsString( 'Your recent orders will appear here after your first purchase.', $html );
+	}
+
+	public function test_woocommerce_dashboard_recent_orders_render_normalized_rows() {
+		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->available = true;
+		$woocommerce          = new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce();
+		$woocommerce->recent_orders = array(
+			array(
+				'id'     => 42,
+				'number' => '1042',
+				'status' => 'Processing',
+				'date'   => 'January 1, 2024',
+				'total'  => '£42.00',
+			),
+		);
+		$screen = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			$woocommerce,
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array( 'woocommerce_takeover' => true )
+		);
+
+		ob_start();
+		$screen->render_dashboard_screen( $settings, '/my-account/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'Recent Orders', $html );
+		$this->assertStringContainsString( 'View all orders', $html );
+		$this->assertStringContainsString( 'href="/my-account/view-order/42/"', $html );
+		$this->assertStringContainsString( 'Order #1042', $html );
+		$this->assertStringContainsString( 'January 1, 2024', $html );
+		$this->assertStringContainsString( 'Processing', $html );
+		$this->assertStringContainsString( '£42.00', $html );
+		$this->assertStringNotContainsString( 'Your recent orders will appear here', $html );
 	}
 
 	public function test_woocommerce_overview_omits_hidden_shortcuts_without_empty_actions_markup() {
@@ -556,8 +613,17 @@ class FrontendDashboardScreenTest extends TestCase {
 		$dashboard->available = true;
 		$screen               = new ALYNT_AG_Frontend_Dashboard_Screen(
 			$dashboard,
-			new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce(),
+			$woocommerce = new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce(),
 			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$woocommerce->recent_orders = array(
+			array(
+				'id' => 42,
+				'number' => '1042',
+				'status' => 'Processing',
+				'date' => '',
+				'total' => '',
+			),
 		);
 		$settings = array_merge(
 			$this->settings,
@@ -576,6 +642,7 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringNotContainsString( 'href="/my-account/orders/"', $html );
 		$this->assertStringNotContainsString( 'href="/my-account/edit-address/"', $html );
 		$this->assertStringNotContainsString( 'href="/my-account/edit-account/"', $html );
+		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-recent-orders"', $html );
 	}
 
 	public function test_render_dashboard_screen_outputs_endpoint_fallback_when_render_fails() {

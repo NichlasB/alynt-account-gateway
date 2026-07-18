@@ -395,6 +395,88 @@ class ALYNT_AG_WooCommerce_Integration {
 	}
 
 	/**
+	 * Return a small normalized list of a customer's recent orders.
+	 *
+	 * @param int $user_id WordPress user ID.
+	 * @param int $limit   Maximum orders to return.
+	 * @return array<int,array<string,mixed>>
+	 */
+	public function recent_orders( $user_id, $limit = 3 ) {
+		$user_id = absint( $user_id );
+		$limit   = max( 1, min( 5, absint( $limit ) ) );
+
+		if ( ! $user_id || ! function_exists( 'wc_get_orders' ) ) {
+			return array();
+		}
+
+		$orders = wc_get_orders(
+			array(
+				'customer_id' => $user_id,
+				'limit'       => $limit,
+				'orderby'     => 'date',
+				'order'       => 'DESC',
+				'return'      => 'objects',
+			)
+		);
+
+		if ( ! is_array( $orders ) ) {
+			return array();
+		}
+
+		$normalized = array();
+		foreach ( $orders as $order ) {
+			if (
+				! is_object( $order )
+				|| ! method_exists( $order, 'get_id' )
+				|| ! method_exists( $order, 'get_order_number' )
+				|| ! method_exists( $order, 'get_status' )
+			) {
+				continue;
+			}
+
+			$order_id = absint( $order->get_id() );
+			if ( ! $order_id ) {
+				continue;
+			}
+
+			$status         = sanitize_key( $order->get_status() );
+			$date           = method_exists( $order, 'get_date_created' ) ? $order->get_date_created() : null;
+			$total          = method_exists( $order, 'get_formatted_order_total' )
+				? html_entity_decode( wp_strip_all_tags( $order->get_formatted_order_total() ), ENT_QUOTES, 'UTF-8' )
+				: '';
+			$formatted_date = '';
+			if ( is_object( $date ) && method_exists( $date, 'getTimestamp' ) ) {
+				$formatted_date = function_exists( 'wc_format_datetime' )
+					? wc_format_datetime( $date, get_option( 'date_format', 'F j, Y' ) )
+					: date_i18n( get_option( 'date_format', 'F j, Y' ), $date->getTimestamp() );
+			}
+
+			$normalized[] = array(
+				'id'     => $order_id,
+				'number' => sanitize_text_field( $order->get_order_number() ),
+				'status' => function_exists( 'wc_get_order_status_name' )
+					? sanitize_text_field( wc_get_order_status_name( $status ) )
+					: sanitize_text_field( ucfirst( str_replace( '-', ' ', $status ) ) ),
+				'date'   => sanitize_text_field( $formatted_date ),
+				'total'  => sanitize_text_field( $total ),
+			);
+		}
+
+		return $normalized;
+	}
+
+	/**
+	 * Build an order-details URL inside the configured account area.
+	 *
+	 * @param int                 $order_id Order ID.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return string
+	 */
+	public function order_url( $order_id, $settings ) {
+		return trailingslashit( $this->endpoint_url( 'view-order', $settings ) ) . trailingslashit( absint( $order_id ) );
+	}
+
+	/**
 	 * Build a URL for a WooCommerce account endpoint from settings.
 	 *
 	 * @param string              $endpoint Endpoint key.

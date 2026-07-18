@@ -145,6 +145,19 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertMatchesRegularExpression( '/\.agw-dashboard-content input,[^}]*font-size:\s*18px;/s', $css );
 	}
 
+	public function test_recent_orders_module_has_responsive_accessible_styles() {
+		$css = $this->get_frontend_css();
+
+		$this->assertStringContainsString( '.agw-dashboard-recent-orders__list', $css );
+		$this->assertStringContainsString( '.agw-dashboard-recent-order:focus-visible', $css );
+		$this->assertStringContainsString( '.agw-dashboard-recent-order__summary', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-dashboard-hero__meta\s*\{[^}]*overflow-wrap:\s*anywhere;/s', $css );
+		$this->assertStringContainsString( '@media (max-width: 800px)', $css );
+		$this->assertStringContainsString( '.agw-dashboard-recent-order {', $css );
+		$this->assertStringContainsString( 'grid-template-columns: 1fr;', $css );
+		$this->assertStringContainsString( '@media (forced-colors: active)', $css );
+	}
+
 	public function test_gateway_card_spacing_matches_post_v1_visual_tweak() {
 		$css = $this->get_frontend_css();
 

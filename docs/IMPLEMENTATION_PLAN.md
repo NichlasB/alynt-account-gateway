@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.1 Deeper Provider Admin UX released, public-asset inspected, and updater-verified
+- Current phase: Richer Dashboard UX Expansion in progress; Recent Orders increment implemented and exact-package accepted on the v1.1.1 baseline
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.1 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Continue with the richer Dashboard UX Expansion slice unless a higher-priority production rollout need appears.
+- Next roadmap: Prepare the approval-gated Recent Orders release, then select the next bounded dashboard module.
 
 ## Post-v1 Product Roadmap
 
@@ -187,6 +187,42 @@
 - Staging's active list remained valid and Account Gateway remained active, but the headless attempts normalized its cached active-list ordering from the initial observed position `6` to current position `7`; this positional change is documented rather than represented as an exact active-list-hash preservation result. Production HBF was not touched.
 
 ### Slice 6 - Dashboard UX Expansion
+
+#### Immediate Increment - Recent Orders
+
+##### Scope
+
+- [x] Add a read-only Recent Orders module to the base WooCommerce dashboard.
+- [x] Query only the current customer's three most recent orders through `wc_get_orders()`.
+- [x] Normalize order ID, customer-facing number, status, date, and formatted total inside the WooCommerce integration boundary.
+- [x] Link each row to WooCommerce's delegated View Order endpoint without recreating order actions or authorization logic.
+- [x] Show a calm first-purchase empty state when no recent orders exist.
+- [x] Omit the entire module when the administrator hides the Orders dashboard navigation item.
+- [x] Add responsive, visible-focus, RTL-safe logical alignment, and forced-colors styling.
+
+##### Acceptance Criteria
+
+- [x] Recent orders appear only for the authenticated customer and contain no raw order objects or provider payloads in renderer data.
+- [x] Order rows remain read-only and WooCommerce continues to own order-detail authorization and actions.
+- [x] Empty accounts receive helpful copy without an empty list or broken controls.
+- [x] Hiding Orders removes the overview shortcut and Recent Orders module while leaving the direct endpoint available.
+- [x] Focused and full automated checks pass.
+- [x] Exact-package desktop/mobile acceptance passes on Plugin Tester and `hbf-staging`.
+
+##### Progress Notes
+
+- Added `recent_orders()` and `order_url()` to the WooCommerce integration. Queries are customer-scoped, capped at five defensively, and normalized to sanitized scalar display data before reaching the renderer.
+- Added a three-row Recent Orders dashboard section with linked order number, date, translated status, plain-text formatted total, a View all orders link, and a neutral first-purchase empty state.
+- Added responsive single-column order rows below `800px`, visible focus treatment, minimum `16px` text, logical end alignment for RTL, and forced-colors borders/backgrounds.
+- Mobile package smoke exposed a pre-existing long-email overflow in the dashboard hero. Added a scoped `overflow-wrap: anywhere` safeguard to the account meta line and regression coverage before restarting exact-package acceptance.
+- Final review switched order-date display to WooCommerce's timezone-aware `wc_format_datetime()` helper with a WordPress fallback for isolated environments, preventing near-midnight orders from showing the wrong site-local calendar date.
+- Local validation passed: PHP syntax checks, focused PHPUnit (`43 tests`, `336 assertions`), final WooCommerce-focused PHPUnit (`17 tests`, `40 assertions`), full PHPUnit (`338 tests`, `2158 assertions`), `npm.cmd run lint`, `npm.cmd run build`, `npm.cmd run make-pot` (`1054 strings`), and `git diff --check`.
+- Final portable acceptance package `alynt-account-gateway-v1.1.1-recent-orders-qa.zip` inspected cleanly: 47 runtime files, one expected plugin root, zero development-file or backslash-path hits, Recent Orders, long-email-wrap, and WooCommerce date-formatter markers present, and SHA-256 `883DBF6B347C113EF9A0CDA820AB9141D73DCE59C2E717327568CDDC3D869FE7`.
+- Plugin Tester exact-package acceptance passed through the native WordPress upgrader path. A disposable customer with three orders verified desktop rows, mobile single-column rows, visible keyboard focus, translated statuses, dates, totals, the View all orders link, and WooCommerce-owned order-detail rendering. A second disposable customer verified the first-purchase empty state. Temporarily hiding Orders removed the overview shortcut, navigation card, and Recent Orders module while the direct Orders endpoint remained available.
+- Plugin Tester responsive acceptance passed at `1440px`, `390px`, and `320px` with no horizontal overflow after the long-email safeguard. Cleanup removed three orders and two users; settings SHA-256 returned to `4c9c362f34b69a693030000a806bb55f172ce98601d4398b9b8fd75555e90a0f`, active-plugin SHA-256 remained `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9`, ACG remained active at position `1`, and all QA upload/rollback artifacts were removed.
+- `hbf-staging` exact-package acceptance passed after the remote ZIP SHA-256 matched the inspected package and the GridPane root WP-CLI path installed it over the root-owned plugin directory. The same populated, empty, hidden-Orders, direct-endpoint, delegated-detail, visible-focus, desktop, `390px`, and `320px` checks passed without overflow. The only console entry was the previously documented Independent Analytics `401` from `/wp-json/iawp/search`, not Account Gateway.
+- `hbf-staging` cleanup removed three orders, two users, the helper, uploaded package, and rollback archive. Settings SHA-256 returned to `07c3e10868e0f20119fdf5fe9ac48c6435a995deb92b85ec38da6476afac409c`, active-plugin SHA-256 remained `c1576c22edb3110bd0ea1a3df379ce454f2e2e0f7d427e25d3211ea00aa462df`, ACG remained active at position `7`, and `/login/` returned HTTP `200`. Production HBF was not touched.
+- The final checksum was reinstalled on both targets after the timezone polish. One-request disposable order smokes returned normalized `Processing` rows dated `July 18, 2026` through the packaged `wc_format_datetime()` path, then deleted the orders and users immediately. Plugin Tester retained exact settings/active hashes `4c9c362f34b69a693030000a806bb55f172ce98601d4398b9b8fd75555e90a0f` / `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9`; `hbf-staging` retained `07c3e10868e0f20119fdf5fe9ac48c6435a995deb92b85ec38da6476afac409c` / `c1576c22edb3110bd0ea1a3df379ce454f2e2e0f7d427e25d3211ea00aa462df` at active position `7`.
 
 #### Immediate Approved Scope - Navigation Visibility And Footer Menu
 
