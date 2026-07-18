@@ -94,6 +94,13 @@ class ALYNT_AG_Test_Frontend_Dashboard_WooCommerce extends ALYNT_AG_WooCommerce_
 	);
 
 	/**
+	 * Saved payment methods to return.
+	 *
+	 * @var array<int,array<string,mixed>>
+	 */
+	public $saved_payment_methods = array();
+
+	/**
 	 * Return configured endpoint.
 	 *
 	 * @param string              $path     Current relative path.
@@ -168,6 +175,17 @@ class ALYNT_AG_Test_Frontend_Dashboard_WooCommerce extends ALYNT_AG_WooCommerce_
 	 */
 	public function saved_addresses( $user_id ) {
 		return $this->saved_addresses;
+	}
+
+	/**
+	 * Return configured saved payment methods.
+	 *
+	 * @param int $user_id User ID.
+	 * @param int $limit   Maximum payment methods.
+	 * @return array<int,array<string,mixed>>
+	 */
+	public function saved_payment_methods( $user_id, $limit = 3 ) {
+		return $this->saved_payment_methods;
 	}
 }
 
@@ -612,6 +630,8 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-addresses"', $html );
 		$this->assertStringContainsString( 'No billing address is saved yet.', $html );
 		$this->assertStringContainsString( 'No shipping address is saved yet.', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-payment-methods"', $html );
+		$this->assertStringContainsString( 'Saved payment methods will appear here when your payment provider supports secure account storage.', $html );
 	}
 
 	public function test_woocommerce_dashboard_recent_orders_render_normalized_rows() {
@@ -735,6 +755,44 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringContainsString( 'Add shipping address', $html );
 	}
 
+	public function test_woocommerce_dashboard_saved_payment_methods_render_normalized_rows() {
+		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
+		$dashboard->available = true;
+		$woocommerce          = new ALYNT_AG_Test_Frontend_Dashboard_WooCommerce();
+		$woocommerce->saved_payment_methods = array(
+			array(
+				'display_name' => 'Visa ending in 4242 (expires 12/28)',
+				'is_default'   => true,
+			),
+			array(
+				'display_name' => 'eCheck ending in 6789',
+				'is_default'   => false,
+			),
+		);
+		$screen = new ALYNT_AG_Frontend_Dashboard_Screen(
+			$dashboard,
+			$woocommerce,
+			new ALYNT_AG_Test_Frontend_Dashboard_Branding()
+		);
+		$settings = array_merge(
+			$this->settings,
+			array( 'woocommerce_takeover' => true )
+		);
+
+		ob_start();
+		$screen->render_dashboard_screen( $settings, '/my-account/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'Saved Payment Methods', $html );
+		$this->assertStringContainsString( 'Manage payment methods', $html );
+		$this->assertStringContainsString( 'href="/my-account/payment-methods/"', $html );
+		$this->assertStringContainsString( 'Visa ending in 4242 (expires 12/28)', $html );
+		$this->assertStringContainsString( 'eCheck ending in 6789', $html );
+		$this->assertSame( 1, substr_count( $html, 'agw-dashboard-payment-method__default' ) );
+		$this->assertStringContainsString( '>Default</span>', $html );
+		$this->assertStringNotContainsString( 'Saved payment methods will appear here', $html );
+	}
+
 	public function test_woocommerce_overview_omits_hidden_shortcuts_without_empty_actions_markup() {
 		$dashboard            = new ALYNT_AG_Test_Frontend_Dashboard_Service();
 		$dashboard->available = true;
@@ -756,7 +814,7 @@ class FrontendDashboardScreenTest extends TestCase {
 			$this->settings,
 			array(
 				'woocommerce_takeover'          => true,
-				'woocommerce_hidden_menu_items' => array( 'orders', 'downloads', 'edit-address', 'edit-account' ),
+				'woocommerce_hidden_menu_items' => array( 'orders', 'downloads', 'edit-address', 'edit-account', 'payment-methods' ),
 			)
 		);
 
@@ -772,6 +830,7 @@ class FrontendDashboardScreenTest extends TestCase {
 		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-recent-orders"', $html );
 		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-downloads"', $html );
 		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-addresses"', $html );
+		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-payment-methods"', $html );
 	}
 
 	public function test_render_dashboard_screen_outputs_endpoint_fallback_when_render_fails() {

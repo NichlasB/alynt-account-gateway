@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.1.5 - 2026-07-18
+
+### Added
+
+- Added a read-only Saved Payment Methods module to the branded WooCommerce dashboard with a three-method preview and clear default-method state.
+- Added calm guidance when the customer has no saved methods or the configured provider does not support secure account storage.
+
+### Security
+
+- Payment-method data is customer-scoped and normalized to WooCommerce-provided display names plus default state before rendering.
+- Raw tokens, token IDs, gateway IDs, credentials, and direct destructive controls are excluded; all management actions remain delegated to WooCommerce.
+
+### Changed
+
+- Saved Payment Methods follows the existing Payment Methods navigation visibility setting without disabling the direct WooCommerce endpoint.
+- Added responsive one-column mobile layout, long-label wrapping, visible focus, 44px management targets, RTL-safe styling, and forced-colors support.
+
+### Tests
+
+- Added integration, renderer, and CSS regression coverage for customer scoping, masked normalization, preview limits, empty and populated states, hidden navigation behavior, responsive layout, and accessibility.
+
 ## 1.1.4 - 2026-07-18
 
 ### Added

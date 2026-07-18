@@ -411,6 +411,25 @@ if ( ! function_exists( 'wc_get_customer_available_downloads' ) ) {
 	}
 }
 
+if ( ! class_exists( 'WC_Payment_Tokens' ) ) {
+	class WC_Payment_Tokens {
+
+		/**
+		 * Return configured payment-token fixtures.
+		 *
+		 * @param int $user_id WordPress user ID.
+		 * @return array<int,object>
+		 */
+		public static function get_customer_tokens( $user_id ) {
+			$GLOBALS['alynt_ag_test_wc_payment_token_calls'][] = absint( $user_id );
+
+			return isset( $GLOBALS['alynt_ag_test_wc_payment_tokens'] )
+				? $GLOBALS['alynt_ag_test_wc_payment_tokens']
+				: array();
+		}
+	}
+}
+
 if ( ! function_exists( 'wc_get_account_formatted_address' ) ) {
 	function wc_get_account_formatted_address( $type = 'billing', $user_id = 0 ) {
 		$key = sanitize_key( $type ) . ':' . absint( $user_id );

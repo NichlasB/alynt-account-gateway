@@ -270,6 +270,7 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 			<?php $this->render_recent_orders( $user->ID, $settings ); ?>
 			<?php $this->render_available_downloads( $user->ID, $settings ); ?>
 			<?php $this->render_saved_addresses( $user->ID, $settings ); ?>
+			<?php $this->render_saved_payment_methods( $user->ID, $settings ); ?>
 		<?php endif; ?>
 
 		<section class="agw-dashboard-section" aria-labelledby="agw-dashboard-links-title">
@@ -850,6 +851,47 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 					</article>
 				<?php endforeach; ?>
 			</div>
+		</section>
+		<?php
+	}
+
+	/**
+	 * Render a read-only saved-payment-methods module on the WooCommerce dashboard.
+	 *
+	 * @param int                 $user_id  WordPress user ID.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	private function render_saved_payment_methods( $user_id, $settings ) {
+		if ( ! $this->woocommerce->is_account_menu_item_visible( 'payment-methods', $settings ) ) {
+			return;
+		}
+
+		$methods = $this->woocommerce->saved_payment_methods( $user_id, 3 );
+		?>
+		<section class="agw-dashboard-section agw-dashboard-payment-methods" aria-labelledby="agw-dashboard-payment-methods-title">
+			<div class="agw-dashboard-payment-methods__header">
+				<h2 id="agw-dashboard-payment-methods-title"><?php esc_html_e( 'Saved Payment Methods', 'alynt-account-gateway' ); ?></h2>
+				<a href="<?php echo esc_url( $this->woocommerce->endpoint_url( 'payment-methods', $settings ) ); ?>">
+					<?php esc_html_e( 'Manage payment methods', 'alynt-account-gateway' ); ?>
+				</a>
+			</div>
+			<?php if ( empty( $methods ) ) : ?>
+				<p class="agw-dashboard-payment-methods__empty">
+					<?php esc_html_e( 'Saved payment methods will appear here when your payment provider supports secure account storage.', 'alynt-account-gateway' ); ?>
+				</p>
+			<?php else : ?>
+				<ul class="agw-dashboard-payment-methods__list" role="list">
+					<?php foreach ( $methods as $method ) : ?>
+						<li class="agw-dashboard-payment-method">
+							<span class="agw-dashboard-payment-method__name"><?php echo esc_html( $method['display_name'] ); ?></span>
+							<?php if ( ! empty( $method['is_default'] ) ) : ?>
+								<span class="agw-dashboard-payment-method__default"><?php esc_html_e( 'Default', 'alynt-account-gateway' ); ?></span>
+							<?php endif; ?>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			<?php endif; ?>
 		</section>
 		<?php
 	}

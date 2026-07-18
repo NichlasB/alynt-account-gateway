@@ -179,8 +179,20 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertStringContainsString( '.agw-dashboard-address__details', $css );
 		$this->assertStringContainsString( 'overflow-wrap: anywhere;', $css );
 		$this->assertMatchesRegularExpression( '/\.agw-dashboard-addresses__header a,[^{]*\.agw-dashboard-address__action\s*\{[^}]*min-height:\s*44px;/s', $css );
-		$this->assertMatchesRegularExpression( '/@media \(max-width: 800px\)[\s\S]*\.agw-dashboard-addresses__header\s*\{[^}]*flex-direction:\s*column;/s', $css );
+		$this->assertMatchesRegularExpression( '/@media \(max-width: 800px\)[\s\S]*\.agw-dashboard-addresses__header[^{]*\{[^}]*flex-direction:\s*column;/s', $css );
 		$this->assertStringContainsString( '.agw-dashboard-address {', $css );
+	}
+
+	public function test_saved_payment_methods_module_has_responsive_accessible_styles() {
+		$css = $this->get_frontend_css();
+
+		$this->assertStringContainsString( '.agw-dashboard-payment-methods__list', $css );
+		$this->assertStringContainsString( '.agw-dashboard-payment-methods__header a:focus-visible', $css );
+		$this->assertStringContainsString( '.agw-dashboard-payment-method__default', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-dashboard-payment-methods__header a\s*\{[^}]*min-height:\s*44px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-dashboard-payment-method__name\s*\{[^}]*font-size:\s*16px;[^}]*overflow-wrap:\s*anywhere;/s', $css );
+		$this->assertMatchesRegularExpression( '/@media \(max-width: 800px\)[\s\S]*\.agw-dashboard-payment-methods__list\s*\{[^}]*grid-template-columns:\s*1fr;/s', $css );
+		$this->assertMatchesRegularExpression( '/@media \(forced-colors: active\)[\s\S]*\.agw-dashboard-payment-method,[\s\S]*\.agw-dashboard-payment-method__default,/s', $css );
 	}
 
 	public function test_gateway_card_spacing_matches_post_v1_visual_tweak() {

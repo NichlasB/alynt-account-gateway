@@ -525,6 +525,60 @@ class ALYNT_AG_WooCommerce_Integration {
 	}
 
 	/**
+	 * Return normalized saved payment-method display data for a customer.
+	 *
+	 * @param int $user_id WordPress user ID.
+	 * @param int $limit   Maximum payment methods to return.
+	 * @return array<int,array<string,mixed>>
+	 */
+	public function saved_payment_methods( $user_id, $limit = 3 ) {
+		$user_id = absint( $user_id );
+		$limit   = max( 1, min( 5, absint( $limit ) ) );
+
+		if (
+			! $user_id
+			|| ! class_exists( 'WC_Payment_Tokens' )
+			|| ! method_exists( 'WC_Payment_Tokens', 'get_customer_tokens' )
+		) {
+			return array();
+		}
+
+		$tokens = WC_Payment_Tokens::get_customer_tokens( $user_id );
+		if ( ! is_array( $tokens ) ) {
+			return array();
+		}
+
+		$normalized = array();
+		foreach ( $tokens as $token ) {
+			if ( ! is_object( $token ) || ! method_exists( $token, 'get_display_name' ) ) {
+				continue;
+			}
+
+			$display_name = html_entity_decode(
+				wp_strip_all_tags( (string) $token->get_display_name() ),
+				ENT_QUOTES,
+				'UTF-8'
+			);
+			$display_name = sanitize_text_field( $display_name );
+
+			if ( '' === $display_name ) {
+				continue;
+			}
+
+			$normalized[] = array(
+				'display_name' => $display_name,
+				'is_default'   => method_exists( $token, 'is_default' ) && (bool) $token->is_default(),
+			);
+
+			if ( count( $normalized ) >= $limit ) {
+				break;
+			}
+		}
+
+		return $normalized;
+	}
+
+	/**
 	 * Return normalized billing and shipping address lines for a customer.
 	 *
 	 * @param int $user_id WordPress user ID.

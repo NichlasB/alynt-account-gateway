@@ -22,6 +22,8 @@ class WooCommerceIntegrationTest extends TestCase {
 		$GLOBALS['alynt_ag_test_wc_format_datetime_calls'] = array();
 		$GLOBALS['alynt_ag_test_wc_available_downloads'] = array();
 		$GLOBALS['alynt_ag_test_wc_available_download_calls'] = array();
+		$GLOBALS['alynt_ag_test_wc_payment_tokens'] = array();
+		$GLOBALS['alynt_ag_test_wc_payment_token_calls'] = array();
 		$GLOBALS['alynt_ag_test_wc_formatted_addresses'] = array();
 		$GLOBALS['alynt_ag_test_wc_formatted_address_calls'] = array();
 	}
@@ -34,6 +36,8 @@ class WooCommerceIntegrationTest extends TestCase {
 			$GLOBALS['alynt_ag_test_wc_format_datetime_calls'],
 			$GLOBALS['alynt_ag_test_wc_available_downloads'],
 			$GLOBALS['alynt_ag_test_wc_available_download_calls'],
+			$GLOBALS['alynt_ag_test_wc_payment_tokens'],
+			$GLOBALS['alynt_ag_test_wc_payment_token_calls'],
 			$GLOBALS['alynt_ag_test_wc_formatted_addresses'],
 			$GLOBALS['alynt_ag_test_wc_formatted_address_calls']
 		);
@@ -331,6 +335,80 @@ class WooCommerceIntegrationTest extends TestCase {
 		$this->assertCount( 2, $integration->available_downloads( 9, 2 ) );
 		$this->assertSame( array(), $integration->available_downloads( 0, 3 ) );
 		$this->assertSame( array( 9 ), $GLOBALS['alynt_ag_test_wc_available_download_calls'] );
+	}
+
+	public function test_saved_payment_methods_returns_masked_customer_display_data() {
+		$GLOBALS['alynt_ag_test_wc_payment_tokens'] = array(
+			new class() {
+				public function get_display_name() {
+					return '<strong>Visa ending in 4242</strong> (expires 12/28)';
+				}
+
+				public function is_default() {
+					return true;
+				}
+
+				public function get_token() {
+					return 'tok_private';
+				}
+			},
+			new class() {
+				public function get_display_name() {
+					return 'eCheck ending in 6789';
+				}
+
+				public function is_default() {
+					return false;
+				}
+			},
+			new stdClass(),
+		);
+
+		$integration = new ALYNT_AG_WooCommerce_Integration();
+		$methods     = $integration->saved_payment_methods( 9, 3 );
+
+		$this->assertSame(
+			array(
+				array(
+					'display_name' => 'Visa ending in 4242 (expires 12/28)',
+					'is_default'   => true,
+				),
+				array(
+					'display_name' => 'eCheck ending in 6789',
+					'is_default'   => false,
+				),
+			),
+			$methods
+		);
+		$this->assertSame( array( 9 ), $GLOBALS['alynt_ag_test_wc_payment_token_calls'] );
+		$this->assertArrayNotHasKey( 'token', $methods[0] );
+		$this->assertArrayNotHasKey( 'gateway_id', $methods[0] );
+	}
+
+	public function test_saved_payment_methods_caps_results_and_rejects_invalid_user() {
+		$GLOBALS['alynt_ag_test_wc_payment_tokens'] = array(
+			new class() {
+				public function get_display_name() {
+					return 'Method one';
+				}
+			},
+			new class() {
+				public function get_display_name() {
+					return 'Method two';
+				}
+			},
+			new class() {
+				public function get_display_name() {
+					return 'Method three';
+				}
+			},
+		);
+
+		$integration = new ALYNT_AG_WooCommerce_Integration();
+
+		$this->assertCount( 2, $integration->saved_payment_methods( 9, 2 ) );
+		$this->assertSame( array(), $integration->saved_payment_methods( 0, 3 ) );
+		$this->assertSame( array( 9 ), $GLOBALS['alynt_ag_test_wc_payment_token_calls'] );
 	}
 
 	public function test_recent_orders_skips_invalid_results_and_caps_query_limit() {

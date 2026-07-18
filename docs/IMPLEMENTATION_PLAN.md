@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Richer Dashboard UX Expansion in progress; Available Downloads released and updater-verified as v1.1.4
+- Current phase: Richer Dashboard UX Expansion in progress; Payment Methods v1.1.5 candidate ready for exact-package acceptance
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.4 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
+- Plugin status: v1.1.4 is the current public baseline; the v1.1.5 Payment Methods candidate has passed local validation and package inspection.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Begin the Payment Methods dashboard module.
+- Next roadmap: Run exact-package Payment Methods acceptance on LocalWP Plugin Tester, then request release approval.
 
 ## Post-v1 Product Roadmap
 
@@ -216,6 +216,38 @@
 - Staging's active list remained valid and Account Gateway remained active, but the headless attempts normalized its cached active-list ordering from the initial observed position `6` to current position `7`; this positional change is documented rather than represented as an exact active-list-hash preservation result. Production HBF was not touched.
 
 ### Slice 6 - Dashboard UX Expansion
+
+#### Immediate Increment - Payment Methods
+
+##### Scope
+
+- [x] Add a read-only Saved Payment Methods module to the base WooCommerce dashboard.
+- [x] Query only the authenticated customer's saved payment tokens through WooCommerce's payment-token API.
+- [x] Normalize only WooCommerce-provided customer-facing display names and default-method state before renderer output.
+- [x] Keep add, delete, and default-method actions delegated to WooCommerce's native Payment Methods endpoints.
+- [x] Show a calm provider-aware empty state when no saved methods are available.
+- [x] Omit the entire module when the administrator hides the Payment Methods dashboard navigation item.
+- [x] Add responsive, visible-focus, RTL-safe, long-label, and forced-colors styling.
+
+##### Acceptance Criteria
+
+- [x] The renderer never receives raw payment tokens, token IDs, gateway IDs, secrets, or unmasked payment credentials.
+- [x] Saved methods are customer-scoped, capped to a small dashboard preview, and use WooCommerce's customer-facing display names.
+- [x] The module is read-only and all sensitive management actions continue through WooCommerce handlers and nonce checks.
+- [ ] Empty, populated, long-label, and default-method states remain readable without horizontal overflow down to 320px.
+- [x] Hiding Payment Methods removes the module and navigation affordance while leaving direct WooCommerce endpoints available.
+- [x] Focused and full automated checks pass.
+- [ ] Exact-package desktop/mobile acceptance passes on Plugin Tester before release approval.
+
+##### Progress Notes
+
+- Selected as the next bounded dashboard increment after Available Downloads.
+- Architecture review confirmed that `WC_Payment_Tokens::get_customer_tokens()` can remain authoritative while the plugin normalizes only `get_display_name()` and `is_default()` output for a read-only dashboard preview.
+- Direct add, delete, and default-method controls are intentionally excluded from the module so WooCommerce and payment providers retain all sensitive action handling.
+- Added a three-method Saved Payment Methods preview with a clear default badge, delegated Manage payment methods link, calm provider-aware empty guidance, complete omission when Payment Methods navigation is hidden, and no direct mutation controls.
+- The integration boundary accepts only the authenticated WordPress user ID, caps the preview defensively at five, skips invalid token objects, strips markup from WooCommerce-provided display names, and returns only `display_name` plus `is_default` scalars. It never calls raw-token or gateway-ID getters.
+- Local validation passed: focused PHPUnit (`14 tests`, `99 assertions`), full PHPUnit (`350 tests`, `2,268 assertions`), full PHPCS, production build, POT regeneration (`1,076 strings`), npm audit (zero vulnerabilities), Composer audit (no advisories), PHP syntax checks, and `git diff --check`.
+- The corrected v1.1.5 QA package contains `47` runtime files under one expected plugin root, `41` syntax-clean PHP files, zero development-file or backslash-path hits, aligned header/constant/stable-tag/POT metadata, compiled Payment Methods CSS, and no raw-token or gateway-ID getter calls. SHA-256: `4B5E2258344444797C3AFCCD930F1A4D6BFEC5FC9C00A8CD8E745365F82CA7BF`.
 
 #### Immediate Increment - Available Downloads
 

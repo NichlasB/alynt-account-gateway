@@ -1236,6 +1236,82 @@ html.agw-has-admin-bar .agw-offcanvas {
 	margin-top: auto;
 }
 
+.agw-dashboard-payment-methods__header {
+	display: flex;
+	gap: 16px;
+	align-items: baseline;
+	justify-content: space-between;
+}
+
+.agw-dashboard-payment-methods__header h2 {
+	margin: 0;
+}
+
+.agw-dashboard-payment-methods__header a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	color: var(--agw-color-primary);
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.4;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.agw-dashboard-payment-methods__list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr));
+	gap: 14px;
+	margin: 16px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.agw-dashboard-payment-method {
+	display: flex;
+	gap: 12px;
+	align-items: center;
+	justify-content: space-between;
+	min-width: 0;
+	min-height: 70px;
+	margin: 0;
+	padding: 14px 16px;
+	border: 1px solid rgb(40 20 8 / 14%);
+	border-radius: 8px;
+	background: var(--agw-color-surface);
+}
+
+.agw-dashboard-payment-method__name {
+	min-width: 0;
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.4;
+	overflow-wrap: anywhere;
+}
+
+.agw-dashboard-payment-method__default {
+	flex: 0 0 auto;
+	padding: 4px 8px;
+	border-radius: 999px;
+	background: color-mix(in srgb, var(--agw-color-primary) 10%, var(--agw-color-surface));
+	color: var(--agw-color-primary);
+	font-size: 16px;
+	font-weight: 700;
+	line-height: 1.3;
+}
+
+.agw-dashboard-payment-methods__empty {
+	margin: 16px 0 0;
+	padding: 16px;
+	border: 1px solid rgb(40 20 8 / 14%);
+	border-radius: 8px;
+	background: color-mix(in srgb, var(--agw-color-primary) 4%, var(--agw-color-surface));
+	color: color-mix(in srgb, var(--agw-color-text) 78%, var(--agw-color-surface));
+	font-size: 16px;
+	line-height: 1.55;
+}
+
 .agw-dashboard-grid {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
@@ -1640,6 +1716,7 @@ html.agw-has-admin-bar .agw-offcanvas {
 .agw-dashboard-download__action:focus-visible,
 .agw-dashboard-addresses__header a:focus-visible,
 .agw-dashboard-address__action:focus-visible,
+.agw-dashboard-payment-methods__header a:focus-visible,
 .agw-dashboard-link:focus-visible,
 .agw-dashboard__logout:focus-visible,
 .agw-dashboard-action:focus-visible,
@@ -1780,7 +1857,8 @@ html.agw-has-admin-bar .agw-offcanvas {
 	}
 
 	.agw-dashboard-downloads__header,
-	.agw-dashboard-addresses__header {
+	.agw-dashboard-addresses__header,
+	.agw-dashboard-payment-methods__header {
 		flex-direction: column;
 		gap: 8px;
 		align-items: flex-start;
@@ -1802,6 +1880,10 @@ html.agw-has-admin-bar .agw-offcanvas {
 	}
 
 	.agw-dashboard-addresses__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.agw-dashboard-payment-methods__list {
 		grid-template-columns: 1fr;
 	}
 
@@ -1895,6 +1977,9 @@ html.agw-has-admin-bar .agw-offcanvas {
 	.agw-dashboard-downloads__empty,
 	.agw-dashboard-download__action,
 	.agw-dashboard-address,
+	.agw-dashboard-payment-method,
+	.agw-dashboard-payment-methods__empty,
+	.agw-dashboard-payment-method__default,
 	.agw-dashboard-link,
 	.agw-dashboard-guidance,
 	.agw-dashboard-affordance,
@@ -1957,6 +2042,7 @@ html.agw-has-admin-bar .agw-offcanvas {
 	.agw-dashboard-download__action:focus,
 	.agw-dashboard-addresses__header a:focus,
 	.agw-dashboard-address__action:focus,
+	.agw-dashboard-payment-methods__header a:focus,
 	.agw-dashboard-link:focus,
 	.agw-dashboard__logout:focus,
 	.agw-dashboard-action:focus,
