@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Richer Dashboard UX Expansion in progress; Payment Methods v1.1.5 candidate ready for exact-package acceptance
+- Current phase: Richer Dashboard UX Expansion in progress; Payment Methods v1.1.5 candidate passed exact-package acceptance and awaits release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.4 is the current public baseline; the v1.1.5 Payment Methods candidate has passed local validation and package inspection.
+- Plugin status: v1.1.4 is the current public baseline; the v1.1.5 Payment Methods candidate has passed local validation, package inspection, and exact-package Plugin Tester acceptance.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Run exact-package Payment Methods acceptance on LocalWP Plugin Tester, then request release approval.
+- Next roadmap: Request release approval for the accepted v1.1.5 Payment Methods candidate.
 
 ## Post-v1 Product Roadmap
 
@@ -234,10 +234,10 @@
 - [x] The renderer never receives raw payment tokens, token IDs, gateway IDs, secrets, or unmasked payment credentials.
 - [x] Saved methods are customer-scoped, capped to a small dashboard preview, and use WooCommerce's customer-facing display names.
 - [x] The module is read-only and all sensitive management actions continue through WooCommerce handlers and nonce checks.
-- [ ] Empty, populated, long-label, and default-method states remain readable without horizontal overflow down to 320px.
+- [x] Empty, populated, long-label, and default-method states remain readable without horizontal overflow down to 320px.
 - [x] Hiding Payment Methods removes the module and navigation affordance while leaving direct WooCommerce endpoints available.
 - [x] Focused and full automated checks pass.
-- [ ] Exact-package desktop/mobile acceptance passes on Plugin Tester before release approval.
+- [x] Exact-package desktop/mobile acceptance passes on Plugin Tester before release approval.
 
 ##### Progress Notes
 
@@ -248,6 +248,11 @@
 - The integration boundary accepts only the authenticated WordPress user ID, caps the preview defensively at five, skips invalid token objects, strips markup from WooCommerce-provided display names, and returns only `display_name` plus `is_default` scalars. It never calls raw-token or gateway-ID getters.
 - Local validation passed: focused PHPUnit (`14 tests`, `99 assertions`), full PHPUnit (`350 tests`, `2,268 assertions`), full PHPCS, production build, POT regeneration (`1,076 strings`), npm audit (zero vulnerabilities), Composer audit (no advisories), PHP syntax checks, and `git diff --check`.
 - The corrected v1.1.5 QA package contains `47` runtime files under one expected plugin root, `41` syntax-clean PHP files, zero development-file or backslash-path hits, aligned header/constant/stable-tag/POT metadata, compiled Payment Methods CSS, and no raw-token or gateway-ID getter calls. SHA-256: `4B5E2258344444797C3AFCCD930F1A4D6BFEC5FC9C00A8CD8E745365F82CA7BF`.
+- Plugin Tester exact-package acceptance passed after installing that inspected ZIP through WordPress's overwrite upgrader path over active `1.1.4`. The installed plugin reports `1.1.5`, remains active at position `1`, and all `47` installed runtime files byte-match the inspected package.
+- Populated-state acceptance used four WooCommerce CC tokens attached to a disposable customer through a registered local gateway. The dashboard rendered exactly three customer-facing display names, one Default badge, no fourth method, no raw token or gateway data, and a `Manage payment methods` link that reached WooCommerce's delegated endpoint with all four methods and native management actions intact.
+- Empty-state, hidden-navigation, and direct-endpoint acceptance passed. The empty module rendered calm provider-aware copy; hiding Payment Methods removed both its module and dashboard navigation affordance; and the direct `/my-account/payment-methods/` endpoint remained available.
+- Responsive browser acceptance passed at `1440px`, `390px`, and `320px`: desktop used a three-card preview, mobile used one column, the long provider label wrapped without overflow, page-level horizontal overflow remained absent, module and action text computed to at least `16px`, the Manage link retained a `44px` target, and keyboard focus rendered a visible solid outline. Browser console inspection found no Account Gateway errors.
+- Cleanup removed both disposable customers, all eight QA token rows and token metadata from the initial and corrected fixture runs, the temporary settings backup, uploaded ZIP, rollback copy, authenticated browser sessions, and MU helper. Final active-plugin SHA-256 `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e` and settings SHA-256 `c9a39358a9ccb267bfe1ae2f1dbab982b8d0222a9b13f40fa3b036d48c945df7` exactly match the pre-test baseline; the local homepage returns HTTP `200`.
 
 #### Immediate Increment - Available Downloads
 
