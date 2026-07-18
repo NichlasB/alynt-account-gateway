@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: Richer Dashboard UX Expansion in progress; Recent Orders increment released as v1.1.2 and updater-verified
+- Current phase: Richer Dashboard UX Expansion in progress; Saved Addresses increment approved as the v1.1.3 release candidate
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.2 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
+- Plugin status: v1.1.2 remains the current public baseline; v1.1.3 Saved Addresses is approved, exact-package accepted on LocalWP `plugin-tester` and `hbf-staging`, and awaiting publication.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 - Next roadmap: Select the next bounded dashboard module.

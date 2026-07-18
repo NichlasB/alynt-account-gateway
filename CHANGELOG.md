@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.1.3 - 2026-07-18
+
+### Added
+
+- Added a read-only Saved Addresses module to the branded WooCommerce dashboard with separate Billing and Shipping summaries.
+- Added calm per-address empty states and delegated Add, Edit, and Manage address links.
+
+### Changed
+
+- Saved Addresses follows the existing Addresses navigation visibility setting without disabling direct WooCommerce address endpoints.
+- Normalized WooCommerce-formatted addresses into sanitized text lines before renderer output.
+- Added responsive two-column and single-column layouts, long-address wrapping, visible focus, 44px action targets, RTL-safe styling, and forced-colors support.
+
+### Tests
+
+- Added integration, renderer, and CSS regression coverage for address normalization, delegated URLs, empty states, hidden navigation behavior, responsive layout, and accessibility.
+- Passed exact-package desktop and mobile acceptance on LocalWP Plugin Tester and production-like HBF staging.
+
 ## 1.1.2 - 2026-07-18
 
 ### Added
