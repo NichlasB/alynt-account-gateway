@@ -1,5 +1,23 @@
 # Changelog
 
+## 1.1.4 - 2026-07-18
+
+### Added
+
+- Added a read-only Available Downloads module to the branded WooCommerce dashboard with a three-file preview.
+- Added calm empty-state guidance plus clear finite, unlimited, dated-expiry, and no-expiry states.
+
+### Changed
+
+- Available Downloads follows the existing Downloads navigation visibility setting without disabling the direct WooCommerce endpoint.
+- Download and View all actions delegate authorization and file delivery to WooCommerce-owned URLs.
+- Added responsive single-column mobile rows, long-name wrapping, visible focus, distinct accessible action labels, 44px action targets, RTL-safe styling, and forced-colors support.
+
+### Tests
+
+- Added integration, renderer, and CSS regression coverage for normalized download data, preview limits, delegated URLs, empty states, hidden navigation behavior, responsive layout, and accessibility.
+- Passed exact-package desktop and mobile acceptance on LocalWP Plugin Tester and production-like HBF staging.
+
 ## 1.1.3 - 2026-07-18
 
 ### Added

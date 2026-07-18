@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Richer Dashboard UX Expansion in progress; Available Downloads implementation and exact-package acceptance complete, release pending
+- Current phase: Richer Dashboard UX Expansion in progress; Available Downloads v1.1.4 release candidate preparation in progress
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.3 is the current public baseline after GitHub release, public asset inspection, and Alynt Plugin Updater verification on LocalWP `plugin-tester` and `hbf-staging`.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Release the accepted Available Downloads increment, then select the next bounded dashboard module.
+- Next roadmap: Release and updater-verify v1.1.4, then select the next bounded dashboard module.
 
 ## Post-v1 Product Roadmap
 

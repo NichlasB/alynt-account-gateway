@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.3
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,13 @@ Uninstalling the plugin removes plugin-owned settings, the stored database schem
 Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile, Reoon, webhooks, diagnostics, or WooCommerce takeover on production sites. The plugin provides WordPress personal-data exporter and eraser callbacks for plugin-owned records, but site owners remain responsible for privacy notice wording, lawful-basis decisions, processor contracts, retention policy, and qualified legal review where required.
 
 == Changelog ==
+
+= 1.1.4 =
+
+* Added a read-only Available Downloads module to the branded WooCommerce dashboard with a three-file preview and delegated View all and Download actions.
+* Added clear finite, unlimited, dated-expiry, and no-expiry states plus a calm empty state.
+* Kept Available Downloads synchronized with the existing Downloads navigation visibility setting while preserving the direct WooCommerce endpoint.
+* Added responsive single-column mobile rows, long-name wrapping, visible focus, distinct accessible action labels, 44px action targets, RTL-safe styling, and high-contrast support.
 
 = 1.1.3 =
 
