@@ -30,11 +30,11 @@ function alyntAgTogglePassword( event ) {
 	}
 
 	const shouldShow = input.type === 'password';
-	const label      = shouldShow ? alyntAgLabels.hidePassword || 'Hide password' : alyntAgLabels.showPassword || 'Show password';
-	const statusText = shouldShow ? alyntAgLabels.passwordVisible || 'Password is visible.' : alyntAgLabels.passwordHidden || 'Password is hidden.';
+	const label      = shouldShow ? alyntAgLabels.hidePassword || '' : alyntAgLabels.showPassword || '';
+	const statusText = shouldShow ? alyntAgLabels.passwordVisible || '' : alyntAgLabels.passwordHidden || '';
 
 	input.type         = shouldShow ? 'text' : 'password';
-	toggle.textContent = shouldShow ? alyntAgLabels.hide || 'Hide' : alyntAgLabels.show || 'Show';
+	toggle.textContent = shouldShow ? alyntAgLabels.hide || '' : alyntAgLabels.show || '';
 	toggle.setAttribute( 'aria-label', label );
 	toggle.setAttribute( 'aria-pressed', shouldShow ? 'true' : 'false' );
 
@@ -86,7 +86,7 @@ function alyntAgUpdatePasswordPolicy( form ) {
 		const key              = item.getAttribute( 'data-agw-requirement' );
 		const passed           = Boolean( checks[ key ] );
 		const requirementLabel = item.getAttribute( 'data-agw-requirement-label' ) || item.textContent.trim();
-		const requirementState = passed ? 'Met' : 'Not met';
+		const requirementState = passed ? alyntAgLabels.requirementMet || '' : alyntAgLabels.requirementNotMet || '';
 
 		item.classList.toggle( 'is-met', passed );
 		item.setAttribute( 'aria-label', `${ requirementState }: ${ requirementLabel }` );
@@ -98,7 +98,10 @@ function alyntAgUpdatePasswordPolicy( form ) {
 	if ( password.length === 0 ) {
 		label.textContent = messages.empty;
 	} else {
-		label.textContent = `${ label.textContent } ${ metRequirements } of ${ totalRequirements } requirements met.`;
+		const requirementsSummary = ( alyntAgLabels.requirementsMet || '' )
+			.replace( '%1$d', String( metRequirements ) )
+			.replace( '%2$d', String( totalRequirements ) );
+		label.textContent         = `${ label.textContent } ${ requirementsSummary }`.trim();
 	}
 
 	passwordInput.setAttribute( 'aria-invalid', password.length > 0 && corePass !== coreKeys.length ? 'true' : 'false' );

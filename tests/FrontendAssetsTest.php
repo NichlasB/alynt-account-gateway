@@ -65,6 +65,9 @@ class FrontendAssetsTest extends TestCase {
 		$this->assertSame( 'Show password', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['showPassword'] );
 		$this->assertSame( 'Password is visible.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['passwordVisible'] );
 		$this->assertSame( 'Password is hidden.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['passwordHidden'] );
+		$this->assertSame( 'Met', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementMet'] );
+		$this->assertSame( 'Not met', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementNotMet'] );
+		$this->assertSame( '%1$d of %2$d requirements met.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementsMet'] );
 	}
 
 	public function test_enqueue_turnstile_only_on_registration_screen_when_configured() {

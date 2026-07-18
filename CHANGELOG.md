@@ -1,5 +1,46 @@
 # Changelog
 
+## 1.1.7 - 2026-07-18
+
+### Changed
+
+- Public HTTPS webhook deliveries now use WordPress safe HTTP validation, while explicit `localhost`, loopback, and `.local` HTTP destinations remain available for development.
+- Added an index for pending-registration confirmation token lookups through the existing idempotent `dbDelta()` schema upgrade path.
+- Added a reusable production rollout playbook with preflight, acceptance, monitoring, rollback, evidence, and cleanup controls.
+
+### Fixed
+
+- Password-policy requirement states and progress summaries are now supplied through translated frontend labels instead of English-only JavaScript strings.
+- Restored the missing v1.1.6 entry in this changelog.
+
+### Security
+
+- Hardened outgoing public webhook requests against unsafe destination resolution by delegating URL validation to `wp_safe_remote_post()`.
+
+### Tests
+
+- Added regression coverage for safe webhook transport, the local-development exception, the confirmation-token index, and localized password accessibility labels.
+
+## 1.1.6 - 2026-07-18
+
+### Added
+
+- Added a read-only Account Details summary to the branded WooCommerce dashboard with customer name, email address, customer-since date, and neutral readiness guidance.
+
+### Security
+
+- Limited renderer data to normalized first name, last name, email, registration date, and completion state.
+- Excluded usernames, display-name fallbacks, user IDs, roles, and password data.
+
+### Changed
+
+- Kept the summary synchronized with the existing Account Details navigation visibility setting while preserving the direct WooCommerce endpoint and native profile controls.
+- Added responsive single-column mobile layout, long-value wrapping, visible focus, 44px action targets, RTL-safe styling, and forced-colors support.
+
+### Tests
+
+- Added integration, renderer, and CSS regression coverage for normalization, completion state, hidden navigation behavior, responsive layout, and accessibility.
+
 ## 1.1.5 - 2026-07-18
 
 ### Added

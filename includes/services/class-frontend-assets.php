@@ -77,12 +77,16 @@ class ALYNT_AG_Frontend_Assets {
 			'alyntAgFrontend',
 			array(
 				'labels' => array(
-					'showPassword'    => __( 'Show password', 'alynt-account-gateway' ),
-					'hidePassword'    => __( 'Hide password', 'alynt-account-gateway' ),
-					'passwordVisible' => __( 'Password is visible.', 'alynt-account-gateway' ),
-					'passwordHidden'  => __( 'Password is hidden.', 'alynt-account-gateway' ),
-					'show'            => __( 'Show', 'alynt-account-gateway' ),
-					'hide'            => __( 'Hide', 'alynt-account-gateway' ),
+					'showPassword'      => __( 'Show password', 'alynt-account-gateway' ),
+					'hidePassword'      => __( 'Hide password', 'alynt-account-gateway' ),
+					'passwordVisible'   => __( 'Password is visible.', 'alynt-account-gateway' ),
+					'passwordHidden'    => __( 'Password is hidden.', 'alynt-account-gateway' ),
+					'show'              => __( 'Show', 'alynt-account-gateway' ),
+					'hide'              => __( 'Hide', 'alynt-account-gateway' ),
+					'requirementMet'    => __( 'Met', 'alynt-account-gateway' ),
+					'requirementNotMet' => __( 'Not met', 'alynt-account-gateway' ),
+					/* translators: 1: number of password requirements met, 2: total password requirements. */
+					'requirementsMet'   => __( '%1$d of %2$d requirements met.', 'alynt-account-gateway' ),
 				),
 			)
 		);

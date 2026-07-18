@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.6
+Stable tag: 1.1.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,7 +40,7 @@ Core features include:
 3. Configure Settings -> Account Gateway.
 4. Enable Frontend Output only after confirming the settings.
 
-Review `docs/OPERATIONS.md` for the full installation, update, rollback, emergency-disable, support-boundary, and launch-acceptance checklist.
+Review `docs/OPERATIONS.md` for installation and support guidance. Use `docs/PRODUCTION_ROLLOUT_PLAYBOOK.md` as the approval-gated checklist for each production rollout.
 
 == Uninstall ==
 
@@ -51,6 +51,13 @@ Uninstalling the plugin removes plugin-owned settings, the stored database schem
 Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile, Reoon, webhooks, diagnostics, or WooCommerce takeover on production sites. The plugin provides WordPress personal-data exporter and eraser callbacks for plugin-owned records, but site owners remain responsible for privacy notice wording, lawful-basis decisions, processor contracts, retention policy, and qualified legal review where required.
 
 == Changelog ==
+
+= 1.1.7 =
+
+* Added an index for pending-registration confirmation token lookups.
+* Routed public HTTPS webhook deliveries through WordPress safe HTTP validation while retaining explicit local-development webhook support.
+* Localized password-policy accessibility status text and removed English-only JavaScript fallbacks.
+* Added the production rollout playbook and refreshed pre-release documentation.
 
 = 1.1.6 =
 

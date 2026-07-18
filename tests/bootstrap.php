@@ -510,6 +510,17 @@ if ( ! function_exists( 'wp_remote_post' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_safe_remote_post' ) ) {
+	function wp_safe_remote_post( $url, $args = array() ) {
+		$GLOBALS['alynt_ag_test_safe_remote_posts'][] = array(
+			'url'  => $url,
+			'args' => $args,
+		);
+
+		return wp_remote_post( $url, $args );
+	}
+}
+
 if ( ! function_exists( 'wp_remote_get' ) ) {
 	function wp_remote_get( $url, $args = array() ) {
 		$GLOBALS['alynt_ag_test_remote_gets'][] = array(

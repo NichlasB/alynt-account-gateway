@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ALYNT_AG_Database {
 
-	const DB_VERSION = '0.1.4';
+	const DB_VERSION = '0.1.5';
 
 	/**
 	 * Install database tables.
@@ -44,6 +44,7 @@ class ALYNT_AG_Database {
 				PRIMARY KEY  (id),
 				KEY user_id (user_id),
 				KEY email (email),
+				KEY token_hash (token_hash),
 				KEY status (status),
 				KEY expires_at (expires_at)
 			) {$charset_collate};",

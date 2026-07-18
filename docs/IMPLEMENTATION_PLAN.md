@@ -2,12 +2,40 @@
 
 ## Status
 
-- Current phase: Richer Dashboard UX Expansion complete; all five dashboard modules are released and updater-verified
+- Current phase: v1.1.7 release approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.6 is the current public baseline, released and updater-verified.
+- Plugin status: v1.1.6 is the current public baseline; v1.1.7 is an unreleased maintenance candidate.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Resolve the separate updater stale-release-cache follow-up when scheduled; production rollout and inactive-account integration remain intentionally deferred.
+- Next roadmap: Production rollout execution remains deferred until a target site is chosen; inactive-account integration remains deferred until an authoritative status source exists.
+
+## v1.1.7 Pre-Release Revalidation
+
+### Scope
+
+- [x] Create a reusable production rollout playbook.
+- [x] Re-run the ordered wp-plugin-toolkit pre-release review sequence against the current v1 baseline.
+- [x] Add an index for pending-registration confirmation token lookups and bump the plugin database schema to `0.1.5`.
+- [x] Localize password-policy accessibility status text that previously remained hardcoded in frontend JavaScript.
+- [x] Route public HTTPS webhooks through WordPress safe HTTP validation while preserving explicit local-development destinations.
+- [x] Add focused regression coverage for each confirmed defect.
+- [x] Restore the missing v1.1.6 changelog entry and prepare aligned v1.1.7 release metadata.
+- [x] Install the exact v1.1.7 candidate package on Plugin Tester and verify the schema migration, gateway assets, webhook test path, settings preservation, and cleanup.
+- [ ] Publish v1.1.7 and verify Alynt Plugin Updater end to end.
+
+### Review Disposition
+
+- Release-blocking cleanup, error handling, WordPress practices, database, performance, edge-case, uninstall, i18n, accessibility, code-quality, documentation, and security findings are resolved in the candidate.
+- The adversarial suite passes with `355` tests and `2342` assertions, with warnings and risky tests configured as failures.
+- PHPCS/WPCS, asset build, npm audit, Composer audit, and diff checks pass.
+- Large-file decomposition remains a separate structural maintenance project because splitting the settings controller and large component stylesheets during a release gate would create disproportionate regression risk.
+- Comprehensive `@since` tagging remains documentation debt; existing PHPDoc covers purpose, parameters, and return contracts, and the repository has never used per-symbol `@since` tags.
+- Multisite behavior is not certified by this release. The plugin remains validated for standard single-site installations.
+- LocalWP Plugin Tester accepted the corrected 47-file package through WordPress's native upload-and-overwrite flow over active v1.1.6. The installed tree byte-matches the inspected package, active-plugin order is unchanged, settings are unchanged apart from the intended `0.1.4` to `0.1.5` schema migration, and the new `token_hash` index exists.
+- The accepted package SHA-256 is `FF9275437605C612B89231FA0EF95557B1EFF14A9C2A551A0AFF7E432292AEA5`.
+- WordPress rejected the first Windows-built QA archive because all entries used backslash separators. The same staged runtime tree was repackaged with forward-slash entries before acceptance. The GitHub workflow already packages on Ubuntu with `zip`, so the production builder is not affected.
+- Set Password preview behavior, localized accessibility states, isolated webhook metadata logging, LocalWP HTTP health, and full disposable-artifact cleanup passed.
+- See `docs/PRE_RELEASE_REVALIDATION_1.1.7.md` for the review record and deferred items.
 
 ## Post-v1 Product Roadmap
 
@@ -17,7 +45,7 @@
 - Original v1 implementation slices: Complete.
 - New approved post-v1 slices: Alynt Plugin Updater follow-up, deeper provider admin UX, dashboard UX expansion, dashboard action icons/off-canvas navigation, and delegated WooCommerce notice normalization.
 - New approved visual/admin-help tweak: widen gateway cards, reduce panel/card horizontal padding, remove trailing notice paragraph margin, and correct background-image guidance toward tall portrait imagery.
-- Deferred for later: production rollout playbook.
+- Production rollout playbook template: Complete; site-specific execution remains deferred until a production target is approved.
 - Exploratory/deferred: inactive-account integration until a real site or companion plugin defines the authoritative inactive/suspended-account signal.
 
 ### Recommended Sequence
@@ -29,7 +57,7 @@
 5. Dashboard navigation visibility and optional footer menu. Released and updater-verified as v1.1.0.
 6. Deeper provider admin UX. Released and updater-verified as v1.1.1.
 7. Richer dashboard UX expansion. Completed across v1.1.2 through v1.1.6; aggregate regression closure verified without a runtime release.
-8. Production rollout playbook, when the first production rollout is ready to be operationalized.
+8. Complete the site-specific copy of `docs/PRODUCTION_ROLLOUT_PLAYBOOK.md` when the first production rollout is ready to be operationalized.
 9. Inactive-account integration only if a concrete inactive/suspended-user source is identified.
 
 #### Saved Addresses Increment Progress Notes

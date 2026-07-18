@@ -48,6 +48,9 @@ class SettingsPagePreviewAssetsTest extends TestCase {
 		$this->assertSame( 'Show password', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['showPassword'] );
 		$this->assertSame( 'Hide password', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['hidePassword'] );
 		$this->assertSame( 'Password is visible.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['passwordVisible'] );
+		$this->assertSame( 'Met', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementMet'] );
+		$this->assertSame( 'Not met', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementNotMet'] );
+		$this->assertSame( '%1$d of %2$d requirements met.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementsMet'] );
 		$this->assertSame( 'Password is hidden.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['passwordHidden'] );
 	}
 

@@ -15,6 +15,7 @@ class WebhookDispatcherTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$GLOBALS['alynt_ag_test_remote_posts'] = array();
+		$GLOBALS['alynt_ag_test_safe_remote_posts'] = array();
 		$GLOBALS['alynt_ag_test_db_inserts'] = array();
 		unset( $GLOBALS['alynt_ag_test_remote_post_response'] );
 	}
@@ -86,6 +87,7 @@ class WebhookDispatcherTest extends TestCase {
 
 		$this->assertTrue( $result );
 		$this->assertCount( 1, $GLOBALS['alynt_ag_test_remote_posts'] );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_safe_remote_posts'] );
 		$this->assertSame( 'https://hooks.example.test/account-created', $GLOBALS['alynt_ag_test_remote_posts'][0]['url'] );
 		$this->assertSame( 'application/json', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['headers']['Content-Type'] );
 		$this->assertSame( 'account.created', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['headers']['X-Alynt-AG-Event'] );
@@ -210,5 +212,20 @@ class WebhookDispatcherTest extends TestCase {
 		$this->assertTrue( $dispatcher->is_allowed_delivery_url( 'http://plugin-tester.local/account-created' ) );
 		$this->assertTrue( $dispatcher->is_allowed_delivery_url( 'https://hooks.example.test/account-created' ) );
 		$this->assertFalse( $dispatcher->is_allowed_delivery_url( 'http://hooks.example.test/account-created' ) );
+	}
+
+	public function test_local_http_webhook_bypasses_public_url_validation() {
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+		$result     = $dispatcher->dispatch_account_created(
+			321,
+			array(
+				'account_created_webhook' => 'http://plugin-tester.local/account-created',
+				'debug_payload_logging'   => false,
+			)
+		);
+
+		$this->assertTrue( $result );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_remote_posts'] );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_safe_remote_posts'] );
 	}
 }

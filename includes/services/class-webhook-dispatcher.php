@@ -86,7 +86,7 @@ class ALYNT_AG_Webhook_Dispatcher {
 		$body    = is_string( $body ) ? $body : '';
 		$headers = $this->build_headers( $event_name, $body, $settings );
 
-		$response = wp_remote_post(
+		$response = $this->send_request(
 			$url,
 			array(
 				'timeout' => 10,
@@ -107,6 +107,24 @@ class ALYNT_AG_Webhook_Dispatcher {
 		}
 
 		return is_wp_error( $log_result ) ? $log_result : true;
+	}
+
+	/**
+	 * Send a webhook request through WordPress URL validation.
+	 *
+	 * Explicit local development URLs retain their existing support because
+	 * WordPress's safe HTTP helper rejects private network destinations.
+	 *
+	 * @param string              $url  Destination URL.
+	 * @param array<string,mixed> $args Request arguments.
+	 * @return array<string,mixed>|WP_Error
+	 */
+	private function send_request( $url, $args ) {
+		if ( $this->is_local_development_url( $url ) ) {
+			return wp_remote_post( $url, $args );
+		}
+
+		return wp_safe_remote_post( $url, $args );
 	}
 
 	/**
@@ -159,7 +177,20 @@ class ALYNT_AG_Webhook_Dispatcher {
 			return false;
 		}
 
-		return in_array( $host, array( 'localhost', '127.0.0.1', '::1' ), true ) || '.local' === substr( $host, -6 );
+		return $this->is_local_development_url( $url );
+	}
+
+	/**
+	 * Return whether a URL targets an explicitly supported local host.
+	 *
+	 * @param string $url Candidate URL.
+	 * @return bool
+	 */
+	private function is_local_development_url( $url ) {
+		$scheme = (string) wp_parse_url( $url, PHP_URL_SCHEME );
+		$host   = strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) );
+
+		return 'http' === $scheme && ( in_array( $host, array( 'localhost', '127.0.0.1', '::1' ), true ) || '.local' === substr( $host, -6 ) );
 	}
 
 	/**

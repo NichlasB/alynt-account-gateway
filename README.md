@@ -86,6 +86,8 @@ If Composer is available globally, `composer install` can be used instead of `ph
 - `docs/IMPLEMENTATION_PLAN.md`
 - `docs/V1_READINESS_PLAN.md`
 - `docs/OPERATIONS.md`
+- `docs/PRODUCTION_ROLLOUT_PLAYBOOK.md`
+- `docs/PRE_RELEASE_REVALIDATION_1.1.7.md`
 - `docs/PRIVACY_AND_GDPR.md`
 - `docs/SCAFFOLD_MASTER_PROMPT.md`
 - `docs/SETTINGS.md`
