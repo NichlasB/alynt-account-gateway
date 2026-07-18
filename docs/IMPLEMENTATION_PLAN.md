@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v1.1.7 release approval
+- Current phase: v1.1.7 released and updater-verified; production rollout remains deferred
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.6 is the current public baseline; v1.1.7 is an unreleased maintenance candidate.
+- Plugin status: v1.1.7 is the current public baseline, released and updater-verified on LocalWP Plugin Tester.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 - Next roadmap: Production rollout execution remains deferred until a target site is chosen; inactive-account integration remains deferred until an authoritative status source exists.
@@ -21,7 +21,7 @@
 - [x] Add focused regression coverage for each confirmed defect.
 - [x] Restore the missing v1.1.6 changelog entry and prepare aligned v1.1.7 release metadata.
 - [x] Install the exact v1.1.7 candidate package on Plugin Tester and verify the schema migration, gateway assets, webhook test path, settings preservation, and cleanup.
-- [ ] Publish v1.1.7 and verify Alynt Plugin Updater end to end.
+- [x] Publish v1.1.7 and verify Alynt Plugin Updater end to end.
 
 ### Review Disposition
 
@@ -35,13 +35,17 @@
 - The accepted package SHA-256 is `FF9275437605C612B89231FA0EF95557B1EFF14A9C2A551A0AFF7E432292AEA5`.
 - WordPress rejected the first Windows-built QA archive because all entries used backslash separators. The same staged runtime tree was repackaged with forward-slash entries before acceptance. The GitHub workflow already packages on Ubuntu with `zip`, so the production builder is not affected.
 - Set Password preview behavior, localized accessibility states, isolated webhook metadata logging, LocalWP HTTP health, and full disposable-artifact cleanup passed.
+- Released as [`v1.1.7`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.7) from commit `a3912e0`; Build Release workflow run `29661956615` passed.
+- The public GitHub asset contains 57 ZIP entries and 47 runtime files under one correct plugin root, with zero development files or backslash-path entries. All 41 packaged PHP files are syntax-clean, release metadata and schema/security markers are aligned, and SHA-256 is `BE25A519FAA4CBE00D5B3B3E777F0E581EDC16BE3E80CC0DC4642B2FAB10EE42`.
+- Plugin Tester updater verification passed after restoring public v1.1.6: Alynt Plugin Updater offered `1.1.6` to `1.1.7`, WordPress installed the exact public asset, all 47 installed files byte-match the public ZIP, activation order and settings were preserved, schema `0.1.5` and the `token_hash` index remain present, and a fresh check reports Account Gateway v1.1.7 up to date.
+- Release cleanup removed the disposable administrator, browser session, public v1.1.6 test package, extracted inspection files, and WordPress upgrader remnants. The final Plugin Tester home route returned HTTP 200.
 - See `docs/PRE_RELEASE_REVALIDATION_1.1.7.md` for the review record and deferred items.
 
 ## Post-v1 Product Roadmap
 
 ### Status
 
-- Current v1 product baseline: `v1.1.6`, released and updater-verified.
+- Current v1 product baseline: `v1.1.7`, released and updater-verified.
 - Original v1 implementation slices: Complete.
 - New approved post-v1 slices: Alynt Plugin Updater follow-up, deeper provider admin UX, dashboard UX expansion, dashboard action icons/off-canvas navigation, and delegated WooCommerce notice normalization.
 - New approved visual/admin-help tweak: widen gateway cards, reduce panel/card horizontal padding, remove trailing notice paragraph margin, and correct background-image guidance toward tall portrait imagery.

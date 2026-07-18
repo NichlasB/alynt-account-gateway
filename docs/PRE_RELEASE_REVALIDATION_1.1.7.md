@@ -86,8 +86,17 @@ The codebase documents classes and public methods with descriptions, parameter t
 
 The plugin uses site-prefixed tables and WordPress APIs, but network activation, cross-site uninstall, and per-blog lifecycle behavior were not certified. Do not claim multisite support until a dedicated multisite test matrix passes.
 
-## Release Handoff
+## Release Outcome
 
-The v1.1.7 candidate has passed source, dependency, package, and LocalWP runtime acceptance. Publishing still requires the user's explicit release approval. After publication, inspect the GitHub-built asset, verify the public checksum and archive separators, and exercise Alynt Plugin Updater from the prior public version before considering the release cycle closed.
+- Release: [Alynt Account Gateway v1.1.7](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.7)
+- Source commit: `a3912e0`
+- Build Release workflow: `29661956615`, passed
+- Public ZIP entries: 57
+- Public runtime files: 47
+- Packaged PHP files: 41, all syntax-clean
+- Public SHA-256: `BE25A519FAA4CBE00D5B3B3E777F0E581EDC16BE3E80CC0DC4642B2FAB10EE42`
+- Archive structure: one `alynt-account-gateway` root, zero backslash paths, zero development-file leakage
 
-No staging or production site was part of this revalidation.
+Plugin Tester updater verification restored the public v1.1.6 package, forced a fresh Alynt Plugin Updater check, received the v1.1.7 offer, and installed the exact public GitHub asset through WordPress's Plugins screen. The final 47-file installed tree byte-matches the public ZIP. Activation order and plugin settings were preserved, schema `0.1.5` and the `token_hash` index are present, a second fresh check reports v1.1.7 up to date, and the LocalWP homepage returns HTTP 200.
+
+The disposable administrator, browser session, downloaded downgrade package, extracted inspection files, and WordPress upgrader remnants were removed. No staging or production site was part of this release verification.
