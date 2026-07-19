@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.12 is published and updater-verified after the first production rollout passed Gate B; Gate C is paused until the corrected production update is approved and accepted
+- Current phase: v1.1.12 is published, updater-verified, and accepted on `isha-classes`; Gate C can now resume
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.12 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Update `isha-classes` to v1.1.12 through Alynt Plugin Updater after explicit live-site approval, verify the two frontend corrections, then return to Gate C; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Resume Gate C closeout for `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.12 Production Frontend Corrections And Structure Review
 
@@ -20,8 +20,8 @@
 - [x] Add focused regression coverage for both frontend corrections.
 - [x] Complete the full automated, standards, build, package, and browser acceptance suite.
 - [x] Publish and updater-verify v1.1.12 only after explicit release approval.
-- [ ] Update and verify `isha-classes` through Alynt Plugin Updater with a fresh restore point.
-- [ ] Resume Gate C closeout only after the corrected production state is accepted.
+- [x] Update and verify `isha-classes` through Alynt Plugin Updater with a fresh restore point.
+- [x] Resume Gate C closeout only after the corrected production state is accepted.
 
 ### File-Structure Review
 
@@ -54,6 +54,11 @@
 - The public GitHub ZIP contains `47` runtime files under one plugin root, excludes development files, has aligned v1.1.12 metadata and syntax-clean packaged PHP, and has SHA-256 `56916E2F300D52DAA643FDBD31947BBDA40F8BEA5B1D3EE4AB323BE81EB7E49D`.
 - Plugin Tester completed a true public `1.1.11 -> 1.1.12` update through Alynt Plugin Updater after its GitHub release cache was force-refreshed through the updater's own update-check service. Discovery returned the exact v1.1.12 GitHub asset, WordPress installed it, the plugin remained active, all `47` installed files byte-match the public ZIP, settings hash `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e` and active-plugin hash `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e` were preserved, and no update offer remains.
 - The release-installed Plugin Tester homepage responded normally after the updater verification. Production `isha-classes` remained untouched.
+- A fresh production restore point was created at `/var/www/classes.internationalschoolofthehealingarts.com/restores/alynt-account-gateway-v1.1.12-preupdate-20260719-154533`. Its database export, exact v1.1.11 plugin archive, state record, ownership, permissions, and SHA-256 manifest were verified before the update.
+- Alynt Plugin Updater discovered the exact public v1.1.12 GitHub asset and completed `1.1.11 -> 1.1.12` on `isha-classes`. All `47` production runtime files byte-match the public ZIP, Account Gateway remains active, and no update offer remains.
+- The headless upgrader reinserted Account Gateway one position later and normalized a pre-existing sparse active-plugin key. The exact pre-update ordering and sparse key were restored from the database snapshot; settings hash `77e703a83e89c9ee1be5b9e80569df20f326f5e3412f6ef76577eba43e25ec7a` and active-plugin hash `c102561b973c3511541448676f4bbdc7dfefd923e3167a9b8e770ff3b43688a1` now exactly match Gate B.
+- Production acceptance passed at desktop and `390x844`: the login screen omits Create Account while retaining Forgot Password, the registration-unavailable button hover uses `#281408` text on `#EDCE6B` at `18px` without an underline, mobile has no horizontal overflow, lost password uses the branded gateway, and native `wp-login.php` redirects to `/login`.
+- Login, lost-password, registration-unavailable, and native-login redirect route checks returned HTTP `200`. The browser console and production PHP log contained no new warnings or errors.
 
 ## v1.1.11 Theme Compatibility For Gateway Typography
 
