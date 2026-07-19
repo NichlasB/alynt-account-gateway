@@ -356,9 +356,9 @@ Twenty-three files exceed the review thresholds: 14 production files and nine
 test/support files. The production priorities remain materially unchanged from
 the v1.1.12 review.
 
-### Increment 1: Test Bootstrap Support
+### Increment 1: Test Infrastructure
 
-Status: implementation complete; full release gates pending.
+Status: complete.
 
 - Locked the baseline at 386 tests and 2,438 assertions.
 - Reduced `tests/bootstrap.php` from 1,175 lines to an ordered loader and
@@ -368,9 +368,17 @@ Status: implementation complete; full release gates pending.
   options/hooks stub modules.
 - Preserved declaration and loading order.
 - Kept each extracted support file below the 300-line PHP review threshold.
-- Passed support-file PHP syntax, focused PHPCS, `git diff --check`, and the
-  unchanged full unit suite.
+- Split all eight oversized test classes into behavior-specific PHPUnit
+  classes backed by shared abstract support cases.
+- Extracted the large verification-activity expectation catalog into a
+  dedicated test fixture.
+- Reduced every PHP file under `tests/` to 300 lines or fewer.
+- Passed full PHPCS, PHP syntax, frontend/admin build, POT generation, npm
+  high-severity audit, Composer advisory audit, `git diff --check`, and the
+  unchanged 386-test/2,438-assertion suite without warnings or deprecations.
 
-The oversized test classes remain the next test-only increment. They are not
-being mixed into Increment 1 so that bootstrap-loading changes and test-suite
-ownership changes retain separate checkpoints and regression evidence.
+This increment changes only tests and planning documentation, both of which are
+excluded from the public runtime package. It is therefore retained as a pushed
+development checkpoint rather than a version-only public plugin release. The
+next increment begins source asset modularization and will complete package and
+Plugin Tester acceptance before requesting maintenance-release approval.

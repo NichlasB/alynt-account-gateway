@@ -27,7 +27,7 @@
 - The largest production file remains `admin/class-settings-page.php` at `5,492` lines.
 - The initial test bootstrap measured `1,175` lines and mixed database fixtures, WordPress/WooCommerce stubs, HTTP helpers, user/auth helpers, options/hooks, and production class loading.
 
-### Increment 1 - Test Bootstrap Support
+### Increment 1 - Test Infrastructure
 
 - [x] Lock the pre-refactor baseline at `386` tests and `2,438` assertions.
 - [x] Reduce `tests/bootstrap.php` to an ordered loader and shared test-state initializer.
@@ -35,19 +35,22 @@
 - [x] Extract core, WooCommerce, media, HTTP, routing, authentication/user, sanitization, and options/hooks stubs by concern.
 - [x] Extract the production class loader used by unit tests.
 - [x] Preserve declaration and loading order; keep every extracted support file below `300` lines.
-- [x] Pass focused PHPCS, PHP syntax, `git diff --check`, and the unchanged `386`-test/`2,438`-assertion suite.
-- [ ] Complete full build, POT, audit, exact-package, and Plugin Tester acceptance before release approval.
+- [x] Split the eight oversized test suites into focused behavior-specific test classes with shared abstract support cases.
+- [x] Move the large verification-activity expectation catalog into a dedicated fixture.
+- [x] Keep every PHP file under `tests/` at or below the `300`-line review threshold.
+- [x] Preserve the unchanged `386` tests and `2,438` assertions without PHPUnit warnings or PHP deprecations.
+- [x] Pass full PHPCS, PHP syntax, frontend/admin build, POT generation, npm high-severity audit, Composer advisory audit, and `git diff --check`.
+- [x] Record this development-only change as a checkpoint without a public plugin release because tests and planning docs are excluded from the runtime package.
 
 ### Remaining Phase 2 Sequence
 
-1. Split oversized test suites by responsibility without runtime changes.
-2. Split frontend/admin CSS and JavaScript source modules while preserving built entry points.
-3. Extract privacy exporter/eraser collaborators.
-4. Extract dashboard module renderers behind the existing dashboard facade.
-5. Split settings schema/defaults/sanitization.
-6. Split registration and authentication services with behavior-locking tests.
-7. Split WooCommerce and email services.
-8. Decompose the settings page last, using collaborators established by earlier increments.
+1. Split frontend/admin CSS and JavaScript source modules while preserving built entry points.
+2. Extract privacy exporter/eraser collaborators.
+3. Extract dashboard module renderers behind the existing dashboard facade.
+4. Split settings schema/defaults/sanitization.
+5. Split registration and authentication services with behavior-locking tests.
+6. Split WooCommerce and email services.
+7. Decompose the settings page last, using collaborators established by earlier increments.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 
