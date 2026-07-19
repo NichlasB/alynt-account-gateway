@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 2 source-asset modularization is complete and the accepted v1.1.15 candidate is awaiting release approval.
+- Current phase: Phase 2 Increment 2 source-asset modularization is released and updater-verified as v1.1.15.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.14 is the current public baseline.
+- Plugin status: v1.1.15 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Publish and updater-verify v1.1.15 only after explicit approval, then begin Increment 3 by extracting privacy exporter/eraser collaborators. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Begin Increment 3 by extracting privacy exporter/eraser collaborators. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -56,7 +56,7 @@
 - [x] Add structural regression coverage for ordered CSS imports, JavaScript module reachability, and module line limits.
 - [x] Pass the focused build, lint, PHPCS, JavaScript syntax, and `390`-test/`2,712`-assertion gates.
 - [x] Pass the final audit, package-inspection, and Plugin Tester browser-acceptance gates for the v1.1.15 candidate.
-- [ ] Publish v1.1.15 only after explicit release approval.
+- [x] Publish v1.1.15 only after explicit release approval.
 
 ### Increment 2 Acceptance Evidence
 
@@ -70,16 +70,19 @@
 - Desktop and mobile gateway layouts have no horizontal document overflow, frontend/admin compiled assets load from the unchanged public paths, and the browser console contains no warnings or errors.
 - The temporary local authentication helper was removed immediately after use. A complete v1.1.14 file rollback remains available until release closeout.
 - No staging or production site was touched.
+- Release approval was granted and [GitHub v1.1.15](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.15) was published from merge commit `446f975`; Build Release run `29704646229` completed successfully.
+- The public release ZIP contains `49` runtime files and `43` syntax-clean PHP files, contains no development/source files or backslash archive paths, and has SHA-256 `241A6BD3276303771D63BD5CFF349C6D8709E85A92385F6AB75D775A30B8FFA9`.
+- Alynt Plugin Updater detected the public `1.1.14 -> 1.1.15` update on LocalWP Plugin Tester and WordPress installed the GitHub release asset through the native Plugins screen. All `49` installed files byte-match the public ZIP, Account Gateway remains active, no update remains, and the activation, settings, and database-version fingerprints are unchanged.
+- Post-update browser and HTTP acceptance passed with the homepage and `/login/` returning `200`, no browser errors, and the authenticated QA session logged out. Only pre-existing WordPress/jQuery Migrate development warnings were observed.
 
 ### Remaining Phase 2 Sequence
 
-1. Publish and updater-verify v1.1.15 after explicit approval.
-2. Extract privacy exporter/eraser collaborators.
-3. Extract dashboard module renderers behind the existing dashboard facade.
-4. Split settings schema/defaults/sanitization.
-5. Split registration and authentication services with behavior-locking tests.
-6. Split WooCommerce and email services.
-7. Decompose the settings page last, using collaborators established by earlier increments.
+1. Extract privacy exporter/eraser collaborators.
+2. Extract dashboard module renderers behind the existing dashboard facade.
+3. Split settings schema/defaults/sanitization.
+4. Split registration and authentication services with behavior-locking tests.
+5. Split WooCommerce and email services.
+6. Decompose the settings page last, using collaborators established by earlier increments.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 

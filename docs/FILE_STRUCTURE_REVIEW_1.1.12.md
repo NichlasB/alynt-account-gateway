@@ -385,7 +385,7 @@ Plugin Tester acceptance before requesting maintenance-release approval.
 
 ### Increment 2: Source Asset Modules
 
-Status: candidate accepted; release approval pending.
+Status: complete; released and updater-verified as v1.1.15.
 
 - Locked the v1.1.14 compiled asset lengths and SHA-256 fingerprints before
   changing source organization.
@@ -416,6 +416,21 @@ admin JavaScript responsibilities, responsive admin tabs, desktop/mobile
 gateway output, password visibility, lost password, and disabled registration
 without browser warnings or errors.
 
-Release publication requires separate explicit approval. Increment 3 begins
-privacy exporter/eraser extraction only after the v1.1.15 release and updater
-cycle is closed.
+Release approval was granted and
+[GitHub v1.1.15](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.15)
+was published from merge commit `446f975`. Build Release run `29704646229`
+completed successfully. The public package contains 49 runtime files and 43
+syntax-clean PHP files, contains no development/source files or backslash
+archive paths, and has SHA-256
+`241A6BD3276303771D63BD5CFF349C6D8709E85A92385F6AB75D775A30B8FFA9`.
+
+Alynt Plugin Updater detected the public `1.1.14 -> 1.1.15` update on LocalWP
+Plugin Tester and WordPress installed the GitHub release asset through the
+native Plugins screen. All 49 installed files byte-match the public package,
+Account Gateway remains active, no update remains, and the activation,
+settings, and database-version fingerprints are unchanged. The homepage and
+`/login/` return HTTP 200, browser acceptance found no errors, the temporary
+authentication helper was removed, and the QA session was logged out. No
+staging or production site was touched.
+
+Increment 3 may now begin with privacy exporter/eraser extraction.
