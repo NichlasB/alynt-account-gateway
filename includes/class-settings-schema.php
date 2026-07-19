@@ -67,6 +67,18 @@ class ALYNT_AG_Settings_Schema {
 				'default' => '/my-account/',
 				'label'   => __( 'After Login Redirect', 'alynt-account-gateway' ),
 			),
+			'administrator_after_login_redirect'        => array(
+				'tab'     => 'urls',
+				'type'    => 'relative_path',
+				'default' => '/wp-admin/',
+				'label'   => __( 'Administrator After Login Redirect', 'alynt-account-gateway' ),
+			),
+			'shop_manager_after_login_redirect'         => array(
+				'tab'     => 'urls',
+				'type'    => 'relative_path',
+				'default' => '/wp-admin/',
+				'label'   => __( 'Shop Manager After Login Redirect', 'alynt-account-gateway' ),
+			),
 			'emergency_bypass_key'                      => array(
 				'tab'     => 'advanced_tools',
 				'type'    => 'secret',

@@ -35,7 +35,7 @@ This is private Alynt-distributed software. The plugin header includes `GitHub P
 
 ## Installation
 
-1. Download the release zip from the private Alynt distribution channel.
+1. Download the release zip from the Alynt GitHub release channel.
 2. Install it through WordPress admin under Plugins -> Add New -> Upload Plugin.
 3. Activate Alynt Account Gateway.
 4. Open Settings -> Account Gateway and configure the plugin before enabling frontend output.

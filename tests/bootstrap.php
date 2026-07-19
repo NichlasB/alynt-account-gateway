@@ -709,7 +709,13 @@ if ( ! function_exists( 'wp_signon' ) ) {
 			'secure_cookie' => $secure_cookie,
 		);
 
-		return new WP_User( $credentials['user_login'] ?? 'customer@example.test' );
+		$user = new WP_User( $credentials['user_login'] ?? 'customer@example.test' );
+
+		if ( isset( $GLOBALS['alynt_ag_test_signon_roles'] ) && is_array( $GLOBALS['alynt_ag_test_signon_roles'] ) ) {
+			$user->roles = $GLOBALS['alynt_ag_test_signon_roles'];
+		}
+
+		return $user;
 	}
 }
 

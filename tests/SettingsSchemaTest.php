@@ -226,11 +226,13 @@ class SettingsSchemaTest extends TestCase {
 		$defaults = ALYNT_AG_Settings_Schema::defaults_for_tab( 'urls' );
 
 		$this->assertSame(
-			array( 'login_path', 'account_action_base', 'after_login_redirect' ),
+			array( 'login_path', 'account_action_base', 'after_login_redirect', 'administrator_after_login_redirect', 'shop_manager_after_login_redirect' ),
 			array_keys( $defaults )
 		);
 		$this->assertSame( '/login', $defaults['login_path'] );
 		$this->assertSame( '/account', $defaults['account_action_base'] );
+		$this->assertSame( '/wp-admin/', $defaults['administrator_after_login_redirect'] );
+		$this->assertSame( '/wp-admin/', $defaults['shop_manager_after_login_redirect'] );
 	}
 
 	public function test_restore_tab_defaults_resets_only_selected_tab() {

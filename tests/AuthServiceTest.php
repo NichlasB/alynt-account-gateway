@@ -24,6 +24,7 @@ class AuthServiceTest extends TestCase {
 		unset(
 			$GLOBALS['alynt_ag_test_existing_emails'],
 			$GLOBALS['alynt_ag_test_retrieve_password_result'],
+			$GLOBALS['alynt_ag_test_signon_roles'],
 			$GLOBALS['alynt_ag_test_options']['alynt_ag_settings']
 		);
 		$_SERVER['REMOTE_ADDR'] = '203.0.113.30';
@@ -78,6 +79,68 @@ class AuthServiceTest extends TestCase {
 		$this->assertSame(
 			'https://example.test/my-account/',
 			$service->get_login_redirect_url( '', $settings )
+		);
+	}
+
+	public function test_login_redirect_uses_administrator_default_when_no_redirect_is_submitted() {
+		$service  = new ALYNT_AG_Auth_Service();
+		$user     = new WP_User( 'admin@example.test' );
+		$user->roles = array( 'administrator' );
+		$settings = array(
+			'after_login_redirect'               => '/my-account/',
+			'administrator_after_login_redirect' => '/wp-admin/',
+		);
+
+		$this->assertSame(
+			'https://example.test/wp-admin/',
+			$service->get_login_redirect_url( '', $settings, $user )
+		);
+	}
+
+	public function test_login_redirect_uses_shop_manager_default_when_no_redirect_is_submitted() {
+		$service  = new ALYNT_AG_Auth_Service();
+		$user     = new WP_User( 'manager@example.test' );
+		$user->roles = array( 'shop_manager' );
+		$settings = array(
+			'after_login_redirect'               => '/my-account/',
+			'shop_manager_after_login_redirect'  => '/store-management/',
+		);
+
+		$this->assertSame(
+			'https://example.test/store-management/',
+			$service->get_login_redirect_url( '', $settings, $user )
+		);
+	}
+
+	public function test_safe_submitted_redirect_wins_over_role_default() {
+		$service  = new ALYNT_AG_Auth_Service();
+		$user     = new WP_User( 'admin@example.test' );
+		$user->roles = array( 'administrator' );
+		$settings = array(
+			'after_login_redirect'               => '/my-account/',
+			'administrator_after_login_redirect' => '/wp-admin/',
+			'login_path'                        => '/login/',
+			'account_action_base'               => '/account',
+		);
+
+		$this->assertSame(
+			'https://example.test/wp-admin/profile.php',
+			$service->get_login_redirect_url( 'https://example.test/wp-admin/profile.php', $settings, $user )
+		);
+	}
+
+	public function test_rejected_redirect_falls_back_to_role_default() {
+		$service  = new ALYNT_AG_Auth_Service();
+		$user     = new WP_User( 'manager@example.test' );
+		$user->roles = array( 'shop_manager' );
+		$settings = array(
+			'after_login_redirect'              => '/my-account/',
+			'shop_manager_after_login_redirect' => '/wp-admin/',
+		);
+
+		$this->assertSame(
+			'https://example.test/wp-admin/',
+			$service->get_login_redirect_url( 'https://evil.example/phish', $settings, $user )
 		);
 	}
 
@@ -172,6 +235,31 @@ class AuthServiceTest extends TestCase {
 		$this->assertSame( 'damon@example.test', $GLOBALS['alynt_ag_test_signons'][0]['credentials']['user_login'] );
 		$this->assertSame( 'StrongPassword1!', $GLOBALS['alynt_ag_test_signons'][0]['credentials']['user_password'] );
 		$this->assertTrue( $GLOBALS['alynt_ag_test_signons'][0]['credentials']['remember'] );
+	}
+
+	public function test_login_submission_uses_authenticated_user_role_default() {
+		$service = new ALYNT_AG_Auth_Service();
+		$GLOBALS['alynt_ag_test_signon_roles'] = array( 'administrator' );
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'frontend_enabled'                   => true,
+			'login_path'                         => '/login',
+			'after_login_redirect'               => '/my-account/',
+			'administrator_after_login_redirect' => '/wp-admin/',
+		);
+		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_POST = array(
+			'alynt_ag_action' => 'login',
+			'email'           => 'admin@example.test',
+			'pwd'             => 'StrongPassword1!',
+		);
+
+		try {
+			$service->maybe_handle_auth_request();
+			$this->fail( 'Expected redirect exception.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame( 'redirect:https://example.test/wp-admin/', $exception->getMessage() );
+		}
 	}
 
 	public function test_login_submission_logs_success_without_submitted_credentials() {

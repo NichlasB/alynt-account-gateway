@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.7
+Stable tag: 1.1.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -19,7 +19,7 @@ Core features include:
 
 * Branded login, registration, lost password, reset password, set password, and logout confirmation screens.
 * Accessible live color swatches and native color pickers alongside editable hex values.
-* Configurable login path, account action base, after-login redirect, and emergency bypass key.
+* Configurable login path, account action base, customer, administrator, and shop-manager after-login redirects, and emergency bypass key.
 * Setup readiness checks before public frontend output is enabled.
 * Confirmation-first registration that creates the WordPress user only after email confirmation and password setup.
 * Optional Cloudflare Turnstile and Reoon Email Verifier support.
@@ -51,6 +51,12 @@ Uninstalling the plugin removes plugin-owned settings, the stored database schem
 Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile, Reoon, webhooks, diagnostics, or WooCommerce takeover on production sites. The plugin provides WordPress personal-data exporter and eraser callbacks for plugin-owned records, but site owners remain responsible for privacy notice wording, lawful-basis decisions, processor contracts, retention policy, and qualified legal review where required.
 
 == Changelog ==
+
+= 1.1.8 =
+
+* Added separately configurable administrator and WooCommerce shop-manager after-login redirect paths.
+* Defaulted administrator and shop-manager destinations to the WordPress dashboard while preserving the existing customer account destination.
+* Preserved safe explicit internal destinations and existing rejection of external or authentication-surface redirects.
 
 = 1.1.7 =
 

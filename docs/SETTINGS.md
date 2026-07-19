@@ -8,6 +8,10 @@ Settings are stored in the `alynt_ag_settings` option and defined in `ALYNT_AG_S
 - `login_path`: `/login`
 - `account_action_base`: `/account`
 - `after_login_redirect`: `/my-account/`
+- `administrator_after_login_redirect`: `/wp-admin/`
+- `shop_manager_after_login_redirect`: `/wp-admin/`
+
+Role-aware login redirects are used only when the login request does not contain a safe explicit internal `redirect_to` destination. Administrators and WooCommerce shop managers use their dedicated paths; customers and other roles use `after_login_redirect`. External and authentication-surface destinations remain rejected.
 - `emergency_bypass_key`: generated secret on activation/default creation
 - `registration_enabled`: `false`
 - `registration_token_hours`: `24`

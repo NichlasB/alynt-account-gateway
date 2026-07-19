@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.1.8 - 2026-07-19
+
+### Added
+
+- Added separately configurable administrator and WooCommerce shop-manager after-login redirect paths under URLs & Redirects.
+
+### Changed
+
+- Administrators and shop managers now default to `/wp-admin/` when no safe explicit login destination was requested.
+- Customer and other account roles retain the existing `/my-account/` default.
+- Safe internal `redirect_to` destinations continue to take precedence so protected-page, checkout, and account journeys return users to their requested destination.
+
+### Security
+
+- Role-aware defaults continue to use WordPress redirect validation and reject external or authentication-surface destinations.
+
+### Tests
+
+- Added focused schema, settings-help, redirect-resolution, fallback, and branded-login handler coverage.
+
 ## 1.1.7 - 2026-07-18
 
 ### Changed

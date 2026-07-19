@@ -332,7 +332,7 @@ class ALYNT_AG_Auth_Service {
 		}
 
 		$redirect_to = isset( $_POST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_POST['redirect_to'] ) ) : '';
-		$destination = $this->get_login_redirect_url( $redirect_to, $settings );
+		$destination = $this->get_login_redirect_url( $redirect_to, $settings, $user );
 
 		$this->log_auth_event(
 			'info',
@@ -354,10 +354,11 @@ class ALYNT_AG_Auth_Service {
 	 *
 	 * @param string              $redirect_to Submitted redirect URL.
 	 * @param array<string,mixed> $settings    Settings.
+	 * @param WP_User|null        $user        Authenticated user, when available.
 	 * @return string
 	 */
-	public function get_login_redirect_url( $redirect_to, $settings ) {
-		$default = home_url( $settings['after_login_redirect'] );
+	public function get_login_redirect_url( $redirect_to, $settings, $user = null ) {
+		$default = home_url( $this->get_default_login_redirect_path( $settings, $user ) );
 
 		if ( '' === (string) $redirect_to ) {
 			return $default;
@@ -370,6 +371,27 @@ class ALYNT_AG_Auth_Service {
 		}
 
 		return $destination;
+	}
+
+	/**
+	 * Return the configured role-aware default login redirect path.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @param WP_User|null        $user     Authenticated user, when available.
+	 * @return string
+	 */
+	private function get_default_login_redirect_path( $settings, $user = null ) {
+		$roles = $user instanceof WP_User && is_array( $user->roles ) ? $user->roles : array();
+
+		if ( in_array( 'administrator', $roles, true ) ) {
+			return $settings['administrator_after_login_redirect'] ?? '/wp-admin/';
+		}
+
+		if ( in_array( 'shop_manager', $roles, true ) ) {
+			return $settings['shop_manager_after_login_redirect'] ?? '/wp-admin/';
+		}
+
+		return $settings['after_login_redirect'] ?? '/my-account/';
 	}
 
 	/**

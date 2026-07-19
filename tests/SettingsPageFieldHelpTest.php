@@ -60,6 +60,14 @@ class SettingsPageFieldHelpTest extends TestCase {
 			$this->invoke_helper( $settings_page, 'settings_field_help_text', array( 'login_path' ) )
 		);
 		$this->assertStringContainsString(
+			'The default is /wp-admin/',
+			$this->invoke_helper( $settings_page, 'settings_field_help_text', array( 'administrator_after_login_redirect' ) )
+		);
+		$this->assertStringContainsString(
+			'WooCommerce shop manager',
+			$this->invoke_helper( $settings_page, 'settings_field_help_text', array( 'shop_manager_after_login_redirect' ) )
+		);
+		$this->assertStringContainsString(
 			'WordPress still needs a generated username',
 			$this->invoke_helper( $settings_page, 'settings_field_help_text', array( 'username_format' ) )
 		);

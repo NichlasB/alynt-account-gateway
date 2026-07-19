@@ -665,6 +665,8 @@ class ALYNT_AG_Settings_Page {
 			'login_path'                         => __( 'Use a relative path such as /login. This path becomes the clean public login URL.', 'alynt-account-gateway' ),
 			'account_action_base'                => __( 'Use a relative path such as /account. WordPress login actions are served from this base with action parameters.', 'alynt-account-gateway' ),
 			'after_login_redirect'               => __( 'Use the destination users should see after login, usually /my-account/ when the dashboard or WooCommerce account area is enabled.', 'alynt-account-gateway' ),
+			'administrator_after_login_redirect' => __( 'Used when an administrator logs in without a safe requested destination. The default is /wp-admin/.', 'alynt-account-gateway' ),
+			'shop_manager_after_login_redirect'  => __( 'Used when a WooCommerce shop manager logs in without a safe requested destination. The default is /wp-admin/.', 'alynt-account-gateway' ),
 			'emergency_bypass_key'               => __( 'Store this privately. It lets administrators reach the native wp-login.php screen if custom routing causes a lockout.', 'alynt-account-gateway' ),
 			'registration_enabled'               => __( 'Public account creation is disabled by default. Enable it only after terms, privacy, email confirmation, and anti-spam settings are ready.', 'alynt-account-gateway' ),
 			'registration_token_hours'           => __( 'Pending registrations expire after this many hours. The default 24-hour window gives customers time to find the email without leaving stale invitations open too long.', 'alynt-account-gateway' ),
