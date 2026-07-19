@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.8 candidate accepted on Plugin Tester; release approval and first production rollout gates pending
+- Current phase: v1.1.8 released and updater-verified; first production rollout Gate A pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.7 is the current public baseline, released and updater-verified on LocalWP Plugin Tester.
+- Plugin status: v1.1.8 is the current public baseline, released and updater-verified on LocalWP Plugin Tester.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Complete and release role-aware administrator/shop-manager redirects, then execute the first production rollout on `isha-classes` live-only after the required approval gates; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Execute the first production rollout on `isha-classes` live-only after Gate A, keeping Frontend Output disabled and Login Designer active until the later Gate B handover; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.8 Role-Aware Login Redirects And First Production Rollout
 
@@ -20,7 +20,7 @@
 - [x] Preserve safe explicit internal `redirect_to` destinations for protected-page and checkout flows.
 - [x] Preserve external-redirect and authentication-surface rejection.
 - [x] Complete automated, standards, build, and package verification.
-- [ ] Publish and updater-verify the release after explicit approval.
+- [x] Publish and updater-verify the release after explicit approval.
 
 ### Production Rollout Target
 
@@ -46,6 +46,10 @@
 - The disposable local administrator, authenticated browser session, credentials file, and runtime verification helper were removed; no v1.1.8 QA user remains.
 - `isha-classes` read-only baseline confirmed WordPress `7.0.2`, PHP `8.2.32`, WooCommerce `10.9.4`, Blocksy child theme, Login Designer `1.6.10` active, no Account Gateway or Alynt Plugin Updater installation, `/my-account/` as the WooCommerce account page, public registration disabled, and `/login` currently unclaimed.
 - The private rollout record is stored outside the public plugin repository at `work/rollouts/ISHA_CLASSES_ACG_V1.1.8_ROLLOUT.md`. It records the Login Designer handover, background-image fingerprint, restore requirements, disposable shop-manager need, acceptance matrix, rollback, and Gate A/B/C decisions without secrets or personal data.
+- Released as [`v1.1.8`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.8); Build Release workflow run `29685145001` passed.
+- The public GitHub asset contains `47` runtime files under one plugin root, with zero development files or backslash-path entries, aligned v1.1.8 metadata, syntax-clean packaged PHP, and SHA-256 `D6AE13BB5101F1B41B76727B90BD030FA2CCFD353E9F5FB7F377983DEE5BB744`.
+- Plugin Tester completed a true public `1.1.7 -> 1.1.8` update through Alynt Plugin Updater. The updater offered the exact public asset, WordPress installed it, all `47` installed files byte-match the public ZIP, active-plugin and settings fingerprints remained unchanged, schema remained `0.1.5`, and a fresh check reported no remaining update.
+- With separate production approval, Alynt Plugin Updater `1.1.5` was installed on `isha-classes` from its checksum-verified public asset after a private database and active-plugin restore point was created. Its `41` installed files byte-match the public ZIP, its 12-hour cron event and forced discovery passed, the active-plugin list changed only by adding the updater, Login Designer remains active, and baseline route health is unchanged.
 
 ## v1.1.7 Pre-Release Revalidation
 
