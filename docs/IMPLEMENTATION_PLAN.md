@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.14 is released and updater-verified on LocalWP Plugin Tester; the first production rollout on `isha-classes` completed Gate C with an `ACCEPT` decision
+- Current phase: v1.1.14 is released, updater-verified, and synchronized to the accepted `isha-classes` production rollout; Phase 2 structural refactoring is next
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.14 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Separately gate any production update from v1.1.13 to v1.1.14; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Refresh the v1.1.12 structure inventory against v1.1.14, then begin Phase 2 with test infrastructure and oversized test classes; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 
@@ -29,6 +29,7 @@
 - [x] Complete build, lint, test, package, and LocalWP Plugin Tester browser acceptance before requesting release approval.
 - [x] Publish and updater-verify v1.1.14 only after explicit release approval.
 - [x] Do not change any staging or production site as part of implementation or release verification without separate site-specific approval.
+- [x] Synchronize the accepted `isha-classes` production rollout to v1.1.14 only after Gate C closeout and separate production approval.
 
 ### Acceptance Matrix
 
@@ -64,6 +65,11 @@
 - Release approval was granted and [GitHub v1.1.14](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.14) was published from commit `a3c2968`; Build Release run `29701273650` completed successfully.
 - The public updater ZIP contains `49` runtime files and `43` syntax-clean PHP files under one plugin root, includes no development files or backslash archive paths, and has SHA-256 `1DB9A418C127890FA0CA5F3B1C638CED95B04D1B4206A419129D5E4D9FC3A32C`. It matches the final candidate exactly except for expected `readme.txt` line-ending normalization.
 - Alynt Plugin Updater completed the public `1.1.13 -> 1.1.14` replacement on LocalWP Plugin Tester. All `49` installed files byte-match the public ZIP, Account Gateway remains active in its original active-plugin position, settings remain byte-identical, the schema upgraded to `0.1.6`, WordPress reports no remaining update, the homepage returns HTTP `200`, and the empty checkout retains WooCommerce's native Cart redirect.
+- After Gate C accepted the production v1.1.13 rollout, separate approval was granted to synchronize `isha-classes` before structural refactoring. A fresh private restore point captured the database, exact v1.1.13 plugin, settings, activation state, and verified checksums.
+- Alynt Plugin Updater offered the exact public v1.1.14 GitHub asset and WordPress completed the production `1.1.13 -> 1.1.14` update. All `49` installed files byte-match the public ZIP, no update remains, ownership is unchanged, and maintenance mode is clear.
+- Production settings remain byte-identical at `300a163d9dfae9266ca9227802398c4f3acf2fe95f922163287a34d49bdcdfec`. The exact pre-update active-plugin array was restored after the known headless reactivation-order change, retaining fingerprint `c102561b973c3511541448676f4bbdc7dfefd923e3167a9b8e770ff3b43688a1`.
+- The schema reached `0.1.6` with the expected pending-registration `return_path` column. Frontend Output remains enabled while registration, dashboard, WooCommerce takeover, checkout and order-pay authentication, webhook delivery, diagnostics, and debug payload logging remain disabled.
+- Post-update cache purge and production acceptance passed branded Login, Lost Password, Registration Unavailable, native-login redirect, My Account, Home, and native empty-cart Checkout behavior. No browser errors or PHP-log entries appeared, operational tables remain clean, and temporary helpers were removed.
 
 ## v1.1.13 Normal-State Button Contrast Correction
 
