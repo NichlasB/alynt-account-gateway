@@ -424,6 +424,7 @@ html.agw-offcanvas-open {
 	min-width: 0;
 	margin: 0;
 	box-shadow: none;
+	font-size: 18px;
 	letter-spacing: 0;
 	text-transform: none;
 }
@@ -443,6 +444,7 @@ html.agw-offcanvas-open {
 	min-width: 0;
 	margin: 0;
 	box-shadow: none;
+	font-size: 18px;
 }
 
 .alynt-ag-gateway .agw-links a,

@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.11 - 2026-07-19
+
+### Fixed
+
+- Gateway text inputs and action buttons now retain their intended 18px typography when a theme loads broader form-control styles after the plugin stylesheet.
+- The compatibility correction remains scoped to Account Gateway forms and does not alter native theme or WooCommerce controls.
+
+### Tests
+
+- Added regression coverage for the higher-specificity gateway input and button declarations.
+
 ## 1.1.10 - 2026-07-19
 
 ### Fixed

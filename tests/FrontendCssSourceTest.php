@@ -104,8 +104,10 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertStringContainsString( "\toverflow-wrap: anywhere;\n\ttext-decoration: underline;\n\ttext-transform: none;", $css );
 		$this->assertStringContainsString( ".alynt-ag-gateway .agw-form p,\n.alynt-ag-gateway .agw-form fieldset {\n\tmin-width: 0;\n\tmargin: 0;", $css );
 		$this->assertStringContainsString( ".alynt-ag-gateway .agw-form .agw-field input {\n\tmin-width: 0;\n\tmargin: 0;\n\tbox-shadow: none;", $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-gateway \.agw-form \.agw-field input\s*\{[^}]*font-size:\s*18px;/s', $css );
 		$this->assertStringContainsString( '.alynt-ag-gateway .agw-form .agw-password__toggle', $css );
 		$this->assertStringContainsString( ".alynt-ag-gateway .agw-form .agw-button,\n.alynt-ag-gateway .agw-actions .agw-button {\n\twidth: auto;\n\tmax-width: 100%;\n\tmin-width: 0;", $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-gateway \.agw-form \.agw-button,[^{]*\.alynt-ag-gateway \.agw-actions \.agw-button\s*\{[^}]*font-size:\s*18px;/s', $css );
 		$this->assertStringContainsString( ".alynt-ag-gateway .agw-links a,\n.alynt-ag-gateway .agw-back-link,\n.alynt-ag-gateway .agw-checkbox a {\n\tmax-width: 100%;\n\tmargin: 0;", $css );
 	}
 

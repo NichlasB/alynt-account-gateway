@@ -2,12 +2,39 @@
 
 ## Status
 
-- Current phase: v1.1.10 is installed and privately accepted on the first production rollout target; Gate B public handover approval is pending
+- Current phase: v1.1.11 theme-compatibility corrective candidate is in validation after the first Gate B attempt was rolled back exactly
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.10 is the current public baseline.
+- Plugin status: v1.1.10 is the current public baseline; v1.1.11 is not yet released.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Request Gate B before deactivating Login Designer or enabling Frontend Output on `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Validate and release v1.1.11, update `isha-classes` with Frontend Output still disabled, then repeat Gate B with the custom dashboard and WooCommerce takeover explicitly disabled; inactive-account integration remains deferred until an authoritative status source exists.
+
+## v1.1.11 Theme Compatibility For Gateway Typography
+
+### Corrective Slice
+
+- [x] Attempt Gate B with Login Designer deactivated and Frontend Output enabled.
+- [x] Verify branded login, lost-password, disabled-registration, anonymous admin redirect, emergency bypass, and native My Account preservation.
+- [x] Identify later-loaded Blocksy form rules reducing gateway input text to 16px and submit-button text to 15px.
+- [x] Roll back settings and active-plugin order to their exact pre-handover fingerprints.
+- [x] Add gateway-scoped, higher-specificity 18px typography declarations without using `!important`.
+- [x] Add focused source regression coverage.
+- [x] Complete the full release suite and exact-package Plugin Tester browser acceptance.
+- [ ] Publish and updater-verify after explicit release approval.
+- [ ] Update `isha-classes` while Frontend Output remains disabled.
+- [ ] Repeat Gate B with `dashboard_enabled` and `woocommerce_takeover` disabled.
+
+### Gate B Finding
+
+- The initial handover passed routing, branded screen, registration-disabled, admin redirect, emergency bypass, and native WooCommerce My Account checks.
+- Blocksy loads broad input and submit-button typography after the plugin stylesheet. Those selectors overrode the gateway's unscoped 18px rules, producing 16px input text and 15px button text on the production login screen.
+- The production handover was rejected and rolled back. Saved settings and active-plugin order match their exact pre-handover hashes; Login Designer is active and Frontend Output is disabled.
+- The next handover must not enable the custom account dashboard or WooCommerce takeover.
+- PHPUnit passes with `363` tests and `2366` assertions. PHPCS, focused PHP syntax, the frontend/admin build, npm high-severity audit, Composer advisory audit, POT generation, and `git diff --check` pass.
+- The exact candidate contains `47` runtime files under one plugin root, excludes development files, has syntax-clean packaged PHP, and has SHA-256 `66048C60C40CFBD9287C65A854BCC9E2535668E56F33C01930F6B37B8EE49486`.
+- Plugin Tester accepted the exact candidate over active v1.1.10. All `47` installed files byte-match the candidate, the public gateway remains active, and built assets report v1.1.11.
+- A later-loaded browser rule matching the production Blocksy input and submit-button selectors could not reduce the gateway controls: email, password, and submit-button text remained `18px` at desktop and `390x844`; the mobile document remained exactly `390px` wide with no horizontal overflow.
+- Production cleanup removed the disposable administrator and all local/remote Gate B helpers. Browser verification confirms `/login` is again a true `404`, while `/wp-login.php` is the Login Designer/native form with no Account Gateway markup.
 
 ## v1.1.10 Mobile Email Fallback URL Wrapping
 
