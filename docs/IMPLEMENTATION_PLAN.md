@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.11 theme-compatibility corrective candidate is in validation after the first Gate B attempt was rolled back exactly
+- Current phase: v1.1.11 theme-compatibility correction is released and updater-verified; the first production rollout remains safely rolled back pending a new live-site approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.10 is the current public baseline; v1.1.11 is not yet released.
+- Plugin status: v1.1.11 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Validate and release v1.1.11, update `isha-classes` with Frontend Output still disabled, then repeat Gate B with the custom dashboard and WooCommerce takeover explicitly disabled; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: After explicit live-site approval, update `isha-classes` to v1.1.11 with Frontend Output still disabled, then repeat Gate B with the custom dashboard and WooCommerce takeover explicitly disabled; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.11 Theme Compatibility For Gateway Typography
 
@@ -20,7 +20,7 @@
 - [x] Add gateway-scoped, higher-specificity 18px typography declarations without using `!important`.
 - [x] Add focused source regression coverage.
 - [x] Complete the full release suite and exact-package Plugin Tester browser acceptance.
-- [ ] Publish and updater-verify after explicit release approval.
+- [x] Publish and updater-verify after explicit release approval.
 - [ ] Update `isha-classes` while Frontend Output remains disabled.
 - [ ] Repeat Gate B with `dashboard_enabled` and `woocommerce_takeover` disabled.
 
@@ -35,6 +35,10 @@
 - Plugin Tester accepted the exact candidate over active v1.1.10. All `47` installed files byte-match the candidate, the public gateway remains active, and built assets report v1.1.11.
 - A later-loaded browser rule matching the production Blocksy input and submit-button selectors could not reduce the gateway controls: email, password, and submit-button text remained `18px` at desktop and `390x844`; the mobile document remained exactly `390px` wide with no horizontal overflow.
 - Production cleanup removed the disposable administrator and all local/remote Gate B helpers. Browser verification confirms `/login` is again a true `404`, while `/wp-login.php` is the Login Designer/native form with no Account Gateway markup.
+- Released as [`v1.1.11`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.11) from commit `399dd8a`; Build Release workflow run `29690436666` passed.
+- The public GitHub ZIP contains `47` runtime files under one plugin root, excludes development files, has aligned v1.1.11 metadata and syntax-clean packaged PHP, and has SHA-256 `D53BE217E73B881DF89CD99FB3E96827774A073906C5426B4DA75DA800126491`.
+- Plugin Tester completed a true public `1.1.10 -> 1.1.11` update through Alynt Plugin Updater. Discovery returned the exact v1.1.11 GitHub asset, WordPress installed it, the plugin remained active, all `47` installed files byte-match the public ZIP, and no stale update offer remains.
+- The release-installed Plugin Tester copy passed the production-shaped Blocksy typography conflict at `390x844`: email, password, and submit-button text remained `18px`, Account Gateway markup and assets loaded, and the document had no horizontal overflow.
 
 ## v1.1.10 Mobile Email Fallback URL Wrapping
 
