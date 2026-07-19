@@ -342,3 +342,35 @@ Each increment requires the full test suite, PHPCS, build, exact-package
 inspection, Plugin Tester acceptance, and a small maintenance release. Do not
 perform the entire sequence in one branch or release.
 
+## Phase 2 Progress
+
+### v1.1.14 Inventory Refresh
+
+Phase 2 began from clean pushed checkpoint
+`36ec9eccc321a9af5326d64e78ea5545c412581d` after the v1.1.14 release,
+updater verification, and accepted production synchronization.
+
+The refreshed inventory contains 97 code files after excluding dependencies,
+generated assets, build output, work directories, and repository metadata.
+Twenty-three files exceed the review thresholds: 14 production files and nine
+test/support files. The production priorities remain materially unchanged from
+the v1.1.12 review.
+
+### Increment 1: Test Bootstrap Support
+
+Status: implementation complete; full release gates pending.
+
+- Locked the baseline at 386 tests and 2,438 assertions.
+- Reduced `tests/bootstrap.php` from 1,175 lines to an ordered loader and
+  shared-state initializer.
+- Extracted the database fixture, production test loader, and focused core,
+  WooCommerce, media, HTTP, routing, authentication/user, sanitization, and
+  options/hooks stub modules.
+- Preserved declaration and loading order.
+- Kept each extracted support file below the 300-line PHP review threshold.
+- Passed support-file PHP syntax, focused PHPCS, `git diff --check`, and the
+  unchanged full unit suite.
+
+The oversized test classes remain the next test-only increment. They are not
+being mixed into Increment 1 so that bootstrap-loading changes and test-suite
+ownership changes retain separate checkpoints and regression evidence.

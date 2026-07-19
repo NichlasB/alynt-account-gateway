@@ -2,12 +2,52 @@
 
 ## Status
 
-- Current phase: v1.1.14 is released, updater-verified, and synchronized to the accepted `isha-classes` production rollout; Phase 2 structural refactoring is next
+- Current phase: Phase 2 structural refactoring is active from the clean v1.1.14 production-synchronized checkpoint.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.14 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Refresh the v1.1.12 structure inventory against v1.1.14, then begin Phase 2 with test infrastructure and oversized test classes; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Complete Phase 2 as small behavior-preserving maintenance releases. Increment 1 decomposes test bootstrap support; Increment 2 splits oversized test suites; production assets and runtime services follow only after those test foundations are stable. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## Phase 2 Structural Refactoring
+
+### Safety Boundary
+
+- [x] Receive explicit approval to begin Phase 2 after v1.1.14 production synchronization.
+- [x] Use clean pushed commit `36ec9eccc321a9af5326d64e78ea5545c412581d` as the Phase 2 restore checkpoint.
+- [x] Refresh the v1.1.12 inventory against v1.1.14.
+- [x] Keep Increment 1 limited to test infrastructure with no runtime, route, setting, asset, or frontend behavior changes.
+- [ ] Complete each increment on its own branch with the full quality, package, Plugin Tester, and release gates.
+- [ ] Leave production sites unchanged during structural maintenance unless a later site-specific update is separately approved.
+
+### Refreshed v1.1.14 Inventory
+
+- `97` code files were reviewed after excluding generated, dependency, build, and repository directories.
+- `23` files exceed the structure-review thresholds: `14` production files and `9` test/support files.
+- The largest production file remains `admin/class-settings-page.php` at `5,492` lines.
+- The initial test bootstrap measured `1,175` lines and mixed database fixtures, WordPress/WooCommerce stubs, HTTP helpers, user/auth helpers, options/hooks, and production class loading.
+
+### Increment 1 - Test Bootstrap Support
+
+- [x] Lock the pre-refactor baseline at `386` tests and `2,438` assertions.
+- [x] Reduce `tests/bootstrap.php` to an ordered loader and shared test-state initializer.
+- [x] Extract the test database fixture into dedicated support.
+- [x] Extract core, WooCommerce, media, HTTP, routing, authentication/user, sanitization, and options/hooks stubs by concern.
+- [x] Extract the production class loader used by unit tests.
+- [x] Preserve declaration and loading order; keep every extracted support file below `300` lines.
+- [x] Pass focused PHPCS, PHP syntax, `git diff --check`, and the unchanged `386`-test/`2,438`-assertion suite.
+- [ ] Complete full build, POT, audit, exact-package, and Plugin Tester acceptance before release approval.
+
+### Remaining Phase 2 Sequence
+
+1. Split oversized test suites by responsibility without runtime changes.
+2. Split frontend/admin CSS and JavaScript source modules while preserving built entry points.
+3. Extract privacy exporter/eraser collaborators.
+4. Extract dashboard module renderers behind the existing dashboard facade.
+5. Split settings schema/defaults/sanitization.
+6. Split registration and authentication services with behavior-locking tests.
+7. Split WooCommerce and email services.
+8. Decompose the settings page last, using collaborators established by earlier increments.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 
@@ -130,7 +170,7 @@
 - [x] Confirm additional oversized production PHP, JavaScript, CSS, and test-support files remain.
 - [x] Complete Phase 1 inventory: logical sections, dependencies, complex methods, responsibility boundaries, and specific extraction targets.
 - [x] Record a staged refactoring plan that separates production classes, assets, tests, and test bootstrap work in `docs/FILE_STRUCTURE_REVIEW_1.1.12.md`.
-- [ ] Do not execute Phase 2 structural refactoring without separate explicit approval.
+- [x] Do not execute Phase 2 structural refactoring without separate explicit approval.
 - [x] Keep structural refactoring out of the v1.1.12 corrective release unless a frontend correction cannot be made safely without it.
 
 ### Structural Disposition
