@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring is active from the clean v1.1.14 production-synchronized checkpoint.
+- Current phase: Phase 2 Increment 2 source-asset modularization is complete and the accepted v1.1.15 candidate is awaiting release approval.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.14 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Complete Phase 2 as small behavior-preserving maintenance releases. Increment 1 completed the test-infrastructure decomposition. Increment 2 modularizes source assets while preserving the public build entry points. Runtime services follow only after the asset candidate passes package and Plugin Tester acceptance. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Publish and updater-verify v1.1.15 only after explicit approval, then begin Increment 3 by extracting privacy exporter/eraser collaborators. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -55,12 +55,25 @@
 - [x] Keep each CSS module at or below `500` lines and each JavaScript module at or below `250` lines.
 - [x] Add structural regression coverage for ordered CSS imports, JavaScript module reachability, and module line limits.
 - [x] Pass the focused build, lint, PHPCS, JavaScript syntax, and `390`-test/`2,712`-assertion gates.
-- [ ] Pass the final audit, package-inspection, and Plugin Tester browser-acceptance gates for the v1.1.15 candidate.
+- [x] Pass the final audit, package-inspection, and Plugin Tester browser-acceptance gates for the v1.1.15 candidate.
 - [ ] Publish v1.1.15 only after explicit release approval.
+
+### Increment 2 Acceptance Evidence
+
+- Full build, PHPCS, PHP syntax, JavaScript syntax, POT generation, npm high-severity audit, Composer advisory audit, and `git diff --check` gates pass.
+- PHPUnit passes with `390` tests and `2,712` assertions.
+- The v1.1.15 candidate contains `49` runtime files and `43` syntax-clean PHP files under one plugin root, includes the four expected compiled asset entry points, and contains no development/source files or backslash archive paths.
+- Candidate SHA-256: `6F36E2930E1B26773991DA39607ECF328035FFEE6224B8E0086D86BBEAC0B625`.
+- LocalWP Plugin Tester installed the exact candidate over active v1.1.14. All `49` installed files byte-match the inspected package and Account Gateway remains active at v1.1.15.
+- The `alynt_ag_settings`, `active_plugins`, and `alynt_ag_db_version` fingerprints remained byte-identical after installation and browser acceptance.
+- Browser acceptance passed for responsive admin tabs; typography, color, media, email save-state, and dashboard-link admin modules; desktop/mobile login; password visibility; lost password; and disabled-registration output.
+- Desktop and mobile gateway layouts have no horizontal document overflow, frontend/admin compiled assets load from the unchanged public paths, and the browser console contains no warnings or errors.
+- The temporary local authentication helper was removed immediately after use. A complete v1.1.14 file rollback remains available until release closeout.
+- No staging or production site was touched.
 
 ### Remaining Phase 2 Sequence
 
-1. Complete Increment 2 package inspection and Plugin Tester acceptance.
+1. Publish and updater-verify v1.1.15 after explicit approval.
 2. Extract privacy exporter/eraser collaborators.
 3. Extract dashboard module renderers behind the existing dashboard facade.
 4. Split settings schema/defaults/sanitization.

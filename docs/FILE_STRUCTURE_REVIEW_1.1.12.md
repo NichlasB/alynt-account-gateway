@@ -385,7 +385,7 @@ Plugin Tester acceptance before requesting maintenance-release approval.
 
 ### Increment 2: Source Asset Modules
 
-Status: candidate verification in progress.
+Status: candidate accepted; release approval pending.
 
 - Locked the v1.1.14 compiled asset lengths and SHA-256 fingerprints before
   changing source organization.
@@ -405,6 +405,17 @@ Status: candidate verification in progress.
 - The focused quality run passes PHPCS, JavaScript syntax, lint, build, and the
   expanded 390-test/2,712-assertion suite.
 
-The remaining acceptance work is the full audit set, exact-package inspection,
-and Plugin Tester browser verification. Release publication requires separate
-explicit approval.
+The full audit set, exact-package inspection, and Plugin Tester browser
+verification pass for the v1.1.15 candidate. The package contains 49 runtime
+files and 43 syntax-clean PHP files, contains no development/source files or
+backslash paths, and has SHA-256
+`6F36E2930E1B26773991DA39607ECF328035FFEE6224B8E0086D86BBEAC0B625`.
+All installed files byte-match the package. Settings, activation order, and
+schema fingerprints remain unchanged. Browser acceptance covered the five
+admin JavaScript responsibilities, responsive admin tabs, desktop/mobile
+gateway output, password visibility, lost password, and disabled registration
+without browser warnings or errors.
+
+Release publication requires separate explicit approval. Increment 3 begins
+privacy exporter/eraser extraction only after the v1.1.15 release and updater
+cycle is closed.
