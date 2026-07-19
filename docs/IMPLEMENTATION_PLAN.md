@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.14 checkout authentication is released and updater-verified on LocalWP Plugin Tester; production rollout remains separately gated
+- Current phase: v1.1.14 is released and updater-verified on LocalWP Plugin Tester; the first production rollout on `isha-classes` completed Gate C with an `ACCEPT` decision
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.14 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Resume Gate C closeout for `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Separately gate any production update from v1.1.13 to v1.1.14; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 
@@ -28,7 +28,7 @@
 - [x] Add focused automated coverage for settings defaults/sanitization, route detection, endpoint exclusions, open-redirect rejection, login retry persistence, enabled/disabled registration copy, and pending-registration return-path persistence.
 - [x] Complete build, lint, test, package, and LocalWP Plugin Tester browser acceptance before requesting release approval.
 - [x] Publish and updater-verify v1.1.14 only after explicit release approval.
-- [ ] Do not change any staging or production site as part of implementation or release verification without separate site-specific approval.
+- [x] Do not change any staging or production site as part of implementation or release verification without separate site-specific approval.
 
 ### Acceptance Matrix
 
@@ -115,7 +115,7 @@
 - [x] Complete the full automated, standards, build, package, and browser acceptance suite.
 - [x] Publish and updater-verify v1.1.12 only after explicit release approval.
 - [x] Update and verify `isha-classes` through Alynt Plugin Updater with a fresh restore point.
-- [ ] Resume Gate C closeout only after the corrected production state is accepted.
+- [x] Resume Gate C closeout only after the corrected production state is accepted.
 
 ### File-Structure Review
 
@@ -168,7 +168,7 @@
 - [x] Publish and updater-verify after explicit release approval.
 - [x] Update `isha-classes` while Frontend Output remains disabled.
 - [x] Repeat Gate B with `dashboard_enabled` and `woocommerce_takeover` disabled.
-- [ ] Obtain Gate C closeout approval.
+- [x] Obtain Gate C closeout approval.
 
 ### Gate B Finding
 
@@ -276,7 +276,8 @@
 - [x] Install the exact approved release with Frontend Output disabled.
 - [x] Configure and privately preview the gateway, including the requested background image.
 - [x] Confirm Gate B before deactivating Login Designer and enabling Frontend Output.
-- [ ] Run the production acceptance matrix, monitoring window, cleanup, and Gate C closeout.
+- [x] Run the production acceptance matrix, monitoring window, and cleanup.
+- [x] Obtain the rollout owner's Gate C closeout decision.
 
 ### Verification Notes
 
@@ -293,6 +294,12 @@
 - The public GitHub asset contains `47` runtime files under one plugin root, with zero development files or backslash-path entries, aligned v1.1.8 metadata, syntax-clean packaged PHP, and SHA-256 `D6AE13BB5101F1B41B76727B90BD030FA2CCFD353E9F5FB7F377983DEE5BB744`.
 - Plugin Tester completed a true public `1.1.7 -> 1.1.8` update through Alynt Plugin Updater. The updater offered the exact public asset, WordPress installed it, all `47` installed files byte-match the public ZIP, active-plugin and settings fingerprints remained unchanged, schema remained `0.1.5`, and a fresh check reported no remaining update.
 - With separate production approval, Alynt Plugin Updater `1.1.5` was installed on `isha-classes` from its checksum-verified public asset after a private database and active-plugin restore point was created. Its `41` installed files byte-match the public ZIP, its 12-hour cron event and forced discovery passed, the active-plugin list changed only by adding the updater, Login Designer remains active, and baseline route health is unchanged.
+- Gate C acceptance completed anonymous, customer, administrator, shop-manager, password-reset, email, WooCommerce native-account, responsive, accessibility, provider-configuration, monitoring, and cleanup checks on production v1.1.13.
+- A final ordinary Login request exposed a stale GridPane/Nginx cache entry containing Create Account while registration was disabled. The site owner cleared GridPane cache; the refreshed response and its subsequent cache `HIT` both contained zero Create Account links.
+- Final production state retains Frontend Output enabled while registration, custom dashboard, WooCommerce takeover, checkout authentication, webhook delivery, diagnostics, and debug payload logging remain disabled. Turnstile and Reoon are configured in `turnstile_or_reoon` mode.
+- Final settings fingerprint is `300a163d9dfae9266ca9227802398c4f3acf2fe95f922163287a34d49bdcdfec`; active-plugin fingerprint remains `c102561b973c3511541448676f4bbdc7dfefd923e3167a9b8e770ff3b43688a1`. Disposable users remain absent, non-audit plugin tables are empty, the three audit rows are expected settings-change records, and the PHP log is empty.
+- `/legal/privacy/` remains unavailable and is a documented blocker before registration can be enabled. Registration remains intentionally disabled, so registration-dependent legal-page and live provider-submission scenarios are out of scope for this rollout.
+- The rollout owner accepted Gate C at `2026-07-19 22:10 CEST`. The first production rollout is closed successfully on v1.1.13; any move to v1.1.14 remains a separate production approval.
 
 ## v1.1.7 Pre-Release Revalidation
 
