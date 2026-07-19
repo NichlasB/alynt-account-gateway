@@ -134,6 +134,24 @@ class EmailTemplateServiceTest extends TestCase {
 		$this->assertStringContainsString( 'font-size: 18px !important;', $rendered['html'] );
 	}
 
+	public function test_email_fallback_action_url_wraps_on_narrow_screens() {
+		$service  = new ALYNT_AG_Email_Template_Service();
+		$rendered = $service->render(
+			'registration_confirmation',
+			array(
+				'first_name'       => 'Damon',
+				'confirmation_url' => 'https://example.test/account?action=setpassword&alynt_ag_token=sample-token',
+				'expiry_hours'     => '24',
+			),
+			ALYNT_AG_Settings_Schema::defaults()
+		);
+
+		$this->assertStringContainsString(
+			'opacity:.78;word-break:break-all;overflow-wrap:anywhere;',
+			$rendered['html']
+		);
+	}
+
 	public function test_render_strips_unsafe_markup_and_escapes_token_markup() {
 		$service  = new ALYNT_AG_Email_Template_Service();
 		$settings = array_merge(

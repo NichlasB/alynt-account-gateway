@@ -647,7 +647,7 @@ class ALYNT_AG_Email_Template_Service {
 										<p style="margin:28px 0;">
 											<a href="<?php echo esc_url( $button_url ); ?>" style="display:inline-block;padding:14px 22px;border-radius:6px;background:<?php echo esc_attr( $primary ); ?>;color:<?php echo esc_attr( $button_text ); ?>;font-weight:600;text-decoration:none;"><?php echo esc_html( $button_label ); ?></a>
 										</p>
-										<p style="font-size:13px;line-height:1.5;color:<?php echo esc_attr( $text_color ); ?>;opacity:.78;"><?php echo esc_html( $button_url ); ?></p>
+										<p style="font-size:13px;line-height:1.5;color:<?php echo esc_attr( $text_color ); ?>;opacity:.78;word-break:break-all;overflow-wrap:anywhere;"><?php echo esc_html( $button_url ); ?></p>
 									<?php endif; ?>
 								</td>
 							</tr>

@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.10 - 2026-07-19
+
+### Fixed
+
+- Long fallback action URLs in branded account emails now wrap without expanding the email layout on narrow screens.
+- Existing responsive body typography, branded buttons, and plain-text email fallbacks remain unchanged.
+
+### Tests
+
+- Added regression coverage for inline fallback-URL wrapping rules.
+
 ## 1.1.9 - 2026-07-19
 
 ### Fixed
