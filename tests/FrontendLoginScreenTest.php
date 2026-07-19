@@ -28,6 +28,7 @@ class FrontendLoginScreenTest extends TestCase {
 			'account_action_base' => '/account',
 			'login_path'          => '/login',
 			'login_intro_text'    => 'Welcome back to your account.',
+			'registration_enabled' => true,
 		);
 	}
 
@@ -66,6 +67,20 @@ class FrontendLoginScreenTest extends TestCase {
 		$this->assertStringContainsString( 'href="https://example.test/account?action=lostpassword"', $html );
 		$this->assertStringNotContainsString( 'agw-login-error', $html );
 		$this->assertStringNotContainsString( 'name="redirect_to"', $html );
+	}
+
+	public function test_render_login_screen_hides_registration_link_when_registration_is_disabled() {
+		$screen                                  = new ALYNT_AG_Frontend_Login_Screen();
+		$this->settings['registration_enabled'] = false;
+
+		ob_start();
+		$screen->render_login_screen( $this->settings );
+		$html = ob_get_clean();
+
+		$this->assertStringNotContainsString( 'action=register', $html );
+		$this->assertStringNotContainsString( 'Create Account', $html );
+		$this->assertStringContainsString( 'href="https://example.test/account?action=lostpassword"', $html );
+		$this->assertStringContainsString( 'Forgot Password?', $html );
 	}
 
 	public function test_render_login_screen_outputs_success_states_and_redirect() {

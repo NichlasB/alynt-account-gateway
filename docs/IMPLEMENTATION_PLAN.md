@@ -2,12 +2,54 @@
 
 ## Status
 
-- Current phase: v1.1.11 is live on the first production rollout target and Gate B acceptance has passed; Gate C closeout approval is pending
+- Current phase: v1.1.12 corrective work is in progress after the first production rollout passed Gate B; Gate C is paused until the corrective release and file-structure review are complete
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.11 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Obtain Gate C closeout approval for `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Complete the v1.1.12 frontend corrections, deliver the read-only file-structure review, then return to Gate C for `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
+
+## v1.1.12 Production Frontend Corrections And Structure Review
+
+### Corrective Slice
+
+- [x] Preserve the configured primary-button background and text colors across hover and keyboard-focus states, including when a theme loads broader link-hover rules after the plugin stylesheet.
+- [x] Verify the configured ISHA button color pair retains accessible contrast in normal and interactive states.
+- [x] Hide the login screen's Create Account link whenever public account creation is disabled.
+- [x] Keep Forgot Password available and preserve the login-link layout when Create Account is absent.
+- [x] Add focused regression coverage for both frontend corrections.
+- [x] Complete the full automated, standards, build, package, and browser acceptance suite.
+- [ ] Publish and updater-verify v1.1.12 only after explicit release approval.
+- [ ] Update and verify `isha-classes` through Alynt Plugin Updater with a fresh restore point.
+- [ ] Resume Gate C closeout only after the corrected production state is accepted.
+
+### File-Structure Review
+
+- [x] Confirm the toolkit review thresholds: PHP over 300 lines must be split, JavaScript over 250 lines should be modularized, and CSS over 500 lines should be split by component or section.
+- [x] Confirm `admin/class-settings-page.php` is materially over the PHP threshold at 5,489 lines.
+- [x] Confirm additional oversized production PHP, JavaScript, CSS, and test-support files remain.
+- [x] Complete Phase 1 inventory: logical sections, dependencies, complex methods, responsibility boundaries, and specific extraction targets.
+- [x] Record a staged refactoring plan that separates production classes, assets, tests, and test bootstrap work in `docs/FILE_STRUCTURE_REVIEW_1.1.12.md`.
+- [ ] Do not execute Phase 2 structural refactoring without separate explicit approval.
+- [ ] Keep structural refactoring out of the v1.1.12 corrective release unless a frontend correction cannot be made safely without it.
+
+### Structural Disposition
+
+- The plugin's v1.1.7 pre-release review explicitly recorded large-file decomposition as deferred structural maintenance because performing broad class and stylesheet splits inside a release gate would create disproportionate regression risk.
+- Passing the pre-release workflow therefore established that the debt was known and non-blocking for the validated runtime release; it did not establish that the oversized files complied with the structure-review thresholds.
+- The current review treats the decomposition as required maintenance, but as a dedicated behavior-preserving project with its own approval, tests, and release cycle.
+
+### Candidate Verification
+
+- The ISHA configured button pair `#281408` on `#EDCE6B` has a WCAG contrast ratio of `11.43:1`.
+- The higher-specificity interaction rules explicitly preserve both configured color variables while retaining the existing subtle hover brightness change and visible focus outline.
+- Focused tests pass with `20` tests and `295` assertions.
+- The full suite passes with `365` tests and `2376` assertions. PHPCS, source and packaged PHP syntax, the frontend/admin build, POT generation, npm high-severity audit, Composer advisory audit, and `git diff --check` pass.
+- The exact local candidate contains `47` runtime files under one plugin root, excludes development files, has no backslash archive entries, and has SHA-256 `EFADC91762EE5CB7A82AA81BBCF26909E826695F719BACE5F4F8299A775B45CD`.
+- Plugin Tester accepted the exact candidate over active v1.1.11. All `47` installed files byte-matched the inspected candidate, and the plugin remained active.
+- With registration disabled, the desktop and `390x844` login screens omitted Create Account while retaining Forgot Password. Mobile remained exactly `390px` wide with no horizontal overflow.
+- A disposable later-loaded theme rule attempted to replace link hover/focus color and border with the low-contrast `#FBC3A3`. The candidate's scoped primary-button interaction selectors and configured ISHA variables were both present; the registration-unavailable anchor button retained `#281408` text on `#EDCE6B`, `18px` text, no underline, and the existing focus treatment.
+- Cleanup restored the exact v1.1.11 package, all `47` installed files byte-match the pre-test archive, settings hash `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e`, and active-plugin hash `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e`. The temporary theme fixture was removed and the local homepage produced no browser warnings or errors.
 
 ## v1.1.11 Theme Compatibility For Gateway Typography
 

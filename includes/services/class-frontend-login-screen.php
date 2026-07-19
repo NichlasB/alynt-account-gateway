@@ -112,7 +112,9 @@ class ALYNT_AG_Frontend_Login_Screen {
 			</label>
 			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Log In', 'alynt-account-gateway' ); ?></button>
 			<div class="agw-links">
-				<a href="<?php echo esc_url( $this->routes->action_url( 'register', $settings ) ); ?>"><?php esc_html_e( 'Create Account', 'alynt-account-gateway' ); ?></a>
+				<?php if ( ! empty( $settings['registration_enabled'] ) ) : ?>
+					<a href="<?php echo esc_url( $this->routes->action_url( 'register', $settings ) ); ?>"><?php esc_html_e( 'Create Account', 'alynt-account-gateway' ); ?></a>
+				<?php endif; ?>
 				<a href="<?php echo esc_url( $this->routes->action_url( 'lostpassword', $settings ) ); ?>"><?php esc_html_e( 'Forgot Password?', 'alynt-account-gateway' ); ?></a>
 			</div>
 		</form>

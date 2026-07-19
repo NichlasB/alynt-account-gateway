@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.1.12 - 2026-07-19
+
+### Fixed
+
+- Primary gateway buttons now retain their configured background and text colors across hover and keyboard-focus states when themes load broader link-interaction styles later.
+- The login screen no longer displays Create Account when public account creation is disabled; Forgot Password remains available.
+
+### Documentation
+
+- Added a Phase 1 file-structure inventory and staged decomposition plan. No structural refactoring is included in this corrective release.
+
+### Tests
+
+- Added regression coverage for theme-resistant primary-button interaction colors and registration-aware login links.
+
 ## 1.1.11 - 2026-07-19
 
 ### Fixed

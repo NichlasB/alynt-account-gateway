@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.11
+Stable tag: 1.1.12
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,12 @@ Uninstalling the plugin removes plugin-owned settings, the stored database schem
 Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile, Reoon, webhooks, diagnostics, or WooCommerce takeover on production sites. The plugin provides WordPress personal-data exporter and eraser callbacks for plugin-owned records, but site owners remain responsible for privacy notice wording, lawful-basis decisions, processor contracts, retention policy, and qualified legal review where required.
 
 == Changelog ==
+
+= 1.1.12 =
+
+* Preserved configured primary-button colors across hover and keyboard-focus states when themes load broader link styles later.
+* Hidden the login screen's Create Account link when public account creation is disabled while retaining password recovery.
+* Documented the Phase 1 file-structure inventory and staged decomposition plan without introducing a high-risk structural refactor.
 
 = 1.1.11 =
 * Strengthened gateway input and button typography so later-loaded theme form styles cannot reduce the configured 18px control text.

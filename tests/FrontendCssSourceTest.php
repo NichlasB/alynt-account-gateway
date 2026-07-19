@@ -147,6 +147,16 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertMatchesRegularExpression( '/\.agw-dashboard-content input,[^}]*font-size:\s*18px;/s', $css );
 	}
 
+	public function test_primary_button_interactive_states_preserve_configured_colors() {
+		$css = $this->get_frontend_css();
+
+		$this->assertStringContainsString( '.alynt-ag-gateway .agw-button--primary:hover,', $css );
+		$this->assertStringContainsString( '.alynt-ag-gateway .agw-button--primary:focus,', $css );
+		$this->assertStringContainsString( '.alynt-ag-gateway .agw-button--primary:focus-visible {', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-gateway \.agw-button--primary:hover,[^{]*\{[^}]*background:\s*var\(--agw-button-background\);[^}]*color:\s*var\(--agw-button-text\);/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-gateway \.agw-button--primary:hover\s*\{[^}]*filter:\s*brightness\(0\.92\);/s', $css );
+	}
+
 	public function test_recent_orders_module_has_responsive_accessible_styles() {
 		$css = $this->get_frontend_css();
 

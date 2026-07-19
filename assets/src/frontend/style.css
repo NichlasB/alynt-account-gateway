@@ -372,7 +372,16 @@ html.agw-offcanvas-open {
 	color: var(--agw-button-text);
 }
 
-.agw-button--primary:hover {
+.alynt-ag-gateway .agw-button--primary:hover,
+.alynt-ag-gateway .agw-button--primary:focus,
+.alynt-ag-gateway .agw-button--primary:focus-visible {
+	border-color: transparent;
+	background: var(--agw-button-background);
+	color: var(--agw-button-text);
+	text-decoration: none;
+}
+
+.alynt-ag-gateway .agw-button--primary:hover {
 	filter: brightness(0.92);
 }
 
