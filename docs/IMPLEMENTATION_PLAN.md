@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.11 is released, updater-verified, and installed privately on the first production rollout target; Gate B public handover remains pending
+- Current phase: v1.1.11 is live on the first production rollout target and Gate B acceptance has passed; Gate C closeout approval is pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.11 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: After explicit Gate B approval, repeat the `isha-classes` public handover with the custom dashboard and WooCommerce takeover explicitly disabled; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Obtain Gate C closeout approval for `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.11 Theme Compatibility For Gateway Typography
 
@@ -22,7 +22,8 @@
 - [x] Complete the full release suite and exact-package Plugin Tester browser acceptance.
 - [x] Publish and updater-verify after explicit release approval.
 - [x] Update `isha-classes` while Frontend Output remains disabled.
-- [ ] Repeat Gate B with `dashboard_enabled` and `woocommerce_takeover` disabled.
+- [x] Repeat Gate B with `dashboard_enabled` and `woocommerce_takeover` disabled.
+- [ ] Obtain Gate C closeout approval.
 
 ### Gate B Finding
 
@@ -43,6 +44,13 @@
 - Alynt Plugin Updater discovered and installed the exact v1.1.11 GitHub release asset on `isha-classes`. All `47` installed files byte-match the public ZIP, Account Gateway remains active, no update offer remains, and the settings and active-plugin fingerprints are unchanged.
 - Production remains private after the update: Frontend Output and registration are disabled, Login Designer remains active and owns `/wp-login.php`, `/login` remains a true `404`, and the native My Account route remains available.
 - The stored custom-dashboard and WooCommerce-takeover preferences remain dormant behind the disabled master output switch. Per rollout approval, Gate B must explicitly disable both preferences before public output is enabled.
+- Gate B was approved and applied from a fresh checksum-verified restore point at `/var/www/classes.internationalschoolofthehealingarts.com/restores/alynt-account-gateway-v1.1.11-gate-b-20260719-143409`.
+- Public handover explicitly enabled Frontend Output, kept registration disabled, disabled the custom dashboard and WooCommerce takeover, and deactivated Login Designer. Final settings hash: `77e703a83e89c9ee1be5b9e80569df20f326f5e3412f6ef76577eba43e25ec7a`; final active-plugin hash: `c102561b973c3511541448676f4bbdc7dfefd923e3167a9b8e770ff3b43688a1`.
+- Public login, lost-password, registration-unavailable, logout-entry, anonymous wp-admin redirect, home, and native My Account routes passed. Native `wp-login.php` redirects to `/login`.
+- Production Blocksy rendering passed at `390x844` and `1440x1000`: gateway input, notice, and button text remained `18px`; mobile had no horizontal overflow; desktop retained the configured image/form split and `540px` card.
+- The emergency bypass returned native login with no gateway markup, redirect, or authenticated cookie. Administrator email-only login reached the configured wp-admin destination.
+- Authenticated My Account remained native WooCommerce with standard navigation, no `.agw-dashboard` or `.alynt-ag-gateway` markup, and no Account Gateway assets.
+- Three monitoring samples kept login, lost-password, and My Account at HTTP `200`. The disposable administrator and all local/remote helpers were removed, its session was invalidated, and the Gate B restore-point checksums revalidated.
 
 ## v1.1.10 Mobile Email Fallback URL Wrapping
 
@@ -122,7 +130,7 @@
 - [x] Confirm Gate A before installing or changing production.
 - [x] Install the exact approved release with Frontend Output disabled.
 - [x] Configure and privately preview the gateway, including the requested background image.
-- [ ] Confirm Gate B before deactivating Login Designer and enabling Frontend Output.
+- [x] Confirm Gate B before deactivating Login Designer and enabling Frontend Output.
 - [ ] Run the production acceptance matrix, monitoring window, cleanup, and Gate C closeout.
 
 ### Verification Notes
