@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.9 corrective candidate in validation after first production rollout Gate A exposed disabled-output preview assets
+- Current phase: v1.1.9 released and updater-verified; first production rollout Gate A is ready to resume private preview acceptance
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.8 is the current public baseline; v1.1.9 is an unreleased corrective candidate.
+- Plugin status: v1.1.9 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Validate and release the preview-asset correction, update `isha-classes`, finish private previews, then request Gate B while keeping Login Designer active and Frontend Output disabled; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Update `isha-classes` to v1.1.9, finish private previews, then request Gate B while keeping Login Designer active and Frontend Output disabled; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.9 Disabled-Output Preview Assets
 
@@ -19,7 +19,7 @@
 - [x] Preserve normal public asset suppression while Frontend Output is disabled.
 - [x] Add focused regression coverage.
 - [x] Complete the full release suite and exact-package Plugin Tester acceptance.
-- [ ] Publish and updater-verify after explicit release approval.
+- [x] Publish and updater-verify after explicit release approval.
 - [ ] Update `isha-classes` and resume private preview acceptance.
 
 ### Finding
@@ -32,6 +32,9 @@
 - Corrected candidate `alynt-account-gateway-v1.1.9-rc.zip` contains `47` runtime files under one plugin root, with zero development files or backslash-path entries. SHA-256: `4E1674F4EBF6C1FEB1C30D1A96E1362585CEFA2827E9BEA083CCB1F60BD15650`.
 - Plugin Tester accepted the exact corrected package over active v1.1.9 candidate files. With Frontend Output disabled, the authenticated login preview loaded the built stylesheet and script, rendered the styled desktop split layout, collapsed to a `390x844` single-column layout without horizontal overflow, and exposed a working password visibility control with updated accessible label and live status.
 - Cleanup restored the exact pre-test settings fingerprint `4c9c362f34b69a693030000a806bb55f172ce98601d4398b9b8fd75555e90a0f` and active-plugin fingerprint `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9`. All `47` installed files byte-match the corrected candidate; the disposable administrator and temporary settings helper were removed.
+- Released as [`v1.1.9`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.9) from commit `17ea934`; Build Release workflow run `29686997024` passed.
+- The public GitHub asset contains `47` runtime files under one plugin root, with zero development files, aligned v1.1.9 metadata, and SHA-256 `1651E9F0CC794B7738F3EA088C60BEAF3D643D8DB16F757174C0C8B348C41D6D`.
+- Plugin Tester completed a true public `1.1.8 -> 1.1.9` update through Alynt Plugin Updater. Discovery returned the exact v1.1.9 GitHub release asset, WordPress installed it through the native upgrader, all `47` installed files byte-match the public ZIP, the plugin remained active, settings and active-plugin fingerprints remained unchanged, and a fresh updater check reported no remaining offer.
 
 ## v1.1.8 Role-Aware Login Redirects And First Production Rollout
 
