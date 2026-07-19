@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.12 corrective work is in progress after the first production rollout passed Gate B; Gate C is paused until the corrective release and file-structure review are complete
+- Current phase: v1.1.12 is published and updater-verified after the first production rollout passed Gate B; Gate C is paused until the corrected production update is approved and accepted
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.11 is the current public baseline.
+- Plugin status: v1.1.12 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Complete the v1.1.12 frontend corrections, deliver the read-only file-structure review, then return to Gate C for `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Update `isha-classes` to v1.1.12 through Alynt Plugin Updater after explicit live-site approval, verify the two frontend corrections, then return to Gate C; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.12 Production Frontend Corrections And Structure Review
 
@@ -19,7 +19,7 @@
 - [x] Keep Forgot Password available and preserve the login-link layout when Create Account is absent.
 - [x] Add focused regression coverage for both frontend corrections.
 - [x] Complete the full automated, standards, build, package, and browser acceptance suite.
-- [ ] Publish and updater-verify v1.1.12 only after explicit release approval.
+- [x] Publish and updater-verify v1.1.12 only after explicit release approval.
 - [ ] Update and verify `isha-classes` through Alynt Plugin Updater with a fresh restore point.
 - [ ] Resume Gate C closeout only after the corrected production state is accepted.
 
@@ -31,7 +31,7 @@
 - [x] Complete Phase 1 inventory: logical sections, dependencies, complex methods, responsibility boundaries, and specific extraction targets.
 - [x] Record a staged refactoring plan that separates production classes, assets, tests, and test bootstrap work in `docs/FILE_STRUCTURE_REVIEW_1.1.12.md`.
 - [ ] Do not execute Phase 2 structural refactoring without separate explicit approval.
-- [ ] Keep structural refactoring out of the v1.1.12 corrective release unless a frontend correction cannot be made safely without it.
+- [x] Keep structural refactoring out of the v1.1.12 corrective release unless a frontend correction cannot be made safely without it.
 
 ### Structural Disposition
 
@@ -50,6 +50,10 @@
 - With registration disabled, the desktop and `390x844` login screens omitted Create Account while retaining Forgot Password. Mobile remained exactly `390px` wide with no horizontal overflow.
 - A disposable later-loaded theme rule attempted to replace link hover/focus color and border with the low-contrast `#FBC3A3`. Browser inspection confirmed that rule and the candidate interaction selectors loaded together while the registration-unavailable anchor button used `#281408` text on `#EDCE6B`, `18px` text, and no underline. Focused source regression coverage verifies that the more-specific gateway hover/focus selectors explicitly reapply both configured color variables while preserving the existing focus outline.
 - Cleanup restored the exact v1.1.11 package, all `47` installed files byte-match the pre-test archive, settings hash `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e`, and active-plugin hash `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e`. The temporary theme fixture was removed and the local homepage produced no browser warnings or errors.
+- Released as [`v1.1.12`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.12) from commit `247da7e`; Build Release workflow run `29692972797` passed.
+- The public GitHub ZIP contains `47` runtime files under one plugin root, excludes development files, has aligned v1.1.12 metadata and syntax-clean packaged PHP, and has SHA-256 `56916E2F300D52DAA643FDBD31947BBDA40F8BEA5B1D3EE4AB323BE81EB7E49D`.
+- Plugin Tester completed a true public `1.1.11 -> 1.1.12` update through Alynt Plugin Updater after its GitHub release cache was force-refreshed through the updater's own update-check service. Discovery returned the exact v1.1.12 GitHub asset, WordPress installed it, the plugin remained active, all `47` installed files byte-match the public ZIP, settings hash `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e` and active-plugin hash `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e` were preserved, and no update offer remains.
+- The release-installed Plugin Tester homepage responded normally after the updater verification. Production `isha-classes` remained untouched.
 
 ## v1.1.11 Theme Compatibility For Gateway Typography
 
