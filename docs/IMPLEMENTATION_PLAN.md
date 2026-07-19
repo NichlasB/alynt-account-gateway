@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.11 theme-compatibility correction is released and updater-verified; the first production rollout remains safely rolled back pending a new live-site approval
+- Current phase: v1.1.11 is released, updater-verified, and installed privately on the first production rollout target; Gate B public handover remains pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.11 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: After explicit live-site approval, update `isha-classes` to v1.1.11 with Frontend Output still disabled, then repeat Gate B with the custom dashboard and WooCommerce takeover explicitly disabled; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: After explicit Gate B approval, repeat the `isha-classes` public handover with the custom dashboard and WooCommerce takeover explicitly disabled; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.11 Theme Compatibility For Gateway Typography
 
@@ -21,7 +21,7 @@
 - [x] Add focused source regression coverage.
 - [x] Complete the full release suite and exact-package Plugin Tester browser acceptance.
 - [x] Publish and updater-verify after explicit release approval.
-- [ ] Update `isha-classes` while Frontend Output remains disabled.
+- [x] Update `isha-classes` while Frontend Output remains disabled.
 - [ ] Repeat Gate B with `dashboard_enabled` and `woocommerce_takeover` disabled.
 
 ### Gate B Finding
@@ -39,6 +39,10 @@
 - The public GitHub ZIP contains `47` runtime files under one plugin root, excludes development files, has aligned v1.1.11 metadata and syntax-clean packaged PHP, and has SHA-256 `D53BE217E73B881DF89CD99FB3E96827774A073906C5426B4DA75DA800126491`.
 - Plugin Tester completed a true public `1.1.10 -> 1.1.11` update through Alynt Plugin Updater. Discovery returned the exact v1.1.11 GitHub asset, WordPress installed it, the plugin remained active, all `47` installed files byte-match the public ZIP, and no stale update offer remains.
 - The release-installed Plugin Tester copy passed the production-shaped Blocksy typography conflict at `390x844`: email, password, and submit-button text remained `18px`, Account Gateway markup and assets loaded, and the document had no horizontal overflow.
+- A fresh production restore point was created at `/var/www/classes.internationalschoolofthehealingarts.com/restores/alynt-account-gateway-v1.1.11-preupdate-20260719-142733`. Its database export, exact active-plugin snapshot, v1.1.10 Account Gateway archive, v1.1.5 updater archive, ownership, permissions, and checksums passed.
+- Alynt Plugin Updater discovered and installed the exact v1.1.11 GitHub release asset on `isha-classes`. All `47` installed files byte-match the public ZIP, Account Gateway remains active, no update offer remains, and the settings and active-plugin fingerprints are unchanged.
+- Production remains private after the update: Frontend Output and registration are disabled, Login Designer remains active and owns `/wp-login.php`, `/login` remains a true `404`, and the native My Account route remains available.
+- The stored custom-dashboard and WooCommerce-takeover preferences remain dormant behind the disabled master output switch. Per rollout approval, Gate B must explicitly disable both preferences before public output is enabled.
 
 ## v1.1.10 Mobile Email Fallback URL Wrapping
 
