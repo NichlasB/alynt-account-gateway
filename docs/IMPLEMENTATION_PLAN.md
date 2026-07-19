@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.12 is published and installed on `isha-classes`; Gate C found a residual normal-state button contrast conflict that requires v1.1.13 before closeout can resume
+- Current phase: v1.1.13 is published and updater-verified; `isha-classes` remains on v1.1.12 pending separate live-update approval before Gate C can resume
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.12 is the current public baseline; v1.1.13 normal-state contrast correction is in progress.
+- Plugin status: v1.1.13 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Complete, release, and production-verify the v1.1.13 normal-state button contrast correction, then resume Gate C closeout for `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Update and production-verify v1.1.13 on `isha-classes` after explicit live-site approval, then resume Gate C closeout; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.13 Normal-State Button Contrast Correction
 
@@ -18,7 +18,7 @@
 - [x] Scope the base primary-button rule with `.alynt-ag-gateway` so configured background and text colors apply before interaction as well.
 - [x] Add focused source regression coverage for the normal-state selector and color variables.
 - [x] Complete automated, build, package, and Plugin Tester browser acceptance.
-- [ ] Publish and updater-verify v1.1.13 only after explicit release approval.
+- [x] Publish and updater-verify v1.1.13 only after explicit release approval.
 - [ ] Update and verify `isha-classes` only after separate explicit live-site approval.
 - [ ] Resume Gate C only after normal, hover, and focus contrast pass on production.
 
@@ -35,6 +35,11 @@
 - A disposable later-loaded rule attempted to force white text and borders onto primary gateway buttons. At desktop width, the non-hovered, hovered, and keyboard-focused button retained `#281408` text on `#EDCE6B`, `18px` text, no hover underline, the existing hover brightness, and a visible focus outline.
 - At `390x844`, the same conflict remained loaded while the normal-state button retained the configured color pair, the login screen omitted Create Account and retained Forgot Password, and the document stayed exactly `390px` wide.
 - Cleanup restored the exact public v1.1.12 package, settings hash `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e`, and active-plugin hash `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e`. The conflict fixture was removed and the local homepage produced no browser warnings or errors.
+- Released as [`v1.1.13`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.13) from commit `82f8719`; Build Release workflow run `29694804963` passed.
+- The public GitHub ZIP contains `47` runtime files under one plugin root, excludes development files, has forward-slash archive paths and syntax-clean packaged PHP, and has SHA-256 `27B688C10B52C85C3002756F1A24367ED780873120C14BEC8E5F1AB9F872AE2B`.
+- The public package contains the same `47` files as the browser-tested candidate. Only `readme.txt` differs at the byte level due to GitHub checkout line-ending normalization; normalized content is identical.
+- Plugin Tester completed a true public `1.1.12 -> 1.1.13` update through Alynt Plugin Updater. Discovery returned the exact v1.1.13 GitHub asset, WordPress installed it, the plugin remained active, all `47` installed files byte-match the public ZIP, settings hash `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e` and active-plugin hash `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e` were preserved, and no update offer remains.
+- The release-installed Plugin Tester homepage responded normally with no browser warnings or errors.
 
 ## v1.1.12 Production Frontend Corrections And Structure Review
 
