@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.9 released and updater-verified; first production rollout Gate A is ready to resume private preview acceptance
+- Current phase: v1.1.9 is installed and privately accepted on the first production rollout target; Gate B public handover approval is pending
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.9 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Update `isha-classes` to v1.1.9, finish private previews, then request Gate B while keeping Login Designer active and Frontend Output disabled; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Request Gate B before deactivating Login Designer and enabling Frontend Output on `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.9 Disabled-Output Preview Assets
 
@@ -20,7 +20,7 @@
 - [x] Add focused regression coverage.
 - [x] Complete the full release suite and exact-package Plugin Tester acceptance.
 - [x] Publish and updater-verify after explicit release approval.
-- [ ] Update `isha-classes` and resume private preview acceptance.
+- [x] Update `isha-classes` and resume private preview acceptance.
 
 ### Finding
 
@@ -35,6 +35,11 @@
 - Released as [`v1.1.9`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.9) from commit `17ea934`; Build Release workflow run `29686997024` passed.
 - The public GitHub asset contains `47` runtime files under one plugin root, with zero development files, aligned v1.1.9 metadata, and SHA-256 `1651E9F0CC794B7738F3EA088C60BEAF3D643D8DB16F757174C0C8B348C41D6D`.
 - Plugin Tester completed a true public `1.1.8 -> 1.1.9` update through Alynt Plugin Updater. Discovery returned the exact v1.1.9 GitHub release asset, WordPress installed it through the native upgrader, all `47` installed files byte-match the public ZIP, the plugin remained active, settings and active-plugin fingerprints remained unchanged, and a fresh updater check reported no remaining offer.
+- A new private production restore point was created at `/var/www/classes.internationalschoolofthehealingarts.com/restores/alynt-account-gateway-v1.1.9-preupdate-20260719-123643` immediately before the production update. Its database dump, v1.1.8 plugin archive, active-plugin snapshot, ownership, restrictive permissions, and checksums were verified.
+- Alynt Plugin Updater discovered and installed the exact public `1.1.9` GitHub release asset on `isha-classes`. All `47` installed runtime files byte-match the public ZIP, Account Gateway remains active, saved settings and active-plugin fingerprints are unchanged, Login Designer remains active, Frontend Output and registration remain disabled, and a fresh updater check reports no remaining offer.
+- Authenticated production previews passed for login, registration, lost password, set password, logout confirmation, registration disabled, invalid link, and dashboard at `1440x1000` and `390x844`. Every state loaded the built frontend assets, retained branding, avoided native WordPress login markup and horizontal overflow, and used the expected desktop/mobile layout.
+- Public routes remain unchanged while output is disabled: home, native login, and My Account return HTTP `200`; `/login` remains HTTP `404`. Browser preview checks produced no Account Gateway console warnings or errors. The only recent PHP warning came from the unrelated `fox-required-features` admin customization.
+- The disposable production administrator and all local/remote verification helpers were removed. Gate B remains the required approval before Login Designer deactivation or Frontend Output enablement.
 
 ## v1.1.8 Role-Aware Login Redirects And First Production Rollout
 
@@ -58,7 +63,7 @@
 - [x] Create and verify production restore points immediately before rollout.
 - [x] Confirm Gate A before installing or changing production.
 - [x] Install the exact approved release with Frontend Output disabled.
-- [ ] Configure and privately preview the gateway, including the requested background image. Configuration is saved; preview acceptance is blocked pending v1.1.9.
+- [x] Configure and privately preview the gateway, including the requested background image.
 - [ ] Confirm Gate B before deactivating Login Designer and enabling Frontend Output.
 - [ ] Run the production acceptance matrix, monitoring window, cleanup, and Gate C closeout.
 
