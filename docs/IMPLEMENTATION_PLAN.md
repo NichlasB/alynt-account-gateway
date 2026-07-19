@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.10 corrective email-overflow candidate after first production Gate B private acceptance
+- Current phase: v1.1.10 released and updater-verified; first production Gate B corrective update awaits live approval
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.9 is the current public baseline; v1.1.10 is an unreleased corrective candidate.
+- Plugin status: v1.1.10 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Validate and release the email fallback-URL overflow correction, updater-install it on `isha-classes`, repeat mobile email acceptance, then request Gate B before deactivating Login Designer or enabling Frontend Output; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: After explicit live approval, updater-install v1.1.10 on `isha-classes`, repeat mobile email acceptance, then request Gate B before deactivating Login Designer or enabling Frontend Output; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.10 Mobile Email Fallback URL Wrapping
 
@@ -20,7 +20,7 @@
 - [x] Add email-client-safe inline wrapping rules without changing the action button or plain-text fallback.
 - [x] Add focused regression coverage.
 - [x] Complete the full release suite and exact-package Plugin Tester browser acceptance.
-- [ ] Publish and updater-verify after explicit release approval.
+- [x] Publish and updater-verify after explicit release approval.
 - [ ] Update `isha-classes`, repeat mobile email previews, and resume Gate B.
 
 ### Finding
@@ -28,6 +28,7 @@
 - At `390px`, registration confirmation, password reset, account-created welcome, and email-change confirmation previews expanded beyond the viewport because their long fallback action URL had no inline wrapping behavior. Password changed did not overflow because it has no action URL.
 - This is a shared email-template defect rather than an ISHA-specific configuration issue. The correction applies `word-break:break-all` and `overflow-wrap:anywhere` directly to the small fallback URL paragraph for broad email-client resilience.
 - The exact `47`-file candidate package passed Plugin Tester acceptance at `390x844` and `1440x1000`: all five previews remained within the viewport, mobile message copy remained `16px`, desktop message copy remained `20px`, and no template tokens were unresolved. Plugin settings and active-plugin fingerprints were unchanged after installation.
+- The public `47`-file ZIP has SHA-256 `72B1DF405E6EDF76FA9A1EEAB4FC2BF446FDCBF8E81595EC2757946746128813`. Alynt Plugin Updater discovered its exact GitHub release URL and completed a true Plugin Tester `1.1.9 -> 1.1.10` update; installed files byte-match the public ZIP and no stale update offer remains.
 
 ## v1.1.9 Disabled-Output Preview Assets
 
