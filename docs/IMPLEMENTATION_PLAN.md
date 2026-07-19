@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.14 checkout authentication passed exact-candidate acceptance and is awaiting release approval; v1.1.13 remains the public production baseline
+- Current phase: v1.1.14 checkout authentication is released and updater-verified on LocalWP Plugin Tester; production rollout remains separately gated
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.13 is the current public baseline.
+- Plugin status: v1.1.14 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Complete and release the opt-in WooCommerce checkout-authentication slice, then resume Gate C closeout for `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Resume Gate C closeout for `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 
@@ -27,7 +27,7 @@
 - [x] Do not alter WooCommerce guest-checkout settings; show an admin compatibility warning when WooCommerce guest checkout is enabled while this gate is enabled.
 - [x] Add focused automated coverage for settings defaults/sanitization, route detection, endpoint exclusions, open-redirect rejection, login retry persistence, enabled/disabled registration copy, and pending-registration return-path persistence.
 - [x] Complete build, lint, test, package, and LocalWP Plugin Tester browser acceptance before requesting release approval.
-- [ ] Publish and updater-verify v1.1.14 only after explicit release approval.
+- [x] Publish and updater-verify v1.1.14 only after explicit release approval.
 - [ ] Do not change any staging or production site as part of implementation or release verification without separate site-specific approval.
 
 ### Acceptance Matrix
@@ -61,6 +61,9 @@
 - The final `v1.1.14` candidate contains `49` runtime files and `43` syntax-clean PHP files under one plugin root, has no development files or backslash archive paths, aligns the plugin header, version constant, stable tag, readme entry, and POT metadata, and has SHA-256 `898C6157B13C4026B91D3C52BBB98F887FB88CC0FD38493362EAB506D16EEA94`.
 - Plugin Tester installed the exact final candidate with all `49` files byte-matching the inspected package. Account Gateway remained active at `1.1.14`, settings and active-plugin fingerprints remained exact, first-request migration reached `0.1.6`, Login returned `200`, and disabled-gate checkout retained its native redirect.
 - Final cleanup restored all `47` v1.1.13 files, settings fingerprint `4C9C362F34B69A693030000A806BB55F172CE98601D4398B9B8FD75555E90A0F`, active-plugin fingerprint `E2B3B196DABC025F1D461E49D2CE0C6ECF70BC180DC341D00B7C39B4B8407FE9`, database version `0.1.5`, the pre-test schema, native checkout behavior, and HTTP `200` homepage. Only the final inspected candidate ZIP remains.
+- Release approval was granted and [GitHub v1.1.14](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.14) was published from commit `a3c2968`; Build Release run `29701273650` completed successfully.
+- The public updater ZIP contains `49` runtime files and `43` syntax-clean PHP files under one plugin root, includes no development files or backslash archive paths, and has SHA-256 `1DB9A418C127890FA0CA5F3B1C638CED95B04D1B4206A419129D5E4D9FC3A32C`. It matches the final candidate exactly except for expected `readme.txt` line-ending normalization.
+- Alynt Plugin Updater completed the public `1.1.13 -> 1.1.14` replacement on LocalWP Plugin Tester. All `49` installed files byte-match the public ZIP, Account Gateway remains active in its original active-plugin position, settings remain byte-identical, the schema upgraded to `0.1.6`, WordPress reports no remaining update, the homepage returns HTTP `200`, and the empty checkout retains WooCommerce's native Cart redirect.
 
 ## v1.1.13 Normal-State Button Contrast Correction
 
