@@ -18,7 +18,7 @@
 - [x] Add a dedicated authenticated-preview asset path that bypasses only the public-output asset guard.
 - [x] Preserve normal public asset suppression while Frontend Output is disabled.
 - [x] Add focused regression coverage.
-- [ ] Complete the full release suite and exact-package Plugin Tester acceptance.
+- [x] Complete the full release suite and exact-package Plugin Tester acceptance.
 - [ ] Publish and updater-verify after explicit release approval.
 - [ ] Update `isha-classes` and resume private preview acceptance.
 
@@ -27,6 +27,11 @@
 - The frontend preview endpoint called the normal asset loader. That loader intentionally returns early when `frontend_enabled` is false, so authenticated previews rendered bare HTML even though preview markup was available.
 - Public output remained disabled throughout discovery. Login Designer stayed active, `/login` remained unclaimed, and no customer-facing route changed.
 - The corrective API adds preview-only asset enqueueing without mutating saved settings or weakening the public master safety switch.
+- The first local candidate failed real-browser acceptance because its frontend wiring called the preview loader from the public enqueue hook and the guarded loader from the preview endpoint. The candidate was rejected before release, the calls were corrected, and frontend-level regression coverage now verifies both directions.
+- The corrected suite passes with `362` tests and `2359` assertions. PHPCS, changed-file PHP syntax checks, the frontend/admin asset build, package structure inspection, and `git diff --check` pass.
+- Corrected candidate `alynt-account-gateway-v1.1.9-rc.zip` contains `47` runtime files under one plugin root, with zero development files or backslash-path entries. SHA-256: `4E1674F4EBF6C1FEB1C30D1A96E1362585CEFA2827E9BEA083CCB1F60BD15650`.
+- Plugin Tester accepted the exact corrected package over active v1.1.9 candidate files. With Frontend Output disabled, the authenticated login preview loaded the built stylesheet and script, rendered the styled desktop split layout, collapsed to a `390x844` single-column layout without horizontal overflow, and exposed a working password visibility control with updated accessible label and live status.
+- Cleanup restored the exact pre-test settings fingerprint `4c9c362f34b69a693030000a806bb55f172ce98601d4398b9b8fd75555e90a0f` and active-plugin fingerprint `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9`. All `47` installed files byte-match the corrected candidate; the disposable administrator and temporary settings helper were removed.
 
 ## v1.1.8 Role-Aware Login Redirects And First Production Rollout
 

@@ -125,6 +125,33 @@ class FrontendRoutingTest extends TestCase {
 		);
 	}
 
+	public function test_preview_assets_bypass_disabled_output_without_changing_public_enqueue() {
+		$frontend = new ALYNT_AG_Frontend();
+		$settings = $GLOBALS['alynt_ag_test_options']['alynt_ag_settings'];
+
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings']['frontend_enabled'] = false;
+		$GLOBALS['alynt_ag_test_enqueued_styles']                                 = array();
+		$GLOBALS['alynt_ag_test_enqueued_scripts']                                = array();
+		$_SERVER['REQUEST_URI']                                                    = '/login';
+
+		$frontend->enqueue_assets();
+
+		$this->assertSame( array(), $GLOBALS['alynt_ag_test_enqueued_styles'] );
+		$this->assertSame( array(), $GLOBALS['alynt_ag_test_enqueued_scripts'] );
+
+		$settings['frontend_enabled'] = false;
+		$frontend->enqueue_preview_assets( $settings, 'login' );
+
+		$this->assertSame(
+			array( 'alynt-ag-frontend' ),
+			array_column( $GLOBALS['alynt_ag_test_enqueued_styles'], 'handle' )
+		);
+		$this->assertSame(
+			array( 'alynt-ag-frontend' ),
+			array_column( $GLOBALS['alynt_ag_test_enqueued_scripts'], 'handle' )
+		);
+	}
+
 	public function test_native_login_redirect_preserves_action_and_safe_query_args() {
 		$frontend = new ALYNT_AG_Frontend();
 		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;

@@ -42,6 +42,17 @@ class ALYNT_AG_Frontend {
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 		$screen   = $this->get_gateway_screen( $settings );
 
+		$this->assets()->enqueue( $settings, $screen );
+	}
+
+	/**
+	 * Enqueue assets for an authenticated gateway preview.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @param string              $screen   Gateway screen.
+	 * @return void
+	 */
+	public function enqueue_preview_assets( $settings, $screen ) {
 		$this->assets()->enqueue_preview( $settings, $screen );
 	}
 
@@ -203,7 +214,7 @@ class ALYNT_AG_Frontend {
 
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 
-		$this->assets()->enqueue( $settings, $screen );
+		$this->enqueue_preview_assets( $settings, $screen );
 		show_admin_bar( false );
 		add_filter( 'show_admin_bar', '__return_false', PHP_INT_MAX );
 
