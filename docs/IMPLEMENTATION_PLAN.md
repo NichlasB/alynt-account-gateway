@@ -2,12 +2,39 @@
 
 ## Status
 
-- Current phase: v1.1.12 is published, updater-verified, and accepted on `isha-classes`; Gate C can now resume
+- Current phase: v1.1.12 is published and installed on `isha-classes`; Gate C found a residual normal-state button contrast conflict that requires v1.1.13 before closeout can resume
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.12 is the current public baseline.
+- Plugin status: v1.1.12 is the current public baseline; v1.1.13 normal-state contrast correction is in progress.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Resume Gate C closeout for `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Complete, release, and production-verify the v1.1.13 normal-state button contrast correction, then resume Gate C closeout for `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
+
+## v1.1.13 Normal-State Button Contrast Correction
+
+### Corrective Slice
+
+- [x] Confirm the v1.1.12 higher-specificity hover/focus rule restores configured button colors on production.
+- [x] Confirm Blocksy still overrides the non-hovered primary-button text color because the base primary-button selector remains less specific.
+- [x] Scope the base primary-button rule with `.alynt-ag-gateway` so configured background and text colors apply before interaction as well.
+- [x] Add focused source regression coverage for the normal-state selector and color variables.
+- [x] Complete automated, build, package, and Plugin Tester browser acceptance.
+- [ ] Publish and updater-verify v1.1.13 only after explicit release approval.
+- [ ] Update and verify `isha-classes` only after separate explicit live-site approval.
+- [ ] Resume Gate C only after normal, hover, and focus contrast pass on production.
+
+### Production Finding
+
+- On v1.1.12, the explicit hover state passes with `#281408` text on `#EDCE6B`, but moving the pointer away exposes Blocksy's broader button rule: the non-hovered text becomes white while the configured `--agw-button-text` remains `#281408`.
+- The correction changes only the base selector specificity. It does not change saved colors, button dimensions, hover brightness, focus outline, routes, registration behavior, dashboard behavior, or settings.
+
+### Candidate Verification
+
+- The full suite passes with `365` tests and `2377` assertions. PHPCS, frontend/admin builds, POT generation, npm high-severity audit, Composer advisory audit, packaged PHP syntax, and `git diff --check` pass.
+- The exact candidate contains `47` runtime files under one plugin root, excludes development files, has no backslash archive entries, and has SHA-256 `A9BBBC9B08D17A873A6FD277FEF37574E9DAD982307020E9C94CC5DE87944DBC`.
+- Plugin Tester accepted the exact candidate over active v1.1.12, and all `47` installed files byte-match the inspected package.
+- A disposable later-loaded rule attempted to force white text and borders onto primary gateway buttons. At desktop width, the non-hovered, hovered, and keyboard-focused button retained `#281408` text on `#EDCE6B`, `18px` text, no hover underline, the existing hover brightness, and a visible focus outline.
+- At `390x844`, the same conflict remained loaded while the normal-state button retained the configured color pair, the login screen omitted Create Account and retained Forgot Password, and the document stayed exactly `390px` wide.
+- Cleanup restored the exact public v1.1.12 package, settings hash `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e`, and active-plugin hash `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e`. The conflict fixture was removed and the local homepage produced no browser warnings or errors.
 
 ## v1.1.12 Production Frontend Corrections And Structure Review
 
@@ -21,7 +48,7 @@
 - [x] Complete the full automated, standards, build, package, and browser acceptance suite.
 - [x] Publish and updater-verify v1.1.12 only after explicit release approval.
 - [x] Update and verify `isha-classes` through Alynt Plugin Updater with a fresh restore point.
-- [x] Resume Gate C closeout only after the corrected production state is accepted.
+- [ ] Resume Gate C closeout only after the corrected production state is accepted.
 
 ### File-Structure Review
 
@@ -57,7 +84,7 @@
 - A fresh production restore point was created at `/var/www/classes.internationalschoolofthehealingarts.com/restores/alynt-account-gateway-v1.1.12-preupdate-20260719-154533`. Its database export, exact v1.1.11 plugin archive, state record, ownership, permissions, and SHA-256 manifest were verified before the update.
 - Alynt Plugin Updater discovered the exact public v1.1.12 GitHub asset and completed `1.1.11 -> 1.1.12` on `isha-classes`. All `47` production runtime files byte-match the public ZIP, Account Gateway remains active, and no update offer remains.
 - The headless upgrader reinserted Account Gateway one position later and normalized a pre-existing sparse active-plugin key. The exact pre-update ordering and sparse key were restored from the database snapshot; settings hash `77e703a83e89c9ee1be5b9e80569df20f326f5e3412f6ef76577eba43e25ec7a` and active-plugin hash `c102561b973c3511541448676f4bbdc7dfefd923e3167a9b8e770ff3b43688a1` now exactly match Gate B.
-- Production acceptance passed at desktop and `390x844`: the login screen omits Create Account while retaining Forgot Password, the registration-unavailable button hover uses `#281408` text on `#EDCE6B` at `18px` without an underline, mobile has no horizontal overflow, lost password uses the branded gateway, and native `wp-login.php` redirects to `/login`.
+- Production acceptance passed at desktop and `390x844` for the requested v1.1.12 behaviors: the login screen omits Create Account while retaining Forgot Password, the registration-unavailable button hover uses `#281408` text on `#EDCE6B` at `18px` without an underline, mobile has no horizontal overflow, lost password uses the branded gateway, and native `wp-login.php` redirects to `/login`. A final pointer-away check then found the residual normal-state contrast conflict now assigned to v1.1.13.
 - Login, lost-password, registration-unavailable, and native-login redirect route checks returned HTTP `200`. The browser console and production PHP log contained no new warnings or errors.
 
 ## v1.1.11 Theme Compatibility For Gateway Typography

@@ -366,7 +366,7 @@ html.agw-offcanvas-open {
 	letter-spacing: 0;
 }
 
-.agw-button--primary {
+.alynt-ag-gateway .agw-button--primary {
 	border: 0;
 	background: var(--agw-button-background);
 	color: var(--agw-button-text);

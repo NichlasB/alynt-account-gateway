@@ -150,6 +150,7 @@ class FrontendCssSourceTest extends TestCase {
 	public function test_primary_button_interactive_states_preserve_configured_colors() {
 		$css = $this->get_frontend_css();
 
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-gateway \.agw-button--primary\s*\{[^}]*background:\s*var\(--agw-button-background\);[^}]*color:\s*var\(--agw-button-text\);/s', $css );
 		$this->assertStringContainsString( '.alynt-ag-gateway .agw-button--primary:hover,', $css );
 		$this->assertStringContainsString( '.alynt-ag-gateway .agw-button--primary:focus,', $css );
 		$this->assertStringContainsString( '.alynt-ag-gateway .agw-button--primary:focus-visible {', $css );

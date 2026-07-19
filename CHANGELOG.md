@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.13 - 2026-07-19
+
+### Fixed
+
+- Primary gateway buttons now retain their configured background and text colors before interaction when themes load broader button styles later.
+- The correction complements the v1.1.12 hover and keyboard-focus rules without changing saved colors or interaction behavior.
+
+### Tests
+
+- Added regression coverage for the gateway-scoped normal-state primary-button selector and configured color variables.
+
 ## 1.1.12 - 2026-07-19
 
 ### Fixed
