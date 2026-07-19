@@ -1,0 +1,144 @@
+.alynt-ag-tab-guidance {
+	display: grid;
+	grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr) auto;
+	gap: 18px;
+	align-items: start;
+	max-width: 78rem;
+	margin: 16px 0 20px;
+	padding: 16px 18px;
+	border: 1px solid #c3c4c7;
+	border-inline-start: 4px solid #3858e9;
+	background: #fff;
+}
+
+.alynt-ag-tab-guidance__eyebrow {
+	margin: 0 0 4px;
+	color: #3858e9;
+	font-size: 12px;
+	font-weight: 700;
+	text-transform: uppercase;
+}
+
+.alynt-ag-tab-guidance h2 {
+	margin: 0 0 6px;
+	font-size: 18px;
+	line-height: 1.35;
+}
+
+.alynt-ag-tab-guidance p {
+	margin: 0;
+	color: #50575e;
+	line-height: 1.5;
+}
+
+.alynt-ag-tab-guidance__steps {
+	display: grid;
+	gap: 7px;
+	margin: 0;
+	padding: 0;
+	color: #1d2327;
+	list-style: none;
+}
+
+.alynt-ag-tab-guidance__steps li {
+	position: relative;
+	margin: 0;
+	padding-inline-start: 18px;
+	line-height: 1.45;
+}
+
+.alynt-ag-tab-guidance__steps li::before {
+	position: absolute;
+	top: 0;
+	inset-inline-start: 0;
+	color: #3858e9;
+	content: "\2022";
+	font-weight: 700;
+}
+
+.alynt-ag-readiness {
+	max-width: 78rem;
+	margin: 16px 0 24px;
+	padding: 18px;
+	border: 1px solid #c3c4c7;
+	background: #fff;
+}
+
+.alynt-ag-readiness__header {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 24px;
+	margin-bottom: 16px;
+}
+
+.alynt-ag-readiness__header h2 {
+	margin: 0 0 4px;
+}
+
+.alynt-ag-readiness__header p {
+	margin: 0;
+	color: #50575e;
+}
+
+.alynt-ag-readiness__summary {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	justify-content: flex-end;
+}
+
+.alynt-ag-readiness__summary span {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 5px 8px;
+	border: 1px solid #dcdcde;
+	background: #f6f7f7;
+}
+
+.alynt-ag-readiness__list {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	gap: 12px;
+	margin: 0;
+}
+
+.alynt-ag-readiness__item {
+	display: flex;
+	gap: 10px;
+	margin: 0;
+	padding: 12px;
+	border: 1px solid #dcdcde;
+	border-inline-start-width: 4px;
+	background: #fff;
+}
+
+.alynt-ag-readiness__item--ready {
+	border-inline-start-color: #008a20;
+}
+
+.alynt-ag-readiness__item--warning {
+	border-inline-start-color: #dba617;
+}
+
+.alynt-ag-readiness__item--action {
+	border-inline-start-color: #d63638;
+}
+
+.alynt-ag-readiness__badge {
+	flex: 0 0 auto;
+	min-width: 76px;
+	height: max-content;
+	padding: 3px 7px;
+	border: 1px solid #dcdcde;
+	background: #f6f7f7;
+	font-size: 12px;
+	font-weight: 600;
+	text-align: center;
+}
+
+.alynt-ag-readiness__item p {
+	margin: 4px 0 6px;
+	color: #50575e;
+}

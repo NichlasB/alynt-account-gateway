@@ -18,11 +18,47 @@ class AdminCssSourceTest extends TestCase {
 	 * @return string
 	 */
 	private function get_admin_css() {
-		$css = file_get_contents( dirname( __DIR__ ) . '/assets/src/admin/style.css' );
+		$source_dir = dirname( __DIR__ ) . '/assets/src/admin';
+		$entry      = file_get_contents( $source_dir . '/style.css' );
 
-		$this->assertIsString( $css );
+		$this->assertIsString( $entry );
+		preg_match_all( "/@import '\\.\\/([^']+)';/", $entry, $imports );
+
+		$css = $entry;
+		foreach ( $imports[1] as $relative_path ) {
+			$module = file_get_contents( $source_dir . '/' . $relative_path );
+
+			$this->assertIsString( $module );
+			$css .= "\n" . $module;
+		}
 
 		return $css;
+	}
+
+	public function test_admin_css_uses_focused_imported_modules() {
+		$source_dir = dirname( __DIR__ ) . '/assets/src/admin';
+		$entry      = file_get_contents( $source_dir . '/style.css' );
+
+		$this->assertIsString( $entry );
+		preg_match_all( "/@import '\\.\\/([^']+)';/", $entry, $imports );
+
+		$this->assertSame(
+			array(
+				'styles/fields.css',
+				'styles/guidance-readiness.css',
+				'styles/security.css',
+				'styles/tools.css',
+				'styles/responsive.css',
+			),
+			$imports[1]
+		);
+
+		foreach ( $imports[1] as $relative_path ) {
+			$lines = file( $source_dir . '/' . $relative_path );
+
+			$this->assertIsArray( $lines );
+			$this->assertLessThanOrEqual( 500, count( $lines ), $relative_path );
+		}
 	}
 
 	public function test_admin_css_uses_logical_inline_start_for_rtl_panels() {

@@ -18,11 +18,49 @@ class FrontendCssSourceTest extends TestCase {
 	 * @return string
 	 */
 	private function get_frontend_css() {
-		$css = file_get_contents( dirname( __DIR__ ) . '/assets/src/frontend/style.css' );
+		$source_dir = dirname( __DIR__ ) . '/assets/src/frontend';
+		$entry      = file_get_contents( $source_dir . '/style.css' );
 
-		$this->assertIsString( $css );
+		$this->assertIsString( $entry );
+		preg_match_all( "/@import '\\.\\/([^']+)';/", $entry, $imports );
+
+		$css = $entry;
+		foreach ( $imports[1] as $relative_path ) {
+			$module = file_get_contents( $source_dir . '/' . $relative_path );
+
+			$this->assertIsString( $module );
+			$css .= "\n" . $module;
+		}
 
 		return $css;
+	}
+
+	public function test_frontend_css_uses_focused_imported_modules() {
+		$source_dir = dirname( __DIR__ ) . '/assets/src/frontend';
+		$entry      = file_get_contents( $source_dir . '/style.css' );
+
+		$this->assertIsString( $entry );
+		preg_match_all( "/@import '\\.\\/([^']+)';/", $entry, $imports );
+
+		$this->assertSame(
+			array(
+				'styles/base.css',
+				'styles/forms.css',
+				'styles/dashboard-shell.css',
+				'styles/dashboard-overview.css',
+				'styles/dashboard-commerce.css',
+				'styles/dashboard-content.css',
+				'styles/responsive.css',
+			),
+			$imports[1]
+		);
+
+		foreach ( $imports[1] as $relative_path ) {
+			$lines = file( $source_dir . '/' . $relative_path );
+
+			$this->assertIsArray( $lines );
+			$this->assertLessThanOrEqual( 500, count( $lines ), $relative_path );
+		}
 	}
 
 	public function test_woocommerce_dashboard_form_polish_is_scoped_to_dashboard_content() {
