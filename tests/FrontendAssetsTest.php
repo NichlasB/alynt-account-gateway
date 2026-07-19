@@ -70,6 +70,31 @@ class FrontendAssetsTest extends TestCase {
 		$this->assertSame( '%1$d of %2$d requirements met.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementsMet'] );
 	}
 
+	public function test_preview_enqueue_loads_assets_while_frontend_output_is_disabled() {
+		$assets = new ALYNT_AG_Frontend_Assets();
+
+		$this->settings['frontend_enabled'] = false;
+		$assets->enqueue_preview( $this->settings, 'login' );
+
+		$this->assertSame(
+			array( 'alynt-ag-frontend' ),
+			array_column( $GLOBALS['alynt_ag_test_enqueued_styles'], 'handle' )
+		);
+		$this->assertSame(
+			array( 'alynt-ag-frontend' ),
+			array_column( $GLOBALS['alynt_ag_test_enqueued_scripts'], 'handle' )
+		);
+
+		$GLOBALS['alynt_ag_test_enqueued_styles']    = array();
+		$GLOBALS['alynt_ag_test_enqueued_scripts']   = array();
+		$GLOBALS['alynt_ag_test_localized_scripts']  = array();
+
+		$assets->enqueue_preview( $this->settings, '' );
+
+		$this->assertSame( array(), $GLOBALS['alynt_ag_test_enqueued_styles'] );
+		$this->assertSame( array(), $GLOBALS['alynt_ag_test_enqueued_scripts'] );
+	}
+
 	public function test_enqueue_turnstile_only_on_registration_screen_when_configured() {
 		$assets = new ALYNT_AG_Frontend_Assets();
 		$this->settings['turnstile_site_key'] = 'site-key';

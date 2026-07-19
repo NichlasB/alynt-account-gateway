@@ -42,7 +42,7 @@ class ALYNT_AG_Frontend {
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 		$screen   = $this->get_gateway_screen( $settings );
 
-		$this->assets()->enqueue( $settings, $screen );
+		$this->assets()->enqueue_preview( $settings, $screen );
 	}
 
 	/**

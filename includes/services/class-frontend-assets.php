@@ -26,6 +26,35 @@ class ALYNT_AG_Frontend_Assets {
 			return;
 		}
 
+		$this->enqueue_assets( $settings, $screen );
+	}
+
+	/**
+	 * Enqueue assets for an authenticated gateway preview.
+	 *
+	 * Preview assets must remain available while public frontend output is
+	 * disabled so administrators can review the saved configuration safely.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @param string              $screen   Gateway screen.
+	 * @return void
+	 */
+	public function enqueue_preview( $settings, $screen ) {
+		if ( ! $screen ) {
+			return;
+		}
+
+		$this->enqueue_assets( $settings, $screen );
+	}
+
+	/**
+	 * Enqueue the shared gateway assets.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @param string              $screen   Gateway screen.
+	 * @return void
+	 */
+	private function enqueue_assets( $settings, $screen ) {
 		$this->enqueue_frontend_style();
 		$this->enqueue_frontend_script();
 

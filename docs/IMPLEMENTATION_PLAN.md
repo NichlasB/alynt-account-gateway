@@ -2,12 +2,31 @@
 
 ## Status
 
-- Current phase: v1.1.8 released and updater-verified; first production rollout Gate A pending
+- Current phase: v1.1.9 corrective candidate in validation after first production rollout Gate A exposed disabled-output preview assets
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.8 is the current public baseline, released and updater-verified on LocalWP Plugin Tester.
+- Plugin status: v1.1.8 is the current public baseline; v1.1.9 is an unreleased corrective candidate.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Execute the first production rollout on `isha-classes` live-only after Gate A, keeping Frontend Output disabled and Login Designer active until the later Gate B handover; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Validate and release the preview-asset correction, update `isha-classes`, finish private previews, then request Gate B while keeping Login Designer active and Frontend Output disabled; inactive-account integration remains deferred until an authoritative status source exists.
+
+## v1.1.9 Disabled-Output Preview Assets
+
+### Corrective Slice
+
+- [x] Reproduce the production preview failure with Frontend Output disabled.
+- [x] Confirm the frontend preview endpoint rendered markup but registered no stylesheet or script.
+- [x] Add a dedicated authenticated-preview asset path that bypasses only the public-output asset guard.
+- [x] Preserve normal public asset suppression while Frontend Output is disabled.
+- [x] Add focused regression coverage.
+- [ ] Complete the full release suite and exact-package Plugin Tester acceptance.
+- [ ] Publish and updater-verify after explicit release approval.
+- [ ] Update `isha-classes` and resume private preview acceptance.
+
+### Finding
+
+- The frontend preview endpoint called the normal asset loader. That loader intentionally returns early when `frontend_enabled` is false, so authenticated previews rendered bare HTML even though preview markup was available.
+- Public output remained disabled throughout discovery. Login Designer stayed active, `/login` remained unclaimed, and no customer-facing route changed.
+- The corrective API adds preview-only asset enqueueing without mutating saved settings or weakening the public master safety switch.
 
 ## v1.1.8 Role-Aware Login Redirects And First Production Rollout
 
@@ -28,10 +47,10 @@
 - [x] Intended replacement identified: deactivate Login Designer when Alynt Account Gateway assumes the public login routes.
 - [x] Requested gateway background image identified: `C:\Users\Captain\Desktop\login-bg-orange-i.jpg`.
 - [x] Complete a private site-specific rollout record and read-only production baseline.
-- [ ] Create and verify production restore points immediately before rollout.
-- [ ] Confirm Gate A before installing or changing production.
-- [ ] Install the exact approved release with Frontend Output disabled.
-- [ ] Configure and privately preview the gateway, including the requested background image.
+- [x] Create and verify production restore points immediately before rollout.
+- [x] Confirm Gate A before installing or changing production.
+- [x] Install the exact approved release with Frontend Output disabled.
+- [ ] Configure and privately preview the gateway, including the requested background image. Configuration is saved; preview acceptance is blocked pending v1.1.9.
 - [ ] Confirm Gate B before deactivating Login Designer and enabling Frontend Output.
 - [ ] Run the production acceptance matrix, monitoring window, cleanup, and Gate C closeout.
 

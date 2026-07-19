@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.9 - 2026-07-19
+
+### Fixed
+
+- Authenticated Gateway Screen Preview routes now load the frontend stylesheet and script while public Frontend Output is disabled.
+- Normal public asset loading continues to obey the master Frontend Output safety switch.
+
+### Tests
+
+- Added regression coverage for preview-only asset loading with disabled public output and preserved missing-screen safeguards.
+
 ## 1.1.8 - 2026-07-19
 
 ### Added
