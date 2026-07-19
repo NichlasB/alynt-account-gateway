@@ -7,7 +7,7 @@
 - Plugin status: v1.1.14 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Complete Phase 2 as small behavior-preserving maintenance releases. Increment 1 decomposes test bootstrap support; Increment 2 splits oversized test suites; production assets and runtime services follow only after those test foundations are stable. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Complete Phase 2 as small behavior-preserving maintenance releases. Increment 1 completed the test-infrastructure decomposition. Increment 2 modularizes source assets while preserving the public build entry points. Runtime services follow only after the asset candidate passes package and Plugin Tester acceptance. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -42,9 +42,25 @@
 - [x] Pass full PHPCS, PHP syntax, frontend/admin build, POT generation, npm high-severity audit, Composer advisory audit, and `git diff --check`.
 - [x] Record this development-only change as a checkpoint without a public plugin release because tests and planning docs are excluded from the runtime package.
 
+### Increment 2 - Source Asset Modules
+
+- [x] Lock the four v1.1.14 compiled asset lengths and SHA-256 fingerprints before source edits.
+- [x] Split frontend CSS into ordered base, form, dashboard, WooCommerce/content, and responsive modules.
+- [x] Split admin CSS into ordered field, guidance/readiness, security, tools, and responsive modules.
+- [x] Split frontend JavaScript into label, password, registration, Turnstile, and off-canvas modules.
+- [x] Split admin JavaScript into email save-state, typography, color, media, and dashboard-link modules.
+- [x] Preserve the four public `assets/dist/admin/index.*` and `assets/dist/frontend/index.*` entry paths.
+- [x] Keep compiled CSS byte-identical to v1.1.14.
+- [x] Preserve JavaScript behavior through source-marker coverage, module reachability checks, syntax checks, and the full unit suite; the bundler produces expected byte differences after module extraction.
+- [x] Keep each CSS module at or below `500` lines and each JavaScript module at or below `250` lines.
+- [x] Add structural regression coverage for ordered CSS imports, JavaScript module reachability, and module line limits.
+- [x] Pass the focused build, lint, PHPCS, JavaScript syntax, and `390`-test/`2,712`-assertion gates.
+- [ ] Pass the final audit, package-inspection, and Plugin Tester browser-acceptance gates for the v1.1.15 candidate.
+- [ ] Publish v1.1.15 only after explicit release approval.
+
 ### Remaining Phase 2 Sequence
 
-1. Split frontend/admin CSS and JavaScript source modules while preserving built entry points.
+1. Complete Increment 2 package inspection and Plugin Tester acceptance.
 2. Extract privacy exporter/eraser collaborators.
 3. Extract dashboard module renderers behind the existing dashboard facade.
 4. Split settings schema/defaults/sanitization.

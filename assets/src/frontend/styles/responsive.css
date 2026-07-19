@@ -1,0 +1,332 @@
+@media (max-width: 800px) {
+	.agw-shell {
+		display: block;
+	}
+
+	.agw-media {
+		display: none;
+	}
+
+	.agw-panel {
+		min-height: 100vh;
+		padding: 24px;
+	}
+
+	.agw-card {
+		max-width: none;
+		padding: 32px 24px;
+	}
+
+	.agw-grid--two {
+		grid-template-columns: 1fr;
+	}
+
+	.agw-dashboard {
+		padding: 24px;
+	}
+
+	.agw-dashboard__header {
+		align-items: flex-start;
+		margin-bottom: 32px;
+	}
+
+	.agw-dashboard-footer {
+		margin-top: 28px;
+		padding-top: 18px;
+	}
+
+	.agw-dashboard-footer__menu {
+		gap: 8px 16px;
+	}
+
+	.agw-offcanvas__panel {
+		width: 100%;
+		padding: 28px 24px;
+		opacity: 0;
+		text-align: center;
+		transform: none;
+		transition: opacity 180ms ease;
+	}
+
+	[dir="rtl"] .agw-offcanvas__panel {
+		transform: none;
+	}
+
+	.agw-offcanvas.is-open .agw-offcanvas__panel {
+		opacity: 1;
+	}
+
+	.agw-offcanvas__header {
+		margin-bottom: 36px;
+	}
+
+	.agw-offcanvas__menu,
+	.agw-offcanvas__menu ul {
+		justify-items: center;
+	}
+
+	.agw-offcanvas__menu ul {
+		padding-inline-start: 0;
+	}
+
+	.agw-offcanvas__menu-row {
+		justify-content: center;
+	}
+
+	.agw-offcanvas__menu a {
+		justify-content: center;
+		font-size: 24px;
+	}
+
+	.agw-offcanvas__submenu a {
+		font-size: 20px;
+		font-weight: 500;
+	}
+
+	.agw-dashboard-hero__title {
+		font-size: 32px;
+	}
+
+	.agw-dashboard-overview {
+		grid-template-columns: 1fr;
+		padding: 20px;
+	}
+
+	.agw-dashboard-overview h2 {
+		font-size: 24px;
+	}
+
+	.agw-dashboard-recent-orders__header {
+		align-items: flex-start;
+	}
+
+	.agw-dashboard-downloads__header,
+	.agw-dashboard-addresses__header,
+	.agw-dashboard-account-details__header,
+	.agw-dashboard-payment-methods__header {
+		flex-direction: column;
+		gap: 8px;
+		align-items: flex-start;
+	}
+
+	.agw-dashboard-download {
+		grid-template-columns: 1fr;
+		gap: 10px;
+		align-items: start;
+	}
+
+	.agw-dashboard-download__meta {
+		justify-items: start;
+		text-align: start;
+	}
+
+	.agw-dashboard-download__action {
+		justify-self: start;
+	}
+
+	.agw-dashboard-addresses__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.agw-dashboard-account-details__actions {
+		justify-content: flex-start;
+	}
+
+	.agw-dashboard-account-details__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.agw-dashboard-payment-methods__list {
+		grid-template-columns: 1fr;
+	}
+
+	.agw-dashboard-recent-order {
+		grid-template-columns: 1fr;
+		gap: 10px;
+	}
+
+	.agw-dashboard-recent-order__summary {
+		justify-items: start;
+		text-align: start;
+	}
+
+	.agw-dashboard-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.agw-dashboard-content {
+		overflow-x: auto;
+		padding: 16px;
+	}
+
+	.agw-dashboard-content .woocommerce-address-fields__field-wrapper,
+	.agw-dashboard-content .woocommerce-EditAccountForm {
+		grid-template-columns: 1fr;
+	}
+}
+
+@media (max-width: 360px) {
+	.agw-panel,
+	.agw-dashboard {
+		padding: 16px;
+	}
+
+	.agw-card {
+		padding: 28px 18px;
+	}
+
+	.agw-title {
+		font-size: 24px;
+	}
+
+	.agw-dashboard-hero__title {
+		font-size: 28px;
+	}
+
+	.agw-links,
+	.agw-dashboard__header {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.agw-dashboard-actions {
+		align-self: flex-start;
+	}
+}
+
+@media (forced-colors: active) {
+	.alynt-ag-gateway {
+		--agw-color-text: CanvasText;
+		--agw-color-primary: LinkText;
+		--agw-color-background: Canvas;
+		--agw-color-notice: Canvas;
+		--agw-color-error: Mark;
+		--agw-color-surface: Canvas;
+		--agw-button-background: ButtonFace;
+		--agw-button-text: ButtonText;
+		background: Canvas;
+		color: CanvasText;
+		forced-color-adjust: auto;
+	}
+
+	.agw-media__pattern,
+	.agw-leaf,
+	.agw-dot,
+	.agw-dashboard-link__icon::before,
+	.agw-dashboard-link__icon::after {
+		display: none;
+	}
+
+	.agw-card,
+	.agw-notice,
+	.agw-status,
+	.agw-resend-guidance,
+	.agw-verification-slot,
+	.agw-dashboard-overview,
+	.agw-dashboard-overview__action,
+	.agw-dashboard-recent-order,
+	.agw-dashboard-recent-orders__empty,
+	.agw-dashboard-download,
+	.agw-dashboard-downloads__empty,
+	.agw-dashboard-download__action,
+	.agw-dashboard-address,
+	.agw-dashboard-account-detail,
+	.agw-dashboard-payment-method,
+	.agw-dashboard-payment-methods__empty,
+	.agw-dashboard-payment-method__default,
+	.agw-dashboard-link,
+	.agw-dashboard-guidance,
+	.agw-dashboard-affordance,
+	.agw-dashboard-content,
+	.agw-dashboard-content fieldset,
+	.agw-dashboard-content .woocommerce-message,
+	.agw-dashboard-content .woocommerce-info,
+	.agw-dashboard-content .woocommerce-error,
+	.agw-dashboard-content .woocommerce-PaymentMethod,
+	.agw-dashboard-content #payment,
+	.agw-dashboard-content .payment_box,
+	.agw-dashboard-action,
+	.agw-offcanvas__panel,
+	.agw-offcanvas__close,
+	.agw-offcanvas__submenu-toggle {
+		border: 1px solid CanvasText;
+		background: Canvas;
+		box-shadow: none;
+		color: CanvasText;
+	}
+
+	.agw-field input,
+	.agw-dashboard-content input,
+	.agw-dashboard-content select,
+	.agw-dashboard-content textarea {
+		border: 1px solid CanvasText;
+		background: Field;
+		color: FieldText;
+	}
+
+	.agw-button--primary,
+	.agw-dashboard-content .button,
+	.agw-dashboard-content button,
+	.agw-dashboard-content input[type="submit"] {
+		border: 1px solid ButtonText;
+		background: ButtonFace;
+		color: ButtonText;
+	}
+
+	.agw-links a,
+	.agw-back-link,
+	.agw-checkbox a,
+	.agw-dashboard-affordance a,
+	.agw-dashboard-content a {
+		color: LinkText;
+	}
+
+	.agw-field input:focus,
+	.agw-checkbox input:focus,
+	.agw-password__toggle:focus,
+	.agw-button:focus,
+	.agw-back-link:focus,
+	.agw-links a:focus,
+	.agw-checkbox a:focus,
+	.agw-dashboard-section-actions a:focus,
+	.agw-dashboard-overview__action:focus,
+	.agw-dashboard-recent-orders__header a:focus,
+	.agw-dashboard-recent-order:focus,
+	.agw-dashboard-downloads__header a:focus,
+	.agw-dashboard-download__action:focus,
+	.agw-dashboard-addresses__header a:focus,
+	.agw-dashboard-address__action:focus,
+	.agw-dashboard-account-details__header a:focus,
+	.agw-dashboard-payment-methods__header a:focus,
+	.agw-dashboard-link:focus,
+	.agw-dashboard__logout:focus,
+	.agw-dashboard-action:focus,
+	.agw-offcanvas__close:focus,
+	.agw-offcanvas__submenu-toggle:focus,
+	.agw-offcanvas__menu a:focus,
+	.agw-dashboard-affordance a:focus,
+	.agw-dashboard-content input:focus,
+	.agw-dashboard-content select:focus,
+	.agw-dashboard-content textarea:focus,
+	.agw-dashboard-content .button:focus,
+	.agw-dashboard-content button:focus,
+	.agw-dashboard-content input[type="submit"]:focus {
+		outline: 3px solid Highlight;
+		outline-offset: 3px;
+	}
+
+	.agw-dashboard-account-details__status {
+		color: CanvasText;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.alynt-ag-gateway *,
+	.alynt-ag-gateway *::before,
+	.alynt-ag-gateway *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		scroll-behavior: auto !important;
+		transition-duration: 0.01ms !important;
+	}
+}

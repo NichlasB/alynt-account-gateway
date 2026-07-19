@@ -1,0 +1,44 @@
+@media (max-width: 960px) {
+	.alynt-ag-tab-guidance {
+		grid-template-columns: 1fr;
+	}
+
+	.alynt-ag-dashboard-link-row__grid {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+@media (max-width: 640px) {
+	.alynt-ag-readiness__header {
+		display: block;
+	}
+
+	.alynt-ag-readiness__summary {
+		justify-content: flex-start;
+		margin-top: 12px;
+	}
+
+	.alynt-ag-readiness__item {
+		display: block;
+	}
+
+	.alynt-ag-security-status__header {
+		display: block;
+	}
+
+	.alynt-ag-readiness__badge {
+		display: inline-block;
+		margin-bottom: 8px;
+	}
+
+	.alynt-ag-dashboard-link-row__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.alynt-ag-admin .widefat {
+		display: block;
+		max-width: 100%;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+}

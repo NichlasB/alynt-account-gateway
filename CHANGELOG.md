@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.1.15 - 2026-07-19
+
+### Changed
+
+- Split frontend CSS into ordered gateway, form, dashboard, WooCommerce, and responsive source modules.
+- Split admin CSS into fields, guidance/readiness, security, tools, and responsive source modules.
+- Split frontend JavaScript into password, registration, Turnstile, labels, and off-canvas navigation modules.
+- Split admin JavaScript into email save-state, typography, color, media, and dashboard-link modules.
+- Preserved the existing `assets/dist/admin/index.*` and `assets/dist/frontend/index.*` entry points; compiled CSS remains byte-identical to v1.1.14.
+- Decomposed the unit-test bootstrap and oversized test suites into focused support files and behavior-specific classes.
+
+### Tests
+
+- Added structural coverage for module import order and the CSS/JavaScript source-file size thresholds.
+- Preserved the complete pre-refactor behavioral suite while increasing the suite to 390 tests and 2,712 assertions.
+
 ## 1.1.14 - 2026-07-19
 
 ### Added

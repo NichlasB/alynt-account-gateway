@@ -1,0 +1,313 @@
+.agw-form,
+.agw-actions {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+
+.agw-form p,
+.agw-form fieldset {
+	margin: 0;
+}
+
+.agw-grid {
+	display: grid;
+	gap: 18px;
+}
+
+.agw-grid--two {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.agw-field label {
+	display: block;
+	margin-bottom: 6px;
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.agw-field input {
+	appearance: none;
+	width: 100%;
+	max-width: 100%;
+	min-height: 48px;
+	margin: 0;
+	padding: 12px 14px;
+	border: 1px solid rgb(40 20 8 / 18%);
+	border-radius: 6px;
+	background: color-mix(in srgb, var(--agw-color-surface) 92%, var(--agw-color-background));
+	box-shadow: none;
+	color: var(--agw-color-text);
+	font: inherit;
+	font-size: 18px;
+	line-height: 1.3;
+}
+
+.agw-field input:focus,
+.agw-checkbox input:focus,
+.agw-button:focus,
+.agw-back-link:focus,
+.agw-links a:focus,
+.agw-checkbox a:focus {
+	outline: 2px solid var(--agw-color-primary);
+	outline-offset: 2px;
+}
+
+.agw-field input:focus-visible,
+.agw-checkbox input:focus-visible,
+.agw-password__toggle:focus-visible,
+.agw-button:focus-visible,
+.agw-back-link:focus-visible,
+.agw-links a:focus-visible,
+.agw-checkbox a:focus-visible {
+	outline: 3px solid var(--agw-color-primary);
+	outline-offset: 3px;
+}
+
+.agw-field input[aria-invalid="true"] {
+	border-color: var(--agw-color-error);
+	box-shadow: 0 0 0 1px var(--agw-color-error);
+}
+
+.agw-password {
+	position: relative;
+}
+
+.agw-password input {
+	padding-inline-end: 96px;
+}
+
+.agw-password__toggle {
+	appearance: none;
+	position: absolute;
+	top: 50%;
+	inset-inline-end: 6px;
+	min-height: 40px;
+	margin: 0;
+	padding: 0 10px;
+	border: 0;
+	background: transparent;
+	box-shadow: none;
+	color: var(--agw-color-primary);
+	cursor: pointer;
+	font: inherit;
+	font-size: 16px;
+	font-weight: 600;
+	line-height: 1;
+	text-transform: none;
+	transform: translateY(-50%);
+}
+
+.agw-checkbox {
+	display: flex;
+	gap: 10px;
+	align-items: flex-start;
+	font-size: 18px;
+	line-height: 1.45;
+}
+
+.agw-checkbox input {
+	flex: 0 0 auto;
+	width: 18px;
+	height: 18px;
+	margin-top: 3px;
+	accent-color: var(--agw-color-primary);
+}
+
+.agw-button {
+	appearance: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 100%;
+	min-height: 50px;
+	margin: 0;
+	padding: 14px 20px;
+	border-radius: 6px;
+	box-shadow: none;
+	cursor: pointer;
+	font: inherit;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.2;
+	text-align: center;
+	text-decoration: none;
+	text-transform: none;
+	letter-spacing: 0;
+}
+
+.alynt-ag-gateway .agw-button--primary {
+	border: 0;
+	background: var(--agw-button-background);
+	color: var(--agw-button-text);
+}
+
+.alynt-ag-gateway .agw-button--primary:hover,
+.alynt-ag-gateway .agw-button--primary:focus,
+.alynt-ag-gateway .agw-button--primary:focus-visible {
+	border-color: transparent;
+	background: var(--agw-button-background);
+	color: var(--agw-button-text);
+	text-decoration: none;
+}
+
+.alynt-ag-gateway .agw-button--primary:hover {
+	filter: brightness(0.92);
+}
+
+.agw-button--secondary {
+	border: 1px solid rgb(40 20 8 / 25%);
+	background: transparent;
+	color: var(--agw-color-text);
+}
+
+.agw-button:disabled,
+.agw-button[aria-disabled="true"] {
+	cursor: not-allowed;
+	filter: grayscale(0.45);
+	opacity: 0.62;
+}
+
+.agw-links {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 18px;
+	justify-content: center;
+	font-size: 18px;
+}
+
+.agw-links a,
+.agw-back-link,
+.agw-checkbox a {
+	color: var(--agw-color-primary);
+	font-weight: 500;
+	line-height: 1.35;
+	overflow-wrap: anywhere;
+	text-decoration: underline;
+	text-transform: none;
+	text-underline-offset: 3px;
+}
+
+.alynt-ag-gateway .agw-form p,
+.alynt-ag-gateway .agw-form fieldset {
+	min-width: 0;
+	margin: 0;
+}
+
+.alynt-ag-gateway .agw-form fieldset {
+	padding: 0;
+	border: 0;
+}
+
+.alynt-ag-gateway .agw-form .agw-field input {
+	min-width: 0;
+	margin: 0;
+	box-shadow: none;
+	font-size: 18px;
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+.alynt-ag-gateway .agw-form .agw-password__toggle {
+	width: auto;
+	max-width: 100%;
+	min-width: 0;
+	margin: 0;
+	box-shadow: none;
+}
+
+.alynt-ag-gateway .agw-form .agw-button,
+.alynt-ag-gateway .agw-actions .agw-button {
+	width: auto;
+	max-width: 100%;
+	min-width: 0;
+	margin: 0;
+	box-shadow: none;
+	font-size: 18px;
+}
+
+.alynt-ag-gateway .agw-links a,
+.alynt-ag-gateway .agw-back-link,
+.alynt-ag-gateway .agw-checkbox a {
+	max-width: 100%;
+	margin: 0;
+}
+
+.agw-back-link {
+	display: block;
+	font-size: 18px;
+	text-align: center;
+}
+
+.agw-verification-slot {
+	padding: 14px;
+	border: 1px solid rgb(40 20 8 / 18%);
+	border-radius: 6px;
+	background: color-mix(in srgb, var(--agw-color-surface) 92%, var(--agw-color-background));
+	font-size: 16px;
+}
+
+.agw-strength {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 6px;
+	font-size: 16px;
+}
+
+.agw-strength span {
+	display: block;
+	height: 6px;
+	border-radius: 999px;
+	background: rgb(40 20 8 / 14%);
+	transition: background-color 160ms ease;
+}
+
+.agw-strength strong {
+	grid-column: 1 / -1;
+	font-weight: 600;
+}
+
+.agw-strength[data-agw-strength-score="1"] span:nth-of-type(-n+1),
+.agw-strength[data-agw-strength-score="2"] span:nth-of-type(-n+2) {
+	background: var(--agw-color-error);
+}
+
+.agw-strength[data-agw-strength-score="3"] span:nth-of-type(-n+3) {
+	background: color-mix(in srgb, var(--agw-color-primary) 70%, var(--agw-color-notice));
+}
+
+.agw-strength[data-agw-strength-score="4"] span {
+	background: var(--agw-color-primary);
+}
+
+.agw-requirements {
+	margin: -4px 0 0;
+	padding: 0;
+	list-style: none;
+	font-size: 16px;
+	line-height: 1.6;
+}
+
+.agw-requirements li {
+	position: relative;
+	padding-inline-start: 22px;
+	color: color-mix(in srgb, var(--agw-color-text) 70%, transparent);
+}
+
+.agw-requirements li::before {
+	position: absolute;
+	top: 0;
+	inset-inline-start: 0;
+	color: var(--agw-color-error);
+	content: "x";
+	font-weight: 700;
+}
+
+.agw-requirements li.is-met {
+	color: var(--agw-color-text);
+}
+
+.agw-requirements li.is-met::before {
+	color: var(--agw-color-primary);
+	content: "\2713";
+}

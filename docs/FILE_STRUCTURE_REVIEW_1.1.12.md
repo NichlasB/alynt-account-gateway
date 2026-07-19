@@ -382,3 +382,29 @@ excluded from the public runtime package. It is therefore retained as a pushed
 development checkpoint rather than a version-only public plugin release. The
 next increment begins source asset modularization and will complete package and
 Plugin Tester acceptance before requesting maintenance-release approval.
+
+### Increment 2: Source Asset Modules
+
+Status: candidate verification in progress.
+
+- Locked the v1.1.14 compiled asset lengths and SHA-256 fingerprints before
+  changing source organization.
+- Split frontend CSS into seven ordered modules and admin CSS into five ordered
+  modules while keeping each module at or below 500 lines.
+- Split frontend JavaScript into five behavior-focused modules and admin
+  JavaScript into five behavior-focused modules while keeping each module at
+  or below 250 lines.
+- Preserved the existing `assets/dist/frontend/index.*` and
+  `assets/dist/admin/index.*` public build entry points.
+- Rebuilt CSS is byte-identical to the v1.1.14 baseline. Rebuilt JavaScript has
+  expected bundler-level byte differences after module extraction; entry
+  points, initialization order, behavior markers, and runtime responsibilities
+  remain covered.
+- Added structural tests for ordered CSS imports, JavaScript module
+  reachability, and module line limits.
+- The focused quality run passes PHPCS, JavaScript syntax, lint, build, and the
+  expanded 390-test/2,712-assertion suite.
+
+The remaining acceptance work is the full audit set, exact-package inspection,
+and Plugin Tester browser verification. Release publication requires separate
+explicit approval.

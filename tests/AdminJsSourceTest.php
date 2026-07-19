@@ -12,8 +12,51 @@ use PHPUnit\Framework\TestCase;
  */
 class AdminJsSourceTest extends TestCase {
 
+	/**
+	 * Reads the complete admin JavaScript source tree.
+	 *
+	 * @return string
+	 */
+	private function get_admin_js() {
+		$source_dir = dirname( __DIR__ ) . '/assets/src/admin';
+		$files      = glob( $source_dir . '/modules/*.js' );
+
+		$this->assertIsArray( $files );
+		sort( $files );
+		array_unshift( $files, $source_dir . '/index.js' );
+
+		$js = '';
+		foreach ( $files as $file ) {
+			$module = file_get_contents( $file );
+
+			$this->assertIsString( $module );
+			$js .= "\n" . $module;
+		}
+
+		return $js;
+	}
+
+	public function test_admin_javascript_uses_focused_modules() {
+		$source_dir = dirname( __DIR__ ) . '/assets/src/admin';
+		$entry      = file_get_contents( $source_dir . '/index.js' );
+		$modules    = glob( $source_dir . '/modules/*.js' );
+
+		$this->assertIsString( $entry );
+		$this->assertIsArray( $modules );
+		$this->assertCount( 5, $modules );
+
+		foreach ( $modules as $module ) {
+			$relative_path = './modules/' . basename( $module );
+			$lines         = file( $module );
+
+			$this->assertStringContainsString( $relative_path, $entry );
+			$this->assertIsArray( $lines );
+			$this->assertLessThanOrEqual( 250, count( $lines ), $relative_path );
+		}
+	}
+
 	public function test_email_save_state_tracks_fields_and_tinymce_before_disabling_actions() {
-		$js = file_get_contents( dirname( __DIR__ ) . '/assets/src/admin/index.js' );
+		$js = $this->get_admin_js();
 
 		$this->assertIsString( $js );
 		$this->assertStringContainsString( "document.querySelector( '[data-alynt-ag-email-settings]' )", $js );
@@ -54,7 +97,7 @@ class AdminJsSourceTest extends TestCase {
 	}
 
 	public function test_typography_presets_update_existing_stack_fields_and_preserve_custom_edits() {
-		$js = file_get_contents( dirname( __DIR__ ) . '/assets/src/admin/index.js' );
+		$js = $this->get_admin_js();
 
 		$this->assertIsString( $js );
 		$this->assertStringContainsString( "document.querySelector( '[data-alynt-ag-typography-presets]' )", $js );
@@ -71,7 +114,7 @@ class AdminJsSourceTest extends TestCase {
 	}
 
 	public function test_color_controls_synchronize_picker_and_hex_text_in_both_directions() {
-		$js = file_get_contents( dirname( __DIR__ ) . '/assets/src/admin/index.js' );
+		$js = $this->get_admin_js();
 
 		$this->assertIsString( $js );
 		$this->assertStringContainsString( "document.querySelectorAll( '[data-alynt-ag-color-control]' )", $js );

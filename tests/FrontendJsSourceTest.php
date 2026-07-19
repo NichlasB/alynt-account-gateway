@@ -18,11 +18,43 @@ class FrontendJsSourceTest extends TestCase {
 	 * @return string
 	 */
 	private function get_frontend_js() {
-		$js = file_get_contents( dirname( __DIR__ ) . '/assets/src/frontend/index.js' );
+		$source_dir = dirname( __DIR__ ) . '/assets/src/frontend';
+		$files      = glob( $source_dir . '/modules/*.js' );
 
-		$this->assertIsString( $js );
+		$this->assertIsArray( $files );
+		sort( $files );
+		array_unshift( $files, $source_dir . '/index.js' );
+
+		$js = '';
+		foreach ( $files as $file ) {
+			$module = file_get_contents( $file );
+
+			$this->assertIsString( $module );
+			$js .= "\n" . $module;
+		}
 
 		return $js;
+	}
+
+	public function test_frontend_javascript_uses_focused_modules() {
+		$source_dir = dirname( __DIR__ ) . '/assets/src/frontend';
+		$entry      = file_get_contents( $source_dir . '/index.js' );
+		$modules    = glob( $source_dir . '/modules/*.js' );
+		$source     = $this->get_frontend_js();
+
+		$this->assertIsString( $entry );
+		$this->assertIsArray( $modules );
+		$this->assertCount( 5, $modules );
+
+		foreach ( $modules as $module ) {
+			$relative_path = './modules/' . basename( $module );
+			$import_path   = 'labels.js' === basename( $module ) ? './labels.js' : $relative_path;
+			$lines         = file( $module );
+
+			$this->assertStringContainsString( $import_path, $source );
+			$this->assertIsArray( $lines );
+			$this->assertLessThanOrEqual( 250, count( $lines ), $relative_path );
+		}
 	}
 
 	public function test_password_submit_aria_disabled_tracks_validity() {
