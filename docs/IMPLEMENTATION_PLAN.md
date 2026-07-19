@@ -7,7 +7,7 @@
 - Plugin status: v1.1.9 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Request Gate B before deactivating Login Designer and enabling Frontend Output on `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Complete the remaining private email-preview, role-redirect, and emergency-recovery checks on `isha-classes`, then request Gate B before deactivating Login Designer or enabling Frontend Output; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.9 Disabled-Output Preview Assets
 
