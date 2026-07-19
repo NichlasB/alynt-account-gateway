@@ -29,14 +29,32 @@ class ALYNT_AG_Frontend_Register_Screen {
 	private $messages;
 
 	/**
+	 * Route helpers.
+	 *
+	 * @var ALYNT_AG_Frontend_Routes
+	 */
+	private $routes;
+
+	/**
+	 * Return destination helper.
+	 *
+	 * @var ALYNT_AG_Return_Destination
+	 */
+	private $destinations;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param ALYNT_AG_Frontend_Components|null $components Component helpers.
 	 * @param ALYNT_AG_Frontend_Messages|null   $messages   Message helpers.
+	 * @param ALYNT_AG_Frontend_Routes|null     $routes     Route helpers.
+	 * @param ALYNT_AG_Return_Destination|null  $destinations Return destination helper.
 	 */
-	public function __construct( $components = null, $messages = null ) {
-		$this->components = $components ? $components : new ALYNT_AG_Frontend_Components();
-		$this->messages   = $messages ? $messages : new ALYNT_AG_Frontend_Messages();
+	public function __construct( $components = null, $messages = null, $routes = null, $destinations = null ) {
+		$this->components   = $components ? $components : new ALYNT_AG_Frontend_Components();
+		$this->messages     = $messages ? $messages : new ALYNT_AG_Frontend_Messages();
+		$this->routes       = $routes ? $routes : new ALYNT_AG_Frontend_Routes();
+		$this->destinations = $destinations ? $destinations : new ALYNT_AG_Return_Destination();
 	}
 
 	/**
@@ -50,8 +68,11 @@ class ALYNT_AG_Frontend_Register_Screen {
 		$registration_sent = ! empty( $_GET['registration_sent'] );
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only error display.
 		$error_code = isset( $_GET['registration_error'] ) ? sanitize_key( wp_unslash( $_GET['registration_error'] ) ) : '';
-		$notice_id  = $this->components->has_notice( $settings['register_intro_text'] ) ? 'agw-register-instructions' : '';
-		$form_desc  = array_filter( array( $notice_id, $error_code ? 'agw-register-error' : '' ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Read-only value validated as a same-site destination below.
+		$submitted_redirect = isset( $_GET['redirect_to'] ) ? wp_unslash( $_GET['redirect_to'] ) : '';
+		$redirect_to        = $this->destinations->absolute_url( $submitted_redirect, $settings );
+		$notice_id          = $this->components->has_notice( $settings['register_intro_text'] ) ? 'agw-register-instructions' : '';
+		$form_desc          = array_filter( array( $notice_id, $error_code ? 'agw-register-error' : '' ) );
 
 		if ( $registration_sent ) {
 			?>
@@ -59,7 +80,7 @@ class ALYNT_AG_Frontend_Register_Screen {
 			<div id="agw-registration-sent" class="agw-status agw-status--success" role="status" aria-live="polite" aria-atomic="true">
 				<?php esc_html_e( 'If the details can be used, a confirmation email has been sent. Please check your inbox and spam folder.', 'alynt-account-gateway' ); ?>
 			</div>
-			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
+			<a class="agw-back-link" href="<?php echo esc_url( $this->routes->login_url( $settings, $redirect_to ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
 			<?php
 			return;
 		}
@@ -72,6 +93,9 @@ class ALYNT_AG_Frontend_Register_Screen {
 		<form class="agw-form" method="post" action="<?php echo esc_url( home_url( $settings['account_action_base'] ) ); ?>" data-agw-registration-form<?php echo $this->components->describedby_attribute( $form_desc ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by describedby_attribute(). ?>>
 			<input type="hidden" name="alynt_ag_action" value="start_registration">
 			<?php wp_nonce_field( 'alynt_ag_start_registration', 'alynt_ag_registration_nonce' ); ?>
+			<?php if ( $redirect_to ) : ?>
+				<input type="hidden" name="redirect_to" value="<?php echo esc_attr( $redirect_to ); ?>">
+			<?php endif; ?>
 			<div class="agw-grid agw-grid--two">
 				<div class="agw-field">
 					<label for="agw-register-first"><?php esc_html_e( 'First Name', 'alynt-account-gateway' ); ?></label>
@@ -97,7 +121,7 @@ class ALYNT_AG_Frontend_Register_Screen {
 			</label>
 			<?php $this->components->render_verification_slot( $settings ); ?>
 			<button class="agw-button agw-button--primary" type="submit" data-agw-registration-submit disabled aria-disabled="true"><?php esc_html_e( 'Create Account', 'alynt-account-gateway' ); ?></button>
-			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
+			<a class="agw-back-link" href="<?php echo esc_url( $this->routes->login_url( $settings, $redirect_to ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
 		</form>
 		<?php
 	}

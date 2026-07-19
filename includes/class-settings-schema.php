@@ -487,6 +487,18 @@ class ALYNT_AG_Settings_Schema {
 				'default' => false,
 				'label'   => __( 'Take Over WooCommerce My Account', 'alynt-account-gateway' ),
 			),
+			'woocommerce_require_login_checkout'        => array(
+				'tab'     => 'woocommerce',
+				'type'    => 'boolean',
+				'default' => false,
+				'label'   => __( 'Require Login Before Checkout', 'alynt-account-gateway' ),
+			),
+			'woocommerce_require_login_order_pay'       => array(
+				'tab'     => 'woocommerce',
+				'type'    => 'boolean',
+				'default' => false,
+				'label'   => __( 'Require Login For Order Payment Links', 'alynt-account-gateway' ),
+			),
 			'woocommerce_hidden_menu_items'             => array(
 				'tab'     => 'woocommerce',
 				'type'    => 'woocommerce_menu_visibility',

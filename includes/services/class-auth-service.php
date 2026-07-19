@@ -15,6 +15,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ALYNT_AG_Auth_Service {
 
 	/**
+	 * Return destination helper.
+	 *
+	 * @var ALYNT_AG_Return_Destination
+	 */
+	private $destinations;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param ALYNT_AG_Return_Destination|null $destinations Return destination helper.
+	 */
+	public function __construct( $destinations = null ) {
+		$this->destinations = $destinations ? $destinations : new ALYNT_AG_Return_Destination();
+	}
+
+	/**
 	 * Register hooks.
 	 *
 	 * @return void
@@ -275,6 +291,9 @@ class ALYNT_AG_Auth_Service {
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 		$base_url = home_url( $settings['login_path'] );
 		$email    = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Validated as a same-site destination below.
+		$submitted_redirect = isset( $_POST['redirect_to'] ) ? wp_unslash( $_POST['redirect_to'] ) : '';
+		$redirect_to        = $this->destinations->absolute_url( $submitted_redirect, $settings );
 
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Password is passed to wp_signon() and must not be altered.
 		$password = isset( $_POST['pwd'] ) ? wp_unslash( $_POST['pwd'] ) : '';
@@ -289,7 +308,7 @@ class ALYNT_AG_Auth_Service {
 					'has_email' => '' !== $email,
 				)
 			);
-			wp_safe_redirect( add_query_arg( 'login_error', $rate_limit->get_error_code(), $base_url ) );
+			wp_safe_redirect( $this->login_error_url( $rate_limit->get_error_code(), $base_url, $redirect_to ) );
 			exit;
 		}
 
@@ -304,7 +323,7 @@ class ALYNT_AG_Auth_Service {
 					'has_password' => '' !== (string) $password,
 				)
 			);
-			wp_safe_redirect( add_query_arg( 'login_error', 'failed', $base_url ) );
+			wp_safe_redirect( $this->login_error_url( 'failed', $base_url, $redirect_to ) );
 			exit;
 		}
 
@@ -327,11 +346,10 @@ class ALYNT_AG_Auth_Service {
 					'error_code' => $user->get_error_code(),
 				)
 			);
-			wp_safe_redirect( add_query_arg( 'login_error', 'failed', $base_url ) );
+			wp_safe_redirect( $this->login_error_url( 'failed', $base_url, $redirect_to ) );
 			exit;
 		}
 
-		$redirect_to = isset( $_POST['redirect_to'] ) ? esc_url_raw( wp_unslash( $_POST['redirect_to'] ) ) : '';
 		$destination = $this->get_login_redirect_url( $redirect_to, $settings, $user );
 
 		$this->log_auth_event(
@@ -364,13 +382,25 @@ class ALYNT_AG_Auth_Service {
 			return $default;
 		}
 
-		$destination = wp_validate_redirect( $redirect_to, $default );
+		return $this->destinations->absolute_url( $redirect_to, $settings, $default );
+	}
 
-		if ( $this->is_auth_surface_redirect_destination( $destination, $settings ) ) {
-			return $default;
+	/**
+	 * Build a failed-login URL that retains a validated return destination.
+	 *
+	 * @param string $error_code  Public error code.
+	 * @param string $base_url    Branded login URL.
+	 * @param string $redirect_to Validated return destination.
+	 * @return string
+	 */
+	private function login_error_url( $error_code, $base_url, $redirect_to = '' ) {
+		$args = array( 'login_error' => sanitize_key( $error_code ) );
+
+		if ( $redirect_to ) {
+			$args['redirect_to'] = rawurlencode( $redirect_to );
 		}
 
-		return $destination;
+		return add_query_arg( $args, $base_url );
 	}
 
 	/**
@@ -392,41 +422,6 @@ class ALYNT_AG_Auth_Service {
 		}
 
 		return $settings['after_login_redirect'] ?? '/my-account/';
-	}
-
-	/**
-	 * Determine whether a post-login destination points back to an auth surface.
-	 *
-	 * @param string              $destination Validated redirect destination.
-	 * @param array<string,mixed> $settings    Settings.
-	 * @return bool
-	 */
-	private function is_auth_surface_redirect_destination( $destination, $settings ) {
-		$path = wp_parse_url( $destination, PHP_URL_PATH );
-
-		if ( ! is_string( $path ) || '' === $path ) {
-			return false;
-		}
-
-		$path          = $this->normalize_redirect_path( $path );
-		$login_path    = $this->normalize_redirect_path( isset( $settings['login_path'] ) ? (string) $settings['login_path'] : '/login/' );
-		$account_base  = $this->normalize_redirect_path( isset( $settings['account_action_base'] ) ? (string) $settings['account_action_base'] : '/account' );
-		$wp_login_path = $this->normalize_redirect_path( '/wp-login.php' );
-
-		return in_array( $path, array( $login_path, $account_base, $wp_login_path ), true );
-	}
-
-	/**
-	 * Normalize a URL path for redirect-surface comparison.
-	 *
-	 * @param string $path URL path.
-	 * @return string
-	 */
-	private function normalize_redirect_path( $path ) {
-		$path = '/' . ltrim( $path, '/' );
-		$path = untrailingslashit( $path );
-
-		return '' === $path ? '/' : $path;
 	}
 
 	/**

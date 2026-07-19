@@ -37,6 +37,23 @@ class SettingsSchemaTest extends TestCase {
 		$this->assertSame( 'allow', $defaults['reoon_flagged_policy'] );
 	}
 
+	public function test_checkout_authentication_is_opt_in_and_order_pay_is_separate() {
+		$defaults = ALYNT_AG_Settings_Schema::defaults();
+
+		$this->assertFalse( $defaults['woocommerce_require_login_checkout'] );
+		$this->assertFalse( $defaults['woocommerce_require_login_order_pay'] );
+
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array(
+				'woocommerce_require_login_checkout'  => '1',
+				'woocommerce_require_login_order_pay' => '0',
+			)
+		);
+
+		$this->assertTrue( $sanitized['woocommerce_require_login_checkout'] );
+		$this->assertFalse( $sanitized['woocommerce_require_login_order_pay'] );
+	}
+
 	public function test_terms_path_and_login_instruction_use_updated_defaults() {
 		$defaults = ALYNT_AG_Settings_Schema::defaults();
 

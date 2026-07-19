@@ -139,6 +139,7 @@ class FrontendCssSourceTest extends TestCase {
 		$css = $this->get_frontend_css();
 
 		$this->assertMatchesRegularExpression( '/\.agw-notice\s*\{[^}]*font-size:\s*18px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-status--checkout\s*\{[^}]*font-size:\s*18px;/s', $css );
 		$this->assertMatchesRegularExpression( '/\.agw-field input\s*\{[^}]*font-size:\s*18px;/s', $css );
 		$this->assertMatchesRegularExpression( '/\.agw-checkbox\s*\{[^}]*font-size:\s*18px;/s', $css );
 		$this->assertMatchesRegularExpression( '/\.agw-button\s*\{[^}]*font-size:\s*18px;/s', $css );

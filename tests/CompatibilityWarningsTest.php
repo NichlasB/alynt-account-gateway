@@ -36,6 +36,29 @@ class CompatibilityWarningsTest extends TestCase {
 		$this->assertStringContainsString( 'Theme My Login', $warnings[0]['title'] );
 	}
 
+	public function test_checkout_gate_warns_when_woocommerce_guest_checkout_is_enabled() {
+		$GLOBALS['alynt_ag_test_options']['woocommerce_enable_guest_checkout'] = 'yes';
+		$service = new ALYNT_AG_Compatibility_Warnings();
+		$warnings = $service->woocommerce_checkout_warnings(
+			array( 'woocommerce_require_login_checkout' => true )
+		);
+
+		$this->assertCount( 1, $warnings );
+		$this->assertSame( 'woocommerce_guest_checkout', $warnings[0]['id'] );
+	}
+
+	public function test_checkout_gate_does_not_warn_when_its_setting_is_disabled() {
+		$GLOBALS['alynt_ag_test_options']['woocommerce_enable_guest_checkout'] = 'yes';
+		$service = new ALYNT_AG_Compatibility_Warnings();
+
+		$this->assertSame(
+			array(),
+			$service->woocommerce_checkout_warnings(
+				array( 'woocommerce_require_login_checkout' => false )
+			)
+		);
+	}
+
 	public function test_known_woocommerce_plugin_warns_only_when_takeover_is_enabled() {
 		$service = new ALYNT_AG_Compatibility_Warnings();
 

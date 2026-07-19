@@ -48,6 +48,36 @@ class RegistrationServiceTest extends TestCase {
 		$this->assertStringContainsString( 'alynt_ag_token=abc123', $url );
 	}
 
+	public function test_pending_registration_stores_only_valid_same_site_return_path() {
+		$service = new ALYNT_AG_Registration_Service();
+		$result  = $service->create_pending_registration(
+			'Damon',
+			'Paulo',
+			'checkout@example.test',
+			ALYNT_AG_Settings_Schema::defaults(),
+			'https://example.test/checkout/?coupon=welcome'
+		);
+
+		$this->assertIsArray( $result );
+		$this->assertSame( '/checkout/?coupon=welcome', $result['return_path'] );
+		$this->assertSame( '/checkout/?coupon=welcome', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['return_path'] );
+	}
+
+	public function test_pending_registration_rejects_external_return_path() {
+		$service = new ALYNT_AG_Registration_Service();
+		$result  = $service->create_pending_registration(
+			'Damon',
+			'Paulo',
+			'external@example.test',
+			ALYNT_AG_Settings_Schema::defaults(),
+			'https://evil.example/checkout/'
+		);
+
+		$this->assertIsArray( $result );
+		$this->assertSame( '', $result['return_path'] );
+		$this->assertSame( '', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['return_path'] );
+	}
+
 	public function test_confirm_pending_token_rejects_invalid_or_expired_token() {
 		$service = new ALYNT_AG_Registration_Service();
 		$result  = $service->confirm_pending_token( 'invalid-or-expired-token' );
@@ -415,6 +445,7 @@ class RegistrationServiceTest extends TestCase {
 					'email'      => 'customer@example.test',
 					'first_name' => 'Damon',
 					'last_name'  => 'Paulo',
+					'return_path' => '/checkout/',
 					'status'     => 'email_confirmed',
 				);
 			}
@@ -483,6 +514,10 @@ class RegistrationServiceTest extends TestCase {
 		$this->assertSame( 456, $service->welcome_calls[0]['user_id'] );
 		$this->assertCount( 1, $service->webhook_calls );
 		$this->assertSame( 456, $service->webhook_calls[0]['user_id'] );
+		$this->assertSame(
+			'https://example.test/login?registration_complete=1&redirect_to=https%253A%252F%252Fexample.test%252Fcheckout%252F',
+			$service->registration_complete_login_url( $settings )
+		);
 	}
 
 	public function test_complete_pending_registration_logs_password_validation_failures() {

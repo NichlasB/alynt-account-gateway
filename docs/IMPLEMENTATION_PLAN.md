@@ -2,12 +2,65 @@
 
 ## Status
 
-- Current phase: v1.1.13 is published, updater-verified, and accepted on `isha-classes`; Gate C can now resume
+- Current phase: v1.1.14 checkout authentication passed exact-candidate acceptance and is awaiting release approval; v1.1.13 remains the public production baseline
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.13 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Resume Gate C closeout for `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Complete and release the opt-in WooCommerce checkout-authentication slice, then resume Gate C closeout for `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
+
+## v1.1.14 WooCommerce Checkout Authentication
+
+### Product Slice
+
+- [x] Define the checkout-authentication behavior and security boundaries.
+- [x] Add an opt-in **Require Login Before Checkout** setting on the WooCommerce tab; default to disabled.
+- [x] Add a separate opt-in for authenticated order-pay routes; default to disabled so guest payment links continue to work.
+- [x] Redirect logged-out visitors from the main WooCommerce checkout route to the branded login screen with a validated same-site return destination.
+- [x] Exclude order-received and, by default, order-pay endpoints from the checkout gate.
+- [x] Display a structured checkout notice on the branded login screen only when the validated return destination is an actual WooCommerce checkout route.
+- [x] When public registration is enabled, include a linked **create an account** action in the checkout notice and preserve the checkout return destination through registration, confirmation, password setup, and subsequent login.
+- [x] When public registration is disabled, omit the registration link and state that new account registration is unavailable.
+- [x] Preserve a validated return destination through failed and rate-limited login attempts.
+- [x] Store only a same-site relative return path with pending registration data; reject external, malformed, and authentication-surface destinations.
+- [x] Keep WooCommerce cart handling native: same-browser sessions retain the cart, while cross-device cart migration remains out of scope.
+- [x] Do not alter WooCommerce guest-checkout settings; show an admin compatibility warning when WooCommerce guest checkout is enabled while this gate is enabled.
+- [x] Add focused automated coverage for settings defaults/sanitization, route detection, endpoint exclusions, open-redirect rejection, login retry persistence, enabled/disabled registration copy, and pending-registration return-path persistence.
+- [x] Complete build, lint, test, package, and LocalWP Plugin Tester browser acceptance before requesting release approval.
+- [ ] Publish and updater-verify v1.1.14 only after explicit release approval.
+- [ ] Do not change any staging or production site as part of implementation or release verification without separate site-specific approval.
+
+### Acceptance Matrix
+
+- Gate disabled: WooCommerce checkout behavior is unchanged.
+- Gate enabled, user logged in: checkout behavior is unchanged.
+- Gate enabled, user logged out: main checkout redirects to the branded login URL with a validated same-site `redirect_to`.
+- Registration enabled: the checkout notice offers account creation and the checkout destination survives the complete confirmed-registration flow.
+- Registration disabled: the checkout notice contains no account-creation link.
+- Failed or throttled login: the checkout notice and validated return destination remain present.
+- Successful login: the user returns to checkout.
+- Order received: never intercepted.
+- Order pay: not intercepted by default; intercepted only when its dedicated opt-in is enabled.
+- External or authentication-surface return destination: rejected and replaced by the configured normal login destination.
+
+### Branch-QA Verification
+
+- PHPCS, changed-file PHP syntax, frontend/admin build, POT generation, and the full PHPUnit suite pass. The final suite contains `386` tests and `2,438` assertions.
+- The final branch-QA package contains `49` runtime files under one `alynt-account-gateway` root, uses forward-slash archive paths, excludes development files, includes both new checkout services and the built checkout-notice CSS, and has SHA-256 `755B7DC35FC18F42086890123B100FBA324DF5160F27EB946449EA143F69DCB5`.
+- Plugin Tester installed the exact package over active v1.1.13. All `49` installed files byte-matched the inspected package, and Account Gateway remained active.
+- Package replacement through a headless updater exposed that schema checks ran only on `admin_init`. The lifecycle was corrected to run the cached version check on early `init`, ensuring a frontend request can install a newly required column before registration writes use it. Focused lifecycle coverage was added.
+- After reinstalling the corrected package, the first anonymous frontend request upgraded the stored schema version from `0.1.5` to `0.1.6`.
+- With the checkout gate disabled, the empty main checkout retained WooCommerce's native redirect to Cart.
+- With the checkout gate enabled and registration disabled, anonymous main checkout redirected to branded login with a validated checkout return URL. The contextual notice stated that registration was unavailable, no Create Account links were rendered, its text computed to `18px`, keyboard focus remained visible, desktop/mobile layouts had no horizontal overflow, and no browser errors occurred.
+- With registration enabled, both account-creation links preserved the checkout destination. The registration form stored the validated return URL and Back to Login preserved it.
+- External and authentication-surface destinations were rejected in the browser with no checkout notice or hidden redirect field.
+- A failed login retained the neutral error, contextual checkout notice, and validated return destination.
+- A disposable customer completed the real navigation chain `checkout -> login -> checkout -> cart`; WooCommerce redirected the authenticated empty checkout to Cart as expected.
+- Order-pay remained native by default, redirected only when its dedicated opt-in was enabled, and order-received remained exempt in both states.
+- Cleanup removed the disposable user, browser session, schema column, helper, settings snapshots, rejected packages, and rollback artifacts. The original `47` plugin files, settings hash `68B9E4B2F5C394590766B447FDFFA128DE3EB484D0BA8659FF368FF83A087096`, active-plugin hash `68B439F41CEAD71B327544605105130859A765124AE7863ECE3BF27CCB025E61`, database version `0.1.5`, native checkout redirect, and HTTP `200` homepage were restored exactly.
+- The final `v1.1.14` candidate contains `49` runtime files and `43` syntax-clean PHP files under one plugin root, has no development files or backslash archive paths, aligns the plugin header, version constant, stable tag, readme entry, and POT metadata, and has SHA-256 `898C6157B13C4026B91D3C52BBB98F887FB88CC0FD38493362EAB506D16EEA94`.
+- Plugin Tester installed the exact final candidate with all `49` files byte-matching the inspected package. Account Gateway remained active at `1.1.14`, settings and active-plugin fingerprints remained exact, first-request migration reached `0.1.6`, Login returned `200`, and disabled-gate checkout retained its native redirect.
+- Final cleanup restored all `47` v1.1.13 files, settings fingerprint `4C9C362F34B69A693030000A806BB55F172CE98601D4398B9B8FD75555E90A0F`, active-plugin fingerprint `E2B3B196DABC025F1D461E49D2CE0C6ECF70BC180DC341D00B7C39B4B8407FE9`, database version `0.1.5`, the pre-test schema, native checkout behavior, and HTTP `200` homepage. Only the final inspected candidate ZIP remains.
 
 ## v1.1.13 Normal-State Button Contrast Correction
 

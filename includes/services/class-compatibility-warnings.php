@@ -24,10 +24,35 @@ class ALYNT_AG_Compatibility_Warnings {
 		$settings = is_array( $settings ) ? $settings : ALYNT_AG_Settings_Schema::get_settings();
 		$warnings = array_merge(
 			$this->known_plugin_warnings( $this->active_plugin_basenames(), $settings ),
-			$this->hook_warnings( $settings )
+			$this->hook_warnings( $settings ),
+			$this->woocommerce_checkout_warnings( $settings )
 		);
 
 		return $this->deduplicate_warnings( $warnings );
+	}
+
+	/**
+	 * Return checkout-setting compatibility warnings.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return array<int,array<string,string>>
+	 */
+	public function woocommerce_checkout_warnings( $settings ) {
+		if (
+			empty( $settings['woocommerce_require_login_checkout'] )
+			|| 'yes' !== get_option( 'woocommerce_enable_guest_checkout', 'no' )
+		) {
+			return array();
+		}
+
+		return array(
+			array(
+				'id'       => 'woocommerce_guest_checkout',
+				'category' => 'woocommerce_checkout',
+				'title'    => __( 'WooCommerce guest checkout is still enabled', 'alynt-account-gateway' ),
+				'message'  => __( 'Alynt Account Gateway will require login before the main checkout, but WooCommerce still permits guest checkout. Review both settings and test every checkout entry point before launch.', 'alynt-account-gateway' ),
+			),
+		);
 	}
 
 	/**

@@ -94,10 +94,17 @@ class ALYNT_AG_Frontend_Routes {
 	 * Build a branded registration URL.
 	 *
 	 * @param array<string,mixed> $settings Settings.
+	 * @param string              $redirect Redirect URL.
 	 * @return string
 	 */
-	public function register_url( $settings ) {
-		return $this->action_url( 'register', $settings );
+	public function register_url( $settings, $redirect = '' ) {
+		$url = $this->action_url( 'register', $settings );
+
+		if ( $redirect ) {
+			$url = add_query_arg( 'redirect_to', rawurlencode( $redirect ), $url );
+		}
+
+		return $url;
 	}
 
 	/**

@@ -116,4 +116,35 @@ class FrontendLoginScreenTest extends TestCase {
 		$this->assertStringContainsString( 'aria-describedby="agw-login-error"', $html );
 		$this->assertStringContainsString( 'aria-invalid="true"', $html );
 	}
+
+	public function test_checkout_login_notice_links_to_registration_and_preserves_return_destination() {
+		$screen = new ALYNT_AG_Frontend_Login_Screen();
+		$this->settings['woocommerce_require_login_checkout'] = true;
+		$_GET['redirect_to'] = 'https://example.test/checkout/';
+
+		ob_start();
+		$screen->render_login_screen( $this->settings );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'id="agw-checkout-login"', $html );
+		$this->assertStringContainsString( 'Log in to complete your order', $html );
+		$this->assertStringContainsString( 'create an account', $html );
+		$this->assertStringContainsString( 'action=register&redirect_to=https%253A%252F%252Fexample.test%252Fcheckout%252F', $html );
+		$this->assertStringContainsString( 'aria-describedby="agw-login-instructions agw-checkout-login"', $html );
+		$this->assertStringContainsString( 'name="redirect_to" value="https://example.test/checkout/"', $html );
+	}
+
+	public function test_checkout_login_notice_omits_registration_link_when_registration_is_disabled() {
+		$screen = new ALYNT_AG_Frontend_Login_Screen();
+		$this->settings['woocommerce_require_login_checkout'] = true;
+		$this->settings['registration_enabled'] = false;
+		$_GET['redirect_to'] = 'https://example.test/checkout/';
+
+		ob_start();
+		$screen->render_login_screen( $this->settings );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'New account registration is currently unavailable.', $html );
+		$this->assertStringNotContainsString( 'action=register', $html );
+	}
 }

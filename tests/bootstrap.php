@@ -662,6 +662,35 @@ if ( ! function_exists( 'is_user_logged_in' ) ) {
 	}
 }
 
+if ( ! function_exists( 'is_checkout' ) ) {
+	function is_checkout() {
+		return ! empty( $GLOBALS['alynt_ag_test_is_checkout'] );
+	}
+}
+
+if ( ! function_exists( 'is_wc_endpoint_url' ) ) {
+	function is_wc_endpoint_url( $endpoint = '' ) {
+		$current = $GLOBALS['alynt_ag_test_wc_endpoint'] ?? '';
+
+		return $endpoint ? $endpoint === $current : '' !== $current;
+	}
+}
+
+if ( ! function_exists( 'wc_get_checkout_url' ) ) {
+	function wc_get_checkout_url() {
+		return $GLOBALS['alynt_ag_test_checkout_url'] ?? 'https://example.test/checkout/';
+	}
+}
+
+if ( ! function_exists( 'wc_get_endpoint_url' ) ) {
+	function wc_get_endpoint_url( $endpoint, $value = '', $permalink = '' ) {
+		$base = $permalink ? trailingslashit( $permalink ) : 'https://example.test/';
+		$url  = $base . trim( (string) $endpoint, '/' ) . '/';
+
+		return $value ? $url . trim( (string) $value, '/' ) . '/' : $url;
+	}
+}
+
 if ( ! function_exists( 'current_user_can' ) ) {
 	function current_user_can( $capability ) {
 		return in_array( $capability, $GLOBALS['alynt_ag_test_user_caps'] ?? array(), true );
@@ -977,6 +1006,12 @@ if ( ! function_exists( 'is_multisite' ) ) {
 	}
 }
 
+if ( ! function_exists( 'is_admin' ) ) {
+	function is_admin() {
+		return ! empty( $GLOBALS['alynt_ag_test_is_admin'] );
+	}
+}
+
 if ( ! function_exists( 'do_action' ) ) {
 	function do_action( $hook_name, ...$args ) {
 		$GLOBALS['alynt_ag_test_actions'][] = array(
@@ -1107,8 +1142,10 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-database.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-deactivator.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-diagnostics-logger.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-retention-cleanup.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-i18n.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-client-ip.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-rate-limiter.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-return-destination.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-template-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-auth-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-registration-service.php';
@@ -1118,6 +1155,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-webhook-dispatcher.p
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-dashboard-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-woocommerce-integration.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-routes.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-woocommerce-checkout-gate.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-assets.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-branding.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-components.php';
@@ -1134,3 +1172,4 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-document-re
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-warnings.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'public/class-frontend.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-plugin.php';

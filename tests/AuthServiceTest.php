@@ -214,6 +214,57 @@ class AuthServiceTest extends TestCase {
 		$this->assertSame( array(), $GLOBALS['alynt_ag_test_signons'] );
 	}
 
+	public function test_failed_login_preserves_valid_same_site_return_destination() {
+		$service = new ALYNT_AG_Auth_Service();
+		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_POST = array(
+			'alynt_ag_action' => 'login',
+			'email'           => 'not-an-email',
+			'pwd'             => 'StrongPassword1!',
+			'redirect_to'     => 'https://example.test/checkout/',
+		);
+
+		try {
+			$service->maybe_handle_auth_request();
+			$this->fail( 'Expected redirect exception.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame(
+				'redirect:https://example.test/login?login_error=failed&redirect_to=https%253A%252F%252Fexample.test%252Fcheckout%252F',
+				$exception->getMessage()
+			);
+		}
+	}
+
+	public function test_rate_limited_login_preserves_valid_same_site_return_destination() {
+		$service  = new ALYNT_AG_Auth_Service();
+		$settings = array(
+			'login_rate_limit_count'  => 1,
+			'login_rate_limit_window' => 60,
+		);
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = $settings;
+		$GLOBALS['alynt_ag_test_throw_on_redirect']            = true;
+		$_SERVER['REQUEST_METHOD']                             = 'POST';
+		$_POST                                                = array(
+			'alynt_ag_action' => 'login',
+			'email'           => 'damon@example.test',
+			'pwd'             => 'StrongPassword1!',
+			'redirect_to'     => 'https://example.test/checkout/',
+		);
+
+		$this->assertTrue( $service->validate_rate_limit( 'login', 'damon@example.test', $settings ) );
+
+		try {
+			$service->maybe_handle_auth_request();
+			$this->fail( 'Expected redirect exception.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame(
+				'redirect:https://example.test/login?login_error=alynt_ag_rate_limited&redirect_to=https%253A%252F%252Fexample.test%252Fcheckout%252F',
+				$exception->getMessage()
+			);
+		}
+	}
+
 	public function test_login_submission_passes_email_to_wordpress_signon() {
 		$service = new ALYNT_AG_Auth_Service();
 		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;

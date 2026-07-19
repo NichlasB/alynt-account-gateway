@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.1.14 - 2026-07-19
+
+### Added
+
+- Added an opt-in WooCommerce checkout login gate that redirects anonymous main-checkout visitors to the branded login screen and returns authenticated users to checkout.
+- Added a contextual checkout notice that offers account creation only when public registration is enabled.
+- Added a separate, default-disabled order-pay opt-in while always exempting order-received routes.
+- Added a same-site return-destination service and pending-registration return-path storage so checkout context survives confirmation-first registration.
+
+### Changed
+
+- Database schema version checks now run on early `init`, allowing frontend requests after a headless update to install newly required columns before they are used.
+- WooCommerce guest-checkout settings remain untouched; administrators receive a compatibility warning when both guest checkout and the plugin gate are enabled.
+
+### Security
+
+- Return destinations reject external hosts, protocol-relative URLs, alternate schemes or ports, embedded credentials, malformed values, and authentication-surface loops.
+- Pending registration stores only a validated same-site relative path.
+
+### Tests
+
+- Added route, endpoint, retry, registration, schema-lifecycle, open-redirect, compatibility-warning, responsive-style, and return-path regression coverage.
+- Completed exact-package LocalWP acceptance across disabled/enabled registration, failed/successful login, order-pay opt-in, and order-received exclusion states.
+
 ## 1.1.13 - 2026-07-19
 
 ### Fixed

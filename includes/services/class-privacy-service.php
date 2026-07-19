@@ -223,6 +223,7 @@ class ALYNT_AG_Privacy_Service {
 					__( 'Email', 'alynt-account-gateway' ) => $registration->email,
 					__( 'First Name', 'alynt-account-gateway' ) => $registration->first_name,
 					__( 'Last Name', 'alynt-account-gateway' ) => $registration->last_name,
+					__( 'Return Path', 'alynt-account-gateway' ) => $registration->return_path ?? '',
 					__( 'Status', 'alynt-account-gateway' ) => $registration->status,
 					__( 'Created At', 'alynt-account-gateway' ) => $registration->created_at,
 					__( 'Expires At', 'alynt-account-gateway' ) => $registration->expires_at,

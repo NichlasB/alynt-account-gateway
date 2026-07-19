@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.13
+Stable tag: 1.1.14
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,6 +26,7 @@ Core features include:
 * Rate limiting for account gateway actions.
 * Branded account emails with preview and test-send tools.
 * Optional custom dashboard and WooCommerce My Account takeover.
+* Optional WooCommerce checkout login gate with safe return-to-checkout handling and an independent order-pay opt-in.
 * Branded WooCommerce customer dashboard overview with quick links for orders, addresses, and account details.
 * Custom dashboard links with icons, ordering, role visibility, and new-tab behavior.
 * Account-created webhook delivery with optional request signing and admin delivery summaries.
@@ -51,6 +52,13 @@ Uninstalling the plugin removes plugin-owned settings, the stored database schem
 Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile, Reoon, webhooks, diagnostics, or WooCommerce takeover on production sites. The plugin provides WordPress personal-data exporter and eraser callbacks for plugin-owned records, but site owners remain responsible for privacy notice wording, lawful-basis decisions, processor contracts, retention policy, and qualified legal review where required.
 
 == Changelog ==
+
+= 1.1.14 =
+
+* Added an opt-in WooCommerce checkout login gate with a branded contextual notice and validated return-to-checkout handling.
+* Preserved checkout context through failed login and confirmation-first account registration while omitting account-creation links when registration is disabled.
+* Kept order-received exempt and order-pay native by default, with a separate order-pay opt-in.
+* Hardened database upgrades so newly required frontend schema changes can install on the first request after an update.
 
 = 1.1.13 =
 

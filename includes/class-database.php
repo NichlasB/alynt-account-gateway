@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ALYNT_AG_Database {
 
-	const DB_VERSION = '0.1.5';
+	const DB_VERSION = '0.1.6';
 
 	/**
 	 * Install database tables.
@@ -37,6 +37,7 @@ class ALYNT_AG_Database {
 				last_name varchar(100) NOT NULL DEFAULT '',
 				user_id bigint(20) unsigned NOT NULL DEFAULT 0,
 				token_hash varchar(255) NOT NULL,
+				return_path text NULL,
 				status varchar(40) NOT NULL DEFAULT 'pending',
 				expires_at datetime NOT NULL,
 				created_at datetime NOT NULL,

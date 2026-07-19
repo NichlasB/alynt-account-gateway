@@ -116,4 +116,28 @@ class FrontendRegisterScreenTest extends TestCase {
 		$this->assertStringContainsString( 'data-sitekey="site-key-123"', $html );
 		$this->assertStringNotContainsString( 'Verification will appear here when enabled.', $html );
 	}
+
+	public function test_registration_screen_preserves_valid_checkout_return_destination() {
+		$screen = new ALYNT_AG_Frontend_Register_Screen();
+		$_GET['redirect_to'] = 'https://example.test/checkout/';
+
+		ob_start();
+		$screen->render_register_screen( $this->settings );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'name="redirect_to" value="https://example.test/checkout/"', $html );
+		$this->assertStringContainsString( 'href="https://example.test/login?redirect_to=https%253A%252F%252Fexample.test%252Fcheckout%252F"', $html );
+	}
+
+	public function test_registration_screen_rejects_external_return_destination() {
+		$screen = new ALYNT_AG_Frontend_Register_Screen();
+		$_GET['redirect_to'] = 'https://evil.example/checkout/';
+
+		ob_start();
+		$screen->render_register_screen( $this->settings );
+		$html = ob_get_clean();
+
+		$this->assertStringNotContainsString( 'name="redirect_to"', $html );
+		$this->assertStringContainsString( 'href="https://example.test/login"', $html );
+	}
 }

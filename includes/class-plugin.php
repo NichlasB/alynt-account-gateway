@@ -20,7 +20,7 @@ class ALYNT_AG_Plugin {
 	 * @return void
 	 */
 	public function run() {
-		add_action( 'admin_init', array( 'ALYNT_AG_Database', 'maybe_upgrade' ) );
+		add_action( 'init', array( 'ALYNT_AG_Database', 'maybe_upgrade' ), 1 );
 
 		$i18n = new ALYNT_AG_I18n();
 		$i18n->register();
@@ -53,5 +53,8 @@ class ALYNT_AG_Plugin {
 
 		$woocommerce = new ALYNT_AG_WooCommerce_Integration();
 		$woocommerce->register();
+
+		$checkout_gate = new ALYNT_AG_WooCommerce_Checkout_Gate();
+		$checkout_gate->register();
 	}
 }

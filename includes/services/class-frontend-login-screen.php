@@ -36,16 +36,34 @@ class ALYNT_AG_Frontend_Login_Screen {
 	private $routes;
 
 	/**
+	 * Return destination helper.
+	 *
+	 * @var ALYNT_AG_Return_Destination
+	 */
+	private $destinations;
+
+	/**
+	 * WooCommerce checkout gate.
+	 *
+	 * @var ALYNT_AG_WooCommerce_Checkout_Gate
+	 */
+	private $checkout_gate;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param ALYNT_AG_Auth_Service|null        $auth       Auth service.
-	 * @param ALYNT_AG_Frontend_Components|null $components Component helpers.
-	 * @param ALYNT_AG_Frontend_Routes|null     $routes     Route helpers.
+	 * @param ALYNT_AG_Auth_Service|null              $auth          Auth service.
+	 * @param ALYNT_AG_Frontend_Components|null       $components    Component helpers.
+	 * @param ALYNT_AG_Frontend_Routes|null           $routes        Route helpers.
+	 * @param ALYNT_AG_Return_Destination|null        $destinations  Return destination helper.
+	 * @param ALYNT_AG_WooCommerce_Checkout_Gate|null $checkout_gate WooCommerce checkout gate.
 	 */
-	public function __construct( $auth = null, $components = null, $routes = null ) {
-		$this->auth       = $auth ? $auth : new ALYNT_AG_Auth_Service();
-		$this->components = $components ? $components : new ALYNT_AG_Frontend_Components();
-		$this->routes     = $routes ? $routes : new ALYNT_AG_Frontend_Routes();
+	public function __construct( $auth = null, $components = null, $routes = null, $destinations = null, $checkout_gate = null ) {
+		$this->auth          = $auth ? $auth : new ALYNT_AG_Auth_Service();
+		$this->components    = $components ? $components : new ALYNT_AG_Frontend_Components();
+		$this->routes        = $routes ? $routes : new ALYNT_AG_Frontend_Routes();
+		$this->destinations  = $destinations ? $destinations : new ALYNT_AG_Return_Destination();
+		$this->checkout_gate = $checkout_gate ? $checkout_gate : new ALYNT_AG_WooCommerce_Checkout_Gate();
 	}
 
 	/**
@@ -61,12 +79,15 @@ class ALYNT_AG_Frontend_Login_Screen {
 		$password_reset = ! empty( $_GET['password_reset'] );
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only error display.
 		$error_code = isset( $_GET['login_error'] ) ? sanitize_key( wp_unslash( $_GET['login_error'] ) ) : '';
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Optional redirect target for a login attempt.
-		$redirect_to = isset( $_GET['redirect_to'] ) ? esc_url_raw( wp_unslash( $_GET['redirect_to'] ) ) : '';
-		$notice_id   = $this->components->has_notice( $settings['login_intro_text'] ) ? 'agw-login-instructions' : '';
-		$form_desc   = array_filter(
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Read-only value validated as a same-site destination below.
+		$submitted_redirect = isset( $_GET['redirect_to'] ) ? wp_unslash( $_GET['redirect_to'] ) : '';
+		$redirect_to        = $this->destinations->absolute_url( $submitted_redirect, $settings );
+		$is_checkout        = $this->checkout_gate->is_checkout_destination( $redirect_to, $settings );
+		$notice_id          = $this->components->has_notice( $settings['login_intro_text'] ) ? 'agw-login-instructions' : '';
+		$form_desc          = array_filter(
 			array(
 				$notice_id,
+				$is_checkout ? 'agw-checkout-login' : '',
 				$registration_complete ? 'agw-registration-complete' : '',
 				$password_reset ? 'agw-password-reset' : '',
 				$error_code ? 'agw-login-error' : '',
@@ -75,6 +96,20 @@ class ALYNT_AG_Frontend_Login_Screen {
 		?>
 		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Log In', 'alynt-account-gateway' ); ?></h1>
 		<?php $this->components->render_notice( $settings['login_intro_text'], $notice_id ); ?>
+		<?php if ( $is_checkout ) : ?>
+			<div id="agw-checkout-login" class="agw-status agw-status--checkout" role="status">
+				<strong class="agw-status__title"><?php esc_html_e( 'Log in to complete your order', 'alynt-account-gateway' ); ?></strong>
+				<p>
+					<?php if ( ! empty( $settings['registration_enabled'] ) ) : ?>
+						<?php esc_html_e( 'To continue to checkout, log in below or', 'alynt-account-gateway' ); ?>
+						<a href="<?php echo esc_url( $this->routes->register_url( $settings, $redirect_to ) ); ?>"><?php esc_html_e( 'create an account', 'alynt-account-gateway' ); ?></a>
+						<?php esc_html_e( 'first.', 'alynt-account-gateway' ); ?>
+					<?php else : ?>
+						<?php esc_html_e( 'To continue to checkout, log in below. New account registration is currently unavailable.', 'alynt-account-gateway' ); ?>
+					<?php endif; ?>
+				</p>
+			</div>
+		<?php endif; ?>
 		<?php if ( $registration_complete ) : ?>
 			<div id="agw-registration-complete" class="agw-status agw-status--success" role="status" aria-live="polite" aria-atomic="true">
 				<?php esc_html_e( 'Your account has been created. You can log in now.', 'alynt-account-gateway' ); ?>
@@ -113,7 +148,7 @@ class ALYNT_AG_Frontend_Login_Screen {
 			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Log In', 'alynt-account-gateway' ); ?></button>
 			<div class="agw-links">
 				<?php if ( ! empty( $settings['registration_enabled'] ) ) : ?>
-					<a href="<?php echo esc_url( $this->routes->action_url( 'register', $settings ) ); ?>"><?php esc_html_e( 'Create Account', 'alynt-account-gateway' ); ?></a>
+					<a href="<?php echo esc_url( $this->routes->register_url( $settings, $redirect_to ) ); ?>"><?php esc_html_e( 'Create Account', 'alynt-account-gateway' ); ?></a>
 				<?php endif; ?>
 				<a href="<?php echo esc_url( $this->routes->action_url( 'lostpassword', $settings ) ); ?>"><?php esc_html_e( 'Forgot Password?', 'alynt-account-gateway' ); ?></a>
 			</div>

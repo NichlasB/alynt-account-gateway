@@ -20,6 +20,29 @@ class ALYNT_AG_Registration_Service {
 	const MIN_PASSWORD_LENGTH = 12;
 
 	/**
+	 * Return destination helper.
+	 *
+	 * @var ALYNT_AG_Return_Destination
+	 */
+	private $destinations;
+
+	/**
+	 * Return path associated with the most recently completed registration.
+	 *
+	 * @var string
+	 */
+	private $last_completed_return_path = '';
+
+	/**
+	 * Constructor.
+	 *
+	 * @param ALYNT_AG_Return_Destination|null $destinations Return destination helper.
+	 */
+	public function __construct( $destinations = null ) {
+		$this->destinations = $destinations ? $destinations : new ALYNT_AG_Return_Destination();
+	}
+
+	/**
 	 * Register hooks.
 	 *
 	 * @return void
@@ -58,7 +81,16 @@ class ALYNT_AG_Registration_Service {
 		check_admin_referer( 'alynt_ag_start_registration', 'alynt_ag_registration_nonce' );
 
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
-		$base_url = add_query_arg( 'action', 'register', home_url( $settings['account_action_base'] ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified above before this optional return destination is read.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Validated as a same-site destination below.
+		$submitted_redirect = isset( $_POST['redirect_to'] ) ? wp_unslash( $_POST['redirect_to'] ) : '';
+		$redirect_to        = $this->destinations->absolute_url( $submitted_redirect, $settings );
+		$return_path        = $this->destinations->relative_path( $redirect_to, $settings );
+		$base_url           = add_query_arg( 'action', 'register', home_url( $settings['account_action_base'] ) );
+
+		if ( $redirect_to ) {
+			$base_url = add_query_arg( 'redirect_to', rawurlencode( $redirect_to ), $base_url );
+		}
 
 		if ( empty( $settings['registration_enabled'] ) ) {
 			wp_safe_redirect( add_query_arg( 'registration_error', 'disabled', $base_url ) );
@@ -94,7 +126,8 @@ class ALYNT_AG_Registration_Service {
 			isset( $_POST['first_name'] ) ? wp_unslash( $_POST['first_name'] ) : '',
 			isset( $_POST['last_name'] ) ? wp_unslash( $_POST['last_name'] ) : '',
 			isset( $_POST['email'] ) ? wp_unslash( $_POST['email'] ) : '',
-			$settings
+			$settings,
+			$return_path
 		);
 		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
@@ -127,14 +160,16 @@ class ALYNT_AG_Registration_Service {
 	 * @param string              $last_name  Last name.
 	 * @param string              $email      Email address.
 	 * @param array<string,mixed> $settings   Settings.
+	 * @param string              $return_path Validated same-site return path.
 	 * @return array<string,mixed>|WP_Error
 	 */
-	public function create_pending_registration( $first_name, $last_name, $email, $settings ) {
+	public function create_pending_registration( $first_name, $last_name, $email, $settings, $return_path = '' ) {
 		global $wpdb;
 
-		$first_name = sanitize_text_field( $first_name );
-		$last_name  = sanitize_text_field( $last_name );
-		$email      = sanitize_email( $email );
+		$first_name  = sanitize_text_field( $first_name );
+		$last_name   = sanitize_text_field( $last_name );
+		$email       = sanitize_email( $email );
+		$return_path = $this->destinations->relative_path( $return_path, $settings );
 
 		if ( ! $first_name || ! $last_name || ! $email ) {
 			return new WP_Error( 'missing_required_fields', __( 'Please complete all required fields.', 'alynt-account-gateway' ) );
@@ -172,12 +207,13 @@ class ALYNT_AG_Registration_Service {
 				'last_name'    => $last_name,
 				'user_id'      => 0,
 				'token_hash'   => $token_hash,
+				'return_path'  => $return_path,
 				'status'       => 'pending',
 				'expires_at'   => $expires_at,
 				'created_at'   => $now,
 				'confirmed_at' => null,
 			),
-			array( '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', null )
+			array( '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', null )
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
@@ -199,6 +235,7 @@ class ALYNT_AG_Registration_Service {
 			'last_name'        => $last_name,
 			'token'            => $token,
 			'token_hash'       => $token_hash,
+			'return_path'      => $return_path,
 			'expires_at'       => $expires_at,
 			'confirmation_url' => $this->build_confirmation_url( $token, $settings ),
 		);
@@ -567,6 +604,7 @@ class ALYNT_AG_Registration_Service {
 			'last_name'        => $pending->last_name,
 			'token'            => $token,
 			'token_hash'       => $token_hash,
+			'return_path'      => isset( $pending->return_path ) ? (string) $pending->return_path : '',
 			'expires_at'       => $expires_at,
 			'confirmation_url' => $this->build_confirmation_url( $token, $settings ),
 		);
@@ -667,6 +705,10 @@ class ALYNT_AG_Registration_Service {
 		if ( is_wp_error( $pending ) ) {
 			return $pending;
 		}
+
+		$this->last_completed_return_path = isset( $pending->return_path )
+			? $this->destinations->relative_path( $pending->return_path, $settings )
+			: '';
 
 		$password_valid = $this->validate_password_pair( $password, $password_confirm );
 		if ( is_wp_error( $password_valid ) ) {
@@ -875,8 +917,25 @@ class ALYNT_AG_Registration_Service {
 			exit;
 		}
 
-		wp_safe_redirect( add_query_arg( 'registration_complete', '1', home_url( $settings['login_path'] ) ) );
+		wp_safe_redirect( $this->registration_complete_login_url( $settings ) );
 		exit;
+	}
+
+	/**
+	 * Build the login URL used after a registration is completed.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return string
+	 */
+	public function registration_complete_login_url( $settings ) {
+		$login_url  = add_query_arg( 'registration_complete', '1', home_url( $settings['login_path'] ) );
+		$return_url = $this->destinations->from_stored_path( $this->last_completed_return_path, $settings );
+
+		if ( $return_url ) {
+			$login_url = add_query_arg( 'redirect_to', rawurlencode( $return_url ), $login_url );
+		}
+
+		return $login_url;
 	}
 
 	/**

@@ -64,6 +64,10 @@ class FrontendRoutesTest extends TestCase {
 			$routes->lostpassword_url( $this->settings, 'https://example.test/my-account/' )
 		);
 		$this->assertSame(
+			'https://example.test/account?action=register&redirect_to=https%253A%252F%252Fexample.test%252Fcheckout%252F',
+			$routes->register_url( $this->settings, 'https://example.test/checkout/' )
+		);
+		$this->assertSame(
 			'https://example.test/account?action=logout&_wpnonce=test-nonce&redirect_to=https%253A%252F%252Fexample.test%252Flogin',
 			$routes->logout_url( $this->settings, 'https://example.test/login' )
 		);
