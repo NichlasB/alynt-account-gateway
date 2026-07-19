@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.13 is published and updater-verified; `isha-classes` remains on v1.1.12 pending separate live-update approval before Gate C can resume
+- Current phase: v1.1.13 is published, updater-verified, and accepted on `isha-classes`; Gate C can now resume
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.13 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Update and production-verify v1.1.13 on `isha-classes` after explicit live-site approval, then resume Gate C closeout; inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Resume Gate C closeout for `isha-classes`; inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.13 Normal-State Button Contrast Correction
 
@@ -19,8 +19,8 @@
 - [x] Add focused source regression coverage for the normal-state selector and color variables.
 - [x] Complete automated, build, package, and Plugin Tester browser acceptance.
 - [x] Publish and updater-verify v1.1.13 only after explicit release approval.
-- [ ] Update and verify `isha-classes` only after separate explicit live-site approval.
-- [ ] Resume Gate C only after normal, hover, and focus contrast pass on production.
+- [x] Update and verify `isha-classes` only after separate explicit live-site approval.
+- [x] Resume Gate C only after normal, hover, and focus contrast pass on production.
 
 ### Production Finding
 
@@ -40,6 +40,12 @@
 - The public package contains the same `47` files as the browser-tested candidate. Only `readme.txt` differs at the byte level due to GitHub checkout line-ending normalization; normalized content is identical.
 - Plugin Tester completed a true public `1.1.12 -> 1.1.13` update through Alynt Plugin Updater. Discovery returned the exact v1.1.13 GitHub asset, WordPress installed it, the plugin remained active, all `47` installed files byte-match the public ZIP, settings hash `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e` and active-plugin hash `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e` were preserved, and no update offer remains.
 - The release-installed Plugin Tester homepage responded normally with no browser warnings or errors.
+- A fresh production restore point was created at `/var/www/classes.internationalschoolofthehealingarts.com/restores/alynt-account-gateway-v1.1.13-preupdate-20260719-163948`. Its database export, exact v1.1.12 plugin archive, serialized settings/active-plugin state, private ownership and permissions, and SHA-256 manifest were verified before the update.
+- Alynt Plugin Updater discovered the exact public v1.1.13 GitHub asset and completed `1.1.12 -> 1.1.13` on `isha-classes`. All `47` production runtime files byte-match the public ZIP, Account Gateway remains active, and no update offer remains.
+- The headless upgrader again reinserted Account Gateway later in the active-plugin array. The exact serialized pre-update array was restored from the new restore point; settings hash `77e703a83e89c9ee1be5b9e80569df20f326f5e3412f6ef76577eba43e25ec7a` and active-plugin hash `c102561b973c3511541448676f4bbdc7dfefd923e3167a9b8e770ff3b43688a1` now exactly match the accepted baseline.
+- Production browser acceptance passed at desktop and `390x844`. The non-hovered, hovered, and keyboard-focused primary button retained `#281408` text on `#EDCE6B` at `18px`; hover retained its brightness treatment and no underline, and keyboard focus retained a visible outline.
+- The mobile login and registration-unavailable screens remained exactly `390px` wide. Create Account remained absent, Forgot Password remained available, Account Gateway markup replaced the native shell, and native `wp-login.php` redirected to `/login`.
+- Login, lost-password, and native-login redirect checks returned HTTP `200`. The browser console and production PHP log contained no new warnings or errors.
 
 ## v1.1.12 Production Frontend Corrections And Structure Review
 
