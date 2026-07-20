@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01`, `02`, and `03` are complete; prompt `04` is next.
+- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `04` are complete; prompt `05` is next.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Run approval-gated `04-WP_BEST_PRACTICES_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompt `03` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Run approval-gated `05-DATABASE_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompts `03` and `04` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
@@ -26,7 +26,7 @@
 - [x] `01-CODE_CLEANUP_PROMPT.md`
 - [x] `02-FILE_STRUCTURE_REVIEW_PROMPT.md`
 - [x] `03-ERROR_HANDLING_REVIEW_PROMPT.md`
-- [ ] `04-WP_BEST_PRACTICES_REVIEW_PROMPT.md`
+- [x] `04-WP_BEST_PRACTICES_REVIEW_PROMPT.md`
 - [ ] `05-DATABASE_REVIEW_PROMPT.md`
 - [ ] `06-PERFORMANCE_REVIEW_PROMPT.md`
 - [ ] `07-EDGE_CASES_REVIEW_PROMPT.md`
@@ -86,6 +86,17 @@ Execution rules:
 - [x] Added `docs/ERROR_HANDLING_REVIEW_1.1.21.md` with the approved inventory, implemented solutions, recovery behavior, logging decisions, edge-case decisions, commit evidence, and validation results.
 - [x] Final validation passed: production build, 1,137-string POT generation, PHPCS, 225 PHP syntax checks, 17 JavaScript/MJS syntax checks, 457 PHPUnit tests with 3,334 assertions, npm high-severity audit with zero vulnerabilities, Composer advisory audit with no advisories, source ceilings, and `git diff --check`.
 - [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `03`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
+
+### Prompt 04 - WordPress Best Practices Review Evidence
+
+- [x] Completed read-only Phase 1 across 225 tracked PHP files and received explicit approval before Phase 2.
+- [x] Found one unescaped `LIKE` table-name comparison, five `get_option()` calls without explicit defaults, and one legacy preview path that versioned Cloudflare's canonical Turnstile API URL.
+- [x] Escaped the schema table name with `$wpdb->esc_like()`, added type-appropriate option defaults, and aligned legacy Turnstile loading with the primary frontend loader.
+- [x] Confirmed there are no deprecated WordPress/PHP functions, hook issues, meta-key issues, AJAX authorization issues, REST routes, hardcoded plugin paths, plugin-header omissions, or WPCS violations.
+- [x] Preserved documented exceptions for the full-document authenticated AJAX preview fallback, WordPress-owned user-meta keys, frequently read autoloaded settings, and justified plugin-owned direct SQL.
+- [x] Added `docs/WP_BEST_PRACTICES_REVIEW_1.1.21.md` with the Phase 1 inventory, implemented fixes, reviewed exceptions, and validation evidence.
+- [x] Final validation passed: production build, 1,137-string POT generation, PHPCS, 225 PHP syntax checks, 17 JavaScript/MJS syntax checks, 457 PHPUnit tests with 3,334 assertions, npm high-severity audit with zero vulnerabilities, Composer advisory audit with no advisories, source ceilings, and `git diff --check`.
+- [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `04`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
 
 ### Consolidated End-To-End Acceptance
 

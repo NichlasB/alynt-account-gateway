@@ -214,8 +214,8 @@ class ALYNT_AG_Settings_Page_Security_Failure_Triage extends ALYNT_AG_Settings_P
 			return '';
 		}
 
-		$date_format = get_option( 'date_format' );
-		$time_format = get_option( 'time_format' );
+		$date_format = get_option( 'date_format', 'Y-m-d' );
+		$time_format = get_option( 'time_format', 'H:i' );
 
 		return date_i18n( $date_format . ' ' . $time_format, $latest, true );
 	}

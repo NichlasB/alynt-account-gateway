@@ -133,7 +133,7 @@ class ALYNT_AG_Database {
 
 		foreach ( $tables as $table ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Installation must verify each plugin-owned table exists before stamping the schema version.
-			$installed_table = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+			$installed_table = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table ) ) );
 			if ( $table !== $installed_table ) {
 				return false;
 			}
@@ -141,7 +141,7 @@ class ALYNT_AG_Database {
 
 		$updated = update_option( 'alynt_ag_db_version', self::DB_VERSION );
 
-		return $updated || self::DB_VERSION === get_option( 'alynt_ag_db_version' );
+		return $updated || self::DB_VERSION === get_option( 'alynt_ag_db_version', '' );
 	}
 
 	/**
@@ -150,7 +150,7 @@ class ALYNT_AG_Database {
 	 * @return void
 	 */
 	public static function maybe_upgrade() {
-		if ( get_option( 'alynt_ag_db_version' ) === self::DB_VERSION ) {
+		if ( get_option( 'alynt_ag_db_version', '' ) === self::DB_VERSION ) {
 			return;
 		}
 

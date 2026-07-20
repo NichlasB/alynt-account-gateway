@@ -230,7 +230,7 @@ class ALYNT_AG_Settings_Page_Gateway_Preview extends ALYNT_AG_Settings_Page_Comp
 				'alynt-ag-turnstile',
 				'https://challenges.cloudflare.com/turnstile/v0/api.js',
 				array(),
-				ALYNT_AG_VERSION,
+				null, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Cloudflare warns when its API URL receives a WordPress version query.
 				true
 			);
 		}
