@@ -38,6 +38,59 @@ class PrivacyServiceTest extends TestCase {
 		$this->assertContains( 'wp_privacy_personal_data_erasers', $hooks );
 	}
 
+	public function test_registered_callbacks_remain_on_privacy_service_facade() {
+		$service   = new ALYNT_AG_Privacy_Service();
+		$exporters = $service->register_exporter( array() );
+		$erasers   = $service->register_eraser( array() );
+
+		$this->assertSame(
+			array( $service, 'export_personal_data' ),
+			$exporters['alynt-account-gateway']['callback']
+		);
+		$this->assertSame(
+			array( $service, 'erase_personal_data' ),
+			$erasers['alynt-account-gateway']['callback']
+		);
+	}
+
+	public function test_facade_delegates_privacy_callbacks_with_original_arguments() {
+		$exporter = new class() {
+			public $arguments = array();
+
+			public function export_personal_data( $email_address, $page ) {
+				$this->arguments = array( $email_address, $page );
+
+				return array(
+					'data' => array( 'exported' ),
+					'done' => true,
+				);
+			}
+		};
+		$eraser   = new class() {
+			public $arguments = array();
+
+			public function erase_personal_data( $email_address, $page ) {
+				$this->arguments = array( $email_address, $page );
+
+				return array(
+					'items_removed'  => true,
+					'items_retained' => false,
+					'messages'       => array(),
+					'done'           => true,
+				);
+			}
+		};
+		$service  = new ALYNT_AG_Privacy_Service( $exporter, $eraser );
+
+		$export = $service->export_personal_data( 'export@example.test', 3 );
+		$erase  = $service->erase_personal_data( 'erase@example.test', 4 );
+
+		$this->assertSame( array( 'export@example.test', 3 ), $exporter->arguments );
+		$this->assertSame( array( 'erase@example.test', 4 ), $eraser->arguments );
+		$this->assertSame( array( 'exported' ), $export['data'] );
+		$this->assertTrue( $erase['items_removed'] );
+	}
+
 	public function test_record_registration_consent_stores_paths_version_and_no_ip() {
 		$service = new ALYNT_AG_Privacy_Service();
 		$result  = $service->record_registration_consent(

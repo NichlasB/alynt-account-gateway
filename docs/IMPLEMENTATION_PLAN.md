@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 2 source-asset modularization is released and updater-verified as v1.1.15.
+- Current phase: Phase 2 Increment 3 privacy exporter/eraser extraction is complete and the accepted v1.1.16 candidate is awaiting release approval.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.15 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Begin Increment 3 by extracting privacy exporter/eraser collaborators. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Publish and updater-verify v1.1.16 only after explicit approval, then begin Increment 4 by extracting dashboard module renderers behind the existing facade. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -75,9 +75,40 @@
 - Alynt Plugin Updater detected the public `1.1.14 -> 1.1.15` update on LocalWP Plugin Tester and WordPress installed the GitHub release asset through the native Plugins screen. All `49` installed files byte-match the public ZIP, Account Gateway remains active, no update remains, and the activation, settings, and database-version fingerprints are unchanged.
 - Post-update browser and HTTP acceptance passed with the homepage and `/login/` returning `200`, no browser errors, and the authenticated QA session logged out. Only pre-existing WordPress/jQuery Migrate development warnings were observed.
 
+### Increment 3 - Privacy Exporter And Eraser Collaborators
+
+- [x] Lock the v1.1.15 baseline at `390` tests and `2,712` assertions.
+- [x] Keep `ALYNT_AG_Privacy_Service` as the public WordPress callback and registration-consent facade.
+- [x] Extract exporter queries and record formatting into `ALYNT_AG_Privacy_Exporter`.
+- [x] Extract plugin-owned data deletion into `ALYNT_AG_Privacy_Eraser`.
+- [x] Preserve callback signatures, pagination arguments, query conditions, exported fields, deletion paths, and return structures.
+- [x] Load both collaborators before the privacy facade in production and test bootstraps.
+- [x] Add behavior-locking coverage for callback ownership and injected collaborator delegation.
+- [x] Reduce the privacy facade from `333` to `220` lines; keep the exporter at `164` lines and eraser at `54` lines.
+- [x] Pass focused PHPCS, PHP syntax, and privacy tests.
+- [x] Pass the full build, PHPCS, syntax, POT, audit, PHPUnit, and `git diff --check` gates.
+- [x] Inspect the exact v1.1.16 release-style package.
+- [x] Install the exact candidate on LocalWP Plugin Tester and verify native exporter/eraser behavior.
+- [ ] Publish v1.1.16 only after separate explicit release approval.
+
+### Increment 3 Quality Evidence
+
+- Frontend/admin build and POT generation pass; the POT contains `1,104` strings and reports project version `1.1.16`.
+- Full PHPCS, PHP syntax, and JavaScript syntax checks pass.
+- PHPUnit passes with `392` tests and `2,718` assertions.
+- npm reports zero vulnerabilities and Composer reports no security advisories.
+- `git diff --check` passes.
+- The v1.1.16 candidate contains `51` runtime files and `45` syntax-clean PHP files under one plugin root, contains no development files or backslash archive paths, and has SHA-256 `B4985AF9B34C510E2642A0F0A893BEED43882EADAACFAFDFC04D623D8DFFB6B7`.
+- LocalWP Plugin Tester installed the exact candidate over active v1.1.15. All `51` installed files byte-match the inspected package and Account Gateway remains active at v1.1.16.
+- The `active_plugins`, `alynt_ag_settings`, and `alynt_ag_db_version` fingerprints remain unchanged from the v1.1.15 baseline.
+- Native WordPress exporter registration retained `ALYNT_AG_Privacy_Service::export_personal_data` as the callback and returned the expected consent, pending registration, verification, and webhook groups from disposable records.
+- Native WordPress eraser registration retained `ALYNT_AG_Privacy_Service::erase_personal_data` as the callback, returned `items_removed: true`, `items_retained: false`, and `done: true`, and removed all disposable consent, pending registration, verification, webhook, and audit records.
+- The disposable subscriber, temporary callback harnesses, and every disposable database row were removed. The homepage and `/login/` return HTTP `200`, and browser acceptance found no errors.
+- Novamira MCP was unavailable in the current session, so acceptance used the LocalWP MariaDB client, LocalWP-compatible WP-CLI runtime, and browser automation. No staging or production site was touched.
+
 ### Remaining Phase 2 Sequence
 
-1. Extract privacy exporter/eraser collaborators.
+1. Publish and updater-verify v1.1.16 after explicit approval.
 2. Extract dashboard module renderers behind the existing dashboard facade.
 3. Split settings schema/defaults/sanitization.
 4. Split registration and authentication services with behavior-locking tests.

@@ -434,3 +434,46 @@ authentication helper was removed, and the QA session was logged out. No
 staging or production site was touched.
 
 Increment 3 may now begin with privacy exporter/eraser extraction.
+
+### Increment 3: Privacy Exporter And Eraser Collaborators
+
+Status: candidate accepted; release approval pending.
+
+- Kept `ALYNT_AG_Privacy_Service` as the stable WordPress callback and
+  registration-consent facade.
+- Extracted exporter queries and record formatting into
+  `ALYNT_AG_Privacy_Exporter`.
+- Extracted plugin-owned personal-data deletion into
+  `ALYNT_AG_Privacy_Eraser`.
+- Preserved callback signatures, pagination arguments, query conditions,
+  exported fields, deletion paths, and response structures.
+- Added injection-based regression coverage for callback ownership and
+  collaborator delegation.
+- Reduced the privacy facade from 333 to 220 lines. The exporter is 164 lines
+  and the eraser is 54 lines.
+
+The focused privacy suite and the full quality gates pass. PHPUnit now reports
+392 tests and 2,718 assertions. PHPCS, project-wide PHP syntax, source
+JavaScript syntax, frontend/admin build, POT generation, npm audit, Composer
+audit, and `git diff --check` all pass.
+
+The inspected v1.1.16 candidate contains 51 runtime files and 45 syntax-clean
+PHP files, contains no development files or backslash archive paths, and has
+SHA-256
+`B4985AF9B34C510E2642A0F0A893BEED43882EADAACFAFDFC04D623D8DFFB6B7`.
+LocalWP Plugin Tester installed that exact package over active v1.1.15; all 51
+installed files byte-match, and activation, settings, and schema fingerprints
+remain unchanged.
+
+Installed-copy acceptance verified both callbacks through WordPress's native
+privacy filter registrations. The exporter retained the privacy-service facade
+callback and returned the expected consent, pending registration, verification,
+and webhook groups. The eraser retained the facade callback and removed all
+disposable consent, pending registration, verification, webhook, and audit
+records. The disposable subscriber, temporary callback harnesses, and all QA
+rows were removed. The homepage and branded login return HTTP 200 without
+browser errors. No staging or production site was touched.
+
+Release publication requires separate explicit approval. Increment 4 begins
+dashboard module renderer extraction only after the v1.1.16 release and
+updater cycle is closed.

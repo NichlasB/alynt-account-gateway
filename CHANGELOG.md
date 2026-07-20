@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.16 - 2026-07-20
+
+### Changed
+
+- Extracted the WordPress personal-data exporter and eraser into focused collaborators behind the existing privacy-service facade.
+- Preserved the existing exporter and eraser callback signatures, query behavior, output records, deletion paths, consent handling, and response shapes.
+
+### Tests
+
+- Added regression coverage confirming WordPress callbacks remain registered on the privacy-service facade and that callback arguments and results delegate unchanged.
+
 ## 1.1.15 - 2026-07-19
 
 ### Changed

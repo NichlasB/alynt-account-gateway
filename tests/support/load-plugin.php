@@ -38,6 +38,8 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-state-scree
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-gateway-shell.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-document-renderer.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-warnings.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-exporter.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-eraser.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'public/class-frontend.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-plugin.php';
