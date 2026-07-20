@@ -103,7 +103,22 @@ class ALYNT_AG_Rate_Limiter {
 			);
 		}
 
-		set_transient( $key, $count + 1, $window_mins * MINUTE_IN_SECONDS );
+		$stored = set_transient( $key, $count + 1, $window_mins * MINUTE_IN_SECONDS );
+		if ( ! $stored ) {
+			ALYNT_AG_Diagnostics_Logger::log_event(
+				'critical',
+				'security',
+				'rate_limit_storage_failed',
+				__( 'A rate-limit counter could not be stored.', 'alynt-account-gateway' ),
+				array( 'action' => sanitize_key( $action ) )
+			);
+
+			return new WP_Error(
+				'alynt_ag_rate_limit_unavailable',
+				__( 'This request could not be verified. Please wait and try again.', 'alynt-account-gateway' )
+			);
+		}
+
 		$this->set_bucket_meta( $meta_key, $action, $count + 1, $limit, $window_mins, false );
 
 		return true;

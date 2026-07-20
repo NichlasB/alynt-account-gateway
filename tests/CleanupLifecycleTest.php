@@ -21,6 +21,7 @@ class CleanupLifecycleTest extends TestCase {
 		$GLOBALS['alynt_ag_test_unscheduled_events'] = array();
 		$GLOBALS['alynt_ag_test_cleared_hooks'] = array();
 		$GLOBALS['alynt_ag_test_rewrite_rules_flushed'] = false;
+		unset( $GLOBALS['alynt_ag_test_db_query_result'] );
 		$GLOBALS['alynt_ag_test_options'] = array(
 			'alynt_ag_settings' => array(
 				'success_log_retention'      => 3,
@@ -63,6 +64,14 @@ class CleanupLifecycleTest extends TestCase {
 		$this->assertStringContainsString( 'DELETE FROM wp_alynt_ag_diagnostics_logs', $queries );
 		$this->assertStringContainsString( 'DELETE FROM wp_alynt_ag_consent_records', $queries );
 		$this->assertStringContainsString( 'DELETE FROM wp_alynt_ag_audit_logs', $queries );
+	}
+
+	public function test_retention_cleanup_reports_query_failure() {
+		$GLOBALS['alynt_ag_test_db_query_result'] = false;
+
+		$cleanup = new ALYNT_AG_Retention_Cleanup();
+
+		$this->assertFalse( $cleanup->run() );
 	}
 
 	public function test_deactivation_unschedules_retention_cleanup() {

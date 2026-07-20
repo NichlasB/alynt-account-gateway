@@ -54,7 +54,7 @@ class ALYNT_AG_Diagnostics_Logger {
 	 * @param string              $action  Event action.
 	 * @param array<string,mixed> $context Event context.
 	 * @param int                 $user_id User ID.
-	 * @return void
+	 * @return bool
 	 */
 	public static function log( $action, $context = array(), $user_id = 0 ) {
 		global $wpdb;
@@ -177,8 +177,10 @@ class ALYNT_AG_Diagnostics_Logger {
 		$tables = ALYNT_AG_Database::tables();
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Admin purge clears plugin-owned diagnostics table.
-		$wpdb->query( "TRUNCATE TABLE {$tables['diagnostics_logs']}" );
+		$result = $wpdb->query( "TRUNCATE TABLE {$tables['diagnostics_logs']}" );
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return false !== $result;
 	}
 
 	/**

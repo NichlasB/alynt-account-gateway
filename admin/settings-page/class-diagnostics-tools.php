@@ -260,13 +260,14 @@ class ALYNT_AG_Settings_Page_Diagnostics_Tools extends ALYNT_AG_Settings_Page_Co
 		}
 
 		check_admin_referer( 'alynt_ag_clear_diagnostics' );
-		ALYNT_AG_Diagnostics_Logger::clear_events();
+		$cleared = ALYNT_AG_Diagnostics_Logger::clear_events();
 
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page' => 'alynt-account-gateway',
-					'tab'  => 'advanced_tools',
+					'page'            => 'alynt-account-gateway',
+					'tab'             => 'advanced_tools',
+					'alynt_ag_notice' => $cleared ? 'diagnostics_cleared' : 'diagnostics_clear_failed',
 				),
 				admin_url( 'options-general.php' )
 			)

@@ -26,7 +26,7 @@ class ALYNT_AG_Retention_Cleanup {
 	/**
 	 * Run cleanup.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	public function run() {
 		global $wpdb;
@@ -36,7 +36,8 @@ class ALYNT_AG_Retention_Cleanup {
 		$now      = current_time( 'mysql', true );
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned retention cleanup tables require dynamic table names.
-		$wpdb->query(
+		$results   = array();
+		$results[] = $wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$tables['pending_registrations']} WHERE expires_at < %s",
 				$now
@@ -50,7 +51,7 @@ class ALYNT_AG_Retention_Cleanup {
 		$consent_days         = max( 1, absint( $settings['consent_record_retention'] ) );
 		$audit_days           = max( 1, absint( $settings['audit_log_retention'] ) );
 
-		$wpdb->query(
+		$results[] = $wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$tables['webhook_logs']} WHERE success = 1 AND created_at < DATE_SUB(%s, INTERVAL %d DAY)",
 				$now,
@@ -58,7 +59,7 @@ class ALYNT_AG_Retention_Cleanup {
 			)
 		);
 
-		$wpdb->query(
+		$results[] = $wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$tables['webhook_logs']} WHERE success = 0 AND created_at < DATE_SUB(%s, INTERVAL %d DAY)",
 				$now,
@@ -66,7 +67,7 @@ class ALYNT_AG_Retention_Cleanup {
 			)
 		);
 
-		$wpdb->query(
+		$results[] = $wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$tables['verification_logs']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY)",
 				$now,
@@ -74,7 +75,7 @@ class ALYNT_AG_Retention_Cleanup {
 			)
 		);
 
-		$wpdb->query(
+		$results[] = $wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$tables['diagnostics_logs']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY)",
 				$now,
@@ -82,7 +83,7 @@ class ALYNT_AG_Retention_Cleanup {
 			)
 		);
 
-		$wpdb->query(
+		$results[] = $wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$tables['consent_records']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY)",
 				$now,
@@ -90,7 +91,7 @@ class ALYNT_AG_Retention_Cleanup {
 			)
 		);
 
-		$wpdb->query(
+		$results[] = $wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$tables['audit_logs']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY)",
 				$now,
@@ -98,5 +99,19 @@ class ALYNT_AG_Retention_Cleanup {
 			)
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		if ( in_array( false, $results, true ) ) {
+			ALYNT_AG_Diagnostics_Logger::log_event(
+				'error',
+				'cron',
+				'retention_cleanup_failed',
+				__( 'One or more retention cleanup queries failed.', 'alynt-account-gateway' ),
+				array( 'failed_queries' => count( array_keys( $results, false, true ) ) )
+			);
+
+			return false;
+		}
+
+		return true;
 	}
 }

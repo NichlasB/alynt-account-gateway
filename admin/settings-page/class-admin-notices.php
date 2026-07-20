@@ -111,6 +111,14 @@ class ALYNT_AG_Settings_Page_Admin_Notices extends ALYNT_AG_Settings_Page_Compon
 				'type'    => 'error',
 				'message' => __( 'This settings tab could not be restored.', 'alynt-account-gateway' ),
 			),
+			'diagnostics_cleared'            => array(
+				'type'    => 'success',
+				'message' => __( 'Diagnostics events cleared.', 'alynt-account-gateway' ),
+			),
+			'diagnostics_clear_failed'       => array(
+				'type'    => 'error',
+				'message' => __( 'Diagnostics events could not be cleared. Please retry and check the site database if the problem continues.', 'alynt-account-gateway' ),
+			),
 			'email_test_sent'               => array(
 				'type'    => 'success',
 				'message' => __( 'Test email sent.', 'alynt-account-gateway' ),

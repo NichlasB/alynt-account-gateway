@@ -17,6 +17,10 @@ if ( ! function_exists( 'get_option' ) ) {
 
 if ( ! function_exists( 'update_option' ) ) {
 	function update_option( $name, $value, $autoload = null ) {
+		if ( isset( $GLOBALS['alynt_ag_test_update_option_result'] ) && false === $GLOBALS['alynt_ag_test_update_option_result'] ) {
+			return false;
+		}
+
 		$GLOBALS['alynt_ag_test_options'][ $name ] = $value;
 
 		return true;
@@ -175,6 +179,10 @@ if ( ! function_exists( 'get_transient' ) ) {
 
 if ( ! function_exists( 'set_transient' ) ) {
 	function set_transient( $name, $value, $expiration = 0 ) {
+		if ( isset( $GLOBALS['alynt_ag_test_set_transient_result'] ) && false === $GLOBALS['alynt_ag_test_set_transient_result'] ) {
+			return false;
+		}
+
 		$GLOBALS['alynt_ag_test_transients'][ $name ] = array(
 			'value'      => $value,
 			'expiration' => $expiration,

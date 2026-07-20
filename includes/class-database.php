@@ -19,7 +19,7 @@ class ALYNT_AG_Database {
 	/**
 	 * Install database tables.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	public static function install() {
 		global $wpdb;
@@ -131,7 +131,17 @@ class ALYNT_AG_Database {
 			dbDelta( $statement );
 		}
 
-		update_option( 'alynt_ag_db_version', self::DB_VERSION );
+		foreach ( $tables as $table ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Installation must verify each plugin-owned table exists before stamping the schema version.
+			$installed_table = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) );
+			if ( $table !== $installed_table ) {
+				return false;
+			}
+		}
+
+		$updated = update_option( 'alynt_ag_db_version', self::DB_VERSION );
+
+		return $updated || self::DB_VERSION === get_option( 'alynt_ag_db_version' );
 	}
 
 	/**

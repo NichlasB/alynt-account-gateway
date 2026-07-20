@@ -64,19 +64,22 @@ class ALYNT_AG_Settings_Page_Settings_Transfer extends ALYNT_AG_Settings_Page_Co
 
 			if ( ! is_wp_error( $imported ) ) {
 				$ignored_count = isset( $inspection['unknown_count'] ) ? absint( $inspection['unknown_count'] ) : 0;
-				update_option( 'alynt_ag_settings', $imported );
-				ALYNT_AG_Diagnostics_Logger::log(
-					'settings_imported',
-					array(
-						'imported_keys'  => isset( $inspection['known_keys'] ) ? $inspection['known_keys'] : array_keys( ALYNT_AG_Settings_Schema::filter_known_settings( $imported ) ),
-						'ignored_keys'   => isset( $inspection['unknown_keys'] ) ? $inspection['unknown_keys'] : array(),
-						'source_plugin'  => isset( $inspection['plugin'] ) ? $inspection['plugin'] : '',
-						'source_version' => isset( $inspection['version'] ) ? $inspection['version'] : '',
-						'exported_at'    => isset( $inspection['exported_at'] ) ? $inspection['exported_at'] : '',
-					),
-					get_current_user_id()
-				);
-				$status = $ignored_count > 0 ? 'settings_imported_with_ignored_keys' : 'settings_imported';
+				if ( $this->persist_settings( $imported ) ) {
+					ALYNT_AG_Diagnostics_Logger::log(
+						'settings_imported',
+						array(
+							'imported_keys'  => isset( $inspection['known_keys'] ) ? $inspection['known_keys'] : array_keys( ALYNT_AG_Settings_Schema::filter_known_settings( $imported ) ),
+							'ignored_keys'   => isset( $inspection['unknown_keys'] ) ? $inspection['unknown_keys'] : array(),
+							'source_plugin'  => isset( $inspection['plugin'] ) ? $inspection['plugin'] : '',
+							'source_version' => isset( $inspection['version'] ) ? $inspection['version'] : '',
+							'exported_at'    => isset( $inspection['exported_at'] ) ? $inspection['exported_at'] : '',
+						),
+						get_current_user_id()
+					);
+					$status = $ignored_count > 0 ? 'settings_imported_with_ignored_keys' : 'settings_imported';
+				} else {
+					$status = 'settings_import_failed';
+				}
 			} elseif ( 'alynt_ag_invalid_settings_import' === $imported->get_error_code() ) {
 				$status = 'settings_import_invalid_json';
 			} elseif ( 'alynt_ag_empty_settings_import' === $imported->get_error_code() ) {
@@ -120,16 +123,17 @@ class ALYNT_AG_Settings_Page_Settings_Transfer extends ALYNT_AG_Settings_Page_Co
 		$status   = 'tab_defaults_failed';
 
 		if ( ! is_wp_error( $restored ) ) {
-			update_option( 'alynt_ag_settings', $restored );
-			ALYNT_AG_Diagnostics_Logger::log(
-				'tab_defaults_restored',
-				array(
-					'tab'           => $tab,
-					'restored_keys' => ALYNT_AG_Settings_Schema::keys_for_tab( $tab ),
-				),
-				get_current_user_id()
-			);
-			$status = 'tab_defaults_restored';
+			if ( $this->persist_settings( $restored ) ) {
+				ALYNT_AG_Diagnostics_Logger::log(
+					'tab_defaults_restored',
+					array(
+						'tab'           => $tab,
+						'restored_keys' => ALYNT_AG_Settings_Schema::keys_for_tab( $tab ),
+					),
+					get_current_user_id()
+				);
+				$status = 'tab_defaults_restored';
+			}
 		}
 
 		wp_safe_redirect(
@@ -143,5 +147,17 @@ class ALYNT_AG_Settings_Page_Settings_Transfer extends ALYNT_AG_Settings_Page_Co
 			)
 		);
 		exit;
+	}
+
+	/**
+	 * Store settings and verify the resulting option value.
+	 *
+	 * @param array<string,mixed> $settings Sanitized settings.
+	 * @return bool
+	 */
+	private function persist_settings( $settings ) {
+		$updated = update_option( 'alynt_ag_settings', $settings );
+
+		return $updated || $settings === get_option( 'alynt_ag_settings' );
 	}
 }

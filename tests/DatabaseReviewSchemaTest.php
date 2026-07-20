@@ -25,5 +25,7 @@ class DatabaseReviewSchemaTest extends TestCase {
 		$this->assertStringContainsString( 'reviewed_at datetime NULL', $source );
 		$this->assertStringContainsString( 'KEY review_decision (review_decision)', $source );
 		$this->assertStringContainsString( 'KEY reviewed_at (reviewed_at)', $source );
+		$this->assertStringContainsString( 'SHOW TABLES LIKE %s', $source );
+		$this->assertStringContainsString( "update_option( 'alynt_ag_db_version', self::DB_VERSION )", $source );
 	}
 }

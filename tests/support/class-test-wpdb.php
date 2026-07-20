@@ -75,7 +75,21 @@ class ALYNT_AG_Test_WPDB {
 	public function query( $query ) {
 		$GLOBALS['alynt_ag_test_db_queries'][] = $query;
 
+		if ( isset( $GLOBALS['alynt_ag_test_db_query_result'] ) ) {
+			return $GLOBALS['alynt_ag_test_db_query_result'];
+		}
+
 		return true;
+	}
+
+	public function get_var( $query ) {
+		$GLOBALS['alynt_ag_test_db_queries'][] = $query;
+
+		if ( preg_match( "/SHOW TABLES LIKE '([^']+)'/", $query, $matches ) ) {
+			return stripslashes( $matches[1] );
+		}
+
+		return $GLOBALS['alynt_ag_test_db_var'] ?? null;
 	}
 
 	public function esc_like( $text ) {
