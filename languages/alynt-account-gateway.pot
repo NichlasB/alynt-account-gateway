@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 1.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 18:43+0000\n"
+"POT-Creation-Date: 2026-07-20 18:49+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid "A branded password-reset email could not be sent."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:171
+#: includes/services/class-webhook-retry-scheduler.php:44
 msgid "A failed webhook retry could not be scheduled."
 msgstr ""
 
@@ -4018,7 +4018,7 @@ msgstr ""
 msgid "The test webhook could not be sent. Review the recent webhook deliveries table for details."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:341
+#: includes/services/class-webhook-delivery-logger.php:62
 msgid "The webhook delivery log could not be stored."
 msgstr ""
 

@@ -53,6 +53,8 @@ $alynt_ag_files = array(
 	'includes/services/class-email-template-service.php',
 	'includes/services/class-turnstile-client.php',
 	'includes/services/class-reoon-client.php',
+	'includes/services/class-webhook-retry-scheduler.php',
+	'includes/services/class-webhook-delivery-logger.php',
 	'includes/services/class-webhook-dispatcher.php',
 	'includes/services/class-dashboard-service.php',
 	'includes/services/class-woocommerce-navigation.php',

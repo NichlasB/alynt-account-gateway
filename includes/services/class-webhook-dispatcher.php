@@ -152,33 +152,13 @@ class ALYNT_AG_Webhook_Dispatcher {
 	 * @return bool
 	 */
 	private function maybe_schedule_retry( $user_id, $retry_count, $allow_retries ) {
-		if ( ! $allow_retries || $retry_count >= self::MAX_RETRIES ) {
-			return false;
-		}
-
-		$next_retry = $retry_count + 1;
-		$args       = array( absint( $user_id ), $next_retry );
-		if ( wp_next_scheduled( self::RETRY_HOOK, $args ) ) {
-			return true;
-		}
-
-		$scheduled = wp_schedule_single_event( time() + ( MINUTE_IN_SECONDS * ( 2 ** $retry_count ) ), self::RETRY_HOOK, $args, true );
-		if ( is_wp_error( $scheduled ) || ! $scheduled ) {
-			ALYNT_AG_Diagnostics_Logger::log_event(
-				'error',
-				'cron',
-				'webhook_retry_schedule_failed',
-				__( 'A failed webhook retry could not be scheduled.', 'alynt-account-gateway' ),
-				array(
-					'user_id'     => absint( $user_id ),
-					'retry_count' => $next_retry,
-				)
-			);
-
-			return false;
-		}
-
-		return true;
+		return ( new ALYNT_AG_Webhook_Retry_Scheduler() )->schedule(
+			self::RETRY_HOOK,
+			self::MAX_RETRIES,
+			$user_id,
+			$retry_count,
+			$allow_retries
+		);
 	}
 
 	/**
@@ -305,42 +285,14 @@ class ALYNT_AG_Webhook_Dispatcher {
 	 * @return true|WP_Error
 	 */
 	public function log_dispatch( $event_name, $url, $user_id, $payload, $response, $settings, $retry_count = 0 ) {
-		global $wpdb;
-
-		$tables      = ALYNT_AG_Database::tables();
-		$http_status = is_wp_error( $response ) ? 0 : (int) wp_remote_retrieve_response_code( $response );
-		$success     = ! is_wp_error( $response ) && $http_status >= 200 && $http_status < 300;
-		$error       = '';
-
-		if ( is_wp_error( $response ) ) {
-			$error = $response->get_error_message();
-		} elseif ( ! $success ) {
-			$error = wp_remote_retrieve_response_message( $response );
-		}
-
-		$host = (string) wp_parse_url( $url, PHP_URL_HOST );
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Plugin-owned webhook log table.
-		$inserted = $wpdb->insert(
-			$tables['webhook_logs'],
-			array(
-				'event_name'       => sanitize_text_field( $event_name ),
-				'user_id'          => absint( $user_id ),
-				'destination_host' => sanitize_text_field( $host ),
-				'http_status'      => $http_status,
-				'success'          => $success ? 1 : 0,
-				'retry_count'      => absint( $retry_count ),
-				'payload'          => ! empty( $settings['debug_payload_logging'] ) ? wp_json_encode( $payload ) : null,
-				'error_message'    => sanitize_text_field( $error ),
-				'created_at'       => current_time( 'mysql', true ),
-			),
-			array( '%s', '%d', '%s', '%d', '%d', '%d', '%s', '%s', '%s' )
+		return ( new ALYNT_AG_Webhook_Delivery_Logger() )->store(
+			$event_name,
+			$url,
+			$user_id,
+			$payload,
+			$response,
+			$settings,
+			$retry_count
 		);
-
-		if ( ! $inserted ) {
-			return new WP_Error( 'alynt_ag_webhook_log_failed', __( 'The webhook delivery log could not be stored.', 'alynt-account-gateway' ) );
-		}
-
-		return true;
 	}
 }

@@ -47,6 +47,8 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/trait-registration-credent
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-registration-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-reoon-client.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-turnstile-client.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-webhook-retry-scheduler.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-webhook-delivery-logger.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-webhook-dispatcher.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-dashboard-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-woocommerce-navigation.php';
