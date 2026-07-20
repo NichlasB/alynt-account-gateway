@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `04` are complete; prompt `05` is next.
+- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `05` are complete; prompt `06` is next.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Run approval-gated `05-DATABASE_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompts `03` and `04` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Run approval-gated `06-PERFORMANCE_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompts `03` through `05` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
@@ -27,7 +27,7 @@
 - [x] `02-FILE_STRUCTURE_REVIEW_PROMPT.md`
 - [x] `03-ERROR_HANDLING_REVIEW_PROMPT.md`
 - [x] `04-WP_BEST_PRACTICES_REVIEW_PROMPT.md`
-- [ ] `05-DATABASE_REVIEW_PROMPT.md`
+- [x] `05-DATABASE_REVIEW_PROMPT.md`
 - [ ] `06-PERFORMANCE_REVIEW_PROMPT.md`
 - [ ] `07-EDGE_CASES_REVIEW_PROMPT.md`
 - [ ] `07A-ADVERSARIAL_TEST_SUITE_REVIEW_PROMPT.md`
@@ -97,6 +97,19 @@ Execution rules:
 - [x] Added `docs/WP_BEST_PRACTICES_REVIEW_1.1.21.md` with the Phase 1 inventory, implemented fixes, reviewed exceptions, and validation evidence.
 - [x] Final validation passed: production build, 1,137-string POT generation, PHPCS, 225 PHP syntax checks, 17 JavaScript/MJS syntax checks, 457 PHPUnit tests with 3,334 assertions, npm high-severity audit with zero vulnerabilities, Composer advisory audit with no advisories, source ceilings, and `git diff --check`.
 - [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `04`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
+
+### Prompt 05 - Database Review Evidence
+
+- [x] Completed a read-only inventory of 6 plugin-owned tables, 51 query patterns, WordPress data storage, table relationships, lifecycle operations, retention policies, privacy callbacks, schema migration behavior, and uninstall cleanup.
+- [x] Captured pending-registration IDs before related consent inserts, checked replacement cleanup, compensated consent failures, and rejected zero-row state transitions while preserving concurrent confirmation idempotency.
+- [x] Aligned the administrator lifecycle classifier with the persisted `account_created` status, retained the legacy `completed` alias, and changed pending-expiry comparisons to UTC.
+- [x] Propagated active rate-limit bucket query failures as visible `WP_Error` notices instead of treating failed reads as empty healthy data.
+- [x] Added 100-row-per-table privacy export pages, bounded first-remaining-ID privacy erasure batches, and accurate `done`, removed, and retained responses.
+- [x] Limited each retention query to 500 rows, added a non-duplicated near-term continuation hook for larger backlogs, and cleared the continuation during deactivation and uninstall.
+- [x] Added the webhook `success_created_at (success, created_at)` retention index and bumped the idempotent database schema version from `0.1.6` to `0.1.7`.
+- [x] Added `docs/DATABASE_REVIEW_1.1.21.md` with the complete database inventory, implemented changes, design trade-offs, migration behavior, rollback implications, and validation evidence.
+- [x] Final validation passed: production build, 1,140-string POT generation, PHPCS, 225 PHP syntax checks, 19 JavaScript/MJS syntax checks, 473 PHPUnit tests with 3,385 assertions, npm high-severity audit with zero vulnerabilities, Composer advisory audit with no advisories, source ceilings, and `git diff --check`.
+- [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `05`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
 
 ### Consolidated End-To-End Acceptance
 

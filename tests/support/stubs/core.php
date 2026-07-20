@@ -134,6 +134,14 @@ if ( ! function_exists( 'wp_generate_password' ) ) {
 
 if ( ! function_exists( 'current_time' ) ) {
 	function current_time( $type, $gmt = false ) {
+		if ( $gmt && isset( $GLOBALS['alynt_ag_test_current_time_utc'] ) ) {
+			return $GLOBALS['alynt_ag_test_current_time_utc'];
+		}
+
+		if ( ! $gmt && isset( $GLOBALS['alynt_ag_test_current_time_local'] ) ) {
+			return $GLOBALS['alynt_ag_test_current_time_local'];
+		}
+
 		return '2026-07-03 12:00:00';
 	}
 }

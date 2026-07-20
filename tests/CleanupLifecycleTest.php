@@ -18,6 +18,7 @@ class CleanupLifecycleTest extends TestCase {
 		$GLOBALS['alynt_ag_test_db_queries'] = array();
 		$GLOBALS['alynt_ag_test_deleted_options'] = array();
 		$GLOBALS['alynt_ag_test_scheduled_hooks'] = array();
+		$GLOBALS['alynt_ag_test_single_events'] = array();
 		$GLOBALS['alynt_ag_test_unscheduled_events'] = array();
 		$GLOBALS['alynt_ag_test_cleared_hooks'] = array();
 		$GLOBALS['alynt_ag_test_rewrite_rules_flushed'] = false;
@@ -39,6 +40,7 @@ class CleanupLifecycleTest extends TestCase {
 			$GLOBALS['alynt_ag_test_db_queries'],
 			$GLOBALS['alynt_ag_test_deleted_options'],
 			$GLOBALS['alynt_ag_test_scheduled_hooks'],
+			$GLOBALS['alynt_ag_test_single_events'],
 			$GLOBALS['alynt_ag_test_unscheduled_events'],
 			$GLOBALS['alynt_ag_test_cleared_hooks'],
 			$GLOBALS['alynt_ag_test_rewrite_rules_flushed'],
@@ -64,6 +66,7 @@ class CleanupLifecycleTest extends TestCase {
 		$this->assertStringContainsString( 'DELETE FROM wp_alynt_ag_diagnostics_logs', $queries );
 		$this->assertStringContainsString( 'DELETE FROM wp_alynt_ag_consent_records', $queries );
 		$this->assertStringContainsString( 'DELETE FROM wp_alynt_ag_audit_logs', $queries );
+		$this->assertSame( 7, substr_count( $queries, 'LIMIT 500' ) );
 	}
 
 	public function test_retention_cleanup_reports_query_failure() {
@@ -72,6 +75,26 @@ class CleanupLifecycleTest extends TestCase {
 		$cleanup = new ALYNT_AG_Retention_Cleanup();
 
 		$this->assertFalse( $cleanup->run() );
+	}
+
+	public function test_retention_cleanup_schedules_one_continuation_for_full_batches() {
+		$GLOBALS['alynt_ag_test_db_query_result'] = ALYNT_AG_Retention_Cleanup::BATCH_SIZE;
+
+		$cleanup = new ALYNT_AG_Retention_Cleanup();
+
+		$this->assertTrue( $cleanup->run() );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_single_events'] );
+		$this->assertSame( ALYNT_AG_Retention_Cleanup::CONTINUATION_HOOK, $GLOBALS['alynt_ag_test_single_events'][0]['hook'] );
+	}
+
+	public function test_retention_cleanup_does_not_duplicate_pending_continuation() {
+		$GLOBALS['alynt_ag_test_db_query_result'] = ALYNT_AG_Retention_Cleanup::BATCH_SIZE;
+		$GLOBALS['alynt_ag_test_scheduled_hooks'][ ALYNT_AG_Retention_Cleanup::CONTINUATION_HOOK ] = 123456789;
+
+		$cleanup = new ALYNT_AG_Retention_Cleanup();
+
+		$this->assertTrue( $cleanup->run() );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_single_events'] );
 	}
 
 	public function test_deactivation_unschedules_retention_cleanup() {
@@ -89,6 +112,7 @@ class CleanupLifecycleTest extends TestCase {
 			$GLOBALS['alynt_ag_test_unscheduled_events']
 		);
 		$this->assertContains( ALYNT_AG_Webhook_Dispatcher::RETRY_HOOK, $GLOBALS['alynt_ag_test_cleared_hooks'] );
+		$this->assertContains( ALYNT_AG_Retention_Cleanup::CONTINUATION_HOOK, $GLOBALS['alynt_ag_test_cleared_hooks'] );
 		$this->assertTrue( $GLOBALS['alynt_ag_test_rewrite_rules_flushed'] );
 	}
 
@@ -104,6 +128,7 @@ class CleanupLifecycleTest extends TestCase {
 		$this->assertContains( 'alynt_ag_settings', $GLOBALS['alynt_ag_test_deleted_options'] );
 		$this->assertContains( 'alynt_ag_db_version', $GLOBALS['alynt_ag_test_deleted_options'] );
 		$this->assertContains( 'alynt_ag_retention_cleanup', $GLOBALS['alynt_ag_test_cleared_hooks'] );
+		$this->assertContains( 'alynt_ag_retention_cleanup_continue', $GLOBALS['alynt_ag_test_cleared_hooks'] );
 		$this->assertStringContainsString( 'DROP TABLE IF EXISTS wp_alynt_ag_pending_registrations', $queries );
 		$this->assertStringContainsString( 'DROP TABLE IF EXISTS wp_alynt_ag_webhook_logs', $queries );
 		$this->assertStringContainsString( 'DROP TABLE IF EXISTS wp_alynt_ag_verification_logs', $queries );

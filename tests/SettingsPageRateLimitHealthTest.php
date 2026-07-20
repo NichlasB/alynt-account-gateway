@@ -116,6 +116,35 @@ class SettingsPageRateLimitHealthTest extends SettingsPageSecurityStatusTestCase
 		$this->assertSame( 'ready', $items[3]['status'] );
 	}
 
+	public function test_security_active_rate_limit_bucket_query_failure_is_reported() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public function get_results( $query ) {
+				unset( $query );
+
+				return false;
+			}
+		};
+
+		try {
+			$settings_page = new ALYNT_AG_Settings_Page();
+			$result        = $this->invoke_helper( $settings_page, 'security_active_rate_limit_bucket_items' );
+
+			$this->assertInstanceOf( WP_Error::class, $result );
+			$this->assertSame( 'alynt_ag_rate_limit_buckets_read_failed', $result->get_error_code() );
+
+			ob_start();
+			$this->invoke_helper( $settings_page, 'render_security_rate_limit_pressure', array( array() ) );
+			$output = ob_get_clean();
+
+			$this->assertStringContainsString( 'Active rate-limit buckets could not be loaded.', $output );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
+
 	public function test_security_provider_health_signals_count_recent_activity() {
 		$settings_page = new ALYNT_AG_Settings_Page();
 		$items         = $this->invoke_helper(

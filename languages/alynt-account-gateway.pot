@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 1.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 18:49+0000\n"
+"POT-Creation-Date: 2026-07-20 20:00+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -44,20 +44,28 @@ msgstr ""
 msgid "A newly created user could not be removed after account finalization failed."
 msgstr ""
 
+#: includes/services/class-registration-pending-store.php:124
+msgid "A pending registration could not be removed after its consent record failed."
+msgstr ""
+
 #: includes/services/class-registration-completion.php:195
 msgid "A pending registration could not be restored after account finalization failed."
 msgstr ""
 
-#: includes/services/class-privacy-eraser.php:69
+#: includes/services/class-privacy-eraser.php:73
 msgid "A privacy erasure database query failed."
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:104
+#: includes/services/class-privacy-exporter.php:121
 msgid "A privacy export database query failed."
 msgstr ""
 
 #: includes/services/class-rate-limiter.php:112
 msgid "A rate-limit counter could not be stored."
+msgstr ""
+
+#: includes/class-retention-cleanup.php:139
+msgid "A retention cleanup continuation could not be scheduled."
 msgstr ""
 
 #: includes/services/class-email-wordpress-filters.php:277
@@ -174,7 +182,7 @@ msgstr ""
 msgid "Account Gateway"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:133
+#: includes/services/class-privacy-exporter.php:166
 msgid "Account Gateway Consent"
 msgstr ""
 
@@ -217,24 +225,28 @@ msgstr ""
 msgid "Action tokens:"
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:186
+#: admin/settings-page/class-security-rate-limits.php:194
 msgid "active lockouts from %d current login buckets."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:196
+#: admin/settings-page/class-security-rate-limits.php:204
 msgid "active lockouts from %d current password-reset buckets."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:166
+#: admin/settings-page/class-security-rate-limits.php:174
 msgid "active lockouts from %d current registration buckets."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:176
+#: admin/settings-page/class-security-rate-limits.php:184
 msgid "active lockouts from %d current resend buckets."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:44
+#: admin/settings-page/class-security-rate-limits.php:46
 msgid "Active Rate Limit Buckets"
+msgstr ""
+
+#: admin/settings-page/class-security-rate-limits.php:232
+msgid "Active rate-limit buckets could not be loaded. Refresh the page and check the database connection if the problem continues."
 msgstr ""
 
 #: includes/services/class-dashboard-endpoint-metadata.php:67
@@ -389,7 +401,7 @@ msgstr ""
 msgid "Alynt Account Gateway"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:110
+#: includes/services/class-privacy-exporter.php:127
 msgid "Alynt Account Gateway could not retrieve all personal data. Please retry the export and check the site database if the problem continues."
 msgstr ""
 
@@ -512,7 +524,7 @@ msgid "Block when personal accountability, subscriptions, or fraud exposure matt
 msgstr ""
 
 #: admin/settings-page/class-security-signal-renderer-a.php:82
-#: includes/services/class-privacy-exporter.php:191
+#: includes/services/class-privacy-exporter.php:224
 msgid "Blocked"
 msgstr ""
 
@@ -838,8 +850,8 @@ msgstr ""
 msgid "Confirmation resend was blocked by the rate limit. Ask the customer to wait for the configured resend window before trying again."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:171
-#: admin/settings-page/class-security-rate-limits.php:92
+#: admin/settings-page/class-security-rate-limits.php:179
+#: admin/settings-page/class-security-rate-limits.php:95
 msgid "Confirmation Resends"
 msgstr ""
 
@@ -867,11 +879,11 @@ msgstr ""
 msgid "Consent Record Retention Days"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:139
+#: includes/services/class-privacy-exporter.php:172
 msgid "Consent Version"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:136
+#: includes/services/class-privacy-exporter.php:169
 msgid "Context"
 msgstr ""
 
@@ -923,10 +935,10 @@ msgid "Create your customer account. Fill in your details and you will receive a
 msgstr ""
 
 #: admin/settings-page/class-security-pending.php:47
-#: includes/services/class-privacy-exporter.php:140
-#: includes/services/class-privacy-exporter.php:166
-#: includes/services/class-privacy-exporter.php:194
-#: includes/services/class-privacy-exporter.php:219
+#: includes/services/class-privacy-exporter.php:173
+#: includes/services/class-privacy-exporter.php:199
+#: includes/services/class-privacy-exporter.php:227
+#: includes/services/class-privacy-exporter.php:252
 msgid "Created At"
 msgstr ""
 
@@ -1227,9 +1239,9 @@ msgstr ""
 
 #: admin/settings-page/class-security-pending.php:44
 #: admin/settings-page/class-security-signal-renderer-a.php:64
-#: includes/services/class-privacy-exporter.php:135
-#: includes/services/class-privacy-exporter.php:161
-#: includes/services/class-privacy-exporter.php:188
+#: includes/services/class-privacy-exporter.php:168
+#: includes/services/class-privacy-exporter.php:194
+#: includes/services/class-privacy-exporter.php:221
 msgid "Email"
 msgstr ""
 
@@ -1301,7 +1313,7 @@ msgstr ""
 msgid "Email verification is temporarily unavailable. Please try again later."
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:186
+#: includes/services/class-privacy-exporter.php:219
 msgid "Email Verification Log"
 msgstr ""
 
@@ -1412,7 +1424,7 @@ msgstr ""
 
 #: admin/settings-page/class-diagnostics-tools.php:96
 #: admin/settings-page/class-webhook-tools.php:62
-#: includes/services/class-privacy-exporter.php:215
+#: includes/services/class-privacy-exporter.php:248
 msgid "Event"
 msgstr ""
 
@@ -1445,7 +1457,7 @@ msgid "Expired Pending Records"
 msgstr ""
 
 #: admin/settings-page/class-security-pending.php:49
-#: includes/services/class-privacy-exporter.php:167
+#: includes/services/class-privacy-exporter.php:200
 msgid "Expires At"
 msgstr ""
 
@@ -1502,7 +1514,7 @@ msgid "First name"
 msgstr ""
 
 #: includes/services/class-frontend-register-screen.php:101
-#: includes/services/class-privacy-exporter.php:162
+#: includes/services/class-privacy-exporter.php:195
 msgid "First Name"
 msgstr ""
 
@@ -1657,7 +1669,7 @@ msgstr ""
 msgid "Highlights unresolved Reoon flagged results that were allowed by policy so support teams can record a review decision without changing the public registration flow."
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:216
+#: includes/services/class-privacy-exporter.php:249
 msgid "Host"
 msgstr ""
 
@@ -1665,7 +1677,7 @@ msgstr ""
 msgid "HTTP"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:217
+#: includes/services/class-privacy-exporter.php:250
 msgid "HTTP Status"
 msgstr ""
 
@@ -1791,7 +1803,7 @@ msgid "Last name"
 msgstr ""
 
 #: includes/services/class-frontend-register-screen.php:105
-#: includes/services/class-privacy-exporter.php:163
+#: includes/services/class-privacy-exporter.php:196
 msgid "Last Name"
 msgstr ""
 
@@ -1892,8 +1904,8 @@ msgid "Logged At"
 msgstr ""
 
 #: admin/settings-page/class-gateway-preview.php:24
-#: admin/settings-page/class-security-rate-limits.php:181
-#: admin/settings-page/class-security-rate-limits.php:98
+#: admin/settings-page/class-security-rate-limits.php:101
+#: admin/settings-page/class-security-rate-limits.php:189
 msgid "Login"
 msgstr ""
 
@@ -2097,8 +2109,8 @@ msgid "Next Step"
 msgstr ""
 
 #: admin/settings-page/class-diagnostics-tools.php:56
-#: includes/services/class-privacy-exporter.php:191
-#: includes/services/class-privacy-exporter.php:218
+#: includes/services/class-privacy-exporter.php:224
+#: includes/services/class-privacy-exporter.php:251
 msgid "No"
 msgstr ""
 
@@ -2252,7 +2264,7 @@ msgstr ""
 msgid "Once you place an order, its status, details, and available actions will appear here."
 msgstr ""
 
-#: includes/class-retention-cleanup.php:108
+#: includes/class-retention-cleanup.php:127
 msgid "One or more retention cleanup queries failed."
 msgstr ""
 
@@ -2403,8 +2415,8 @@ msgstr ""
 msgid "Password must include uppercase, lowercase, number, and symbol characters."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:104
-#: admin/settings-page/class-security-rate-limits.php:191
+#: admin/settings-page/class-security-rate-limits.php:107
+#: admin/settings-page/class-security-rate-limits.php:199
 #: includes/services/class-email-tokens.php:25
 msgid "Password Reset"
 msgstr ""
@@ -2494,7 +2506,7 @@ msgstr ""
 msgid "Pending"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:159
+#: includes/services/class-privacy-exporter.php:192
 msgid "Pending Account Registration"
 msgstr ""
 
@@ -2579,7 +2591,7 @@ msgstr ""
 msgid "Privacy & Data"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:138
+#: includes/services/class-privacy-exporter.php:171
 msgid "Privacy Path"
 msgstr ""
 
@@ -2608,7 +2620,7 @@ msgid "Protection Mode"
 msgstr ""
 
 #: admin/settings-page/class-security-signal-renderer-a.php:65
-#: includes/services/class-privacy-exporter.php:189
+#: includes/services/class-privacy-exporter.php:222
 msgid "Provider"
 msgstr ""
 
@@ -2692,7 +2704,7 @@ msgstr ""
 msgid "Rate Limit Posture"
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:28
+#: admin/settings-page/class-security-rate-limits.php:30
 msgid "Rate Limit Pressure"
 msgstr ""
 
@@ -2730,7 +2742,7 @@ msgstr ""
 msgid "recent account-created welcome email failures. Check mail delivery before relying on account onboarding."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:30
+#: admin/settings-page/class-security-rate-limits.php:32
 msgid "Recent blocks come from verification logs. Active buckets show privacy-preserving lockout pressure that is still inside the configured rate-limit window."
 msgstr ""
 
@@ -2798,7 +2810,7 @@ msgstr ""
 msgid "Recent gateway routing signals"
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:101
+#: admin/settings-page/class-security-rate-limits.php:104
 msgid "recent login blocks. Repeated login blocks can indicate credential stuffing or customers stuck at login."
 msgstr ""
 
@@ -2846,7 +2858,7 @@ msgstr ""
 msgid "recent password or email-availability blocks. Review password guidance if customers struggle to complete setup."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:107
+#: admin/settings-page/class-security-rate-limits.php:110
 msgid "recent password-reset blocks. Check for repeated reset requests against the same account."
 msgstr ""
 
@@ -2886,7 +2898,7 @@ msgstr ""
 msgid "Recent provider health signals"
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:27
+#: admin/settings-page/class-security-rate-limits.php:29
 msgid "Recent rate limit pressure"
 msgstr ""
 
@@ -2906,7 +2918,7 @@ msgstr ""
 msgid "recent registration blocks or system failures. Review consent copy, pending-registration storage, and password setup guidance."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:89
+#: admin/settings-page/class-security-rate-limits.php:92
 msgid "recent registration blocks. Review the limit if legitimate customers are affected."
 msgstr ""
 
@@ -2934,7 +2946,7 @@ msgstr ""
 msgid "recent Reoon policy blocks for low-quality or flagged addresses. Review if legitimate business domains appear in support tickets."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:95
+#: admin/settings-page/class-security-rate-limits.php:98
 msgid "recent resend blocks. Repeated resends can indicate confused customers or automated retries."
 msgstr ""
 
@@ -3011,8 +3023,8 @@ msgid "Redirects and Admin Blocks"
 msgstr ""
 
 #: admin/settings-page/class-gateway-preview.php:25
-#: admin/settings-page/class-security-rate-limits.php:161
-#: admin/settings-page/class-security-rate-limits.php:86
+#: admin/settings-page/class-security-rate-limits.php:169
+#: admin/settings-page/class-security-rate-limits.php:89
 #: includes/class-settings-definition.php:30
 msgid "Registration"
 msgstr ""
@@ -3322,7 +3334,7 @@ msgstr ""
 msgid "Retain consent and audit records long enough for operational review."
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:164
+#: includes/services/class-privacy-exporter.php:197
 msgid "Return Path"
 msgstr ""
 
@@ -3362,7 +3374,7 @@ msgstr ""
 msgid "Review decision"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:192
+#: includes/services/class-privacy-exporter.php:225
 msgid "Review Decision"
 msgstr ""
 
@@ -3451,7 +3463,7 @@ msgstr ""
 msgid "Review WooCommerce"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:193
+#: includes/services/class-privacy-exporter.php:226
 msgid "Reviewed At"
 msgstr ""
 
@@ -3764,7 +3776,7 @@ msgstr ""
 msgid "Smoke orders, addresses, account details, downloads, and payment methods after changes."
 msgstr ""
 
-#: includes/services/class-privacy-eraser.php:62
+#: includes/services/class-privacy-eraser.php:66
 msgid "Some Alynt Account Gateway records could not be erased. Please retry the request and check the site database if the problem continues."
 msgstr ""
 
@@ -3777,8 +3789,8 @@ msgid "Start safely before changing public account screens."
 msgstr ""
 
 #: admin/settings-page/class-security-pending.php:45
-#: includes/services/class-privacy-exporter.php:165
-#: includes/services/class-privacy-exporter.php:190
+#: includes/services/class-privacy-exporter.php:198
+#: includes/services/class-privacy-exporter.php:223
 msgid "Status"
 msgstr ""
 
@@ -3803,7 +3815,7 @@ msgid "Subscription account endpoints are delegated through WooCommerce handlers
 msgstr ""
 
 #: admin/settings-page/class-webhook-tools.php:169
-#: includes/services/class-privacy-exporter.php:218
+#: includes/services/class-privacy-exporter.php:251
 msgid "Success"
 msgstr ""
 
@@ -3847,7 +3859,7 @@ msgstr ""
 msgid "Terms and privacy links are configured for the registration consent checkbox."
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:137
+#: includes/services/class-privacy-exporter.php:170
 msgid "Terms Path"
 msgstr ""
 
@@ -3914,7 +3926,7 @@ msgstr ""
 msgid "The confirmation email could not be sent. Please try again."
 msgstr ""
 
-#: includes/services/class-registration-pending-store.php:147
+#: includes/services/class-registration-pending-store.php:170
 msgid "The confirmation link could not be checked. Please try again."
 msgstr ""
 
@@ -3931,7 +3943,7 @@ msgstr ""
 msgid "The email address or password is incorrect."
 msgstr ""
 
-#: includes/services/class-registration-pending-store.php:224
+#: includes/services/class-registration-pending-store.php:257
 msgid "The email confirmation could not be saved. Please try again."
 msgstr ""
 
@@ -3948,7 +3960,7 @@ msgstr ""
 msgid "The passwords do not match."
 msgstr ""
 
-#: includes/services/class-registration-pending-store.php:179
+#: includes/services/class-registration-pending-store.php:202
 msgid "The pending registration could not be checked. Please try again."
 msgstr ""
 
@@ -3960,13 +3972,14 @@ msgstr ""
 msgid "The registration confirmation email could not be sent."
 msgstr ""
 
-#: includes/services/class-registration-pending-store.php:107
+#: includes/services/class-registration-pending-store.php:130
 msgid "The registration consent record could not be stored. Please try again."
 msgstr ""
 
 #: includes/services/class-frontend-messages.php:52
 #: includes/services/class-frontend-messages.php:65
-#: includes/services/class-registration-pending-store.php:101
+#: includes/services/class-registration-pending-store.php:106
+#: includes/services/class-registration-pending-store.php:83
 msgid "The registration could not be started. Please try again."
 msgstr ""
 
@@ -4068,7 +4081,7 @@ msgstr ""
 msgid "This area is not ready yet"
 msgstr ""
 
-#: includes/services/class-registration-pending-store.php:200
+#: includes/services/class-registration-pending-store.php:223
 msgid "This confirmation link is invalid or has expired."
 msgstr ""
 
@@ -4544,7 +4557,7 @@ msgstr ""
 msgid "Webhook Delivery Failures"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:213
+#: includes/services/class-privacy-exporter.php:246
 msgid "Webhook Delivery Metadata"
 msgstr ""
 
@@ -4665,8 +4678,8 @@ msgid "WPS Hide Login may overlap with login URL routing"
 msgstr ""
 
 #: admin/settings-page/class-diagnostics-tools.php:56
-#: includes/services/class-privacy-exporter.php:191
-#: includes/services/class-privacy-exporter.php:218
+#: includes/services/class-privacy-exporter.php:224
+#: includes/services/class-privacy-exporter.php:251
 msgid "Yes"
 msgstr ""
 

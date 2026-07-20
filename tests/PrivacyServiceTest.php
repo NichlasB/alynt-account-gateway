@@ -18,6 +18,7 @@ class PrivacyServiceTest extends TestCase {
 		$GLOBALS['alynt_ag_test_db_updates'] = array();
 		$GLOBALS['alynt_ag_test_db_deletes'] = array();
 		$GLOBALS['alynt_ag_test_db_results'] = array();
+		$GLOBALS['alynt_ag_test_db_queries'] = array();
 		$GLOBALS['alynt_ag_test_filters'] = array();
 		$GLOBALS['alynt_ag_test_missing_user_emails'] = array();
 	}
@@ -128,6 +129,27 @@ class PrivacyServiceTest extends TestCase {
 		$this->assertSame( 0, $update['where']['user_id'] );
 	}
 
+	public function test_attach_registration_consent_to_user_rejects_zero_row_update() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public function update( $table, $data, $where, $format = array(), $where_format = array() ) {
+				unset( $table, $data, $where, $format, $where_format );
+
+				return 0;
+			}
+		};
+
+		try {
+			$service = new ALYNT_AG_Privacy_Service();
+
+			$this->assertFalse( $service->attach_registration_consent_to_user( 'customer@example.test', 123 ) );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
+
 	public function test_export_personal_data_returns_plugin_records() {
 		$tables = ALYNT_AG_Database::tables();
 		$GLOBALS['alynt_ag_test_db_results'][ $tables['consent_records'] ] = array(
@@ -234,20 +256,79 @@ class PrivacyServiceTest extends TestCase {
 		}
 	}
 
+	public function test_export_personal_data_uses_requested_bounded_page() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public $select_queries = array();
+
+			public function get_results( $query ) {
+				$this->select_queries[] = $query;
+
+				return array();
+			}
+		};
+
+		try {
+			$service = new ALYNT_AG_Privacy_Service();
+			$result  = $service->export_personal_data( 'customer@example.test', 3 );
+
+			$this->assertTrue( $result['done'] );
+			$this->assertCount( 4, $wpdb->select_queries );
+			foreach ( $wpdb->select_queries as $query ) {
+				$this->assertStringContainsString( 'LIMIT 100 OFFSET 200', $query );
+				$this->assertStringContainsString( 'ORDER BY created_at DESC, id DESC', $query );
+			}
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
+
+	public function test_export_personal_data_reports_more_pages_for_full_table_batch() {
+		$tables = ALYNT_AG_Database::tables();
+		$rows   = array();
+
+		for ( $id = 1; $id <= ALYNT_AG_Privacy_Exporter::PAGE_SIZE; ++$id ) {
+			$rows[] = (object) array(
+				'id'              => $id,
+				'email'           => 'customer@example.test',
+				'context'         => 'registration',
+				'terms_path'      => '/terms/',
+				'privacy_path'    => '/privacy/',
+				'consent_version' => '1.0.0',
+				'created_at'      => '2026-07-03 12:00:00',
+			);
+		}
+
+		$GLOBALS['alynt_ag_test_db_results'][ $tables['consent_records'] ] = $rows;
+
+		$service = new ALYNT_AG_Privacy_Service();
+		$result  = $service->export_personal_data( 'customer@example.test' );
+
+		$this->assertFalse( $result['done'] );
+		$this->assertCount( ALYNT_AG_Privacy_Exporter::PAGE_SIZE, $result['data'] );
+	}
+
 	public function test_erase_personal_data_deletes_plugin_records() {
+		$tables = ALYNT_AG_Database::tables();
+		foreach ( $tables as $table ) {
+			$GLOBALS['alynt_ag_test_db_results'][ $table ] = array( (object) array( 'id' => 1 ) );
+		}
+
 		$service = new ALYNT_AG_Privacy_Service();
 		$result  = $service->erase_personal_data( 'customer@example.test' );
 
 		$this->assertTrue( $result['done'] );
 		$this->assertTrue( $result['items_removed'] );
 
-		$tables = array_column( $GLOBALS['alynt_ag_test_db_deletes'], 'table' );
+		$queries = implode( "\n", $GLOBALS['alynt_ag_test_db_queries'] );
 
-		$this->assertContains( 'wp_alynt_ag_pending_registrations', $tables );
-		$this->assertContains( 'wp_alynt_ag_verification_logs', $tables );
-		$this->assertContains( 'wp_alynt_ag_consent_records', $tables );
-		$this->assertContains( 'wp_alynt_ag_webhook_logs', $tables );
-		$this->assertContains( 'wp_alynt_ag_audit_logs', $tables );
+		$this->assertStringContainsString( 'DELETE FROM wp_alynt_ag_pending_registrations WHERE id IN (1)', $queries );
+		$this->assertStringContainsString( 'DELETE FROM wp_alynt_ag_verification_logs WHERE id IN (1)', $queries );
+		$this->assertStringContainsString( 'DELETE FROM wp_alynt_ag_consent_records WHERE id IN (1)', $queries );
+		$this->assertStringContainsString( 'DELETE FROM wp_alynt_ag_webhook_logs WHERE id IN (1)', $queries );
+		$this->assertStringContainsString( 'DELETE FROM wp_alynt_ag_audit_logs WHERE id IN (1)', $queries );
 	}
 
 	public function test_erase_personal_data_reports_partial_database_failure() {
@@ -257,14 +338,22 @@ class PrivacyServiceTest extends TestCase {
 		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
 			private $delete_count = 0;
 
-			public function delete( $table, $where, $where_format = array() ) {
-				++$this->delete_count;
+			public function get_results( $query ) {
+				unset( $query );
 
-				if ( 2 === $this->delete_count ) {
-					return false;
+				return array( (object) array( 'id' => 1 ) );
+			}
+
+			public function query( $query ) {
+				if ( 0 === strpos( $query, 'DELETE FROM ' ) ) {
+					++$this->delete_count;
+
+					if ( 2 === $this->delete_count ) {
+						return false;
+					}
 				}
 
-				return parent::delete( $table, $where, $where_format );
+				return parent::query( $query );
 			}
 		};
 
@@ -272,11 +361,47 @@ class PrivacyServiceTest extends TestCase {
 			$service = new ALYNT_AG_Privacy_Service();
 			$result  = $service->erase_personal_data( 'customer@example.test' );
 
-			$this->assertTrue( $result['done'] );
+			$this->assertFalse( $result['done'] );
 			$this->assertTrue( $result['items_removed'] );
 			$this->assertTrue( $result['items_retained'] );
 			$this->assertCount( 1, $result['messages'] );
 			$this->assertStringContainsString( 'could not be erased', $result['messages'][0] );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
+
+	public function test_erase_personal_data_reports_more_work_for_full_batch() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public function get_results( $query ) {
+				$GLOBALS['alynt_ag_test_db_queries'][] = $query;
+				$rows = array();
+
+				for ( $id = 1; $id <= ALYNT_AG_Privacy_Eraser::BATCH_SIZE + 1; ++$id ) {
+					$rows[] = (object) array( 'id' => $id );
+				}
+
+				return $rows;
+			}
+
+			public function query( $query ) {
+				parent::query( $query );
+
+				return ALYNT_AG_Privacy_Eraser::BATCH_SIZE;
+			}
+		};
+
+		try {
+			$service = new ALYNT_AG_Privacy_Service();
+			$result  = $service->erase_personal_data( 'customer@example.test' );
+
+			$this->assertTrue( $result['items_removed'] );
+			$this->assertFalse( $result['items_retained'] );
+			$this->assertFalse( $result['done'] );
+			$this->assertStringContainsString( 'LIMIT 101', $GLOBALS['alynt_ag_test_db_queries'][0] );
 		} finally {
 			$wpdb = $original_wpdb;
 		}

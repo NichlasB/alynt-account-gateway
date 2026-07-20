@@ -23,6 +23,8 @@ class ALYNT_AG_Settings_Page_Security_Rate_Limits extends ALYNT_AG_Settings_Page
 	public function render_security_rate_limit_pressure( $logs ) {
 		$items          = $this->security_rate_limit_pressure_items( $logs );
 		$active_buckets = $this->security_active_rate_limit_bucket_items();
+		$read_error     = is_wp_error( $active_buckets ) ? $active_buckets : null;
+		$active_buckets = $read_error ? array() : $active_buckets;
 		?>
 		<div class="alynt-ag-security-pressure" aria-label="<?php esc_attr_e( 'Recent rate limit pressure', 'alynt-account-gateway' ); ?>">
 			<h4><?php esc_html_e( 'Rate Limit Pressure', 'alynt-account-gateway' ); ?></h4>
@@ -42,6 +44,7 @@ class ALYNT_AG_Settings_Page_Security_Rate_Limits extends ALYNT_AG_Settings_Page
 				<?php endforeach; ?>
 			</div>
 			<h5><?php esc_html_e( 'Active Rate Limit Buckets', 'alynt-account-gateway' ); ?></h5>
+			<?php $this->render_admin_data_read_errors( array( $read_error ) ); ?>
 			<div class="alynt-ag-security-status__grid">
 				<?php foreach ( $active_buckets as $item ) : ?>
 					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
@@ -112,7 +115,7 @@ class ALYNT_AG_Settings_Page_Security_Rate_Limits extends ALYNT_AG_Settings_Page
 	/**
 	 * Return active rate-limit bucket summary items.
 	 *
-	 * @return array<int,array{label:string,status:string,count:int,message:string}>
+	 * @return array<int,array{label:string,status:string,count:int,message:string}>|WP_Error
 	 */
 	public function security_active_rate_limit_bucket_items() {
 		$counts = array(
@@ -134,7 +137,12 @@ class ALYNT_AG_Settings_Page_Security_Rate_Limits extends ALYNT_AG_Settings_Page
 			),
 		);
 
-		foreach ( $this->security_active_rate_limit_bucket_rows() as $row ) {
+		$rows = $this->security_active_rate_limit_bucket_rows();
+		if ( is_wp_error( $rows ) ) {
+			return $rows;
+		}
+
+		foreach ( $rows as $row ) {
 			$meta = isset( $row->option_value ) ? maybe_unserialize( $row->option_value ) : null;
 
 			if ( ! is_array( $meta ) || empty( $meta['action'] ) ) {
@@ -203,18 +211,25 @@ class ALYNT_AG_Settings_Page_Security_Rate_Limits extends ALYNT_AG_Settings_Page
 	/**
 	 * Fetch active rate-limit metadata transient rows.
 	 *
-	 * @return array<int,object>
+	 * @return array<int,object>|WP_Error
 	 */
 	public function security_active_rate_limit_bucket_rows() {
 		global $wpdb;
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Admin-only aggregate observability for plugin-owned transient rows.
-		return (array) $wpdb->get_results(
+		$rows = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT option_value FROM {$wpdb->options} WHERE option_name LIKE %s",
 				$wpdb->esc_like( '_transient_alynt_ag_rl_meta_' ) . '%'
 			)
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+
+		return is_array( $rows )
+			? $rows
+			: new WP_Error(
+				'alynt_ag_rate_limit_buckets_read_failed',
+				__( 'Active rate-limit buckets could not be loaded. Refresh the page and check the database connection if the problem continues.', 'alynt-account-gateway' )
+			);
 	}
 }

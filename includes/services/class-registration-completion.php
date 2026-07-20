@@ -148,7 +148,7 @@ class ALYNT_AG_Registration_Completion extends ALYNT_AG_Service_Collaborator {
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		return false !== $updated;
+		return 1 === (int) $updated;
 	}
 
 	/**
@@ -187,7 +187,7 @@ class ALYNT_AG_Registration_Completion extends ALYNT_AG_Service_Collaborator {
 			array( '%d' )
 		);
 
-		if ( false === $restored ) {
+		if ( 1 !== (int) $restored ) {
 			ALYNT_AG_Diagnostics_Logger::log_event(
 				'error',
 				'database',
@@ -196,7 +196,7 @@ class ALYNT_AG_Registration_Completion extends ALYNT_AG_Service_Collaborator {
 			);
 		}
 
-		return false !== $restored;
+		return 1 === (int) $restored;
 	}
 
 	/**

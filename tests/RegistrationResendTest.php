@@ -68,4 +68,35 @@ class RegistrationResendTest extends RegistrationServiceTestCase {
 		$this->assertSame( 'confirmation_resent', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['status'] );
 		$this->assertSame( 0, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
 	}
+
+	public function test_renew_pending_confirmation_rejects_zero_row_update() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public function update( $table, $data, $where, $format = array(), $where_format = array() ) {
+				unset( $table, $data, $where, $format, $where_format );
+
+				return 0;
+			}
+		};
+
+		try {
+			$service = new ALYNT_AG_Registration_Service();
+			$result  = $service->renew_pending_confirmation(
+				(object) array(
+					'id'         => 44,
+					'email'      => 'pending@example.test',
+					'first_name' => 'Damon',
+					'last_name'  => 'Paulo',
+				),
+				ALYNT_AG_Settings_Schema::defaults()
+			);
+
+			$this->assertInstanceOf( WP_Error::class, $result );
+			$this->assertSame( 'pending_registration_failed', $result->get_error_code() );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
 }

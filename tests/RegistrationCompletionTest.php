@@ -215,4 +215,41 @@ class RegistrationCompletionTest extends RegistrationServiceTestCase {
 			$wpdb = $original_wpdb;
 		}
 	}
+
+	public function test_complete_pending_registration_rolls_back_user_when_pending_update_changes_no_rows() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public function update( $table, $data, $where, $format = array(), $where_format = array() ) {
+				unset( $table, $data, $where, $format, $where_format );
+
+				return 0;
+			}
+		};
+
+		$service = new class() extends ALYNT_AG_Registration_Service {
+			public function confirm_pending_token( $token ) {
+				unset( $token );
+
+				return (object) array(
+					'id'         => 77,
+					'email'      => 'customer@example.test',
+					'first_name' => 'Damon',
+					'last_name'  => 'Paulo',
+					'status'     => 'email_confirmed',
+				);
+			}
+		};
+
+		try {
+			$result = $service->complete_pending_registration( 'confirmed-token', 'StrongPassword1!', 'StrongPassword1!', ALYNT_AG_Settings_Schema::defaults() );
+
+			$this->assertInstanceOf( WP_Error::class, $result );
+			$this->assertSame( 'pending_registration_update_failed', $result->get_error_code() );
+			$this->assertSame( array( 456 ), $GLOBALS['alynt_ag_test_deleted_users'] );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
 }

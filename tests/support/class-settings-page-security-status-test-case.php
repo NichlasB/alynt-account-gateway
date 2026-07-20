@@ -36,6 +36,8 @@ abstract class SettingsPageSecurityStatusTestCase extends TestCase {
 			$GLOBALS['alynt_ag_test_options']['time_format'],
 			$GLOBALS['alynt_ag_test_user_caps'],
 			$GLOBALS['alynt_ag_test_current_user_id'],
+			$GLOBALS['alynt_ag_test_current_time_local'],
+			$GLOBALS['alynt_ag_test_current_time_utc'],
 			$GLOBALS['alynt_ag_test_throw_on_redirect']
 		);
 		$_POST = array();

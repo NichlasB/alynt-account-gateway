@@ -15,6 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ALYNT_AG_Privacy_Exporter {
 
 	/**
+	 * Maximum rows read from each table per export page.
+	 */
+	const PAGE_SIZE = 100;
+
+	/**
 	 * Export personal data stored by the plugin.
 	 *
 	 * @param string $email_address Email address.
@@ -22,12 +27,11 @@ class ALYNT_AG_Privacy_Exporter {
 	 * @return array<string,mixed>|WP_Error
 	 */
 	public function export_personal_data( $email_address, $page = 1 ) {
-		unset( $page );
-
 		$email   = sanitize_email( $email_address );
 		$user    = function_exists( 'get_user_by' ) ? get_user_by( 'email', $email ) : false;
 		$user_id = $user && isset( $user->ID ) ? absint( $user->ID ) : 0;
-		$records = $this->personal_data_records( $email, $user_id );
+		$page    = max( 1, absint( $page ) );
+		$records = $this->personal_data_records( $email, $user_id, $page );
 
 		if ( is_wp_error( $records ) ) {
 			return $records;
@@ -42,7 +46,7 @@ class ALYNT_AG_Privacy_Exporter {
 
 		return array(
 			'data' => $data,
-			'done' => true,
+			'done' => ! $this->records_have_full_page( $records ),
 		);
 	}
 
@@ -51,46 +55,59 @@ class ALYNT_AG_Privacy_Exporter {
 	 *
 	 * @param string $email   Sanitized email address.
 	 * @param int    $user_id WordPress user ID.
+	 * @param int    $page    Export page.
 	 * @return array{consents:array<int,object>,pending:array<int,object>,verification:array<int,object>,webhooks:array<int,object>}|WP_Error
 	 */
-	private function personal_data_records( $email, $user_id ) {
+	private function personal_data_records( $email, $user_id, $page ) {
 		global $wpdb;
 
 		$tables = ALYNT_AG_Database::tables();
+		$limit  = self::PAGE_SIZE;
+		$offset = ( $page - 1 ) * $limit;
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Exporter reads plugin-owned tables.
 		if ( $user_id ) {
 			$consents = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT * FROM {$tables['consent_records']} WHERE email = %s OR user_id = %d ORDER BY created_at DESC",
+					"SELECT * FROM {$tables['consent_records']} WHERE email = %s OR user_id = %d ORDER BY created_at DESC, id DESC LIMIT %d OFFSET %d",
 					$email,
-					$user_id
+					$user_id,
+					$limit,
+					$offset
 				)
 			);
 		} else {
 			$consents = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT * FROM {$tables['consent_records']} WHERE email = %s ORDER BY created_at DESC",
-					$email
+					"SELECT * FROM {$tables['consent_records']} WHERE email = %s ORDER BY created_at DESC, id DESC LIMIT %d OFFSET %d",
+					$email,
+					$limit,
+					$offset
 				)
 			);
 		}
 		$pending      = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM {$tables['pending_registrations']} WHERE email = %s ORDER BY created_at DESC",
-				$email
+				"SELECT * FROM {$tables['pending_registrations']} WHERE email = %s ORDER BY created_at DESC, id DESC LIMIT %d OFFSET %d",
+				$email,
+				$limit,
+				$offset
 			)
 		);
 		$verification = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM {$tables['verification_logs']} WHERE email = %s ORDER BY created_at DESC",
-				$email
+				"SELECT * FROM {$tables['verification_logs']} WHERE email = %s ORDER BY created_at DESC, id DESC LIMIT %d OFFSET %d",
+				$email,
+				$limit,
+				$offset
 			)
 		);
 		$webhooks     = $user_id ? $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM {$tables['webhook_logs']} WHERE user_id = %d ORDER BY created_at DESC",
-				$user_id
+				"SELECT * FROM {$tables['webhook_logs']} WHERE user_id = %d ORDER BY created_at DESC, id DESC LIMIT %d OFFSET %d",
+				$user_id,
+				$limit,
+				$offset
 			)
 		) : array();
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
@@ -117,6 +134,22 @@ class ALYNT_AG_Privacy_Exporter {
 			'verification' => (array) $verification,
 			'webhooks'     => (array) $webhooks,
 		);
+	}
+
+	/**
+	 * Return whether any table filled its current export page.
+	 *
+	 * @param array<string,array<int,object>> $records Personal data records.
+	 * @return bool
+	 */
+	private function records_have_full_page( $records ) {
+		foreach ( $records as $rows ) {
+			if ( self::PAGE_SIZE === count( $rows ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

@@ -15,12 +15,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ALYNT_AG_Retention_Cleanup {
 
 	/**
+	 * Maximum rows deleted by each retention query.
+	 */
+	const BATCH_SIZE = 500;
+
+	/**
+	 * Follow-up hook for draining larger retention backlogs.
+	 */
+	const CONTINUATION_HOOK = 'alynt_ag_retention_cleanup_continue';
+
+	/**
 	 * Register hooks.
 	 *
 	 * @return void
 	 */
 	public function register() {
 		add_action( 'alynt_ag_retention_cleanup', array( $this, 'run' ) );
+		add_action( self::CONTINUATION_HOOK, array( $this, 'run' ) );
 	}
 
 	/**
@@ -34,13 +45,15 @@ class ALYNT_AG_Retention_Cleanup {
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 		$tables   = ALYNT_AG_Database::tables();
 		$now      = current_time( 'mysql', true );
+		$limit    = self::BATCH_SIZE;
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned retention cleanup tables require dynamic table names.
 		$results   = array();
 		$results[] = $wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM {$tables['pending_registrations']} WHERE expires_at < %s",
-				$now
+				"DELETE FROM {$tables['pending_registrations']} WHERE expires_at < %s LIMIT %d",
+				$now,
+				$limit
 			)
 		);
 
@@ -53,49 +66,55 @@ class ALYNT_AG_Retention_Cleanup {
 
 		$results[] = $wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM {$tables['webhook_logs']} WHERE success = 1 AND created_at < DATE_SUB(%s, INTERVAL %d DAY)",
+				"DELETE FROM {$tables['webhook_logs']} WHERE success = 1 AND created_at < DATE_SUB(%s, INTERVAL %d DAY) LIMIT %d",
 				$now,
-				$webhook_success_days
+				$webhook_success_days,
+				$limit
 			)
 		);
 
 		$results[] = $wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM {$tables['webhook_logs']} WHERE success = 0 AND created_at < DATE_SUB(%s, INTERVAL %d DAY)",
+				"DELETE FROM {$tables['webhook_logs']} WHERE success = 0 AND created_at < DATE_SUB(%s, INTERVAL %d DAY) LIMIT %d",
 				$now,
-				$webhook_failed_days
+				$webhook_failed_days,
+				$limit
 			)
 		);
 
 		$results[] = $wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM {$tables['verification_logs']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY)",
+				"DELETE FROM {$tables['verification_logs']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY) LIMIT %d",
 				$now,
-				$verification_days
+				$verification_days,
+				$limit
 			)
 		);
 
 		$results[] = $wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM {$tables['diagnostics_logs']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY)",
+				"DELETE FROM {$tables['diagnostics_logs']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY) LIMIT %d",
 				$now,
-				$diagnostics_days
+				$diagnostics_days,
+				$limit
 			)
 		);
 
 		$results[] = $wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM {$tables['consent_records']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY)",
+				"DELETE FROM {$tables['consent_records']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY) LIMIT %d",
 				$now,
-				$consent_days
+				$consent_days,
+				$limit
 			)
 		);
 
 		$results[] = $wpdb->query(
 			$wpdb->prepare(
-				"DELETE FROM {$tables['audit_logs']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY)",
+				"DELETE FROM {$tables['audit_logs']} WHERE created_at < DATE_SUB(%s, INTERVAL %d DAY) LIMIT %d",
 				$now,
-				$audit_days
+				$audit_days,
+				$limit
 			)
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
@@ -112,6 +131,30 @@ class ALYNT_AG_Retention_Cleanup {
 			return false;
 		}
 
+		if ( in_array( self::BATCH_SIZE, $results, true ) && ! $this->schedule_continuation() ) {
+			ALYNT_AG_Diagnostics_Logger::log_event(
+				'error',
+				'cron',
+				'retention_cleanup_continuation_failed',
+				__( 'A retention cleanup continuation could not be scheduled.', 'alynt-account-gateway' )
+			);
+
+			return false;
+		}
+
 		return true;
+	}
+
+	/**
+	 * Schedule one near-term follow-up without duplicating an existing event.
+	 *
+	 * @return bool
+	 */
+	private function schedule_continuation() {
+		if ( wp_next_scheduled( self::CONTINUATION_HOOK ) ) {
+			return true;
+		}
+
+		return (bool) wp_schedule_single_event( time() + MINUTE_IN_SECONDS, self::CONTINUATION_HOOK );
 	}
 }

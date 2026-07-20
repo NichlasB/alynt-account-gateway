@@ -22,6 +22,7 @@ abstract class RegistrationServiceTestCase extends TestCase {
 		$GLOBALS['alynt_ag_test_options'] = array();
 		$GLOBALS['alynt_ag_test_transients'] = array();
 		$GLOBALS['alynt_ag_test_db_inserts'] = array();
+		$GLOBALS['alynt_ag_test_db_deletes'] = array();
 		$GLOBALS['alynt_ag_test_created_users'] = array();
 		$GLOBALS['alynt_ag_test_user_updates'] = array();
 		$GLOBALS['alynt_ag_test_deleted_users'] = array();

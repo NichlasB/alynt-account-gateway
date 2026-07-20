@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ALYNT_AG_Database {
 
-	const DB_VERSION = '0.1.6';
+	const DB_VERSION = '0.1.7';
 
 	/**
 	 * Install database tables.
@@ -64,7 +64,8 @@ class ALYNT_AG_Database {
 				KEY event_name (event_name),
 				KEY user_id (user_id),
 				KEY success (success),
-				KEY created_at (created_at)
+				KEY created_at (created_at),
+				KEY success_created_at (success, created_at)
 			) {$charset_collate};",
 			"CREATE TABLE {$tables['verification_logs']} (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,

@@ -64,6 +64,102 @@ class RegistrationPendingLifecycleTest extends RegistrationServiceTestCase {
 		$this->assertSame( '', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['return_path'] );
 	}
 
+	public function test_pending_registration_returns_id_from_pending_insert() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			private $insert_count = 0;
+
+			public function insert( $table, $data, $format = array() ) {
+				$result = parent::insert( $table, $data, $format );
+				++$this->insert_count;
+				$this->insert_id = 1 === $this->insert_count ? 41 : 99;
+
+				return $result;
+			}
+		};
+
+		try {
+			$service = new ALYNT_AG_Registration_Service();
+			$result  = $service->create_pending_registration(
+				'Damon',
+				'Paulo',
+				'captured-id@example.test',
+				ALYNT_AG_Settings_Schema::defaults()
+			);
+
+			$this->assertIsArray( $result );
+			$this->assertSame( 41, $result['id'] );
+			$this->assertSame( 99, $wpdb->insert_id );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
+
+	public function test_pending_registration_stops_when_existing_row_cleanup_fails() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public function delete( $table, $where, $where_format = array() ) {
+				unset( $table, $where, $where_format );
+
+				return false;
+			}
+		};
+
+		try {
+			$service = new ALYNT_AG_Registration_Service();
+			$result  = $service->create_pending_registration(
+				'Damon',
+				'Paulo',
+				'cleanup-failed@example.test',
+				ALYNT_AG_Settings_Schema::defaults()
+			);
+
+			$this->assertInstanceOf( WP_Error::class, $result );
+			$this->assertSame( 'pending_registration_failed', $result->get_error_code() );
+			$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+			$this->assertStringContainsString( 'verification_logs', $GLOBALS['alynt_ag_test_db_inserts'][0]['table'] );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
+
+	public function test_pending_registration_removes_new_row_when_consent_insert_fails() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public function insert( $table, $data, $format = array() ) {
+				if ( false !== strpos( $table, 'consent_records' ) ) {
+					return false;
+				}
+
+				$this->insert_id = 73;
+				return parent::insert( $table, $data, $format );
+			}
+		};
+
+		try {
+			$service = new ALYNT_AG_Registration_Service();
+			$result  = $service->create_pending_registration(
+				'Damon',
+				'Paulo',
+				'consent-failed@example.test',
+				ALYNT_AG_Settings_Schema::defaults()
+			);
+
+			$this->assertInstanceOf( WP_Error::class, $result );
+			$this->assertSame( 'consent_record_failed', $result->get_error_code() );
+			$this->assertCount( 2, $GLOBALS['alynt_ag_test_db_deletes'] );
+			$this->assertSame( array( 'id' => 73 ), $GLOBALS['alynt_ag_test_db_deletes'][1]['where'] );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
+
 	public function test_confirm_pending_token_rejects_invalid_or_expired_token() {
 		$service = new ALYNT_AG_Registration_Service();
 		$result  = $service->confirm_pending_token( 'invalid-or-expired-token' );
@@ -93,7 +189,13 @@ class RegistrationPendingLifecycleTest extends RegistrationServiceTestCase {
 		$this->assertNotEmpty( $result->confirmed_at );
 		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_updates'] );
 		$this->assertSame( 'email_confirmed', $GLOBALS['alynt_ag_test_db_updates'][0]['data']['status'] );
-		$this->assertSame( array( 'id' => 42 ), $GLOBALS['alynt_ag_test_db_updates'][0]['where'] );
+		$this->assertSame(
+			array(
+				'id'     => 42,
+				'status' => 'pending',
+			),
+			$GLOBALS['alynt_ag_test_db_updates'][0]['where']
+		);
 	}
 
 	public function test_confirm_pending_token_reports_lookup_database_failure() {
@@ -132,6 +234,73 @@ class RegistrationPendingLifecycleTest extends RegistrationServiceTestCase {
 			'first_name' => 'Damon',
 			'last_name'  => 'Paulo',
 			'status'     => 'pending',
+		);
+
+		try {
+			$service = new ALYNT_AG_Registration_Service();
+			$result  = $service->confirm_pending_token( 'valid-token' );
+
+			$this->assertInstanceOf( WP_Error::class, $result );
+			$this->assertSame( 'pending_confirmation_failed', $result->get_error_code() );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
+
+	public function test_confirm_pending_token_accepts_concurrent_confirmation() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public function update( $table, $data, $where, $format = array(), $where_format = array() ) {
+				parent::update( $table, $data, $where, $format, $where_format );
+
+				return 0;
+			}
+		};
+		$GLOBALS['alynt_ag_test_db_rows'][] = (object) array(
+			'id'     => 42,
+			'email'  => 'customer@example.test',
+			'status' => 'pending',
+		);
+		$GLOBALS['alynt_ag_test_db_rows'][] = (object) array(
+			'id'           => 42,
+			'email'        => 'customer@example.test',
+			'status'       => 'email_confirmed',
+			'confirmed_at' => '2026-07-20 10:00:00',
+		);
+
+		try {
+			$service = new ALYNT_AG_Registration_Service();
+			$result  = $service->confirm_pending_token( 'valid-token' );
+
+			$this->assertSame( 'email_confirmed', $result->status );
+			$this->assertCount( 2, $GLOBALS['alynt_ag_test_db_queries'] );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
+
+	public function test_confirm_pending_token_rejects_zero_row_update_without_confirmed_state() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public function update( $table, $data, $where, $format = array(), $where_format = array() ) {
+				unset( $table, $data, $where, $format, $where_format );
+
+				return 0;
+			}
+		};
+		$GLOBALS['alynt_ag_test_db_rows'][] = (object) array(
+			'id'     => 42,
+			'email'  => 'customer@example.test',
+			'status' => 'pending',
+		);
+		$GLOBALS['alynt_ag_test_db_rows'][] = (object) array(
+			'id'     => 42,
+			'email'  => 'customer@example.test',
+			'status' => 'pending',
 		);
 
 		try {

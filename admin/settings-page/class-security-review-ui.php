@@ -145,7 +145,7 @@ class ALYNT_AG_Settings_Page_Security_Review_Ui extends ALYNT_AG_Settings_Page_C
 	public function security_pending_registration_status( $registration ) {
 		$status     = isset( $registration->status ) ? sanitize_key( $registration->status ) : 'pending';
 		$expires_at = isset( $registration->expires_at ) ? strtotime( (string) $registration->expires_at ) : false;
-		$now        = strtotime( current_time( 'mysql' ) );
+		$now        = strtotime( current_time( 'mysql', true ) );
 
 		if ( in_array( $status, array( 'pending', 'email_confirmed' ), true ) && $expires_at && $now && $expires_at < $now ) {
 			return array(
@@ -161,7 +161,7 @@ class ALYNT_AG_Settings_Page_Security_Review_Ui extends ALYNT_AG_Settings_Page_C
 			);
 		}
 
-		if ( 'completed' === $status ) {
+		if ( in_array( $status, array( 'account_created', 'completed' ), true ) ) {
 			return array(
 				'key'   => 'completed',
 				'label' => __( 'Completed', 'alynt-account-gateway' ),

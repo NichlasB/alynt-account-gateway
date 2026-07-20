@@ -13,6 +13,7 @@ delete_option( 'alynt_ag_settings' );
 delete_option( 'alynt_ag_db_version' );
 
 wp_clear_scheduled_hook( 'alynt_ag_retention_cleanup' );
+wp_clear_scheduled_hook( 'alynt_ag_retention_cleanup_continue' );
 
 global $wpdb;
 

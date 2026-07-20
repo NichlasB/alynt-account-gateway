@@ -76,7 +76,7 @@ class ALYNT_AG_Registration_Confirmation extends ALYNT_AG_Service_Collaborator {
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		if ( false === $updated ) {
+		if ( 1 !== (int) $updated ) {
 			return new WP_Error( 'pending_registration_failed', __( 'The confirmation link could not be renewed. Please try again.', 'alynt-account-gateway' ) );
 		}
 
