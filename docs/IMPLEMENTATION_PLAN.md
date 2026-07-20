@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 6 registration/authentication service decomposition and v1.1.19 candidate acceptance are complete; release approval is pending.
+- Current phase: Phase 2 Increment 6 registration/authentication service decomposition is released and updater-verified as v1.1.19.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.18 is the current public baseline.
+- Plugin status: v1.1.19 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Preserve both public service facades and override-sensitive behavior while extracting focused request, lifecycle, protection, persistence, delivery, reset, activity, message, and redirect collaborators. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Begin Phase 2 Increment 7 by decomposing the WooCommerce and email services behind their established public contracts. Decompose the settings page last. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -211,7 +211,7 @@
 - [x] Pass full build, POT, PHPCS, PHP syntax, JavaScript syntax, audit, PHPUnit, and `git diff --check` gates.
 - [x] Inspect the exact v1.1.19 release-style package.
 - [x] Install the exact candidate on LocalWP Plugin Tester and verify registration, login, lost-password, reset-password, and redirect behavior.
-- [ ] Publish v1.1.19 only after separate explicit release approval.
+- [x] Publish v1.1.19 only after separate explicit release approval.
 
 Implementation evidence:
 
@@ -223,6 +223,12 @@ Implementation evidence:
 - WordPress's native upload-and-replace flow installed that exact package over active v1.1.18 on confirmed local-only Plugin Tester. Account Gateway reports active v1.1.19, and all `76` installed files byte-match the inspected ZIP with no extras.
 - Plugin Tester browser acceptance covered the settings screen, logout confirmation, login, lost-password, registration-disabled, invalid set-password, and validated same-site redirect surfaces. Desktop and `390px` login layouts had no horizontal overflow, and the browser reported no console errors.
 - Cleanup removed the authenticated browser session, both temporary local helper files, the delayed disposable administrator and its metadata, and any upgrade artifacts. The exact established settings fingerprint `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e`, active-plugin fingerprint `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e`, and database version `0.1.6` remain unchanged.
+- Release approval was granted and [GitHub v1.1.19](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.19) was published from merge commit `bfe0a45`; Build Release run `29741445139` completed successfully.
+- The public ZIP contains `76` runtime files and `70` syntax-clean PHP files, contains no development files or backslash archive paths, and has SHA-256 `C137ABB90A2726FF1221345DEA43AE8CBB82E211407CA96E4E8157FFD3373BEB`.
+- The public ZIP has the same file set and normalized content as the accepted candidate. Only `readme.txt` differs at the byte level because of expected checkout line-ending normalization.
+- Alynt Plugin Updater's fresh check detected the public `1.1.18 -> 1.1.19` update on LocalWP Plugin Tester, and WordPress installed the GitHub release asset through the native Plugins screen.
+- All `76` updater-installed files byte-match the public ZIP. Account Gateway remains active at v1.1.19, settings and activation fingerprints remain unchanged, the database version remains `0.1.6`, and a fresh updater check reports v1.1.19 up to date with zero Account Gateway updates remaining.
+- Final cleanup removed the authenticated browser session and temporary helper, left no disposable candidate users or upgrade artifacts, and confirmed the homepage, branded login, and lost-password routes return HTTP `200`.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 

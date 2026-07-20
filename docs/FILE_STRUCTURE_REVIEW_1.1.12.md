@@ -624,8 +624,8 @@ artifacts. Increment 5 is closed.
 
 ### Increment 6: Registration And Authentication Services
 
-Status: implementation, collaboration-contract coverage, full gates, and
-v1.1.19 candidate acceptance complete; release approval pending.
+Status: implementation, collaboration-contract coverage, full gates, candidate
+acceptance, v1.1.19 publication, and public updater verification complete.
 
 The registration service currently contains 1,033 lines and exposes 27 public
 methods across request routing, protection providers, activity logging,
@@ -682,3 +682,20 @@ removed all temporary helpers, the browser session, the delayed disposable
 administrator, and upgrade artifacts. Established settings and active-plugin
 fingerprints remain exact, and database version 0.1.6 is unchanged. The
 candidate is ready for explicit v1.1.19 release approval.
+
+Release approval was granted and GitHub v1.1.19 was published from merge
+commit `bfe0a45`. Build Release run `29741445139` completed successfully. The
+public ZIP contains 76 runtime files and 70 syntax-clean PHP files, has no
+development or backslash entries, and has SHA-256
+`C137ABB90A2726FF1221345DEA43AE8CBB82E211407CA96E4E8157FFD3373BEB`.
+Its file set and normalized content match the accepted candidate; only expected
+`readme.txt` checkout line endings differ at the byte level.
+
+Alynt Plugin Updater detected and installed the public v1.1.18 to v1.1.19
+update on LocalWP Plugin Tester. All 76 installed files byte-match the public
+asset, Account Gateway remains active at v1.1.19, established settings and
+active-plugin fingerprints remain exact, and database version 0.1.6 is
+unchanged. A fresh updater check reports v1.1.19 up to date. Final cleanup
+removed the authenticated browser session and helper, left no disposable
+candidate users or upgrade artifacts, and confirmed home, login, and
+lost-password return HTTP 200. Increment 6 is closed.
