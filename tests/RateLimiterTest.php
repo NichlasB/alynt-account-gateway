@@ -15,6 +15,7 @@ class RateLimiterTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$GLOBALS['alynt_ag_test_transients'] = array();
+		$GLOBALS['alynt_ag_test_options']    = array();
 		$GLOBALS['alynt_ag_test_filters']    = array();
 		$_SERVER['REMOTE_ADDR'] = '203.0.113.10';
 		unset( $GLOBALS['alynt_ag_test_set_transient_result'] );
@@ -108,5 +109,17 @@ class RateLimiterTest extends TestCase {
 
 		$this->assertInstanceOf( WP_Error::class, $result );
 		$this->assertSame( 'alynt_ag_rate_limit_unavailable', $result->get_error_code() );
+	}
+
+	public function test_check_and_increment_fails_closed_while_bucket_is_locked() {
+		$limiter = new ALYNT_AG_Rate_Limiter();
+		$key     = $limiter->get_bucket_key( 'login', 'damon@example.test' );
+
+		$this->assertIsString( ALYNT_AG_Operation_Lock::acquire( 'rate_limit', $key, 5 ) );
+		$result = $limiter->check_and_increment( 'login', 'damon@example.test', 5, 15 );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'alynt_ag_rate_limit_unavailable', $result->get_error_code() );
+		$this->assertEmpty( $GLOBALS['alynt_ag_test_transients'] );
 	}
 }

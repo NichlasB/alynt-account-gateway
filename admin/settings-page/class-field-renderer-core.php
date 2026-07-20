@@ -95,8 +95,22 @@ class ALYNT_AG_Settings_Page_Field_Renderer_Core extends ALYNT_AG_Settings_Page_
 			return true;
 		}
 
+		if ( 'integer' === $type ) {
+			$minimum = isset( $context['field']['min'] ) ? (int) $context['field']['min'] : 0;
+			$maximum = isset( $context['field']['max'] ) ? ' max="' . esc_attr( (string) (int) $context['field']['max'] ) . '"' : '';
+			printf(
+				'<input type="number" min="%1$s"%2$s class="small-text" id="%3$s" name="%4$s" value="%5$s"%6$s>',
+				esc_attr( (string) $minimum ),
+				$maximum, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Attribute value escaped above.
+				esc_attr( $id ),
+				esc_attr( $name ),
+				esc_attr( $value ),
+				$aria // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute().
+			);
+			return true;
+		}
+
 		$formats = array(
-			'integer'  => '<input type="number" min="0" class="small-text" id="%1$s" name="%2$s" value="%3$s"%4$s>',
 			'email'    => '<input type="email" class="regular-text" id="%1$s" name="%2$s" value="%3$s" autocomplete="email"%4$s>',
 			'textarea' => '<textarea class="large-text alynt-ag-textarea" rows="4" id="%1$s" name="%2$s"%4$s>%3$s</textarea>',
 		);

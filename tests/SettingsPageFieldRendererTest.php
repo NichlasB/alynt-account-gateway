@@ -46,12 +46,14 @@ class SettingsPageFieldRendererTest extends TestCase {
 	}
 
 	public function test_scalar_fields_preserve_types_and_values() {
-		$integer = $this->render_field( 'limit', array( 'type' => 'integer' ), 12 );
+		$integer = $this->render_field( 'limit', array( 'type' => 'integer', 'min' => 1, 'max' => 100 ), 12 );
 		$email   = $this->render_field( 'recipient', array( 'type' => 'email' ), 'test@example.com' );
 		$text    = $this->render_field( 'message', array( 'type' => 'textarea' ), '<strong>Safe</strong>' );
 
 		$this->assertStringContainsString( 'type="number"', $integer );
 		$this->assertStringContainsString( 'value="12"', $integer );
+		$this->assertStringContainsString( 'min="1"', $integer );
+		$this->assertStringContainsString( 'max="100"', $integer );
 		$this->assertStringContainsString( 'type="email"', $email );
 		$this->assertStringContainsString( 'value="test@example.com"', $email );
 		$this->assertStringContainsString( '&lt;strong&gt;Safe&lt;/strong&gt;', $text );

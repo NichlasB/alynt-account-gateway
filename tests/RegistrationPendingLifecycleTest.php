@@ -361,6 +361,17 @@ class RegistrationPendingLifecycleTest extends RegistrationServiceTestCase {
 		$this->assertSame( '@User_Damon_Paulo_2', $username );
 	}
 
+	public function test_generated_username_stays_within_wordpress_limit_after_collision_suffix() {
+		$service = new ALYNT_AG_Registration_Service();
+		$username = $service->generate_username(
+			str_repeat( 'A', 80 ),
+			str_repeat( 'B', 80 ),
+			array( 'username_format' => '{first_name}_{last_name}' )
+		);
+
+		$this->assertLessThanOrEqual( 60, strlen( $username ) );
+	}
+
 	public function test_password_confirmation_must_match() {
 		$service = new ALYNT_AG_Registration_Service();
 		$result  = $service->validate_password_pair( 'StrongPassword1!', 'DifferentPassword1!' );

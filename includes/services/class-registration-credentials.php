@@ -53,11 +53,13 @@ class ALYNT_AG_Registration_Credentials extends ALYNT_AG_Service_Collaborator {
 		$base = sanitize_user( $base, true );
 		$base = $base ? $base : 'user';
 
+		$base     = substr( $base, 0, 60 );
 		$username = $base;
 		$suffix   = 2;
 
 		while ( username_exists( $username ) ) {
-			$username = $base . '_' . $suffix;
+			$ending   = '_' . $suffix;
+			$username = substr( $base, 0, 60 - strlen( $ending ) ) . $ending;
 			++$suffix;
 		}
 
@@ -118,7 +120,8 @@ class ALYNT_AG_Registration_Credentials extends ALYNT_AG_Service_Collaborator {
 	 * @return true|WP_Error
 	 */
 	public function run_validate_password( $password ) {
-		if ( strlen( $password ) < ALYNT_AG_Registration_Service::MIN_PASSWORD_LENGTH ) {
+		$length = function_exists( 'mb_strlen' ) ? mb_strlen( $password, 'UTF-8' ) : strlen( $password );
+		if ( $length < ALYNT_AG_Registration_Service::MIN_PASSWORD_LENGTH ) {
 			return new WP_Error( 'alynt_ag_password_length', __( 'Password must be at least 12 characters.', 'alynt-account-gateway' ) );
 		}
 

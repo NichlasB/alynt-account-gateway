@@ -113,7 +113,10 @@ class RegistrationProtectionTest extends RegistrationServiceTestCase {
 	}
 
 	public function test_registration_protection_blocks_flagged_reoon_status_when_policy_requires_it() {
-		$GLOBALS['alynt_ag_test_remote_get_response'] = array( 'body' => '{"status":"role_account"}' );
+		$GLOBALS['alynt_ag_test_remote_get_response'] = array(
+			'body'     => '{"status":"role_account"}',
+			'response' => array( 'code' => 200 ),
+		);
 
 		$service = new ALYNT_AG_Registration_Service();
 		$result  = $service->validate_registration_protection(
@@ -132,6 +135,25 @@ class RegistrationProtectionTest extends RegistrationServiceTestCase {
 		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
 		$this->assertSame( 'role_account_flagged_blocked', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['status'] );
 		$this->assertSame( 1, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
+	}
+
+	public function test_reoon_unexpected_status_fails_closed() {
+		$client = new ALYNT_AG_Reoon_Client();
+		$result = $client->interpret_response( array( 'status' => 'error' ) );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'alynt_ag_reoon_invalid_response', $result->get_error_code() );
+	}
+
+	public function test_reoon_non_success_http_response_fails_closed() {
+		$GLOBALS['alynt_ag_test_remote_get_response'] = array(
+			'body'     => '{"status":"safe"}',
+			'response' => array( 'code' => 429 ),
+		);
+
+		$result = ( new ALYNT_AG_Reoon_Client() )->verify( 'damon@example.test', 'key', 'quick' );
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'alynt_ag_reoon_request_failed', $result->get_error_code() );
 	}
 
 	public function test_registration_flow_log_records_blocked_form_outcomes() {

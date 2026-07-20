@@ -120,7 +120,7 @@ class ALYNT_AG_Frontend_Register_Screen {
 				</span>
 			</label>
 			<?php $this->components->render_verification_slot( $settings ); ?>
-			<button class="agw-button agw-button--primary" type="submit" data-agw-registration-submit disabled aria-disabled="true"><?php esc_html_e( 'Create Account', 'alynt-account-gateway' ); ?></button>
+			<button class="agw-button agw-button--primary" type="submit" data-agw-registration-submit aria-disabled="false"><?php esc_html_e( 'Create Account', 'alynt-account-gateway' ); ?></button>
 			<a class="agw-back-link" href="<?php echo esc_url( $this->routes->login_url( $settings, $redirect_to ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
 		</form>
 		<?php

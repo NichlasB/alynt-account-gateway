@@ -18,6 +18,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-diagnostics-logger.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-retention-cleanup.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-i18n.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-client-ip.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-operation-lock.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-rate-limiter.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-return-destination.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-service-collaborator.php';

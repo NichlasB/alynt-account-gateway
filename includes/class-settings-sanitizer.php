@@ -79,6 +79,10 @@ class ALYNT_AG_Settings_Sanitizer {
 			case 'boolean':
 				return (bool) $value;
 			case 'integer':
+				$integer = (int) $value;
+				$minimum = isset( $field['min'] ) ? (int) $field['min'] : 0;
+				$maximum = isset( $field['max'] ) ? (int) $field['max'] : PHP_INT_MAX;
+				return max( $minimum, min( $maximum, $integer ) );
 			case 'attachment_id':
 			case 'nav_menu':
 				return max( 0, absint( $value ) );
@@ -136,7 +140,7 @@ class ALYNT_AG_Settings_Sanitizer {
 
 			$links = array();
 
-		foreach ( $value as $link ) {
+		foreach ( array_slice( $value, 0, 100 ) as $link ) {
 			if ( ! is_array( $link ) ) {
 				continue;
 			}
@@ -149,7 +153,7 @@ class ALYNT_AG_Settings_Sanitizer {
 			}
 
 			$roles = isset( $link['roles'] ) && is_array( $link['roles'] ) ? $link['roles'] : array();
-			$roles = array_values( array_filter( array_map( 'sanitize_key', $roles ) ) );
+			$roles = array_slice( array_values( array_filter( array_map( 'sanitize_key', $roles ) ) ), 0, 20 );
 
 			$links[] = array(
 				'label'  => $label,

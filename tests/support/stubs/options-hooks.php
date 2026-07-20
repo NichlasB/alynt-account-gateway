@@ -27,6 +27,18 @@ if ( ! function_exists( 'update_option' ) ) {
 	}
 }
 
+if ( ! function_exists( 'add_option' ) ) {
+	function add_option( $name, $value, $deprecated = '', $autoload = 'yes' ) {
+		unset( $deprecated, $autoload );
+		if ( array_key_exists( $name, $GLOBALS['alynt_ag_test_options'] ) ) {
+			return false;
+		}
+
+		$GLOBALS['alynt_ag_test_options'][ $name ] = $value;
+		return true;
+	}
+}
+
 if ( ! function_exists( 'delete_option' ) ) {
 	function delete_option( $name ) {
 		$GLOBALS['alynt_ag_test_deleted_options'][] = $name;

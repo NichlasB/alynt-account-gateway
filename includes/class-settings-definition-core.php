@@ -73,6 +73,8 @@ class ALYNT_AG_Settings_Definition_Core {
 				'tab'     => 'registration',
 				'type'    => 'integer',
 				'default' => 24,
+				'min'     => 1,
+				'max'     => 168,
 				'label'   => __( 'Pending Registration Expiry Hours', 'alynt-account-gateway' ),
 			),
 			'username_format'                    => array(
@@ -145,6 +147,8 @@ class ALYNT_AG_Settings_Definition_Core {
 				'tab'     => 'branding',
 				'type'    => 'integer',
 				'default' => 220,
+				'min'     => 80,
+				'max'     => 520,
 				'label'   => __( 'Logo Max Width', 'alynt-account-gateway' ),
 			),
 			'primary_color'                      => array(

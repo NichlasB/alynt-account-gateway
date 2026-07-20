@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 1.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 20:46+0000\n"
+"POT-Creation-Date: 2026-07-20 21:34+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -32,7 +32,7 @@ msgstr ""
 msgid "A branded password-reset email could not be sent."
 msgstr ""
 
-#: includes/services/class-webhook-retry-scheduler.php:64
+#: includes/services/class-webhook-retry-scheduler.php:66
 msgid "A failed webhook retry could not be scheduled."
 msgstr ""
 
@@ -60,7 +60,7 @@ msgstr ""
 msgid "A privacy export database query failed."
 msgstr ""
 
-#: includes/services/class-rate-limiter.php:112
+#: includes/services/class-rate-limiter.php:122
 msgid "A rate-limit counter could not be stored."
 msgstr ""
 
@@ -80,7 +80,7 @@ msgstr ""
 msgid "A webhook URL is configured without a signing secret. Add signing before connecting sensitive automations."
 msgstr ""
 
-#: includes/class-settings-definition-core.php:160
+#: includes/class-settings-definition-core.php:164
 msgid "Accent Color"
 msgstr ""
 
@@ -120,15 +120,15 @@ msgstr ""
 msgid "Account Created Welcome"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:202
+#: includes/class-settings-definition-security-email.php:218
 msgid "Account Created Welcome Body"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:196
+#: includes/class-settings-definition-security-email.php:212
 msgid "Account Created Welcome Preheader"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:190
+#: includes/class-settings-definition-security-email.php:206
 msgid "Account Created Welcome Subject"
 msgstr ""
 
@@ -265,7 +265,7 @@ msgstr ""
 msgid "Add a test recipient and send representative account emails before inviting users."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:80
+#: includes/services/class-webhook-dispatcher.php:110
 msgid "Add an account-created webhook URL before sending a test."
 msgstr ""
 
@@ -405,12 +405,20 @@ msgstr ""
 msgid "Alynt Account Gateway"
 msgstr ""
 
+#: includes/class-activator.php:38
+msgid "Alynt Account Gateway could not create or update its database tables. Check the database permissions and try again."
+msgstr ""
+
 #: includes/services/class-privacy-exporter.php:127
 msgid "Alynt Account Gateway could not retrieve all personal data. Please retry the export and check the site database if the problem continues."
 msgstr ""
 
 #: includes/services/class-privacy-service.php:66
 msgid "Alynt Account Gateway may process account registration data, email verification results, webhook delivery metadata, and consent records. Site owners should disclose configured third-party services such as Cloudflare Turnstile, Reoon Email Verifier, and outgoing webhooks."
+msgstr ""
+
+#: includes/class-activator.php:26
+msgid "Alynt Account Gateway must be activated separately on each site in a multisite network."
 msgstr ""
 
 #: includes/services/class-compatibility-warnings.php:78
@@ -429,7 +437,7 @@ msgstr ""
 msgid "Anti-Spam Coverage"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:123
+#: includes/class-settings-definition-core.php:125
 msgid "Are you sure you want to log out of your account?"
 msgstr ""
 
@@ -465,7 +473,7 @@ msgstr ""
 msgid "At least one uppercase letter"
 msgstr ""
 
-#: includes/class-settings-definition-account-data.php:148
+#: includes/class-settings-definition-account-data.php:160
 msgid "Audit Log Retention Days"
 msgstr ""
 
@@ -561,7 +569,7 @@ msgstr ""
 msgid "Blocks catch-all, role account, unknown, and inbox-full statuses before account creation."
 msgstr ""
 
-#: includes/class-settings-definition-core.php:214
+#: includes/class-settings-definition-core.php:218
 msgid "Body Font Stack"
 msgstr ""
 
@@ -573,7 +581,7 @@ msgstr ""
 msgid "Both plugins can own public registration. Confirm which registration flow should create users."
 msgstr ""
 
-#: includes/class-settings-definition-core.php:142
+#: includes/class-settings-definition-core.php:144
 msgid "Brand Logo"
 msgstr ""
 
@@ -589,11 +597,11 @@ msgstr ""
 msgid "Branding & Layout"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:190
+#: includes/class-settings-definition-core.php:194
 msgid "Button Background Color"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:196
+#: includes/class-settings-definition-core.php:200
 msgid "Button Text Color"
 msgstr ""
 
@@ -605,7 +613,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:178
+#: includes/class-settings-definition-core.php:182
 msgid "Card Surface Color"
 msgstr ""
 
@@ -674,11 +682,11 @@ msgstr ""
 msgid "Checks the saved API key against Reoon account status. It does not submit an email address or run a customer verification."
 msgstr ""
 
-#: admin/settings-page/class-field-renderer-core.php:133
+#: admin/settings-page/class-field-renderer-core.php:147
 msgid "Choose %s"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:117
+#: includes/class-settings-definition-core.php:119
 msgid "Choose a new password for your account."
 msgstr ""
 
@@ -806,7 +814,7 @@ msgstr ""
 msgid "Confirm the Terms and Privacy paths point to real public pages."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:219
+#: includes/class-settings-definition-security-email.php:235
 msgid "Confirm this email address to finish updating your account."
 msgstr ""
 
@@ -818,15 +826,15 @@ msgstr ""
 msgid "Confirm URLs, branding, registration, email, dashboard, and privacy settings before enabling public output."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:123
+#: includes/class-settings-definition-security-email.php:139
 msgid "Confirm your account for {{site_name}}"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:129
+#: includes/class-settings-definition-security-email.php:145
 msgid "Confirm your email address and choose a password."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:213
+#: includes/class-settings-definition-security-email.php:229
 msgid "Confirm your email address for {{site_name}}"
 msgstr ""
 
@@ -842,11 +850,11 @@ msgstr ""
 msgid "Confirmation Resend Attempts"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:88
+#: includes/class-settings-definition-security-email.php:94
 msgid "Confirmation Resend Attempts Per Window"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:94
+#: includes/class-settings-definition-security-email.php:102
 msgid "Confirmation Resend Rate Limit Window Minutes"
 msgstr ""
 
@@ -879,7 +887,7 @@ msgstr ""
 msgid "Consent Links"
 msgstr ""
 
-#: includes/class-settings-definition-account-data.php:142
+#: includes/class-settings-definition-account-data.php:152
 msgid "Consent Record Retention Days"
 msgstr ""
 
@@ -934,7 +942,7 @@ msgstr ""
 msgid "create an account"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:105
+#: includes/class-settings-definition-core.php:107
 msgid "Create your customer account. Fill in your details and you will receive a confirmation email. Be sure to check your spam folder if you do not see it."
 msgstr ""
 
@@ -1031,7 +1039,7 @@ msgstr ""
 msgid "Dashboard actions"
 msgstr ""
 
-#: includes/class-settings-sanitizer.php:193
+#: includes/class-settings-sanitizer.php:197
 msgid "Dashboard custom links were not saved because the raw JSON is invalid. The previously saved links were preserved."
 msgstr ""
 
@@ -1158,15 +1166,15 @@ msgstr ""
 msgid "Diagnostics Minimum Level"
 msgstr ""
 
-#: includes/class-settings-definition-account-data.php:118
+#: includes/class-settings-definition-account-data.php:120
 msgid "Diagnostics Retention Days"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:184
+#: includes/class-settings-definition-security-email.php:200
 msgid "Disable Account Created Welcome Email"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:208
+#: includes/class-settings-definition-security-email.php:224
 msgid "Disable Email Change Confirmation Email"
 msgstr ""
 
@@ -1182,7 +1190,7 @@ msgstr ""
 msgid "Disable only when another trusted system sends an equivalent password-change notification."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:160
+#: includes/class-settings-definition-security-email.php:176
 msgid "Disable Password Changed Email"
 msgstr ""
 
@@ -1265,15 +1273,15 @@ msgstr ""
 msgid "Email Change Confirmation"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:226
+#: includes/class-settings-definition-security-email.php:242
 msgid "Email Change Confirmation Body"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:220
+#: includes/class-settings-definition-security-email.php:236
 msgid "Email Change Confirmation Preheader"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:214
+#: includes/class-settings-definition-security-email.php:230
 msgid "Email Change Confirmation Subject"
 msgstr ""
 
@@ -1301,10 +1309,13 @@ msgstr ""
 msgid "Email Testing"
 msgstr ""
 
+#: includes/services/class-reoon-client.php:105
+#: includes/services/class-reoon-client.php:132
 #: includes/services/class-reoon-client.php:37
-#: includes/services/class-reoon-client.php:42
-#: includes/services/class-reoon-client.php:91
-#: includes/services/class-reoon-client.php:97
+#: includes/services/class-reoon-client.php:41
+#: includes/services/class-reoon-client.php:46
+#: includes/services/class-reoon-client.php:95
+#: includes/services/class-reoon-client.php:99
 msgid "Email verification failed. Please try again."
 msgstr ""
 
@@ -1406,7 +1417,7 @@ msgstr ""
 msgid "Enter a password to begin."
 msgstr ""
 
-#: includes/class-settings-definition-core.php:111
+#: includes/class-settings-definition-core.php:113
 msgid "Enter the email address associated with your account and we will send a link to reset your password."
 msgstr ""
 
@@ -1418,7 +1429,7 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:184
+#: includes/class-settings-definition-core.php:188
 msgid "Error Color"
 msgstr ""
 
@@ -1501,7 +1512,7 @@ msgstr ""
 msgid "Failed Webhook Deliveries"
 msgstr ""
 
-#: includes/class-settings-definition-account-data.php:130
+#: includes/class-settings-definition-account-data.php:136
 msgid "Failed Webhook Log Retention Days"
 msgstr ""
 
@@ -1558,7 +1569,7 @@ msgstr ""
 msgid "Gateway Auth Signals"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:202
+#: includes/class-settings-definition-core.php:206
 msgid "Gateway Background Image"
 msgstr ""
 
@@ -1590,7 +1601,7 @@ msgstr ""
 msgid "Generate and save an emergency bypass key before replacing public login screens."
 msgstr ""
 
-#: includes/class-settings-definition-core.php:82
+#: includes/class-settings-definition-core.php:84
 msgid "Generated Username Format"
 msgstr ""
 
@@ -1602,7 +1613,7 @@ msgstr ""
 msgid "Guidance"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:208
+#: includes/class-settings-definition-core.php:212
 msgid "Heading Font Stack"
 msgstr ""
 
@@ -1614,7 +1625,7 @@ msgstr ""
 msgid "Helpful account next steps"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:225
+#: includes/class-settings-definition-security-email.php:241
 msgid ""
 "Hi {{first_name}},\n"
 "\n"
@@ -1623,7 +1634,7 @@ msgid ""
 "If you did not request this change, you can ignore this email."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:177
+#: includes/class-settings-definition-security-email.php:193
 msgid ""
 "Hi {{first_name}},\n"
 "\n"
@@ -1632,7 +1643,7 @@ msgid ""
 "If you did not make this change, please contact the site owner right away."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:153
+#: includes/class-settings-definition-security-email.php:169
 msgid ""
 "Hi {{first_name}},\n"
 "\n"
@@ -1641,7 +1652,7 @@ msgid ""
 "If you did not request this, you can ignore this email."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:135
+#: includes/class-settings-definition-security-email.php:151
 msgid ""
 "Hi {{first_name}},\n"
 "\n"
@@ -1650,7 +1661,7 @@ msgid ""
 "This link expires in {{expiry_hours}} hours."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:201
+#: includes/class-settings-definition-security-email.php:217
 msgid ""
 "Hi {{first_name}},\n"
 "\n"
@@ -1726,7 +1737,7 @@ msgstr ""
 msgid "Invalid Link"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:136
+#: includes/class-settings-definition-core.php:138
 msgid "Invalid Or Expired Link Text"
 msgstr ""
 
@@ -1921,11 +1932,11 @@ msgstr ""
 msgid "Login Attempts"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:100
+#: includes/class-settings-definition-security-email.php:110
 msgid "Login Attempts Per Window"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:100
+#: includes/class-settings-definition-core.php:102
 msgid "Login Instruction Text"
 msgstr ""
 
@@ -1933,7 +1944,7 @@ msgstr ""
 msgid "Login Lockouts"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:106
+#: includes/class-settings-definition-security-email.php:118
 msgid "Login Rate Limit Window Minutes"
 msgstr ""
 
@@ -1953,7 +1964,7 @@ msgstr ""
 msgid "LoginPress may overlap with branded login output"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:148
+#: includes/class-settings-definition-core.php:152
 msgid "Logo Max Width"
 msgstr ""
 
@@ -1969,7 +1980,7 @@ msgstr ""
 msgid "Logout Confirmation"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:124
+#: includes/class-settings-definition-core.php:126
 msgid "Logout Confirmation Instruction Text"
 msgstr ""
 
@@ -1977,7 +1988,7 @@ msgstr ""
 msgid "Lost Password"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:112
+#: includes/class-settings-definition-core.php:114
 msgid "Lost Password Instruction Text"
 msgstr ""
 
@@ -2099,7 +2110,7 @@ msgstr ""
 msgid "Needs review"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:129
+#: includes/class-settings-definition-core.php:131
 msgid "New account registration is currently unavailable. Please check back later, or log in if you already have an account."
 msgstr ""
 
@@ -2359,7 +2370,7 @@ msgstr ""
 msgid "Outcome"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:172
+#: includes/class-settings-definition-core.php:176
 msgid "Page Background Color"
 msgstr ""
 
@@ -2383,15 +2394,15 @@ msgstr ""
 msgid "Password Changed"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:178
+#: includes/class-settings-definition-security-email.php:194
 msgid "Password Changed Body"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:172
+#: includes/class-settings-definition-security-email.php:188
 msgid "Password Changed Preheader"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:166
+#: includes/class-settings-definition-security-email.php:182
 msgid "Password Changed Subject"
 msgstr ""
 
@@ -2410,12 +2421,12 @@ msgid "Password is visible."
 msgstr ""
 
 #: includes/services/class-frontend-messages.php:97
-#: includes/services/class-registration-credentials.php:122
+#: includes/services/class-registration-credentials.php:125
 msgid "Password must be at least 12 characters."
 msgstr ""
 
 #: includes/services/class-frontend-messages.php:98
-#: includes/services/class-registration-credentials.php:126
+#: includes/services/class-registration-credentials.php:129
 msgid "Password must include uppercase, lowercase, number, and symbol characters."
 msgstr ""
 
@@ -2429,11 +2440,11 @@ msgstr ""
 msgid "Password Reset Attempts"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:112
+#: includes/class-settings-definition-security-email.php:126
 msgid "Password Reset Attempts Per Window"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:154
+#: includes/class-settings-definition-security-email.php:170
 msgid "Password Reset Body"
 msgstr ""
 
@@ -2453,11 +2464,11 @@ msgstr ""
 msgid "Password Reset Lockouts"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:148
+#: includes/class-settings-definition-security-email.php:164
 msgid "Password Reset Preheader"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:118
+#: includes/class-settings-definition-security-email.php:134
 msgid "Password Reset Rate Limit Window Minutes"
 msgstr ""
 
@@ -2469,7 +2480,7 @@ msgstr ""
 msgid "Password Reset Requests"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:142
+#: includes/class-settings-definition-security-email.php:158
 msgid "Password Reset Subject"
 msgstr ""
 
@@ -2514,7 +2525,7 @@ msgstr ""
 msgid "Pending Account Registration"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:76
+#: includes/class-settings-definition-core.php:78
 msgid "Pending Registration Expiry Hours"
 msgstr ""
 
@@ -2587,7 +2598,7 @@ msgstr ""
 msgid "Preview Template"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:154
+#: includes/class-settings-definition-core.php:158
 msgid "Primary Color"
 msgstr ""
 
@@ -2611,7 +2622,7 @@ msgstr ""
 msgid "Privacy settings control how long plugin-owned verification, webhook, consent, and audit records are kept."
 msgstr ""
 
-#: includes/class-settings-definition-core.php:94
+#: includes/class-settings-definition-core.php:96
 msgid "Privacy URL Path"
 msgstr ""
 
@@ -3045,7 +3056,7 @@ msgstr ""
 msgid "Registration Attempts"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:76
+#: includes/class-settings-definition-security-email.php:78
 msgid "Registration Attempts Per Window"
 msgstr ""
 
@@ -3053,15 +3064,15 @@ msgstr ""
 msgid "Registration Confirmation"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:136
+#: includes/class-settings-definition-security-email.php:152
 msgid "Registration Confirmation Body"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:130
+#: includes/class-settings-definition-security-email.php:146
 msgid "Registration Confirmation Preheader"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:124
+#: includes/class-settings-definition-security-email.php:140
 msgid "Registration Confirmation Subject"
 msgstr ""
 
@@ -3077,7 +3088,7 @@ msgstr ""
 msgid "Registration Disabled"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:130
+#: includes/class-settings-definition-core.php:132
 msgid "Registration Disabled Text"
 msgstr ""
 
@@ -3101,7 +3112,7 @@ msgstr ""
 msgid "Registration Flow Signals"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:106
+#: includes/class-settings-definition-core.php:108
 msgid "Registration Instruction Text"
 msgstr ""
 
@@ -3113,7 +3124,7 @@ msgstr ""
 msgid "Registration Protection Mode"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:82
+#: includes/class-settings-definition-security-email.php:86
 msgid "Registration Rate Limit Window Minutes"
 msgstr ""
 
@@ -3267,7 +3278,7 @@ msgid "Reoon Unexpected Responses"
 msgstr ""
 
 #: includes/services/class-reoon-client.php:28
-#: includes/services/class-reoon-client.php:70
+#: includes/services/class-reoon-client.php:74
 msgid "Reoon verification is not configured."
 msgstr ""
 
@@ -3306,7 +3317,7 @@ msgstr ""
 msgid "Reset Password"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:141
+#: includes/class-settings-definition-security-email.php:157
 msgid "Reset your password for {{site_name}}"
 msgstr ""
 
@@ -3648,7 +3659,7 @@ msgstr ""
 msgid "Set Password"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:118
+#: includes/class-settings-definition-core.php:120
 msgid "Set Password Instruction Text"
 msgstr ""
 
@@ -3827,7 +3838,7 @@ msgstr ""
 msgid "Success"
 msgstr ""
 
-#: includes/class-settings-definition-account-data.php:124
+#: includes/class-settings-definition-account-data.php:128
 msgid "Successful Webhook Log Retention Days"
 msgstr ""
 
@@ -3871,11 +3882,11 @@ msgstr ""
 msgid "Terms Path"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:88
+#: includes/class-settings-definition-core.php:90
 msgid "Terms URL Path"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:232
+#: includes/class-settings-definition-security-email.php:248
 msgid "Test Email Recipient"
 msgstr ""
 
@@ -3895,7 +3906,7 @@ msgstr ""
 msgid "Test webhook sent."
 msgstr ""
 
-#: includes/class-settings-definition-core.php:166
+#: includes/class-settings-definition-core.php:170
 msgid "Text Color"
 msgstr ""
 
@@ -3912,7 +3923,7 @@ msgid "The account profile could not be saved. Please try again."
 msgstr ""
 
 #: includes/services/class-registration-completion.php:253
-#: includes/services/class-webhook-retry-scheduler.php:33
+#: includes/services/class-webhook-retry-scheduler.php:34
 msgid "The account-created webhook could not be queued."
 msgstr ""
 
@@ -3977,6 +3988,10 @@ msgstr ""
 msgid "The pending registration record could not be stored."
 msgstr ""
 
+#: includes/services/class-webhook-dispatcher.php:78
+msgid "The queued webhook data is invalid."
+msgstr ""
+
 #: admin/settings-page/class-security-verification-guidance.php:110
 msgid "The registration confirmation email could not be sent."
 msgstr ""
@@ -3992,7 +4007,7 @@ msgstr ""
 msgid "The registration could not be started. Please try again."
 msgstr ""
 
-#: includes/services/class-reoon-client.php:49
+#: includes/services/class-reoon-client.php:53
 msgid "The Reoon API account is not active."
 msgstr ""
 
@@ -4044,16 +4059,17 @@ msgstr ""
 msgid "The webhook delivery log could not be stored."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:142
+#: includes/services/class-webhook-dispatcher.php:173
 msgid "The webhook endpoint returned an unsuccessful response."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:115
+#: includes/services/class-webhook-dispatcher.php:146
 msgid "The webhook payload could not be encoded."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:51
-#: includes/services/class-webhook-dispatcher.php:89
+#: includes/services/class-webhook-dispatcher.php:119
+#: includes/services/class-webhook-dispatcher.php:52
+#: includes/services/trait-webhook-queue.php:36
 msgid "The webhook user could not be found."
 msgstr ""
 
@@ -4094,11 +4110,11 @@ msgstr ""
 msgid "This confirmation link is invalid or has expired."
 msgstr ""
 
-#: includes/class-settings-definition-core.php:135
+#: includes/class-settings-definition-core.php:137
 msgid "This confirmation link is invalid or has expired. Request a new one below."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:171
+#: includes/class-settings-definition-security-email.php:187
 msgid "This confirms that your account password was updated."
 msgstr ""
 
@@ -4113,7 +4129,7 @@ msgid "This email address cannot be used for registration."
 msgstr ""
 
 #: includes/services/class-registration-protection.php:96
-#: includes/services/class-reoon-client.php:115
+#: includes/services/class-reoon-client.php:123
 msgid "This email address cannot be used."
 msgstr ""
 
@@ -4125,11 +4141,16 @@ msgstr ""
 msgid "This link is invalid or has expired."
 msgstr ""
 
+#: includes/services/class-operation-lock.php:47
+msgid "This operation is already in progress. Please try again."
+msgstr ""
+
 #: includes/services/class-compatibility-registry.php:46
 msgid "This plugin customizes the native login page while Alynt Account Gateway redirects users to branded routes."
 msgstr ""
 
-#: includes/services/class-rate-limiter.php:118
+#: includes/services/class-rate-limiter.php:100
+#: includes/services/class-rate-limiter.php:128
 msgid "This request could not be verified. Please wait and try again."
 msgstr ""
 
@@ -4176,7 +4197,7 @@ msgstr ""
 msgid "Too many attempts. Please wait a moment and try again."
 msgstr ""
 
-#: includes/services/class-rate-limiter.php:102
+#: includes/services/class-rate-limiter.php:112
 msgid "Too many attempts. Please wait and try again."
 msgstr ""
 
@@ -4443,7 +4464,7 @@ msgstr ""
 msgid "Use this quick checklist before making public registration available. It summarizes configuration choices that affect spam resistance, customer support, and launch evidence."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:147
+#: includes/class-settings-definition-security-email.php:163
 msgid "Use this secure link to choose a new password."
 msgstr ""
 
@@ -4495,7 +4516,7 @@ msgstr ""
 msgid "Verification is temporarily unavailable. Please try again later."
 msgstr ""
 
-#: includes/class-settings-definition-account-data.php:136
+#: includes/class-settings-definition-account-data.php:144
 msgid "Verification Log Retention Days"
 msgstr ""
 
@@ -4586,8 +4607,8 @@ msgstr ""
 msgid "Webhook Tools"
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:46
-#: includes/services/class-webhook-dispatcher.php:84
+#: includes/services/class-webhook-dispatcher.php:114
+#: includes/services/class-webhook-dispatcher.php:47
 #: includes/services/trait-webhook-queue.php:31
 msgid "Webhook URLs must use HTTPS unless they point to a local development host."
 msgstr ""
@@ -4596,7 +4617,7 @@ msgstr ""
 msgid "Webhooks"
 msgstr ""
 
-#: includes/class-settings-definition-core.php:99
+#: includes/class-settings-definition-core.php:101
 msgid "Welcome back. Log in to manage your orders and account details."
 msgstr ""
 
@@ -4604,7 +4625,7 @@ msgstr ""
 msgid "Welcome Email Failures"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:189
+#: includes/class-settings-definition-security-email.php:205
 msgid "Welcome to {{site_name}}"
 msgstr ""
 
@@ -4742,7 +4763,7 @@ msgstr ""
 msgid "You have unsaved email changes."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:165
+#: includes/class-settings-definition-security-email.php:181
 msgid "Your {{site_name}} password was changed"
 msgstr ""
 
@@ -4754,7 +4775,7 @@ msgstr ""
 msgid "Your account has been created. You can log in now."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:195
+#: includes/class-settings-definition-security-email.php:211
 msgid "Your account is ready."
 msgstr ""
 

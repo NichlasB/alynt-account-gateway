@@ -39,7 +39,7 @@ export function alyntAgTogglePassword( event ) {
 
 function alyntAgGetPasswordChecks( password, confirm ) {
 	return {
-		length: password.length >= 12,
+		length: Array.from( password ).length >= 12,
 		uppercase: /[A-Z]/.test( password ),
 		lowercase: /[a-z]/.test( password ),
 		number: /[0-9]/.test( password ),

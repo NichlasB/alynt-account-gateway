@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `06` are complete; prompt `07` is next.
+- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `07` are complete; prompt `07A` is next.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Run approval-gated `07-EDGE_CASES_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompts `03` through `06` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Run `07A-ADVERSARIAL_TEST_SUITE_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompts `03` through `07` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
@@ -29,7 +29,7 @@
 - [x] `04-WP_BEST_PRACTICES_REVIEW_PROMPT.md`
 - [x] `05-DATABASE_REVIEW_PROMPT.md`
 - [x] `06-PERFORMANCE_REVIEW_PROMPT.md`
-- [ ] `07-EDGE_CASES_REVIEW_PROMPT.md`
+- [x] `07-EDGE_CASES_REVIEW_PROMPT.md`
 - [ ] `07A-ADVERSARIAL_TEST_SUITE_REVIEW_PROMPT.md`
 - [ ] `08-UNINSTALL_REVIEW_PROMPT.md`
 - [ ] `09-I18N_REVIEW_PROMPT.md`
@@ -125,6 +125,20 @@ Execution rules:
 - [x] Added `docs/PERFORMANCE_REVIEW_1.1.21.md` with the inventory, strategies, before/after behavior, trade-offs, accepted constraints, migration notes, and validation evidence.
 - [x] Final validation passed: production build with no generated asset change, 1,142-string POT generation, PHPCS, 228 first-party PHP syntax checks, 17 JavaScript/MJS syntax checks, 480 PHPUnit tests with 3,407 assertions and no deprecations, npm high-severity audit with zero vulnerabilities, Composer advisory audit with no advisories, 122/15/14 production PHP/source JS/source CSS ceilings, and `git diff --check`.
 - [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `06`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
+
+### Prompt 07 - Edge Cases Review Evidence
+
+- [x] Completed a read-only Phase 1 inventory of 26 scenarios: 8 high, 14 medium, 4 low, and no critical finding; received explicit approval before Phase 2.
+- [x] Added atomic, privacy-preserving operation locks for rate-limit updates and same-email public pending-registration creation, including stale-lock recovery and uninstall cleanup.
+- [x] Made registration and set-password forms usable without JavaScript while retaining client-side progressive validation and server-side enforcement.
+- [x] Added schema min/max bounds, dashboard-link/role caps, suffix-aware WordPress username limits, and aligned UTF-8 password-length counting.
+- [x] Hardened Reoon handling so non-200 and undocumented statuses fail closed while documented valid, blocked, and flagged policy behavior remains explicit.
+- [x] Snapshotted queued webhook destination, full payload, signing/debug policy, timestamp, and stable event ID; retries now reuse that envelope and expose `X-Alynt-AG-Delivery`.
+- [x] Preserved receiver success when only local webhook logging fails, with the logging failure recorded through diagnostics.
+- [x] Rejected unsupported network-wide activation and made database-install failure abort activation clearly.
+- [x] Added `docs/EDGE_CASES_REVIEW_1.1.21.md` with all 26 dispositions, implemented prevention/handling/recovery controls, accepted constraints, and validation evidence.
+- [x] Final validation passed: production build, 1,146-string POT generation, PHPCS, 228 PHP syntax checks, 17 JavaScript/MJS syntax checks, 487 PHPUnit tests with 3,443 assertions, npm and Composer audits, source ceilings, and `git diff --check`.
+- [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `07`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
 
 ### Consolidated End-To-End Acceptance
 

@@ -70,6 +70,7 @@ class FrontendJsSourceTest extends TestCase {
 	public function test_password_submit_aria_disabled_tracks_validity() {
 		$js = $this->get_frontend_js();
 
+		$this->assertStringContainsString( 'Array.from( password ).length >= 12', $js );
 		$this->assertStringContainsString( 'submit.disabled = ! isValid;', $js );
 		$this->assertStringContainsString( "submit.setAttribute( 'aria-disabled', isValid ? 'false' : 'true' );", $js );
 	}

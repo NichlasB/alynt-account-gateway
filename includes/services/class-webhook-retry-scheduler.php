@@ -17,12 +17,13 @@ class ALYNT_AG_Webhook_Retry_Scheduler {
 	/**
 	 * Queue an initial account-created delivery outside the customer request.
 	 *
-	 * @param string $hook    Delivery hook.
-	 * @param int    $user_id User ID.
+	 * @param string              $hook    Delivery hook.
+	 * @param int                 $user_id User ID.
+	 * @param array<string,mixed> $envelope Immutable delivery envelope.
 	 * @return true|WP_Error
 	 */
-	public function schedule_initial( $hook, $user_id ) {
-		$args = array( absint( $user_id ) );
+	public function schedule_initial( $hook, $user_id, $envelope = array() ) {
+		$args = array( absint( $user_id ), $envelope );
 		if ( wp_next_scheduled( $hook, $args ) ) {
 			return true;
 		}
@@ -37,20 +38,21 @@ class ALYNT_AG_Webhook_Retry_Scheduler {
 	/**
 	 * Queue a bounded retry after a transport or HTTP failure.
 	 *
-	 * @param string $hook          Retry hook.
-	 * @param int    $maximum       Maximum retry count.
-	 * @param int    $user_id       User ID.
-	 * @param int    $retry_count   Current retry count.
-	 * @param bool   $allow_retries Whether retries are enabled for this event.
+	 * @param string              $hook          Retry hook.
+	 * @param int                 $maximum       Maximum retry count.
+	 * @param int                 $user_id       User ID.
+	 * @param int                 $retry_count   Current retry count.
+	 * @param bool                $allow_retries Whether retries are enabled for this event.
+	 * @param array<string,mixed> $envelope Immutable delivery envelope.
 	 * @return bool
 	 */
-	public function schedule( $hook, $maximum, $user_id, $retry_count, $allow_retries ) {
+	public function schedule( $hook, $maximum, $user_id, $retry_count, $allow_retries, $envelope = array() ) {
 		if ( ! $allow_retries || $retry_count >= $maximum ) {
 			return false;
 		}
 
 		$next_retry = $retry_count + 1;
-		$args       = array( absint( $user_id ), $next_retry );
+		$args       = array( absint( $user_id ), $next_retry, $envelope );
 		if ( wp_next_scheduled( $hook, $args ) ) {
 			return true;
 		}

@@ -37,6 +37,10 @@ class ALYNT_AG_Reoon_Client {
 			return new WP_Error( 'alynt_ag_reoon_request_failed', __( 'Email verification failed. Please try again.', 'alynt-account-gateway' ) );
 		}
 
+		if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
+			return new WP_Error( 'alynt_ag_reoon_request_failed', __( 'Email verification failed. Please try again.', 'alynt-account-gateway' ) );
+		}
+
 		$body = json_decode( wp_remote_retrieve_body( $response ), true );
 		if ( ! is_array( $body ) ) {
 			return new WP_Error( 'alynt_ag_reoon_invalid_response', __( 'Email verification failed. Please try again.', 'alynt-account-gateway' ) );
@@ -91,6 +95,10 @@ class ALYNT_AG_Reoon_Client {
 			return new WP_Error( 'alynt_ag_reoon_request_failed', __( 'Email verification failed. Please try again.', 'alynt-account-gateway' ) );
 		}
 
+		if ( 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
+			return new WP_Error( 'alynt_ag_reoon_request_failed', __( 'Email verification failed. Please try again.', 'alynt-account-gateway' ) );
+		}
+
 		$body = json_decode( wp_remote_retrieve_body( $response ), true );
 
 		if ( ! is_array( $body ) ) {
@@ -114,6 +122,14 @@ class ALYNT_AG_Reoon_Client {
 				'alynt_ag_reoon_blocked',
 				__( 'This email address cannot be used.', 'alynt-account-gateway' ),
 				array( 'status' => $status )
+			);
+		}
+
+		$accepted = array( 'valid', 'safe', 'catch_all', 'role_account', 'unknown', 'inbox_full' );
+		if ( ! in_array( $status, $accepted, true ) ) {
+			return new WP_Error(
+				'alynt_ag_reoon_invalid_response',
+				__( 'Email verification failed. Please try again.', 'alynt-account-gateway' )
 			);
 		}
 

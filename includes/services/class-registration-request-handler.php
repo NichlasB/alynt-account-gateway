@@ -85,7 +85,14 @@ class ALYNT_AG_Registration_Request_Handler extends ALYNT_AG_Service_Collaborato
 			exit;
 		}
 
+		$lock = ALYNT_AG_Operation_Lock::acquire( 'pending_registration', $context['email'], 30 );
+		if ( is_wp_error( $lock ) ) {
+			wp_safe_redirect( add_query_arg( 'registration_error', 'pending_registration_failed', $context['base_url'] ) );
+			exit;
+		}
+
 		$result = $this->create_pending_registration_from_request( $settings, $context['return_path'] );
+		ALYNT_AG_Operation_Lock::release( 'pending_registration', $context['email'], $lock );
 		if ( is_wp_error( $result ) ) {
 			if ( 'email_unavailable' === $result->get_error_code() ) {
 				wp_safe_redirect( add_query_arg( 'registration_sent', '1', $context['base_url'] ) );

@@ -141,6 +141,7 @@ class CleanupLifecycleTest extends TestCase {
 		$this->assertStringContainsString( '\\_transient\\_timeout\\_alynt\\_ag\\_rl\\_', $queries );
 		$this->assertStringContainsString( '\\_transient\\_alynt\\_ag\\_rl\\_meta\\_', $queries );
 		$this->assertStringContainsString( '\\_transient\\_timeout\\_alynt\\_ag\\_rl\\_meta\\_', $queries );
+		$this->assertStringContainsString( 'alynt\\_ag\\_lock\\_', $queries );
 	}
 
 	public function test_uninstall_drops_the_database_registry_tables_only() {

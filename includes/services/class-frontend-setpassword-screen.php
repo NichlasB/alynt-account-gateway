@@ -207,7 +207,7 @@ class ALYNT_AG_Frontend_Setpassword_Screen {
 				<li data-agw-requirement="symbol" data-agw-requirement-label="<?php esc_attr_e( 'At least one special symbol', 'alynt-account-gateway' ); ?>" aria-label="<?php esc_attr_e( 'Not met: At least one special symbol', 'alynt-account-gateway' ); ?>"><?php esc_html_e( 'At least one special symbol', 'alynt-account-gateway' ); ?></li>
 				<li data-agw-requirement="match" data-agw-requirement-label="<?php esc_attr_e( 'Passwords match', 'alynt-account-gateway' ); ?>" aria-label="<?php esc_attr_e( 'Not met: Passwords match', 'alynt-account-gateway' ); ?>"><?php esc_html_e( 'Passwords match', 'alynt-account-gateway' ); ?></li>
 			</ul>
-			<button class="agw-button agw-button--primary" type="submit" data-agw-password-submit disabled aria-disabled="true"><?php esc_html_e( 'Save Password', 'alynt-account-gateway' ); ?></button>
+			<button class="agw-button agw-button--primary" type="submit" data-agw-password-submit aria-disabled="false"><?php esc_html_e( 'Save Password', 'alynt-account-gateway' ); ?></button>
 		</form>
 		<?php
 	}

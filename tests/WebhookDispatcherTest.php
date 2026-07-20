@@ -49,7 +49,11 @@ class WebhookDispatcherTest extends TestCase {
 		$this->assertCount( 0, $GLOBALS['alynt_ag_test_remote_posts'] );
 		$this->assertCount( 1, $GLOBALS['alynt_ag_test_single_events'] );
 		$this->assertSame( ALYNT_AG_Webhook_Dispatcher::DELIVERY_HOOK, $GLOBALS['alynt_ag_test_single_events'][0]['hook'] );
-		$this->assertSame( array( 321 ), $GLOBALS['alynt_ag_test_single_events'][0]['args'] );
+		$args = $GLOBALS['alynt_ag_test_single_events'][0]['args'];
+		$this->assertSame( 321, $args[0] );
+		$this->assertSame( 'https://hooks.example.test/account-created', $args[1]['url'] );
+		$this->assertStringStartsWith( 'evt_', $args[1]['payload']['id'] );
+		$this->assertSame( 'customer@example.test', $args[1]['payload']['user']['user_email'] );
 	}
 
 	public function test_account_created_queue_is_a_no_op_without_destination() {
@@ -57,6 +61,25 @@ class WebhookDispatcherTest extends TestCase {
 
 		$this->assertTrue( $dispatcher->queue_account_created( 321, array() ) );
 		$this->assertCount( 0, $GLOBALS['alynt_ag_test_single_events'] );
+	}
+
+	public function test_queued_delivery_uses_snapshotted_destination_and_payload() {
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+		$dispatcher->queue_account_created(
+			321,
+			array(
+				'account_created_webhook' => 'https://hooks.example.test/original',
+				'webhook_signing_secret'  => 'original-secret',
+			)
+		);
+
+		$envelope = $GLOBALS['alynt_ag_test_single_events'][0]['args'][1];
+		$result   = $dispatcher->deliver_account_created( 321, $envelope );
+
+		$this->assertTrue( $result );
+		$this->assertSame( 'https://hooks.example.test/original', $GLOBALS['alynt_ag_test_remote_posts'][0]['url'] );
+		$this->assertSame( $envelope['payload']['id'], $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['headers']['X-Alynt-AG-Delivery'] );
+		$this->assertArrayHasKey( 'X-Alynt-AG-Signature', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['headers'] );
 	}
 
 	public function test_register_adds_initial_delivery_and_retry_hooks() {
@@ -124,6 +147,7 @@ class WebhookDispatcherTest extends TestCase {
 		$this->assertSame( 'https://hooks.example.test/account-created', $GLOBALS['alynt_ag_test_remote_posts'][0]['url'] );
 		$this->assertSame( 'application/json', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['headers']['Content-Type'] );
 		$this->assertSame( 'account.created', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['headers']['X-Alynt-AG-Event'] );
+		$this->assertStringStartsWith( 'evt_', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['headers']['X-Alynt-AG-Delivery'] );
 		$this->assertArrayNotHasKey( 'X-Alynt-AG-Signature', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['headers'] );
 		$this->assertStringContainsString( '"event":"account.created"', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['body'] );
 		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
@@ -182,7 +206,14 @@ class WebhookDispatcherTest extends TestCase {
 		$this->assertNull( $row['payload'] );
 		$this->assertCount( 1, $GLOBALS['alynt_ag_test_single_events'] );
 		$this->assertSame( ALYNT_AG_Webhook_Dispatcher::RETRY_HOOK, $GLOBALS['alynt_ag_test_single_events'][0]['hook'] );
-		$this->assertSame( array( 321, 1 ), $GLOBALS['alynt_ag_test_single_events'][0]['args'] );
+		$retry_args = $GLOBALS['alynt_ag_test_single_events'][0]['args'];
+		$this->assertSame( 321, $retry_args[0] );
+		$this->assertSame( 1, $retry_args[1] );
+		$this->assertSame( 'https://hooks.example.test/account-created', $retry_args[2]['url'] );
+		$this->assertSame(
+			$GLOBALS['alynt_ag_test_remote_posts'][0]['args']['headers']['X-Alynt-AG-Delivery'],
+			$retry_args[2]['payload']['id']
+		);
 	}
 
 	public function test_dispatch_account_created_signs_json_body_when_secret_is_configured() {
