@@ -11,12 +11,6 @@ import { alyntAgInitColorControls } from './modules/colors.js';
 import { alyntAgHandleMediaClick } from './modules/media.js';
 import { alyntAgInitDashboardLinks } from './modules/dashboard-links.js';
 
-const root = document.querySelector( '.alynt-ag-admin' );
-
-if ( root ) {
-	root.classList.add( 'alynt-ag-admin--ready' );
-}
-
 alyntAgInitEmailSaveState();
 alyntAgInitTypographyPresets();
 alyntAgInitColorControls();

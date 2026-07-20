@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release revalidation is planned and awaits explicit approval.
+- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompt `01` is complete; prompt `02` Phase 1 awaits explicit approval.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Run the approval-gated v1.1.21 post-refactor pre-release sequence, then complete one consolidated end-to-end acceptance matrix. Findings that require code changes will target v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Run the approval-gated v1.1.21 post-refactor pre-release sequence beginning with prompt `02` Phase 1, then complete one consolidated end-to-end acceptance matrix. Findings that require code changes will target v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
@@ -16,14 +16,14 @@
 - [x] Use released v1.1.21 as the immutable review baseline.
 - [x] Skip optional `00-PLUGIN_MODEL_ASSESSMENT_PROMPT.md` by explicit owner decision.
 - [x] Record the ordered pre-release and runtime-validation plan before execution.
-- [ ] Receive explicit approval before beginning prompt `01`.
-- [ ] Keep the review branch, LocalWP fixtures, and evidence isolated from staging and production sites.
+- [x] Receive explicit approval before beginning prompt `01`.
+- [x] Keep the prompt `01` review branch and evidence isolated from staging and production sites.
 - [ ] Do not publish another release unless review findings require changes and a later release is separately approved.
 - [ ] Put any code, test, documentation, or packaging fixes into v1.1.22 rather than altering the published v1.1.21 tag or asset.
 
 ### Ordered Pre-Release Sequence
 
-- [ ] `01-CODE_CLEANUP_PROMPT.md`
+- [x] `01-CODE_CLEANUP_PROMPT.md`
 - [ ] `02-FILE_STRUCTURE_REVIEW_PROMPT.md`
 - [ ] `03-ERROR_HANDLING_REVIEW_PROMPT.md`
 - [ ] `04-WP_BEST_PRACTICES_REVIEW_PROMPT.md`
@@ -46,6 +46,18 @@ Execution rules:
 - Update the toolkit `PRE_RELEASE_CHECKLIST.md` only after each supported workflow completes successfully.
 - Keep unresolved or intentionally deferred findings visible with severity, rationale, owner decision, and recommended release target.
 - Run the full source gates after any modifying workflow and again after prompt `13`: build, stable POT generation, PHPCS, all PHP and JavaScript syntax checks, npm and Composer audits, PHPUnit, and `git diff --check`.
+
+### Prompt 01 - Code Cleanup Evidence
+
+- [x] Reviewed all `209` tracked PHP files and `14` tracked JavaScript/MJS files for unused code, dead code, unreachable branches, debug output, development remnants, and dormant imports or collaborators.
+- [x] Cross-checked `14` tracked CSS files for selectors that could make apparently dormant JavaScript state changes reachable.
+- [x] Found no runtime debug calls, TODO/FIXME markers, commented-out code blocks, empty inline functions, unused private/protected properties, dead private/protected methods, unreachable PHP statements, or unused production imports.
+- [x] Retained three intentional CLI status messages in the build and POT-generation scripts; they report command progress and are not shipped frontend or admin debug output.
+- [x] Confirmed the two `alert()` strings are intentional hostile-input fixtures in email-template security tests.
+- [x] Removed one obvious unused code path from `assets/src/admin/index.js`: a root query and `alynt-ag-admin--ready` class mutation with no CSS, PHP, JavaScript, test, or compiled-output consumer.
+- [x] Rebuilt the assets and confirmed the tracked distribution remained unchanged, demonstrating that the removed source path had no shipped behavior.
+- [x] Passed PHPCS, the focused `Squiz.PHP.NonExecutableCode` sniff, `209` PHP syntax checks, `14` JavaScript/MJS syntax checks, `425` PHPUnit tests with `3,130` assertions, npm high-severity audit, and Composer advisory audit.
+- [x] Recorded no manual-decision findings and no deferred prompt `01` cleanup items.
 
 ### Consolidated End-To-End Acceptance
 
