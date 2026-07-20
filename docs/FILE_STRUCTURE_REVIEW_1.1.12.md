@@ -360,8 +360,11 @@ The test suite now passes at 424 tests and 3,121 assertions. New guardrails
 lock the facade API, 133 extracted method owners, production loader order, and
 line thresholds. Build, stable 1,104-string POT generation, PHPCS, all PHP and
 JavaScript syntax checks, npm and Composer security audits, and diff-integrity
-checks pass. Exact-package inspection and LocalWP Plugin Tester acceptance
-remain before separate v1.1.21 release approval.
+checks pass. The exact 116-file package was inspected and installed on LocalWP
+Plugin Tester, where all installed files byte-matched the candidate and the
+full settings surface passed authenticated browser acceptance without changing
+activation or persistent settings. Increment 8 is complete and v1.1.21 now
+awaits separate release approval.
 
 Each increment requires the full test suite, PHPCS, build, exact-package
 inspection, Plugin Tester acceptance, and a small maintenance release. Do not
