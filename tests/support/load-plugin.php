@@ -28,6 +28,11 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-assets.php'
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-branding.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-components.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-messages.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-dashboard-navigation-renderer.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-dashboard-endpoint-metadata.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-dashboard-endpoint-renderer.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-dashboard-commerce-renderer.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-dashboard-account-renderer.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-dashboard-screen.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-register-screen.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-login-screen.php';

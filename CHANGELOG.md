@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.17 - 2026-07-20
+
+### Changed
+
+- Extracted dashboard navigation, WooCommerce endpoint, commerce overview, and account-summary rendering into focused collaborators behind the existing frontend dashboard facade.
+- Preserved the established dashboard constructor contract, public rendering methods, WooCommerce delegation, markup classes, and frontend behavior.
+
+### Tests
+
+- Added regression coverage for injected renderer delegation, exact non-dashboard endpoint context, and dashboard renderer line limits.
+
 ## 1.1.16 - 2026-07-20
 
 ### Changed

@@ -491,3 +491,50 @@ and browser acceptance found no warnings or errors. No staging or production
 site was touched.
 
 Increment 4 may now begin with dashboard module renderer extraction.
+
+### Increment 4: Dashboard Renderer Collaborators
+
+Status: candidate accepted; explicit v1.1.17 release approval pending.
+
+- Kept `ALYNT_AG_Frontend_Dashboard_Screen` as the stable public facade with
+  its established first three constructor arguments and two public render
+  methods.
+- Extracted dashboard actions and optional menus into a navigation renderer.
+- Extracted WooCommerce endpoint metadata and endpoint content rendering into
+  separate collaborators.
+- Extracted overview, recent-order, and download modules into a commerce
+  renderer.
+- Extracted address, account-detail, and payment-method modules into an
+  account renderer.
+- Preserved WooCommerce delegation, visibility checks, endpoint context,
+  markup classes, copy, and navigation behavior.
+- Reduced the dashboard facade from 983 to 208 lines. Every extracted
+  collaborator is 241 lines or fewer.
+- Added regression coverage for navigation order, dashboard module delegation,
+  exact endpoint context, and the 300-line structural threshold.
+
+The full quality gates pass. PHPUnit now reports 396 tests and 2,743
+assertions. PHPCS, project-wide PHP syntax, source JavaScript syntax,
+frontend/admin build, POT generation, npm audit, Composer audit, and
+`git diff --check` all pass.
+
+The inspected v1.1.17 candidate contains 56 runtime files and 50 syntax-clean
+PHP files under one plugin root, contains no development files or backslash
+archive paths, and has SHA-256
+`0ADF44A4005D09A4F2FBDBBDB206816FC86C963A4E97BE1C8E98C1BCC89545BD`.
+LocalWP Plugin Tester installed that exact candidate over active v1.1.16; all
+56 installed files byte-match the package, the plugin remains active at
+v1.1.17, and activation and settings fingerprints remain unchanged.
+
+Authenticated desktop acceptance covered every extracted dashboard renderer,
+including the dashboard overview, commerce, address, account-detail, payment,
+navigation, and endpoint responsibilities. Orders and Payment Methods
+preserved native WooCommerce delegation and empty-state output. Payment
+Methods also passed at a 390x844 mobile viewport with no browser warnings,
+errors, or failed dynamic requests. The disposable customer and authenticated
+session were removed, the homepage and branded login return HTTP 200, and no
+staging or production site was touched.
+
+The candidate is ready for explicit v1.1.17 release approval. After release
+and updater verification, the next Phase 2 increment will split settings
+schema, defaults, and sanitization.
