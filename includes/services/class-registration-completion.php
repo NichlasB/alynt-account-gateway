@@ -43,8 +43,6 @@ class ALYNT_AG_Registration_Completion extends ALYNT_AG_Service_Collaborator {
 	 * @return int|WP_Error
 	 */
 	public function run_complete_pending_registration( $token, $password, $password_confirm, $settings, &$last_completed_return_path ) {
-		global $wpdb;
-
 		$pending = $this->confirm_pending_token( $token );
 		if ( is_wp_error( $pending ) ) {
 			return $pending;
@@ -65,11 +63,32 @@ class ALYNT_AG_Registration_Completion extends ALYNT_AG_Service_Collaborator {
 			return new WP_Error( 'email_unavailable', __( 'This email address can no longer be used.', 'alynt-account-gateway' ) );
 		}
 
+		$user_id = $this->create_registration_user( $pending, $password, $settings );
+		if ( is_wp_error( $user_id ) ) {
+			$this->log_registration_flow_result( $pending->email, $user_id->get_error_code() );
+			return $user_id;
+		}
+
+		$this->mark_pending_registration_created( $pending, $user_id );
+		$this->attach_registration_consent( $pending, $user_id );
+		$this->deliver_registration_integrations( $pending, $user_id, $settings );
+
+		return $user_id;
+	}
+
+	/**
+	 * Create and populate the confirmed WordPress user.
+	 *
+	 * @param object              $pending  Pending registration.
+	 * @param string              $password Chosen password.
+	 * @param array<string,mixed> $settings Plugin settings.
+	 * @return int|WP_Error
+	 */
+	private function create_registration_user( $pending, $password, $settings ) {
 		$username = $this->generate_username( $pending->first_name, $pending->last_name, $settings );
 		$user_id  = wp_create_user( $username, $password, $pending->email );
 
 		if ( is_wp_error( $user_id ) ) {
-			$this->log_registration_flow_result( $pending->email, $user_id->get_error_code() );
 			return $user_id;
 		}
 
@@ -81,6 +100,19 @@ class ALYNT_AG_Registration_Completion extends ALYNT_AG_Service_Collaborator {
 				'display_name' => trim( $pending->first_name . ' ' . $pending->last_name ),
 			)
 		);
+
+		return (int) $user_id;
+	}
+
+	/**
+	 * Mark a pending registration as converted.
+	 *
+	 * @param object $pending Pending registration.
+	 * @param int    $user_id WordPress user ID.
+	 * @return void
+	 */
+	private function mark_pending_registration_created( $pending, $user_id ) {
+		global $wpdb;
 
 		$tables = ALYNT_AG_Database::tables();
 
@@ -96,41 +128,72 @@ class ALYNT_AG_Registration_Completion extends ALYNT_AG_Service_Collaborator {
 			array( '%d' )
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	}
 
+	/**
+	 * Attach the pending registration consent to the new user.
+	 *
+	 * @param object $pending Pending registration.
+	 * @param int    $user_id WordPress user ID.
+	 * @return void
+	 */
+	private function attach_registration_consent( $pending, $user_id ) {
 		$privacy = new ALYNT_AG_Privacy_Service();
-		$privacy->attach_registration_consent_to_user( $pending->email, (int) $user_id );
+		$privacy->attach_registration_consent_to_user( $pending->email, $user_id );
+	}
 
-		$welcome_sent = $this->send_account_created_welcome_email( $pending, (int) $user_id, $settings );
+	/**
+	 * Deliver non-blocking account-created integrations.
+	 *
+	 * @param object              $pending  Pending registration.
+	 * @param int                 $user_id  WordPress user ID.
+	 * @param array<string,mixed> $settings Plugin settings.
+	 * @return void
+	 */
+	private function deliver_registration_integrations( $pending, $user_id, $settings ) {
+		$welcome_sent = $this->send_account_created_welcome_email( $pending, $user_id, $settings );
 		if ( is_wp_error( $welcome_sent ) ) {
-			ALYNT_AG_Diagnostics_Logger::log_event(
-				'warning',
-				'external_api',
+			$this->log_integration_failure(
 				'account_created_welcome_failed',
 				__( 'The account-created welcome email could not be sent.', 'alynt-account-gateway' ),
 				array(
-					'user_id' => (int) $user_id,
+					'user_id' => $user_id,
 					'email'   => $pending->email,
 					'error'   => $welcome_sent->get_error_code(),
 				)
 			);
 		}
 
-		$webhook_sent = $this->dispatch_account_created_webhook( (int) $user_id, $settings );
+		$webhook_sent = $this->dispatch_account_created_webhook( $user_id, $settings );
 		if ( is_wp_error( $webhook_sent ) ) {
-			ALYNT_AG_Diagnostics_Logger::log_event(
-				'warning',
-				'external_api',
+			$this->log_integration_failure(
 				'account_created_webhook_failed',
 				__( 'The account-created webhook could not be sent.', 'alynt-account-gateway' ),
 				array(
-					'user_id' => (int) $user_id,
+					'user_id' => $user_id,
 					'email'   => $pending->email,
 					'error'   => $webhook_sent->get_error_code(),
 				)
 			);
 		}
+	}
 
-		return (int) $user_id;
+	/**
+	 * Record a non-blocking account-created integration failure.
+	 *
+	 * @param string              $event   Diagnostics event.
+	 * @param string              $message Safe diagnostics message.
+	 * @param array<string,mixed> $context Failure context.
+	 * @return void
+	 */
+	private function log_integration_failure( $event, $message, $context ) {
+		ALYNT_AG_Diagnostics_Logger::log_event(
+			'warning',
+			'external_api',
+			$event,
+			$message,
+			$context
+		);
 	}
 
 	/**
