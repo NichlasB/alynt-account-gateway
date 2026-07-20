@@ -137,7 +137,7 @@ Execution rules:
 - [x] Preserved receiver success when only local webhook logging fails, with the logging failure recorded through diagnostics.
 - [x] Rejected unsupported network-wide activation and made database-install failure abort activation clearly.
 - [x] Added `docs/EDGE_CASES_REVIEW_1.1.21.md` with all 26 dispositions, implemented prevention/handling/recovery controls, accepted constraints, and validation evidence.
-- [x] Final validation passed: production build, 1,146-string POT generation, PHPCS, 228 PHP syntax checks, 17 JavaScript/MJS syntax checks, 487 PHPUnit tests with 3,443 assertions, npm and Composer audits, source ceilings, and `git diff --check`.
+- [x] Final validation passed: production build, 1,146-string POT generation, PHPCS, 230 PHP syntax checks, 17 JavaScript/MJS syntax checks, 487 PHPUnit tests with 3,443 assertions, npm and Composer audits, source ceilings, and `git diff --check`.
 - [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `07`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
 
 ### Consolidated End-To-End Acceptance

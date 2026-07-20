@@ -136,7 +136,7 @@ for systematic hostile and mutation-oriented test expansion.
 - Production asset build: passed.
 - POT generation: 1,146 strings.
 - PHPCS/WPCS and PHP compatibility lint: passed.
-- PHP syntax: 228 tracked files passed.
+- PHP syntax: 230 tracked files passed.
 - JavaScript/MJS syntax: 17 tracked files passed.
 - PHPUnit: 487 tests, 3,443 assertions, no failures or deprecations.
 - npm high-severity audit: zero vulnerabilities.
