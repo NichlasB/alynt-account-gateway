@@ -24,13 +24,34 @@ class ALYNT_AG_Privacy_Exporter {
 	public function export_personal_data( $email_address, $page = 1 ) {
 		unset( $page );
 
-		global $wpdb;
-
 		$email   = sanitize_email( $email_address );
 		$user    = function_exists( 'get_user_by' ) ? get_user_by( 'email', $email ) : false;
 		$user_id = $user && isset( $user->ID ) ? absint( $user->ID ) : 0;
-		$tables  = ALYNT_AG_Database::tables();
-		$data    = array();
+		$records = $this->personal_data_records( $email, $user_id );
+		$data    = array_merge(
+			$this->export_consents( $records['consents'] ),
+			$this->export_pending_registrations( $records['pending'] ),
+			$this->export_verification_logs( $records['verification'] ),
+			$this->export_webhook_logs( $records['webhooks'] )
+		);
+
+		return array(
+			'data' => $data,
+			'done' => true,
+		);
+	}
+
+	/**
+	 * Read personal-data records from plugin-owned tables.
+	 *
+	 * @param string $email   Sanitized email address.
+	 * @param int    $user_id WordPress user ID.
+	 * @return array{consents:array<int,object>,pending:array<int,object>,verification:array<int,object>,webhooks:array<int,object>}
+	 */
+	private function personal_data_records( $email, $user_id ) {
+		global $wpdb;
+
+		$tables = ALYNT_AG_Database::tables();
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Exporter reads plugin-owned tables.
 		if ( $user_id ) {
@@ -69,7 +90,23 @@ class ALYNT_AG_Privacy_Exporter {
 		) : array();
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		foreach ( (array) $consents as $consent ) {
+		return array(
+			'consents'     => (array) $consents,
+			'pending'      => (array) $pending,
+			'verification' => (array) $verification,
+			'webhooks'     => (array) $webhooks,
+		);
+	}
+
+	/**
+	 * Format consent records for the WordPress exporter.
+	 *
+	 * @param array<int,object> $records Consent records.
+	 * @return array<int,array<string,mixed>>
+	 */
+	private function export_consents( $records ) {
+		$data = array();
+		foreach ( $records as $consent ) {
 			$data[] = $this->export_item(
 				'consent-' . $consent->id,
 				__( 'Account Gateway Consent', 'alynt-account-gateway' ),
@@ -84,7 +121,18 @@ class ALYNT_AG_Privacy_Exporter {
 			);
 		}
 
-		foreach ( (array) $pending as $registration ) {
+		return $data;
+	}
+
+	/**
+	 * Format pending registrations for the WordPress exporter.
+	 *
+	 * @param array<int,object> $records Pending registrations.
+	 * @return array<int,array<string,mixed>>
+	 */
+	private function export_pending_registrations( $records ) {
+		$data = array();
+		foreach ( $records as $registration ) {
 			$data[] = $this->export_item(
 				'pending-registration-' . $registration->id,
 				__( 'Pending Account Registration', 'alynt-account-gateway' ),
@@ -100,7 +148,18 @@ class ALYNT_AG_Privacy_Exporter {
 			);
 		}
 
-		foreach ( (array) $verification as $log ) {
+		return $data;
+	}
+
+	/**
+	 * Format verification records for the WordPress exporter.
+	 *
+	 * @param array<int,object> $records Verification records.
+	 * @return array<int,array<string,mixed>>
+	 */
+	private function export_verification_logs( $records ) {
+		$data = array();
+		foreach ( $records as $log ) {
 			$data[] = $this->export_item(
 				'verification-' . $log->id,
 				__( 'Email Verification Log', 'alynt-account-gateway' ),
@@ -116,7 +175,18 @@ class ALYNT_AG_Privacy_Exporter {
 			);
 		}
 
-		foreach ( (array) $webhooks as $log ) {
+		return $data;
+	}
+
+	/**
+	 * Format webhook records for the WordPress exporter.
+	 *
+	 * @param array<int,object> $records Webhook records.
+	 * @return array<int,array<string,mixed>>
+	 */
+	private function export_webhook_logs( $records ) {
+		$data = array();
+		foreach ( $records as $log ) {
 			$data[] = $this->export_item(
 				'webhook-' . $log->id,
 				__( 'Webhook Delivery Metadata', 'alynt-account-gateway' ),
@@ -130,10 +200,7 @@ class ALYNT_AG_Privacy_Exporter {
 			);
 		}
 
-		return array(
-			'data' => $data,
-			'done' => true,
-		);
+		return $data;
 	}
 
 	/**

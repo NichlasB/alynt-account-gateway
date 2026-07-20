@@ -59,79 +59,128 @@ class ALYNT_AG_Registration_Request_Handler extends ALYNT_AG_Service_Collaborato
 			return;
 		}
 
+		$this->handle_start_registration_request();
+	}
+
+	/**
+	 * Handle a start-registration form submission.
+	 *
+	 * @return void
+	 */
+	private function handle_start_registration_request() {
 		check_admin_referer( 'alynt_ag_start_registration', 'alynt_ag_registration_nonce' );
 
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified above before this optional return destination is read.
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Validated as a same-site destination below.
+		$context  = $this->start_registration_context( $settings );
+		$valid    = $this->validate_start_registration_request( $context['email'], $settings );
+
+		if ( is_wp_error( $valid ) ) {
+			wp_safe_redirect( add_query_arg( 'registration_error', $valid->get_error_code(), $context['base_url'] ) );
+			exit;
+		}
+
+		$result = $this->create_pending_registration_from_request( $settings, $context['return_path'] );
+		if ( is_wp_error( $result ) ) {
+			if ( 'email_unavailable' === $result->get_error_code() ) {
+				wp_safe_redirect( add_query_arg( 'registration_sent', '1', $context['base_url'] ) );
+				exit;
+			}
+
+			$this->log_registration_flow_result( $context['email'], $result->get_error_code() );
+			wp_safe_redirect( add_query_arg( 'registration_error', $result->get_error_code(), $context['base_url'] ) );
+			exit;
+		}
+
+		$email_sent = $this->send_confirmation_email( $result, $settings );
+		if ( is_wp_error( $email_sent ) ) {
+			$this->log_registration_flow_result( $context['email'], $email_sent->get_error_code() );
+			wp_safe_redirect( add_query_arg( 'registration_error', $email_sent->get_error_code(), $context['base_url'] ) );
+			exit;
+		}
+
+		wp_safe_redirect( add_query_arg( 'registration_sent', '1', $context['base_url'] ) );
+		exit;
+	}
+
+	/**
+	 * Build sanitized registration request context.
+	 *
+	 * @param array<string,mixed> $settings Plugin settings.
+	 * @return array{email:string,base_url:string,return_path:string}
+	 */
+	private function start_registration_context( $settings ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce is verified by the caller; destination is validated below.
 		$submitted_redirect = isset( $_POST['redirect_to'] ) ? wp_unslash( $_POST['redirect_to'] ) : '';
 		$redirect_to        = $this->destinations->absolute_url( $submitted_redirect, $settings );
 		$return_path        = $this->destinations->relative_path( $redirect_to, $settings );
 		$base_url           = add_query_arg( 'action', 'register', home_url( $settings['account_action_base'] ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified by the caller.
+		$email = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
 
 		if ( $redirect_to ) {
 			$base_url = add_query_arg( 'redirect_to', rawurlencode( $redirect_to ), $base_url );
 		}
 
+		return array(
+			'email'       => $email,
+			'base_url'    => $base_url,
+			'return_path' => $return_path,
+		);
+	}
+
+	/**
+	 * Validate registration availability and abuse protections.
+	 *
+	 * @param string              $email    Submitted email.
+	 * @param array<string,mixed> $settings Plugin settings.
+	 * @return true|WP_Error
+	 */
+	private function validate_start_registration_request( $email, $settings ) {
 		if ( empty( $settings['registration_enabled'] ) ) {
-			wp_safe_redirect( add_query_arg( 'registration_error', 'disabled', $base_url ) );
-			exit;
+			return new WP_Error( 'disabled' );
 		}
 
-		$email      = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
 		$rate_limit = $this->validate_rate_limit( 'registration', $email, $settings );
 		if ( is_wp_error( $rate_limit ) ) {
-			wp_safe_redirect( add_query_arg( 'registration_error', $rate_limit->get_error_code(), $base_url ) );
-			exit;
+			return $rate_limit;
 		}
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Turnstile token is sanitized by validate_registration_protection().
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce is verified by the caller; token is sanitized by validate_registration_protection().
 		$turnstile_token = isset( $_POST['cf-turnstile-response'] ) ? wp_unslash( $_POST['cf-turnstile-response'] ) : '';
 		$protection      = $this->validate_registration_protection( $email, $turnstile_token, $settings );
 
 		if ( is_wp_error( $protection ) ) {
-			wp_safe_redirect( add_query_arg( 'registration_error', $protection->get_error_code(), $base_url ) );
-			exit;
+			return $protection;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified by the caller.
 		$terms_value = isset( $_POST['terms'] ) ? sanitize_text_field( wp_unslash( $_POST['terms'] ) ) : '';
 		$terms       = $this->validate_terms_acceptance( $terms_value );
 		if ( is_wp_error( $terms ) ) {
 			$this->log_registration_flow_result( $email, $terms->get_error_code() );
-			wp_safe_redirect( add_query_arg( 'registration_error', $terms->get_error_code(), $base_url ) );
-			exit;
+			return $terms;
 		}
 
-		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized in create_pending_registration().
-		$result = $this->create_pending_registration(
+		return true;
+	}
+
+	/**
+	 * Create a pending registration from nonce-verified request fields.
+	 *
+	 * @param array<string,mixed> $settings    Plugin settings.
+	 * @param string              $return_path Validated return path.
+	 * @return array<string,mixed>|WP_Error
+	 */
+	private function create_pending_registration_from_request( $settings, $return_path ) {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce is verified by the caller; values are sanitized in create_pending_registration().
+		return $this->create_pending_registration(
 			isset( $_POST['first_name'] ) ? wp_unslash( $_POST['first_name'] ) : '',
 			isset( $_POST['last_name'] ) ? wp_unslash( $_POST['last_name'] ) : '',
 			isset( $_POST['email'] ) ? wp_unslash( $_POST['email'] ) : '',
 			$settings,
 			$return_path
 		);
-		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-
-		if ( is_wp_error( $result ) ) {
-			if ( 'email_unavailable' === $result->get_error_code() ) {
-				wp_safe_redirect( add_query_arg( 'registration_sent', '1', $base_url ) );
-				exit;
-			}
-
-			$this->log_registration_flow_result( $email, $result->get_error_code() );
-			wp_safe_redirect( add_query_arg( 'registration_error', $result->get_error_code(), $base_url ) );
-			exit;
-		}
-
-		$email_sent = $this->send_confirmation_email( $result, $settings );
-		if ( is_wp_error( $email_sent ) ) {
-			$this->log_registration_flow_result( $email, $email_sent->get_error_code() );
-			wp_safe_redirect( add_query_arg( 'registration_error', $email_sent->get_error_code(), $base_url ) );
-			exit;
-		}
-
-		wp_safe_redirect( add_query_arg( 'registration_sent', '1', $base_url ) );
-		exit;
+		// phpcs:enable WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	}
 
 	/**
