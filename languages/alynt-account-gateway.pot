@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 1.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 15:47+0000\n"
+"POT-Creation-Date: 2026-07-20 17:49+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -142,7 +142,7 @@ msgstr ""
 msgid "Account Gateway"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:75
+#: includes/services/class-privacy-exporter.php:112
 msgid "Account Gateway Consent"
 msgstr ""
 
@@ -361,7 +361,7 @@ msgstr ""
 msgid "Alynt Account Gateway may process account registration data, email verification results, webhook delivery metadata, and consent records. Site owners should disclose configured third-party services such as Cloudflare Turnstile, Reoon Email Verifier, and outgoing webhooks."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:53
+#: includes/services/class-compatibility-warnings.php:78
 msgid "Alynt Account Gateway will require login before the main checkout, but WooCommerce still permits guest checkout. Review both settings and test every checkout entry point before launch."
 msgstr ""
 
@@ -476,7 +476,7 @@ msgid "Block when personal accountability, subscriptions, or fraud exposure matt
 msgstr ""
 
 #: admin/settings-page/class-security-signal-renderer-a.php:73
-#: includes/services/class-privacy-exporter.php:111
+#: includes/services/class-privacy-exporter.php:170
 msgid "Blocked"
 msgstr ""
 
@@ -501,7 +501,7 @@ msgstr ""
 msgid "Blocked Flagged Results"
 msgstr ""
 
-#: public/class-frontend.php:103
+#: includes/services/class-frontend-access-controller.php:78
 msgid "Blocked wp-admin access for a non-privileged user."
 msgstr ""
 
@@ -513,11 +513,11 @@ msgstr ""
 msgid "Body Font Stack"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:159
+#: includes/services/class-compatibility-registry.php:28
 msgid "Both plugins can change or protect login URLs. Keep the emergency bypass documented before enabling frontend output."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:183
+#: includes/services/class-compatibility-registry.php:52
 msgid "Both plugins can own public registration. Confirm which registration flow should create users."
 msgstr ""
 
@@ -622,7 +622,7 @@ msgstr ""
 msgid "Checks the saved API key against Reoon account status. It does not submit an email address or run a customer verification."
 msgstr ""
 
-#: admin/settings-page/class-field-renderer-core.php:62
+#: admin/settings-page/class-field-renderer-core.php:133
 msgid "Choose %s"
 msgstr ""
 
@@ -658,11 +658,11 @@ msgstr ""
 msgid "Close account menu"
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:171
+#: admin/settings-page/class-admin-notices.php:162
 msgid "Cloudflare rejected the saved Turnstile secret. Confirm the secret is current and belongs to the configured widget."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:179
+#: admin/settings-page/class-admin-notices.php:170
 msgid "Cloudflare returned an unexpected response to the Turnstile connection check. Retry later and confirm the saved secret in Cloudflare."
 msgstr ""
 
@@ -831,11 +831,11 @@ msgstr ""
 msgid "Consent Record Retention Days"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:81
+#: includes/services/class-privacy-exporter.php:118
 msgid "Consent Version"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:78
+#: includes/services/class-privacy-exporter.php:115
 msgid "Context"
 msgstr ""
 
@@ -887,10 +887,10 @@ msgid "Create your customer account. Fill in your details and you will receive a
 msgstr ""
 
 #: admin/settings-page/class-security-pending.php:44
-#: includes/services/class-privacy-exporter.php:114
-#: includes/services/class-privacy-exporter.php:128
-#: includes/services/class-privacy-exporter.php:82
-#: includes/services/class-privacy-exporter.php:97
+#: includes/services/class-privacy-exporter.php:119
+#: includes/services/class-privacy-exporter.php:145
+#: includes/services/class-privacy-exporter.php:173
+#: includes/services/class-privacy-exporter.php:198
 msgid "Created At"
 msgstr ""
 
@@ -927,7 +927,7 @@ msgstr ""
 msgid "Custom Dashboard Links"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:176
+#: includes/services/class-compatibility-registry.php:45
 msgid "Custom Login Page Customizer may overlap with branded login output"
 msgstr ""
 
@@ -1179,9 +1179,9 @@ msgstr ""
 
 #: admin/settings-page/class-security-pending.php:41
 #: admin/settings-page/class-security-signal-renderer-a.php:55
-#: includes/services/class-privacy-exporter.php:108
-#: includes/services/class-privacy-exporter.php:77
-#: includes/services/class-privacy-exporter.php:92
+#: includes/services/class-privacy-exporter.php:114
+#: includes/services/class-privacy-exporter.php:140
+#: includes/services/class-privacy-exporter.php:167
 msgid "Email"
 msgstr ""
 
@@ -1253,7 +1253,7 @@ msgstr ""
 msgid "Email verification is temporarily unavailable. Please try again later."
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:106
+#: includes/services/class-privacy-exporter.php:165
 msgid "Email Verification Log"
 msgstr ""
 
@@ -1325,7 +1325,7 @@ msgstr ""
 msgid "Enable this when logged-in users should see the branded full-page account dashboard."
 msgstr ""
 
-#: admin/settings-page/class-field-renderer-core.php:35
+#: admin/settings-page/class-field-renderer-core.php:92
 msgid "Enabled"
 msgstr ""
 
@@ -1364,7 +1364,7 @@ msgstr ""
 
 #: admin/settings-page/class-diagnostics-tools.php:83
 #: admin/settings-page/class-webhook-tools.php:59
-#: includes/services/class-privacy-exporter.php:124
+#: includes/services/class-privacy-exporter.php:194
 msgid "Event"
 msgstr ""
 
@@ -1397,7 +1397,7 @@ msgid "Expired Pending Records"
 msgstr ""
 
 #: admin/settings-page/class-security-pending.php:46
-#: includes/services/class-privacy-exporter.php:98
+#: includes/services/class-privacy-exporter.php:146
 msgid "Expires At"
 msgstr ""
 
@@ -1454,7 +1454,7 @@ msgid "First name"
 msgstr ""
 
 #: includes/services/class-frontend-register-screen.php:101
-#: includes/services/class-privacy-exporter.php:93
+#: includes/services/class-privacy-exporter.php:141
 msgid "First Name"
 msgstr ""
 
@@ -1609,7 +1609,7 @@ msgstr ""
 msgid "Highlights unresolved Reoon flagged results that were allowed by policy so support teams can record a review decision without changing the public registration flow."
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:125
+#: includes/services/class-privacy-exporter.php:195
 msgid "Host"
 msgstr ""
 
@@ -1617,7 +1617,7 @@ msgstr ""
 msgid "HTTP"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:126
+#: includes/services/class-privacy-exporter.php:196
 msgid "HTTP Status"
 msgstr ""
 
@@ -1739,7 +1739,7 @@ msgid "Last name"
 msgstr ""
 
 #: includes/services/class-frontend-register-screen.php:105
-#: includes/services/class-privacy-exporter.php:94
+#: includes/services/class-privacy-exporter.php:142
 msgid "Last Name"
 msgstr ""
 
@@ -1877,11 +1877,11 @@ msgstr ""
 msgid "Login, account action, and after-login paths are configured."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:171
+#: includes/services/class-compatibility-registry.php:40
 msgid "LoginPress customizes native login screens. Confirm whether native wp-login.php or Alynt Account Gateway should own the branded experience."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:170
+#: includes/services/class-compatibility-registry.php:39
 msgid "LoginPress may overlap with branded login output"
 msgstr ""
 
@@ -1977,15 +1977,15 @@ msgstr ""
 msgid "Maximum registration attempts allowed from the same source during the rate-limit window."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:201
+#: includes/services/class-compatibility-registry.php:70
 msgid "MemberPress account routes and redirects may need explicit testing with the custom dashboard."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:200
+#: includes/services/class-compatibility-registry.php:69
 msgid "MemberPress may overlap with account pages"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:195
+#: includes/services/class-compatibility-registry.php:64
 msgid "Membership account flows can add redirects or account screens. Verify member account links after enabling the gateway."
 msgstr ""
 
@@ -2045,8 +2045,8 @@ msgid "Next Step"
 msgstr ""
 
 #: admin/settings-page/class-diagnostics-tools.php:48
-#: includes/services/class-privacy-exporter.php:111
-#: includes/services/class-privacy-exporter.php:127
+#: includes/services/class-privacy-exporter.php:170
+#: includes/services/class-privacy-exporter.php:197
 msgid "No"
 msgstr ""
 
@@ -2263,23 +2263,23 @@ msgstr ""
 msgid "Orders"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:298
+#: includes/services/class-compatibility-registry.php:167
 msgid "Other account-page integrations may be active"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:117
+#: includes/services/class-compatibility-warnings.php:142
 msgid "Other code is attached to related account hooks: %s. Review these integrations if gateway behavior looks unexpected."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:295
+#: includes/services/class-compatibility-registry.php:164
 msgid "Other login or registration hooks are active"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:296
+#: includes/services/class-compatibility-registry.php:165
 msgid "Other redirect or security hooks are active"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:297
+#: includes/services/class-compatibility-registry.php:166
 msgid "Other WooCommerce account hooks are active"
 msgstr ""
 
@@ -2291,7 +2291,7 @@ msgstr ""
 msgid "Page Background Color"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:194
+#: includes/services/class-compatibility-registry.php:63
 msgid "Paid Memberships Pro may overlap with account pages"
 msgstr ""
 
@@ -2421,7 +2421,7 @@ msgstr ""
 msgid "Payment"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:219
+#: includes/services/class-compatibility-registry.php:88
 msgid "Payment method screens are delegated to WooCommerce. Verify saved-payment management after dashboard takeover."
 msgstr ""
 
@@ -2438,7 +2438,7 @@ msgstr ""
 msgid "Pending"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:90
+#: includes/services/class-privacy-exporter.php:138
 msgid "Pending Account Registration"
 msgstr ""
 
@@ -2475,7 +2475,7 @@ msgstr ""
 msgid "Please enter a valid email address."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:207
+#: includes/services/class-compatibility-registry.php:76
 msgid "Plugin-added WooCommerce account endpoints are preserved when possible, but should be checked after dashboard takeover."
 msgstr ""
 
@@ -2483,7 +2483,7 @@ msgstr ""
 msgid "Plugin-owned privacy, verification, webhook, consent, and audit retention windows are configured."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:301
+#: includes/services/class-compatibility-registry.php:170
 msgid "Potential compatibility overlap detected"
 msgstr ""
 
@@ -2519,7 +2519,7 @@ msgstr ""
 msgid "Privacy & Data"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:80
+#: includes/services/class-privacy-exporter.php:117
 msgid "Privacy Path"
 msgstr ""
 
@@ -2548,7 +2548,7 @@ msgid "Protection Mode"
 msgstr ""
 
 #: admin/settings-page/class-security-signal-renderer-a.php:56
-#: includes/services/class-privacy-exporter.php:109
+#: includes/services/class-privacy-exporter.php:168
 msgid "Provider"
 msgstr ""
 
@@ -2914,7 +2914,7 @@ msgstr ""
 msgid "Redirect-To Preserved"
 msgstr ""
 
-#: public/class-frontend.php:149
+#: includes/services/class-frontend-access-controller.php:124
 msgid "Redirected a native wp-login.php request to the branded account gateway."
 msgstr ""
 
@@ -3138,11 +3138,11 @@ msgstr ""
 msgid "Reoon Provider Failures"
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:183
+#: admin/settings-page/class-admin-notices.php:174
 msgid "Reoon responded successfully and reports the saved API account as active. No email address was submitted during this check."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:191
+#: admin/settings-page/class-admin-notices.php:182
 msgid "Reoon responded, but the saved API account is not active. Review the account and API key in Reoon."
 msgstr ""
 
@@ -3150,7 +3150,7 @@ msgstr ""
 msgid "Reoon Result Group"
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:199
+#: admin/settings-page/class-admin-notices.php:190
 msgid "Reoon returned an unexpected account response. Retry later and confirm the saved API key in Reoon."
 msgstr ""
 
@@ -3234,7 +3234,7 @@ msgstr ""
 msgid "Retain consent and audit records long enough for operational review."
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:95
+#: includes/services/class-privacy-exporter.php:143
 msgid "Return Path"
 msgstr ""
 
@@ -3274,7 +3274,7 @@ msgstr ""
 msgid "Review decision"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:112
+#: includes/services/class-privacy-exporter.php:171
 msgid "Review Decision"
 msgstr ""
 
@@ -3363,7 +3363,7 @@ msgstr ""
 msgid "Review WooCommerce"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:113
+#: includes/services/class-privacy-exporter.php:172
 msgid "Reviewed At"
 msgstr ""
 
@@ -3383,7 +3383,7 @@ msgstr ""
 msgid "Sample: %s"
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:187
+#: admin/settings-page/class-admin-notices.php:178
 msgid "Save a Reoon API key before running the account connection check."
 msgstr ""
 
@@ -3391,7 +3391,7 @@ msgstr ""
 msgid "Save an account-created webhook URL to enable test sends."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:167
+#: admin/settings-page/class-admin-notices.php:158
 msgid "Save both the Turnstile site key and secret key before running the connection check."
 msgstr ""
 
@@ -3568,19 +3568,19 @@ msgstr ""
 msgid "Settings could not be encoded for export."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:79
+#: admin/settings-page/class-admin-notices.php:100
 msgid "Settings could not be imported because the file does not contain recognized Alynt Account Gateway settings."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:72
+#: admin/settings-page/class-admin-notices.php:96
 msgid "Settings could not be imported because the selected file is not valid JSON."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:86
+#: admin/settings-page/class-admin-notices.php:104
 msgid "Settings could not be imported because the uploaded file could not be read."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:65
+#: admin/settings-page/class-admin-notices.php:92
 msgid "Settings could not be imported. Choose a valid Alynt Account Gateway JSON export."
 msgstr ""
 
@@ -3588,11 +3588,11 @@ msgstr ""
 msgid "Settings Import / Export"
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:39
+#: admin/settings-page/class-admin-notices.php:88
 msgid "Settings imported successfully."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:53
+#: admin/settings-page/class-admin-notices.php:67
 msgid "Settings imported successfully. Unrecognized setting keys ignored: %d."
 msgstr ""
 
@@ -3685,8 +3685,8 @@ msgid "Start safely before changing public account screens."
 msgstr ""
 
 #: admin/settings-page/class-security-pending.php:42
-#: includes/services/class-privacy-exporter.php:110
-#: includes/services/class-privacy-exporter.php:96
+#: includes/services/class-privacy-exporter.php:144
+#: includes/services/class-privacy-exporter.php:169
 msgid "Status"
 msgstr ""
 
@@ -3706,12 +3706,12 @@ msgstr ""
 msgid "Subscriber"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:213
+#: includes/services/class-compatibility-registry.php:82
 msgid "Subscription account endpoints are delegated through WooCommerce handlers. Verify subscription views after dashboard takeover."
 msgstr ""
 
 #: admin/settings-page/class-webhook-tools.php:166
-#: includes/services/class-privacy-exporter.php:127
+#: includes/services/class-privacy-exporter.php:197
 msgid "Success"
 msgstr ""
 
@@ -3755,7 +3755,7 @@ msgstr ""
 msgid "Terms and privacy links are configured for the registration consent checkbox."
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:79
+#: includes/services/class-privacy-exporter.php:116
 msgid "Terms Path"
 msgstr ""
 
@@ -3767,7 +3767,7 @@ msgstr ""
 msgid "Test Email Recipient"
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:107
+#: admin/settings-page/class-admin-notices.php:116
 msgid "Test email sent."
 msgstr ""
 
@@ -3779,7 +3779,7 @@ msgstr ""
 msgid "Test the Reoon API key and outbound HTTP path before relying on email verification."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:121
+#: admin/settings-page/class-admin-notices.php:124
 msgid "Test webhook sent."
 msgstr ""
 
@@ -3787,11 +3787,11 @@ msgstr ""
 msgid "Text Color"
 msgstr ""
 
-#: includes/services/class-registration-completion.php:124
+#: includes/services/class-registration-completion.php:171
 msgid "The account-created webhook could not be sent."
 msgstr ""
 
-#: includes/services/class-registration-completion.php:109
+#: includes/services/class-registration-completion.php:158
 msgid "The account-created welcome email could not be sent."
 msgstr ""
 
@@ -3858,7 +3858,7 @@ msgstr ""
 msgid "The Reoon API account is not active."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:142
+#: admin/settings-page/class-admin-notices.php:136
 msgid "The Reoon review decision was recorded."
 msgstr ""
 
@@ -3866,7 +3866,7 @@ msgstr ""
 msgid "The reset request could not be processed. Please try again."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:149
+#: admin/settings-page/class-admin-notices.php:140
 msgid "The review decision could not be recorded. Refresh the Security tab and try again."
 msgstr ""
 
@@ -3886,19 +3886,19 @@ msgstr ""
 msgid "The selected settings tab is invalid."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:175
+#: admin/settings-page/class-admin-notices.php:166
 msgid "The site could not reach Cloudflare Siteverify. Check outbound HTTPS, DNS, firewall rules, and provider availability."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:195
+#: admin/settings-page/class-admin-notices.php:186
 msgid "The site could not reach Reoon. Check outbound HTTPS, DNS, firewall rules, provider availability, and API-key permissions."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:114
+#: admin/settings-page/class-admin-notices.php:120
 msgid "The test email could not be sent. Check the recipient and mail configuration."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:135
+#: admin/settings-page/class-admin-notices.php:132
 msgid "The test webhook could not be sent. Review the recent webhook deliveries table for details."
 msgstr ""
 
@@ -3919,11 +3919,11 @@ msgstr ""
 msgid "The welcome email could not be sent."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:165
+#: includes/services/class-compatibility-registry.php:34
 msgid "Theme My Login also replaces login, registration, and password screens. Avoid enabling both frontends for the same routes."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:164
+#: includes/services/class-compatibility-registry.php:33
 msgid "Theme My Login may overlap with gateway screens"
 msgstr ""
 
@@ -3961,7 +3961,7 @@ msgid "This confirms that your account password was updated."
 msgstr ""
 
 #: includes/services/class-frontend-messages.php:96
-#: includes/services/class-registration-completion.php:65
+#: includes/services/class-registration-completion.php:63
 msgid "This email address can no longer be used."
 msgstr ""
 
@@ -3975,7 +3975,7 @@ msgstr ""
 msgid "This email address cannot be used."
 msgstr ""
 
-#: includes/services/class-email-renderer.php:186
+#: includes/services/class-email-html-renderer.php:159
 msgid "This email was sent by %s."
 msgstr ""
 
@@ -3983,7 +3983,7 @@ msgstr ""
 msgid "This link is invalid or has expired."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:177
+#: includes/services/class-compatibility-registry.php:46
 msgid "This plugin customizes the native login page while Alynt Account Gateway redirects users to branded routes."
 msgstr ""
 
@@ -3996,11 +3996,11 @@ msgstr ""
 msgid "This reset link is invalid or has expired. Please request a new link."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:100
+#: admin/settings-page/class-admin-notices.php:112
 msgid "This settings tab could not be restored."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:93
+#: admin/settings-page/class-admin-notices.php:108
 msgid "This settings tab was restored to its defaults."
 msgstr ""
 
@@ -4084,7 +4084,7 @@ msgstr ""
 msgid "Turnstile is partially configured. Add both the site key and secret key before relying on it."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:163
+#: admin/settings-page/class-admin-notices.php:154
 msgid "Turnstile reached Cloudflare and the saved secret was accepted for a deliberately invalid test token. Complete a real registration challenge to confirm the site key, hostname, widget, and secret together."
 msgstr ""
 
@@ -4137,11 +4137,11 @@ msgstr ""
 msgid "Typography Preset"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:188
+#: includes/services/class-compatibility-registry.php:57
 msgid "Ultimate Member may overlap with account pages"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:189
+#: includes/services/class-compatibility-registry.php:58
 msgid "Ultimate Member provides login, registration, and account pages that may compete with the gateway routes."
 msgstr ""
 
@@ -4149,7 +4149,7 @@ msgstr ""
 msgid "Unavailable"
 msgstr ""
 
-#: includes/services/class-email-renderer.php:45
+#: includes/services/class-email-renderer.php:54
 msgid "Unknown email template."
 msgstr ""
 
@@ -4333,7 +4333,7 @@ msgstr ""
 msgid "User ID"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:182
+#: includes/services/class-compatibility-registry.php:51
 msgid "User Registration may overlap with account creation"
 msgstr ""
 
@@ -4420,7 +4420,7 @@ msgstr ""
 msgid "Webhook Delivery Failures"
 msgstr ""
 
-#: includes/services/class-privacy-exporter.php:122
+#: includes/services/class-privacy-exporter.php:192
 msgid "Webhook Delivery Metadata"
 msgstr ""
 
@@ -4493,15 +4493,15 @@ msgstr ""
 msgid "WooCommerce did not return content for %s. Try another account area or come back after the store has finished configuring this section."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:52
+#: includes/services/class-compatibility-warnings.php:77
 msgid "WooCommerce guest checkout is still enabled"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:206
+#: includes/services/class-compatibility-registry.php:75
 msgid "WooCommerce Memberships may add account endpoints"
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:212
+#: includes/services/class-compatibility-registry.php:81
 msgid "WooCommerce Subscriptions may add account endpoints"
 msgstr ""
 
@@ -4528,7 +4528,7 @@ msgstr ""
 msgid "WooCommerce takeover wraps native account endpoints in the branded dashboard while WooCommerce keeps handling account actions."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:218
+#: includes/services/class-compatibility-registry.php:87
 msgid "WooPayments may affect payment account sections"
 msgstr ""
 
@@ -4536,13 +4536,13 @@ msgstr ""
 msgid "WordPress rejected a branded login attempt."
 msgstr ""
 
-#: includes/services/class-compatibility-warnings.php:158
+#: includes/services/class-compatibility-registry.php:27
 msgid "WPS Hide Login may overlap with login URL routing"
 msgstr ""
 
 #: admin/settings-page/class-diagnostics-tools.php:48
-#: includes/services/class-privacy-exporter.php:111
-#: includes/services/class-privacy-exporter.php:127
+#: includes/services/class-privacy-exporter.php:170
+#: includes/services/class-privacy-exporter.php:197
 msgid "Yes"
 msgstr ""
 
@@ -4567,7 +4567,7 @@ msgid "You do not have permission to preview emails."
 msgstr ""
 
 #: admin/settings-page/class-gateway-preview.php:113
-#: public/class-frontend.php:210
+#: includes/services/class-frontend-gateway-controller.php:99
 msgid "You do not have permission to preview gateway screens."
 msgstr ""
 
