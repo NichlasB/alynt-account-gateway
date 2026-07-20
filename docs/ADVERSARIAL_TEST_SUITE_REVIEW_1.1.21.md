@@ -104,6 +104,9 @@ reverse, and fixed-random runs each pass with 526 tests and 3,675 assertions.
   were built, and PHP 7.4 required explicit reflection accessibility in tests.
 - Action: CI builds first, verifies all four generated assets are nonempty, and
   test-only reflection helpers now run consistently across the PHP matrix.
+- Red: the remote npm audit received a new high-severity `shell-quote`
+  advisory through an unused `concurrently` development dependency.
+- Action: removed the unused dependency and its transitive package subtree.
 
 ### 07A-07 - Password Boundaries
 

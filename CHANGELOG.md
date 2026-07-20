@@ -8,6 +8,7 @@
 - Reject corrupted queued webhook envelopes before transport when stable event identity or required snapshots are missing.
 - Remove order-dependent global state from authentication and webhook settings-page tests.
 - Resolve development dependencies against the supported PHP 7.4 floor so clean CI installs do not select PHP 8.4-only packages.
+- Remove the unused `concurrently` development dependency and its vulnerable transitive `shell-quote` package.
 
 ### Tests
 
