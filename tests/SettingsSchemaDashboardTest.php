@@ -93,4 +93,25 @@ class SettingsSchemaDashboardTest extends SettingsSchemaTestCase {
 		$this->assertSame( array( 'customer', 'bad' ), $links[0]['roles'] );
 		$this->assertArrayNotHasKey( 'unknown', $links[0] );
 	}
+
+	public function test_invalid_dashboard_custom_links_json_preserves_saved_links() {
+		$saved = wp_json_encode(
+			array(
+				array(
+					'label' => 'Support',
+					'url'   => '/support/',
+				),
+			)
+		);
+		update_option(
+			'alynt_ag_settings',
+			array( 'dashboard_custom_links' => $saved )
+		);
+
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array( 'dashboard_custom_links' => '{invalid-json' )
+		);
+
+		$this->assertSame( $saved, $sanitized['dashboard_custom_links'] );
+	}
 }

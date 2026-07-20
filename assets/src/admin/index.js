@@ -10,9 +10,11 @@ import { alyntAgInitTypographyPresets } from './modules/typography.js';
 import { alyntAgInitColorControls } from './modules/colors.js';
 import { alyntAgHandleMediaClick } from './modules/media.js';
 import { alyntAgInitDashboardLinks } from './modules/dashboard-links.js';
+import { alyntAgInitAdminFormState } from './modules/form-state.js';
 
 alyntAgInitEmailSaveState();
 alyntAgInitTypographyPresets();
 alyntAgInitColorControls();
 document.addEventListener( 'click', alyntAgHandleMediaClick );
 alyntAgInitDashboardLinks();
+alyntAgInitAdminFormState();

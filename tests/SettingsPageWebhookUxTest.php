@@ -98,6 +98,18 @@ class SettingsPageWebhookUxTest extends TestCase {
 		$this->assertStringContainsString( 'Server Error', $output );
 	}
 
+	public function test_recent_webhook_logs_returns_error_when_database_read_fails() {
+		$tables = ALYNT_AG_Database::tables();
+		$GLOBALS['alynt_ag_test_db_results'][ $tables['webhook_logs'] ] = false;
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		$result = $this->invoke_helper( $settings_page, 'recent_webhook_logs' );
+
+		$this->assertTrue( is_wp_error( $result ) );
+		$this->assertSame( 'alynt_ag_webhook_logs_read_failed', $result->get_error_code() );
+		unset( $GLOBALS['alynt_ag_test_db_results'][ $tables['webhook_logs'] ] );
+	}
+
 	public function test_webhook_time_formatter_returns_original_invalid_timestamp() {
 		$settings_page = new ALYNT_AG_Settings_Page();
 

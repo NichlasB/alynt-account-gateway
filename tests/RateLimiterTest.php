@@ -21,6 +21,12 @@ class RateLimiterTest extends TestCase {
 		unset( $_SERVER['HTTP_CF_CONNECTING_IP'], $_SERVER['HTTP_X_FORWARDED_FOR'] );
 	}
 
+	protected function tearDown(): void {
+		unset( $GLOBALS['alynt_ag_test_set_transient_result'] );
+
+		parent::tearDown();
+	}
+
 	public function test_bucket_key_does_not_expose_identifier_or_ip() {
 		$limiter = new ALYNT_AG_Rate_Limiter();
 		$key     = $limiter->get_bucket_key( 'registration', 'damon@example.test' );

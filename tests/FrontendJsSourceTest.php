@@ -44,7 +44,7 @@ class FrontendJsSourceTest extends TestCase {
 
 		$this->assertIsString( $entry );
 		$this->assertIsArray( $modules );
-		$this->assertCount( 6, $modules );
+		$this->assertCount( 7, $modules );
 
 		foreach ( $modules as $module ) {
 			$relative_path = './modules/' . basename( $module );
@@ -73,6 +73,17 @@ class FrontendJsSourceTest extends TestCase {
 		$this->assertStringContainsString( 'submit.disabled = ! isValid;', $js );
 		$this->assertStringContainsString( "submit.setAttribute( 'aria-disabled', isValid ? 'false' : 'true' );", $js );
 	}
+
+	public function test_gateway_forms_prevent_duplicate_submissions_and_report_busy_state() {
+		$js = $this->get_frontend_js();
+
+		$this->assertStringContainsString( "document.querySelectorAll( '.agw-form' )", $js );
+		$this->assertStringContainsString( "form.dataset.agwSubmitting === '1'", $js );
+		$this->assertStringContainsString( "form.setAttribute( 'aria-busy', 'true' )", $js );
+		$this->assertStringContainsString( "submit.setAttribute( 'aria-disabled', 'true' )", $js );
+		$this->assertStringContainsString( 'event.defaultPrevented || ! form.checkValidity()', $js );
+	}
+
 	public function test_password_requirements_use_readable_accessibility_labels() {
 		$js = $this->get_frontend_js();
 

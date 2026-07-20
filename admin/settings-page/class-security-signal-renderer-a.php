@@ -25,12 +25,21 @@ class ALYNT_AG_Settings_Page_Security_Signal_Renderer_A extends ALYNT_AG_Setting
 		$external_events   = $this->security_recent_external_diagnostics_events( 25 );
 		$webhook_logs      = $this->recent_webhook_logs();
 		$settings          = ALYNT_AG_Settings_Schema::get_settings();
+		$read_errors       = array_filter(
+			array( $logs, $diagnostic_events, $external_events, $webhook_logs ),
+			'is_wp_error'
+		);
+		$logs              = is_wp_error( $logs ) ? array() : $logs;
+		$diagnostic_events = is_wp_error( $diagnostic_events ) ? array() : $diagnostic_events;
+		$external_events   = is_wp_error( $external_events ) ? array() : $external_events;
+		$webhook_logs      = is_wp_error( $webhook_logs ) ? array() : $webhook_logs;
 		?>
 		<div class="alynt-ag-security-activity">
 			<h3><?php esc_html_e( 'Recent Registration Verification Activity', 'alynt-account-gateway' ); ?></h3>
 			<p class="description">
 				<?php esc_html_e( 'Shows recent Turnstile and Reoon outcomes stored in the plugin verification log. Email addresses are masked in this admin view.', 'alynt-account-gateway' ); ?>
 			</p>
+			<?php $this->render_admin_data_read_errors( $read_errors ); ?>
 
 			<?php $this->render_security_provider_health_signals( $logs ); ?>
 			<?php $this->render_security_manual_review_queue( $logs ); ?>

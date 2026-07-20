@@ -43,7 +43,7 @@ class AdminJsSourceTest extends TestCase {
 
 		$this->assertIsString( $entry );
 		$this->assertIsArray( $modules );
-		$this->assertCount( 5, $modules );
+		$this->assertCount( 6, $modules );
 
 		foreach ( $modules as $module ) {
 			$relative_path = './modules/' . basename( $module );
@@ -111,6 +111,27 @@ class AdminJsSourceTest extends TestCase {
 		$this->assertStringContainsString( "state.bodyInput.addEventListener( 'input', markCustom )", $js );
 		$this->assertStringContainsString( "state.previewHeading.style.fontFamily = state.headingInput.value || 'inherit'", $js );
 		$this->assertStringContainsString( "state.previewBody.style.fontFamily    = state.bodyInput.value || 'inherit'", $js );
+	}
+
+	public function test_admin_forms_confirm_consequential_actions_and_report_submission_progress() {
+		$js = $this->get_admin_js();
+
+		$this->assertStringContainsString( "document.querySelectorAll( '[data-alynt-ag-action-form]' )", $js );
+		$this->assertStringContainsString( 'window.confirm( confirmation )', $js );
+		$this->assertStringContainsString( "form.setAttribute( 'aria-busy', 'true' )", $js );
+		$this->assertStringContainsString( "submit.setAttribute( 'aria-disabled', 'true' )", $js );
+		$this->assertStringContainsString( "form.getAttribute( 'aria-busy' ) === 'true'", $js );
+	}
+
+	public function test_non_email_settings_forms_warn_before_discarding_unsaved_changes() {
+		$js = $this->get_admin_js();
+
+		$this->assertStringContainsString(
+			"'[data-alynt-ag-settings-form]:not([data-alynt-ag-email-settings])'",
+			$js
+		);
+		$this->assertStringContainsString( 'alyntAgSerializeSettingsForm( form ) !== state.initial', $js );
+		$this->assertStringContainsString( "window.addEventListener( 'beforeunload', handleBeforeUnload )", $js );
 	}
 
 	public function test_color_controls_synchronize_picker_and_hex_text_in_both_directions() {

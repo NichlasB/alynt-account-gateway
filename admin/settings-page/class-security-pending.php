@@ -21,12 +21,15 @@ class ALYNT_AG_Settings_Page_Security_Pending extends ALYNT_AG_Settings_Page_Com
 	 */
 	public function render_security_pending_registrations() {
 		$registrations = $this->security_recent_pending_registrations( 10 );
+		$read_error    = is_wp_error( $registrations ) ? $registrations : null;
+		$registrations = $read_error ? array() : $registrations;
 		?>
 		<div class="alynt-ag-security-activity">
 			<h3><?php esc_html_e( 'Recent Pending Registrations', 'alynt-account-gateway' ); ?></h3>
 			<p class="description">
 				<?php esc_html_e( 'Shows recent email-confirmation registration records stored by the plugin. Email addresses are masked in this admin view.', 'alynt-account-gateway' ); ?>
 			</p>
+			<?php $this->render_admin_data_read_errors( array( $read_error ) ); ?>
 
 			<?php $this->render_security_pending_registration_lifecycle_signals( $registrations ); ?>
 
@@ -153,7 +156,7 @@ class ALYNT_AG_Settings_Page_Security_Pending extends ALYNT_AG_Settings_Page_Com
 	 * Return recent registration verification logs.
 	 *
 	 * @param int $limit Maximum records.
-	 * @return array<int,object>
+	 * @return array<int,object>|WP_Error
 	 */
 	public function security_recent_verification_logs( $limit = 10 ) {
 		global $wpdb;
@@ -170,14 +173,19 @@ class ALYNT_AG_Settings_Page_Security_Pending extends ALYNT_AG_Settings_Page_Com
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		return is_array( $logs ) ? $logs : array();
+		return is_array( $logs )
+			? $logs
+			: new WP_Error(
+				'alynt_ag_verification_logs_read_failed',
+				__( 'Recent verification activity could not be loaded. Refresh the page and check the database connection if the problem continues.', 'alynt-account-gateway' )
+			);
 	}
 
 	/**
 	 * Return recent security diagnostics events.
 	 *
 	 * @param int $limit Maximum records.
-	 * @return array<int,object>
+	 * @return array<int,object>|WP_Error
 	 */
 	public function security_recent_diagnostics_events( $limit = 25 ) {
 		global $wpdb;
@@ -195,14 +203,19 @@ class ALYNT_AG_Settings_Page_Security_Pending extends ALYNT_AG_Settings_Page_Com
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		return is_array( $events ) ? $events : array();
+		return is_array( $events )
+			? $events
+			: new WP_Error(
+				'alynt_ag_security_diagnostics_read_failed',
+				__( 'Recent security diagnostics could not be loaded. Refresh the page and check the database connection if the problem continues.', 'alynt-account-gateway' )
+			);
 	}
 
 	/**
 	 * Return recent external diagnostics events.
 	 *
 	 * @param int $limit Maximum records.
-	 * @return array<int,object>
+	 * @return array<int,object>|WP_Error
 	 */
 	public function security_recent_external_diagnostics_events( $limit = 25 ) {
 		global $wpdb;
@@ -220,6 +233,11 @@ class ALYNT_AG_Settings_Page_Security_Pending extends ALYNT_AG_Settings_Page_Com
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		return is_array( $events ) ? $events : array();
+		return is_array( $events )
+			? $events
+			: new WP_Error(
+				'alynt_ag_external_diagnostics_read_failed',
+				__( 'Recent delivery diagnostics could not be loaded. Refresh the page and check the database connection if the problem continues.', 'alynt-account-gateway' )
+			);
 	}
 }

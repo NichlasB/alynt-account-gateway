@@ -40,4 +40,23 @@ abstract class ALYNT_AG_Settings_Page_Component {
 	public function __call( $method, $arguments ) {
 		return $this->components->call( $method, $arguments );
 	}
+
+	/**
+	 * Render sanitized admin notices for failed plugin-data reads.
+	 *
+	 * @param array<int,WP_Error> $errors Read errors.
+	 * @return void
+	 */
+	protected function render_admin_data_read_errors( $errors ) {
+		foreach ( $errors as $error ) {
+			if ( ! is_wp_error( $error ) ) {
+				continue;
+			}
+			?>
+			<div class="notice notice-error inline">
+				<p><?php echo esc_html( $error->get_error_message() ); ?></p>
+			</div>
+			<?php
+		}
+	}
 }

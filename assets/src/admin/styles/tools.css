@@ -11,6 +11,16 @@
 	display: none;
 }
 
+.alynt-ag-form--submitting {
+	cursor: progress;
+	opacity: 0.78;
+}
+
+.alynt-ag-form--submitting button[type="submit"],
+.alynt-ag-form--submitting input[type="submit"] {
+	cursor: progress;
+}
+
 .alynt-ag-email-reference,
 .alynt-ag-email-tokens,
 .alynt-ag-email-action {

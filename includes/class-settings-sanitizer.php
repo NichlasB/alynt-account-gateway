@@ -53,6 +53,11 @@ class ALYNT_AG_Settings_Sanitizer {
 				continue;
 			}
 
+			if ( 'dashboard_links' === ( $field['type'] ?? '' ) && ! self::is_dashboard_links_json_valid( $input[ $key ] ) ) {
+				self::add_dashboard_links_error();
+				continue;
+			}
+
 			$sanitized[ $key ] = self::sanitize_value( $input[ $key ], $field );
 		}
 
@@ -159,6 +164,36 @@ class ALYNT_AG_Settings_Sanitizer {
 			$json = wp_json_encode( $links, JSON_UNESCAPED_SLASHES );
 
 			return is_string( $json ) ? $json : '[]';
+	}
+
+		/**
+		 * Return whether a raw dashboard links value can be safely imported.
+		 *
+		 * @param mixed $value Raw dashboard links value.
+		 * @return bool
+		 */
+	private static function is_dashboard_links_json_valid( $value ) {
+		if ( ! is_string( $value ) ) {
+			return is_array( $value );
+		}
+
+		return is_array( json_decode( wp_unslash( $value ), true ) );
+	}
+
+		/**
+		 * Register an admin-facing error for invalid dashboard links JSON.
+		 *
+		 * @return void
+		 */
+	private static function add_dashboard_links_error() {
+		if ( function_exists( 'add_settings_error' ) ) {
+			add_settings_error(
+				'alynt_ag_settings',
+				'alynt_ag_invalid_dashboard_links',
+				__( 'Dashboard custom links were not saved because the raw JSON is invalid. The previously saved links were preserved.', 'alynt-account-gateway' ),
+				'error'
+			);
+		}
 	}
 
 		/**

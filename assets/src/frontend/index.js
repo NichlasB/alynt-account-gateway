@@ -10,6 +10,7 @@ import { alyntAgInitRegistrationForms } from './modules/registration.js';
 import { alyntAgPrepareTurnstileWidgets } from './modules/turnstile.js';
 import { alyntAgHandleOffcanvasClick, alyntAgHandleOffcanvasKeydown } from './modules/offcanvas.js';
 import { alyntAgInitRetainedFields } from './modules/retained-fields.js';
+import { alyntAgInitSubmissionState } from './modules/submission-state.js';
 
 document.documentElement.classList.add( 'alynt-ag-frontend-ready' );
 document.addEventListener( 'click', alyntAgTogglePassword );
@@ -21,6 +22,7 @@ function alyntAgInitFrontend() {
 	alyntAgInitPasswordPolicy();
 	alyntAgInitRegistrationForms();
 	alyntAgInitRetainedFields();
+	alyntAgInitSubmissionState();
 }
 
 if ( document.readyState === 'loading' ) {

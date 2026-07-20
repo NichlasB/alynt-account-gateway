@@ -41,7 +41,14 @@ class ALYNT_AG_Settings_Page_Settings_Tools extends ALYNT_AG_Settings_Page_Compo
 			</a>
 		</p>
 
-		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data" class="alynt-ag-inline-tool">
+		<form
+			method="post"
+			action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"
+			enctype="multipart/form-data"
+			class="alynt-ag-inline-tool"
+			data-alynt-ag-action-form
+			data-alynt-ag-confirm="<?php esc_attr_e( 'Importing will replace recognized plugin settings with values from this file. Continue?', 'alynt-account-gateway' ); ?>"
+		>
 			<input type="hidden" name="action" value="alynt_ag_import_settings">
 			<?php wp_nonce_field( 'alynt_ag_import_settings' ); ?>
 			<label for="alynt-ag-settings-import"><?php esc_html_e( 'Settings JSON file', 'alynt-account-gateway' ); ?></label>
