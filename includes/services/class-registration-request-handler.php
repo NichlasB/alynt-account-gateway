@@ -32,6 +32,8 @@ class ALYNT_AG_Registration_Request_Handler extends ALYNT_AG_Service_Collaborato
 		$this->destinations = $destinations;
 	}
 
+	// phpcs:disable WordPress.Security.NonceVerification.Missing -- Each handler verifies its branded frontend nonce explicitly before processing the request.
+
 	/**
 	 * Handle branded registration form submissions.
 	 *
@@ -68,11 +70,15 @@ class ALYNT_AG_Registration_Request_Handler extends ALYNT_AG_Service_Collaborato
 	 * @return void
 	 */
 	private function handle_start_registration_request() {
-		check_admin_referer( 'alynt_ag_start_registration', 'alynt_ag_registration_nonce' );
-
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 		$context  = $this->start_registration_context( $settings );
-		$valid    = $this->validate_start_registration_request( $context['email'], $settings );
+
+		if ( ! $this->request_nonce_is_valid( 'alynt_ag_start_registration', 'alynt_ag_registration_nonce' ) ) {
+			wp_safe_redirect( add_query_arg( 'registration_error', 'session_expired', $context['base_url'] ) );
+			exit;
+		}
+
+		$valid = $this->validate_start_registration_request( $context['email'], $settings );
 
 		if ( is_wp_error( $valid ) ) {
 			wp_safe_redirect( add_query_arg( 'registration_error', $valid->get_error_code(), $context['base_url'] ) );
@@ -172,7 +178,7 @@ class ALYNT_AG_Registration_Request_Handler extends ALYNT_AG_Service_Collaborato
 	 * @return array<string,mixed>|WP_Error
 	 */
 	private function create_pending_registration_from_request( $settings, $return_path ) {
-		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce is verified by the caller; values are sanitized in create_pending_registration().
+		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Nonce is verified by the caller; values are sanitized in create_pending_registration().
 		return $this->create_pending_registration(
 			isset( $_POST['first_name'] ) ? wp_unslash( $_POST['first_name'] ) : '',
 			isset( $_POST['last_name'] ) ? wp_unslash( $_POST['last_name'] ) : '',
@@ -180,7 +186,7 @@ class ALYNT_AG_Registration_Request_Handler extends ALYNT_AG_Service_Collaborato
 			$settings,
 			$return_path
 		);
-		// phpcs:enable WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	}
 
 	/**
@@ -189,8 +195,6 @@ class ALYNT_AG_Registration_Request_Handler extends ALYNT_AG_Service_Collaborato
 	 * @return void
 	 */
 	private function handle_complete_registration_request() {
-		check_admin_referer( 'alynt_ag_complete_registration', 'alynt_ag_registration_nonce' );
-
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 
 		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized/validated by complete_pending_registration().
@@ -199,8 +203,6 @@ class ALYNT_AG_Registration_Request_Handler extends ALYNT_AG_Service_Collaborato
 		$password_confirm = isset( $_POST['password_confirm'] ) ? wp_unslash( $_POST['password_confirm'] ) : '';
 		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
-		$result = $this->complete_pending_registration( $token, $password, $password_confirm, $settings );
-
 		$base_url = add_query_arg(
 			array(
 				'action'         => 'setpassword',
@@ -208,6 +210,13 @@ class ALYNT_AG_Registration_Request_Handler extends ALYNT_AG_Service_Collaborato
 			),
 			home_url( $settings['account_action_base'] )
 		);
+
+		if ( ! $this->request_nonce_is_valid( 'alynt_ag_complete_registration', 'alynt_ag_registration_nonce' ) ) {
+			wp_safe_redirect( add_query_arg( 'password_error', 'session_expired', $base_url ) );
+			exit;
+		}
+
+		$result = $this->complete_pending_registration( $token, $password, $password_confirm, $settings );
 
 		if ( is_wp_error( $result ) ) {
 			wp_safe_redirect( add_query_arg( 'password_error', $result->get_error_code(), $base_url ) );
@@ -224,11 +233,14 @@ class ALYNT_AG_Registration_Request_Handler extends ALYNT_AG_Service_Collaborato
 	 * @return void
 	 */
 	private function handle_resend_confirmation_request() {
-		check_admin_referer( 'alynt_ag_resend_confirmation', 'alynt_ag_registration_nonce' );
-
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 		$base_url = add_query_arg( 'action', 'invalidlink', home_url( $settings['account_action_base'] ) );
 		$email    = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+
+		if ( ! $this->request_nonce_is_valid( 'alynt_ag_resend_confirmation', 'alynt_ag_registration_nonce' ) ) {
+			wp_safe_redirect( add_query_arg( 'resend_error', 'session_expired', $base_url ) );
+			exit;
+		}
 
 		$rate_limit = $this->validate_rate_limit( 'resend_confirmation', $email, $settings );
 		if ( is_wp_error( $rate_limit ) ) {
@@ -245,4 +257,6 @@ class ALYNT_AG_Registration_Request_Handler extends ALYNT_AG_Service_Collaborato
 		wp_safe_redirect( add_query_arg( 'confirmation_resent', '1', $base_url ) );
 		exit;
 	}
+
+	// phpcs:enable WordPress.Security.NonceVerification.Missing
 }

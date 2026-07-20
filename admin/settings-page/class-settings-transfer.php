@@ -158,6 +158,6 @@ class ALYNT_AG_Settings_Page_Settings_Transfer extends ALYNT_AG_Settings_Page_Co
 	private function persist_settings( $settings ) {
 		$updated = update_option( 'alynt_ag_settings', $settings );
 
-		return $updated || $settings === get_option( 'alynt_ag_settings' );
+		return $updated || get_option( 'alynt_ag_settings' ) === $settings;
 	}
 }

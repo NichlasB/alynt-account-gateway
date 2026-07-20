@@ -33,7 +33,7 @@ class ALYNT_AG_Privacy_Exporter {
 			return $records;
 		}
 
-		$data    = array_merge(
+		$data = array_merge(
 			$this->export_consents( $records['consents'] ),
 			$this->export_pending_registrations( $records['pending'] ),
 			$this->export_verification_logs( $records['verification'] ),

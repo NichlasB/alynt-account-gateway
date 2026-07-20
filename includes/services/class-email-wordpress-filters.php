@@ -20,7 +20,6 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 	 * @var ALYNT_AG_Email_Tokens
 	 */
 	private $tokens;
-
 	/**
 	 * Whether the current profile email-change request should be suppressed.
 	 *
@@ -62,7 +61,6 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 			$this->log_render_failure( 'password_reset', $rendered );
 			return $email;
 		}
-
 		$email['subject'] = $rendered['subject'];
 		$email['message'] = $rendered['html'];
 		$email['headers'] = $this->service->html_headers();
@@ -149,7 +147,6 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 			$this->log_render_failure( 'password_changed', $rendered );
 			return $email;
 		}
-
 		$email['subject'] = $rendered['subject'];
 		$email['message'] = $rendered['html'];
 		$email['headers'] = $this->service->html_headers();
@@ -189,7 +186,6 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 			$this->log_render_failure( 'email_change_confirmation', $rendered );
 			return $email;
 		}
-
 		$email['subject'] = $rendered['subject'];
 		$email['message'] = $rendered['html'];
 		$email['headers'] = $this->service->html_headers();
@@ -211,7 +207,6 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 			$this->suppress_profile_email_change_request = true;
 			return $content;
 		}
-
 		$user   = function_exists( 'wp_get_current_user' ) ? wp_get_current_user() : null;
 		$tokens = is_object( $user ) ? $this->tokens->for_user( $user ) : array();
 
@@ -284,7 +279,12 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 			);
 		}
 	}
-	/** Log a branded email rendering failure before using the core fallback. */
+	/**
+	 * Log a branded email rendering failure before using the core fallback.
+	 *
+	 * @param string   $template Template key.
+	 * @param WP_Error $error    Rendering error.
+	 */
 	private function log_render_failure( $template, $error ) {
 		ALYNT_AG_Diagnostics_Logger::log_event(
 			'error',

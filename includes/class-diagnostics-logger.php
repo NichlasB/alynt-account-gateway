@@ -54,7 +54,7 @@ class ALYNT_AG_Diagnostics_Logger {
 	 * @param string              $action  Event action.
 	 * @param array<string,mixed> $context Event context.
 	 * @param int                 $user_id User ID.
-	 * @return bool
+	 * @return void
 	 */
 	public static function log( $action, $context = array(), $user_id = 0 ) {
 		global $wpdb;
@@ -169,7 +169,7 @@ class ALYNT_AG_Diagnostics_Logger {
 	/**
 	 * Clear diagnostics events.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	public static function clear_events() {
 		global $wpdb;

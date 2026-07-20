@@ -43,6 +43,7 @@ class ALYNT_AG_Frontend_Messages {
 	 */
 	public function registration_error( $error_code ) {
 		$messages = array(
+			'session_expired'                   => __( 'Your session expired. Please review the form and try again.', 'alynt-account-gateway' ),
 			'disabled'                          => __( 'Registration is currently unavailable.', 'alynt-account-gateway' ),
 			'missing_required_fields'           => __( 'Please complete all required fields.', 'alynt-account-gateway' ),
 			'invalid_email'                     => __( 'Please enter a valid email address.', 'alynt-account-gateway' ),
@@ -72,6 +73,7 @@ class ALYNT_AG_Frontend_Messages {
 	 */
 	public function resend_error( $error_code ) {
 		$messages = array(
+			'session_expired'             => __( 'Your session expired. Please review the form and try again.', 'alynt-account-gateway' ),
 			'invalid_email'               => __( 'Please enter a valid email address.', 'alynt-account-gateway' ),
 			'alynt_ag_rate_limited'       => __( 'Too many confirmation email requests. Please wait for the resend window before trying again.', 'alynt-account-gateway' ),
 			'pending_registration_failed' => __( 'The confirmation link could not be renewed. Please try again.', 'alynt-account-gateway' ),
@@ -89,6 +91,7 @@ class ALYNT_AG_Frontend_Messages {
 	 */
 	public function password_error( $error_code ) {
 		$messages = array(
+			'session_expired'              => __( 'Your session expired. Please review the form and try again.', 'alynt-account-gateway' ),
 			'invalid_or_expired_token'     => __( 'This link is invalid or has expired.', 'alynt-account-gateway' ),
 			'password_mismatch'            => __( 'The passwords do not match.', 'alynt-account-gateway' ),
 			'alynt_ag_password_length'     => __( 'Password must be at least 12 characters.', 'alynt-account-gateway' ),

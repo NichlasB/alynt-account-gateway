@@ -44,7 +44,7 @@ class FrontendJsSourceTest extends TestCase {
 
 		$this->assertIsString( $entry );
 		$this->assertIsArray( $modules );
-		$this->assertCount( 5, $modules );
+		$this->assertCount( 6, $modules );
 
 		foreach ( $modules as $module ) {
 			$relative_path = './modules/' . basename( $module );
@@ -55,6 +55,16 @@ class FrontendJsSourceTest extends TestCase {
 			$this->assertIsArray( $lines );
 			$this->assertLessThanOrEqual( 250, count( $lines ), $relative_path );
 		}
+	}
+
+	public function test_redirected_errors_restore_non_secret_fields_and_focus_invalid_input() {
+		$js = $this->get_frontend_js();
+
+		$this->assertStringContainsString( "form.querySelectorAll( '[data-agw-retain][name]' )", $js );
+		$this->assertStringContainsString( 'window.sessionStorage.setItem', $js );
+		$this->assertStringContainsString( "document.querySelector( '.agw-form [aria-invalid=\"true\"]' )", $js );
+		$this->assertStringNotContainsString( "name=\"pwd\"", $js );
+		$this->assertStringNotContainsString( "name=\"password\"", $js );
 	}
 
 	public function test_password_submit_aria_disabled_tracks_validity() {

@@ -11,6 +11,18 @@ if ( ! function_exists( 'check_admin_referer' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_verify_nonce' ) ) {
+	function wp_verify_nonce( $nonce, $action = -1 ) {
+		unset( $action );
+
+		if ( isset( $GLOBALS['alynt_ag_test_nonce_valid'] ) ) {
+			return $GLOBALS['alynt_ag_test_nonce_valid'] ? 1 : false;
+		}
+
+		return 1;
+	}
+}
+
 if ( ! function_exists( 'is_ssl' ) ) {
 	function is_ssl() {
 		return false;

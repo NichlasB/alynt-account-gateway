@@ -123,7 +123,7 @@ class ALYNT_AG_Frontend_Login_Screen {
 		<?php if ( $error_code ) : ?>
 			<div id="agw-login-error" class="agw-status agw-status--error" role="alert" aria-live="assertive" aria-atomic="true"><?php echo esc_html( $this->auth->get_login_error_message( $error_code ) ); ?></div>
 		<?php endif; ?>
-		<form class="agw-form" method="post" action="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"<?php echo $this->components->describedby_attribute( $form_desc ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by describedby_attribute(). ?>>
+		<form class="agw-form" method="post" action="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>" data-agw-retain-fields<?php echo $this->components->describedby_attribute( $form_desc ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by describedby_attribute(). ?>>
 			<input type="hidden" name="alynt_ag_action" value="login">
 			<?php wp_nonce_field( 'alynt_ag_login', 'alynt_ag_auth_nonce' ); ?>
 			<?php if ( $redirect_to ) : ?>
@@ -131,7 +131,7 @@ class ALYNT_AG_Frontend_Login_Screen {
 			<?php endif; ?>
 			<div class="agw-field">
 				<label for="agw-login-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-login-email" name="email" type="email" autocomplete="email" dir="ltr" required <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-login-error"' : ''; ?>>
+				<input id="agw-login-email" name="email" type="email" autocomplete="email" dir="ltr" required data-agw-retain <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-login-error"' : ''; ?>>
 			</div>
 			<div class="agw-field agw-field--password">
 				<label for="agw-login-password"><?php esc_html_e( 'Password', 'alynt-account-gateway' ); ?></label>
@@ -142,7 +142,7 @@ class ALYNT_AG_Frontend_Login_Screen {
 				</div>
 			</div>
 			<label class="agw-checkbox">
-				<input name="rememberme" type="checkbox" value="forever">
+				<input name="rememberme" type="checkbox" value="forever" data-agw-retain>
 				<span><?php esc_html_e( 'Remember Me', 'alynt-account-gateway' ); ?></span>
 			</label>
 			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Log In', 'alynt-account-gateway' ); ?></button>

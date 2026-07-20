@@ -40,4 +40,18 @@ abstract class ALYNT_AG_Service_Collaborator {
 	public function __call( $name, $arguments ) {
 		return call_user_func_array( array( $this->service, $name ), $arguments );
 	}
+
+	/**
+	 * Verify a submitted frontend nonce without invoking the core error screen.
+	 *
+	 * @param string $action Nonce action.
+	 * @param string $field  Request field.
+	 * @return bool
+	 */
+	protected function request_nonce_is_valid( $action, $field ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- This method performs the nonce verification.
+		$nonce = isset( $_REQUEST[ $field ] ) ? sanitize_text_field( wp_unslash( $_REQUEST[ $field ] ) ) : '';
+
+		return (bool) wp_verify_nonce( $nonce, $action );
+	}
 }

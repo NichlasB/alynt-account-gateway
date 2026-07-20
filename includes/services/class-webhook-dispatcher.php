@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ALYNT_AG_Webhook_Dispatcher {
 
-	const RETRY_HOOK = 'alynt_ag_retry_account_created_webhook';
+	const RETRY_HOOK  = 'alynt_ag_retry_account_created_webhook';
 	const MAX_RETRIES = 2;
 
 	/**
@@ -31,6 +31,7 @@ class ALYNT_AG_Webhook_Dispatcher {
 	 *
 	 * @param int                 $user_id  User ID.
 	 * @param array<string,mixed> $settings Settings.
+	 * @param int                 $retry_count Retry attempt number.
 	 * @return true|WP_Error
 	 */
 	public function dispatch_account_created( $user_id, $settings, $retry_count = 0 ) {
@@ -107,7 +108,7 @@ class ALYNT_AG_Webhook_Dispatcher {
 	 * @return true|WP_Error
 	 */
 	private function dispatch_payload( $event_name, $url, $user_id, $payload, $settings, $retry_count, $allow_retries ) {
-		$body    = wp_json_encode( $payload );
+		$body = wp_json_encode( $payload );
 		if ( ! is_string( $body ) ) {
 			$error = new WP_Error( 'alynt_ag_webhook_encoding_failed', __( 'The webhook payload could not be encoded.', 'alynt-account-gateway' ) );
 			$this->log_dispatch( $event_name, $url, $user_id, array(), $error, $settings, $retry_count );

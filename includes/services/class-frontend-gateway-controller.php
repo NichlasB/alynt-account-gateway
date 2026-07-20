@@ -206,7 +206,21 @@ class ALYNT_AG_Frontend_Gateway_Controller {
 			return false;
 		}
 
-		check_admin_referer( 'log-out' );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nonce is verified explicitly to retain the branded error screen.
+		$nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'log-out' ) ) {
+			wp_safe_redirect(
+				add_query_arg(
+					array(
+						'action'       => 'logout',
+						'logout_error' => 'session_expired',
+					),
+					home_url( $settings['account_action_base'] )
+				)
+			);
+			exit;
+		}
+
 		wp_logout();
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Optional redirect target after verified logout.
