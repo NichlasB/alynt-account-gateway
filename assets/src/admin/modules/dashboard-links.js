@@ -85,73 +85,62 @@ function alyntAgAddDashboardLinkRow( editor ) {
 	alyntAgHandleVisualDashboardLinkChange( editor );
 }
 
-export function alyntAgInitDashboardLinks() {
-	document.querySelectorAll( '[data-alynt-ag-dashboard-links]' ).forEach(
-		function ( editor ) {
-			const addButton = editor.querySelector( '[data-alynt-ag-dashboard-link-add]' );
+function alyntAgHandleDashboardLinkInput( editor, event ) {
+	if ( event.target.matches( '[data-alynt-ag-dashboard-link-json]' ) ) {
+		event.target.dataset.alyntAgRawEdited = '1';
+		return;
+	}
 
-			alyntAgDashboardLinkRows( editor ).forEach(
-				function ( row, index ) {
-					alyntAgRenumberDashboardLinkRow( row, String( index ) );
-				}
-			);
+	alyntAgHandleVisualDashboardLinkChange( editor );
+}
 
-			addButton.addEventListener(
-				'click',
-				function () {
-					alyntAgAddDashboardLinkRow( editor );
-				}
-			);
+function alyntAgBindDashboardLinkEvents( editor ) {
+	const addButton = editor.querySelector( '[data-alynt-ag-dashboard-link-add]' );
 
-			editor.addEventListener(
-				'click',
-				function ( event ) {
-					const removeButton = event.target.closest( '[data-alynt-ag-dashboard-link-remove]' );
+	addButton.addEventListener( 'click', () => alyntAgAddDashboardLinkRow( editor ) );
+	editor.addEventListener(
+		'click',
+		function ( event ) {
+			const removeButton = event.target.closest( '[data-alynt-ag-dashboard-link-remove]' );
 
-					if ( removeButton ) {
-						removeButton.closest( '[data-alynt-ag-dashboard-link-row]' ).remove();
-						alyntAgSerializeDashboardLinks( editor );
-					}
-				}
-			);
-
-			editor.addEventListener(
-				'input',
-				function ( event ) {
-					if ( event.target.matches( '[data-alynt-ag-dashboard-link-json]' ) ) {
-						event.target.dataset.alyntAgRawEdited = '1';
-						return;
-					}
-
-					alyntAgHandleVisualDashboardLinkChange( editor );
-				}
-			);
-
-			editor.addEventListener(
-				'change',
-				function ( event ) {
-					if ( event.target.matches( '[data-alynt-ag-dashboard-link-json]' ) ) {
-						event.target.dataset.alyntAgRawEdited = '1';
-						return;
-					}
-
-					alyntAgHandleVisualDashboardLinkChange( editor );
-				}
-			);
-
-			const form = editor.closest( 'form' );
-			if ( form ) {
-				form.addEventListener(
-					'submit',
-					function () {
-						const textarea = editor.querySelector( '[data-alynt-ag-dashboard-link-json]' );
-
-						if ( textarea.dataset.alyntAgRawEdited !== '1' ) {
-							alyntAgSerializeDashboardLinks( editor );
-						}
-					}
-				);
+			if ( removeButton ) {
+				removeButton.closest( '[data-alynt-ag-dashboard-link-row]' ).remove();
+				alyntAgSerializeDashboardLinks( editor );
 			}
 		}
 	);
+	editor.addEventListener( 'input', ( event ) => alyntAgHandleDashboardLinkInput( editor, event ) );
+	editor.addEventListener( 'change', ( event ) => alyntAgHandleDashboardLinkInput( editor, event ) );
+}
+
+function alyntAgBindDashboardLinkSubmit( editor ) {
+	const form = editor.closest( 'form' );
+	if ( ! form ) {
+		return;
+	}
+
+	form.addEventListener(
+		'submit',
+		function () {
+			const textarea = editor.querySelector( '[data-alynt-ag-dashboard-link-json]' );
+
+			if ( textarea.dataset.alyntAgRawEdited !== '1' ) {
+				alyntAgSerializeDashboardLinks( editor );
+			}
+		}
+	);
+}
+
+function alyntAgInitDashboardLinkEditor( editor ) {
+	alyntAgDashboardLinkRows( editor ).forEach(
+		function ( row, index ) {
+			alyntAgRenumberDashboardLinkRow( row, String( index ) );
+		}
+	);
+	alyntAgBindDashboardLinkEvents( editor );
+	alyntAgBindDashboardLinkSubmit( editor );
+}
+
+export function alyntAgInitDashboardLinks() {
+	document.querySelectorAll( '[data-alynt-ag-dashboard-links]' ).forEach( alyntAgInitDashboardLinkEditor );
 }

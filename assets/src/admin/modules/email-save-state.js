@@ -4,164 +4,164 @@
  * @package Alynt_Account_Gateway
  */
 
-export function alyntAgInitEmailSaveState() {
-	const settingsForm = document.querySelector( '[data-alynt-ag-email-settings]' );
-	const notice       = document.querySelector( '[data-alynt-ag-email-save-state]' );
-	const actionForms  = document.querySelectorAll( '[data-alynt-ag-requires-saved-email-settings]' );
+/**
+ * Normalize TinyMCE content before comparison.
+ *
+ * @param {Object} editor  TinyMCE editor.
+ * @param {string} content Editor content.
+ *
+ * @return {string} Normalized content.
+ */
+function alyntAgNormalizeEditorContent( editor, content ) {
+	if (
+		! window.switchEditors ||
+		typeof window.switchEditors.wpautop !== 'function' ||
+		! window.tinymce.html
+	) {
+		return content;
+	}
 
-	if ( ! settingsForm || ! notice || ! actionForms.length ) {
+	const parser     = new window.tinymce.html.DomParser( {}, editor.schema );
+	const serializer = new window.tinymce.html.Serializer( {}, editor.schema );
+	const html       = window.switchEditors.wpautop( content );
+
+	return serializer.serialize( parser.parse( html ) );
+}
+
+function alyntAgReadEmailFieldValue( field ) {
+	if ( ! field.matches( '.wp-editor-area' ) || ! window.tinymce ) {
+		return field.value;
+	}
+
+	const editor = window.tinymce.get( field.id );
+
+	if ( ! editor ) {
+		return field.value;
+	}
+
+	return alyntAgNormalizeEditorContent(
+		editor,
+		editor.isHidden() ? field.value : editor.getContent()
+	);
+}
+
+function alyntAgReadEmailSettings( state ) {
+	return Array.from( new window.FormData( state.settingsForm ).entries() ).map(
+		function ( entry ) {
+			const field = state.settingsForm.elements.namedItem( entry[0] );
+
+			if ( ! field || typeof field.matches !== 'function' ) {
+				return entry;
+			}
+
+			return [ entry[0], alyntAgReadEmailFieldValue( field ) ];
+		}
+	);
+}
+
+function alyntAgSerializeEmailSettings( state, entries ) {
+	return JSON.stringify( entries || alyntAgReadEmailSettings( state ) );
+}
+
+function alyntAgUpdateInitialEmailField( state, field ) {
+	state.initialState = state.initialState.map(
+		function ( entry ) {
+			if ( entry[0] !== field.name ) {
+				return entry;
+			}
+
+			return [ entry[0], alyntAgReadEmailFieldValue( field ) ];
+		}
+	);
+}
+
+function alyntAgSetEmailDirtyState( state, nextIsDirty ) {
+	if ( state.isDirty === nextIsDirty ) {
 		return;
 	}
 
-	let isDirty      = false;
-	let initialState = readSettings();
+	state.isDirty       = nextIsDirty;
+	state.notice.hidden = ! state.isDirty;
+	state.settingsForm.classList.toggle( 'alynt-ag-email-settings--dirty', state.isDirty );
 
-	function normalizeEditorContent( editor, content ) {
-		if (
-			! window.switchEditors ||
-			typeof window.switchEditors.wpautop !== 'function' ||
-			! window.tinymce.html
-		) {
-			return content;
-		}
+	state.actionForms.forEach(
+		function ( form ) {
+			const submit = form.querySelector( 'button[type="submit"], input[type="submit"]' );
 
-		const parser     = new window.tinymce.html.DomParser( {}, editor.schema );
-		const serializer = new window.tinymce.html.Serializer( {}, editor.schema );
-		const html       = window.switchEditors.wpautop( content );
-
-		return serializer.serialize( parser.parse( html ) );
-	}
-
-	function readFieldValue( field ) {
-		if ( ! field.matches( '.wp-editor-area' ) || ! window.tinymce ) {
-			return field.value;
-		}
-
-		const editor = window.tinymce.get( field.id );
-
-		if ( ! editor ) {
-			return field.value;
-		}
-
-		return normalizeEditorContent(
-			editor,
-			editor.isHidden() ? field.value : editor.getContent()
-		);
-	}
-
-	function readSettings() {
-		return Array.from( new window.FormData( settingsForm ).entries() ).map(
-			function ( entry ) {
-				const field = settingsForm.elements.namedItem( entry[0] );
-
-				if ( ! field || typeof field.matches !== 'function' ) {
-					return entry;
-				}
-
-				return [ entry[0], readFieldValue( field ) ];
+			if ( ! submit ) {
+				return;
 			}
-		);
-	}
 
-	function serializeSettings( entries ) {
-		return JSON.stringify( entries || readSettings() );
-	}
-
-	function updateInitialField( field ) {
-		initialState = initialState.map(
-			function ( entry ) {
-				if ( entry[0] !== field.name ) {
-					return entry;
-				}
-
-				return [ entry[0], readFieldValue( field ) ];
+			submit.disabled = state.isDirty;
+			if ( state.isDirty ) {
+				submit.setAttribute( 'aria-disabled', 'true' );
+			} else {
+				submit.removeAttribute( 'aria-disabled' );
 			}
-		);
+		}
+	);
+}
+
+function alyntAgUpdateEmailDirtyState( state ) {
+	const current = alyntAgSerializeEmailSettings( state );
+	const initial = alyntAgSerializeEmailSettings( state, state.initialState );
+
+	alyntAgSetEmailDirtyState( state, current !== initial );
+}
+
+function alyntAgTrackEmailEditor( state, editor ) {
+	if ( ! editor || editor.alyntAgEmailSaveStateTracked ) {
+		return;
 	}
 
-	function setDirtyState( nextIsDirty ) {
-		if ( isDirty === nextIsDirty ) {
-			return;
-		}
+	const textarea = editor.getElement();
+	if ( ! textarea || ! state.settingsForm.contains( textarea ) ) {
+		return;
+	}
 
-		isDirty       = nextIsDirty;
-		notice.hidden = ! isDirty;
-		settingsForm.classList.toggle( 'alynt-ag-email-settings--dirty', isDirty );
-
-		actionForms.forEach(
-			function ( form ) {
-				const submit = form.querySelector( 'button[type="submit"], input[type="submit"]' );
-
-				if ( submit ) {
-					submit.disabled = isDirty;
-
-					if ( isDirty ) {
-						submit.setAttribute( 'aria-disabled', 'true' );
-					} else {
-						submit.removeAttribute( 'aria-disabled' );
-					}
+	editor.alyntAgEmailSaveStateTracked = 'pending';
+	window.setTimeout(
+		function () {
+			editor.save();
+			alyntAgUpdateInitialEmailField( state, textarea );
+			editor.alyntAgEmailSaveStateTracked = true;
+			editor.on(
+				'change input undo redo',
+				function () {
+					editor.save();
+					alyntAgUpdateEmailDirtyState( state );
 				}
-			}
-		);
-	}
+			);
+			alyntAgUpdateEmailDirtyState( state );
+		},
+		0
+	);
+}
 
-	function updateDirtyState() {
-		setDirtyState( serializeSettings() !== serializeSettings( initialState ) );
-	}
-
-	function trackTinyMceEditor( editor ) {
-		if ( ! editor || editor.alyntAgEmailSaveStateTracked ) {
-			return;
-		}
-
-		const textarea = editor.getElement();
-
-		if ( ! textarea || ! settingsForm.contains( textarea ) ) {
-			return;
-		}
-
-		editor.alyntAgEmailSaveStateTracked = 'pending';
-		window.setTimeout(
-			function () {
-				editor.save();
-				updateInitialField( textarea );
-				editor.alyntAgEmailSaveStateTracked = true;
-				editor.on(
-					'change input undo redo',
-					function () {
-						editor.save();
-						updateDirtyState();
-					}
-				);
-				updateDirtyState();
-			},
-			0
-		);
-	}
-
-	function handleSettingsChange( event ) {
+function alyntAgBindEmailSaveState( state ) {
+	const handleSettingsChange = function ( event ) {
 		if ( event.target.matches( '.wp-editor-area' ) && ! event.isTrusted ) {
 			return;
 		}
 
-		updateDirtyState();
-	}
-
-	function handleBeforeUnload( event ) {
-		if ( ! isDirty ) {
+		alyntAgUpdateEmailDirtyState( state );
+	};
+	const handleBeforeUnload   = function ( event ) {
+		if ( ! state.isDirty ) {
 			return;
 		}
 
 		event.preventDefault();
 		event.returnValue = '';
-	}
+	};
+	const trackTinyMceEditor   = ( editor ) => alyntAgTrackEmailEditor( state, editor );
 
-	settingsForm.addEventListener( 'input', handleSettingsChange );
-	settingsForm.addEventListener( 'change', handleSettingsChange );
-	settingsForm.addEventListener(
+	state.settingsForm.addEventListener( 'input', handleSettingsChange );
+	state.settingsForm.addEventListener( 'change', handleSettingsChange );
+	state.settingsForm.addEventListener(
 		'submit',
 		function () {
-			setDirtyState( false );
+			alyntAgSetEmailDirtyState( state, false );
 		}
 	);
 	window.addEventListener( 'beforeunload', handleBeforeUnload );
@@ -174,8 +174,25 @@ export function alyntAgInitEmailSaveState() {
 		window.jQuery( document ).on(
 			'tinymce-editor-init.alyntAgEmailSaveState',
 			function ( event, editor ) {
-				trackTinyMceEditor( editor );
+				alyntAgTrackEmailEditor( state, editor );
 			}
 		);
 	}
+}
+
+export function alyntAgInitEmailSaveState() {
+	const state = {
+		settingsForm: document.querySelector( '[data-alynt-ag-email-settings]' ),
+		notice: document.querySelector( '[data-alynt-ag-email-save-state]' ),
+		actionForms: document.querySelectorAll( '[data-alynt-ag-requires-saved-email-settings]' ),
+		isDirty: false,
+		initialState: [],
+	};
+
+	if ( ! state.settingsForm || ! state.notice || ! state.actionForms.length ) {
+		return;
+	}
+
+	state.initialState = alyntAgReadEmailSettings( state );
+	alyntAgBindEmailSaveState( state );
 }
