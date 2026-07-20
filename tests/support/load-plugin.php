@@ -73,6 +73,10 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-logout-scre
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-state-screens.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-gateway-shell.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-document-renderer.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-request-context.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-url-adapter.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-access-controller.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-frontend-gateway-controller.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-registry.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-hook-inspector.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-warnings.php';
