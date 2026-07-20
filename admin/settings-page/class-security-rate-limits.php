@@ -15,6 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ALYNT_AG_Settings_Page_Security_Rate_Limits extends ALYNT_AG_Settings_Page_Component {
 
 	/**
+	 * Maximum active transient rows summarized in one admin request.
+	 */
+	const MAX_ACTIVE_BUCKETS = 1000;
+
+	/**
 	 * Render rate-limit pressure summary from recent verification logs.
 	 *
 	 * @param array<int,object> $logs Recent verification logs.
@@ -219,17 +224,27 @@ class ALYNT_AG_Settings_Page_Security_Rate_Limits extends ALYNT_AG_Settings_Page
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Admin-only aggregate observability for plugin-owned transient rows.
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT option_value FROM {$wpdb->options} WHERE option_name LIKE %s",
-				$wpdb->esc_like( '_transient_alynt_ag_rl_meta_' ) . '%'
+				"SELECT option_value FROM {$wpdb->options} WHERE option_name LIKE %s LIMIT %d",
+				$wpdb->esc_like( '_transient_alynt_ag_rl_meta_' ) . '%',
+				self::MAX_ACTIVE_BUCKETS + 1
 			)
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
-		return is_array( $rows )
-			? $rows
-			: new WP_Error(
+		if ( ! is_array( $rows ) ) {
+			return new WP_Error(
 				'alynt_ag_rate_limit_buckets_read_failed',
 				__( 'Active rate-limit buckets could not be loaded. Refresh the page and check the database connection if the problem continues.', 'alynt-account-gateway' )
 			);
+		}
+
+		if ( count( $rows ) > self::MAX_ACTIVE_BUCKETS ) {
+			return new WP_Error(
+				'alynt_ag_rate_limit_buckets_too_many',
+				__( 'Active rate-limit pressure is too high to summarize safely in one request. Wait for current rate-limit windows to expire, then refresh this screen.', 'alynt-account-gateway' )
+			);
+		}
+
+		return $rows;
 	}
 }

@@ -52,6 +52,17 @@ class ALYNT_AG_Test_Frontend_Routes_Spy {
  */
 class FrontendCollaborationTest extends TestCase {
 
+	public function test_default_facade_defers_gateway_document_graph() {
+		$facade     = new ALYNT_AG_Frontend();
+		$reflection = new ReflectionClass( $facade );
+
+		foreach ( array( 'renderer', 'gateway' ) as $property_name ) {
+			$property = $reflection->getProperty( $property_name );
+
+			$this->assertNull( $property->getValue( $facade ) );
+		}
+	}
+
 	public function test_facade_delegates_to_injected_collaborators() {
 		$routes  = new ALYNT_AG_Test_Frontend_Routes_Spy();
 		$assets  = new ALYNT_AG_Test_Frontend_Collaborator_Spy();
@@ -105,6 +116,9 @@ class FrontendCollaborationTest extends TestCase {
 
 		$loader = file_get_contents( ALYNT_AG_PLUGIN_DIR . 'includes/class-loader.php' );
 		$facade = strpos( $loader, 'public/class-frontend.php' );
+
+		$this->assertStringContainsString( 'if ( is_admin() )', $loader );
+		$this->assertStringContainsString( '$alynt_ag_files = array_merge( $alynt_ag_files, $alynt_ag_admin_files )', $loader );
 
 		foreach ( array_slice( $files, 1 ) as $file ) {
 			$this->assertLessThan( $facade, strpos( $loader, basename( $file ) ) );

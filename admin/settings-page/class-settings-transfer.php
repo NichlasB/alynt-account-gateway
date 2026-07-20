@@ -15,6 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ALYNT_AG_Settings_Page_Settings_Transfer extends ALYNT_AG_Settings_Page_Component {
 
 	/**
+	 * Maximum accepted settings import size.
+	 */
+	const MAX_IMPORT_BYTES = 1048576;
+
+	/**
 	 * Export plugin settings as JSON.
 	 *
 	 * @return void
@@ -56,7 +61,9 @@ class ALYNT_AG_Settings_Page_Settings_Transfer extends ALYNT_AG_Settings_Page_Co
 		$ignored_count = 0;
 		$file          = isset( $_FILES['settings_file'] ) && is_array( $_FILES['settings_file'] ) ? $_FILES['settings_file'] : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- File metadata is validated before use.
 
-		if ( isset( $file['tmp_name'], $file['error'] ) && is_string( $file['tmp_name'] ) && UPLOAD_ERR_OK === (int) $file['error'] && is_uploaded_file( $file['tmp_name'] ) ) {
+		if ( $this->import_file_is_too_large( $file ) ) {
+			$status = 'settings_import_file_too_large';
+		} elseif ( isset( $file['tmp_name'], $file['error'] ) && is_string( $file['tmp_name'] ) && UPLOAD_ERR_OK === (int) $file['error'] && is_uploaded_file( $file['tmp_name'] ) ) {
 			$json       = file_get_contents( $file['tmp_name'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading the PHP-uploaded temp file only.
 			$json       = is_string( $json ) ? $json : '';
 			$inspection = ALYNT_AG_Settings_Schema::inspect_import_package( $json );
@@ -101,6 +108,26 @@ class ALYNT_AG_Settings_Page_Settings_Transfer extends ALYNT_AG_Settings_Page_Co
 			)
 		);
 		exit;
+	}
+
+	/**
+	 * Return whether an uploaded settings package exceeds the memory-safe limit.
+	 *
+	 * @param array<string,mixed> $file Uploaded file metadata.
+	 * @return bool
+	 */
+	private function import_file_is_too_large( $file ) {
+		if ( isset( $file['size'] ) && (int) $file['size'] > self::MAX_IMPORT_BYTES ) {
+			return true;
+		}
+
+		if ( empty( $file['tmp_name'] ) || ! is_string( $file['tmp_name'] ) || ! is_file( $file['tmp_name'] ) ) {
+			return false;
+		}
+
+		$size = filesize( $file['tmp_name'] );
+
+		return false !== $size && $size > self::MAX_IMPORT_BYTES;
 	}
 
 	/**

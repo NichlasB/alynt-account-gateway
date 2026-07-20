@@ -38,6 +38,38 @@ class WebhookDispatcherTest extends TestCase {
 		$this->assertSame( 'Example Store', $payload['site']['name'] );
 	}
 
+	public function test_account_created_delivery_is_queued_without_network_io() {
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+		$result     = $dispatcher->queue_account_created(
+			321,
+			array( 'account_created_webhook' => 'https://hooks.example.test/account-created' )
+		);
+
+		$this->assertTrue( $result );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_remote_posts'] );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_single_events'] );
+		$this->assertSame( ALYNT_AG_Webhook_Dispatcher::DELIVERY_HOOK, $GLOBALS['alynt_ag_test_single_events'][0]['hook'] );
+		$this->assertSame( array( 321 ), $GLOBALS['alynt_ag_test_single_events'][0]['args'] );
+	}
+
+	public function test_account_created_queue_is_a_no_op_without_destination() {
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+
+		$this->assertTrue( $dispatcher->queue_account_created( 321, array() ) );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_single_events'] );
+	}
+
+	public function test_register_adds_initial_delivery_and_retry_hooks() {
+		$GLOBALS['alynt_ag_test_actions'] = array();
+		$dispatcher                      = new ALYNT_AG_Webhook_Dispatcher();
+
+		$dispatcher->register();
+
+		$hooks = array_column( $GLOBALS['alynt_ag_test_actions'], 'hook' );
+		$this->assertContains( ALYNT_AG_Webhook_Dispatcher::DELIVERY_HOOK, $hooks );
+		$this->assertContains( ALYNT_AG_Webhook_Dispatcher::RETRY_HOOK, $hooks );
+	}
+
 	public function test_log_dispatch_stores_metadata_without_payload_by_default() {
 		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
 		$result     = $dispatcher->log_dispatch(

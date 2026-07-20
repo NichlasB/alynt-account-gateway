@@ -13,9 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Dispatches account gateway webhooks.
  */
 class ALYNT_AG_Webhook_Dispatcher {
+	use ALYNT_AG_Webhook_Queue;
 
-	const RETRY_HOOK  = 'alynt_ag_retry_account_created_webhook';
-	const MAX_RETRIES = 2;
+	const DELIVERY_HOOK = 'alynt_ag_deliver_account_created_webhook';
+	const RETRY_HOOK    = 'alynt_ag_retry_account_created_webhook';
+	const MAX_RETRIES   = 2;
 
 	/**
 	 * Register retry processing.
@@ -23,6 +25,7 @@ class ALYNT_AG_Webhook_Dispatcher {
 	 * @return void
 	 */
 	public function register() {
+		add_action( self::DELIVERY_HOOK, array( $this, 'deliver_account_created' ) );
 		add_action( self::RETRY_HOOK, array( $this, 'retry_account_created' ), 10, 2 );
 	}
 
@@ -50,7 +53,6 @@ class ALYNT_AG_Webhook_Dispatcher {
 		}
 
 		$payload = $this->build_account_created_payload( $user );
-
 		return $this->dispatch_payload( 'account.created', $url, $user->ID, $payload, $settings, absint( $retry_count ), true );
 	}
 

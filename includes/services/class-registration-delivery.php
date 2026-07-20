@@ -49,7 +49,7 @@ class ALYNT_AG_Registration_Delivery extends ALYNT_AG_Service_Collaborator {
 	}
 
 	/**
-	 * Dispatch the account-created webhook.
+	 * Queue the account-created webhook.
 	 *
 	 * @param int                 $user_id  Created user ID.
 	 * @param array<string,mixed> $settings Settings.
@@ -58,6 +58,6 @@ class ALYNT_AG_Registration_Delivery extends ALYNT_AG_Service_Collaborator {
 	public function run_dispatch_account_created_webhook( $user_id, $settings ) {
 		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
 
-		return $dispatcher->dispatch_account_created( $user_id, $settings );
+		return $dispatcher->queue_account_created( $user_id, $settings );
 	}
 }

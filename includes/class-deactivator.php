@@ -26,6 +26,7 @@ class ALYNT_AG_Deactivator {
 			wp_unschedule_event( $timestamp, 'alynt_ag_retention_cleanup' );
 		}
 
+		wp_clear_scheduled_hook( ALYNT_AG_Webhook_Dispatcher::DELIVERY_HOOK );
 		wp_clear_scheduled_hook( ALYNT_AG_Webhook_Dispatcher::RETRY_HOOK );
 		wp_clear_scheduled_hook( ALYNT_AG_Retention_Cleanup::CONTINUATION_HOOK );
 		flush_rewrite_rules();

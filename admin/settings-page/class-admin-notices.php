@@ -83,67 +83,71 @@ class ALYNT_AG_Settings_Page_Admin_Notices extends ALYNT_AG_Settings_Page_Compon
 	 */
 	private function admin_notices() {
 		return array(
-			'settings_imported'             => array(
+			'settings_imported'              => array(
 				'type'    => 'success',
 				'message' => __( 'Settings imported successfully.', 'alynt-account-gateway' ),
 			),
-			'settings_import_failed'        => array(
+			'settings_import_failed'         => array(
 				'type'    => 'error',
 				'message' => __( 'Settings could not be imported. Choose a valid Alynt Account Gateway JSON export.', 'alynt-account-gateway' ),
 			),
-			'settings_import_invalid_json'  => array(
+			'settings_import_invalid_json'   => array(
 				'type'    => 'error',
 				'message' => __( 'Settings could not be imported because the selected file is not valid JSON.', 'alynt-account-gateway' ),
 			),
-			'settings_import_empty'         => array(
+			'settings_import_empty'          => array(
 				'type'    => 'error',
 				'message' => __( 'Settings could not be imported because the file does not contain recognized Alynt Account Gateway settings.', 'alynt-account-gateway' ),
 			),
-			'settings_import_upload_failed' => array(
+			'settings_import_upload_failed'  => array(
 				'type'    => 'error',
 				'message' => __( 'Settings could not be imported because the uploaded file could not be read.', 'alynt-account-gateway' ),
 			),
-			'tab_defaults_restored'         => array(
+			'settings_import_file_too_large' => array(
+				'type'    => 'error',
+				'message' => __( 'Settings could not be imported because the selected file exceeds the 1 MB limit.', 'alynt-account-gateway' ),
+			),
+			'tab_defaults_restored'          => array(
 				'type'    => 'success',
 				'message' => __( 'This settings tab was restored to its defaults.', 'alynt-account-gateway' ),
 			),
-			'tab_defaults_failed'           => array(
+			'tab_defaults_failed'            => array(
 				'type'    => 'error',
 				'message' => __( 'This settings tab could not be restored.', 'alynt-account-gateway' ),
 			),
-			'diagnostics_cleared'           => array(
+			'diagnostics_cleared'            => array(
 				'type'    => 'success',
 				'message' => __( 'Diagnostics events cleared.', 'alynt-account-gateway' ),
 			),
-			'diagnostics_clear_failed'      => array(
+			'diagnostics_clear_failed'       => array(
 				'type'    => 'error',
 				'message' => __( 'Diagnostics events could not be cleared. Please retry and check the site database if the problem continues.', 'alynt-account-gateway' ),
 			),
-			'email_test_sent'               => array(
+			'email_test_sent'                => array(
 				'type'    => 'success',
 				'message' => __( 'Test email sent.', 'alynt-account-gateway' ),
 			),
-			'email_test_failed'             => array(
+			'email_test_failed'              => array(
 				'type'    => 'error',
 				'message' => __( 'The test email could not be sent. Check the recipient and mail configuration.', 'alynt-account-gateway' ),
 			),
-			'webhook_test_sent'             => array(
+			'webhook_test_sent'              => array(
 				'type'    => 'success',
 				'message' => __( 'Test webhook sent.', 'alynt-account-gateway' ),
 			),
-			'webhook_test_missing'          => array(
+			'webhook_test_missing'           => array(
 				'type'    => 'warning',
 				'message' => __( 'Add and save an account-created webhook URL before sending a test.', 'alynt-account-gateway' ),
 			),
-			'webhook_test_failed'           => array(
+			'webhook_test_failed'            => array(
 				'type'    => 'error',
 				'message' => __( 'The test webhook could not be sent. Review the recent webhook deliveries table for details.', 'alynt-account-gateway' ),
 			),
-			'verification_review_recorded'  => array(
+			'verification_review_recorded'   => array(
 				'type'    => 'success',
 				'message' => __( 'The Reoon review decision was recorded.', 'alynt-account-gateway' ),
 			),
-			'verification_review_failed'    => array(
+			'verification_review_failed'     => array(
 				'type'    => 'error',
 				'message' => __( 'The review decision could not be recorded. Refresh the Security tab and try again.', 'alynt-account-gateway' ),
 			),

@@ -17,49 +17,49 @@ class ALYNT_AG_Frontend_Gateway_Shell {
 	/**
 	 * Branding helper.
 	 *
-	 * @var ALYNT_AG_Frontend_Branding
+	 * @var ALYNT_AG_Frontend_Branding|null
 	 */
 	private $branding;
 
 	/**
 	 * Login screen helper.
 	 *
-	 * @var ALYNT_AG_Frontend_Login_Screen
+	 * @var ALYNT_AG_Frontend_Login_Screen|null
 	 */
 	private $login_screen;
 
 	/**
 	 * Registration screen helper.
 	 *
-	 * @var ALYNT_AG_Frontend_Register_Screen
+	 * @var ALYNT_AG_Frontend_Register_Screen|null
 	 */
 	private $register_screen;
 
 	/**
 	 * Lost-password screen helper.
 	 *
-	 * @var ALYNT_AG_Frontend_Lostpassword_Screen
+	 * @var ALYNT_AG_Frontend_Lostpassword_Screen|null
 	 */
 	private $lostpassword_screen;
 
 	/**
 	 * Set-password screen helper.
 	 *
-	 * @var ALYNT_AG_Frontend_Setpassword_Screen
+	 * @var ALYNT_AG_Frontend_Setpassword_Screen|null
 	 */
 	private $setpassword_screen;
 
 	/**
 	 * Logout screen helper.
 	 *
-	 * @var ALYNT_AG_Frontend_Logout_Screen
+	 * @var ALYNT_AG_Frontend_Logout_Screen|null
 	 */
 	private $logout_screen;
 
 	/**
 	 * State screen helpers.
 	 *
-	 * @var ALYNT_AG_Frontend_State_Screens
+	 * @var ALYNT_AG_Frontend_State_Screens|null
 	 */
 	private $state_screens;
 
@@ -83,13 +83,13 @@ class ALYNT_AG_Frontend_Gateway_Shell {
 		$logout_screen = null,
 		$state_screens = null
 	) {
-		$this->branding            = $branding ? $branding : new ALYNT_AG_Frontend_Branding();
-		$this->login_screen        = $login_screen ? $login_screen : new ALYNT_AG_Frontend_Login_Screen();
-		$this->register_screen     = $register_screen ? $register_screen : new ALYNT_AG_Frontend_Register_Screen();
-		$this->lostpassword_screen = $lostpassword_screen ? $lostpassword_screen : new ALYNT_AG_Frontend_Lostpassword_Screen();
-		$this->setpassword_screen  = $setpassword_screen ? $setpassword_screen : new ALYNT_AG_Frontend_Setpassword_Screen();
-		$this->logout_screen       = $logout_screen ? $logout_screen : new ALYNT_AG_Frontend_Logout_Screen();
-		$this->state_screens       = $state_screens ? $state_screens : new ALYNT_AG_Frontend_State_Screens();
+		$this->branding            = $branding;
+		$this->login_screen        = $login_screen;
+		$this->register_screen     = $register_screen;
+		$this->lostpassword_screen = $lostpassword_screen;
+		$this->setpassword_screen  = $setpassword_screen;
+		$this->logout_screen       = $logout_screen;
+		$this->state_screens       = $state_screens;
 	}
 
 	/**
@@ -100,17 +100,17 @@ class ALYNT_AG_Frontend_Gateway_Shell {
 	 * @return void
 	 */
 	public function render_gateway_shell( $screen, $settings ) {
-		$style = $this->branding->style_attribute( $settings );
+		$style = $this->branding()->style_attribute( $settings );
 		$dir   = is_rtl() ? 'rtl' : 'ltr';
 		?>
 		<main class="alynt-ag-gateway" data-agw-screen="<?php echo esc_attr( $screen ); ?>" dir="<?php echo esc_attr( $dir ); ?>" style="<?php echo esc_attr( $style ); ?>">
 			<section class="agw-shell" aria-labelledby="agw-screen-title">
 				<div class="agw-media" aria-hidden="true">
-					<?php $this->branding->render_media_panel( $settings ); ?>
+					<?php $this->branding()->render_media_panel( $settings ); ?>
 				</div>
 				<div class="agw-panel">
 					<div class="agw-card">
-						<?php $this->branding->render_brand_block( $settings ); ?>
+						<?php $this->branding()->render_brand_block( $settings ); ?>
 						<?php $this->render_screen( $screen, $settings ); ?>
 					</div>
 				</div>
@@ -126,19 +126,19 @@ class ALYNT_AG_Frontend_Gateway_Shell {
 	 * @return void
 	 */
 	public function render_gateway_shell_with_password_preview( $settings ) {
-		$style = $this->branding->style_attribute( $settings );
+		$style = $this->branding()->style_attribute( $settings );
 		$dir   = is_rtl() ? 'rtl' : 'ltr';
 		?>
 		<main class="alynt-ag-gateway" data-agw-screen="setpassword" dir="<?php echo esc_attr( $dir ); ?>" style="<?php echo esc_attr( $style ); ?>">
 			<section class="agw-shell" aria-labelledby="agw-screen-title">
 				<div class="agw-media" aria-hidden="true">
-					<?php $this->branding->render_media_panel( $settings ); ?>
+					<?php $this->branding()->render_media_panel( $settings ); ?>
 				</div>
 				<div class="agw-panel">
 					<div class="agw-card">
-						<?php $this->branding->render_brand_block( $settings ); ?>
+						<?php $this->branding()->render_brand_block( $settings ); ?>
 						<?php
-						$this->setpassword_screen->render_password_form(
+						$this->setpassword_screen()->render_password_form(
 							$settings,
 							home_url( $settings['account_action_base'] ),
 							'reset_password',
@@ -168,27 +168,105 @@ class ALYNT_AG_Frontend_Gateway_Shell {
 	private function render_screen( $screen, $settings ) {
 		switch ( $screen ) {
 			case 'register':
-				$this->register_screen->render_register_screen( $settings );
+				$this->register_screen()->render_register_screen( $settings );
 				break;
 			case 'lostpassword':
-				$this->lostpassword_screen->render_lostpassword_screen( $settings );
+				$this->lostpassword_screen()->render_lostpassword_screen( $settings );
 				break;
 			case 'setpassword':
-				$this->setpassword_screen->render_setpassword_screen( $settings );
+				$this->setpassword_screen()->render_setpassword_screen( $settings );
 				break;
 			case 'logout':
-				$this->logout_screen->render_logout_screen( $settings );
+				$this->logout_screen()->render_logout_screen( $settings );
 				break;
 			case 'registration_disabled':
-				$this->state_screens->render_registration_disabled_screen( $settings );
+				$this->state_screens()->render_registration_disabled_screen( $settings );
 				break;
 			case 'invalidlink':
-				$this->state_screens->render_invalid_link_screen( $settings );
+				$this->state_screens()->render_invalid_link_screen( $settings );
 				break;
 			case 'login':
 			default:
-				$this->login_screen->render_login_screen( $settings );
+				$this->login_screen()->render_login_screen( $settings );
 				break;
 		}
+	}
+
+	/**
+	 * Return a shell collaborator, creating it only for the active screen.
+	 *
+	 * @param string $property   Property name.
+	 * @param string $class_name Class name.
+	 * @return object
+	 */
+	private function collaborator( $property, $class_name ) {
+		if ( null === $this->{$property} ) {
+			$this->{$property} = new $class_name();
+		}
+
+		return $this->{$property};
+	}
+
+	/**
+	 * Return the branding collaborator.
+	 *
+	 * @return ALYNT_AG_Frontend_Branding
+	 */
+	private function branding() {
+		return $this->collaborator( 'branding', 'ALYNT_AG_Frontend_Branding' );
+	}
+
+	/**
+	 * Return the login screen collaborator.
+	 *
+	 * @return ALYNT_AG_Frontend_Login_Screen
+	 */
+	private function login_screen() {
+		return $this->collaborator( 'login_screen', 'ALYNT_AG_Frontend_Login_Screen' );
+	}
+
+	/**
+	 * Return the registration screen collaborator.
+	 *
+	 * @return ALYNT_AG_Frontend_Register_Screen
+	 */
+	private function register_screen() {
+		return $this->collaborator( 'register_screen', 'ALYNT_AG_Frontend_Register_Screen' );
+	}
+
+	/**
+	 * Return the lost-password screen collaborator.
+	 *
+	 * @return ALYNT_AG_Frontend_Lostpassword_Screen
+	 */
+	private function lostpassword_screen() {
+		return $this->collaborator( 'lostpassword_screen', 'ALYNT_AG_Frontend_Lostpassword_Screen' );
+	}
+
+	/**
+	 * Return the set-password screen collaborator.
+	 *
+	 * @return ALYNT_AG_Frontend_Setpassword_Screen
+	 */
+	private function setpassword_screen() {
+		return $this->collaborator( 'setpassword_screen', 'ALYNT_AG_Frontend_Setpassword_Screen' );
+	}
+
+	/**
+	 * Return the logout screen collaborator.
+	 *
+	 * @return ALYNT_AG_Frontend_Logout_Screen
+	 */
+	private function logout_screen() {
+		return $this->collaborator( 'logout_screen', 'ALYNT_AG_Frontend_Logout_Screen' );
+	}
+
+	/**
+	 * Return the state-screen collaborator.
+	 *
+	 * @return ALYNT_AG_Frontend_State_Screens
+	 */
+	private function state_screens() {
+		return $this->collaborator( 'state_screens', 'ALYNT_AG_Frontend_State_Screens' );
 	}
 }

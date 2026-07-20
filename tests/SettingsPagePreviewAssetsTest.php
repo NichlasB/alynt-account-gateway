@@ -93,6 +93,21 @@ class SettingsPagePreviewAssetsTest extends TestCase {
 		$this->assertCount( 1, $ajax_preview );
 	}
 
+	public function test_unrelated_admin_request_does_not_build_component_registry() {
+		$original_get = $_GET;
+		$_GET        = array( 'page' => 'unrelated-settings-page' );
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$settings_page->maybe_handle_preview_gateway_request();
+
+		$reflection = new ReflectionClass( $settings_page );
+		$components = $reflection->getProperty( 'components' );
+
+		$this->assertNull( $components->getValue( $settings_page ) );
+
+		$_GET = $original_get;
+	}
+
 	public function test_gateway_preview_links_use_frontend_preview_route() {
 		$settings_page = new ALYNT_AG_Settings_Page();
 

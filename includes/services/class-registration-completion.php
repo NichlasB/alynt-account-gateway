@@ -250,7 +250,7 @@ class ALYNT_AG_Registration_Completion extends ALYNT_AG_Service_Collaborator {
 		if ( is_wp_error( $webhook_sent ) ) {
 			$this->log_integration_failure(
 				'account_created_webhook_failed',
-				__( 'The account-created webhook could not be sent.', 'alynt-account-gateway' ),
+				__( 'The account-created webhook could not be queued.', 'alynt-account-gateway' ),
 				array(
 					'user_id' => $user_id,
 					'email'   => $pending->email,

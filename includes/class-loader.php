@@ -55,12 +55,14 @@ $alynt_ag_files = array(
 	'includes/services/class-reoon-client.php',
 	'includes/services/class-webhook-retry-scheduler.php',
 	'includes/services/class-webhook-delivery-logger.php',
+	'includes/services/trait-webhook-queue.php',
 	'includes/services/class-webhook-dispatcher.php',
 	'includes/services/class-dashboard-service.php',
 	'includes/services/class-woocommerce-navigation.php',
 	'includes/services/class-woocommerce-routing.php',
 	'includes/services/class-woocommerce-endpoint-renderer.php',
 	'includes/services/class-woocommerce-customer-data.php',
+	'includes/services/trait-woocommerce-collaborators.php',
 	'includes/services/class-woocommerce-integration.php',
 	'includes/services/class-frontend-routes.php',
 	'includes/services/class-woocommerce-checkout-gate.php',
@@ -93,6 +95,9 @@ $alynt_ag_files = array(
 	'includes/services/class-privacy-eraser.php',
 	'includes/services/class-privacy-service.php',
 	'includes/services/class-frontend-messages.php',
+);
+
+$alynt_ag_admin_files = array(
 	'admin/class-admin.php',
 	'admin/settings-page/class-component.php',
 	'admin/settings-page/class-page-shell.php',
@@ -127,8 +132,18 @@ $alynt_ag_files = array(
 	'admin/settings-page/class-messaging-actions.php',
 	'admin/settings-page/class-components.php',
 	'admin/class-settings-page.php',
-	'public/class-frontend.php',
-	'includes/class-plugin.php',
+);
+
+if ( is_admin() ) {
+	$alynt_ag_files = array_merge( $alynt_ag_files, $alynt_ag_admin_files );
+}
+
+$alynt_ag_files = array_merge(
+	$alynt_ag_files,
+	array(
+		'public/class-frontend.php',
+		'includes/class-plugin.php',
+	)
 );
 
 foreach ( $alynt_ag_files as $alynt_ag_file ) {

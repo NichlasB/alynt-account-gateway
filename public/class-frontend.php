@@ -45,9 +45,16 @@ class ALYNT_AG_Frontend {
 	/**
 	 * Gateway controller.
 	 *
-	 * @var ALYNT_AG_Frontend_Gateway_Controller
+	 * @var ALYNT_AG_Frontend_Gateway_Controller|null
 	 */
 	private $gateway;
+
+	/**
+	 * Document renderer, created only when a gateway document is rendered.
+	 *
+	 * @var ALYNT_AG_Frontend_Document_Renderer|null
+	 */
+	private $renderer;
 
 	/**
 	 * Constructor.
@@ -58,13 +65,13 @@ class ALYNT_AG_Frontend {
 		$collaborators = is_array( $collaborators ) ? $collaborators : array();
 		$routes        = $collaborators['routes'] ?? new ALYNT_AG_Frontend_Routes();
 		$context       = $collaborators['context'] ?? new ALYNT_AG_Frontend_Request_Context();
-		$renderer      = $collaborators['renderer'] ?? new ALYNT_AG_Frontend_Document_Renderer();
 
-		$this->routes  = $routes;
-		$this->assets  = $collaborators['assets'] ?? new ALYNT_AG_Frontend_Assets();
-		$this->access  = $collaborators['access'] ?? new ALYNT_AG_Frontend_Access_Controller( $routes, $context );
-		$this->urls    = $collaborators['urls'] ?? new ALYNT_AG_Frontend_Url_Adapter( $routes );
-		$this->gateway = $collaborators['gateway'] ?? new ALYNT_AG_Frontend_Gateway_Controller( $routes, $this->assets, $renderer );
+		$this->routes   = $routes;
+		$this->assets   = $collaborators['assets'] ?? new ALYNT_AG_Frontend_Assets();
+		$this->access   = $collaborators['access'] ?? new ALYNT_AG_Frontend_Access_Controller( $routes, $context );
+		$this->urls     = $collaborators['urls'] ?? new ALYNT_AG_Frontend_Url_Adapter( $routes );
+		$this->renderer = $collaborators['renderer'] ?? null;
+		$this->gateway  = $collaborators['gateway'] ?? null;
 	}
 
 	/**
@@ -143,7 +150,7 @@ class ALYNT_AG_Frontend {
 	 * @return void
 	 */
 	public function maybe_render_gateway() {
-		$this->gateway->maybe_render_gateway();
+		$this->gateway()->maybe_render_gateway();
 	}
 
 	/**
@@ -152,7 +159,7 @@ class ALYNT_AG_Frontend {
 	 * @return void
 	 */
 	public function maybe_render_gateway_preview() {
-		$this->gateway->maybe_render_gateway_preview();
+		$this->gateway()->maybe_render_gateway_preview();
 	}
 
 	/**
@@ -163,7 +170,7 @@ class ALYNT_AG_Frontend {
 	 * @return void
 	 */
 	public function render_preview( $screen, $settings ) {
-		$this->gateway->render_preview( $screen, $settings );
+		$this->gateway()->render_preview( $screen, $settings );
 	}
 
 	/**
@@ -228,6 +235,23 @@ class ALYNT_AG_Frontend {
 	 * @return string
 	 */
 	public function get_screen_title( $screen ) {
-		return $this->gateway->get_screen_title( $screen );
+		return $this->gateway()->get_screen_title( $screen );
+	}
+
+	/**
+	 * Return the gateway controller when a gateway operation actually runs.
+	 *
+	 * @return ALYNT_AG_Frontend_Gateway_Controller
+	 */
+	private function gateway() {
+		if ( null === $this->gateway ) {
+			if ( null === $this->renderer ) {
+				$this->renderer = new ALYNT_AG_Frontend_Document_Renderer();
+			}
+
+			$this->gateway = new ALYNT_AG_Frontend_Gateway_Controller( $this->routes, $this->assets, $this->renderer );
+		}
+
+		return $this->gateway;
 	}
 }

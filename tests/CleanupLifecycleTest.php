@@ -112,6 +112,7 @@ class CleanupLifecycleTest extends TestCase {
 			$GLOBALS['alynt_ag_test_unscheduled_events']
 		);
 		$this->assertContains( ALYNT_AG_Webhook_Dispatcher::RETRY_HOOK, $GLOBALS['alynt_ag_test_cleared_hooks'] );
+		$this->assertContains( ALYNT_AG_Webhook_Dispatcher::DELIVERY_HOOK, $GLOBALS['alynt_ag_test_cleared_hooks'] );
 		$this->assertContains( ALYNT_AG_Retention_Cleanup::CONTINUATION_HOOK, $GLOBALS['alynt_ag_test_cleared_hooks'] );
 		$this->assertTrue( $GLOBALS['alynt_ag_test_rewrite_rules_flushed'] );
 	}

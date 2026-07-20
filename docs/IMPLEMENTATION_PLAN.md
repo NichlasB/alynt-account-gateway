@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `05` are complete; prompt `06` is next.
+- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `06` are complete; prompt `07` is next.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Run approval-gated `06-PERFORMANCE_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompts `03` through `05` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Run approval-gated `07-EDGE_CASES_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompts `03` through `06` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
@@ -28,7 +28,7 @@
 - [x] `03-ERROR_HANDLING_REVIEW_PROMPT.md`
 - [x] `04-WP_BEST_PRACTICES_REVIEW_PROMPT.md`
 - [x] `05-DATABASE_REVIEW_PROMPT.md`
-- [ ] `06-PERFORMANCE_REVIEW_PROMPT.md`
+- [x] `06-PERFORMANCE_REVIEW_PROMPT.md`
 - [ ] `07-EDGE_CASES_REVIEW_PROMPT.md`
 - [ ] `07A-ADVERSARIAL_TEST_SUITE_REVIEW_PROMPT.md`
 - [ ] `08-UNINSTALL_REVIEW_PROMPT.md`
@@ -110,6 +110,21 @@ Execution rules:
 - [x] Added `docs/DATABASE_REVIEW_1.1.21.md` with the complete database inventory, implemented changes, design trade-offs, migration behavior, rollback implications, and validation evidence.
 - [x] Final validation passed: production build, 1,140-string POT generation, PHPCS, 225 PHP syntax checks, 19 JavaScript/MJS syntax checks, 473 PHPUnit tests with 3,385 assertions, npm high-severity audit with zero vulnerabilities, Composer advisory audit with no advisories, source ceilings, and `git diff --check`.
 - [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `05`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
+
+### Prompt 06 - Performance Review Evidence
+
+- [x] Completed a read-only inventory of 151 first-party runtime/source files and recorded 10 findings: 4 high, 5 medium, 1 low, and no critical issue.
+- [x] Restricted 34 admin PHP files measuring 261,960 bytes to admin requests, reducing the listed public request set to 87 files and 443,622 bytes, including two new lazy-resolution traits.
+- [x] Lazy-loaded the gateway controller, document branches, authentication screen helpers, dashboard integration, and focused WooCommerce collaborators while preserving test injection boundaries.
+- [x] Added a cheap preview-route gate before settings component-registry construction on unrelated admin requests.
+- [x] Cached the immutable 86-field settings schema and defaults once per request.
+- [x] Bounded settings imports at 1 MB and active rate-limit observability at 1,000 rows with explicit non-truncating error states.
+- [x] Moved initial account-created webhook delivery out of the registration response through a one-time WordPress Cron event while preserving direct admin tests, HMAC signing, logging, and two bounded retries.
+- [x] Added pending-registration `created_at_id (created_at, id)` and diagnostics `category_created_at (category, created_at, id)` indexes and advanced the idempotent schema version from `0.1.7` to `0.1.8`.
+- [x] Retained synchronous Turnstile/Reoon decisions and WooCommerce-owned complete download/token APIs as documented security and compatibility constraints.
+- [x] Added `docs/PERFORMANCE_REVIEW_1.1.21.md` with the inventory, strategies, before/after behavior, trade-offs, accepted constraints, migration notes, and validation evidence.
+- [x] Final validation passed: production build with no generated asset change, 1,142-string POT generation, PHPCS, 228 first-party PHP syntax checks, 17 JavaScript/MJS syntax checks, 480 PHPUnit tests with 3,407 assertions and no deprecations, npm high-severity audit with zero vulnerabilities, Composer advisory audit with no advisories, 122/15/14 production PHP/source JS/source CSS ceilings, and `git diff --check`.
+- [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `06`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
 
 ### Consolidated End-To-End Acceptance
 

@@ -103,16 +103,19 @@ class ALYNT_AG_Settings_Defaults {
 	/**
 	 * Merge stored settings over schema defaults.
 	 *
-	 * @param array<string,array<string,mixed>> $schema Settings schema.
+	 * @param array<string,array<string,mixed>> $schema   Settings schema.
+	 * @param array<string,mixed>|null          $defaults Prepared defaults.
 	 * @return array<string,mixed>
 	 */
-	public static function get_settings( $schema ) {
+	public static function get_settings( $schema, $defaults = null ) {
 		$saved = get_option( 'alynt_ag_settings', array() );
 
 		if ( ! is_array( $saved ) ) {
 			$saved = array();
 		}
 
-		return array_merge( self::defaults( $schema ), $saved );
+		$defaults = is_array( $defaults ) ? $defaults : self::defaults( $schema );
+
+		return array_merge( $defaults, $saved );
 	}
 }

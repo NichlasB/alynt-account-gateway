@@ -15,6 +15,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ALYNT_AG_Webhook_Retry_Scheduler {
 
 	/**
+	 * Queue an initial account-created delivery outside the customer request.
+	 *
+	 * @param string $hook    Delivery hook.
+	 * @param int    $user_id User ID.
+	 * @return true|WP_Error
+	 */
+	public function schedule_initial( $hook, $user_id ) {
+		$args = array( absint( $user_id ) );
+		if ( wp_next_scheduled( $hook, $args ) ) {
+			return true;
+		}
+
+		$scheduled = wp_schedule_single_event( time() + 1, $hook, $args, true );
+
+		return is_wp_error( $scheduled ) || ! $scheduled
+			? new WP_Error( 'alynt_ag_webhook_schedule_failed', __( 'The account-created webhook could not be queued.', 'alynt-account-gateway' ) )
+			: true;
+	}
+
+	/**
 	 * Queue a bounded retry after a transport or HTTP failure.
 	 *
 	 * @param string $hook          Retry hook.

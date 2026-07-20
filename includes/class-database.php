@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ALYNT_AG_Database {
 
-	const DB_VERSION = '0.1.7';
+	const DB_VERSION = '0.1.8';
 
 	/**
 	 * Install database tables.
@@ -47,7 +47,8 @@ class ALYNT_AG_Database {
 				KEY email (email),
 				KEY token_hash (token_hash),
 				KEY status (status),
-				KEY expires_at (expires_at)
+				KEY expires_at (expires_at),
+				KEY created_at_id (created_at, id)
 			) {$charset_collate};",
 			"CREATE TABLE {$tables['webhook_logs']} (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -124,7 +125,8 @@ class ALYNT_AG_Database {
 				KEY level (level),
 				KEY category (category),
 				KEY event_code (event_code),
-				KEY created_at (created_at)
+				KEY created_at (created_at),
+				KEY category_created_at (category, created_at, id)
 			) {$charset_collate};",
 		);
 
