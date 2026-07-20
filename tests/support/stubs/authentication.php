@@ -119,6 +119,12 @@ if ( ! class_exists( 'WP_User' ) ) {
 
 if ( ! function_exists( 'get_user_meta' ) ) {
 	function get_user_meta( $user_id, $key = '', $single = false ) {
+		unset( $user_id, $single );
+
+		if ( isset( $GLOBALS['alynt_ag_test_user_meta'][ $key ] ) ) {
+			return $GLOBALS['alynt_ag_test_user_meta'][ $key ];
+		}
+
 		$values = array(
 			'first_name' => 'Damon',
 			'last_name'  => 'Paulo',

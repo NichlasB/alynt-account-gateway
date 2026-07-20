@@ -14,6 +14,18 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ALYNT_AG_Webhook_Dispatcher {
 
+	const RETRY_HOOK = 'alynt_ag_retry_account_created_webhook';
+	const MAX_RETRIES = 2;
+
+	/**
+	 * Register retry processing.
+	 *
+	 * @return void
+	 */
+	public function register() {
+		add_action( self::RETRY_HOOK, array( $this, 'retry_account_created' ), 10, 2 );
+	}
+
 	/**
 	 * Dispatch account-created webhook when configured.
 	 *
@@ -21,7 +33,7 @@ class ALYNT_AG_Webhook_Dispatcher {
 	 * @param array<string,mixed> $settings Settings.
 	 * @return true|WP_Error
 	 */
-	public function dispatch_account_created( $user_id, $settings ) {
+	public function dispatch_account_created( $user_id, $settings, $retry_count = 0 ) {
 		$url = ! empty( $settings['account_created_webhook'] ) ? esc_url_raw( $settings['account_created_webhook'] ) : '';
 		if ( ! $url ) {
 			return true;
@@ -38,7 +50,18 @@ class ALYNT_AG_Webhook_Dispatcher {
 
 		$payload = $this->build_account_created_payload( $user );
 
-		return $this->dispatch_payload( 'account.created', $url, $user->ID, $payload, $settings );
+		return $this->dispatch_payload( 'account.created', $url, $user->ID, $payload, $settings, absint( $retry_count ), true );
+	}
+
+	/**
+	 * Retry a failed account-created webhook.
+	 *
+	 * @param int $user_id     User ID.
+	 * @param int $retry_count Retry attempt number.
+	 * @return true|WP_Error
+	 */
+	public function retry_account_created( $user_id, $retry_count ) {
+		return $this->dispatch_account_created( absint( $user_id ), ALYNT_AG_Settings_Schema::get_settings(), absint( $retry_count ) );
 	}
 
 	/**
@@ -68,7 +91,7 @@ class ALYNT_AG_Webhook_Dispatcher {
 		$payload['test']         = true;
 		$payload['triggered_by'] = 'admin';
 
-		return $this->dispatch_payload( 'account.created.test', $url, $user->ID, $payload, $settings );
+		return $this->dispatch_payload( 'account.created.test', $url, $user->ID, $payload, $settings, 0, false );
 	}
 
 	/**
@@ -79,11 +102,19 @@ class ALYNT_AG_Webhook_Dispatcher {
 	 * @param int                 $user_id    User ID.
 	 * @param array<string,mixed> $payload    Payload.
 	 * @param array<string,mixed> $settings   Settings.
+	 * @param int                 $retry_count   Retry attempt number.
+	 * @param bool                $allow_retries Whether failures may be queued.
 	 * @return true|WP_Error
 	 */
-	private function dispatch_payload( $event_name, $url, $user_id, $payload, $settings ) {
+	private function dispatch_payload( $event_name, $url, $user_id, $payload, $settings, $retry_count, $allow_retries ) {
 		$body    = wp_json_encode( $payload );
-		$body    = is_string( $body ) ? $body : '';
+		if ( ! is_string( $body ) ) {
+			$error = new WP_Error( 'alynt_ag_webhook_encoding_failed', __( 'The webhook payload could not be encoded.', 'alynt-account-gateway' ) );
+			$this->log_dispatch( $event_name, $url, $user_id, array(), $error, $settings, $retry_count );
+
+			return $error;
+		}
+
 		$headers = $this->build_headers( $event_name, $body, $settings );
 
 		$response = $this->send_request(
@@ -95,18 +126,58 @@ class ALYNT_AG_Webhook_Dispatcher {
 			)
 		);
 
-		$log_result = $this->log_dispatch( $event_name, $url, $user_id, $payload, $response, $settings );
+		$log_result = $this->log_dispatch( $event_name, $url, $user_id, $payload, $response, $settings, $retry_count );
 
 		if ( is_wp_error( $response ) ) {
+			$this->maybe_schedule_retry( $user_id, $retry_count, $allow_retries );
 			return $response;
 		}
 
 		$code = (int) wp_remote_retrieve_response_code( $response );
 		if ( $code < 200 || $code >= 300 ) {
+			$this->maybe_schedule_retry( $user_id, $retry_count, $allow_retries );
 			return new WP_Error( 'alynt_ag_webhook_http_error', __( 'The webhook endpoint returned an unsuccessful response.', 'alynt-account-gateway' ) );
 		}
 
 		return is_wp_error( $log_result ) ? $log_result : true;
+	}
+
+	/**
+	 * Queue a bounded retry after a transport or HTTP failure.
+	 *
+	 * @param int  $user_id       User ID.
+	 * @param int  $retry_count   Current retry count.
+	 * @param bool $allow_retries Whether retries are enabled for this event.
+	 * @return bool
+	 */
+	private function maybe_schedule_retry( $user_id, $retry_count, $allow_retries ) {
+		if ( ! $allow_retries || $retry_count >= self::MAX_RETRIES ) {
+			return false;
+		}
+
+		$next_retry = $retry_count + 1;
+		$args       = array( absint( $user_id ), $next_retry );
+		if ( wp_next_scheduled( self::RETRY_HOOK, $args ) ) {
+			return true;
+		}
+
+		$scheduled = wp_schedule_single_event( time() + ( MINUTE_IN_SECONDS * ( 2 ** $retry_count ) ), self::RETRY_HOOK, $args, true );
+		if ( is_wp_error( $scheduled ) || ! $scheduled ) {
+			ALYNT_AG_Diagnostics_Logger::log_event(
+				'error',
+				'cron',
+				'webhook_retry_schedule_failed',
+				__( 'A failed webhook retry could not be scheduled.', 'alynt-account-gateway' ),
+				array(
+					'user_id'     => absint( $user_id ),
+					'retry_count' => $next_retry,
+				)
+			);
+
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -229,9 +300,10 @@ class ALYNT_AG_Webhook_Dispatcher {
 	 * @param array<string,mixed>          $payload    Payload.
 	 * @param array<string,mixed>|WP_Error $response Response.
 	 * @param array<string,mixed>          $settings   Settings.
+	 * @param int                          $retry_count Retry attempt number.
 	 * @return true|WP_Error
 	 */
-	public function log_dispatch( $event_name, $url, $user_id, $payload, $response, $settings ) {
+	public function log_dispatch( $event_name, $url, $user_id, $payload, $response, $settings, $retry_count = 0 ) {
 		global $wpdb;
 
 		$tables      = ALYNT_AG_Database::tables();
@@ -256,7 +328,7 @@ class ALYNT_AG_Webhook_Dispatcher {
 				'destination_host' => sanitize_text_field( $host ),
 				'http_status'      => $http_status,
 				'success'          => $success ? 1 : 0,
-				'retry_count'      => 0,
+				'retry_count'      => absint( $retry_count ),
 				'payload'          => ! empty( $settings['debug_payload_logging'] ) ? wp_json_encode( $payload ) : null,
 				'error_message'    => sanitize_text_field( $error ),
 				'created_at'       => current_time( 'mysql', true ),

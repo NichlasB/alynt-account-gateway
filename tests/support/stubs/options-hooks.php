@@ -37,8 +37,24 @@ if ( ! function_exists( 'delete_option' ) ) {
 }
 
 if ( ! function_exists( 'wp_next_scheduled' ) ) {
-	function wp_next_scheduled( $hook ) {
+	function wp_next_scheduled( $hook, $args = array() ) {
+		unset( $args );
+
 		return $GLOBALS['alynt_ag_test_scheduled_hooks'][ $hook ] ?? false;
+	}
+}
+
+if ( ! function_exists( 'wp_schedule_single_event' ) ) {
+	function wp_schedule_single_event( $timestamp, $hook, $args = array(), $wp_error = false ) {
+		unset( $wp_error );
+
+		$GLOBALS['alynt_ag_test_single_events'][] = array(
+			'timestamp' => $timestamp,
+			'hook'      => $hook,
+			'args'      => $args,
+		);
+
+		return true;
 	}
 }
 

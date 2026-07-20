@@ -43,6 +43,9 @@ class ALYNT_AG_Plugin {
 		$registration = new ALYNT_AG_Registration_Service();
 		$registration->register();
 
+		$webhooks = new ALYNT_AG_Webhook_Dispatcher();
+		$webhooks->register();
+
 		if ( is_admin() ) {
 			$admin = new ALYNT_AG_Admin();
 			$admin->register();

@@ -17,7 +17,8 @@ class WebhookDispatcherTest extends TestCase {
 		$GLOBALS['alynt_ag_test_remote_posts'] = array();
 		$GLOBALS['alynt_ag_test_safe_remote_posts'] = array();
 		$GLOBALS['alynt_ag_test_db_inserts'] = array();
-		unset( $GLOBALS['alynt_ag_test_remote_post_response'] );
+		$GLOBALS['alynt_ag_test_single_events'] = array();
+		unset( $GLOBALS['alynt_ag_test_remote_post_response'], $GLOBALS['alynt_ag_test_user_meta'] );
 	}
 
 	public function test_account_created_payload_contains_full_user_fields() {
@@ -123,6 +124,7 @@ class WebhookDispatcherTest extends TestCase {
 		$this->assertSame( 0, $row['success'] );
 		$this->assertSame( 'Service Unavailable', $row['error_message'] );
 		$this->assertNull( $row['payload'] );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_single_events'] );
 	}
 
 	public function test_dispatch_account_created_returns_and_logs_transport_error() {
@@ -146,6 +148,9 @@ class WebhookDispatcherTest extends TestCase {
 		$this->assertSame( 0, $row['success'] );
 		$this->assertSame( 'Connection timed out.', $row['error_message'] );
 		$this->assertNull( $row['payload'] );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_single_events'] );
+		$this->assertSame( ALYNT_AG_Webhook_Dispatcher::RETRY_HOOK, $GLOBALS['alynt_ag_test_single_events'][0]['hook'] );
+		$this->assertSame( array( 321, 1 ), $GLOBALS['alynt_ag_test_single_events'][0]['args'] );
 	}
 
 	public function test_dispatch_account_created_signs_json_body_when_secret_is_configured() {
@@ -187,6 +192,43 @@ class WebhookDispatcherTest extends TestCase {
 		$this->assertStringContainsString( '"test":true', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['body'] );
 		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
 		$this->assertSame( 'account.created.test', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['event_name'] );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_single_events'] );
+	}
+
+	public function test_dispatch_account_created_rejects_unencodable_payload_without_sending() {
+		$GLOBALS['alynt_ag_test_user_meta']['first_name'] = "\xB1";
+
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+		$result     = $dispatcher->dispatch_account_created(
+			321,
+			array(
+				'account_created_webhook' => 'https://hooks.example.test/account-created',
+				'debug_payload_logging'   => false,
+			)
+		);
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'alynt_ag_webhook_encoding_failed', $result->get_error_code() );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_remote_posts'] );
+		$this->assertCount( 1, $GLOBALS['alynt_ag_test_db_inserts'] );
+	}
+
+	public function test_dispatch_account_created_records_retry_count_and_stops_after_limit() {
+		$GLOBALS['alynt_ag_test_remote_post_response'] = new WP_Error( 'http_request_failed', 'Connection timed out.' );
+
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+		$result     = $dispatcher->dispatch_account_created(
+			321,
+			array(
+				'account_created_webhook' => 'https://hooks.example.test/account-created',
+				'debug_payload_logging'   => false,
+			),
+			ALYNT_AG_Webhook_Dispatcher::MAX_RETRIES
+		);
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( ALYNT_AG_Webhook_Dispatcher::MAX_RETRIES, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['retry_count'] );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_single_events'] );
 	}
 
 	public function test_dispatch_account_created_rejects_public_http_webhook_url() {
