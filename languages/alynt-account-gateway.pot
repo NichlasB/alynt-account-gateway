@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Alynt Account Gateway 1.1.15\n"
+"Project-Id-Version: Alynt Account Gateway 1.1.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-19 21:08+0000\n"
+"POT-Creation-Date: 2026-07-20 07:37+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -142,7 +142,7 @@ msgstr ""
 msgid "Account Gateway"
 msgstr ""
 
-#: includes/services/class-privacy-service.php:206
+#: includes/services/class-privacy-exporter.php:75
 msgid "Account Gateway Consent"
 msgstr ""
 
@@ -351,13 +351,13 @@ msgstr ""
 
 #: admin/class-settings-page.php:48
 #: admin/class-settings-page.php:97
-#: includes/services/class-privacy-service.php:39
-#: includes/services/class-privacy-service.php:54
-#: includes/services/class-privacy-service.php:69
+#: includes/services/class-privacy-service.php:64
+#: includes/services/class-privacy-service.php:79
+#: includes/services/class-privacy-service.php:94
 msgid "Alynt Account Gateway"
 msgstr ""
 
-#: includes/services/class-privacy-service.php:41
+#: includes/services/class-privacy-service.php:66
 msgid "Alynt Account Gateway may process account registration data, email verification results, webhook delivery metadata, and consent records. Site owners should disclose configured third-party services such as Cloudflare Turnstile, Reoon Email Verifier, and outgoing webhooks."
 msgstr ""
 
@@ -476,7 +476,7 @@ msgid "Block when personal accountability, subscriptions, or fraud exposure matt
 msgstr ""
 
 #: admin/class-settings-page.php:1906
-#: includes/services/class-privacy-service.php:242
+#: includes/services/class-privacy-exporter.php:111
 msgid "Blocked"
 msgstr ""
 
@@ -831,11 +831,11 @@ msgstr ""
 msgid "Consent Record Retention Days"
 msgstr ""
 
-#: includes/services/class-privacy-service.php:212
+#: includes/services/class-privacy-exporter.php:81
 msgid "Consent Version"
 msgstr ""
 
-#: includes/services/class-privacy-service.php:209
+#: includes/services/class-privacy-exporter.php:78
 msgid "Context"
 msgstr ""
 
@@ -887,10 +887,10 @@ msgid "Create your customer account. Fill in your details and you will receive a
 msgstr ""
 
 #: admin/class-settings-page.php:3350
-#: includes/services/class-privacy-service.php:213
-#: includes/services/class-privacy-service.php:228
-#: includes/services/class-privacy-service.php:245
-#: includes/services/class-privacy-service.php:259
+#: includes/services/class-privacy-exporter.php:114
+#: includes/services/class-privacy-exporter.php:128
+#: includes/services/class-privacy-exporter.php:82
+#: includes/services/class-privacy-exporter.php:97
 msgid "Created At"
 msgstr ""
 
@@ -1179,9 +1179,9 @@ msgstr ""
 
 #: admin/class-settings-page.php:1888
 #: admin/class-settings-page.php:3347
-#: includes/services/class-privacy-service.php:208
-#: includes/services/class-privacy-service.php:223
-#: includes/services/class-privacy-service.php:239
+#: includes/services/class-privacy-exporter.php:108
+#: includes/services/class-privacy-exporter.php:77
+#: includes/services/class-privacy-exporter.php:92
 msgid "Email"
 msgstr ""
 
@@ -1253,7 +1253,7 @@ msgstr ""
 msgid "Email verification is temporarily unavailable. Please try again later."
 msgstr ""
 
-#: includes/services/class-privacy-service.php:237
+#: includes/services/class-privacy-exporter.php:106
 msgid "Email Verification Log"
 msgstr ""
 
@@ -1364,7 +1364,7 @@ msgstr ""
 
 #: admin/class-settings-page.php:4182
 #: admin/class-settings-page.php:4779
-#: includes/services/class-privacy-service.php:255
+#: includes/services/class-privacy-exporter.php:124
 msgid "Event"
 msgstr ""
 
@@ -1397,7 +1397,7 @@ msgid "Expired Pending Records"
 msgstr ""
 
 #: admin/class-settings-page.php:3352
-#: includes/services/class-privacy-service.php:229
+#: includes/services/class-privacy-exporter.php:98
 msgid "Expires At"
 msgstr ""
 
@@ -1454,7 +1454,7 @@ msgid "First name"
 msgstr ""
 
 #: includes/services/class-frontend-register-screen.php:101
-#: includes/services/class-privacy-service.php:224
+#: includes/services/class-privacy-exporter.php:93
 msgid "First Name"
 msgstr ""
 
@@ -1609,7 +1609,7 @@ msgstr ""
 msgid "Highlights unresolved Reoon flagged results that were allowed by policy so support teams can record a review decision without changing the public registration flow."
 msgstr ""
 
-#: includes/services/class-privacy-service.php:256
+#: includes/services/class-privacy-exporter.php:125
 msgid "Host"
 msgstr ""
 
@@ -1617,7 +1617,7 @@ msgstr ""
 msgid "HTTP"
 msgstr ""
 
-#: includes/services/class-privacy-service.php:257
+#: includes/services/class-privacy-exporter.php:126
 msgid "HTTP Status"
 msgstr ""
 
@@ -1739,7 +1739,7 @@ msgid "Last name"
 msgstr ""
 
 #: includes/services/class-frontend-register-screen.php:105
-#: includes/services/class-privacy-service.php:225
+#: includes/services/class-privacy-exporter.php:94
 msgid "Last Name"
 msgstr ""
 
@@ -2045,8 +2045,8 @@ msgid "Next Step"
 msgstr ""
 
 #: admin/class-settings-page.php:4744
-#: includes/services/class-privacy-service.php:242
-#: includes/services/class-privacy-service.php:258
+#: includes/services/class-privacy-exporter.php:111
+#: includes/services/class-privacy-exporter.php:127
 msgid "No"
 msgstr ""
 
@@ -2438,7 +2438,7 @@ msgstr ""
 msgid "Pending"
 msgstr ""
 
-#: includes/services/class-privacy-service.php:221
+#: includes/services/class-privacy-exporter.php:90
 msgid "Pending Account Registration"
 msgstr ""
 
@@ -2519,7 +2519,7 @@ msgstr ""
 msgid "Privacy & Data"
 msgstr ""
 
-#: includes/services/class-privacy-service.php:211
+#: includes/services/class-privacy-exporter.php:80
 msgid "Privacy Path"
 msgstr ""
 
@@ -2548,7 +2548,7 @@ msgid "Protection Mode"
 msgstr ""
 
 #: admin/class-settings-page.php:1889
-#: includes/services/class-privacy-service.php:240
+#: includes/services/class-privacy-exporter.php:109
 msgid "Provider"
 msgstr ""
 
@@ -3234,7 +3234,7 @@ msgstr ""
 msgid "Retain consent and audit records long enough for operational review."
 msgstr ""
 
-#: includes/services/class-privacy-service.php:226
+#: includes/services/class-privacy-exporter.php:95
 msgid "Return Path"
 msgstr ""
 
@@ -3274,7 +3274,7 @@ msgstr ""
 msgid "Review decision"
 msgstr ""
 
-#: includes/services/class-privacy-service.php:243
+#: includes/services/class-privacy-exporter.php:112
 msgid "Review Decision"
 msgstr ""
 
@@ -3363,7 +3363,7 @@ msgstr ""
 msgid "Review WooCommerce"
 msgstr ""
 
-#: includes/services/class-privacy-service.php:244
+#: includes/services/class-privacy-exporter.php:113
 msgid "Reviewed At"
 msgstr ""
 
@@ -3685,8 +3685,8 @@ msgid "Start safely before changing public account screens."
 msgstr ""
 
 #: admin/class-settings-page.php:3348
-#: includes/services/class-privacy-service.php:227
-#: includes/services/class-privacy-service.php:241
+#: includes/services/class-privacy-exporter.php:110
+#: includes/services/class-privacy-exporter.php:96
 msgid "Status"
 msgstr ""
 
@@ -3711,7 +3711,7 @@ msgid "Subscription account endpoints are delegated through WooCommerce handlers
 msgstr ""
 
 #: admin/class-settings-page.php:4289
-#: includes/services/class-privacy-service.php:258
+#: includes/services/class-privacy-exporter.php:127
 msgid "Success"
 msgstr ""
 
@@ -3755,7 +3755,7 @@ msgstr ""
 msgid "Terms and privacy links are configured for the registration consent checkbox."
 msgstr ""
 
-#: includes/services/class-privacy-service.php:210
+#: includes/services/class-privacy-exporter.php:79
 msgid "Terms Path"
 msgstr ""
 
@@ -4420,7 +4420,7 @@ msgstr ""
 msgid "Webhook Delivery Failures"
 msgstr ""
 
-#: includes/services/class-privacy-service.php:253
+#: includes/services/class-privacy-exporter.php:122
 msgid "Webhook Delivery Metadata"
 msgstr ""
 
@@ -4541,8 +4541,8 @@ msgid "WPS Hide Login may overlap with login URL routing"
 msgstr ""
 
 #: admin/class-settings-page.php:4744
-#: includes/services/class-privacy-service.php:242
-#: includes/services/class-privacy-service.php:258
+#: includes/services/class-privacy-exporter.php:111
+#: includes/services/class-privacy-exporter.php:127
 msgid "Yes"
 msgstr ""
 

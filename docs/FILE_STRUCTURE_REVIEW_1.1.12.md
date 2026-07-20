@@ -434,3 +434,26 @@ authentication helper was removed, and the QA session was logged out. No
 staging or production site was touched.
 
 Increment 3 may now begin with privacy exporter/eraser extraction.
+
+### Increment 3: Privacy Exporter And Eraser Collaborators
+
+Status: implementation complete; full candidate acceptance in progress.
+
+- Kept `ALYNT_AG_Privacy_Service` as the stable WordPress callback and
+  registration-consent facade.
+- Extracted exporter queries and record formatting into
+  `ALYNT_AG_Privacy_Exporter`.
+- Extracted plugin-owned personal-data deletion into
+  `ALYNT_AG_Privacy_Eraser`.
+- Preserved callback signatures, pagination arguments, query conditions,
+  exported fields, deletion paths, and response structures.
+- Added injection-based regression coverage for callback ownership and
+  collaborator delegation.
+- Reduced the privacy facade from 333 to 220 lines. The exporter is 164 lines
+  and the eraser is 54 lines.
+
+The focused privacy suite and the full quality gates pass. PHPUnit now reports
+392 tests and 2,718 assertions. PHPCS, project-wide PHP syntax, source
+JavaScript syntax, frontend/admin build, POT generation, npm audit, Composer
+audit, and `git diff --check` all pass. Package and LocalWP Plugin Tester
+acceptance remain required before v1.1.16 release approval may be requested.

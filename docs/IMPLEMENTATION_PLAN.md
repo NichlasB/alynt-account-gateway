@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 2 source-asset modularization is released and updater-verified as v1.1.15.
+- Current phase: Phase 2 Increment 3 privacy exporter/eraser extraction is implemented as a v1.1.16 maintenance candidate; full acceptance is in progress.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.15 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Begin Increment 3 by extracting privacy exporter/eraser collaborators. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Complete Increment 3 quality, package, and Plugin Tester privacy acceptance, then request explicit v1.1.16 release approval. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -75,9 +75,33 @@
 - Alynt Plugin Updater detected the public `1.1.14 -> 1.1.15` update on LocalWP Plugin Tester and WordPress installed the GitHub release asset through the native Plugins screen. All `49` installed files byte-match the public ZIP, Account Gateway remains active, no update remains, and the activation, settings, and database-version fingerprints are unchanged.
 - Post-update browser and HTTP acceptance passed with the homepage and `/login/` returning `200`, no browser errors, and the authenticated QA session logged out. Only pre-existing WordPress/jQuery Migrate development warnings were observed.
 
+### Increment 3 - Privacy Exporter And Eraser Collaborators
+
+- [x] Lock the v1.1.15 baseline at `390` tests and `2,712` assertions.
+- [x] Keep `ALYNT_AG_Privacy_Service` as the public WordPress callback and registration-consent facade.
+- [x] Extract exporter queries and record formatting into `ALYNT_AG_Privacy_Exporter`.
+- [x] Extract plugin-owned data deletion into `ALYNT_AG_Privacy_Eraser`.
+- [x] Preserve callback signatures, pagination arguments, query conditions, exported fields, deletion paths, and return structures.
+- [x] Load both collaborators before the privacy facade in production and test bootstraps.
+- [x] Add behavior-locking coverage for callback ownership and injected collaborator delegation.
+- [x] Reduce the privacy facade from `333` to `220` lines; keep the exporter at `164` lines and eraser at `54` lines.
+- [x] Pass focused PHPCS, PHP syntax, and privacy tests.
+- [x] Pass the full build, PHPCS, syntax, POT, audit, PHPUnit, and `git diff --check` gates.
+- [ ] Inspect the exact v1.1.16 release-style package.
+- [ ] Install the exact candidate on LocalWP Plugin Tester and verify native exporter/eraser behavior.
+- [ ] Publish v1.1.16 only after separate explicit release approval.
+
+### Increment 3 Quality Evidence
+
+- Frontend/admin build and POT generation pass; the POT contains `1,104` strings and reports project version `1.1.16`.
+- Full PHPCS, PHP syntax, and JavaScript syntax checks pass.
+- PHPUnit passes with `392` tests and `2,718` assertions.
+- npm reports zero vulnerabilities and Composer reports no security advisories.
+- `git diff --check` passes.
+
 ### Remaining Phase 2 Sequence
 
-1. Extract privacy exporter/eraser collaborators.
+1. Complete and release Increment 3 after all acceptance gates and explicit approval.
 2. Extract dashboard module renderers behind the existing dashboard facade.
 3. Split settings schema/defaults/sanitization.
 4. Split registration and authentication services with behavior-locking tests.

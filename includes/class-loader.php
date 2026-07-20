@@ -44,6 +44,8 @@ $alynt_ag_files = array(
 	'includes/services/class-frontend-gateway-shell.php',
 	'includes/services/class-frontend-document-renderer.php',
 	'includes/services/class-compatibility-warnings.php',
+	'includes/services/class-privacy-exporter.php',
+	'includes/services/class-privacy-eraser.php',
 	'includes/services/class-privacy-service.php',
 	'includes/services/class-frontend-messages.php',
 	'admin/class-admin.php',
