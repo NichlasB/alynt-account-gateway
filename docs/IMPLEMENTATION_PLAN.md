@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 5 settings definition/defaults/sanitization extraction is implemented as a v1.1.18 maintenance candidate; full audit, package, and Plugin Tester acceptance remain.
+- Current phase: Phase 2 Increment 5 settings definition/defaults/sanitization extraction is accepted as a v1.1.18 maintenance candidate; release approval remains.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.17 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Complete the v1.1.18 audit, package inspection, and Plugin Tester settings acceptance, then request explicit release approval. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Request explicit v1.1.18 release approval, publish and verify the public updater path if approved, then begin the registration/authentication-services increment. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -163,8 +163,8 @@
 - [x] Add regression coverage for the public facade contract, exact definition/default fingerprints, provider aggregation, collaborator equivalence, and the `300`-line structural threshold.
 - [x] Reduce the settings facade from `952` to `213` lines; keep every extracted collaborator at or below `236` lines.
 - [x] Pass full build, POT, PHPCS, PHP syntax, JavaScript syntax, audit, PHPUnit, and `git diff --check` gates.
-- [ ] Inspect the exact v1.1.18 release-style package.
-- [ ] Install the exact candidate on LocalWP Plugin Tester and verify settings behavior.
+- [x] Inspect the exact v1.1.18 release-style package.
+- [x] Install the exact candidate on LocalWP Plugin Tester and verify settings behavior.
 - [ ] Publish v1.1.18 only after separate explicit release approval.
 
 ### Increment 5 Quality Evidence
@@ -175,6 +175,14 @@
 - PHPUnit passes with `401` tests and `2,773` assertions.
 - npm reports zero vulnerabilities and Composer reports no security advisories.
 - `git diff --check` passes.
+- The v1.1.18 candidate contains `62` runtime files and `56` syntax-clean PHP files under one plugin root, contains no development files or backslash archive paths, and has SHA-256 `6C5043A6F064D670B1896DB13592CFBEB9A5FA34504B3B86BDF26A73F1CC5D9D`.
+- LocalWP Plugin Tester installed the exact candidate over active v1.1.17. All `62` installed files byte-match the inspected package and Account Gateway remains active at v1.1.18.
+- The established `active_plugins` fingerprint `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9`, `alynt_ag_settings` fingerprint `4c9c362f34b69a693030000a806bb55f172ce98601d4398b9b8fd75555e90a0f`, and database version `0.1.6` remain unchanged.
+- Installed-copy verification reports `86` schema fields, the exact schema fingerprint `a1b5089ea1b9a3057008dc678c7dc5d6c62d95820ee5c962056a69f4e779a5cc`, the exact tabs fingerprint `70530449c004ad07db184561ed00ae270bb2abf24e7affeee36a31b30b031bc5`, and matching facade/defaults-collaborator output after normalizing the intentionally generated emergency bypass key.
+- Authenticated browser acceptance loaded all `12` settings tabs and exercised General, URLs & Redirects, Security & Spam, Emails, and Advanced / Tools. The five email editors, security readiness controls, gateway preview, import/export, diagnostics, and tab-specific form controls remained present.
+- Settings tabs wrapped without overlap at `1100x800` and `782x900`. Browser acceptance found no errors or failed dynamic requests; only the pre-existing WordPress development-mode React DevTools shim warning appeared.
+- The disposable administrator, browser session, and read-only inspection helper were removed. The homepage, branded login, and lost-password routes return HTTP `200`.
+- Novamira MCP was unavailable in the current session, so acceptance used the LocalWP-compatible WP-CLI runtime and Playwright MCP. No staging or production site was touched.
 
 ### Remaining Phase 2 Sequence
 
