@@ -559,3 +559,48 @@ branded login return HTTP 200, and no staging or production site was touched.
 
 The next Phase 2 increment may now split settings schema, defaults, and
 sanitization.
+
+### Increment 5: Settings Definition, Defaults, And Sanitization
+
+Status: implementation and v1.1.18 candidate acceptance complete; release
+approval pending.
+
+- Kept `ALYNT_AG_Settings_Schema` as the stable public static facade with all
+  twelve established public methods.
+- Split the ordered field catalog into core, security/email, and account/data
+  definition providers behind one definition aggregator.
+- Extracted default derivation, tab restoration, and stored-value merging into
+  a defaults collaborator.
+- Extracted schema filtering and type-specific value handling into a sanitizer
+  collaborator.
+- Preserved exact tab, schema, and defaults fingerprints from v1.1.17.
+- Preserved import/export behavior, field order and metadata, generated
+  bypass defaults, stored-value merging, and sanitized output.
+- Reduced the settings facade from 952 to 213 lines. Every extracted
+  collaborator is 236 lines or fewer.
+- Added regression coverage for the public facade contract, exact
+  fingerprints, provider aggregation, collaborator equivalence, and the
+  300-line structural threshold.
+
+The full quality gates pass. PHPUnit reports 401 tests and 2,773 assertions.
+PHPCS, project-wide PHP syntax, source JavaScript syntax, frontend/admin build,
+POT generation, npm audit, Composer audit, and `git diff --check` all pass.
+
+The inspected v1.1.18 candidate contains 62 runtime files and 56 syntax-clean
+PHP files under one plugin root, excludes development files, uses portable
+forward-slash archive paths, and has SHA-256
+`6C5043A6F064D670B1896DB13592CFBEB9A5FA34504B3B86BDF26A73F1CC5D9D`.
+LocalWP Plugin Tester installed that exact package over active v1.1.17. Every
+installed file byte-matches the package, Account Gateway remains active at
+v1.1.18, saved settings and active-plugin fingerprints are unchanged, and the
+database version remains `0.1.6`.
+
+Installed-copy verification preserved the exact 86-field schema and ordered
+tabs fingerprints, and the facade/defaults collaborator outputs match after
+normalizing the intentionally generated emergency bypass key. Browser
+acceptance loaded all 12 settings tabs and exercised representative core,
+security, email, and tools screens. Tabs wrapped without overlap at 1100px and
+782px, dynamic requests succeeded, and no plugin browser errors were observed.
+The disposable administrator, browser session, and inspection helper were
+removed; public local routes return HTTP 200. No staging or production site
+was touched. The candidate is ready for explicit v1.1.18 release approval.

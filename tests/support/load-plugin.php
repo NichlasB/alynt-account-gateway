@@ -5,6 +5,12 @@
  * @package Alynt_Account_Gateway
  */
 
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-settings-definition-core.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-settings-definition-security-email.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-settings-definition-account-data.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-settings-definition.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-settings-defaults.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-settings-sanitizer.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-settings-schema.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-database.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-deactivator.php';

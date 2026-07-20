@@ -10,6 +10,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $alynt_ag_files = array(
+	'includes/class-settings-definition-core.php',
+	'includes/class-settings-definition-security-email.php',
+	'includes/class-settings-definition-account-data.php',
+	'includes/class-settings-definition.php',
+	'includes/class-settings-defaults.php',
+	'includes/class-settings-sanitizer.php',
 	'includes/class-settings-schema.php',
 	'includes/class-database.php',
 	'includes/class-diagnostics-logger.php',
