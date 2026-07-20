@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 3 privacy exporter/eraser extraction is complete and the accepted v1.1.16 candidate is awaiting release approval.
+- Current phase: Phase 2 Increment 3 privacy exporter/eraser extraction is complete, released, and updater-verified as v1.1.16.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.15 is the current public baseline.
+- Plugin status: v1.1.16 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Publish and updater-verify v1.1.16 only after explicit approval, then begin Increment 4 by extracting dashboard module renderers behind the existing facade. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Begin Increment 4 by extracting dashboard module renderers behind the existing facade. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -89,7 +89,7 @@
 - [x] Pass the full build, PHPCS, syntax, POT, audit, PHPUnit, and `git diff --check` gates.
 - [x] Inspect the exact v1.1.16 release-style package.
 - [x] Install the exact candidate on LocalWP Plugin Tester and verify native exporter/eraser behavior.
-- [ ] Publish v1.1.16 only after separate explicit release approval.
+- [x] Publish v1.1.16 only after separate explicit release approval.
 
 ### Increment 3 Quality Evidence
 
@@ -105,15 +105,18 @@
 - Native WordPress eraser registration retained `ALYNT_AG_Privacy_Service::erase_personal_data` as the callback, returned `items_removed: true`, `items_retained: false`, and `done: true`, and removed all disposable consent, pending registration, verification, webhook, and audit records.
 - The disposable subscriber, temporary callback harnesses, and every disposable database row were removed. The homepage and `/login/` return HTTP `200`, and browser acceptance found no errors.
 - Novamira MCP was unavailable in the current session, so acceptance used the LocalWP MariaDB client, LocalWP-compatible WP-CLI runtime, and browser automation. No staging or production site was touched.
+- Release approval was granted and [GitHub v1.1.16](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.16) was published from merge commit `6274b0b`; Build Release run `29727428023` completed successfully.
+- The public release ZIP contains `51` runtime files and `45` syntax-clean PHP files, contains no development files or backslash archive paths, and has SHA-256 `793B3C8CBF96583D2745A4639331C92AC23D14F00FA52C6907F0EF8AF8BCD49D`.
+- Alynt Plugin Updater detected the public `1.1.15 -> 1.1.16` update on LocalWP Plugin Tester and WordPress installed the GitHub release asset through its native upgrader. All `51` installed files byte-match the public ZIP, Account Gateway remains active, and no update remains.
+- The activation, settings, and database-version fingerprints remained unchanged. The homepage and `/login/` return HTTP `200`, the branded login renders correctly, and browser acceptance found no warnings or errors.
 
 ### Remaining Phase 2 Sequence
 
-1. Publish and updater-verify v1.1.16 after explicit approval.
-2. Extract dashboard module renderers behind the existing dashboard facade.
-3. Split settings schema/defaults/sanitization.
-4. Split registration and authentication services with behavior-locking tests.
-5. Split WooCommerce and email services.
-6. Decompose the settings page last, using collaborators established by earlier increments.
+1. Extract dashboard module renderers behind the existing dashboard facade.
+2. Split settings schema/defaults/sanitization.
+3. Split registration and authentication services with behavior-locking tests.
+4. Split WooCommerce and email services.
+5. Decompose the settings page last, using collaborators established by earlier increments.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 

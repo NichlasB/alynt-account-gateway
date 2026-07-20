@@ -437,7 +437,7 @@ Increment 3 may now begin with privacy exporter/eraser extraction.
 
 ### Increment 3: Privacy Exporter And Eraser Collaborators
 
-Status: candidate accepted; release approval pending.
+Status: complete; released and updater-verified as v1.1.16.
 
 - Kept `ALYNT_AG_Privacy_Service` as the stable WordPress callback and
   registration-consent facade.
@@ -474,6 +474,20 @@ records. The disposable subscriber, temporary callback harnesses, and all QA
 rows were removed. The homepage and branded login return HTTP 200 without
 browser errors. No staging or production site was touched.
 
-Release publication requires separate explicit approval. Increment 4 begins
-dashboard module renderer extraction only after the v1.1.16 release and
-updater cycle is closed.
+Release approval was granted and
+[GitHub v1.1.16](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.16)
+was published from merge commit `6274b0b`. Build Release run `29727428023`
+completed successfully. The public ZIP contains 51 runtime files and 45
+syntax-clean PHP files, contains no development files or backslash archive
+paths, and has SHA-256
+`793B3C8CBF96583D2745A4639331C92AC23D14F00FA52C6907F0EF8AF8BCD49D`.
+
+Alynt Plugin Updater detected the public `1.1.15 -> 1.1.16` update on LocalWP
+Plugin Tester, and WordPress installed that public asset through its native
+upgrader. All 51 installed files byte-match the public ZIP, Account Gateway
+remains active, no update remains, and activation, settings, and schema
+fingerprints are unchanged. The homepage and branded login return HTTP 200,
+and browser acceptance found no warnings or errors. No staging or production
+site was touched.
+
+Increment 4 may now begin with dashboard module renderer extraction.
