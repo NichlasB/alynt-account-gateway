@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `07` are complete; prompt `07A` is next.
+- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `07A` are complete; prompt `08` is next.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Run `07A-ADVERSARIAL_TEST_SUITE_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompts `03` through `07` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Run `08-UNINSTALL_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompts `03` through `07A` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
@@ -30,7 +30,7 @@
 - [x] `05-DATABASE_REVIEW_PROMPT.md`
 - [x] `06-PERFORMANCE_REVIEW_PROMPT.md`
 - [x] `07-EDGE_CASES_REVIEW_PROMPT.md`
-- [ ] `07A-ADVERSARIAL_TEST_SUITE_REVIEW_PROMPT.md`
+- [x] `07A-ADVERSARIAL_TEST_SUITE_REVIEW_PROMPT.md`
 - [ ] `08-UNINSTALL_REVIEW_PROMPT.md`
 - [ ] `09-I18N_REVIEW_PROMPT.md`
 - [ ] `10-ACCESSIBILITY_REVIEW_PROMPT.md`
@@ -139,6 +139,20 @@ Execution rules:
 - [x] Added `docs/EDGE_CASES_REVIEW_1.1.21.md` with all 26 dispositions, implemented prevention/handling/recovery controls, accepted constraints, and validation evidence.
 - [x] Final validation passed: production build, 1,146-string POT generation, PHPCS, 230 PHP syntax checks, 17 JavaScript/MJS syntax checks, 487 PHPUnit tests with 3,443 assertions, npm and Composer audits, source ceilings, and `git diff --check`.
 - [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `07`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
+
+### Prompt 07A - Adversarial Test-Suite Review Evidence
+
+- [x] Completed read-only Phase 1 against the 487-test, 3,443-assertion baseline and received explicit approval before Phase 2.
+- [x] Found and fixed order-dependent test state: fixed-random initially failed once, and reverse order initially produced one failure plus one error.
+- [x] Added direct operation-lock coverage and fixed malformed lock state that could otherwise block an operation indefinitely.
+- [x] Added a hostile queued-webhook regression and rejected envelopes missing their event, stable delivery ID, user snapshot, or site snapshot before transport.
+- [x] Strengthened the Cron fake and covered scheduling failure, exact event-identity deduplication, retry limits, immutable retry envelopes, and failure diagnostics.
+- [x] Replaced activation source-string claims with executable network rejection, failed-database rollback, and successful initialization tests.
+- [x] Added exact password boundary coverage plus unauthorized and invalid-nonce cases for ten sensitive admin handlers.
+- [x] Added GitHub quality enforcement for PHP 7.4 and 8.3 with PHPCS, normal/adversarial PHPUnit, dependency audits, and production asset verification.
+- [x] Added `docs/ADVERSARIAL_TEST_SUITE_REVIEW_1.1.21.md` with findings, red-to-green evidence, runtime handoffs, and validation results.
+- [x] Final validation passed: normal, reverse, and fixed-random PHPUnit runs each reported 526 tests and 3,675 assertions; PHPCS, build, npm audit, Composer audit, and `git diff --check` passed.
+- [x] Kept real WordPress database, Cron, request, browser, provider, site, publication, packaging, and deployment claims outside prompt `07A`.
 
 ### Consolidated End-To-End Acceptance
 

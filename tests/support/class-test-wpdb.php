@@ -5,6 +5,13 @@
  * @package Alynt_Account_Gateway
  */
 
+if ( ! function_exists( 'dbDelta' ) ) {
+	function dbDelta( $statement ) {
+		$GLOBALS['alynt_ag_test_db_delta_statements'][] = $statement;
+		return array();
+	}
+}
+
 class ALYNT_AG_Test_WPDB {
 	public $prefix = 'wp_';
 	public $options = 'wp_options';
@@ -84,6 +91,9 @@ class ALYNT_AG_Test_WPDB {
 
 	public function get_var( $query ) {
 		$GLOBALS['alynt_ag_test_db_queries'][] = $query;
+		if ( array_key_exists( 'alynt_ag_test_db_var', $GLOBALS ) ) {
+			return $GLOBALS['alynt_ag_test_db_var'];
+		}
 
 		if ( preg_match( "/SHOW TABLES LIKE '([^']+)'/", $query, $matches ) ) {
 			return stripslashes( $matches[1] );

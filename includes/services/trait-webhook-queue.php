@@ -23,11 +23,22 @@ trait ALYNT_AG_Webhook_Queue {
 	 * @return true|WP_Error
 	 */
 	public function dispatch_queued_envelope( $user_id, $envelope, $retry_count = 0 ) {
-		$url      = isset( $envelope['url'] ) ? esc_url_raw( $envelope['url'] ) : '';
+		$url      = isset( $envelope['url'] ) && is_string( $envelope['url'] ) ? esc_url_raw( $envelope['url'] ) : '';
 		$payload  = isset( $envelope['payload'] ) && is_array( $envelope['payload'] ) ? $envelope['payload'] : array();
 		$settings = isset( $envelope['settings'] ) && is_array( $envelope['settings'] ) ? $envelope['settings'] : array();
+		$event_id = isset( $payload['id'] ) && is_string( $payload['id'] ) ? trim( $payload['id'] ) : '';
+		$event    = isset( $payload['event'] ) && is_string( $payload['event'] ) ? $payload['event'] : '';
 
-		if ( ! $url || ! $payload || ! $this->is_allowed_delivery_url( $url ) ) {
+		if (
+			! $url
+			|| 'account.created' !== $event
+			|| '' === $event_id
+			|| empty( $payload['user'] )
+			|| ! is_array( $payload['user'] )
+			|| empty( $payload['site'] )
+			|| ! is_array( $payload['site'] )
+			|| ! $this->is_allowed_delivery_url( $url )
+		) {
 			return new WP_Error( 'alynt_ag_webhook_invalid_envelope', __( 'The queued webhook data is invalid.', 'alynt-account-gateway' ) );
 		}
 

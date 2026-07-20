@@ -82,6 +82,23 @@ class WebhookDispatcherTest extends TestCase {
 		$this->assertArrayHasKey( 'X-Alynt-AG-Signature', $GLOBALS['alynt_ag_test_remote_posts'][0]['args']['headers'] );
 	}
 
+	public function test_queued_delivery_rejects_corrupted_envelope_without_network_io() {
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+		$result     = $dispatcher->dispatch_queued_envelope(
+			321,
+			array(
+				'url'      => 'https://hooks.example.test/account-created',
+				'payload'  => array( 'unexpected' => 'data' ),
+				'settings' => array(),
+			)
+		);
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'alynt_ag_webhook_invalid_envelope', $result->get_error_code() );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_remote_posts'] );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_db_inserts'] );
+	}
+
 	public function test_register_adds_initial_delivery_and_retry_hooks() {
 		$GLOBALS['alynt_ag_test_actions'] = array();
 		$dispatcher                      = new ALYNT_AG_Webhook_Dispatcher();

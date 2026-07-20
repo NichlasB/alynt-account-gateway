@@ -14,6 +14,15 @@ require_once ALYNT_AG_PLUGIN_DIR . 'admin/class-settings-page.php';
  */
 class SettingsPageWebhookUxTest extends TestCase {
 
+	protected function setUp(): void {
+		parent::setUp();
+		$GLOBALS['alynt_ag_test_options'] = array(
+			'date_format' => 'Y-m-d',
+			'time_format' => 'H:i',
+		);
+		$GLOBALS['alynt_ag_test_db_results'] = array();
+	}
+
 	/**
 	 * Invoke a private settings page helper.
 	 *

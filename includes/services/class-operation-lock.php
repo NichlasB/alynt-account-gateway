@@ -34,8 +34,13 @@ class ALYNT_AG_Operation_Lock {
 			return $token;
 		}
 
-		$current = get_option( $name, array() );
-		if ( is_array( $current ) && ! empty( $current['expires_at'] ) && (int) $current['expires_at'] < time() ) {
+		$current       = get_option( $name, array() );
+		$current_valid = is_array( $current )
+			&& ! empty( $current['token'] )
+			&& ! empty( $current['expires_at'] );
+		$current_stale = $current_valid && (int) $current['expires_at'] <= time();
+
+		if ( ! $current_valid || $current_stale ) {
 			delete_option( $name );
 			if ( add_option( $name, $value, '', false ) ) {
 				return $token;

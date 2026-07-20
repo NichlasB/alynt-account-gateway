@@ -24,7 +24,9 @@ class ALYNT_AG_Database {
 	public static function install() {
 		global $wpdb;
 
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		if ( ! function_exists( 'dbDelta' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		}
 
 		$charset_collate = $wpdb->get_charset_collate();
 		$tables          = self::tables();

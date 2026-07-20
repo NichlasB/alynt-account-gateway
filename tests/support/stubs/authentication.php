@@ -7,6 +7,15 @@
 
 if ( ! function_exists( 'check_admin_referer' ) ) {
 	function check_admin_referer( $action = -1, $query_arg = false ) {
+		$GLOBALS['alynt_ag_test_admin_referer_checks'][] = array(
+			'action'    => $action,
+			'query_arg' => $query_arg,
+		);
+
+		if ( isset( $GLOBALS['alynt_ag_test_admin_nonce_valid'] ) && ! $GLOBALS['alynt_ag_test_admin_nonce_valid'] ) {
+			wp_die( 'Invalid admin nonce.' );
+		}
+
 		return true;
 	}
 }

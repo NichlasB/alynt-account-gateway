@@ -50,20 +50,49 @@ if ( ! function_exists( 'delete_option' ) ) {
 
 if ( ! function_exists( 'wp_next_scheduled' ) ) {
 	function wp_next_scheduled( $hook, $args = array() ) {
-		unset( $args );
+		if ( isset( $GLOBALS['alynt_ag_test_scheduled_hooks'][ $hook ] ) ) {
+			return $GLOBALS['alynt_ag_test_scheduled_hooks'][ $hook ];
+		}
 
-		return $GLOBALS['alynt_ag_test_scheduled_hooks'][ $hook ] ?? false;
+		foreach ( $GLOBALS['alynt_ag_test_single_events'] ?? array() as $event ) {
+			if ( $hook === $event['hook'] && $args === $event['args'] ) {
+				return $event['timestamp'];
+			}
+		}
+
+		return false;
 	}
 }
 
 if ( ! function_exists( 'wp_schedule_single_event' ) ) {
 	function wp_schedule_single_event( $timestamp, $hook, $args = array(), $wp_error = false ) {
 		unset( $wp_error );
+		if ( array_key_exists( 'alynt_ag_test_schedule_single_event_result', $GLOBALS ) ) {
+			$result = $GLOBALS['alynt_ag_test_schedule_single_event_result'];
+			if ( is_wp_error( $result ) || ! $result ) {
+				return $result;
+			}
+		}
 
 		$GLOBALS['alynt_ag_test_single_events'][] = array(
 			'timestamp' => $timestamp,
 			'hook'      => $hook,
 			'args'      => $args,
+		);
+
+		return true;
+	}
+}
+
+if ( ! function_exists( 'wp_schedule_event' ) ) {
+	function wp_schedule_event( $timestamp, $recurrence, $hook, $args = array(), $wp_error = false ) {
+		unset( $wp_error );
+		$GLOBALS['alynt_ag_test_scheduled_hooks'][ $hook ] = $timestamp;
+		$GLOBALS['alynt_ag_test_recurring_events'][] = array(
+			'timestamp'  => $timestamp,
+			'recurrence' => $recurrence,
+			'hook'       => $hook,
+			'args'       => $args,
 		);
 
 		return true;

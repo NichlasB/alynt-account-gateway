@@ -385,4 +385,31 @@ class RegistrationPendingLifecycleTest extends RegistrationServiceTestCase {
 
 		$this->assertTrue( $service->validate_password_pair( 'StrongPassword1!', 'StrongPassword1!' ) );
 	}
+
+	/**
+	 * @dataProvider invalid_password_policy_provider
+	 */
+	public function test_password_policy_rejects_each_missing_requirement( $password, $expected_code ) {
+		$service = new ALYNT_AG_Registration_Service();
+		$result  = $service->validate_password( $password );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( $expected_code, $result->get_error_code() );
+	}
+
+	public function invalid_password_policy_provider() {
+		return array(
+			'eleven characters' => array( 'Abcdef1!xyz', 'alynt_ag_password_length' ),
+			'no uppercase'       => array( 'abcdefghi1!x', 'alynt_ag_password_complexity' ),
+			'no lowercase'       => array( 'ABCDEFGHI1!X', 'alynt_ag_password_complexity' ),
+			'no number'          => array( 'Abcdefghij!X', 'alynt_ag_password_complexity' ),
+			'no symbol'          => array( 'Abcdefghij12', 'alynt_ag_password_complexity' ),
+		);
+	}
+
+	public function test_password_policy_accepts_exact_twelve_character_boundary() {
+		$service = new ALYNT_AG_Registration_Service();
+
+		$this->assertTrue( $service->validate_password( 'Abcdefghi1!X' ) );
+	}
 }

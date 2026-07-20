@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+
+- Reclaim malformed operation-lock records instead of leaving an affected operation permanently blocked.
+- Reject corrupted queued webhook envelopes before transport when stable event identity or required snapshots are missing.
+- Remove order-dependent global state from authentication and webhook settings-page tests.
+
+### Tests
+
+- Add operation-lock, webhook scheduling, password-boundary, executable activation, and admin capability/nonce regression coverage.
+- Add repeatable reverse and fixed-random test-order runs and GitHub quality enforcement for PHP 7.4 and 8.3.
+
 ## 1.1.21 - 2026-07-20
 
 ### Changed

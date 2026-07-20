@@ -71,6 +71,13 @@ if ( ! function_exists( 'esc_url' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_die' ) ) {
+	function wp_die( $message = '' ) {
+		$GLOBALS['alynt_ag_test_wp_die_messages'][] = (string) $message;
+		throw new RuntimeException( 'wp_die:' . wp_strip_all_tags( (string) $message ) );
+	}
+}
+
 if ( ! function_exists( 'is_wp_error' ) ) {
 	function is_wp_error( $thing ) {
 		return $thing instanceof WP_Error;

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 1.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 21:34+0000\n"
+"POT-Creation-Date: 2026-07-20 22:03+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -265,7 +265,7 @@ msgstr ""
 msgid "Add a test recipient and send representative account emails before inviting users."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:110
+#: includes/services/class-webhook-dispatcher.php:90
 msgid "Add an account-created webhook URL before sending a test."
 msgstr ""
 
@@ -405,7 +405,7 @@ msgstr ""
 msgid "Alynt Account Gateway"
 msgstr ""
 
-#: includes/class-activator.php:38
+#: includes/class-activator.php:42
 msgid "Alynt Account Gateway could not create or update its database tables. Check the database permissions and try again."
 msgstr ""
 
@@ -3988,7 +3988,7 @@ msgstr ""
 msgid "The pending registration record could not be stored."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:78
+#: includes/services/trait-webhook-queue.php:42
 msgid "The queued webhook data is invalid."
 msgstr ""
 
@@ -4059,17 +4059,17 @@ msgstr ""
 msgid "The webhook delivery log could not be stored."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:173
+#: includes/services/class-webhook-dispatcher.php:153
 msgid "The webhook endpoint returned an unsuccessful response."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:146
+#: includes/services/class-webhook-dispatcher.php:126
 msgid "The webhook payload could not be encoded."
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:119
 #: includes/services/class-webhook-dispatcher.php:52
-#: includes/services/trait-webhook-queue.php:36
+#: includes/services/class-webhook-dispatcher.php:99
+#: includes/services/trait-webhook-queue.php:108
 msgid "The webhook user could not be found."
 msgstr ""
 
@@ -4141,7 +4141,7 @@ msgstr ""
 msgid "This link is invalid or has expired."
 msgstr ""
 
-#: includes/services/class-operation-lock.php:47
+#: includes/services/class-operation-lock.php:52
 msgid "This operation is already in progress. Please try again."
 msgstr ""
 
@@ -4607,9 +4607,9 @@ msgstr ""
 msgid "Webhook Tools"
 msgstr ""
 
-#: includes/services/class-webhook-dispatcher.php:114
 #: includes/services/class-webhook-dispatcher.php:47
-#: includes/services/trait-webhook-queue.php:31
+#: includes/services/class-webhook-dispatcher.php:94
+#: includes/services/trait-webhook-queue.php:103
 msgid "Webhook URLs must use HTTPS unless they point to a local development host."
 msgstr ""
 
