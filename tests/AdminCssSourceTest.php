@@ -95,6 +95,14 @@ class AdminCssSourceTest extends TestCase {
 		$this->assertMatchesRegularExpression( '/\.alynt-ag-admin \.nav-tab-active\s*\{[^}]*box-shadow:\s*inset 0 3px #2271b1;/s', $css );
 	}
 
+	public function test_admin_tables_wrap_long_identifiers_at_tablet_widths() {
+		$css = $this->get_admin_css();
+
+		$this->assertMatchesRegularExpression( '/@media \(max-width:\s*960px\)\s*\{.*\.alynt-ag-admin \.widefat\s*\{[^}]*table-layout:\s*fixed;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-admin \.widefat th,\s*\.alynt-ag-admin \.widefat td\s*\{[^}]*overflow-wrap:\s*anywhere;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.alynt-ag-admin \.widefat th,\s*\.alynt-ag-admin \.widefat td\s*\{[^}]*word-break:\s*break-word;/s', $css );
+	}
+
 	public function test_email_save_state_notice_respects_hidden_attribute() {
 		$css = $this->get_admin_css();
 
