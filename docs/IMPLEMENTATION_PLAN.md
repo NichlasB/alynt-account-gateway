@@ -150,6 +150,7 @@ Execution rules:
 - [x] Replaced activation source-string claims with executable network rejection, failed-database rollback, and successful initialization tests.
 - [x] Added exact password boundary coverage plus unauthorized and invalid-nonce cases for ten sensitive admin handlers.
 - [x] Added GitHub quality enforcement for PHP 7.4 and 8.3 with PHPCS, normal/adversarial PHPUnit, dependency audits, and production asset verification.
+- [x] Exercised the new workflow on the revalidation branch, caught a PHP 8.4-only transitive development lock, and constrained Composer resolution to the supported PHP 7.4 floor.
 - [x] Added `docs/ADVERSARIAL_TEST_SUITE_REVIEW_1.1.21.md` with findings, red-to-green evidence, runtime handoffs, and validation results.
 - [x] Final validation passed: normal, reverse, and fixed-random PHPUnit runs each reported 526 tests and 3,675 assertions; PHPCS, build, npm audit, Composer audit, and `git diff --check` passed.
 - [x] Kept real WordPress database, Cron, request, browser, provider, site, publication, packaging, and deployment claims outside prompt `07A`.

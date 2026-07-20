@@ -18,6 +18,8 @@ performed during this workflow.
 - Harness defects fixed: 2 order-dependent fixture failures plus Cron-fake gaps.
 - New automated enforcement: normal, reverse, and fixed-random PHPUnit runs,
   PHPCS, dependency audits, and production asset build in GitHub Actions.
+- CI portability correction: Composer now resolves development dependencies
+  against the supported PHP 7.4 floor.
 - Coverage and mutation tooling: not configured; neither was added solely to
   manufacture a percentage.
 
@@ -42,7 +44,7 @@ reverse, and fixed-random runs each pass with 526 tests and 3,675 assertions.
 | 07A-02 | High | Missing/production defect | Corrupted queued webhook envelopes now fail before transport or logging |
 | 07A-03 | Medium | Missing/production defect | Malformed or expired operation-lock state is reclaimed safely |
 | 07A-04 | High | Misleading | Activation source assertions replaced with executable shim tests |
-| 07A-05 | High | Harness | Added push, pull-request, and manual GitHub quality workflow |
+| 07A-05 | High | Harness | Added push, pull-request, and manual GitHub quality workflow; corrected PHP-floor lock resolution |
 | 07A-06 | Medium | Missing/harness | Cron fake now models failure and argument-sensitive deduplication |
 | 07A-07 | Medium | Missing | Added exact password-length and independent complexity boundaries |
 | 07A-08 | Medium | Mis-layered | Retained as real WordPress runtime handoff |
@@ -92,8 +94,12 @@ reverse, and fixed-random runs each pass with 526 tests and 3,675 assertions.
 - Action: Cron stubs now support forced failure and exact hook/argument identity.
   Retry tests cover queue failure, deduplication, retry ceiling, immutable
   envelope preservation, and diagnostics logging.
-- Action: `.github/workflows/quality.yml` runs on master pushes, pull requests,
-  and manual dispatch for PHP 7.4 and 8.3.
+- Action: `.github/workflows/quality.yml` runs on all pushes, pull requests, and
+  manual dispatch for PHP 7.4 and 8.3.
+- Red: the first remote matrix run failed dependency installation because the
+  lock had selected `doctrine/instantiator 2.1.0`, which requires PHP 8.4.
+- Action: Composer resolves the development lock against PHP 7.4 and selected
+  `doctrine/instantiator 1.5.0`, compatible with the declared matrix floor.
 
 ### 07A-07 - Password Boundaries
 
@@ -133,6 +139,7 @@ review and must run after prompts 08 through 12.
 - Production asset build: passed with committed output unchanged.
 - npm high-severity audit: zero vulnerabilities.
 - Composer advisory audit: no advisories.
+- Composer dependency resolution is pinned to the PHP 7.4 support floor.
 - PHPUnit warnings, risky, skipped, and incomplete tests are configured to fail.
 - `git diff --check`: passed.
 
