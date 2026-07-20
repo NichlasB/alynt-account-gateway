@@ -624,8 +624,8 @@ artifacts. Increment 5 is closed.
 
 ### Increment 6: Registration And Authentication Services
 
-Status: implementation and collaboration-contract coverage complete; v1.1.19
-full gates and candidate acceptance are in progress.
+Status: implementation, collaboration-contract coverage, full gates, and
+v1.1.19 candidate acceptance complete; release approval pending.
 
 The registration service currently contains 1,033 lines and exposes 27 public
 methods across request routing, protection providers, activity logging,
@@ -668,5 +668,17 @@ paths, loader order, and structural thresholds. The full suite currently passes
 at 410 tests and 2,853 assertions. The v1.1.19 source also passes build, stable
 1,104-string POT generation, full PHPCS, all-file PHP and JavaScript syntax,
 npm audit with zero vulnerabilities, and diff-integrity checks. Exact-package
-inspection and LocalWP Plugin Tester acceptance remain required before a
-v1.1.19 release may be requested.
+inspection found 76 runtime files and 70 syntax-clean PHP files under one
+plugin root, no development or backslash entries, and SHA-256
+`31C6DE7EFA4A80A9E1DF829AFDD690A3DE7C59574731619B62E05CD64507444F`.
+
+WordPress's native upload-and-replace flow installed the exact candidate over
+active v1.1.18 on local-only Plugin Tester. All 76 installed files byte-match
+the package with no extras, and the plugin remains active at v1.1.19. Browser
+acceptance covered settings, logout, login, lost-password,
+registration-disabled, invalid set-password, and same-site redirect handling
+without console errors or horizontal overflow at desktop and 390px. Cleanup
+removed all temporary helpers, the browser session, the delayed disposable
+administrator, and upgrade artifacts. Established settings and active-plugin
+fingerprints remain exact, and database version 0.1.6 is unchanged. The
+candidate is ready for explicit v1.1.19 release approval.
