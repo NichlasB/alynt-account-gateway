@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.18
+Stable tag: 1.1.19
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -52,6 +52,13 @@ Uninstalling the plugin removes plugin-owned settings, the stored database schem
 Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile, Reoon, webhooks, diagnostics, or WooCommerce takeover on production sites. The plugin provides WordPress personal-data exporter and eraser callbacks for plugin-owned records, but site owners remain responsible for privacy notice wording, lawful-basis decisions, processor contracts, retention policy, and qualified legal review where required.
 
 == Changelog ==
+
+= 1.1.19 =
+
+* Extract registration request, protection, activity, persistence, confirmation, completion, delivery, and credential concerns behind the existing registration service facade.
+* Extract authentication request, activity, public-message, password-reset, and role-aware redirect concerns behind the existing authentication service facade.
+* Preserve established public methods, constructor compatibility, subclass overrides, request behavior, account creation, password recovery, and redirects.
+* Add public-API, collaborator-delegation, override-path, loader-order, and structural line-limit regression coverage.
 
 = 1.1.18 =
 

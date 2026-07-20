@@ -621,3 +621,64 @@ and settings fingerprints remain unchanged, database version `0.1.6` is
 preserved, and a fresh updater check reports no remaining update. Post-update
 settings smoke acceptance passed and cleanup removed all disposable release
 artifacts. Increment 5 is closed.
+
+### Increment 6: Registration And Authentication Services
+
+Status: implementation, collaboration-contract coverage, full gates, and
+v1.1.19 candidate acceptance complete; release approval pending.
+
+The registration service currently contains 1,033 lines and exposes 27 public
+methods across request routing, protection providers, activity logging,
+pending-record persistence, confirmation resend, token handling, account
+completion, delivery, username generation, and password policy. The
+authentication service contains 532 lines and exposes 12 public methods across
+request routing, rate limiting, diagnostics, public messages, password reset,
+and role-aware redirects.
+
+Both existing classes will remain the public facades. Their first constructor
+arguments and established public methods will be preserved. Collaborators that
+orchestrate multi-step flows will call override-sensitive methods through the
+facade instead of calling sibling collaborators directly. This maintains the
+subclass behavior already exercised by registration completion, resend, and
+set-password tests.
+
+The planned boundaries are:
+
+- registration request handling;
+- registration protection and activity logging;
+- pending-registration persistence and confirmation lifecycle;
+- registration email/webhook delivery;
+- registration completion plus credential and token policy;
+- authentication request handling;
+- authentication rate-limit/activity logging;
+- authentication public messages;
+- authentication password reset; and
+- authentication role-aware redirects.
+
+The completed extraction uses eight registration collaborators and five
+authentication collaborators behind the two unchanged public facades. A shared
+collaborator base forwards override-sensitive calls through each facade so
+existing subclass behavior remains available.
+
+Every extracted collaborator is at or below 300 lines.
+`class-registration-service.php` is now 386 lines, down from 1,033, and
+`class-auth-service.php` is now 185 lines, down from 532. New tests lock the
+public APIs, constructor seams, collaborator delegation, override-sensitive
+paths, loader order, and structural thresholds. The full suite currently passes
+at 410 tests and 2,853 assertions. The v1.1.19 source also passes build, stable
+1,104-string POT generation, full PHPCS, all-file PHP and JavaScript syntax,
+npm audit with zero vulnerabilities, and diff-integrity checks. Exact-package
+inspection found 76 runtime files and 70 syntax-clean PHP files under one
+plugin root, no development or backslash entries, and SHA-256
+`31C6DE7EFA4A80A9E1DF829AFDD690A3DE7C59574731619B62E05CD64507444F`.
+
+WordPress's native upload-and-replace flow installed the exact candidate over
+active v1.1.18 on local-only Plugin Tester. All 76 installed files byte-match
+the package with no extras, and the plugin remains active at v1.1.19. Browser
+acceptance covered settings, logout, login, lost-password,
+registration-disabled, invalid set-password, and same-site redirect handling
+without console errors or horizontal overflow at desktop and 390px. Cleanup
+removed all temporary helpers, the browser session, the delayed disposable
+administrator, and upgrade artifacts. Established settings and active-plugin
+fingerprints remain exact, and database version 0.1.6 is unchanged. The
+candidate is ready for explicit v1.1.19 release approval.
