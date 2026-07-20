@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 6 registration/authentication service decomposition is released and updater-verified as v1.1.19.
+- Current phase: Phase 2 Increment 7 WooCommerce/email service decomposition is in progress from the released v1.1.19 baseline.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.19 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Begin Phase 2 Increment 7 by decomposing the WooCommerce and email services behind their established public contracts. Decompose the settings page last. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Complete Phase 2 Increment 7 behind the established WooCommerce and email public contracts, then decompose the settings page last. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -192,9 +192,8 @@
 
 ### Remaining Phase 2 Sequence
 
-1. Complete and release Increment 6 after full audit, package acceptance, Plugin Tester verification, and explicit approval.
-2. Split WooCommerce and email services.
-3. Decompose the settings page last, using collaborators established by earlier increments.
+1. Complete and release Increment 7 after full audit, package acceptance, Plugin Tester verification, and explicit approval.
+2. Decompose the settings page last, using collaborators established by earlier increments.
 
 ### Increment 6 - Registration And Authentication Service Collaborators
 
@@ -229,6 +228,32 @@ Implementation evidence:
 - Alynt Plugin Updater's fresh check detected the public `1.1.18 -> 1.1.19` update on LocalWP Plugin Tester, and WordPress installed the GitHub release asset through the native Plugins screen.
 - All `76` updater-installed files byte-match the public ZIP. Account Gateway remains active at v1.1.19, settings and activation fingerprints remain unchanged, the database version remains `0.1.6`, and a fresh updater check reports v1.1.19 up to date with zero Account Gateway updates remaining.
 - Final cleanup removed the authenticated browser session and temporary helper, left no disposable candidate users or upgrade artifacts, and confirmed the homepage, branded login, and lost-password routes return HTTP `200`.
+
+### Increment 7 - WooCommerce And Email Service Collaborators
+
+- [x] Lock the released v1.1.19 baseline at `410` tests and `2,853` assertions.
+- [x] Inventory the `736`-line WooCommerce integration, `733`-line email template service, established public methods, hooks, consumers, mutable state, and override-sensitive call paths.
+- [x] Keep `ALYNT_AG_WooCommerce_Integration` and `ALYNT_AG_Email_Template_Service` as the public facades with their established public APIs, hook callbacks, and default construction behavior.
+- [x] Preserve WooCommerce detection, dashboard takeover, menu visibility and links, endpoint routing, native form processing, endpoint rendering, customer-data normalization, and account URLs.
+- [x] Preserve the email template catalog, preview and user token handling, HTML-safe replacement, responsive HTML and plain-text rendering, sending, core WordPress email filters, and profile-email suppression state.
+- [x] Preserve subclass override behavior by having collaborators call override-sensitive public methods through the facade.
+- [x] Extract WooCommerce navigation, routing, endpoint rendering, and customer-data collaborators.
+- [x] Extract email token, rendering, sending, and WordPress-filter collaborators.
+- [x] Load every collaborator before its facade in production and test bootstraps.
+- [x] Add collaboration-contract tests for public APIs, optional constructor seams, collaborator delegation, override-sensitive paths, hook registration, loader order, and structural line limits.
+- [x] Keep each extracted collaborator at or below `300` lines and reduce both original service files substantially.
+- [x] Pass full build, POT, PHPCS, PHP syntax, JavaScript syntax, audit, PHPUnit, and `git diff --check` gates.
+- [ ] Inspect the exact v1.1.20 release-style package.
+- [ ] Install the exact candidate on LocalWP Plugin Tester and verify WooCommerce dashboard and email-template behavior without changing settings or activation state.
+- [ ] Publish v1.1.20 only after separate explicit release approval.
+
+Implementation evidence:
+
+- WooCommerce now delegates through navigation, routing, endpoint-rendering, and customer-data collaborators. Email handling delegates through token, renderer, sender, and WordPress-filter collaborators.
+- `class-woocommerce-integration.php` was reduced from `736` to under `300` lines and `class-email-template-service.php` from `733` to under `300` lines. Every extracted collaborator is also at or below `300` lines.
+- Public facade APIs, no-argument construction, hook callbacks and priorities, stateful profile-email suppression, and override-sensitive calls remain guarded by focused tests.
+- The suite increased from `410` tests / `2,853` assertions to `420` tests / `2,911` assertions.
+- The v1.1.20 source passes the frontend/admin build, stable `1,104`-string POT generation, full PHPCS, all-file PHP and JavaScript syntax checks, npm audit with zero vulnerabilities, Composer audit with no advisories, PHPUnit, and `git diff --check`.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 
