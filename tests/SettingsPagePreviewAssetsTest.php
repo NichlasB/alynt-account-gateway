@@ -102,6 +102,9 @@ class SettingsPagePreviewAssetsTest extends TestCase {
 
 		$reflection = new ReflectionClass( $settings_page );
 		$components = $reflection->getProperty( 'components' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$components->setAccessible( true );
+		}
 
 		$this->assertNull( $components->getValue( $settings_page ) );
 

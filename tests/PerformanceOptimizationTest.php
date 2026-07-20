@@ -16,6 +16,9 @@ class PerformanceOptimizationTest extends TestCase {
 		$integration = new ALYNT_AG_WooCommerce_Integration();
 		$reflection  = new ReflectionClass( $integration );
 		$property    = $reflection->getProperty( 'collaborators' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$property->setAccessible( true );
+		}
 
 		$this->assertSame(
 			array(

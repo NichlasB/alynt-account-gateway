@@ -58,6 +58,9 @@ class FrontendCollaborationTest extends TestCase {
 
 		foreach ( array( 'renderer', 'gateway' ) as $property_name ) {
 			$property = $reflection->getProperty( $property_name );
+			if ( PHP_VERSION_ID < 80100 ) {
+				$property->setAccessible( true );
+			}
 
 			$this->assertNull( $property->getValue( $facade ) );
 		}

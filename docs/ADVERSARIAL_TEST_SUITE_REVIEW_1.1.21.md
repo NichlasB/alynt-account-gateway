@@ -100,6 +100,10 @@ reverse, and fixed-random runs each pass with 526 tests and 3,675 assertions.
   lock had selected `doctrine/instantiator 2.1.0`, which requires PHP 8.4.
 - Action: Composer resolves the development lock against PHP 7.4 and selected
   `doctrine/instantiator 1.5.0`, compatible with the declared matrix floor.
+- Red: fresh checkouts reached asset tests before ignored production assets
+  were built, and PHP 7.4 required explicit reflection accessibility in tests.
+- Action: CI builds first, verifies all four generated assets are nonempty, and
+  test-only reflection helpers now run consistently across the PHP matrix.
 
 ### 07A-07 - Password Boundaries
 
@@ -136,7 +140,7 @@ review and must run after prompts 08 through 12.
 - PHPUnit reverse order: 526 tests, 3,675 assertions.
 - PHPUnit fixed-random seed `20260720`: 526 tests, 3,675 assertions.
 - PHPCS/WPCS and PHP compatibility lint: passed.
-- Production asset build: passed with committed output unchanged.
+- Production asset build: passed; all four ignored build outputs are nonempty.
 - npm high-severity audit: zero vulnerabilities.
 - Composer advisory audit: no advisories.
 - Composer dependency resolution is pinned to the PHP 7.4 support floor.

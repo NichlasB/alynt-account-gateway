@@ -38,6 +38,9 @@ jobs:
           composer install --no-interaction --prefer-dist
           npm ci
 
+      - name: Build production assets
+        run: npm run build
+
       - name: Validate dependencies
         run: |
           composer validate --strict
@@ -50,8 +53,9 @@ jobs:
           npm test -- --do-not-cache-result
           npm run test:adversarial
 
-      - name: Build production assets
-        run: npm run build
-
-      - name: Verify committed production assets
-        run: git diff --exit-code -- assets/dist
+      - name: Verify production assets
+        run: |
+          test -s assets/dist/admin/index.css
+          test -s assets/dist/admin/index.js
+          test -s assets/dist/frontend/index.css
+          test -s assets/dist/frontend/index.js
