@@ -363,8 +363,8 @@ JavaScript syntax checks, npm and Composer security audits, and diff-integrity
 checks pass. The exact 116-file package was inspected and installed on LocalWP
 Plugin Tester, where all installed files byte-matched the candidate and the
 full settings surface passed authenticated browser acceptance without changing
-activation or persistent settings. Increment 8 is complete and v1.1.21 now
-awaits separate release approval.
+activation or persistent settings. Increment 8 is complete, v1.1.21 is
+published, and its public updater path is verified end to end.
 
 Each increment requires the full test suite, PHPCS, build, exact-package
 inspection, Plugin Tester acceptance, and a small maintenance release. Do not

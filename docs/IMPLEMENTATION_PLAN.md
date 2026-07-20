@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 8 settings-page decomposition and LocalWP acceptance are complete; v1.1.21 release publication is approved.
+- Current phase: Phase 2 Increment 8 settings-page decomposition, release, and updater verification are complete at v1.1.21.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.20 is the current public baseline.
+- Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Publish and updater-verify the approved v1.1.21 release. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Close Phase 2 structural refactoring and select the next separately approved product or rollout task. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -278,7 +278,7 @@ Implementation evidence:
 - [x] Pass full build, stable POT generation, PHPCS, PHP and JavaScript syntax, dependency audits, PHPUnit, and `git diff --check`.
 - [x] Inspect the exact v1.1.21 release-style package.
 - [x] Install the exact candidate on LocalWP Plugin Tester and verify all settings tabs, security operations, email/webhook tools, diagnostics, preview, import/export, and responsive behavior without changing persistent settings or activation state.
-- [ ] Publish v1.1.21 only after separate explicit release approval.
+- [x] Publish v1.1.21 only after separate explicit release approval.
 
 Implementation constraints:
 
@@ -302,6 +302,12 @@ Implementation evidence:
 - Browser acceptance produced no JavaScript errors or failed dynamic requests. The only warning was WordPress's development React refresh shim.
 - Cleanup removed the disposable administrator, its session metadata, its generated auto-draft, and both browser tabs. The v1.1.20 rollback ZIP remains available locally.
 - Novamira MCP remained unavailable in this session, so acceptance used the approved MariaDB and Playwright workflow on `plugin-tester local-only`. No staging or production site was touched.
+- Release approval was granted and [GitHub v1.1.21](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.21) was published from merge commit `e39b405`; Build Release run `29758722325` completed successfully.
+- The public release ZIP contains `116` runtime files, contains no development files, and has SHA-256 `FEF3B446224FA30BBBE94931C124483A3E6A3617CBDE14B68CC9C153096EE5B3`.
+- The public ZIP has the same file set and normalized content as the accepted candidate. Only `readme.txt` differs at the byte level because of expected checkout line-ending normalization.
+- Alynt Plugin Updater detected the public `1.1.20 -> 1.1.21` update on LocalWP Plugin Tester, and WordPress installed the GitHub release asset through the native Plugins screen.
+- All `116` updater-installed files byte-match the public ZIP. Account Gateway remains active at v1.1.21, the settings, activation, and database-version fingerprints remain unchanged, and a fresh updater check reports v1.1.21 up to date.
+- Post-update acceptance reconfirmed the Advanced compatibility table at `782px`: zero document overflow, fixed table layout, wrapped identifiers, and no tab overlap. The disposable release administrator, session metadata, generated auto-draft, and browser session were removed.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 
