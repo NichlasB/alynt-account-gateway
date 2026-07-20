@@ -23,12 +23,13 @@ class ALYNT_AG_Settings_Page_Field_Renderer_Core extends ALYNT_AG_Settings_Page_
 	 * @return void
 	 */
 	public function render_field( $key, $field, $value ) {
-		$name = sprintf( 'alynt_ag_settings[%s]', $key );
-		$id   = sprintf( 'alynt-ag-%s', $key );
-		$aria = $this->field_describedby_attribute( $key );
-		$type = $field['type'];
+		$name    = sprintf( 'alynt_ag_settings[%s]', $key );
+		$id      = sprintf( 'alynt-ag-%s', $key );
+		$aria    = $this->field_describedby_attribute( $key );
+		$type    = $field['type'];
+		$context = compact( 'key', 'field', 'value', 'name', 'id', 'aria', 'type' );
 
-		if ( $this->render_simple_field( $type, $id, $name, $value, $aria ) ) {
+		if ( $this->render_simple_field( $context ) ) {
 			return;
 		}
 
@@ -38,12 +39,12 @@ class ALYNT_AG_Settings_Page_Field_Renderer_Core extends ALYNT_AG_Settings_Page_
 		}
 
 		if ( 'color' === $type ) {
-			$this->render_color_field( $id, $name, $value, $field, $aria );
+			$this->render_color_field( $context );
 			return;
 		}
 
 		if ( 'rich_text' === $type ) {
-			$this->render_rich_text_field( $id, $name, $value );
+			$this->render_rich_text_field( $context );
 			return;
 		}
 
@@ -63,24 +64,26 @@ class ALYNT_AG_Settings_Page_Field_Renderer_Core extends ALYNT_AG_Settings_Page_
 		}
 
 		if ( 'select' === $type ) {
-			$this->render_select_field( $key, $field, $id, $name, $value, $aria );
+			$this->render_select_field( $context );
 			return;
 		}
 
-		$this->render_text_field( $key, $field, $id, $name, $value, $aria );
+		$this->render_text_field( $context );
 	}
 
 	/**
 	 * Render a simple scalar field when the type is supported.
 	 *
-	 * @param string $type  Field type.
-	 * @param string $id    Field ID.
-	 * @param string $name  Field name.
-	 * @param mixed  $value Current value.
-	 * @param string $aria  Described-by attribute.
+	 * @param array<string,mixed> $context Field render context.
 	 * @return bool Whether the field was rendered.
 	 */
-	private function render_simple_field( $type, $id, $name, $value, $aria ) {
+	private function render_simple_field( $context ) {
+		$type  = $context['type'];
+		$id    = $context['id'];
+		$name  = $context['name'];
+		$value = $context['value'];
+		$aria  = $context['aria'];
+
 		if ( 'boolean' === $type ) {
 			?>
 			<label>
@@ -114,14 +117,15 @@ class ALYNT_AG_Settings_Page_Field_Renderer_Core extends ALYNT_AG_Settings_Page_
 	/**
 	 * Render a synchronized color field.
 	 *
-	 * @param string              $id    Field ID.
-	 * @param string              $name  Field name.
-	 * @param mixed               $value Current value.
-	 * @param array<string,mixed> $field Field schema.
-	 * @param string              $aria  Described-by attribute.
+	 * @param array<string,mixed> $context Field render context.
 	 * @return void
 	 */
-	private function render_color_field( $id, $name, $value, $field, $aria ) {
+	private function render_color_field( $context ) {
+		$id           = $context['id'];
+		$name         = $context['name'];
+		$value        = $context['value'];
+		$field        = $context['field'];
+		$aria         = $context['aria'];
 		$picker_value = sanitize_hex_color( (string) $value );
 		$picker_value = $picker_value ? $picker_value : sanitize_hex_color( (string) $field['default'] );
 		$picker_label = sprintf(
@@ -140,17 +144,15 @@ class ALYNT_AG_Settings_Page_Field_Renderer_Core extends ALYNT_AG_Settings_Page_
 	/**
 	 * Render a rich text editor.
 	 *
-	 * @param string $id    Field ID.
-	 * @param string $name  Field name.
-	 * @param mixed  $value Current value.
+	 * @param array<string,mixed> $context Field render context.
 	 * @return void
 	 */
-	private function render_rich_text_field( $id, $name, $value ) {
+	private function render_rich_text_field( $context ) {
 		wp_editor(
-			(string) $value,
-			$id,
+			(string) $context['value'],
+			$context['id'],
 			array(
-				'textarea_name'    => $name,
+				'textarea_name'    => $context['name'],
 				'editor_class'     => 'alynt-ag-rich-text',
 				'editor_height'    => 280,
 				'media_buttons'    => false,
@@ -170,15 +172,16 @@ class ALYNT_AG_Settings_Page_Field_Renderer_Core extends ALYNT_AG_Settings_Page_
 	/**
 	 * Render a select field.
 	 *
-	 * @param string              $key   Field key.
-	 * @param array<string,mixed> $field Field schema.
-	 * @param string              $id    Field ID.
-	 * @param string              $name  Field name.
-	 * @param mixed               $value Current value.
-	 * @param string              $aria  Described-by attribute.
+	 * @param array<string,mixed> $context Field render context.
 	 * @return void
 	 */
-	private function render_select_field( $key, $field, $id, $name, $value, $aria ) {
+	private function render_select_field( $context ) {
+		$key     = $context['key'];
+		$field   = $context['field'];
+		$id      = $context['id'];
+		$name    = $context['name'];
+		$value   = $context['value'];
+		$aria    = $context['aria'];
 		$options = $this->field_select_options( $key, $field );
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $aria is escaped by field_describedby_attribute().
@@ -197,15 +200,16 @@ class ALYNT_AG_Settings_Page_Field_Renderer_Core extends ALYNT_AG_Settings_Page_
 	/**
 	 * Render a text or secret field.
 	 *
-	 * @param string              $key   Field key.
-	 * @param array<string,mixed> $field Field schema.
-	 * @param string              $id    Field ID.
-	 * @param string              $name  Field name.
-	 * @param mixed               $value Current value.
-	 * @param string              $aria  Described-by attribute.
+	 * @param array<string,mixed> $context Field render context.
 	 * @return void
 	 */
-	private function render_text_field( $key, $field, $id, $name, $value, $aria ) {
+	private function render_text_field( $context ) {
+		$key       = $context['key'];
+		$field     = $context['field'];
+		$id        = $context['id'];
+		$name      = $context['name'];
+		$value     = $context['value'];
+		$aria      = $context['aria'];
 		$type      = 'secret' === $field['type'] ? 'password' : 'text';
 		$direction = $this->field_direction_attribute( $key, $field );
 		printf(
