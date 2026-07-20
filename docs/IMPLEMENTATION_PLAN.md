@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 4 dashboard renderer extraction is accepted as a v1.1.17 maintenance candidate; explicit release approval remains.
+- Current phase: Phase 2 Increment 4 dashboard renderer extraction is complete, released, and updater-verified as v1.1.17.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.16 is the current public baseline.
+- Plugin status: v1.1.17 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Publish and updater-verify v1.1.17 only after explicit release approval, then begin the settings schema/defaults/sanitization increment. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Begin the settings schema/defaults/sanitization increment. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -126,7 +126,7 @@
 - [x] Pass full build, POT, PHPCS, PHP syntax, JavaScript syntax, audit, PHPUnit, and `git diff --check` gates.
 - [x] Inspect the exact v1.1.17 release-style package.
 - [x] Install the exact candidate on LocalWP Plugin Tester and verify dashboard behavior.
-- [ ] Publish v1.1.17 only after separate explicit release approval.
+- [x] Publish v1.1.17 only after separate explicit release approval.
 
 ### Increment 4 Quality Evidence
 
@@ -142,14 +142,20 @@
 - The Payment Methods endpoint also passed at a `390x844` mobile viewport. Browser acceptance reported no warnings, errors, or failed dynamic requests.
 - The disposable customer and authenticated browser session were removed. The homepage and `/login/` return HTTP `200`.
 - Novamira MCP was unavailable in the current session, so acceptance used the LocalWP-compatible WP-CLI runtime and Playwright MCP. No staging or production site was touched.
+- Release approval was granted and [GitHub v1.1.17](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.17) was published from merge commit `8fc92ee`; Build Release run `29730827502` completed successfully.
+- The public release ZIP contains `56` runtime files and `50` syntax-clean PHP files, contains no development files or backslash archive paths, and has SHA-256 `F6E31A2B541FD4F7811AC6B8002A07C5A54AB3DD2B798BCA64BE71E81DB407FE`.
+- The public ZIP matches the accepted candidate byte-for-byte except for expected `readme.txt` line-ending normalization.
+- Alynt Plugin Updater's manual check detected the public `1.1.16 -> 1.1.17` update on LocalWP Plugin Tester, and WordPress installed the GitHub release asset through the native Plugins screen.
+- All `56` updater-installed files byte-match the public ZIP. Account Gateway remains active at v1.1.17, settings and activation fingerprints remain unchanged, and WordPress reports no remaining update.
+- Post-update authenticated dashboard smoke acceptance passed with no plugin errors or failed dynamic requests. Only pre-existing WordPress development-mode React and jQuery Migrate warnings were observed.
+- The disposable release administrator and browser session were removed. The homepage and `/login/` continue to return HTTP `200`.
 
 ### Remaining Phase 2 Sequence
 
-1. Publish and updater-verify v1.1.17 after explicit release approval.
-2. Split settings schema/defaults/sanitization.
-3. Split registration and authentication services with behavior-locking tests.
-4. Split WooCommerce and email services.
-5. Decompose the settings page last, using collaborators established by earlier increments.
+1. Split settings schema/defaults/sanitization.
+2. Split registration and authentication services with behavior-locking tests.
+3. Split WooCommerce and email services.
+4. Decompose the settings page last, using collaborators established by earlier increments.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 

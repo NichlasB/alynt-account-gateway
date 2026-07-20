@@ -494,7 +494,7 @@ Increment 4 may now begin with dashboard module renderer extraction.
 
 ### Increment 4: Dashboard Renderer Collaborators
 
-Status: candidate accepted; explicit v1.1.17 release approval pending.
+Status: complete; released and updater-verified as v1.1.17.
 
 - Kept `ALYNT_AG_Frontend_Dashboard_Screen` as the stable public facade with
   its established first three constructor arguments and two public render
@@ -535,6 +535,27 @@ errors, or failed dynamic requests. The disposable customer and authenticated
 session were removed, the homepage and branded login return HTTP 200, and no
 staging or production site was touched.
 
-The candidate is ready for explicit v1.1.17 release approval. After release
-and updater verification, the next Phase 2 increment will split settings
-schema, defaults, and sanitization.
+Release approval was granted and
+[GitHub v1.1.17](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.17)
+was published from merge commit `8fc92ee`. Build Release run `29730827502`
+completed successfully. The public ZIP contains 56 runtime files and 50
+syntax-clean PHP files, contains no development files or backslash archive
+paths, and has SHA-256
+`F6E31A2B541FD4F7811AC6B8002A07C5A54AB3DD2B798BCA64BE71E81DB407FE`.
+It matches the accepted candidate byte-for-byte except for expected
+`readme.txt` line-ending normalization.
+
+Alynt Plugin Updater's manual check detected the public `1.1.16 -> 1.1.17`
+update on LocalWP Plugin Tester, and WordPress installed the GitHub release
+asset through the native Plugins screen. All 56 installed files byte-match
+the public ZIP, the plugin remains active at v1.1.17, activation and settings
+fingerprints are unchanged, and no update remains.
+
+Post-update authenticated dashboard smoke acceptance passed without plugin
+errors or failed dynamic requests. Only pre-existing WordPress
+development-mode React and jQuery Migrate warnings were observed. The
+disposable administrator and browser session were removed, the homepage and
+branded login return HTTP 200, and no staging or production site was touched.
+
+The next Phase 2 increment may now split settings schema, defaults, and
+sanitization.
