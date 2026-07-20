@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 5 settings definition/defaults/sanitization extraction is released as v1.1.18 and verified through the public updater path.
+- Current phase: Phase 2 Increment 6 registration/authentication service decomposition is implemented; v1.1.19 full gates and candidate acceptance are in progress.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.18 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Begin the registration/authentication-services increment with behavior-locking tests and the same isolated quality, package, Plugin Tester, and release gates. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Preserve both public service facades and override-sensitive behavior while extracting focused request, lifecycle, protection, persistence, delivery, reset, activity, message, and redirect collaborators. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -192,10 +192,33 @@
 
 ### Remaining Phase 2 Sequence
 
-1. Complete and release Increment 5 after full audit, package acceptance, Plugin Tester verification, and explicit approval.
-2. Split registration and authentication services with behavior-locking tests.
-3. Split WooCommerce and email services.
-4. Decompose the settings page last, using collaborators established by earlier increments.
+1. Complete and release Increment 6 after full audit, package acceptance, Plugin Tester verification, and explicit approval.
+2. Split WooCommerce and email services.
+3. Decompose the settings page last, using collaborators established by earlier increments.
+
+### Increment 6 - Registration And Authentication Service Collaborators
+
+- [x] Lock the v1.1.18 baseline at `401` tests and `2,773` assertions.
+- [x] Inventory the `1,033`-line registration service, `532`-line authentication service, established public methods, constructor compatibility, consumers, and subclass overrides used by tests and integrations.
+- [x] Keep `ALYNT_AG_Registration_Service` and `ALYNT_AG_Auth_Service` as the public facades with their established public methods and first constructor arguments.
+- [x] Preserve request action routing, nonce checks, redirects, neutral public responses, rate-limit buckets, diagnostics events, token lifecycle, pending-registration persistence, consent attachment, password policy, role-aware login redirects, email delivery, and webhook dispatch.
+- [x] Preserve subclass override behavior by having orchestration collaborators call override-sensitive public methods through the facade.
+- [x] Extract registration request handling, protection/activity, pending lifecycle, delivery, completion, and credential/token concerns into focused collaborators.
+- [x] Extract authentication request handling, rate-limit/activity, public messages, password reset, and role-aware redirect concerns into focused collaborators.
+- [x] Load every collaborator before its facade in production and test bootstraps.
+- [x] Add collaboration-contract tests for public APIs, collaborator delegation, override-sensitive call paths, and structural line limits.
+- [x] Keep each extracted collaborator at or below `300` lines and reduce both original service files substantially.
+- [x] Pass full build, POT, PHPCS, PHP syntax, JavaScript syntax, audit, PHPUnit, and `git diff --check` gates.
+- [ ] Inspect the exact v1.1.19 release-style package.
+- [ ] Install the exact candidate on LocalWP Plugin Tester and verify registration, login, lost-password, reset-password, and redirect behavior.
+- [ ] Publish v1.1.19 only after separate explicit release approval.
+
+Implementation evidence:
+
+- Registration now delegates through eight focused collaborators and authentication through five; the shared override-forwarding base and every collaborator remain at or below `300` lines.
+- `class-registration-service.php` was reduced from `1,033` to `386` lines and `class-auth-service.php` from `532` to `185` lines while retaining their public APIs and constructor compatibility.
+- New collaboration guardrails increased the suite from `401` tests / `2,773` assertions to `410` tests / `2,853` assertions, with the full suite and focused PHPCS checks passing before candidate preparation.
+- The v1.1.19 source passes the frontend/admin build, stable `1,104`-string POT generation, full PHPCS, all-file PHP and JavaScript syntax checks, npm audit with zero vulnerabilities, PHPUnit, and `git diff --check`.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 

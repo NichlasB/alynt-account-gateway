@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Handles pending registration flow.
+ * Public facade for pending registration flows.
  */
 class ALYNT_AG_Registration_Service {
 
@@ -34,12 +34,31 @@ class ALYNT_AG_Registration_Service {
 	private $last_completed_return_path = '';
 
 	/**
+	 * Focused registration collaborators.
+	 *
+	 * @var array<string,object>
+	 */
+	private $collaborators;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param ALYNT_AG_Return_Destination|null $destinations Return destination helper.
+	 * @param array<string,object>             $collaborators Optional collaborator overrides.
 	 */
-	public function __construct( $destinations = null ) {
-		$this->destinations = $destinations ? $destinations : new ALYNT_AG_Return_Destination();
+	public function __construct( $destinations = null, $collaborators = array() ) {
+		$this->destinations  = $destinations ? $destinations : new ALYNT_AG_Return_Destination();
+		$defaults            = array(
+			'request'      => new ALYNT_AG_Registration_Request_Handler( $this, $this->destinations ),
+			'protection'   => new ALYNT_AG_Registration_Protection( $this ),
+			'activity'     => new ALYNT_AG_Registration_Activity( $this ),
+			'pending'      => new ALYNT_AG_Registration_Pending_Store( $this, $this->destinations ),
+			'confirmation' => new ALYNT_AG_Registration_Confirmation( $this ),
+			'completion'   => new ALYNT_AG_Registration_Completion( $this, $this->destinations ),
+			'delivery'     => new ALYNT_AG_Registration_Delivery( $this ),
+			'credentials'  => new ALYNT_AG_Registration_Credentials( $this ),
+		);
+		$this->collaborators = array_merge( $defaults, is_array( $collaborators ) ? $collaborators : array() );
 	}
 
 	/**
@@ -57,100 +76,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return void
 	 */
 	public function maybe_handle_registration_request() {
-		$request_method = isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '';
-		if ( 'POST' !== strtoupper( $request_method ) ) {
-			return;
-		}
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Action check only; nonce is verified below before processing.
-		$action = isset( $_POST['alynt_ag_action'] ) ? sanitize_key( wp_unslash( $_POST['alynt_ag_action'] ) ) : '';
-		if ( 'complete_registration' === $action ) {
-			$this->handle_complete_registration_request();
-			return;
-		}
-
-		if ( 'resend_confirmation' === $action ) {
-			$this->handle_resend_confirmation_request();
-			return;
-		}
-
-		if ( 'start_registration' !== $action ) {
-			return;
-		}
-
-		check_admin_referer( 'alynt_ag_start_registration', 'alynt_ag_registration_nonce' );
-
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is verified above before this optional return destination is read.
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Validated as a same-site destination below.
-		$submitted_redirect = isset( $_POST['redirect_to'] ) ? wp_unslash( $_POST['redirect_to'] ) : '';
-		$redirect_to        = $this->destinations->absolute_url( $submitted_redirect, $settings );
-		$return_path        = $this->destinations->relative_path( $redirect_to, $settings );
-		$base_url           = add_query_arg( 'action', 'register', home_url( $settings['account_action_base'] ) );
-
-		if ( $redirect_to ) {
-			$base_url = add_query_arg( 'redirect_to', rawurlencode( $redirect_to ), $base_url );
-		}
-
-		if ( empty( $settings['registration_enabled'] ) ) {
-			wp_safe_redirect( add_query_arg( 'registration_error', 'disabled', $base_url ) );
-			exit;
-		}
-
-		$email      = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
-		$rate_limit = $this->validate_rate_limit( 'registration', $email, $settings );
-		if ( is_wp_error( $rate_limit ) ) {
-			wp_safe_redirect( add_query_arg( 'registration_error', $rate_limit->get_error_code(), $base_url ) );
-			exit;
-		}
-
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Turnstile token is sanitized by validate_registration_protection().
-		$turnstile_token = isset( $_POST['cf-turnstile-response'] ) ? wp_unslash( $_POST['cf-turnstile-response'] ) : '';
-		$protection      = $this->validate_registration_protection( $email, $turnstile_token, $settings );
-
-		if ( is_wp_error( $protection ) ) {
-			wp_safe_redirect( add_query_arg( 'registration_error', $protection->get_error_code(), $base_url ) );
-			exit;
-		}
-
-		$terms_value = isset( $_POST['terms'] ) ? sanitize_text_field( wp_unslash( $_POST['terms'] ) ) : '';
-		$terms       = $this->validate_terms_acceptance( $terms_value );
-		if ( is_wp_error( $terms ) ) {
-			$this->log_registration_flow_result( $email, $terms->get_error_code() );
-			wp_safe_redirect( add_query_arg( 'registration_error', $terms->get_error_code(), $base_url ) );
-			exit;
-		}
-
-		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized in create_pending_registration().
-		$result = $this->create_pending_registration(
-			isset( $_POST['first_name'] ) ? wp_unslash( $_POST['first_name'] ) : '',
-			isset( $_POST['last_name'] ) ? wp_unslash( $_POST['last_name'] ) : '',
-			isset( $_POST['email'] ) ? wp_unslash( $_POST['email'] ) : '',
-			$settings,
-			$return_path
-		);
-		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-
-		if ( is_wp_error( $result ) ) {
-			if ( 'email_unavailable' === $result->get_error_code() ) {
-				wp_safe_redirect( add_query_arg( 'registration_sent', '1', $base_url ) );
-				exit;
-			}
-
-			$this->log_registration_flow_result( $email, $result->get_error_code() );
-			wp_safe_redirect( add_query_arg( 'registration_error', $result->get_error_code(), $base_url ) );
-			exit;
-		}
-
-		$email_sent = $this->send_confirmation_email( $result, $settings );
-		if ( is_wp_error( $email_sent ) ) {
-			$this->log_registration_flow_result( $email, $email_sent->get_error_code() );
-			wp_safe_redirect( add_query_arg( 'registration_error', $email_sent->get_error_code(), $base_url ) );
-			exit;
-		}
-
-		wp_safe_redirect( add_query_arg( 'registration_sent', '1', $base_url ) );
-		exit;
+		$this->collaborators['request']->run_maybe_handle_registration_request();
 	}
 
 	/**
@@ -164,80 +90,12 @@ class ALYNT_AG_Registration_Service {
 	 * @return array<string,mixed>|WP_Error
 	 */
 	public function create_pending_registration( $first_name, $last_name, $email, $settings, $return_path = '' ) {
-		global $wpdb;
-
-		$first_name  = sanitize_text_field( $first_name );
-		$last_name   = sanitize_text_field( $last_name );
-		$email       = sanitize_email( $email );
-		$return_path = $this->destinations->relative_path( $return_path, $settings );
-
-		if ( ! $first_name || ! $last_name || ! $email ) {
-			return new WP_Error( 'missing_required_fields', __( 'Please complete all required fields.', 'alynt-account-gateway' ) );
-		}
-
-		if ( ! is_email( $email ) ) {
-			return new WP_Error( 'invalid_email', __( 'Please enter a valid email address.', 'alynt-account-gateway' ) );
-		}
-
-		if ( email_exists( $email ) ) {
-			return new WP_Error( 'email_unavailable', __( 'If this email address can be used, a confirmation email will be sent.', 'alynt-account-gateway' ) );
-		}
-
-		$token      = $this->generate_confirmation_token();
-		$token_hash = $this->hash_token( $token );
-		$now        = current_time( 'mysql', true );
-		$expires_at = gmdate( 'Y-m-d H:i:s', time() + ( max( 1, absint( $settings['registration_token_hours'] ) ) * HOUR_IN_SECONDS ) );
-		$tables     = ALYNT_AG_Database::tables();
-
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned pending registration table.
-		$wpdb->delete(
-			$tables['pending_registrations'],
-			array(
-				'email'  => $email,
-				'status' => 'pending',
-			),
-			array( '%s', '%s' )
-		);
-
-		$inserted = $wpdb->insert(
-			$tables['pending_registrations'],
-			array(
-				'email'        => $email,
-				'first_name'   => $first_name,
-				'last_name'    => $last_name,
-				'user_id'      => 0,
-				'token_hash'   => $token_hash,
-				'return_path'  => $return_path,
-				'status'       => 'pending',
-				'expires_at'   => $expires_at,
-				'created_at'   => $now,
-				'confirmed_at' => null,
-			),
-			array( '%s', '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%s', null )
-		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-
-		if ( ! $inserted ) {
-			$this->log_registration_flow_result( $email, 'pending_registration_failed' );
-			return new WP_Error( 'pending_registration_failed', __( 'The registration could not be started. Please try again.', 'alynt-account-gateway' ) );
-		}
-
-		$privacy = new ALYNT_AG_Privacy_Service();
-		if ( ! $privacy->record_registration_consent( $email, $settings ) ) {
-			$this->log_registration_flow_result( $email, 'consent_record_failed' );
-			return new WP_Error( 'consent_record_failed', __( 'The registration consent record could not be stored. Please try again.', 'alynt-account-gateway' ) );
-		}
-
-		return array(
-			'id'               => (int) $wpdb->insert_id,
-			'email'            => $email,
-			'first_name'       => $first_name,
-			'last_name'        => $last_name,
-			'token'            => $token,
-			'token_hash'       => $token_hash,
-			'return_path'      => $return_path,
-			'expires_at'       => $expires_at,
-			'confirmation_url' => $this->build_confirmation_url( $token, $settings ),
+		return $this->collaborators['pending']->run_create_pending_registration(
+			$first_name,
+			$last_name,
+			$email,
+			$settings,
+			$return_path
 		);
 	}
 
@@ -250,53 +108,11 @@ class ALYNT_AG_Registration_Service {
 	 * @return true|WP_Error
 	 */
 	public function validate_registration_protection( $email, $turnstile_token, $settings ) {
-		$checks = array();
-		$email  = sanitize_email( $email );
-
-		if ( ! empty( $settings['turnstile_secret_key'] ) && ! empty( $settings['turnstile_site_key'] ) ) {
-			$turnstile = new ALYNT_AG_Turnstile_Client();
-			$checks[]  = array(
-				'provider' => 'turnstile',
-				'result'   => $turnstile->verify( sanitize_text_field( $turnstile_token ), $settings['turnstile_secret_key'] ),
-			);
-		}
-
-		if ( ! empty( $settings['reoon_api_key'] ) && is_email( $email ) ) {
-			$reoon    = new ALYNT_AG_Reoon_Client();
-			$result   = $reoon->verify( $email, $settings['reoon_api_key'], $settings['reoon_mode'] ?? 'quick' );
-			$checks[] = array(
-				'provider' => 'reoon',
-				'result'   => $this->apply_reoon_flagged_policy( $result, $settings ),
-			);
-		}
-
-		if ( empty( $checks ) ) {
-			return true;
-		}
-
-		$requires_all = ! empty( $settings['protection_mode'] ) && 'turnstile_and_reoon' === $settings['protection_mode'];
-		$has_success  = false;
-		$last_error   = null;
-
-		foreach ( $checks as $check ) {
-			$this->log_verification_result( $email, $check['provider'], $check['result'] );
-
-			if ( is_wp_error( $check['result'] ) ) {
-				$last_error = $check['result'];
-				if ( $requires_all ) {
-					return $check['result'];
-				}
-				continue;
-			}
-
-			$has_success = true;
-		}
-
-		if ( $has_success ) {
-			return true;
-		}
-
-		return $last_error ? $last_error : new WP_Error( 'alynt_ag_registration_protection_failed', __( 'Registration verification failed. Please try again.', 'alynt-account-gateway' ) );
+		return $this->collaborators['protection']->run_validate_registration_protection(
+			$email,
+			$turnstile_token,
+			$settings
+		);
 	}
 
 	/**
@@ -308,30 +124,10 @@ class ALYNT_AG_Registration_Service {
 	 * @return bool
 	 */
 	public function log_verification_result( $email, $provider, $result ) {
-		global $wpdb;
-
-		$email    = sanitize_email( $email );
-		$provider = sanitize_key( $provider );
-
-		if ( ! $email || ! $provider ) {
-			return false;
-		}
-
-		$status  = $this->verification_result_status( $result );
-		$blocked = is_wp_error( $result );
-		$tables  = ALYNT_AG_Database::tables();
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Plugin-owned verification log table.
-		return (bool) $wpdb->insert(
-			$tables['verification_logs'],
-			array(
-				'email'      => $email,
-				'provider'   => $provider,
-				'status'     => $status,
-				'blocked'    => $blocked ? 1 : 0,
-				'created_at' => current_time( 'mysql', true ),
-			),
-			array( '%s', '%s', '%s', '%d', '%s' )
+		return $this->collaborators['activity']->run_log_verification_result(
+			$email,
+			$provider,
+			$result
 		);
 	}
 
@@ -344,28 +140,10 @@ class ALYNT_AG_Registration_Service {
 	 * @return bool
 	 */
 	public function log_registration_flow_result( $email, $status, $blocked = true ) {
-		global $wpdb;
-
-		$email  = sanitize_email( $email );
-		$status = sanitize_key( $status );
-
-		if ( ! is_email( $email ) || ! $status ) {
-			return false;
-		}
-
-		$tables = ALYNT_AG_Database::tables();
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- Plugin-owned verification log table.
-		return (bool) $wpdb->insert(
-			$tables['verification_logs'],
-			array(
-				'email'      => $email,
-				'provider'   => 'registration_flow',
-				'status'     => $status,
-				'blocked'    => $blocked ? 1 : 0,
-				'created_at' => current_time( 'mysql', true ),
-			),
-			array( '%s', '%s', '%s', '%d', '%s' )
+		return $this->collaborators['activity']->run_log_registration_flow_result(
+			$email,
+			$status,
+			$blocked
 		);
 	}
 
@@ -377,54 +155,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return true|array<string,mixed>|WP_Error
 	 */
 	public function apply_reoon_flagged_policy( $result, $settings ) {
-		if ( is_wp_error( $result ) || ! is_array( $result ) || empty( $result['flagged'] ) ) {
-			return $result;
-		}
-
-		$policy = ! empty( $settings['reoon_flagged_policy'] ) ? sanitize_key( $settings['reoon_flagged_policy'] ) : 'allow';
-		if ( 'block' !== $policy ) {
-			return $result;
-		}
-
-		$status = ! empty( $result['status'] ) ? sanitize_key( $result['status'] ) : 'unknown';
-
-		return new WP_Error(
-			'alynt_ag_reoon_flagged_blocked',
-			__( 'This email address cannot be used.', 'alynt-account-gateway' ),
-			array(
-				'status'  => $status,
-				'flagged' => true,
-			)
-		);
-	}
-
-	/**
-	 * Return a compact verification result status.
-	 *
-	 * @param true|array<string,mixed>|WP_Error $result Verification result.
-	 * @return string
-	 */
-	private function verification_result_status( $result ) {
-		if ( is_wp_error( $result ) ) {
-			if ( 'alynt_ag_reoon_flagged_blocked' === $result->get_error_code() ) {
-				$data = $result->get_error_data();
-				if ( is_array( $data ) && ! empty( $data['status'] ) ) {
-					return sanitize_key( $data['status'] . '_flagged_blocked' );
-				}
-			}
-
-			return sanitize_key( $result->get_error_code() );
-		}
-
-		if ( is_array( $result ) && ! empty( $result['status'] ) ) {
-			if ( ! empty( $result['flagged'] ) ) {
-				return sanitize_key( $result['status'] . '_flagged' );
-			}
-
-			return sanitize_key( $result['status'] );
-		}
-
-		return 'passed';
+		return $this->collaborators['protection']->run_apply_reoon_flagged_policy( $result, $settings );
 	}
 
 	/**
@@ -434,11 +165,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return true|WP_Error
 	 */
 	public function validate_terms_acceptance( $accepted ) {
-		if ( empty( $accepted ) ) {
-			return new WP_Error( 'terms_required', __( 'Please accept the terms and privacy policy to continue.', 'alynt-account-gateway' ) );
-		}
-
-		return true;
+		return $this->collaborators['protection']->run_validate_terms_acceptance( $accepted );
 	}
 
 	/**
@@ -450,35 +177,11 @@ class ALYNT_AG_Registration_Service {
 	 * @return true|WP_Error
 	 */
 	public function validate_rate_limit( $bucket, $identifier, $settings ) {
-		$limiter = new ALYNT_AG_Rate_Limiter();
-
-		if ( 'resend_confirmation' === $bucket ) {
-			$result = $limiter->check_and_increment(
-				'resend_confirmation',
-				$identifier,
-				$settings['resend_confirmation_rate_limit_count'],
-				$settings['resend_confirmation_rate_limit_window']
-			);
-
-			if ( is_wp_error( $result ) ) {
-				$this->log_verification_result( $identifier, 'rate_limit', new WP_Error( 'resend_confirmation_rate_limited', $result->get_error_message() ) );
-			}
-
-			return $result;
-		}
-
-		$result = $limiter->check_and_increment(
-			'registration',
+		return $this->collaborators['protection']->run_validate_rate_limit(
+			$bucket,
 			$identifier,
-			$settings['registration_rate_limit_count'],
-			$settings['registration_rate_limit_window']
+			$settings
 		);
-
-		if ( is_wp_error( $result ) ) {
-			$this->log_verification_result( $identifier, 'rate_limit', new WP_Error( 'registration_rate_limited', $result->get_error_message() ) );
-		}
-
-		return $result;
 	}
 
 	/**
@@ -489,26 +192,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return true|WP_Error
 	 */
 	public function send_confirmation_email( $pending, $settings ) {
-		$expiry_hours = max( 1, absint( $settings['registration_token_hours'] ) );
-		$email        = new ALYNT_AG_Email_Template_Service();
-		$sent         = $email->send(
-			'registration_confirmation',
-			$pending['email'],
-			array(
-				'first_name'       => $pending['first_name'],
-				'last_name'        => $pending['last_name'],
-				'user_email'       => $pending['email'],
-				'confirmation_url' => $pending['confirmation_url'],
-				'expiry_hours'     => (string) $expiry_hours,
-			),
-			$settings
-		);
-
-		if ( is_wp_error( $sent ) ) {
-			return new WP_Error( 'confirmation_email_failed', __( 'The confirmation email could not be sent. Please try again.', 'alynt-account-gateway' ) );
-		}
-
-		return true;
+		return $this->collaborators['confirmation']->run_send_confirmation_email( $pending, $settings );
 	}
 
 	/**
@@ -518,21 +202,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return object|null
 	 */
 	public function find_pending_by_token( $token ) {
-		global $wpdb;
-
-		$token_hash = $this->hash_token( $token );
-		$tables     = ALYNT_AG_Database::tables();
-		$now        = current_time( 'mysql', true );
-
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned pending registration table.
-		return $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT * FROM {$tables['pending_registrations']} WHERE token_hash = %s AND status IN ('pending', 'email_confirmed') AND expires_at >= %s LIMIT 1",
-				$token_hash,
-				$now
-			)
-		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		return $this->collaborators['pending']->run_find_pending_by_token( $token );
 	}
 
 	/**
@@ -542,23 +212,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return object|null
 	 */
 	public function find_resendable_pending_by_email( $email ) {
-		global $wpdb;
-
-		$email  = sanitize_email( $email );
-		$tables = ALYNT_AG_Database::tables();
-
-		if ( ! is_email( $email ) ) {
-			return null;
-		}
-
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned pending registration table.
-		return $wpdb->get_row(
-			$wpdb->prepare(
-				"SELECT * FROM {$tables['pending_registrations']} WHERE email = %s AND status IN ('pending', 'email_confirmed') ORDER BY id DESC LIMIT 1",
-				$email
-			)
-		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		return $this->collaborators['pending']->run_find_resendable_pending_by_email( $email );
 	}
 
 	/**
@@ -569,45 +223,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return array<string,mixed>|WP_Error
 	 */
 	public function renew_pending_confirmation( $pending, $settings ) {
-		global $wpdb;
-
-		$token      = $this->generate_confirmation_token();
-		$token_hash = $this->hash_token( $token );
-		$now        = current_time( 'mysql', true );
-		$expires_at = gmdate( 'Y-m-d H:i:s', time() + ( max( 1, absint( $settings['registration_token_hours'] ) ) * HOUR_IN_SECONDS ) );
-		$tables     = ALYNT_AG_Database::tables();
-
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned pending registration table.
-		$updated = $wpdb->update(
-			$tables['pending_registrations'],
-			array(
-				'token_hash'   => $token_hash,
-				'status'       => 'pending',
-				'expires_at'   => $expires_at,
-				'created_at'   => $now,
-				'confirmed_at' => null,
-			),
-			array( 'id' => (int) $pending->id ),
-			array( '%s', '%s', '%s', '%s', null ),
-			array( '%d' )
-		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-
-		if ( false === $updated ) {
-			return new WP_Error( 'pending_registration_failed', __( 'The confirmation link could not be renewed. Please try again.', 'alynt-account-gateway' ) );
-		}
-
-		return array(
-			'id'               => (int) $pending->id,
-			'email'            => $pending->email,
-			'first_name'       => $pending->first_name,
-			'last_name'        => $pending->last_name,
-			'token'            => $token,
-			'token_hash'       => $token_hash,
-			'return_path'      => isset( $pending->return_path ) ? (string) $pending->return_path : '',
-			'expires_at'       => $expires_at,
-			'confirmation_url' => $this->build_confirmation_url( $token, $settings ),
-		);
+		return $this->collaborators['confirmation']->run_renew_pending_confirmation( $pending, $settings );
 	}
 
 	/**
@@ -618,35 +234,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return true|WP_Error
 	 */
 	public function resend_confirmation( $email, $settings ) {
-		$email = sanitize_email( $email );
-
-		if ( ! is_email( $email ) ) {
-			return new WP_Error( 'invalid_email', __( 'Please enter a valid email address.', 'alynt-account-gateway' ) );
-		}
-
-		if ( email_exists( $email ) ) {
-			return true;
-		}
-
-		$pending = $this->find_resendable_pending_by_email( $email );
-		if ( ! $pending ) {
-			return true;
-		}
-
-		$renewed = $this->renew_pending_confirmation( $pending, $settings );
-		if ( is_wp_error( $renewed ) ) {
-			$this->log_registration_flow_result( $email, $renewed->get_error_code() );
-			return $renewed;
-		}
-
-		$sent = $this->send_confirmation_email( $renewed, $settings );
-		if ( is_wp_error( $sent ) ) {
-			$this->log_registration_flow_result( $email, $sent->get_error_code() );
-		} else {
-			$this->log_registration_flow_result( $email, 'confirmation_resent', false );
-		}
-
-		return $sent;
+		return $this->collaborators['confirmation']->run_resend_confirmation( $email, $settings );
 	}
 
 	/**
@@ -656,37 +244,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return object|WP_Error
 	 */
 	public function confirm_pending_token( $token ) {
-		global $wpdb;
-
-		$pending = $this->find_pending_by_token( $token );
-		if ( ! $pending ) {
-			return new WP_Error( 'invalid_or_expired_token', __( 'This confirmation link is invalid or has expired.', 'alynt-account-gateway' ) );
-		}
-
-		if ( 'email_confirmed' === $pending->status ) {
-			return $pending;
-		}
-
-		$tables = ALYNT_AG_Database::tables();
-		$now    = current_time( 'mysql', true );
-
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned pending registration table.
-		$wpdb->update(
-			$tables['pending_registrations'],
-			array(
-				'status'       => 'email_confirmed',
-				'confirmed_at' => $now,
-			),
-			array( 'id' => (int) $pending->id ),
-			array( '%s', '%s' ),
-			array( '%d' )
-		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-
-		$pending->status       = 'email_confirmed';
-		$pending->confirmed_at = $now;
-
-		return $pending;
+		return $this->collaborators['pending']->run_confirm_pending_token( $token );
 	}
 
 	/**
@@ -699,94 +257,13 @@ class ALYNT_AG_Registration_Service {
 	 * @return int|WP_Error
 	 */
 	public function complete_pending_registration( $token, $password, $password_confirm, $settings ) {
-		global $wpdb;
-
-		$pending = $this->confirm_pending_token( $token );
-		if ( is_wp_error( $pending ) ) {
-			return $pending;
-		}
-
-		$this->last_completed_return_path = isset( $pending->return_path )
-			? $this->destinations->relative_path( $pending->return_path, $settings )
-			: '';
-
-		$password_valid = $this->validate_password_pair( $password, $password_confirm );
-		if ( is_wp_error( $password_valid ) ) {
-			$this->log_registration_flow_result( $pending->email, $password_valid->get_error_code() );
-			return $password_valid;
-		}
-
-		if ( email_exists( $pending->email ) ) {
-			$this->log_registration_flow_result( $pending->email, 'email_unavailable' );
-			return new WP_Error( 'email_unavailable', __( 'This email address can no longer be used.', 'alynt-account-gateway' ) );
-		}
-
-		$username = $this->generate_username( $pending->first_name, $pending->last_name, $settings );
-		$user_id  = wp_create_user( $username, $password, $pending->email );
-
-		if ( is_wp_error( $user_id ) ) {
-			$this->log_registration_flow_result( $pending->email, $user_id->get_error_code() );
-			return $user_id;
-		}
-
-		wp_update_user(
-			array(
-				'ID'           => (int) $user_id,
-				'first_name'   => $pending->first_name,
-				'last_name'    => $pending->last_name,
-				'display_name' => trim( $pending->first_name . ' ' . $pending->last_name ),
-			)
+		return $this->collaborators['completion']->run_complete_pending_registration(
+			$token,
+			$password,
+			$password_confirm,
+			$settings,
+			$this->last_completed_return_path
 		);
-
-		$tables = ALYNT_AG_Database::tables();
-
-		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned pending registration table.
-		$wpdb->update(
-			$tables['pending_registrations'],
-			array(
-				'status'  => 'account_created',
-				'user_id' => (int) $user_id,
-			),
-			array( 'id' => (int) $pending->id ),
-			array( '%s', '%d' ),
-			array( '%d' )
-		);
-		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-
-		$privacy = new ALYNT_AG_Privacy_Service();
-		$privacy->attach_registration_consent_to_user( $pending->email, (int) $user_id );
-
-		$welcome_sent = $this->send_account_created_welcome_email( $pending, (int) $user_id, $settings );
-		if ( is_wp_error( $welcome_sent ) ) {
-			ALYNT_AG_Diagnostics_Logger::log_event(
-				'warning',
-				'external_api',
-				'account_created_welcome_failed',
-				__( 'The account-created welcome email could not be sent.', 'alynt-account-gateway' ),
-				array(
-					'user_id' => (int) $user_id,
-					'email'   => $pending->email,
-					'error'   => $welcome_sent->get_error_code(),
-				)
-			);
-		}
-
-		$webhook_sent = $this->dispatch_account_created_webhook( (int) $user_id, $settings );
-		if ( is_wp_error( $webhook_sent ) ) {
-			ALYNT_AG_Diagnostics_Logger::log_event(
-				'warning',
-				'external_api',
-				'account_created_webhook_failed',
-				__( 'The account-created webhook could not be sent.', 'alynt-account-gateway' ),
-				array(
-					'user_id' => (int) $user_id,
-					'email'   => $pending->email,
-					'error'   => $webhook_sent->get_error_code(),
-				)
-			);
-		}
-
-		return (int) $user_id;
 	}
 
 	/**
@@ -798,29 +275,11 @@ class ALYNT_AG_Registration_Service {
 	 * @return true|WP_Error
 	 */
 	public function send_account_created_welcome_email( $pending, $user_id, $settings ) {
-		if ( ! empty( $settings['email_new_user_welcome_disabled'] ) ) {
-			return true;
-		}
-
-		$email = new ALYNT_AG_Email_Template_Service();
-		$sent  = $email->send(
-			'new_user_welcome',
-			$pending->email,
-			array(
-				'first_name'    => $pending->first_name,
-				'last_name'     => $pending->last_name,
-				'user_email'    => $pending->email,
-				'user_id'       => (string) absint( $user_id ),
-				'dashboard_url' => home_url( $settings['after_login_redirect'] ?? '/my-account/' ),
-			),
+		return $this->collaborators['delivery']->run_send_account_created_welcome_email(
+			$pending,
+			$user_id,
 			$settings
 		);
-
-		if ( is_wp_error( $sent ) ) {
-			return new WP_Error( 'welcome_email_failed', __( 'The welcome email could not be sent.', 'alynt-account-gateway' ) );
-		}
-
-		return true;
 	}
 
 	/**
@@ -831,9 +290,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return true|WP_Error
 	 */
 	public function dispatch_account_created_webhook( $user_id, $settings ) {
-		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
-
-		return $dispatcher->dispatch_account_created( $user_id, $settings );
+		return $this->collaborators['delivery']->run_dispatch_account_created_webhook( $user_id, $settings );
 	}
 
 	/**
@@ -844,11 +301,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return true|WP_Error
 	 */
 	public function validate_password_pair( $password, $password_confirm ) {
-		if ( $password !== $password_confirm ) {
-			return new WP_Error( 'password_mismatch', __( 'The passwords do not match.', 'alynt-account-gateway' ) );
-		}
-
-		return $this->validate_password( $password );
+		return $this->collaborators['credentials']->run_validate_password_pair( $password, $password_confirm );
 	}
 
 	/**
@@ -860,65 +313,11 @@ class ALYNT_AG_Registration_Service {
 	 * @return string
 	 */
 	public function generate_username( $first_name, $last_name, $settings ) {
-		$format = ! empty( $settings['username_format'] ) ? (string) $settings['username_format'] : '@User_{first_name}_{last_name}';
-		$base   = strtr(
-			$format,
-			array(
-				'{first_name}' => $first_name,
-				'{last_name}'  => $last_name,
-				'{first}'      => $first_name,
-				'{last}'       => $last_name,
-			)
+		return $this->collaborators['credentials']->run_generate_username(
+			$first_name,
+			$last_name,
+			$settings
 		);
-
-		$base = preg_replace( '/\s+/', '_', $base );
-		$base = sanitize_user( $base, true );
-		$base = $base ? $base : 'user';
-
-		$username = $base;
-		$suffix   = 2;
-
-		while ( username_exists( $username ) ) {
-			$username = $base . '_' . $suffix;
-			++$suffix;
-		}
-
-		return $username;
-	}
-
-	/**
-	 * Handle set-password form submission.
-	 *
-	 * @return void
-	 */
-	private function handle_complete_registration_request() {
-		check_admin_referer( 'alynt_ag_complete_registration', 'alynt_ag_registration_nonce' );
-
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-
-		// phpcs:disable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized/validated by complete_pending_registration().
-		$token            = isset( $_POST['alynt_ag_token'] ) ? wp_unslash( $_POST['alynt_ag_token'] ) : '';
-		$password         = isset( $_POST['password'] ) ? wp_unslash( $_POST['password'] ) : '';
-		$password_confirm = isset( $_POST['password_confirm'] ) ? wp_unslash( $_POST['password_confirm'] ) : '';
-		// phpcs:enable WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-
-		$result = $this->complete_pending_registration( $token, $password, $password_confirm, $settings );
-
-		$base_url = add_query_arg(
-			array(
-				'action'         => 'setpassword',
-				'alynt_ag_token' => rawurlencode( $token ),
-			),
-			home_url( $settings['account_action_base'] )
-		);
-
-		if ( is_wp_error( $result ) ) {
-			wp_safe_redirect( add_query_arg( 'password_error', $result->get_error_code(), $base_url ) );
-			exit;
-		}
-
-		wp_safe_redirect( $this->registration_complete_login_url( $settings ) );
-		exit;
 	}
 
 	/**
@@ -928,42 +327,10 @@ class ALYNT_AG_Registration_Service {
 	 * @return string
 	 */
 	public function registration_complete_login_url( $settings ) {
-		$login_url  = add_query_arg( 'registration_complete', '1', home_url( $settings['login_path'] ) );
-		$return_url = $this->destinations->from_stored_path( $this->last_completed_return_path, $settings );
-
-		if ( $return_url ) {
-			$login_url = add_query_arg( 'redirect_to', rawurlencode( $return_url ), $login_url );
-		}
-
-		return $login_url;
-	}
-
-	/**
-	 * Handle resend-confirmation form submission.
-	 *
-	 * @return void
-	 */
-	private function handle_resend_confirmation_request() {
-		check_admin_referer( 'alynt_ag_resend_confirmation', 'alynt_ag_registration_nonce' );
-
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-		$base_url = add_query_arg( 'action', 'invalidlink', home_url( $settings['account_action_base'] ) );
-		$email    = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
-
-		$rate_limit = $this->validate_rate_limit( 'resend_confirmation', $email, $settings );
-		if ( is_wp_error( $rate_limit ) ) {
-			wp_safe_redirect( add_query_arg( 'resend_error', $rate_limit->get_error_code(), $base_url ) );
-			exit;
-		}
-
-		$result = $this->resend_confirmation( $email, $settings );
-		if ( is_wp_error( $result ) ) {
-			wp_safe_redirect( add_query_arg( 'resend_error', $result->get_error_code(), $base_url ) );
-			exit;
-		}
-
-		wp_safe_redirect( add_query_arg( 'confirmation_resent', '1', $base_url ) );
-		exit;
+		return $this->collaborators['completion']->run_registration_complete_login_url(
+			$settings,
+			$this->last_completed_return_path
+		);
 	}
 
 	/**
@@ -972,7 +339,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return string
 	 */
 	public function generate_confirmation_token() {
-		return wp_generate_password( 32, false, false );
+		return $this->collaborators['credentials']->run_generate_confirmation_token();
 	}
 
 	/**
@@ -982,7 +349,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return string
 	 */
 	public function hash_token( $token ) {
-		return hash_hmac( 'sha256', (string) $token, wp_salt( 'auth' ) );
+		return $this->collaborators['credentials']->run_hash_token( $token );
 	}
 
 	/**
@@ -993,7 +360,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return bool
 	 */
 	public function token_matches_hash( $token, $hash ) {
-		return hash_equals( (string) $hash, $this->hash_token( $token ) );
+		return $this->collaborators['credentials']->run_token_matches_hash( $token, $hash );
 	}
 
 	/**
@@ -1004,13 +371,7 @@ class ALYNT_AG_Registration_Service {
 	 * @return string
 	 */
 	public function build_confirmation_url( $token, $settings ) {
-		return add_query_arg(
-			array(
-				'action'         => 'setpassword',
-				'alynt_ag_token' => rawurlencode( $token ),
-			),
-			home_url( $settings['account_action_base'] )
-		);
+		return $this->collaborators['credentials']->run_build_confirmation_url( $token, $settings );
 	}
 
 	/**
@@ -1020,14 +381,6 @@ class ALYNT_AG_Registration_Service {
 	 * @return true|WP_Error
 	 */
 	public function validate_password( $password ) {
-		if ( strlen( $password ) < self::MIN_PASSWORD_LENGTH ) {
-			return new WP_Error( 'alynt_ag_password_length', __( 'Password must be at least 12 characters.', 'alynt-account-gateway' ) );
-		}
-
-		if ( ! preg_match( '/[A-Z]/', $password ) || ! preg_match( '/[a-z]/', $password ) || ! preg_match( '/[0-9]/', $password ) || ! preg_match( '/[^A-Za-z0-9]/', $password ) ) {
-			return new WP_Error( 'alynt_ag_password_complexity', __( 'Password must include uppercase, lowercase, number, and symbol characters.', 'alynt-account-gateway' ) );
-		}
-
-		return true;
+		return $this->collaborators['credentials']->run_validate_password( $password );
 	}
 }

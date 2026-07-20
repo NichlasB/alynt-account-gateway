@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.19 - 2026-07-20
+
+### Changed
+
+- Extracted registration request, protection, activity, persistence, confirmation, completion, delivery, and credential concerns behind the existing registration service facade.
+- Extracted authentication request, activity, public-message, password-reset, and role-aware redirect concerns behind the existing authentication service facade.
+- Preserved established public methods, constructor compatibility, subclass overrides, request behavior, account creation, password recovery, and redirects.
+
+### Tests
+
+- Added public-API, collaborator-delegation, override-path, loader-order, and structural line-limit regression coverage.
+
 ## 1.1.18 - 2026-07-20
 
 ### Changed
