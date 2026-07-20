@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 7 WooCommerce/email service decomposition and v1.1.20 candidate acceptance are complete; release approval is pending.
+- Current phase: Phase 2 Increment 7 WooCommerce/email service decomposition, v1.1.20 release, and public-updater verification are complete.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.19 is the current public baseline.
+- Plugin status: v1.1.20 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Publish and updater-verify v1.1.20 only after explicit approval, then decompose the settings page last. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Decompose the settings page as the final Phase 2 structural increment. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -192,8 +192,7 @@
 
 ### Remaining Phase 2 Sequence
 
-1. Complete and release Increment 7 after full audit, package acceptance, Plugin Tester verification, and explicit approval.
-2. Decompose the settings page last, using collaborators established by earlier increments.
+1. Decompose the settings page last, using collaborators established by earlier increments.
 
 ### Increment 6 - Registration And Authentication Service Collaborators
 
@@ -245,7 +244,7 @@ Implementation evidence:
 - [x] Pass full build, POT, PHPCS, PHP syntax, JavaScript syntax, audit, PHPUnit, and `git diff --check` gates.
 - [x] Inspect the exact v1.1.20 release-style package.
 - [x] Install the exact candidate on LocalWP Plugin Tester and verify WooCommerce dashboard and email-template behavior without changing settings or activation state.
-- [ ] Publish v1.1.20 only after separate explicit release approval.
+- [x] Publish v1.1.20 only after separate explicit release approval.
 
 Implementation evidence:
 
@@ -259,6 +258,12 @@ Implementation evidence:
 - Authenticated browser acceptance passed for the WooCommerce settings tab; dashboard overview; Orders, Downloads, Addresses, Payment Methods, and Account Details endpoints; native account-form fields; email template editors; registration-confirmation preview; and local test-send handling. Desktop routes and the `390px` Payment Methods and email-preview states had no horizontal overflow, browser errors, or failed dynamic requests.
 - Cleanup removed the disposable administrator, authenticated browser session, preview tab, and in-place rollback directory. The complete v1.1.19 rollback ZIP remains available locally, no disposable user remains, and the homepage plus branded login return HTTP `200`.
 - Novamira MCP remained unavailable after successful OAuth authorization, so acceptance used the normal LocalWP workflow, LocalWP-compatible WP-CLI runtime, MariaDB client, and Playwright MCP. No staging or production site was touched.
+- Release approval was granted and [GitHub v1.1.20](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.20) was published from merge commit `5f32c1b`; Build Release run `29753307309` completed successfully.
+- The public release ZIP contains `84` runtime files, contains no development files, and has SHA-256 `414A4DDDF90A074F043EB1278A7174B1306DE37B923BF1E2FF5AB14AD6D11635`.
+- The public ZIP has the same file set and normalized content as the accepted candidate. Only `readme.txt` differs at the byte level because of expected checkout line-ending normalization.
+- Alynt Plugin Updater detected the public `1.1.19 -> 1.1.20` update on LocalWP Plugin Tester, and WordPress installed the GitHub release asset through the native Plugins screen.
+- All `84` updater-installed files byte-match the public ZIP. Account Gateway remains active at v1.1.20, the settings, activation, and database-version fingerprints remain unchanged, and a fresh updater check reports v1.1.20 up to date with zero Account Gateway updates remaining.
+- Post-update acceptance loaded the Emails settings tab and Payment Methods dashboard endpoint without browser errors or failed dynamic requests. The homepage and branded login return HTTP `200`; the disposable release administrator, authenticated browser session, duplicate rollback directory, and upgrade artifacts were removed.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 

@@ -703,8 +703,8 @@ lost-password return HTTP 200. Increment 6 is closed.
 ### Increment 7: WooCommerce And Email Services
 
 Status: implementation, collaboration-contract coverage, full source gates,
-exact-package inspection, and LocalWP Plugin Tester acceptance complete;
-release approval pending.
+exact-package inspection, LocalWP Plugin Tester acceptance, v1.1.20 release,
+and public-updater verification complete.
 
 The WooCommerce integration contains 736 lines and exposes 22 public methods.
 It combines plugin detection and takeover state with dashboard navigation,
@@ -767,3 +767,20 @@ entries were found. Cleanup removed the disposable administrator, browser
 session, preview tab, and in-place rollback directory; the complete v1.1.19
 rollback ZIP remains local. Novamira MCP was unavailable, so the accepted
 normal LocalWP workflow was used. No staging or production site was touched.
+
+Release approval was granted and GitHub v1.1.20 was published from merge
+commit `5f32c1b`. Build Release run `29753307309` passed. The public ZIP
+contains 84 runtime files, no development files, and has SHA-256
+`414A4DDDF90A074F043EB1278A7174B1306DE37B923BF1E2FF5AB14AD6D11635`.
+Its file set and normalized content match the accepted candidate; only
+`readme.txt` differs byte-for-byte because of expected line-ending
+normalization.
+
+Alynt Plugin Updater detected the public 1.1.19 to 1.1.20 update on LocalWP
+Plugin Tester, and WordPress installed the GitHub asset through the native
+Plugins screen. All 84 installed files byte-match the public ZIP. The plugin
+remains active, settings and database fingerprints are unchanged, and a fresh
+updater check reports v1.1.20 up to date. Post-update Emails-tab, Payment
+Methods, homepage, and branded-login smoke checks passed. Cleanup removed the
+disposable release administrator, browser session, duplicate rollback
+directory, and upgrade artifacts.
