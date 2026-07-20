@@ -23,6 +23,24 @@ if ( ! function_exists( 'esc_attr' ) ) {
 	}
 }
 
+if ( ! function_exists( 'esc_textarea' ) ) {
+	function esc_textarea( $value ) {
+		return htmlspecialchars( (string) $value, ENT_QUOTES, 'UTF-8' );
+	}
+}
+
+if ( ! function_exists( 'selected' ) ) {
+	function selected( $selected, $current = true, $display = true ) {
+		$result = (string) $selected === (string) $current ? ' selected="selected"' : '';
+
+		if ( $display ) {
+			echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static test stub output.
+		}
+
+		return $result;
+	}
+}
+
 if ( ! function_exists( 'esc_html_e' ) ) {
 	function esc_html_e( $text, $domain = 'default' ) {
 		echo esc_html( $text );
