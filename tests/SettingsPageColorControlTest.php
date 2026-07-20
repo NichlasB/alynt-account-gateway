@@ -22,11 +22,11 @@ class SettingsPageColorControlTest extends TestCase {
 	 */
 	private function render_color_field( $value ) {
 		$settings_page = new ALYNT_AG_Settings_Page();
-		$reflection    = new ReflectionMethod( $settings_page, 'render_field' );
 
 		ob_start();
-		$reflection->invokeArgs(
+		alynt_ag_test_invoke_settings_page_method(
 			$settings_page,
+			'render_field',
 			array(
 				'primary_color',
 				array(
@@ -68,8 +68,11 @@ class SettingsPageColorControlTest extends TestCase {
 
 	public function test_primary_color_help_explains_picker_and_hex_entry() {
 		$settings_page = new ALYNT_AG_Settings_Page();
-		$reflection    = new ReflectionMethod( $settings_page, 'settings_field_help_text' );
-		$help          = $reflection->invokeArgs( $settings_page, array( 'primary_color' ) );
+		$help          = alynt_ag_test_invoke_settings_page_method(
+			$settings_page,
+			'settings_field_help_text',
+			array( 'primary_color' )
+		);
 
 		$this->assertStringContainsString( 'color swatch to open the picker', $help );
 		$this->assertStringContainsString( 'six-digit hex value such as #3B5249', $help );

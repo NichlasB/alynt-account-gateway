@@ -22,14 +22,13 @@ class SettingsPageDashboardNavigationTest extends TestCase {
 	 */
 	private function render_field( $key, $field, $value ) {
 		$settings_page = new ALYNT_AG_Settings_Page();
-		$method        = new ReflectionMethod( $settings_page, 'render_field' );
-
-		if ( PHP_VERSION_ID < 80100 ) {
-			$method->setAccessible( true );
-		}
 
 		ob_start();
-		$method->invoke( $settings_page, $key, $field, $value );
+		alynt_ag_test_invoke_settings_page_method(
+			$settings_page,
+			'render_field',
+			array( $key, $field, $value )
+		);
 
 		return ob_get_clean();
 	}

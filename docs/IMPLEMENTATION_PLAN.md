@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 7 WooCommerce/email service decomposition, v1.1.20 release, and public-updater verification are complete.
+- Current phase: Phase 2 Increment 8 settings-page decomposition and LocalWP acceptance are complete; v1.1.21 release publication is approved.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.20 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Decompose the settings page as the final Phase 2 structural increment. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Publish and updater-verify the approved v1.1.21 release. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -264,6 +264,44 @@ Implementation evidence:
 - Alynt Plugin Updater detected the public `1.1.19 -> 1.1.20` update on LocalWP Plugin Tester, and WordPress installed the GitHub release asset through the native Plugins screen.
 - All `84` updater-installed files byte-match the public ZIP. Account Gateway remains active at v1.1.20, the settings, activation, and database-version fingerprints remain unchanged, and a fresh updater check reports v1.1.20 up to date with zero Account Gateway updates remaining.
 - Post-update acceptance loaded the Emails settings tab and Payment Methods dashboard endpoint without browser errors or failed dynamic requests. The homepage and branded login return HTTP `200`; the disposable release administrator, authenticated browser session, duplicate rollback directory, and upgrade artifacts were removed.
+
+### Increment 8 - Settings Page Collaborators
+
+- [x] Start from clean released v1.1.20 and retire the completed v1.1.18 settings-schema worktree.
+- [x] Reconfirm `admin/class-settings-page.php` at `5,492` lines, `136` methods, and no mutable instance state.
+- [x] Preserve `ALYNT_AG_Settings_Page` as the public hook and callback facade with its established public methods and no-argument construction.
+- [x] Add a focused component registry that routes internal settings-page operations without changing public hook callbacks.
+- [x] Extract the page shell, fields, guidance/readiness, security status and review surfaces, email/webhook tools, diagnostics, settings transfer, gateway preview, and action handlers into focused collaborators.
+- [x] Keep every extracted production PHP file at or below the `300`-line structural threshold and reduce the settings-page facade to at most `300` lines.
+- [x] Preserve rendered markup, copy, translation strings, nonce names, action names, redirects, capability checks, diagnostics events, provider behavior, and hook priorities.
+- [x] Update focused tests to target collaborators through the facade's established behavior and add structural/collaboration guardrails.
+- [x] Pass full build, stable POT generation, PHPCS, PHP and JavaScript syntax, dependency audits, PHPUnit, and `git diff --check`.
+- [x] Inspect the exact v1.1.21 release-style package.
+- [x] Install the exact candidate on LocalWP Plugin Tester and verify all settings tabs, security operations, email/webhook tools, diagnostics, preview, import/export, and responsive behavior without changing persistent settings or activation state.
+- [ ] Publish v1.1.21 only after separate explicit release approval.
+
+Implementation constraints:
+
+- Use composition rather than traits.
+- Keep registration and WordPress-facing callbacks on the existing facade.
+- Use stateless collaborators behind one internal method registry so unchanged method bodies can continue calling related operations across responsibility boundaries.
+- No staging or production site changes are part of this increment.
+
+Implementation evidence:
+
+- The original `5,492`-line class and all `136` methods were inventoried before extraction. AST comparison against released v1.1.20 confirms all `136` signatures and method bodies remain present with no missing, extra, or changed operations.
+- `ALYNT_AG_Settings_Page` remains the WordPress-facing facade with the exact established `17` public methods and no required constructor arguments.
+- The facade is now `238` lines. Thirty focused behavior collaborators, the shared component base, and the registry are all below `300` lines; the largest file is `277` lines.
+- Existing tests now use a test-only access adapter for internal component operations. New collaboration tests lock the public facade, `133` extracted method owners, production loader order, and structural line limits.
+- The suite increased from `420` tests / `2,911` assertions to `425` tests / `3,130` assertions.
+- The v1.1.21 source passes the frontend/admin build, stable `1,104`-string POT generation, full PHPCS, all-file PHP and JavaScript syntax checks, npm audit with zero vulnerabilities, Composer audit with no advisories, PHPUnit, and `git diff --check`.
+- The inspected release-style ZIP contains `116` runtime files, no development files or backslash archive entries, and has SHA-256 `C136F92D4D67C5A71E7E81946DCF356B7C99337065FFFF09F87B066F883EF3C6`.
+- LocalWP Plugin Tester installed that exact candidate over active v1.1.20. All `116` installed files byte-match the inspected package, Account Gateway remains active at v1.1.21, and the established `active_plugins`, `alynt_ag_settings`, and `alynt_ag_db_version` fingerprints remain unchanged.
+- Authenticated browser acceptance covered all 12 settings tabs, the readiness and provider panels, five live Visual/Code email editors, email and webhook tools, diagnostics, compatibility warnings, import/export controls, and the Gateway Screen Preview. The preview rendered successfully while frontend output remained disabled.
+- The settings tabs wrap without overlap or tab-container overflow at `1100px` and the WordPress `782px` breakpoint. A scoped tablet rule now constrains wide admin tables and wraps long technical identifiers; the Advanced compatibility table and document both measure zero horizontal overflow at `782px`.
+- Browser acceptance produced no JavaScript errors or failed dynamic requests. The only warning was WordPress's development React refresh shim.
+- Cleanup removed the disposable administrator, its session metadata, its generated auto-draft, and both browser tabs. The v1.1.20 rollback ZIP remains available locally.
+- Novamira MCP remained unavailable in this session, so acceptance used the approved MariaDB and Playwright workflow on `plugin-tester local-only`. No staging or production site was touched.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 

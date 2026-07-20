@@ -36,9 +36,7 @@ class SettingsPageEmailToolsTest extends TestCase {
 	 * @return mixed
 	 */
 	private function invoke_helper( $settings_page, $method, $args = array() ) {
-		$reflection = new ReflectionMethod( $settings_page, $method );
-
-		return $reflection->invokeArgs( $settings_page, $args );
+		return alynt_ag_test_invoke_settings_page_method( $settings_page, $method, $args );
 	}
 
 	public function test_email_template_reference_documents_required_action_tokens() {

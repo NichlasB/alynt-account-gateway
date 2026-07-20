@@ -6,6 +6,18 @@
 	.alynt-ag-dashboard-link-row__grid {
 		grid-template-columns: 1fr 1fr;
 	}
+
+	.alynt-ag-admin .widefat {
+		width: 100%;
+		max-width: 100%;
+		table-layout: fixed;
+	}
+
+	.alynt-ag-admin .widefat th,
+	.alynt-ag-admin .widefat td {
+		overflow-wrap: anywhere;
+		word-break: break-word;
+	}
 }
 
 @media (max-width: 640px) {

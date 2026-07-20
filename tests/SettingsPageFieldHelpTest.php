@@ -43,9 +43,7 @@ class SettingsPageFieldHelpTest extends TestCase {
 	 * @return mixed
 	 */
 	private function invoke_helper( $settings_page, $method, $args = array() ) {
-		$reflection = new ReflectionMethod( $settings_page, $method );
-
-		return $reflection->invokeArgs( $settings_page, $args );
+		return alynt_ag_test_invoke_settings_page_method( $settings_page, $method, $args );
 	}
 
 	public function test_field_help_map_covers_high_impact_settings() {
