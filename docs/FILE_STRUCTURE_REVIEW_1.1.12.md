@@ -702,8 +702,9 @@ lost-password return HTTP 200. Increment 6 is closed.
 
 ### Increment 7: WooCommerce And Email Services
 
-Status: implementation, collaboration-contract coverage, and full source gates
-complete; exact v1.1.20 candidate preparation in progress.
+Status: implementation, collaboration-contract coverage, full source gates,
+exact-package inspection, and LocalWP Plugin Tester acceptance complete;
+release approval pending.
 
 The WooCommerce integration contains 736 lines and exposes 22 public methods.
 It combines plugin detection and takeover state with dashboard navigation,
@@ -748,3 +749,21 @@ loader order, and structural thresholds. The full suite passes at 420 tests and
 2,911 assertions. Build, stable 1,104-string POT generation, full PHPCS,
 all-file PHP and JavaScript syntax, npm audit with zero vulnerabilities,
 Composer audit with no advisories, and diff-integrity checks also pass.
+
+The exact release-style package contains 84 runtime files, no development
+files, and has SHA-256
+`9D3EF6DD59FB8D669DAD26A1536F838DC4F5EAB7DDC3F6D1FB330B2FC543FF47`.
+LocalWP Plugin Tester installed that exact candidate over active v1.1.19, and
+all 84 installed files byte-match the package. The plugin remains active at
+v1.1.20 with unchanged activation, settings, and database-version
+fingerprints.
+
+Authenticated browser acceptance covered the WooCommerce settings tab,
+dashboard overview, every customer account endpoint, native account-form
+fields, email editors, registration-confirmation preview, local test-send
+handling, and responsive Payment Methods and email-preview states. No plugin
+browser errors, failed dynamic requests, horizontal overflow, or new PHP log
+entries were found. Cleanup removed the disposable administrator, browser
+session, preview tab, and in-place rollback directory; the complete v1.1.19
+rollback ZIP remains local. Novamira MCP was unavailable, so the accepted
+normal LocalWP workflow was used. No staging or production site was touched.

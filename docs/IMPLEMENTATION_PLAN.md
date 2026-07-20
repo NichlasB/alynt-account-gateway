@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 7 WooCommerce/email service decomposition is in progress from the released v1.1.19 baseline.
+- Current phase: Phase 2 Increment 7 WooCommerce/email service decomposition and v1.1.20 candidate acceptance are complete; release approval is pending.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.19 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Complete Phase 2 Increment 7 behind the established WooCommerce and email public contracts, then decompose the settings page last. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Publish and updater-verify v1.1.20 only after explicit approval, then decompose the settings page last. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -243,8 +243,8 @@ Implementation evidence:
 - [x] Add collaboration-contract tests for public APIs, optional constructor seams, collaborator delegation, override-sensitive paths, hook registration, loader order, and structural line limits.
 - [x] Keep each extracted collaborator at or below `300` lines and reduce both original service files substantially.
 - [x] Pass full build, POT, PHPCS, PHP syntax, JavaScript syntax, audit, PHPUnit, and `git diff --check` gates.
-- [ ] Inspect the exact v1.1.20 release-style package.
-- [ ] Install the exact candidate on LocalWP Plugin Tester and verify WooCommerce dashboard and email-template behavior without changing settings or activation state.
+- [x] Inspect the exact v1.1.20 release-style package.
+- [x] Install the exact candidate on LocalWP Plugin Tester and verify WooCommerce dashboard and email-template behavior without changing settings or activation state.
 - [ ] Publish v1.1.20 only after separate explicit release approval.
 
 Implementation evidence:
@@ -254,6 +254,11 @@ Implementation evidence:
 - Public facade APIs, no-argument construction, hook callbacks and priorities, stateful profile-email suppression, and override-sensitive calls remain guarded by focused tests.
 - The suite increased from `410` tests / `2,853` assertions to `420` tests / `2,911` assertions.
 - The v1.1.20 source passes the frontend/admin build, stable `1,104`-string POT generation, full PHPCS, all-file PHP and JavaScript syntax checks, npm audit with zero vulnerabilities, Composer audit with no advisories, PHPUnit, and `git diff --check`.
+- The inspected release-style ZIP contains `84` runtime files, no development files, and has SHA-256 `9D3EF6DD59FB8D669DAD26A1536F838DC4F5EAB7DDC3F6D1FB330B2FC543FF47`.
+- LocalWP Plugin Tester installed that exact candidate over active v1.1.19. All `84` installed files byte-match the candidate, Account Gateway remains active at v1.1.20, and the established `active_plugins`, `alynt_ag_settings`, and `alynt_ag_db_version` fingerprints remain unchanged.
+- Authenticated browser acceptance passed for the WooCommerce settings tab; dashboard overview; Orders, Downloads, Addresses, Payment Methods, and Account Details endpoints; native account-form fields; email template editors; registration-confirmation preview; and local test-send handling. Desktop routes and the `390px` Payment Methods and email-preview states had no horizontal overflow, browser errors, or failed dynamic requests.
+- Cleanup removed the disposable administrator, authenticated browser session, preview tab, and in-place rollback directory. The complete v1.1.19 rollback ZIP remains available locally, no disposable user remains, and the homepage plus branded login return HTTP `200`.
+- Novamira MCP remained unavailable after successful OAuth authorization, so acceptance used the normal LocalWP workflow, LocalWP-compatible WP-CLI runtime, MariaDB client, and Playwright MCP. No staging or production site was touched.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 
