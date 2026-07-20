@@ -7,6 +7,7 @@
 - Extracted the settings-page shell, fields, guidance, security surfaces, tools, previews, transfers, and actions behind the existing WordPress callback facade.
 - Reduced the settings-page facade from 5,492 to 238 lines while keeping every focused production collaborator below 300 lines.
 - Preserved public callbacks, hook priorities, rendered markup, copy, actions, nonces, redirects, provider behavior, and persistent settings.
+- Constrained wide admin tables at tablet widths and allowed long compatibility identifiers to wrap without causing page overflow.
 
 ### Tests
 

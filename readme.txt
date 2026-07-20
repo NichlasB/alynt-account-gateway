@@ -58,6 +58,7 @@ Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile
 * Extract the settings-page shell, fields, guidance, security surfaces, tools, previews, transfers, and actions behind the existing WordPress callback facade.
 * Reduce the settings-page facade from 5,492 to 238 lines while keeping every focused production collaborator below 300 lines.
 * Preserve public callbacks, hook priorities, rendered markup, copy, actions, nonces, redirects, provider behavior, and persistent settings.
+* Constrain wide admin tables at tablet widths and wrap long compatibility identifiers without page overflow.
 * Add public-API, method-ownership, loader-order, structural line-limit, and test-access regression coverage.
 
 = 1.1.20 =
