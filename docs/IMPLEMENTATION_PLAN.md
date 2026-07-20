@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompt `01` is complete; prompt `02` Phase 1 awaits explicit approval.
+- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` and `02` are complete; prompt `03` Phase 1 awaits explicit approval.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Run the approval-gated v1.1.21 post-refactor pre-release sequence beginning with prompt `02` Phase 1, then complete one consolidated end-to-end acceptance matrix. Findings that require code changes will target v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Run approval-gated `03-ERROR_HANDLING_REVIEW_PROMPT.md` Phase 1, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Findings that require code changes will target v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
@@ -24,7 +24,7 @@
 ### Ordered Pre-Release Sequence
 
 - [x] `01-CODE_CLEANUP_PROMPT.md`
-- [ ] `02-FILE_STRUCTURE_REVIEW_PROMPT.md`
+- [x] `02-FILE_STRUCTURE_REVIEW_PROMPT.md`
 - [ ] `03-ERROR_HANDLING_REVIEW_PROMPT.md`
 - [ ] `04-WP_BEST_PRACTICES_REVIEW_PROMPT.md`
 - [ ] `05-DATABASE_REVIEW_PROMPT.md`
@@ -58,6 +58,19 @@ Execution rules:
 - [x] Rebuilt the assets and confirmed the tracked distribution remained unchanged, demonstrating that the removed source path had no shipped behavior.
 - [x] Passed PHPCS, the focused `Squiz.PHP.NonExecutableCode` sniff, `209` PHP syntax checks, `14` JavaScript/MJS syntax checks, `425` PHPUnit tests with `3,130` assertions, npm high-severity audit, and Composer advisory audit.
 - [x] Recorded no manual-decision findings and no deferred prompt `01` cleanup items.
+
+### Prompt 02 - File Structure Review Evidence
+
+- [x] Completed read-only Phase 1 across the tracked PHP, JavaScript/MJS, and CSS source set, recorded a Complex assessment, and received explicit approval before Phase 2.
+- [x] Extracted compatibility registry and hook-inspection collaborators; registration lifecycle, protection, and credential facade traits; and frontend request-context, URL, access, and gateway-controller collaborators.
+- [x] Reduced the three initially oversized production files below their hard limits and finished with zero PHP files over 300 lines, zero source JavaScript files over 250 lines, and zero source CSS files over 500 lines.
+- [x] Decomposed priority JavaScript workflows for dashboard links, typography, rich-email dirty state, and password policy while retaining the existing module boundaries.
+- [x] Decomposed priority PHP hotspots for admin notices, core field rendering, registration request routing, privacy export, branded email HTML, and registration completion.
+- [x] Added focused settings notice/field coverage, frontend and compatibility collaboration coverage, email loader/renderer coverage, and missing WordPress test stubs.
+- [x] Reviewed the remaining mechanically long production methods and retained explicit exceptions for single-purpose schema/guidance catalogs, readable HTML templates, DDL, and compatibility-sensitive transactions rather than fragmenting cohesive code.
+- [x] Added `docs/FILE_STRUCTURE_REVIEW_1.1.21.md` with the Phase 1 inventory, Phase 2 item report, trade-offs, reviewed exceptions, commit checkpoints, and complete validation evidence.
+- [x] Final validation passed: `npm run build`, `npm run make-pot` with 1,104 strings, `npm run lint`, 222 tracked PHP syntax checks, 14 tracked JavaScript/MJS syntax checks, npm high-severity audit with zero vulnerabilities, Composer advisory audit with no advisories, full PHPUnit with 438 tests and 3,212 assertions, source ceilings, and `git diff --check`.
+- [x] Kept all site operations, publication, tagging, packaging, and deployment out of prompt `02`; the published v1.1.21 baseline remains immutable and any eventual corrective release will target v1.1.22.
 
 ### Consolidated End-To-End Acceptance
 
