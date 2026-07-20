@@ -58,3 +58,4 @@ require_once __DIR__ . '/support/stubs/authentication.php';
 require_once __DIR__ . '/support/stubs/sanitization.php';
 require_once __DIR__ . '/support/stubs/options-hooks.php';
 require_once __DIR__ . '/support/load-plugin.php';
+require_once __DIR__ . '/support/settings-page-test-access.php';

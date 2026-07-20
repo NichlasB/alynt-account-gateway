@@ -338,6 +338,31 @@ First-priority extractions:
 8. Decompose the settings page last, using the collaborators established by
    earlier increments.
 
+Increment 8 began from released v1.1.20 after the completed v1.1.18
+settings-schema worktree was retired. The current settings page remains 5,492
+lines with 136 methods and no mutable instance state. The approved execution
+keeps `ALYNT_AG_Settings_Page` as the public WordPress hook/callback facade and
+uses composition behind a focused internal method registry. Stateless
+collaborators will own the page shell, fields, guidance/readiness, security
+status and review surfaces, email/webhook tools, diagnostics, settings
+transfer, gateway preview, and action logic. Every production PHP file must
+finish at or below 300 lines without changing public callbacks, markup, copy,
+actions, nonces, redirects, provider behavior, or persistent settings.
+
+The extraction is implemented for v1.1.21. The facade is 238 lines and keeps
+the exact established 17 public methods. Thirty focused behavior
+collaborators, the shared component base, and the registry are all below 300
+lines; the largest is 277 lines. AST comparison against released v1.1.20
+confirms all 136 baseline signatures and method bodies remain present with no
+missing, extra, or changed operations.
+
+The test suite now passes at 424 tests and 3,121 assertions. New guardrails
+lock the facade API, 133 extracted method owners, production loader order, and
+line thresholds. Build, stable 1,104-string POT generation, PHPCS, all PHP and
+JavaScript syntax checks, npm and Composer security audits, and diff-integrity
+checks pass. Exact-package inspection and LocalWP Plugin Tester acceptance
+remain before separate v1.1.21 release approval.
+
 Each increment requires the full test suite, PHPCS, build, exact-package
 inspection, Plugin Tester acceptance, and a small maintenance release. Do not
 perform the entire sequence in one branch or release.
