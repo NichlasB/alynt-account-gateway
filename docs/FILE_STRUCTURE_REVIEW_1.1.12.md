@@ -491,3 +491,30 @@ and browser acceptance found no warnings or errors. No staging or production
 site was touched.
 
 Increment 4 may now begin with dashboard module renderer extraction.
+
+### Increment 4: Dashboard Renderer Collaborators
+
+Status: implementation complete; full candidate acceptance in progress.
+
+- Kept `ALYNT_AG_Frontend_Dashboard_Screen` as the stable public facade with
+  its established first three constructor arguments and two public render
+  methods.
+- Extracted dashboard actions and optional menus into a navigation renderer.
+- Extracted WooCommerce endpoint metadata and endpoint content rendering into
+  separate collaborators.
+- Extracted overview, recent-order, and download modules into a commerce
+  renderer.
+- Extracted address, account-detail, and payment-method modules into an
+  account renderer.
+- Preserved WooCommerce delegation, visibility checks, endpoint context,
+  markup classes, copy, and navigation behavior.
+- Reduced the dashboard facade from 983 to 208 lines. Every extracted
+  collaborator is 241 lines or fewer.
+- Added regression coverage for navigation order, dashboard module delegation,
+  exact endpoint context, and the 300-line structural threshold.
+
+The full quality gates pass. PHPUnit now reports 396 tests and 2,743
+assertions. PHPCS, project-wide PHP syntax, source JavaScript syntax,
+frontend/admin build, POT generation, npm audit, Composer audit, and
+`git diff --check` all pass. Package inspection and LocalWP Plugin Tester
+acceptance remain required before v1.1.17 release approval may be requested.

@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 3 privacy exporter/eraser extraction is complete, released, and updater-verified as v1.1.16.
+- Current phase: Phase 2 Increment 4 dashboard renderer extraction is implemented as a v1.1.17 maintenance candidate; package and Plugin Tester acceptance remain.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.16 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Begin Increment 4 by extracting dashboard module renderers behind the existing facade. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Complete v1.1.17 package and Plugin Tester dashboard acceptance, then request explicit release approval. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -110,9 +110,35 @@
 - Alynt Plugin Updater detected the public `1.1.15 -> 1.1.16` update on LocalWP Plugin Tester and WordPress installed the GitHub release asset through its native upgrader. All `51` installed files byte-match the public ZIP, Account Gateway remains active, and no update remains.
 - The activation, settings, and database-version fingerprints remained unchanged. The homepage and `/login/` return HTTP `200`, the branded login renders correctly, and browser acceptance found no warnings or errors.
 
+### Increment 4 - Dashboard Renderer Collaborators
+
+- [x] Lock the v1.1.16 baseline at `392` tests and `2,718` assertions.
+- [x] Keep `ALYNT_AG_Frontend_Dashboard_Screen` as the public dashboard facade with its established first three constructor arguments and two public rendering methods.
+- [x] Extract header actions, off-canvas navigation, footer navigation, and SVG icons into `ALYNT_AG_Dashboard_Navigation_Renderer`.
+- [x] Extract WooCommerce endpoint guidance, shortcuts, and affordances into `ALYNT_AG_Dashboard_Endpoint_Metadata`.
+- [x] Extract delegated WooCommerce endpoint output and fallback rendering into `ALYNT_AG_Dashboard_Endpoint_Renderer`.
+- [x] Extract dashboard overview, recent orders, and downloads into `ALYNT_AG_Dashboard_Commerce_Renderer`.
+- [x] Extract saved addresses, account details, and payment methods into `ALYNT_AG_Dashboard_Account_Renderer`.
+- [x] Preserve WooCommerce service delegation, visibility checks, endpoint context, markup classes, copy, and navigation behavior.
+- [x] Load all collaborators before the dashboard facade in production and test bootstraps.
+- [x] Add regression coverage for navigation call order, dashboard module delegation, exact endpoint context, and the `300`-line structural threshold.
+- [x] Reduce the dashboard facade from `983` to `208` lines; keep every extracted collaborator at or below `241` lines.
+- [x] Pass full build, POT, PHPCS, PHP syntax, JavaScript syntax, audit, PHPUnit, and `git diff --check` gates.
+- [ ] Inspect the exact v1.1.17 release-style package.
+- [ ] Install the exact candidate on LocalWP Plugin Tester and verify dashboard behavior.
+- [ ] Publish v1.1.17 only after separate explicit release approval.
+
+### Increment 4 Quality Evidence
+
+- Frontend/admin build and POT generation pass; the POT remains stable at `1,104` strings and reports project version `1.1.17`.
+- Full PHPCS, project-wide PHP syntax, and source JavaScript syntax checks pass.
+- PHPUnit passes with `396` tests and `2,743` assertions.
+- npm reports zero vulnerabilities and Composer reports no security advisories.
+- `git diff --check` passes.
+
 ### Remaining Phase 2 Sequence
 
-1. Extract dashboard module renderers behind the existing dashboard facade.
+1. Complete and release Increment 4 after package acceptance, Plugin Tester verification, and explicit approval.
 2. Split settings schema/defaults/sanitization.
 3. Split registration and authentication services with behavior-locking tests.
 4. Split WooCommerce and email services.
