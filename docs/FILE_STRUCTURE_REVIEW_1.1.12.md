@@ -699,3 +699,71 @@ unchanged. A fresh updater check reports v1.1.19 up to date. Final cleanup
 removed the authenticated browser session and helper, left no disposable
 candidate users or upgrade artifacts, and confirmed home, login, and
 lost-password return HTTP 200. Increment 6 is closed.
+
+### Increment 7: WooCommerce And Email Services
+
+Status: implementation, collaboration-contract coverage, full source gates,
+exact-package inspection, and LocalWP Plugin Tester acceptance complete;
+release approval pending.
+
+The WooCommerce integration contains 736 lines and exposes 22 public methods.
+It combines plugin detection and takeover state with dashboard navigation,
+endpoint routing and native form handling, endpoint rendering, customer-data
+normalization, and account URL generation. The email template service contains
+733 lines and exposes 18 public methods. It combines template and token
+metadata, HTML and plain-text rendering, delivery, WordPress core email
+filters, and mutable profile-email suppression state.
+
+Both existing classes will remain the public facades. Their established public
+methods, hook callbacks, and default construction behavior will be preserved.
+New optional collaborator injection seams may be used by focused tests, while
+ordinary no-argument construction remains unchanged. Override-sensitive
+collaborator calls will continue through the public facade.
+
+The planned WooCommerce boundaries are:
+
+- account navigation, visibility, icons, and URLs;
+- endpoint routing and native account-form processing;
+- endpoint rendering; and
+- customer account, order, download, payment, and address data.
+
+The planned email boundaries are:
+
+- template and token metadata;
+- HTML and plain-text rendering;
+- email sending; and
+- WordPress core email filters and profile-email suppression state.
+
+Every extracted collaborator must remain at or below 300 lines. Tests must lock
+the public APIs, optional constructor seams, delegation, hook registration,
+override-sensitive paths, loader order, and structural thresholds. Full build,
+POT, PHPCS, PHP and JavaScript syntax, dependency audit, PHPUnit, package
+inspection, and LocalWP Plugin Tester acceptance must pass before v1.1.20 is
+presented for separate release approval.
+
+The completed extraction uses four WooCommerce collaborators and four email
+collaborators behind the two public facades. Both facades and every collaborator
+remain at or below 300 lines. New tests lock exact public APIs, optional
+constructor injection, delegation, subclass overrides, hook registration,
+loader order, and structural thresholds. The full suite passes at 420 tests and
+2,911 assertions. Build, stable 1,104-string POT generation, full PHPCS,
+all-file PHP and JavaScript syntax, npm audit with zero vulnerabilities,
+Composer audit with no advisories, and diff-integrity checks also pass.
+
+The exact release-style package contains 84 runtime files, no development
+files, and has SHA-256
+`9D3EF6DD59FB8D669DAD26A1536F838DC4F5EAB7DDC3F6D1FB330B2FC543FF47`.
+LocalWP Plugin Tester installed that exact candidate over active v1.1.19, and
+all 84 installed files byte-match the package. The plugin remains active at
+v1.1.20 with unchanged activation, settings, and database-version
+fingerprints.
+
+Authenticated browser acceptance covered the WooCommerce settings tab,
+dashboard overview, every customer account endpoint, native account-form
+fields, email editors, registration-confirmation preview, local test-send
+handling, and responsive Payment Methods and email-preview states. No plugin
+browser errors, failed dynamic requests, horizontal overflow, or new PHP log
+entries were found. Cleanup removed the disposable administrator, browser
+session, preview tab, and in-place rollback directory; the complete v1.1.19
+rollback ZIP remains local. Novamira MCP was unavailable, so the accepted
+normal LocalWP workflow was used. No staging or production site was touched.

@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Alynt Account Gateway 1.1.19\n"
+"Project-Id-Version: Alynt Account Gateway 1.1.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 11:42+0000\n"
+"POT-Creation-Date: 2026-07-20 13:02+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -76,7 +76,7 @@ msgstr ""
 msgid "Account Created Webhook URL"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:51
+#: includes/services/class-email-tokens.php:27
 msgid "Account Created Welcome"
 msgstr ""
 
@@ -129,8 +129,8 @@ msgstr ""
 #: includes/services/class-dashboard-commerce-renderer.php:66
 #: includes/services/class-dashboard-endpoint-metadata.php:58
 #: includes/services/class-dashboard-service.php:32
-#: includes/services/class-woocommerce-integration.php:29
-#: includes/services/class-woocommerce-integration.php:85
+#: includes/services/class-woocommerce-navigation.php:29
+#: includes/services/class-woocommerce-navigation.php:85
 msgid "Account Details"
 msgstr ""
 
@@ -251,7 +251,7 @@ msgid "Add payment method"
 msgstr ""
 
 #: includes/services/class-dashboard-endpoint-metadata.php:66
-#: includes/services/class-woocommerce-integration.php:31
+#: includes/services/class-woocommerce-navigation.php:31
 msgid "Add Payment Method"
 msgstr ""
 
@@ -271,8 +271,8 @@ msgstr ""
 msgid "Address"
 msgstr ""
 
-#: includes/services/class-woocommerce-integration.php:28
-#: includes/services/class-woocommerce-integration.php:83
+#: includes/services/class-woocommerce-navigation.php:28
+#: includes/services/class-woocommerce-navigation.php:83
 msgid "Addresses"
 msgstr ""
 
@@ -714,7 +714,7 @@ msgstr ""
 msgid "Configure both Terms and Privacy relative URL paths before public registration."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:553
+#: includes/services/class-email-tokens.php:192
 msgid "Confirm Account"
 msgstr ""
 
@@ -722,7 +722,7 @@ msgstr ""
 msgid "Confirm domain and key pairing, then watch for bot traffic if challenge failures rise."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:561
+#: includes/services/class-email-tokens.php:200
 msgid "Confirm Email Address"
 msgstr ""
 
@@ -778,11 +778,11 @@ msgstr ""
 msgid "Confirm your email address for {{site_name}}"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:115
+#: includes/services/class-email-tokens.php:91
 msgid "Confirmation expiry"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:108
+#: includes/services/class-email-tokens.php:84
 msgid "Confirmation link for account email address changes."
 msgstr ""
 
@@ -914,7 +914,7 @@ msgstr ""
 msgid "Current policy: %s."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:96
+#: includes/services/class-email-tokens.php:72
 msgid "Current WordPress site name."
 msgstr ""
 
@@ -947,15 +947,15 @@ msgstr ""
 msgid "Customer account shortcuts"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:92
+#: includes/services/class-email-tokens.php:68
 msgid "Customer email address for account and confirmation context."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:84
+#: includes/services/class-email-tokens.php:60
 msgid "Customer first name, with a friendly fallback when profile data is missing."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:88
+#: includes/services/class-email-tokens.php:64
 msgid "Customer last name when available."
 msgstr ""
 
@@ -963,15 +963,15 @@ msgstr ""
 msgid "Customer since"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:63
+#: includes/services/class-email-tokens.php:39
 msgid "Damon"
 msgstr ""
 
 #: admin/class-settings-page.php:1193
 #: admin/class-settings-page.php:4638
 #: includes/class-settings-definition.php:33
-#: includes/services/class-woocommerce-integration.php:24
-#: includes/services/class-woocommerce-integration.php:80
+#: includes/services/class-woocommerce-navigation.php:24
+#: includes/services/class-woocommerce-navigation.php:80
 msgid "Dashboard"
 msgstr ""
 
@@ -1003,7 +1003,7 @@ msgstr ""
 msgid "Dashboard settings control the branded account dashboard and custom links users can access after login."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:111
+#: includes/services/class-email-tokens.php:87
 msgid "Dashboard URL"
 msgstr ""
 
@@ -1036,12 +1036,12 @@ msgid "Default keeps uncertain Reoon statuses usable while logging them for revi
 msgstr ""
 
 #: includes/services/class-dashboard-endpoint-metadata.php:74
-#: includes/services/class-woocommerce-integration.php:33
+#: includes/services/class-woocommerce-navigation.php:33
 msgid "Default Payment Method"
 msgstr ""
 
 #: includes/services/class-dashboard-endpoint-metadata.php:70
-#: includes/services/class-woocommerce-integration.php:32
+#: includes/services/class-woocommerce-navigation.php:32
 msgid "Delete Payment Method"
 msgstr ""
 
@@ -1053,7 +1053,7 @@ msgstr ""
 msgid "Destination"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:112
+#: includes/services/class-email-tokens.php:88
 msgid "Destination for account dashboard or WooCommerce customer account access."
 msgstr ""
 
@@ -1144,8 +1144,8 @@ msgstr ""
 
 #: admin/class-settings-page.php:4472
 #: includes/services/class-dashboard-endpoint-metadata.php:50
-#: includes/services/class-woocommerce-integration.php:27
-#: includes/services/class-woocommerce-integration.php:82
+#: includes/services/class-woocommerce-navigation.php:27
+#: includes/services/class-woocommerce-navigation.php:82
 msgid "Downloads"
 msgstr ""
 
@@ -1186,7 +1186,7 @@ msgid "Email"
 msgstr ""
 
 #: includes/services/class-dashboard-account-renderer.php:148
-#: includes/services/class-email-template-service.php:91
+#: includes/services/class-email-tokens.php:67
 msgid "Email address"
 msgstr ""
 
@@ -1197,7 +1197,7 @@ msgstr ""
 msgid "Email Address"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:52
+#: includes/services/class-email-tokens.php:28
 msgid "Email Change Confirmation"
 msgstr ""
 
@@ -1257,11 +1257,11 @@ msgstr ""
 msgid "Email Verification Log"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:107
+#: includes/services/class-email-tokens.php:83
 msgid "Email-change confirmation URL"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:100
+#: includes/services/class-email-tokens.php:76
 msgid "Email-confirmation link used before the customer sets a password."
 msgstr ""
 
@@ -1449,7 +1449,7 @@ msgstr ""
 msgid "Filesystem"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:83
+#: includes/services/class-email-tokens.php:59
 msgid "First name"
 msgstr ""
 
@@ -1734,7 +1734,7 @@ msgstr ""
 msgid "Label"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:87
+#: includes/services/class-email-tokens.php:63
 msgid "Last name"
 msgstr ""
 
@@ -1830,8 +1830,8 @@ msgstr ""
 #: includes/services/class-dashboard-service.php:40
 #: includes/services/class-frontend-logout-screen.php:54
 #: includes/services/class-frontend-messages.php:30
-#: includes/services/class-woocommerce-integration.php:34
-#: includes/services/class-woocommerce-integration.php:86
+#: includes/services/class-woocommerce-navigation.php:34
+#: includes/services/class-woocommerce-navigation.php:86
 msgid "Log Out"
 msgstr ""
 
@@ -2192,7 +2192,7 @@ msgstr ""
 msgid "Number of days diagnostics events are retained before cleanup."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:116
+#: includes/services/class-email-tokens.php:92
 msgid "Number of hours before a pending registration confirmation expires."
 msgstr ""
 
@@ -2249,7 +2249,7 @@ msgid "Order #%s"
 msgstr ""
 
 #: includes/services/class-dashboard-endpoint-metadata.php:46
-#: includes/services/class-woocommerce-integration.php:26
+#: includes/services/class-woocommerce-navigation.php:26
 msgid "Order Details"
 msgstr ""
 
@@ -2258,8 +2258,8 @@ msgid "Order History"
 msgstr ""
 
 #: admin/class-settings-page.php:4471
-#: includes/services/class-woocommerce-integration.php:25
-#: includes/services/class-woocommerce-integration.php:81
+#: includes/services/class-woocommerce-navigation.php:25
+#: includes/services/class-woocommerce-navigation.php:81
 msgid "Orders"
 msgstr ""
 
@@ -2307,7 +2307,7 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:50
+#: includes/services/class-email-tokens.php:26
 msgid "Password Changed"
 msgstr ""
 
@@ -2349,7 +2349,7 @@ msgstr ""
 
 #: admin/class-settings-page.php:3206
 #: admin/class-settings-page.php:3293
-#: includes/services/class-email-template-service.php:49
+#: includes/services/class-email-tokens.php:25
 msgid "Password Reset"
 msgstr ""
 
@@ -2373,7 +2373,7 @@ msgstr ""
 msgid "Password Reset Issues"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:104
+#: includes/services/class-email-tokens.php:80
 msgid "Password reset link for the branded account gateway."
 msgstr ""
 
@@ -2401,7 +2401,7 @@ msgstr ""
 msgid "Password Reset Subject"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:103
+#: includes/services/class-email-tokens.php:79
 msgid "Password reset URL"
 msgstr ""
 
@@ -2413,7 +2413,7 @@ msgstr ""
 msgid "Passwords match"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:64
+#: includes/services/class-email-tokens.php:40
 msgid "Paulo"
 msgstr ""
 
@@ -2429,8 +2429,8 @@ msgstr ""
 msgid "Payment methods"
 msgstr ""
 
-#: includes/services/class-woocommerce-integration.php:30
-#: includes/services/class-woocommerce-integration.php:84
+#: includes/services/class-woocommerce-navigation.php:30
+#: includes/services/class-woocommerce-navigation.php:84
 msgid "Payment Methods"
 msgstr ""
 
@@ -2945,7 +2945,7 @@ msgstr ""
 msgid "Registration Attempts Per Window"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:48
+#: includes/services/class-email-tokens.php:24
 msgid "Registration Confirmation"
 msgstr ""
 
@@ -2961,7 +2961,7 @@ msgstr ""
 msgid "Registration Confirmation Subject"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:99
+#: includes/services/class-email-tokens.php:75
 msgid "Registration confirmation URL"
 msgstr ""
 
@@ -3195,7 +3195,7 @@ msgstr ""
 msgid "Reset Link Redirects"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:557
+#: includes/services/class-email-tokens.php:196
 #: includes/services/class-frontend-lostpassword-screen.php:77
 #: includes/services/class-frontend-lostpassword-screen.php:89
 #: includes/services/class-frontend-messages.php:28
@@ -3668,7 +3668,7 @@ msgstr ""
 msgid "Signing:"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:95
+#: includes/services/class-email-tokens.php:71
 msgid "Site name"
 msgstr ""
 
@@ -3823,11 +3823,11 @@ msgstr ""
 msgid "The email address or password is incorrect."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:179
+#: includes/services/class-email-sender.php:45
 msgid "The email could not be sent. Please try again."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:163
+#: includes/services/class-email-sender.php:29
 msgid "The email recipient is invalid."
 msgstr ""
 
@@ -3927,7 +3927,7 @@ msgstr ""
 msgid "Theme My Login may overlap with gateway screens"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:535
+#: includes/services/class-email-tokens.php:174
 #: includes/services/class-frontend-dashboard-screen.php:134
 msgid "there"
 msgstr ""
@@ -3975,7 +3975,7 @@ msgstr ""
 msgid "This email address cannot be used."
 msgstr ""
 
-#: includes/services/class-email-template-service.php:660
+#: includes/services/class-email-renderer.php:186
 msgid "This email was sent by %s."
 msgstr ""
 
@@ -4149,7 +4149,7 @@ msgstr ""
 msgid "Unavailable"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:131
+#: includes/services/class-email-renderer.php:45
 msgid "Unknown email template."
 msgstr ""
 
@@ -4373,7 +4373,7 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: includes/services/class-email-template-service.php:565
+#: includes/services/class-email-tokens.php:204
 msgid "View Account"
 msgstr ""
 

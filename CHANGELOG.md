@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.20 - 2026-07-20
+
+### Changed
+
+- Extracted WooCommerce navigation, routing, endpoint rendering, and customer-data concerns behind the existing integration facade.
+- Extracted email token, rendering, sending, and WordPress-filter concerns behind the existing template service facade.
+- Preserved established public methods, hook callbacks, default construction, subclass overrides, dashboard behavior, and branded email output.
+
+### Tests
+
+- Added public-API, collaborator-delegation, override-path, hook, loader-order, and structural line-limit regression coverage.
+
 ## 1.1.19 - 2026-07-20
 
 ### Changed
