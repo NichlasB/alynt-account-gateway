@@ -19,7 +19,7 @@ class ALYNT_AG_Privacy_Exporter {
 	 *
 	 * @param string $email_address Email address.
 	 * @param int    $page          Page number.
-	 * @return array<string,mixed>
+	 * @return array<string,mixed>|WP_Error
 	 */
 	public function export_personal_data( $email_address, $page = 1 ) {
 		unset( $page );
@@ -28,6 +28,11 @@ class ALYNT_AG_Privacy_Exporter {
 		$user    = function_exists( 'get_user_by' ) ? get_user_by( 'email', $email ) : false;
 		$user_id = $user && isset( $user->ID ) ? absint( $user->ID ) : 0;
 		$records = $this->personal_data_records( $email, $user_id );
+
+		if ( is_wp_error( $records ) ) {
+			return $records;
+		}
+
 		$data    = array_merge(
 			$this->export_consents( $records['consents'] ),
 			$this->export_pending_registrations( $records['pending'] ),
@@ -46,7 +51,7 @@ class ALYNT_AG_Privacy_Exporter {
 	 *
 	 * @param string $email   Sanitized email address.
 	 * @param int    $user_id WordPress user ID.
-	 * @return array{consents:array<int,object>,pending:array<int,object>,verification:array<int,object>,webhooks:array<int,object>}
+	 * @return array{consents:array<int,object>,pending:array<int,object>,verification:array<int,object>,webhooks:array<int,object>}|WP_Error
 	 */
 	private function personal_data_records( $email, $user_id ) {
 		global $wpdb;
@@ -89,6 +94,22 @@ class ALYNT_AG_Privacy_Exporter {
 			)
 		) : array();
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		if ( false === $consents || false === $pending || false === $verification || false === $webhooks ) {
+			if ( class_exists( 'ALYNT_AG_Diagnostics_Logger' ) ) {
+				ALYNT_AG_Diagnostics_Logger::log_event(
+					'error',
+					'database',
+					'privacy_export_query_failed',
+					__( 'A privacy export database query failed.', 'alynt-account-gateway' )
+				);
+			}
+
+			return new WP_Error(
+				'alynt_ag_privacy_export_failed',
+				__( 'Alynt Account Gateway could not retrieve all personal data. Please retry the export and check the site database if the problem continues.', 'alynt-account-gateway' )
+			);
+		}
 
 		return array(
 			'consents'     => (array) $consents,

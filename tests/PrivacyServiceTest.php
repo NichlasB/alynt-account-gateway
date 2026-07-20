@@ -210,6 +210,30 @@ class PrivacyServiceTest extends TestCase {
 		}
 	}
 
+	public function test_export_personal_data_returns_error_when_a_database_query_fails() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public function get_results( $query ) {
+				unset( $query );
+
+				return false;
+			}
+		};
+
+		try {
+			$service = new ALYNT_AG_Privacy_Service();
+			$result  = $service->export_personal_data( 'customer@example.test' );
+
+			$this->assertInstanceOf( WP_Error::class, $result );
+			$this->assertSame( 'alynt_ag_privacy_export_failed', $result->get_error_code() );
+			$this->assertStringContainsString( 'could not retrieve all personal data', $result->get_error_message() );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
+
 	public function test_erase_personal_data_deletes_plugin_records() {
 		$service = new ALYNT_AG_Privacy_Service();
 		$result  = $service->erase_personal_data( 'customer@example.test' );
@@ -224,5 +248,37 @@ class PrivacyServiceTest extends TestCase {
 		$this->assertContains( 'wp_alynt_ag_consent_records', $tables );
 		$this->assertContains( 'wp_alynt_ag_webhook_logs', $tables );
 		$this->assertContains( 'wp_alynt_ag_audit_logs', $tables );
+	}
+
+	public function test_erase_personal_data_reports_partial_database_failure() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			private $delete_count = 0;
+
+			public function delete( $table, $where, $where_format = array() ) {
+				++$this->delete_count;
+
+				if ( 2 === $this->delete_count ) {
+					return false;
+				}
+
+				return parent::delete( $table, $where, $where_format );
+			}
+		};
+
+		try {
+			$service = new ALYNT_AG_Privacy_Service();
+			$result  = $service->erase_personal_data( 'customer@example.test' );
+
+			$this->assertTrue( $result['done'] );
+			$this->assertTrue( $result['items_removed'] );
+			$this->assertTrue( $result['items_retained'] );
+			$this->assertCount( 1, $result['messages'] );
+			$this->assertStringContainsString( 'could not be erased', $result['messages'][0] );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
 	}
 }
