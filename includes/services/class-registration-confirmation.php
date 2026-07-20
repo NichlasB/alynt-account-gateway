@@ -112,6 +112,11 @@ class ALYNT_AG_Registration_Confirmation extends ALYNT_AG_Service_Collaborator {
 		}
 
 		$pending = $this->find_resendable_pending_by_email( $email );
+		if ( is_wp_error( $pending ) ) {
+			$this->log_registration_flow_result( $email, $pending->get_error_code() );
+			return $pending;
+		}
+
 		if ( ! $pending ) {
 			return true;
 		}

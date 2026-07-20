@@ -124,7 +124,7 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 	 * Find a pending registration by raw token.
 	 *
 	 * @param string $token Raw token.
-	 * @return object|null
+	 * @return object|null|WP_Error
 	 */
 	public function run_find_pending_by_token( $token ) {
 		global $wpdb;
@@ -134,7 +134,7 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 		$now        = current_time( 'mysql', true );
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned pending registration table.
-		return $wpdb->get_row(
+		$pending = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$tables['pending_registrations']} WHERE token_hash = %s AND status IN ('pending', 'email_confirmed') AND expires_at >= %s LIMIT 1",
 				$token_hash,
@@ -142,13 +142,19 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 			)
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		if ( null === $pending && ! empty( $wpdb->last_error ) ) {
+			return new WP_Error( 'pending_registration_lookup_failed', __( 'The confirmation link could not be checked. Please try again.', 'alynt-account-gateway' ) );
+		}
+
+		return $pending;
 	}
 
 	/**
 	 * Find the latest registration that can receive a fresh confirmation token.
 	 *
 	 * @param string $email Email address.
-	 * @return object|null
+	 * @return object|null|WP_Error
 	 */
 	public function run_find_resendable_pending_by_email( $email ) {
 		global $wpdb;
@@ -161,13 +167,19 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 		}
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned pending registration table.
-		return $wpdb->get_row(
+		$pending = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$tables['pending_registrations']} WHERE email = %s AND status IN ('pending', 'email_confirmed') ORDER BY id DESC LIMIT 1",
 				$email
 			)
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		if ( null === $pending && ! empty( $wpdb->last_error ) ) {
+			return new WP_Error( 'pending_registration_lookup_failed', __( 'The pending registration could not be checked. Please try again.', 'alynt-account-gateway' ) );
+		}
+
+		return $pending;
 	}
 
 	/**
@@ -180,6 +192,10 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 		global $wpdb;
 
 		$pending = $this->find_pending_by_token( $token );
+		if ( is_wp_error( $pending ) ) {
+			return $pending;
+		}
+
 		if ( ! $pending ) {
 			return new WP_Error( 'invalid_or_expired_token', __( 'This confirmation link is invalid or has expired.', 'alynt-account-gateway' ) );
 		}
@@ -192,7 +208,7 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 		$now    = current_time( 'mysql', true );
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned pending registration table.
-		$wpdb->update(
+		$updated = $wpdb->update(
 			$tables['pending_registrations'],
 			array(
 				'status'       => 'email_confirmed',
@@ -203,6 +219,10 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 			array( '%d' )
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		if ( false === $updated ) {
+			return new WP_Error( 'pending_confirmation_failed', __( 'The email confirmation could not be saved. Please try again.', 'alynt-account-gateway' ) );
+		}
 
 		$pending->status       = 'email_confirmed';
 		$pending->confirmed_at = $now;

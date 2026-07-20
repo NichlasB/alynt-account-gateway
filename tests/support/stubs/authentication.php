@@ -81,7 +81,19 @@ if ( ! function_exists( 'wp_update_user' ) ) {
 	function wp_update_user( $userdata ) {
 		$GLOBALS['alynt_ag_test_user_updates'][] = $userdata;
 
+		if ( isset( $GLOBALS['alynt_ag_test_user_update_result'] ) ) {
+			return $GLOBALS['alynt_ag_test_user_update_result'];
+		}
+
 		return isset( $userdata['ID'] ) ? (int) $userdata['ID'] : 0;
+	}
+}
+
+if ( ! function_exists( 'wp_delete_user' ) ) {
+	function wp_delete_user( $user_id ) {
+		$GLOBALS['alynt_ag_test_deleted_users'][] = (int) $user_id;
+
+		return isset( $GLOBALS['alynt_ag_test_user_delete_result'] ) ? $GLOBALS['alynt_ag_test_user_delete_result'] : true;
 	}
 }
 

@@ -153,4 +153,66 @@ class RegistrationCompletionTest extends RegistrationServiceTestCase {
 		$this->assertSame( 'password_mismatch', $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['status'] );
 		$this->assertSame( 1, $GLOBALS['alynt_ag_test_db_inserts'][0]['data']['blocked'] );
 	}
+
+	public function test_complete_pending_registration_rolls_back_user_when_profile_update_fails() {
+		$GLOBALS['alynt_ag_test_user_update_result'] = new WP_Error( 'profile_failed', 'Profile failed.' );
+
+		$service = new class() extends ALYNT_AG_Registration_Service {
+			public function confirm_pending_token( $token ) {
+				unset( $token );
+
+				return (object) array(
+					'id'         => 77,
+					'email'      => 'customer@example.test',
+					'first_name' => 'Damon',
+					'last_name'  => 'Paulo',
+					'status'     => 'email_confirmed',
+				);
+			}
+		};
+
+		$result = $service->complete_pending_registration( 'confirmed-token', 'StrongPassword1!', 'StrongPassword1!', ALYNT_AG_Settings_Schema::defaults() );
+
+		$this->assertInstanceOf( WP_Error::class, $result );
+		$this->assertSame( 'user_profile_update_failed', $result->get_error_code() );
+		$this->assertSame( array( 456 ), $GLOBALS['alynt_ag_test_deleted_users'] );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_db_updates'] );
+	}
+
+	public function test_complete_pending_registration_rolls_back_user_when_pending_update_fails() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public function update( $table, $data, $where, $format = array(), $where_format = array() ) {
+				unset( $table, $data, $where, $format, $where_format );
+
+				return false;
+			}
+		};
+
+		$service = new class() extends ALYNT_AG_Registration_Service {
+			public function confirm_pending_token( $token ) {
+				unset( $token );
+
+				return (object) array(
+					'id'         => 77,
+					'email'      => 'customer@example.test',
+					'first_name' => 'Damon',
+					'last_name'  => 'Paulo',
+					'status'     => 'email_confirmed',
+				);
+			}
+		};
+
+		try {
+			$result = $service->complete_pending_registration( 'confirmed-token', 'StrongPassword1!', 'StrongPassword1!', ALYNT_AG_Settings_Schema::defaults() );
+
+			$this->assertInstanceOf( WP_Error::class, $result );
+			$this->assertSame( 'pending_registration_update_failed', $result->get_error_code() );
+			$this->assertSame( array( 456 ), $GLOBALS['alynt_ag_test_deleted_users'] );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
 }

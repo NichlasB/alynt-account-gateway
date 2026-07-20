@@ -9,6 +9,7 @@ class ALYNT_AG_Test_WPDB {
 	public $prefix = 'wp_';
 	public $options = 'wp_options';
 	public $insert_id = 1;
+	public $last_error = '';
 
 	public function insert( $table, $data, $format = array() ) {
 		$GLOBALS['alynt_ag_test_db_inserts'][] = array(

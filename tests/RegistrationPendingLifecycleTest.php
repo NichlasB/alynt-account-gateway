@@ -96,6 +96,55 @@ class RegistrationPendingLifecycleTest extends RegistrationServiceTestCase {
 		$this->assertSame( array( 'id' => 42 ), $GLOBALS['alynt_ag_test_db_updates'][0]['where'] );
 	}
 
+	public function test_confirm_pending_token_reports_lookup_database_failure() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public $last_error = 'Database unavailable.';
+		};
+
+		try {
+			$service = new ALYNT_AG_Registration_Service();
+			$result  = $service->confirm_pending_token( 'valid-token' );
+
+			$this->assertInstanceOf( WP_Error::class, $result );
+			$this->assertSame( 'pending_registration_lookup_failed', $result->get_error_code() );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
+
+	public function test_confirm_pending_token_reports_update_database_failure() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public function update( $table, $data, $where, $format = array(), $where_format = array() ) {
+				unset( $table, $data, $where, $format, $where_format );
+
+				return false;
+			}
+		};
+		$GLOBALS['alynt_ag_test_db_rows'][] = (object) array(
+			'id'         => 42,
+			'email'      => 'customer@example.test',
+			'first_name' => 'Damon',
+			'last_name'  => 'Paulo',
+			'status'     => 'pending',
+		);
+
+		try {
+			$service = new ALYNT_AG_Registration_Service();
+			$result  = $service->confirm_pending_token( 'valid-token' );
+
+			$this->assertInstanceOf( WP_Error::class, $result );
+			$this->assertSame( 'pending_confirmation_failed', $result->get_error_code() );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
+
 	public function test_confirm_pending_token_does_not_update_already_confirmed_registration() {
 		$pending = (object) array(
 			'id'           => 43,
