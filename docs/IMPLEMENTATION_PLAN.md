@@ -2,12 +2,76 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 8 settings-page decomposition, release, and updater verification are complete at v1.1.21.
+- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release revalidation is planned and awaits explicit approval.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Close Phase 2 structural refactoring and select the next separately approved product or rollout task. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Run the approval-gated v1.1.21 post-refactor pre-release sequence, then complete one consolidated end-to-end acceptance matrix. Findings that require code changes will target v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## v1.1.21 Post-Refactor Pre-Release Revalidation
+
+### Purpose And Boundary
+
+- [x] Use released v1.1.21 as the immutable review baseline.
+- [x] Skip optional `00-PLUGIN_MODEL_ASSESSMENT_PROMPT.md` by explicit owner decision.
+- [x] Record the ordered pre-release and runtime-validation plan before execution.
+- [ ] Receive explicit approval before beginning prompt `01`.
+- [ ] Keep the review branch, LocalWP fixtures, and evidence isolated from staging and production sites.
+- [ ] Do not publish another release unless review findings require changes and a later release is separately approved.
+- [ ] Put any code, test, documentation, or packaging fixes into v1.1.22 rather than altering the published v1.1.21 tag or asset.
+
+### Ordered Pre-Release Sequence
+
+- [ ] `01-CODE_CLEANUP_PROMPT.md`
+- [ ] `02-FILE_STRUCTURE_REVIEW_PROMPT.md`
+- [ ] `03-ERROR_HANDLING_REVIEW_PROMPT.md`
+- [ ] `04-WP_BEST_PRACTICES_REVIEW_PROMPT.md`
+- [ ] `05-DATABASE_REVIEW_PROMPT.md`
+- [ ] `06-PERFORMANCE_REVIEW_PROMPT.md`
+- [ ] `07-EDGE_CASES_REVIEW_PROMPT.md`
+- [ ] `07A-ADVERSARIAL_TEST_SUITE_REVIEW_PROMPT.md`
+- [ ] `08-UNINSTALL_REVIEW_PROMPT.md`
+- [ ] `09-I18N_REVIEW_PROMPT.md`
+- [ ] `10-ACCESSIBILITY_REVIEW_PROMPT.md`
+- [ ] `11-CODE_QUALITY_REVIEW_PROMPT.md`
+- [ ] `12-DOCUMENTATION_REVIEW_PROMPT.md`
+- [ ] `13-SECURITY_AUDIT_PROMPT.md`
+
+Execution rules:
+
+- Follow the toolkit filename order exactly and keep security last.
+- Treat single-phase prompts as bounded review-and-fix passes.
+- For every two-phase prompt, complete Phase 1 read-only, present its findings and proposed changes, and obtain approval before Phase 2 unless the owner later authorizes uninterrupted execution.
+- Update the toolkit `PRE_RELEASE_CHECKLIST.md` only after each supported workflow completes successfully.
+- Keep unresolved or intentionally deferred findings visible with severity, rationale, owner decision, and recommended release target.
+- Run the full source gates after any modifying workflow and again after prompt `13`: build, stable POT generation, PHPCS, all PHP and JavaScript syntax checks, npm and Composer audits, PHPUnit, and `git diff --check`.
+
+### Consolidated End-To-End Acceptance
+
+- [ ] Run `wordpress-component-testing-troubleshooting-debugging-workflow.md` against the final reviewed codebase after prompt `13`.
+- [ ] Start on `plugin-tester local-only`; request separate site-specific approval before using any staging or production target.
+- [ ] Install an exact inspected package through a WordPress replacement or updater path while preserving activation and settings fingerprints.
+- [ ] Verify frontend-output disabled mode and Gateway Screen Preview without exposing public overrides.
+- [ ] Verify login, logout confirmation, lost-password, reset-password, invalid/expired-link, native-login redirect, emergency-bypass, and safe return-destination behavior.
+- [ ] Verify public registration disabled and enabled states, terms/privacy enforcement, protection-mode outcomes, pending-token expiry, confirmation, password policy, account creation, welcome delivery, and cleanup.
+- [ ] Verify administrator, shop-manager when WooCommerce is active, and customer login redirects; wp-admin access rules; and toolbar visibility.
+- [ ] Verify all 12 settings tabs and representative save, restore, preview, test-send, provider-check, webhook-test, import/export, diagnostics, and manual-review operations using disposable data.
+- [ ] Verify dashboard disabled and enabled states, custom links, menu panel, footer menu, responsive behavior, keyboard operation, and role visibility.
+- [ ] Verify WooCommerce takeover disabled and enabled states; dashboard, orders, downloads, addresses, payment methods, account details, logout, hidden navigation items, direct endpoints, checkout-login gating, and order-pay exclusions.
+- [ ] Verify branded registration-confirmation, password-reset, password-changed, welcome, and email-change templates in HTML and plain text, including responsive typography and constrained logo output.
+- [ ] Verify Turnstile and Reoon server-side failure handling locally; require separate approved staging credentials and hostname testing before claiming live-provider end-to-end coverage.
+- [ ] Verify account-created webhook payload, signature, response handling, retry/log metadata, debug-payload policy, and retention cleanup with a disposable receiver.
+- [ ] Verify WordPress personal-data export/erase behavior, retention jobs, diagnostics cleanup, deactivation behavior, and isolated uninstall cleanup without risking retained site data.
+- [ ] Test desktop, tablet, mobile, keyboard-only, visible-focus, reduced-motion, forced-colors where practical, RTL, long-content, empty, error, rate-limited, and repeated-submission states.
+- [ ] Confirm no plugin PHP errors, browser errors, failed plugin requests, leaked development files, unexpected database changes, leftover fixtures, sessions, users, jobs, transients, or upgrade artifacts.
+
+### Completion Decision
+
+- [ ] Classify every finding as fixed, accepted, deferred, or release-blocking.
+- [ ] If code changes were required, prepare and inspect a v1.1.22 candidate and request separate release approval.
+- [ ] If no code changes were required, record v1.1.21 as post-refactor revalidated without creating an unnecessary release.
+- [ ] Update this plan, the structural review, public documentation where required, and the toolkit checklist with final evidence.
 
 ## Phase 2 Structural Refactoring
 
