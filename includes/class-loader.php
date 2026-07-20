@@ -76,6 +76,8 @@ $alynt_ag_files = array(
 	'includes/services/class-frontend-state-screens.php',
 	'includes/services/class-frontend-gateway-shell.php',
 	'includes/services/class-frontend-document-renderer.php',
+	'includes/services/class-compatibility-registry.php',
+	'includes/services/class-compatibility-hook-inspector.php',
 	'includes/services/class-compatibility-warnings.php',
 	'includes/services/class-privacy-exporter.php',
 	'includes/services/class-privacy-eraser.php',

@@ -168,4 +168,62 @@ class CompatibilityWarningsTest extends TestCase {
 		$this->assertCount( 1, $warnings );
 		$this->assertSame( 'security_redirects', $warnings[0]['category'] );
 	}
+
+	public function test_facade_uses_injected_registry_and_hook_inspector() {
+		$registry = new class() extends ALYNT_AG_Compatibility_Registry {
+			public function known_plugins() {
+				return array();
+			}
+
+			public function hook_categories() {
+				return array( 'login_registration' => array( 'login_init' ) );
+			}
+
+			public function category_enabled( $category, $settings ) {
+				return true;
+			}
+
+			public function category_title( $category ) {
+				return 'Injected title';
+			}
+		};
+		$inspector = new class() extends ALYNT_AG_Compatibility_Hook_Inspector {
+			public function third_party_callbacks_for_hooks( $hooks ) {
+				return array( 'login_init:Injected_Callback::run' );
+			}
+		};
+		$service   = new ALYNT_AG_Compatibility_Warnings( $registry, $inspector );
+		$warnings  = $service->hook_warnings( array( 'frontend_enabled' => true ) );
+
+		$this->assertCount( 1, $warnings );
+		$this->assertSame( 'Injected title', $warnings[0]['title'] );
+		$this->assertStringContainsString( 'Injected_Callback::run', $warnings[0]['message'] );
+	}
+
+	public function test_compatibility_files_and_loader_order_stay_structurally_bounded() {
+		$files = array(
+			'class-compatibility-registry.php',
+			'class-compatibility-hook-inspector.php',
+			'class-compatibility-warnings.php',
+		);
+
+		foreach ( $files as $file ) {
+			$this->assertLessThanOrEqual(
+				300,
+				count( file( ALYNT_AG_PLUGIN_DIR . 'includes/services/' . $file ) ),
+				$file
+			);
+		}
+
+		$loader    = file_get_contents( ALYNT_AG_PLUGIN_DIR . 'includes/class-loader.php' );
+		$registry  = strpos( $loader, 'class-compatibility-registry.php' );
+		$inspector = strpos( $loader, 'class-compatibility-hook-inspector.php' );
+		$facade    = strpos( $loader, 'class-compatibility-warnings.php' );
+
+		$this->assertIsInt( $registry );
+		$this->assertIsInt( $inspector );
+		$this->assertIsInt( $facade );
+		$this->assertLessThan( $facade, $registry );
+		$this->assertLessThan( $facade, $inspector );
+	}
 }
