@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.1.18 - 2026-07-20
+
+### Changed
+
+- Extracted ordered settings definitions, default derivation, stored-value access, and type-specific sanitization into focused collaborators behind the existing settings schema facade.
+- Preserved the established public static API, schema order and metadata, default values, import/export behavior, and sanitized output.
+
+### Tests
+
+- Added exact schema/default fingerprints, collaborator delegation coverage, and structural line-limit checks.
+
 ## 1.1.17 - 2026-07-20
 
 ### Changed

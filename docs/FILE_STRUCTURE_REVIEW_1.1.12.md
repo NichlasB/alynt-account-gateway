@@ -559,3 +559,31 @@ branded login return HTTP 200, and no staging or production site was touched.
 
 The next Phase 2 increment may now split settings schema, defaults, and
 sanitization.
+
+### Increment 5: Settings Definition, Defaults, And Sanitization
+
+Status: implementation complete; full v1.1.18 candidate acceptance in
+progress.
+
+- Kept `ALYNT_AG_Settings_Schema` as the stable public static facade with all
+  twelve established public methods.
+- Split the ordered field catalog into core, security/email, and account/data
+  definition providers behind one definition aggregator.
+- Extracted default derivation, tab restoration, and stored-value merging into
+  a defaults collaborator.
+- Extracted schema filtering and type-specific value handling into a sanitizer
+  collaborator.
+- Preserved exact tab, schema, and defaults fingerprints from v1.1.17.
+- Preserved import/export behavior, field order and metadata, generated
+  bypass defaults, stored-value merging, and sanitized output.
+- Reduced the settings facade from 952 to 213 lines. Every extracted
+  collaborator is 236 lines or fewer.
+- Added regression coverage for the public facade contract, exact
+  fingerprints, provider aggregation, collaborator equivalence, and the
+  300-line structural threshold.
+
+The full quality gates pass. PHPUnit reports 401 tests and 2,773 assertions.
+PHPCS, project-wide PHP syntax, source JavaScript syntax, frontend/admin build,
+POT generation, npm audit, Composer audit, and `git diff --check` all pass.
+Package inspection and LocalWP Plugin Tester acceptance remain required before
+v1.1.18 release approval may be requested.
