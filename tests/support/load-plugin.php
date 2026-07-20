@@ -35,6 +35,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-auth-messages.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-auth-password-reset.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-auth-redirects.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-tokens.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-html-renderer.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-renderer.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-sender.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-wordpress-filters.php';

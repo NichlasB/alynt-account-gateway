@@ -22,14 +22,23 @@ class ALYNT_AG_Email_Renderer extends ALYNT_AG_Service_Collaborator {
 	private $tokens;
 
 	/**
+	 * Branded HTML renderer.
+	 *
+	 * @var ALYNT_AG_Email_Html_Renderer
+	 */
+	private $html_renderer;
+
+	/**
 	 * Constructor.
 	 *
-	 * @param object                $service Public service facade.
-	 * @param ALYNT_AG_Email_Tokens $tokens  Token provider.
+	 * @param object                       $service       Public service facade.
+	 * @param ALYNT_AG_Email_Tokens        $tokens        Token provider.
+	 * @param ALYNT_AG_Email_Html_Renderer $html_renderer Optional HTML renderer.
 	 */
-	public function __construct( $service, $tokens ) {
+	public function __construct( $service, $tokens, $html_renderer = null ) {
 		parent::__construct( $service );
-		$this->tokens = $tokens;
+		$this->tokens        = $tokens;
+		$this->html_renderer = $html_renderer ? $html_renderer : new ALYNT_AG_Email_Html_Renderer();
 	}
 
 	/**
@@ -57,7 +66,16 @@ class ALYNT_AG_Email_Renderer extends ALYNT_AG_Service_Collaborator {
 		return array(
 			'subject'   => $subject,
 			'preheader' => $preheader,
-			'html'      => $this->render_html( $template, $subject, $preheader, $body_html, $button, $settings ),
+			'html'      => $this->html_renderer->render(
+				array(
+					'template'  => $template,
+					'subject'   => $subject,
+					'preheader' => $preheader,
+					'body'      => $body_html,
+					'button'    => $button,
+					'settings'  => $settings,
+				)
+			),
 			'plain'     => $this->render_plain( $body, $button ),
 		);
 	}
@@ -97,147 +115,6 @@ class ALYNT_AG_Email_Renderer extends ALYNT_AG_Service_Collaborator {
 		}
 
 		return strtr( (string) $content, $replace );
-	}
-
-	/**
-	 * Render branded HTML.
-	 *
-	 * @param string              $template  Template key.
-	 * @param string              $subject   Subject.
-	 * @param string              $preheader Preheader.
-	 * @param string              $body      Body.
-	 * @param array<string,mixed> $button    Button metadata.
-	 * @param array<string,mixed> $settings  Settings.
-	 * @return string
-	 */
-	private function render_html( $template, $subject, $preheader, $body, $button, $settings ) {
-		$site_name    = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
-		$logo_url     = ! empty( $settings['brand_logo_id'] ) ? wp_get_attachment_image_url( (int) $settings['brand_logo_id'], 'full' ) : '';
-		$logo_width   = ! empty( $settings['brand_logo_max_width'] ) ? absint( $settings['brand_logo_max_width'] ) : 180;
-		$logo_width   = max( 80, min( 220, $logo_width ) );
-		$primary      = $settings['button_background_color'] ?? '#3B5249';
-		$button_text  = $settings['button_text_color'] ?? '#ffffff';
-		$text_color   = $settings['text_color'] ?? '#281408';
-		$background   = $settings['page_background_color'] ?? '#EAE4D6';
-		$surface      = $settings['surface_color'] ?? '#FFFFFF';
-		$body_html    = $this->style_email_body_html( wpautop( wp_kses_post( $body ) ) );
-		$button_url   = ! empty( $button['url'] ) ? esc_url( $button['url'] ) : '';
-		$button_label = ! empty( $button['label'] ) ? $button['label'] : '';
-
-		ob_start();
-		?>
-		<!doctype html>
-		<html>
-		<head>
-			<meta charset="utf-8">
-			<meta name="viewport" content="width=device-width, initial-scale=1">
-			<title><?php echo esc_html( $subject ); ?></title>
-			<style>
-				@media screen and (max-width: 599px) {
-					.agw-email-body,
-					.agw-email-body p,
-					.agw-email-body li {
-						font-size: 16px !important;
-					}
-				}
-
-				@media screen and (min-width: 600px) and (max-width: 959px) {
-					.agw-email-body,
-					.agw-email-body p,
-					.agw-email-body li {
-						font-size: 18px !important;
-					}
-				}
-			</style>
-		</head>
-		<body style="margin:0;padding:0;background:<?php echo esc_attr( $background ); ?>;color:<?php echo esc_attr( $text_color ); ?>;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
-			<div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent;"><?php echo esc_html( $preheader ); ?></div>
-			<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:<?php echo esc_attr( $background ); ?>;padding:32px 16px;">
-				<tr>
-					<td align="center">
-						<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;background:<?php echo esc_attr( $surface ); ?>;border-radius:8px;overflow:hidden;">
-							<tr>
-								<td style="padding:32px 32px 16px;text-align:center;">
-									<?php if ( $logo_url ) : ?>
-										<img src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( $site_name ); ?>" width="<?php echo esc_attr( (string) $logo_width ); ?>" style="display:block;margin:0 auto;width:<?php echo esc_attr( (string) $logo_width ); ?>px;max-width:100%;height:auto;border:0;outline:none;text-decoration:none;">
-									<?php else : ?>
-										<div style="font-family:Georgia,serif;font-size:24px;font-weight:600;"><?php echo esc_html( $site_name ); ?></div>
-									<?php endif; ?>
-								</td>
-							</tr>
-							<tr>
-								<td style="padding:16px 32px 8px;">
-									<h1 style="margin:0 0 16px;font-family:Georgia,serif;font-size:26px;line-height:1.25;color:<?php echo esc_attr( $text_color ); ?>;"><?php echo esc_html( $subject ); ?></h1>
-									<div class="agw-email-body" style="font-size:20px;line-height:1.6;color:<?php echo esc_attr( $text_color ); ?>;"><?php echo wp_kses_post( $body_html ); ?></div>
-									<?php if ( $button_url && $button_label ) : ?>
-										<p style="margin:28px 0;">
-											<a href="<?php echo esc_url( $button_url ); ?>" style="display:inline-block;padding:14px 22px;border-radius:6px;background:<?php echo esc_attr( $primary ); ?>;color:<?php echo esc_attr( $button_text ); ?>;font-weight:600;text-decoration:none;"><?php echo esc_html( $button_label ); ?></a>
-										</p>
-										<p style="font-size:13px;line-height:1.5;color:<?php echo esc_attr( $text_color ); ?>;opacity:.78;word-break:break-all;overflow-wrap:anywhere;"><?php echo esc_html( $button_url ); ?></p>
-									<?php endif; ?>
-								</td>
-							</tr>
-							<tr>
-								<td style="padding:16px 32px 32px;font-size:12px;line-height:1.5;color:<?php echo esc_attr( $text_color ); ?>;opacity:.72;">
-									<?php
-									echo esc_html(
-										sprintf(
-											/* translators: %s: site name. */
-											__( 'This email was sent by %s.', 'alynt-account-gateway' ),
-											$site_name
-										)
-									);
-									?>
-									<span style="display:none;"><?php echo esc_html( $template ); ?></span>
-								</td>
-							</tr>
-						</table>
-					</td>
-				</tr>
-			</table>
-		</body>
-		</html>
-		<?php
-		return (string) ob_get_clean();
-	}
-
-	/**
-	 * Add email-client-safe inline sizing to generated body copy.
-	 *
-	 * @param string $body_html Sanitized body HTML.
-	 * @return string
-	 */
-	private function style_email_body_html( $body_html ) {
-		return (string) preg_replace_callback(
-			'/<(p|li)(\s[^>]*)?>/i',
-			function ( $matches ) {
-				$tag       = strtolower( $matches[1] );
-				$attrs     = isset( $matches[2] ) ? (string) $matches[2] : '';
-				$copy_css  = 'font-size:20px;line-height:1.6;';
-				$copy_css .= 'p' === $tag ? 'margin:0 0 16px;' : 'margin:0 0 8px;';
-
-				if ( preg_match( '/\sstyle=(["\'])(.*?)\1/i', $attrs ) ) {
-					$attrs = (string) preg_replace_callback(
-						'/\sstyle=(["\'])(.*?)\1/i',
-						function ( $style_matches ) use ( $copy_css ) {
-							$style = rtrim( (string) $style_matches[2] );
-							if ( '' !== $style && ';' !== substr( $style, -1 ) ) {
-								$style .= ';';
-							}
-
-							return ' style=' . $style_matches[1] . $style . $copy_css . $style_matches[1];
-						},
-						$attrs,
-						1
-					);
-				} else {
-					$attrs .= ' style="' . $copy_css . '"';
-				}
-
-				return '<' . $tag . $attrs . '>';
-			},
-			$body_html
-		);
 	}
 
 	/**

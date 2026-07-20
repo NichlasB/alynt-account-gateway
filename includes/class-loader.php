@@ -46,6 +46,7 @@ $alynt_ag_files = array(
 	'includes/services/trait-registration-credentials-facade.php',
 	'includes/services/class-registration-service.php',
 	'includes/services/class-email-tokens.php',
+	'includes/services/class-email-html-renderer.php',
 	'includes/services/class-email-renderer.php',
 	'includes/services/class-email-sender.php',
 	'includes/services/class-email-wordpress-filters.php',
