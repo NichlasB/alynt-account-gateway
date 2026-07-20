@@ -562,8 +562,8 @@ sanitization.
 
 ### Increment 5: Settings Definition, Defaults, And Sanitization
 
-Status: implementation and v1.1.18 candidate acceptance complete; release
-approval pending.
+Status: implementation, v1.1.18 candidate acceptance, publication, and public
+updater verification complete.
 
 - Kept `ALYNT_AG_Settings_Schema` as the stable public static facade with all
   twelve established public methods.
@@ -604,3 +604,20 @@ security, email, and tools screens. Tabs wrapped without overlap at 1100px and
 The disposable administrator, browser session, and inspection helper were
 removed; public local routes return HTTP 200. No staging or production site
 was touched. The candidate is ready for explicit v1.1.18 release approval.
+
+Release approval was granted and GitHub v1.1.18 was published from merge
+commit `bd220e5`. Build Release run `29737008196` completed successfully. The
+public package contains the same 62 runtime files as the accepted candidate,
+has 56 syntax-clean PHP files, excludes development files, uses portable
+archive paths, and has SHA-256
+`847F2FC3E6A460C98BF66E6060316034F099291853F0614BD15FCE042D4F5679`.
+Only `readme.txt` differs from the candidate at the byte level due to expected
+checkout line-ending normalization; normalized content is identical.
+
+Alynt Plugin Updater detected the public v1.1.17 to v1.1.18 update on LocalWP
+Plugin Tester, and WordPress installed the GitHub asset through the native
+Plugins screen. All 62 installed files byte-match the public ZIP, activation
+and settings fingerprints remain unchanged, database version `0.1.6` is
+preserved, and a fresh updater check reports no remaining update. Post-update
+settings smoke acceptance passed and cleanup removed all disposable release
+artifacts. Increment 5 is closed.

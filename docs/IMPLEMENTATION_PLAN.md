@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 5 settings definition/defaults/sanitization extraction is accepted as a v1.1.18 maintenance candidate; release approval remains.
+- Current phase: Phase 2 Increment 5 settings definition/defaults/sanitization extraction is released as v1.1.18 and verified through the public updater path.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.17 is the current public baseline.
+- Plugin status: v1.1.18 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Request explicit v1.1.18 release approval, publish and verify the public updater path if approved, then begin the registration/authentication-services increment. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Begin the registration/authentication-services increment with behavior-locking tests and the same isolated quality, package, Plugin Tester, and release gates. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Phase 2 Structural Refactoring
 
@@ -165,7 +165,7 @@
 - [x] Pass full build, POT, PHPCS, PHP syntax, JavaScript syntax, audit, PHPUnit, and `git diff --check` gates.
 - [x] Inspect the exact v1.1.18 release-style package.
 - [x] Install the exact candidate on LocalWP Plugin Tester and verify settings behavior.
-- [ ] Publish v1.1.18 only after separate explicit release approval.
+- [x] Publish v1.1.18 only after separate explicit release approval.
 
 ### Increment 5 Quality Evidence
 
@@ -183,6 +183,12 @@
 - Settings tabs wrapped without overlap at `1100x800` and `782x900`. Browser acceptance found no errors or failed dynamic requests; only the pre-existing WordPress development-mode React DevTools shim warning appeared.
 - The disposable administrator, browser session, and read-only inspection helper were removed. The homepage, branded login, and lost-password routes return HTTP `200`.
 - Novamira MCP was unavailable in the current session, so acceptance used the LocalWP-compatible WP-CLI runtime and Playwright MCP. No staging or production site was touched.
+- Release approval was granted and [GitHub v1.1.18](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.18) was published from merge commit `bd220e5`; Build Release run `29737008196` completed successfully.
+- The public release ZIP contains `62` runtime files and `56` syntax-clean PHP files, contains no development files or backslash archive paths, and has SHA-256 `847F2FC3E6A460C98BF66E6060316034F099291853F0614BD15FCE042D4F5679`.
+- The public ZIP has the same file set and normalized content as the accepted candidate. Only `readme.txt` differs at the byte level because of expected checkout line-ending normalization.
+- Alynt Plugin Updater's fresh check detected the public `1.1.17 -> 1.1.18` update on LocalWP Plugin Tester, and WordPress installed the GitHub release asset through the native Plugins screen.
+- All `62` updater-installed files byte-match the public ZIP. Account Gateway remains active at v1.1.18, settings and activation fingerprints remain unchanged, the database version remains `0.1.6`, and a fresh updater check reports no remaining update.
+- Post-update settings smoke acceptance loaded all `12` tabs and Advanced / Tools without errors. The disposable release administrator, browser session, inspection helper, and empty WordPress upgrade placeholder were removed; the homepage, branded login, and lost-password routes return HTTP `200`.
 
 ### Remaining Phase 2 Sequence
 
