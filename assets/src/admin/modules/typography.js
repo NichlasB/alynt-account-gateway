@@ -49,7 +49,7 @@ export function alyntAgInitTypographyPresets() {
 	state.previewHeading = state.control.querySelector( '[data-alynt-ag-typography-heading]' );
 	state.previewBody    = state.control.querySelector( '[data-alynt-ag-typography-body]' );
 	state.status         = state.control.querySelector( '[data-alynt-ag-typography-status]' );
-	state.statusPrefix   = state.control.dataset.statusPrefix || 'Current pairing:';
+	state.statusPrefix   = state.control.dataset.statusPrefix || '';
 
 	const applyPreset        = () => alyntAgApplyTypographyPreset( state );
 	const markCustom         = () => {

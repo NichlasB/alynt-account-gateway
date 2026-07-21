@@ -176,7 +176,12 @@ class ALYNT_AG_Settings_Page_Security_Rate_Limits extends ALYNT_AG_Settings_Page
 				'count'   => $counts['registration']['locked'],
 				'message' => sprintf(
 					/* translators: %d: active bucket count. */
-					__( 'active lockouts from %d current registration buckets.', 'alynt-account-gateway' ),
+					_n(
+						'active lockouts from %d current registration bucket.',
+						'active lockouts from %d current registration buckets.',
+						$counts['registration']['active'],
+						'alynt-account-gateway'
+					),
 					$counts['registration']['active']
 				),
 			),
@@ -186,7 +191,12 @@ class ALYNT_AG_Settings_Page_Security_Rate_Limits extends ALYNT_AG_Settings_Page
 				'count'   => $counts['resend_confirmation']['locked'],
 				'message' => sprintf(
 					/* translators: %d: active bucket count. */
-					__( 'active lockouts from %d current resend buckets.', 'alynt-account-gateway' ),
+					_n(
+						'active lockouts from %d current resend bucket.',
+						'active lockouts from %d current resend buckets.',
+						$counts['resend_confirmation']['active'],
+						'alynt-account-gateway'
+					),
 					$counts['resend_confirmation']['active']
 				),
 			),
@@ -196,7 +206,12 @@ class ALYNT_AG_Settings_Page_Security_Rate_Limits extends ALYNT_AG_Settings_Page
 				'count'   => $counts['login']['locked'],
 				'message' => sprintf(
 					/* translators: %d: active bucket count. */
-					__( 'active lockouts from %d current login buckets.', 'alynt-account-gateway' ),
+					_n(
+						'active lockouts from %d current login bucket.',
+						'active lockouts from %d current login buckets.',
+						$counts['login']['active'],
+						'alynt-account-gateway'
+					),
 					$counts['login']['active']
 				),
 			),
@@ -206,7 +221,12 @@ class ALYNT_AG_Settings_Page_Security_Rate_Limits extends ALYNT_AG_Settings_Page
 				'count'   => $counts['lostpassword']['locked'],
 				'message' => sprintf(
 					/* translators: %d: active bucket count. */
-					__( 'active lockouts from %d current password-reset buckets.', 'alynt-account-gateway' ),
+					_n(
+						'active lockouts from %d current password-reset bucket.',
+						'active lockouts from %d current password-reset buckets.',
+						$counts['lostpassword']['active'],
+						'alynt-account-gateway'
+					),
 					$counts['lostpassword']['active']
 				),
 			),

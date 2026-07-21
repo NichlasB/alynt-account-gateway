@@ -111,6 +111,7 @@ class SettingsPageRateLimitHealthTest extends SettingsPageSecurityStatusTestCase
 		$this->assertSame( 'Login', $items[2]['label'] );
 		$this->assertSame( 1, $items[2]['count'] );
 		$this->assertSame( 'warning', $items[2]['status'] );
+		$this->assertSame( 'active lockouts from 1 current login bucket.', $items[2]['message'] );
 		$this->assertSame( 'Password Reset', $items[3]['label'] );
 		$this->assertSame( 0, $items[3]['count'] );
 		$this->assertSame( 'ready', $items[3]['status'] );

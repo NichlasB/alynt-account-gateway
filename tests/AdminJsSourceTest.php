@@ -111,6 +111,17 @@ class AdminJsSourceTest extends TestCase {
 		$this->assertStringContainsString( "state.bodyInput.addEventListener( 'input', markCustom )", $js );
 		$this->assertStringContainsString( "state.previewHeading.style.fontFamily = state.headingInput.value || 'inherit'", $js );
 		$this->assertStringContainsString( "state.previewBody.style.fontFamily    = state.bodyInput.value || 'inherit'", $js );
+		$this->assertStringContainsString( "state.control.dataset.statusPrefix || ''", $js );
+		$this->assertStringNotContainsString( "|| 'Current pairing:'", $js );
+	}
+
+	public function test_media_dialog_uses_php_localized_labels_without_english_fallbacks() {
+		$js = $this->get_admin_js();
+
+		$this->assertStringContainsString( "title: labels.selectImage || ''", $js );
+		$this->assertStringContainsString( "text: labels.useImage || ''", $js );
+		$this->assertStringNotContainsString( "labels.selectImage || 'Select Image'", $js );
+		$this->assertStringNotContainsString( "labels.useImage || 'Use Image'", $js );
 	}
 
 	public function test_admin_forms_confirm_consequential_actions_and_report_submission_progress() {

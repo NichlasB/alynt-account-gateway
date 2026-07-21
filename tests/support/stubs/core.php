@@ -11,6 +11,14 @@ if ( ! function_exists( '__' ) ) {
 	}
 }
 
+if ( ! function_exists( '_n' ) ) {
+	function _n( $single, $plural, $number, $domain = 'default' ) {
+		unset( $domain );
+
+		return 1 === (int) $number ? $single : $plural;
+	}
+}
+
 if ( ! function_exists( 'esc_html' ) ) {
 	function esc_html( $value ) {
 		return htmlspecialchars( (string) $value, ENT_QUOTES, 'UTF-8' );

@@ -10,11 +10,13 @@
 - Resolve development dependencies against the supported PHP 7.4 floor so clean CI installs do not select PHP 8.4-only packages.
 - Remove the unused `concurrently` development dependency and its vulnerable transitive `shell-quote` package.
 - Clear queued webhook events during uninstall and remove plugin-owned data from every separately activated multisite blog.
+- Preserve translator comments and plural/context entries in generated catalogs, remove English JavaScript fallbacks, and pluralize count-dependent account and admin messages.
 
 ### Tests
 
 - Add operation-lock, webhook scheduling, password-boundary, executable activation, and admin capability/nonce regression coverage.
 - Add repeatable reverse and fixed-random test-order runs and GitHub quality enforcement for PHP 7.4 and 8.3.
+- Add catalog metadata, localized JavaScript, and singular/plural regression coverage.
 
 ## 1.1.21 - 2026-07-20
 

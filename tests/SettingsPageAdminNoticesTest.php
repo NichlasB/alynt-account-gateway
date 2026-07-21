@@ -58,6 +58,12 @@ class SettingsPageAdminNoticesTest extends TestCase {
 		$this->assertStringContainsString( 'Unrecognized setting keys ignored: 3.', $output );
 	}
 
+	public function test_ignored_import_notice_uses_singular_key_copy() {
+		$output = $this->render_notice( 'settings_imported_with_ignored_keys', 1 );
+
+		$this->assertStringContainsString( 'Unrecognized setting key ignored: 1.', $output );
+	}
+
 	public function test_unknown_notice_renders_nothing() {
 		$this->assertSame( '', $this->render_notice( 'unknown' ) );
 	}

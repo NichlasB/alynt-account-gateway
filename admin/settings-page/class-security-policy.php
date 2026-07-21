@@ -194,11 +194,22 @@ class ALYNT_AG_Settings_Page_Security_Policy extends ALYNT_AG_Settings_Page_Comp
 		$count  = isset( $settings[ $count_key ] ) ? max( 1, absint( $settings[ $count_key ] ) ) : 1;
 		$window = isset( $settings[ $window_key ] ) ? max( 1, absint( $settings[ $window_key ] ) ) : 1;
 
-		return sprintf(
-			/* translators: 1: attempt count, 2: window length in minutes. */
-			__( 'Limit: %1$d attempts in a %2$d-minute window.', 'alynt-account-gateway' ),
-			$count,
+		$attempts = sprintf(
+			/* translators: %d: configured attempt count. */
+			_n( '%d attempt', '%d attempts', $count, 'alynt-account-gateway' ),
+			$count
+		);
+		$minutes = sprintf(
+			/* translators: %d: configured window length in minutes. */
+			_n( '%d minute', '%d minutes', $window, 'alynt-account-gateway' ),
 			$window
+		);
+
+		return sprintf(
+			/* translators: 1: localized attempt count, 2: localized rate-limit window. */
+			__( 'Limit: %1$s within %2$s.', 'alynt-account-gateway' ),
+			$attempts,
+			$minutes
 		);
 	}
 }

@@ -92,7 +92,9 @@ class FrontendJsSourceTest extends TestCase {
 		$this->assertStringContainsString( "item.setAttribute( 'aria-label', `\${ requirementState }: \${ requirementLabel }` );", $js );
 		$this->assertStringContainsString( "alyntAgLabels.requirementMet || ''", $js );
 		$this->assertStringContainsString( "alyntAgLabels.requirementNotMet || ''", $js );
-		$this->assertStringContainsString( "( alyntAgLabels.requirementsMet || '' )", $js );
+		$this->assertStringContainsString( "state.metRequirements === 1", $js );
+		$this->assertStringContainsString( "alyntAgLabels.requirementMetSummary || ''", $js );
+		$this->assertStringContainsString( "alyntAgLabels.requirementsMetSummary || ''", $js );
 		$this->assertStringNotContainsString( "'Met'", $js );
 		$this->assertStringNotContainsString( "'Not met'", $js );
 		$this->assertStringNotContainsString( 'requirements met.', $js );

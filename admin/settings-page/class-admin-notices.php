@@ -64,7 +64,12 @@ class ALYNT_AG_Settings_Page_Admin_Notices extends ALYNT_AG_Settings_Page_Compon
 		$ignored_count = isset( $_GET['alynt_ag_import_ignored'] ) ? absint( wp_unslash( $_GET['alynt_ag_import_ignored'] ) ) : 0;
 		$message       = sprintf(
 			/* translators: %d: ignored settings key count. */
-			__( 'Settings imported successfully. Unrecognized setting keys ignored: %d.', 'alynt-account-gateway' ),
+			_n(
+				'Settings imported successfully. Unrecognized setting key ignored: %d.',
+				'Settings imported successfully. Unrecognized setting keys ignored: %d.',
+				$ignored_count,
+				'alynt-account-gateway'
+			),
 			$ignored_count
 		);
 

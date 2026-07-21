@@ -101,10 +101,13 @@ function alyntAgUpdatePasswordMessage( strength, label, password, state ) {
 	if ( password.length === 0 ) {
 		label.textContent = messages.empty;
 	} else {
-		const requirementsSummary = ( alyntAgLabels.requirementsMet || '' )
+		const requirementsTemplate = state.metRequirements === 1 ?
+			alyntAgLabels.requirementMetSummary || '' :
+			alyntAgLabels.requirementsMetSummary || '';
+		const requirementsSummary  = requirementsTemplate
 			.replace( '%1$d', String( state.metRequirements ) )
 			.replace( '%2$d', String( state.totalRequirements ) );
-		label.textContent         = `${ label.textContent } ${ requirementsSummary }`.trim();
+		label.textContent          = `${ label.textContent } ${ requirementsSummary }`.trim();
 	}
 }
 

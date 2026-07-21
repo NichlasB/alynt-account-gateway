@@ -17,9 +17,9 @@ function alyntAgOpenMediaFrame( field ) {
 	const labels       = window.alyntAgAdmin || {};
 	const frame        = window.wp.media(
 		{
-			title: labels.selectImage || 'Select Image',
+			title: labels.selectImage || '',
 			button: {
-				text: labels.useImage || 'Use Image',
+				text: labels.useImage || '',
 			},
 			multiple: false,
 		}

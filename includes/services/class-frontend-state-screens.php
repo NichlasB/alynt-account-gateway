@@ -125,8 +125,15 @@ class ALYNT_AG_Frontend_State_Screens {
 				<li>
 					<?php
 					printf(
-						/* translators: %d: configured resend cooldown window in minutes. */
-						esc_html__( 'Wait %d minutes before requesting another confirmation email.', 'alynt-account-gateway' ),
+						esc_html(
+							/* translators: %d: configured resend cooldown window in minutes. */
+							_n(
+								'Wait %d minute before requesting another confirmation email.',
+								'Wait %d minutes before requesting another confirmation email.',
+								$window_mins,
+								'alynt-account-gateway'
+							)
+						),
 						(int) $window_mins
 					);
 					?>

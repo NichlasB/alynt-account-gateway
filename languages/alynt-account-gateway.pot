@@ -4,21 +4,50 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 1.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-20 22:03+0000\n"
+"POT-Creation-Date: 2026-07-21 08:19+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: scripts/make-pot.mjs\n"
 "X-Domain: alynt-account-gateway\n"
 
+#. translators: 1: number of password requirements met, 2: total password requirements.
 #: admin/settings-page/class-gateway-preview.php:222
 #: includes/services/class-frontend-assets.php:118
+msgid "%1$d of %2$d requirement met."
+msgstr ""
+
+#. translators: 1: number of password requirements met, 2: total password requirements.
+#: admin/settings-page/class-gateway-preview.php:224
+#: includes/services/class-frontend-assets.php:120
 msgid "%1$d of %2$d requirements met."
 msgstr ""
 
+#. translators: 1: result label, 2: event name, 3: destination host, 4: HTTP status, 5: created date.
 #: admin/settings-page/class-webhook-tools.php:108
 msgid "%1$s for %2$s to %3$s with HTTP %4$s at %5$s."
 msgstr ""
+
+#. translators: %d: configured attempt count.
+#: admin/settings-page/class-security-policy.php:199
+msgid "%d attempt"
+msgid_plural "%d attempts"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of downloads remaining.
+#: includes/services/class-dashboard-commerce-renderer.php:211
+msgid "%d download remaining"
+msgid_plural "%d downloads remaining"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: configured window length in minutes.
+#: admin/settings-page/class-security-policy.php:204
+msgid "%d minute"
+msgid_plural "%d minutes"
+msgstr[0] ""
+msgstr[1] ""
 
 #: admin/settings-page/class-readiness-summary.php:107
 msgid "A brand logo is configured for gateway screens and the dashboard."
@@ -225,31 +254,43 @@ msgstr ""
 msgid "Action tokens:"
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:199
-msgid "active lockouts from %d current login buckets."
-msgstr ""
-
+#. translators: %d: active bucket count.
 #: admin/settings-page/class-security-rate-limits.php:209
-msgid "active lockouts from %d current password-reset buckets."
-msgstr ""
+msgid "active lockouts from %d current login bucket."
+msgid_plural "active lockouts from %d current login buckets."
+msgstr[0] ""
+msgstr[1] ""
 
+#. translators: %d: active bucket count.
+#: admin/settings-page/class-security-rate-limits.php:224
+msgid "active lockouts from %d current password-reset bucket."
+msgid_plural "active lockouts from %d current password-reset buckets."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: active bucket count.
 #: admin/settings-page/class-security-rate-limits.php:179
-msgid "active lockouts from %d current registration buckets."
-msgstr ""
+msgid "active lockouts from %d current registration bucket."
+msgid_plural "active lockouts from %d current registration buckets."
+msgstr[0] ""
+msgstr[1] ""
 
-#: admin/settings-page/class-security-rate-limits.php:189
-msgid "active lockouts from %d current resend buckets."
-msgstr ""
+#. translators: %d: active bucket count.
+#: admin/settings-page/class-security-rate-limits.php:194
+msgid "active lockouts from %d current resend bucket."
+msgid_plural "active lockouts from %d current resend buckets."
+msgstr[0] ""
+msgstr[1] ""
 
 #: admin/settings-page/class-security-rate-limits.php:51
 msgid "Active Rate Limit Buckets"
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:237
+#: admin/settings-page/class-security-rate-limits.php:257
 msgid "Active rate-limit buckets could not be loaded. Refresh the page and check the database connection if the problem continues."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:244
+#: admin/settings-page/class-security-rate-limits.php:264
 msgid "Active rate-limit pressure is too high to summarize safely in one request. Wait for current rate-limit windows to expire, then refresh this screen."
 msgstr ""
 
@@ -269,7 +310,7 @@ msgstr ""
 msgid "Add an account-created webhook URL before sending a test."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:140
+#: admin/settings-page/class-admin-notices.php:145
 msgid "Add and save an account-created webhook URL before sending a test."
 msgstr ""
 
@@ -649,7 +690,7 @@ msgstr ""
 msgid "Check Reoon Account"
 msgstr ""
 
-#: includes/services/class-frontend-state-screens.php:135
+#: includes/services/class-frontend-state-screens.php:142
 msgid "Check spam, promotions, and filtered inbox folders if the email is not in your inbox."
 msgstr ""
 
@@ -682,6 +723,7 @@ msgstr ""
 msgid "Checks the saved API key against Reoon account status. It does not submit an email address or run a customer verification."
 msgstr ""
 
+#. translators: %s: settings field label.
 #: admin/settings-page/class-field-renderer-core.php:147
 msgid "Choose %s"
 msgstr ""
@@ -718,11 +760,11 @@ msgstr ""
 msgid "Close account menu"
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:174
+#: admin/settings-page/class-admin-notices.php:179
 msgid "Cloudflare rejected the saved Turnstile secret. Confirm the secret is current and belongs to the configured widget."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:182
+#: admin/settings-page/class-admin-notices.php:187
 msgid "Cloudflare returned an unexpected response to the Turnstile connection check. Retry later and confirm the saved secret in Cloudflare."
 msgstr ""
 
@@ -730,6 +772,7 @@ msgstr ""
 msgid "Cloudflare Turnstile"
 msgstr ""
 
+#. translators: %s: menu item title.
 #: includes/services/class-offcanvas-menu-walker.php:148
 msgid "Collapse submenu for %s"
 msgstr ""
@@ -863,7 +906,7 @@ msgid "Confirmation resend was blocked by the rate limit. Ask the customer to wa
 msgstr ""
 
 #: admin/settings-page/class-security-rate-limits.php:100
-#: admin/settings-page/class-security-rate-limits.php:184
+#: admin/settings-page/class-security-rate-limits.php:189
 msgid "Confirmation Resends"
 msgstr ""
 
@@ -966,10 +1009,12 @@ msgstr ""
 msgid "Current pairing:"
 msgstr ""
 
+#. translators: %s: typography preset name.
 #: admin/settings-page/class-field-renderer-options.php:71
 msgid "Current pairing: %s"
 msgstr ""
 
+#. translators: %s: selected Reoon flagged-status policy label.
 #: admin/settings-page/class-security-policy.php:38
 msgid "Current policy: %s."
 msgstr ""
@@ -1154,11 +1199,11 @@ msgstr ""
 msgid "Diagnostics are enabled, so launch and support signals can be collected during registration rollout."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:120
+#: admin/settings-page/class-admin-notices.php:125
 msgid "Diagnostics events cleared."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:124
+#: admin/settings-page/class-admin-notices.php:129
 msgid "Diagnostics events could not be cleared. Please retry and check the site database if the problem continues."
 msgstr ""
 
@@ -1202,10 +1247,11 @@ msgstr ""
 msgid "Disposable, spamtrap, invalid, or disabled"
 msgstr ""
 
-#: includes/services/class-dashboard-commerce-renderer.php:232
+#: includes/services/class-dashboard-commerce-renderer.php:237
 msgid "Download"
 msgstr ""
 
+#. translators: %s: downloadable file name.
 #: includes/services/class-dashboard-commerce-renderer.php:192
 msgid "Download %s"
 msgstr ""
@@ -1219,10 +1265,6 @@ msgstr ""
 #: includes/services/class-woocommerce-navigation.php:27
 #: includes/services/class-woocommerce-navigation.php:82
 msgid "Downloads"
-msgstr ""
-
-#: includes/services/class-dashboard-commerce-renderer.php:211
-msgid "Downloads remaining: %s"
 msgstr ""
 
 #: includes/services/class-dashboard-account-renderer.php:138
@@ -1459,6 +1501,7 @@ msgstr ""
 msgid "Everything for your orders in one place"
 msgstr ""
 
+#. translators: %s: menu item title.
 #: includes/services/class-offcanvas-menu-walker.php:143
 msgid "Expand submenu for %s"
 msgstr ""
@@ -1476,7 +1519,8 @@ msgstr ""
 msgid "Expires At"
 msgstr ""
 
-#: includes/services/class-dashboard-commerce-renderer.php:224
+#. translators: %s: download expiry date.
+#: includes/services/class-dashboard-commerce-renderer.php:229
 msgid "Expires: %s"
 msgstr ""
 
@@ -1822,14 +1866,17 @@ msgstr ""
 msgid "Last Name"
 msgstr ""
 
+#. translators: 1: blocked request path, 2: redirect destination path.
 #: admin/settings-page/class-security-signal-data-a.php:152
 msgid "Latest blocked path: %1$s -> %2$s."
 msgstr ""
 
+#. translators: %s: blocked request path.
 #: admin/settings-page/class-security-signal-data-a.php:159
 msgid "Latest blocked path: %s."
 msgstr ""
 
+#. translators: %s: latest provider failure timestamp.
 #: admin/settings-page/class-security-failure-triage.php:43
 msgid "Latest seen: %s."
 msgstr ""
@@ -1879,8 +1926,9 @@ msgstr ""
 msgid "Level"
 msgstr ""
 
-#: admin/settings-page/class-security-policy.php:199
-msgid "Limit: %1$d attempts in a %2$d-minute window."
+#. translators: 1: localized attempt count, 2: localized rate-limit window.
+#: admin/settings-page/class-security-policy.php:210
+msgid "Limit: %1$s within %2$s."
 msgstr ""
 
 #: admin/settings-page/class-complex-fields.php:155
@@ -1920,7 +1968,7 @@ msgstr ""
 
 #: admin/settings-page/class-gateway-preview.php:24
 #: admin/settings-page/class-security-rate-limits.php:106
-#: admin/settings-page/class-security-rate-limits.php:194
+#: admin/settings-page/class-security-rate-limits.php:204
 msgid "Login"
 msgstr ""
 
@@ -2181,7 +2229,7 @@ msgstr ""
 msgid "No downloads available?"
 msgstr ""
 
-#: includes/services/class-dashboard-commerce-renderer.php:221
+#: includes/services/class-dashboard-commerce-renderer.php:226
 msgid "No expiry"
 msgstr ""
 
@@ -2327,6 +2375,7 @@ msgstr ""
 msgid "Order"
 msgstr ""
 
+#. translators: %s: customer-facing order number.
 #: includes/services/class-dashboard-commerce-renderer.php:136
 msgid "Order #%s"
 msgstr ""
@@ -2350,6 +2399,7 @@ msgstr ""
 msgid "Other account-page integrations may be active"
 msgstr ""
 
+#. translators: %s: callback summary.
 #: includes/services/class-compatibility-warnings.php:142
 msgid "Other code is attached to related account hooks: %s. Review these integrations if gateway behavior looks unexpected."
 msgstr ""
@@ -2431,7 +2481,7 @@ msgid "Password must include uppercase, lowercase, number, and symbol characters
 msgstr ""
 
 #: admin/settings-page/class-security-rate-limits.php:112
-#: admin/settings-page/class-security-rate-limits.php:204
+#: admin/settings-page/class-security-rate-limits.php:219
 #: includes/services/class-email-tokens.php:25
 msgid "Password Reset"
 msgstr ""
@@ -2699,6 +2749,7 @@ msgstr ""
 msgid "Public registration is enabled, but Terms and Privacy paths must both be configured."
 msgstr ""
 
+#. translators: %s: comma-separated query argument names.
 #: admin/settings-page/class-security-signal-data-a.php:167
 msgid "Query keys: %s."
 msgstr ""
@@ -3253,11 +3304,11 @@ msgstr ""
 msgid "Reoon Provider Failures"
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:186
+#: admin/settings-page/class-admin-notices.php:191
 msgid "Reoon responded successfully and reports the saved API account as active. No email address was submitted during this check."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:194
+#: admin/settings-page/class-admin-notices.php:199
 msgid "Reoon responded, but the saved API account is not active. Review the account and API key in Reoon."
 msgstr ""
 
@@ -3265,7 +3316,7 @@ msgstr ""
 msgid "Reoon Result Group"
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:202
+#: admin/settings-page/class-admin-notices.php:207
 msgid "Reoon returned an unexpected account response. Retry later and confirm the saved API key in Reoon."
 msgstr ""
 
@@ -3325,6 +3376,7 @@ msgstr ""
 msgid "REST"
 msgstr ""
 
+#. translators: %s: settings tab label.
 #: admin/settings-page/class-gateway-preview.php:93
 msgid "Restore the %s tab to its default settings? This cannot be undone automatically."
 msgstr ""
@@ -3494,11 +3546,12 @@ msgstr ""
 msgid "Role Visibility"
 msgstr ""
 
+#. translators: %s: sample token value.
 #: admin/settings-page/class-email-tools.php:144
 msgid "Sample: %s"
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:190
+#: admin/settings-page/class-admin-notices.php:195
 msgid "Save a Reoon API key before running the account connection check."
 msgstr ""
 
@@ -3506,7 +3559,7 @@ msgstr ""
 msgid "Save an account-created webhook URL to enable test sends."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:170
+#: admin/settings-page/class-admin-notices.php:175
 msgid "Save both the Turnstile site key and secret key before running the connection check."
 msgstr ""
 
@@ -3683,23 +3736,23 @@ msgstr ""
 msgid "Settings could not be encoded for export."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:100
+#: admin/settings-page/class-admin-notices.php:105
 msgid "Settings could not be imported because the file does not contain recognized Alynt Account Gateway settings."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:108
+#: admin/settings-page/class-admin-notices.php:113
 msgid "Settings could not be imported because the selected file exceeds the 1 MB limit."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:96
+#: admin/settings-page/class-admin-notices.php:101
 msgid "Settings could not be imported because the selected file is not valid JSON."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:104
+#: admin/settings-page/class-admin-notices.php:109
 msgid "Settings could not be imported because the uploaded file could not be read."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:92
+#: admin/settings-page/class-admin-notices.php:97
 msgid "Settings could not be imported. Choose a valid Alynt Account Gateway JSON export."
 msgstr ""
 
@@ -3707,13 +3760,16 @@ msgstr ""
 msgid "Settings Import / Export"
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:88
+#: admin/settings-page/class-admin-notices.php:93
 msgid "Settings imported successfully."
 msgstr ""
 
+#. translators: %d: ignored settings key count.
 #: admin/settings-page/class-admin-notices.php:67
-msgid "Settings imported successfully. Unrecognized setting keys ignored: %d."
-msgstr ""
+msgid "Settings imported successfully. Unrecognized setting key ignored: %d."
+msgid_plural "Settings imported successfully. Unrecognized setting keys ignored: %d."
+msgstr[0] ""
+msgstr[1] ""
 
 #: admin/settings-page/class-settings-tools.php:54
 msgid "Settings JSON file"
@@ -3755,6 +3811,7 @@ msgstr ""
 msgid "Show"
 msgstr ""
 
+#. translators: %s: WooCommerce account navigation item label.
 #: admin/settings-page/class-field-renderer-options.php:215
 msgid "Show %s"
 msgstr ""
@@ -3890,7 +3947,7 @@ msgstr ""
 msgid "Test Email Recipient"
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:128
+#: admin/settings-page/class-admin-notices.php:133
 msgid "Test email sent."
 msgstr ""
 
@@ -3902,7 +3959,7 @@ msgstr ""
 msgid "Test the Reoon API key and outbound HTTP path before relying on email verification."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:136
+#: admin/settings-page/class-admin-notices.php:141
 msgid "Test webhook sent."
 msgstr ""
 
@@ -4011,7 +4068,7 @@ msgstr ""
 msgid "The Reoon API account is not active."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:148
+#: admin/settings-page/class-admin-notices.php:153
 msgid "The Reoon review decision was recorded."
 msgstr ""
 
@@ -4019,7 +4076,7 @@ msgstr ""
 msgid "The reset request could not be processed. Please try again."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:152
+#: admin/settings-page/class-admin-notices.php:157
 msgid "The review decision could not be recorded. Refresh the Security tab and try again."
 msgstr ""
 
@@ -4039,19 +4096,19 @@ msgstr ""
 msgid "The selected settings tab is invalid."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:178
+#: admin/settings-page/class-admin-notices.php:183
 msgid "The site could not reach Cloudflare Siteverify. Check outbound HTTPS, DNS, firewall rules, and provider availability."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:198
+#: admin/settings-page/class-admin-notices.php:203
 msgid "The site could not reach Reoon. Check outbound HTTPS, DNS, firewall rules, provider availability, and API-key permissions."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:132
+#: admin/settings-page/class-admin-notices.php:137
 msgid "The test email could not be sent. Check the recipient and mail configuration."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:144
+#: admin/settings-page/class-admin-notices.php:149
 msgid "The test webhook could not be sent. Review the recent webhook deliveries table for details."
 msgstr ""
 
@@ -4133,6 +4190,7 @@ msgstr ""
 msgid "This email address cannot be used."
 msgstr ""
 
+#. translators: %s: site name.
 #: includes/services/class-email-html-renderer.php:159
 msgid "This email was sent by %s."
 msgstr ""
@@ -4163,11 +4221,11 @@ msgstr ""
 msgid "This reset link is invalid or has expired. Please request a new link."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:116
+#: admin/settings-page/class-admin-notices.php:121
 msgid "This settings tab could not be restored."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:112
+#: admin/settings-page/class-admin-notices.php:117
 msgid "This settings tab was restored to its defaults."
 msgstr ""
 
@@ -4251,7 +4309,7 @@ msgstr ""
 msgid "Turnstile is partially configured. Add both the site key and secret key before relying on it."
 msgstr ""
 
-#: admin/settings-page/class-admin-notices.php:166
+#: admin/settings-page/class-admin-notices.php:171
 msgid "Turnstile reached Cloudflare and the saved secret was accepted for a deliberately invalid test token. Complete a real registration challenge to confirm the site key, hostname, widget, and secret together."
 msgstr ""
 
@@ -4428,7 +4486,7 @@ msgstr ""
 msgid "Use the destination users should see after login, usually /my-account/ when the dashboard or WooCommerce account area is enabled."
 msgstr ""
 
-#: includes/services/class-frontend-state-screens.php:134
+#: includes/services/class-frontend-state-screens.php:141
 msgid "Use the newest confirmation email only. Older links may stop working after a resend."
 msgstr ""
 
@@ -4563,9 +4621,12 @@ msgstr ""
 msgid "View Orders"
 msgstr ""
 
-#: includes/services/class-frontend-state-screens.php:129
-msgid "Wait %d minutes before requesting another confirmation email."
-msgstr ""
+#. translators: %d: configured resend cooldown window in minutes.
+#: includes/services/class-frontend-state-screens.php:130
+msgid "Wait %d minute before requesting another confirmation email."
+msgid_plural "Wait %d minutes before requesting another confirmation email."
+msgstr[0] ""
+msgstr[1] ""
 
 #: admin/settings-page/class-security-pending.php:129
 msgid "Waiting For Confirmation"
@@ -4629,6 +4690,7 @@ msgstr ""
 msgid "Welcome to {{site_name}}"
 msgstr ""
 
+#. translators: %s: user first name or a neutral fallback.
 #: includes/services/class-frontend-dashboard-screen.php:146
 msgid "Welcome, %s"
 msgstr ""
@@ -4657,6 +4719,7 @@ msgstr ""
 msgid "WooCommerce dashboard navigation visibility"
 msgstr ""
 
+#. translators: %s: WooCommerce account endpoint label.
 #: includes/services/class-dashboard-endpoint-renderer.php:114
 msgid "WooCommerce did not return content for %s. Try another account area or come back after the store has finished configuring this section."
 msgstr ""

@@ -210,16 +210,18 @@ class ALYNT_AG_Settings_Page_Gateway_Preview extends ALYNT_AG_Settings_Page_Comp
 				'alyntAgFrontend',
 				array(
 					'labels' => array(
-						'showPassword'      => __( 'Show password', 'alynt-account-gateway' ),
-						'hidePassword'      => __( 'Hide password', 'alynt-account-gateway' ),
-						'passwordVisible'   => __( 'Password is visible.', 'alynt-account-gateway' ),
-						'passwordHidden'    => __( 'Password is hidden.', 'alynt-account-gateway' ),
-						'show'              => __( 'Show', 'alynt-account-gateway' ),
-						'hide'              => __( 'Hide', 'alynt-account-gateway' ),
-						'requirementMet'    => __( 'Met', 'alynt-account-gateway' ),
-						'requirementNotMet' => __( 'Not met', 'alynt-account-gateway' ),
+						'showPassword'           => __( 'Show password', 'alynt-account-gateway' ),
+						'hidePassword'           => __( 'Hide password', 'alynt-account-gateway' ),
+						'passwordVisible'        => __( 'Password is visible.', 'alynt-account-gateway' ),
+						'passwordHidden'         => __( 'Password is hidden.', 'alynt-account-gateway' ),
+						'show'                   => __( 'Show', 'alynt-account-gateway' ),
+						'hide'                   => __( 'Hide', 'alynt-account-gateway' ),
+						'requirementMet'         => __( 'Met', 'alynt-account-gateway' ),
+						'requirementNotMet'      => __( 'Not met', 'alynt-account-gateway' ),
 						/* translators: 1: number of password requirements met, 2: total password requirements. */
-						'requirementsMet'   => __( '%1$d of %2$d requirements met.', 'alynt-account-gateway' ),
+						'requirementMetSummary'  => __( '%1$d of %2$d requirement met.', 'alynt-account-gateway' ),
+						/* translators: 1: number of password requirements met, 2: total password requirements. */
+						'requirementsMetSummary' => __( '%1$d of %2$d requirements met.', 'alynt-account-gateway' ),
 					),
 				)
 			);

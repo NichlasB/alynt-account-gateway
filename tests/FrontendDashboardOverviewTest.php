@@ -68,6 +68,13 @@ class FrontendDashboardOverviewTest extends FrontendDashboardScreenTestCase {
 				'remaining'    => null,
 				'expires'      => '',
 			),
+			array(
+				'name'         => 'Single Download',
+				'product_name' => 'Single Download',
+				'url'          => 'https://example.test/?download_file=44&key=single',
+				'remaining'    => 1,
+				'expires'      => '',
+			),
 		);
 		$screen = new ALYNT_AG_Frontend_Dashboard_Screen(
 			$dashboard,
@@ -88,7 +95,8 @@ class FrontendDashboardOverviewTest extends FrontendDashboardScreenTestCase {
 		$this->assertStringContainsString( 'href="/my-account/downloads/"', $html );
 		$this->assertStringContainsString( 'Digital Guide', $html );
 		$this->assertStringContainsString( 'Complete Course', $html );
-		$this->assertStringContainsString( 'Downloads remaining: 2', $html );
+		$this->assertStringContainsString( '2 downloads remaining', $html );
+		$this->assertStringContainsString( '1 download remaining', $html );
 		$this->assertStringContainsString( 'Expires: August 1, 2026', $html );
 		$this->assertStringContainsString( 'Unlimited downloads', $html );
 		$this->assertStringContainsString( 'No expiry', $html );

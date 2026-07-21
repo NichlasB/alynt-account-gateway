@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `07A` are complete; prompt `08` is next.
+- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `09` are complete; prompt `10` is next.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Run `08-UNINSTALL_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompts `03` through `07A` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Run `10-ACCESSIBILITY_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompts `03` through `09` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
@@ -31,8 +31,8 @@
 - [x] `06-PERFORMANCE_REVIEW_PROMPT.md`
 - [x] `07-EDGE_CASES_REVIEW_PROMPT.md`
 - [x] `07A-ADVERSARIAL_TEST_SUITE_REVIEW_PROMPT.md`
-- [ ] `08-UNINSTALL_REVIEW_PROMPT.md`
-- [ ] `09-I18N_REVIEW_PROMPT.md`
+- [x] `08-UNINSTALL_REVIEW_PROMPT.md`
+- [x] `09-I18N_REVIEW_PROMPT.md`
 - [ ] `10-ACCESSIBILITY_REVIEW_PROMPT.md`
 - [ ] `11-CODE_QUALITY_REVIEW_PROMPT.md`
 - [ ] `12-DOCUMENTATION_REVIEW_PROMPT.md`
@@ -167,6 +167,18 @@ Execution rules:
 - [x] Added executable single-site and multisite lifecycle regressions and recorded the full inventory in `docs/UNINSTALL_REVIEW_1.1.21.md`.
 - [x] Revalidated normal, reverse-order, and fixed-random PHPUnit execution at 527 tests and 3,687 assertions; PHPCS, build, dependency audits, Composer validation, PHP syntax, and diff hygiene also pass.
 - [x] Kept real isolated WordPress uninstall verification in the consolidated post-prompt-13 component-testing handoff.
+
+### Prompt 09 - Internationalization Review Evidence
+
+- [x] Reviewed 125 runtime PHP files and 15 source JavaScript files for user-facing strings, text-domain consistency, escaping context, placeholders, pluralization, JavaScript localization, catalog generation, and RTL-sensitive output.
+- [x] Confirmed 1,149 unique catalog entries use the `alynt-account-gateway` domain; the plugin header, domain path, `plugins_loaded` hook, and language-directory path are consistent.
+- [x] Removed three English JavaScript fallback strings from media and typography controls while retaining their PHP-localized values.
+- [x] Added count-aware singular/plural behavior for import notices, resend guidance, rate-limit summaries, download allowances, and password-requirement status.
+- [x] Extended the repeatable POT generator to extract `_n()`, `_x()`, `_nx()`, plural forms, contexts, and translator comments.
+- [x] Regenerated `languages/alynt-account-gateway.pot` with 32 extracted translator-comment references and nine plural entries; no placeholder-bearing entry lacks translator guidance.
+- [x] Added focused catalog, localized JavaScript, and singular/plural regression coverage in `tests/I18nCatalogTest.php` and the affected component suites.
+- [x] Preserved the existing localization-content boundary: the plugin ships a complete POT template but no bundled production-language translations.
+- [x] Revalidated normal, reverse-order, and fixed-random PHPUnit execution at 534 tests and 3,730 assertions; PHPCS, build, dependency audits, Composer validation, PHP/JavaScript syntax, and diff hygiene also pass.
 
 ### Consolidated End-To-End Acceptance
 
