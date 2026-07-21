@@ -4,10 +4,10 @@
 
 - Current phase: Phase 2 structural refactoring, post-refactor pre-release prompts `01` through `13`, and the consolidated LocalWP end-to-end acceptance matrix are complete.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.21 is the current public baseline.
+- Plugin status: v1.1.22 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Await explicit v1.1.22 publication approval. After publication, verify the public release asset through Alynt Plugin Updater on LocalWP Plugin Tester. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: The v1.1.22 release and public updater verification are complete. Inactive-account integration remains deferred until an authoritative status source exists; any further product work begins as a separately scoped release cycle.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
