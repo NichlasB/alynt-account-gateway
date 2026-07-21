@@ -2,12 +2,38 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring, post-refactor pre-release prompts `01` through `13`, and the consolidated LocalWP end-to-end acceptance matrix are complete.
+- Current phase: Manual-order payment compatibility slice complete and awaiting a separately approved release cycle from the released v1.1.22 baseline.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.22 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: The v1.1.22 release and public updater verification are complete. Inactive-account integration remains deferred until an authoritative status source exists; any further product work begins as a separately scoped release cycle.
+- Next roadmap: Review and commit the completed manual-order payment compatibility slice, then request separate approval before packaging, publication, updater installation, staging, or production rollout. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## Manual Order Payment Compatibility Slice
+
+### Purpose And Boundary
+
+- [x] Trace Alynt WC Customer Order Manager's native payment-link and Switch to Customer & Pay workflows against Account Gateway routing.
+- [x] Confirm native WooCommerce payment links remain compatible with Account Gateway's independent order-pay login policy.
+- [x] Identify the switched-customer handoff collision: Account Gateway blocks the authenticated customer at `wp-admin/admin-post.php` before the order manager's completion handler runs.
+- [x] Exempt WordPress's authenticated `admin-post.php` action dispatcher from the customer wp-admin screen restriction without exempting actual admin screens.
+- [x] Add focused regression coverage for the dispatcher exemption and retained non-privileged admin-screen block.
+- [x] Run build, PHPCS, PHPUnit, PHP syntax, dependency audit, and diff-hygiene gates.
+- [x] Run the applicable `ds2-feature` sequence: Feature Light Review, bounded Bloat/Structure Review, and Feature Security Review. UI/UX review is not triggered because the slice changes no rendered UI or copy.
+- [x] Run LocalWP cross-plugin acceptance with WooCommerce, User Switching, Alynt WC Customer Order Manager, and Account Gateway active.
+- [x] Keep publication, packaging, updater installation, staging, and production changes behind separate approval.
+
+### Feature Review Evidence
+
+- Feature Light Review covered the access controller, focused policy regression, changelog, and implementation-plan delta. No non-security issue or broader pre-release escalation was found.
+- Feature Bloat and Structure Review used the `origin/master` merge base (`7c566b2cbdbc6ada92d447cf361c638545a15472`). It reported two changed PHP files, zero oversized files, and no cleanup or Phase 2 edit requirement: the access controller measures `182` total / `96` code lines and the policy test measures `124` total / `93` code lines.
+- Feature UI/UX Implementation Review was correctly skipped because this slice changes no rendered UI, interactive state, or user-facing copy.
+- Feature Security Review found no issue. The dispatcher exemption grants no capability and bypasses no nonce; registered `admin_post_*` handlers retain responsibility for authorization and CSRF protection, while normal customer wp-admin requests remain blocked.
+- Validation passed: production build, PHPCS, `548` PHPUnit tests with `3,997` assertions, `261` PHP syntax checks, npm high-severity audit, Composer advisory audit and strict validation, and `git diff --check`.
+- LocalWP cross-plugin acceptance used WordPress `7.0.2`, PHP `8.5.1`, WooCommerce `10.9.4`, Account Gateway `1.1.22` with the candidate controller, Alynt WC Customer Order Manager `1.1.2`, and User Switching `1.12.1`.
+- A disposable pending order exposed both payment actions. Copy Payment Link reported success, and Switch to Customer & Pay completed the authenticated `admin-post.php` handoff to the keyed WooCommerce `/checkout/order-pay/` URL. WooCommerce Coming Soon mode masked the payment fields, so no gateway charge was attempted.
+- While switched, a direct customer request for `wp-admin` still redirected to `/my-account/`; Switch back returned the administrator to the exact order editor. This confirms the exemption is limited to the action dispatcher and does not reopen ordinary wp-admin screens.
+- Cleanup permanently removed the disposable order and users, uninstalled the two temporary helper plugins, restored the released Account Gateway controller byte-for-byte, and confirmed the Account Gateway settings fingerprint remained unchanged.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 

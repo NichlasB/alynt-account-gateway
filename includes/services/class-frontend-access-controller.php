@@ -62,7 +62,12 @@ class ALYNT_AG_Frontend_Access_Controller {
 	 */
 	public function maybe_block_wp_admin() {
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
-		if ( empty( $settings['frontend_enabled'] ) || wp_doing_ajax() || ! is_user_logged_in() ) {
+		if (
+			empty( $settings['frontend_enabled'] )
+			|| wp_doing_ajax()
+			|| $this->is_admin_action_dispatcher()
+			|| ! is_user_logged_in()
+		) {
 			return;
 		}
 
@@ -87,6 +92,21 @@ class ALYNT_AG_Frontend_Access_Controller {
 
 		wp_safe_redirect( $destination );
 		exit;
+	}
+
+	/**
+	 * Determine whether WordPress is dispatching a frontend admin-post action.
+	 *
+	 * Admin-post handlers are request endpoints rather than wp-admin screens.
+	 * Each registered handler remains responsible for its own authorization and
+	 * CSRF protection.
+	 *
+	 * @return bool
+	 */
+	private function is_admin_action_dispatcher() {
+		global $pagenow;
+
+		return 'admin-post.php' === $pagenow;
 	}
 
 	/**

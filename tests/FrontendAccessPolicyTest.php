@@ -60,6 +60,30 @@ class FrontendAccessPolicyTest extends FrontendRoutingTestCase {
 		$this->assertSame( array(), $GLOBALS['alynt_ag_test_redirects'] );
 	}
 
+	public function test_wp_admin_block_allows_authenticated_admin_post_dispatchers() {
+		$frontend        = new ALYNT_AG_Frontend();
+		$previous_pagenow = $GLOBALS['pagenow'] ?? null;
+
+		$GLOBALS['alynt_ag_test_user_logged_in'] = true;
+		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
+		$GLOBALS['pagenow'] = 'admin-post.php';
+		$_GET['action'] = 'awcom_complete_customer_payment_switch';
+		$_SERVER['REQUEST_URI'] = '/wp-admin/admin-post.php?action=awcom_complete_customer_payment_switch';
+
+		try {
+			$frontend->maybe_block_wp_admin();
+		} finally {
+			if ( null === $previous_pagenow ) {
+				unset( $GLOBALS['pagenow'] );
+			} else {
+				$GLOBALS['pagenow'] = $previous_pagenow;
+			}
+		}
+
+		$this->assertSame( array(), $GLOBALS['alynt_ag_test_redirects'] );
+		$this->assertSame( array(), $GLOBALS['alynt_ag_test_db_inserts'] );
+	}
+
 	public function test_wp_admin_block_logs_diagnostics_when_enabled() {
 		$frontend = new ALYNT_AG_Frontend();
 		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings']['diagnostics_enabled'] = true;
