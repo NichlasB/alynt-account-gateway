@@ -1,6 +1,12 @@
 # Changelog
 
+All notable changes to Alynt Account Gateway are documented in this file.
+
 ## Unreleased
+
+### Documentation
+
+- Reconciled the README, WordPress readme, settings reference, and hooks reference with the current settings schema and public integration contracts.
 
 ### Fixed
 

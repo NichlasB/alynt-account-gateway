@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `11` are complete; prompt `12` is next.
+- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `12` are complete; prompt `13` is next.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Run `12-DOCUMENTATION_REVIEW_PROMPT.md`, then the final `13-SECURITY_AUDIT_PROMPT.md`, and complete one consolidated end-to-end acceptance matrix. Prompts `03` through `11` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Run the final `13-SECURITY_AUDIT_PROMPT.md`, then complete one consolidated end-to-end acceptance matrix. Prompts `03` through `12` produced corrective code, tests, and documentation that target v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
@@ -35,7 +35,7 @@
 - [x] `09-I18N_REVIEW_PROMPT.md`
 - [x] `10-ACCESSIBILITY_REVIEW_PROMPT.md`
 - [x] `11-CODE_QUALITY_REVIEW_PROMPT.md`
-- [ ] `12-DOCUMENTATION_REVIEW_PROMPT.md`
+- [x] `12-DOCUMENTATION_REVIEW_PROMPT.md`
 - [ ] `13-SECURITY_AUDIT_PROMPT.md`
 
 Execution rules:
@@ -532,6 +532,17 @@ Implementation evidence:
 - Alynt Plugin Updater detected the public `1.1.20 -> 1.1.21` update on LocalWP Plugin Tester, and WordPress installed the GitHub release asset through the native Plugins screen.
 - All `116` updater-installed files byte-match the public ZIP. Account Gateway remains active at v1.1.21, the settings, activation, and database-version fingerprints remain unchanged, and a fresh updater check reports v1.1.21 up to date.
 - Post-update acceptance reconfirmed the Advanced compatibility table at `782px`: zero document overflow, fixed table layout, wrapped identifiers, and no tab overlap. The disposable release administrator, session metadata, generated auto-draft, and browser session were removed.
+
+### Prompt 12 - Documentation Review Evidence
+
+- [x] Reviewed the plugin header, Markdown README, WordPress readme, changelog, settings and hooks references, operational/privacy documentation, and PHPDoc conventions across `125` production PHP files.
+- [x] Replaced the partial defaults list with a schema-backed settings reference that documents all `80` persisted settings by tab, key, type, default, sanitization rule, and behavior.
+- [x] Replaced the ambiguous hooks list with filter parameters and examples, explicit internal scheduler contracts, native WooCommerce endpoint delegation, and a separate upstream-hook inventory.
+- [x] Added README/readme FAQ and safe Gateway Screen Preview guidance, refreshed documentation links, and added matching Unreleased changelog entries without changing the public `1.1.21` identity.
+- [x] Added `DocumentationReviewTest` to keep the settings document, hooks contract, stable tag, plugin header, FAQ, preview guidance, and changelog alignment from drifting.
+- [x] Recorded the deliberate `@since` decision: all production PHP files have `@package` headers, while historical per-symbol `@since` dates were never recorded and will not be fabricated for `536` public methods.
+- [x] Added `docs/DOCUMENTATION_REVIEW_1.1.21.md` with findings, corrections, PHPDoc disposition, and regression evidence.
+- [x] Run and record full source gates: build, stable 1,166-string POT generation, PHPCS, 236 PHP syntax checks, 17 JavaScript/MJS syntax checks, 546 PHPUnit tests with 3,989 assertions, npm audit, Composer validation/advisory audit, and `git diff --check`.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 

@@ -51,7 +51,29 @@ Uninstalling the plugin removes plugin-owned settings, the stored database schem
 
 Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile, Reoon, webhooks, diagnostics, or WooCommerce takeover on production sites. The plugin provides WordPress personal-data exporter and eraser callbacks for plugin-owned records, but site owners remain responsible for privacy notice wording, lawful-basis decisions, processor contracts, retention policy, and qualified legal review where required.
 
+== FAQ ==
+
+= Does the emergency bypass sign me in? =
+
+No. `wp-login.php?alynt_ag_bypass={key}` only bypasses the branded screen redirect. It does not authenticate the visitor or grant access to wp-admin.
+
+= Why is the Create Account link missing? =
+
+It is intentionally omitted whenever Enable Public Account Creation is disabled. Existing customers can still log in or reset a password.
+
+= Can I use the dashboard without WooCommerce? =
+
+Yes. The custom dashboard is optional and works without WooCommerce. WooCommerce takeover and its account endpoints require WooCommerce to be active.
+
+= Can I customize email formatting? =
+
+Yes. Each email body uses WordPress's Visual/Text editor with safe HTML formatting. The plugin owns the email wrapper and action-button presentation so account mail remains consistent and resilient in mailbox clients.
+
 == Changelog ==
+
+= Unreleased =
+
+* Reconciled the README, Settings reference, and Hooks reference with the current settings schema and integration contracts.
 
 = 1.1.21 =
 

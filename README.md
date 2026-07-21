@@ -55,6 +55,30 @@ Recommended first pass:
 9. Enable the dashboard and WooCommerce takeover only after confirming account pages locally.
 10. Enable Frontend Output when the configuration is ready.
 
+## Gateway Screens And Preview
+
+The gateway uses a single-column layout below `800px` and an optional two-column layout at wider widths. The configured background image appears only in the desktop layout; tall portrait artwork around `1280 x 1920` pixels gives the most reliable crop.
+
+Use **Settings -> Account Gateway -> Advanced / Tools -> Gateway Screen Preview** to inspect every branded screen while Frontend Output remains disabled. Preview is administrator-only and does not enable public routing.
+
+## FAQ
+
+### Does the emergency bypass sign me in?
+
+No. `wp-login.php?alynt_ag_bypass={key}` only bypasses the branded screen redirect. It does not authenticate the visitor or grant access to `wp-admin`.
+
+### Why is the Create Account link missing?
+
+It is intentionally omitted whenever **Enable Public Account Creation** is disabled. Existing customers can still log in or reset a password.
+
+### Can I use the dashboard without WooCommerce?
+
+Yes. The custom dashboard is optional and works without WooCommerce. WooCommerce takeover and its account endpoints require WooCommerce to be active.
+
+### Can I customize email formatting?
+
+Yes. Each email body uses WordPress's Visual/Text editor with safe HTML formatting. The plugin owns the email wrapper and action-button presentation so account mail remains consistent and resilient in mailbox clients.
+
 ## Security Notes
 
 - The emergency bypass only restores access to the native WordPress login screen; it does not authenticate anyone or grant admin access.
@@ -91,15 +115,13 @@ If Composer is available globally, `composer install` can be used instead of `ph
 
 ## Documentation
 
-- `docs/IMPLEMENTATION_PLAN.md`
-- `docs/V1_READINESS_PLAN.md`
-- `docs/OPERATIONS.md`
-- `docs/PRODUCTION_ROLLOUT_PLAYBOOK.md`
-- `docs/PRE_RELEASE_REVALIDATION_1.1.7.md`
-- `docs/PRIVACY_AND_GDPR.md`
-- `docs/SCAFFOLD_MASTER_PROMPT.md`
-- `docs/SETTINGS.md`
-- `docs/HOOKS.md`
+- [Settings reference](docs/SETTINGS.md)
+- [Hooks reference](docs/HOOKS.md)
+- [Operations guide](docs/OPERATIONS.md)
+- [Privacy and GDPR guide](docs/PRIVACY_AND_GDPR.md)
+- [Production rollout playbook](docs/PRODUCTION_ROLLOUT_PLAYBOOK.md)
+- [Readiness plan](docs/V1_READINESS_PLAN.md)
+- [Changelog](CHANGELOG.md)
 
 ## License
 

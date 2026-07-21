@@ -1,127 +1,185 @@
 # Settings Reference
 
-Settings are stored in the `alynt_ag_settings` option and defined in `ALYNT_AG_Settings_Schema`.
+Settings are stored in the `alynt_ag_settings` option. This reference is derived from `ALYNT_AG_Settings_Schema`; it records every persisted setting, its owning tab, default, storage type, and sanitization rule.
 
-## Defaults
+## Sanitization Legend
 
-- `frontend_enabled`: `false`
-- `login_path`: `/login`
-- `account_action_base`: `/account`
-- `after_login_redirect`: `/my-account/`
-- `administrator_after_login_redirect`: `/wp-admin/`
-- `shop_manager_after_login_redirect`: `/wp-admin/`
+| Type | Sanitization / storage rule |
+| --- | --- |
+| `boolean` | Cast to a boolean value. |
+| `integer` | Cast to an integer and clamped to the field's documented minimum and maximum. |
+| `relative_path` | `sanitize_text_field()`, leading slash restored, query string removed. |
+| `string` / `secret` | `sanitize_text_field()`; secret values must not be copied into exports or documentation. |
+| `textarea` / `rich_text` | `wp_kses_post()`; the Visual/Text email editor retains safe post formatting only. |
+| `color` | `sanitize_hex_color()`, otherwise stored empty. |
+| `attachment_id` / `nav_menu` | Positive integer via `absint()`. |
+| `css_font_family` | Text sanitization followed by a restricted font-stack character allowlist. |
+| `email` | `sanitize_email()`. |
+| `url` | `esc_url_raw()`. |
+| `select` | Sanitized key restricted to the field's available options. |
+| `dashboard_links` | Validated JSON/array, then each link is normalized and bounded. |
+| `woocommerce_menu_visibility` | A bounded list of sanitized WooCommerce account endpoint keys. |
 
-Role-aware login redirects are used only when the login request does not contain a safe explicit internal `redirect_to` destination. Administrators and WooCommerce shop managers use their dedicated paths; customers and other roles use `after_login_redirect`. External and authentication-surface destinations remain rejected.
-- `emergency_bypass_key`: generated secret on activation/default creation
-- `registration_enabled`: `false`
-- `registration_token_hours`: `24`
-- `username_format`: `@User_{first_name}_{last_name}`
-- `terms_path`: `/legal/terms/`
-- `privacy_path`: `/legal/privacy/`
-- `brand_logo_id`: `0`
-- `brand_logo_max_width`: `220`
-- `background_image_id`: `0`
-- `primary_color`: `#3B5249`
-- `accent_color`: `#E1CDB5`
-- `text_color`: `#281408`
-- `page_background_color`: `#EAE4D6`
-- `surface_color`: `#FFFFFF`
-- `error_color`: `#B3492E`
-- `button_background_color`: `#3B5249`
-- `button_text_color`: `#ffffff`
-- `heading_font_family`: `Georgia, serif`
-- `body_font_family`: `-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif`
-- `login_intro_text`: `Welcome back. Log in to manage your orders and account details.`
-- `register_intro_text`: configurable registration instruction text
-- `lostpassword_intro_text`: configurable lost-password instruction text
-- `setpassword_intro_text`: configurable set-password instruction text
-- `logout_intro_text`: configurable logout confirmation instruction text
-- `registration_disabled_text`: configurable disabled-registration text
-- `invalid_link_text`: configurable invalid/expired-link text
-- `protection_mode`: `turnstile_or_reoon`
-- `turnstile_site_key`: empty
-- `turnstile_secret_key`: empty
-- `reoon_api_key`: empty
-- `reoon_mode`: `quick`
-- `registration_rate_limit_count`: `5`
-- `registration_rate_limit_window`: `60`
-- `resend_confirmation_rate_limit_count`: `5`
-- `resend_confirmation_rate_limit_window`: `60`
-- `login_rate_limit_count`: `10`
-- `login_rate_limit_window`: `15`
-- `lostpassword_rate_limit_count`: `5`
-- `lostpassword_rate_limit_window`: `60`
-- `email_registration_confirmation_subject`: tokenized subject for registration confirmation email
-- `email_registration_confirmation_preheader`: tokenized preheader for registration confirmation email
-- `email_registration_confirmation_body`: tokenized body for registration confirmation email
-- `email_password_reset_subject`: tokenized subject for password reset email
-- `email_password_reset_preheader`: tokenized preheader for password reset email
-- `email_password_reset_body`: tokenized body for password reset email
-- `email_password_changed_disabled`: `false`
-- `email_password_changed_subject`: tokenized subject for password changed email
-- `email_password_changed_preheader`: tokenized preheader for password changed email
-- `email_password_changed_body`: tokenized body for password changed email
-- `email_new_user_welcome_disabled`: `false`
-- `email_new_user_welcome_subject`: tokenized subject for account-created welcome email
-- `email_new_user_welcome_preheader`: tokenized preheader for account-created welcome email
-- `email_new_user_welcome_body`: tokenized body for account-created welcome email
-- `email_change_confirmation_disabled`: `false`
-- `email_change_confirmation_subject`: tokenized subject for email-change notification/confirmation email
-- `email_change_confirmation_preheader`: tokenized preheader for email-change notification/confirmation email
-- `email_change_confirmation_body`: tokenized body for email-change notification/confirmation email
-- `email_test_recipient`: empty
-- `dashboard_enabled`: `false`
-- `dashboard_custom_links`: `[]`
-- `woocommerce_takeover`: `false`
-- `account_created_webhook`: empty
-- `webhook_signing_secret`: empty
-- `debug_payload_logging`: `false`
-- `diagnostics_enabled`: `false`
-- `diagnostics_min_level`: `warning`
-- `diagnostics_retention`: `30`
-- `success_log_retention`: `7`
-- `failed_log_retention`: `30`
-- `verification_log_retention`: `30`
-- `consent_record_retention`: `365`
-- `audit_log_retention`: `180`
+## General
 
-## Notes
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `frontend_enabled` | `boolean` | `false` | Enables the branded frontend gateway and URL overrides. Keep disabled while configuring a new site. |
 
-Secrets must never be committed to documentation. Store Turnstile, Reoon, webhook, and bypass secrets only in plugin settings.
+## URLs & Redirects
 
-The General tab includes a read-only Setup Readiness panel. It summarizes whether frontend output, gateway URLs, emergency access, branding, public registration, email testing, dashboard configuration, WooCommerce takeover, webhook signing, and retention windows are ready, need review, or need action before public launch.
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `login_path` | `relative_path` | `/login` | Branded login path. |
+| `account_action_base` | `relative_path` | `/account` | Base path for account actions such as registration, password reset, and logout. |
+| `after_login_redirect` | `relative_path` | `/my-account/` | Fallback post-login path for customers and other non-admin roles. |
+| `administrator_after_login_redirect` | `relative_path` | `/wp-admin/` | Fallback post-login path for administrators. |
+| `shop_manager_after_login_redirect` | `relative_path` | `/wp-admin/` | Fallback post-login path for WooCommerce shop managers. |
 
-Review `docs/OPERATIONS.md` for the recommended install, update, rollback, emergency-disable, staging, support-boundary, and production launch process.
+Safe internal `redirect_to` destinations take precedence over role-aware defaults. External and authentication-surface destinations are rejected.
 
-Email templates support token placeholders such as `{{site_name}}`, `{{first_name}}`, `{{last_name}}`, `{{user_email}}`, `{{confirmation_url}}`, `{{reset_url}}`, `{{change_email_url}}`, and `{{expiry_hours}}`.
+## Branding & Layout
 
-All five email body fields use the WordPress Visual and Text editor. Supported post-safe formatting includes headings, bold and italic emphasis, links, blockquotes, and ordered or unordered lists. Executable or unsafe markup is removed during settings sanitization and again before HTML rendering. Media uploads and arbitrary edits to the branded email wrapper are not exposed. Subjects and preheaders remain plain text, template-specific action buttons continue to use their URL tokens, and the plain-text fallback strips formatting while retaining the applicable action URL.
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `brand_logo_id` | `attachment_id` | `0` | Media Library attachment used as the gateway, dashboard, and email logo. |
+| `brand_logo_max_width` | `integer` | `220` | Logo maximum width in pixels; constrained to `80` through `520`. |
+| `primary_color` | `color` | `#3B5249` | Main brand color. |
+| `accent_color` | `color` | `#E1CDB5` | Accent and highlighted-notice color. |
+| `text_color` | `color` | `#281408` | Primary text color. |
+| `page_background_color` | `color` | `#EAE4D6` | Gateway and dashboard page background color. |
+| `surface_color` | `color` | `#FFFFFF` | Card and panel surface color. |
+| `error_color` | `color` | `#B3492E` | Error and destructive-state color. |
+| `button_background_color` | `color` | `#3B5249` | Primary button background color. |
+| `button_text_color` | `color` | `#ffffff` | Primary button text color. |
+| `background_image_id` | `attachment_id` | `0` | Optional desktop two-column gateway background image. A vertical image near `1280 x 1920` crops gracefully. |
+| `heading_font_family` | `css_font_family` | `Georgia, serif` | Heading font stack. |
+| `body_font_family` | `css_font_family` | `-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif` | Body font stack. |
 
-The `email_change_confirmation_*` template is used for the post-change email notification and as the plain-text body for WordPress's pending profile email-change request. WordPress exposes only the body for the pending request through `new_user_email_content`, so that specific core email cannot use the branded HTML wrapper. When `email_change_confirmation_disabled` is enabled, the plugin suppresses both the post-change notification and the pending profile email-change request, then clears the pending `_new_email` marker so users are not left waiting for a disabled confirmation email.
+## Screen Copy
 
-The `account_created_webhook` setting sends an `account.created` JSON payload after a confirmed registration creates the WordPress user. Webhook logs store destination host, HTTP status, success state, retry count, error message, and timestamp by default. Full payload bodies are stored only when `debug_payload_logging` is enabled.
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `login_intro_text` | `textarea` | Welcome-back message | Instruction text above the login form. |
+| `register_intro_text` | `textarea` | Registration confirmation guidance | Instruction text above the registration form. |
+| `lostpassword_intro_text` | `textarea` | Password-reset guidance | Instruction text above the lost-password form. |
+| `setpassword_intro_text` | `textarea` | Choose-a-password guidance | Instruction text above the set-password form. |
+| `logout_intro_text` | `textarea` | Logout confirmation question | Instruction text above the logout confirmation controls. |
+| `registration_disabled_text` | `textarea` | Registration-unavailable message | Notice displayed when a visitor opens registration while public account creation is disabled. |
+| `invalid_link_text` | `textarea` | Invalid-or-expired-link message | Notice displayed for expired or invalid confirmation links. |
 
-When `webhook_signing_secret` is configured, outgoing webhooks include `X-Alynt-AG-Event`, `X-Alynt-AG-Time`, `X-Alynt-AG-Version`, and `X-Alynt-AG-Signature` headers. The signature is `sha256=` plus the HMAC-SHA256 of `{timestamp}.{event}.{json_body}` using the shared secret. Leave the secret empty to send unsigned webhooks for existing integrations.
+## Registration
 
-The Webhooks settings tab shows the most recent delivery status, current signing status, a signature verification reference, and expandable metadata for recent webhook delivery logs.
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `registration_enabled` | `boolean` | `false` | Allows public account creation. When disabled, registration links are omitted from the login screen. |
+| `registration_token_hours` | `integer` | `24` | Pending-registration confirmation expiry in hours; constrained to `1` through `168`. |
+| `username_format` | `string` | `@User_{first_name}_{last_name}` | Generated username pattern for confirmed registrations. |
+| `terms_path` | `relative_path` | `/legal/terms/` | Terms link used in the registration consent text. |
+| `privacy_path` | `relative_path` | `/legal/privacy/` | Privacy Policy link used in the registration consent text. |
 
-Custom dashboard links are stored in `dashboard_custom_links` as a JSON array. Each link may define `label`, `url`, `icon`, `order`, `roles`, and `target`; relative URLs are resolved from the site home URL, empty roles are visible to all account users, and `_blank` targets receive safe new-tab behavior.
+## Security & Spam
 
-When `dashboard_enabled` and `woocommerce_takeover` are both enabled and WooCommerce is active, requests under the configured `after_login_redirect` path are rendered inside the branded dashboard. Standard WooCommerce account endpoints such as orders, downloads, addresses, account details, and payment methods are delegated to WooCommerce endpoint actions. Plugin-added account endpoints are discovered from WooCommerce account menu items and routed through the same endpoint action pattern.
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `protection_mode` | `select` | `turnstile_or_reoon` | Requires either configured provider to pass, or every configured provider when set to `turnstile_and_reoon`. |
+| `turnstile_site_key` | `string` | empty | Cloudflare Turnstile site key. |
+| `turnstile_secret_key` | `secret` | empty | Cloudflare Turnstile secret key. |
+| `reoon_api_key` | `secret` | empty | Reoon Email Verifier API key. |
+| `reoon_mode` | `select` | `quick` | Reoon verification mode: `quick` or `power`. |
+| `reoon_flagged_policy` | `select` | `allow` | Whether flagged Reoon statuses are logged and allowed, or blocked. |
+| `registration_rate_limit_count` | `integer` | `5` | Registration attempts permitted per registration window; constrained to `1` through `1000`. |
+| `registration_rate_limit_window` | `integer` | `60` | Registration rate-limit window in minutes; constrained to `1` through `10080`. |
+| `resend_confirmation_rate_limit_count` | `integer` | `5` | Confirmation resend attempts per resend window; constrained to `1` through `1000`. |
+| `resend_confirmation_rate_limit_window` | `integer` | `60` | Confirmation resend rate-limit window in minutes; constrained to `1` through `10080`. |
+| `login_rate_limit_count` | `integer` | `10` | Login attempts permitted per login window; constrained to `1` through `1000`. |
+| `login_rate_limit_window` | `integer` | `15` | Login rate-limit window in minutes; constrained to `1` through `10080`. |
+| `lostpassword_rate_limit_count` | `integer` | `5` | Password-reset attempts per reset window; constrained to `1` through `1000`. |
+| `lostpassword_rate_limit_window` | `integer` | `60` | Password-reset rate-limit window in minutes; constrained to `1` through `10080`. |
 
-Registration consent is stored without IP addresses by default. Consent records include email, user ID when available, terms path, privacy path, consent context, plugin version, settings hash, and timestamp. WordPress personal data exporter/eraser callbacks cover pending registrations, consent records, email verification logs, webhook metadata, and audit entries.
+## Emails
 
-Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile, Reoon, webhooks, diagnostics, or WooCommerce takeover on production sites. It summarizes plugin-owned records, default retention, data-subject request support, processor/third-party boundaries, and site-owner review responsibilities.
+Every email template has a plain-text subject and preheader plus a `rich_text` body. Available tokens include `{{site_name}}`, `{{first_name}}`, `{{last_name}}`, `{{user_email}}`, `{{confirmation_url}}`, `{{reset_url}}`, `{{change_email_url}}`, and `{{expiry_hours}}` when applicable. The email body supports safe headings, bold/italic text, links, blockquotes, and lists. The branded wrapper and action-button behavior are intentionally not editable.
 
-The emergency bypass key allows a site owner to visit `wp-login.php?alynt_ag_bypass={key}` when frontend output is enabled. It only bypasses the branded screen redirect and does not authenticate the visitor or grant admin access.
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `email_registration_confirmation_subject` | `string` | Confirmation subject | Subject for the pending-registration confirmation email. |
+| `email_registration_confirmation_preheader` | `string` | Confirmation preheader | Preheader for the pending-registration confirmation email. |
+| `email_registration_confirmation_body` | `rich_text` | Confirmation body | Body for the pending-registration confirmation email. |
+| `email_password_reset_subject` | `string` | Password reset subject | Subject for password reset messages. |
+| `email_password_reset_preheader` | `string` | Password reset preheader | Preheader for password reset messages. |
+| `email_password_reset_body` | `rich_text` | Password reset body | Body for password reset messages. |
+| `email_password_changed_disabled` | `boolean` | `false` | Suppresses password-changed notifications when enabled. |
+| `email_password_changed_subject` | `string` | Password changed subject | Subject for password-changed notifications. |
+| `email_password_changed_preheader` | `string` | Password changed preheader | Preheader for password-changed notifications. |
+| `email_password_changed_body` | `rich_text` | Password changed body | Body for password-changed notifications. |
+| `email_new_user_welcome_disabled` | `boolean` | `false` | Suppresses account-created welcome messages when enabled. |
+| `email_new_user_welcome_subject` | `string` | Account-created welcome subject | Subject for the account-created welcome email. |
+| `email_new_user_welcome_preheader` | `string` | Account-created welcome preheader | Preheader for the account-created welcome email. |
+| `email_new_user_welcome_body` | `rich_text` | Account-created welcome body | Body for the account-created welcome email. |
+| `email_change_confirmation_disabled` | `boolean` | `false` | Suppresses post-change notifications and pending profile email-change requests when enabled. |
+| `email_change_confirmation_subject` | `string` | Email-change subject | Subject for email-change confirmation/notification messages. |
+| `email_change_confirmation_preheader` | `string` | Email-change preheader | Preheader for email-change confirmation/notification messages. |
+| `email_change_confirmation_body` | `rich_text` | Email-change body | Body for email-change confirmation/notification messages. |
+| `email_test_recipient` | `email` | empty | Recipient used by the administrator test-send tool. |
 
-## Diagnostics
+WordPress exposes only a plain-text body for its pending profile email-change request. The plugin uses the configured body there but cannot apply the branded HTML wrapper. Disabling that template also clears the pending `_new_email` marker so a user is not left waiting for an email that will not be sent.
 
-Diagnostics live under `Advanced / Tools`.
+## Dashboard
 
-- Disabled by default.
-- Stored in the plugin-owned `alynt_ag_diagnostics_logs` table.
-- Events below the configured minimum level are ignored.
-- Context values are redacted before storage and export.
-- Admins can view recent events, export a CSV, and clear diagnostics events.
-- Scheduled retention cleanup removes diagnostics events older than `diagnostics_retention` days.
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `dashboard_enabled` | `boolean` | `false` | Enables the custom full-page account dashboard. |
+| `dashboard_custom_links` | `dashboard_links` | `[]` | JSON list of custom account links with label, URL, icon, order, role visibility, and target. |
+| `dashboard_offcanvas_enabled` | `boolean` | `false` | Enables the optional dashboard slide-out navigation panel. |
+| `dashboard_offcanvas_menu_id` | `nav_menu` | `0` | WordPress navigation menu selected for the dashboard slide-out panel. |
+| `dashboard_footer_menu_enabled` | `boolean` | `false` | Enables the optional dashboard footer navigation. |
+| `dashboard_footer_menu_id` | `nav_menu` | `0` | WordPress navigation menu selected for the dashboard footer. |
+
+## WooCommerce
+
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `woocommerce_takeover` | `boolean` | `false` | Renders eligible WooCommerce My Account routes inside the branded dashboard. Requires active WooCommerce and the custom dashboard. |
+| `woocommerce_require_login_checkout` | `boolean` | `false` | Redirects logged-out checkout visitors to the branded login page and returns them after authentication. |
+| `woocommerce_require_login_order_pay` | `boolean` | `false` | Applies the checkout authentication gate to order-payment links separately. |
+| `woocommerce_hidden_menu_items` | `woocommerce_menu_visibility` | `[]` | WooCommerce account endpoint keys hidden from branded dashboard navigation. |
+
+## Webhooks
+
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `account_created_webhook` | `url` | empty | HTTPS endpoint that receives `account.created` after a confirmed registration creates the user. |
+| `webhook_signing_secret` | `secret` | empty | Shared secret for the `sha256=` HMAC signature. |
+| `debug_payload_logging` | `boolean` | `false` | Stores full payload bodies for diagnostic use. Leave disabled in normal operation. |
+
+When a signing secret is configured, delivery includes `X-Alynt-AG-Event`, `X-Alynt-AG-Time`, `X-Alynt-AG-Version`, and `X-Alynt-AG-Signature`. The signature covers `{timestamp}.{event}.{json_body}`. Normal logs retain only metadata such as destination host, status, retry count, and error message.
+
+## Privacy & Data
+
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `success_log_retention` | `integer` | `7` | Successful webhook-log retention in days; constrained to `1` through `3650`. |
+| `failed_log_retention` | `integer` | `30` | Failed webhook-log retention in days; constrained to `1` through `3650`. |
+| `verification_log_retention` | `integer` | `30` | Verification-log retention in days; constrained to `1` through `3650`. |
+| `consent_record_retention` | `integer` | `365` | Registration-consent record retention in days; constrained to `1` through `3650`. |
+| `audit_log_retention` | `integer` | `180` | Audit-log retention in days; constrained to `1` through `3650`. |
+
+Consent records omit IP addresses by default. They include email, user ID when available, terms and privacy paths, consent context, plugin version, settings hash, and timestamp. The plugin registers WordPress personal-data exporter and eraser callbacks for plugin-owned pending registrations, consent records, verification logs, webhook metadata, and audit entries.
+
+## Advanced / Tools
+
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `emergency_bypass_key` | `secret` | generated on activation/default creation | Allows `wp-login.php?alynt_ag_bypass={key}` to bypass the branded screen redirect. It never authenticates a visitor or grants admin access. |
+| `diagnostics_enabled` | `boolean` | `false` | Enables plugin diagnostics collection. |
+| `diagnostics_min_level` | `select` | `warning` | Lowest retained diagnostic level. |
+| `diagnostics_retention` | `integer` | `30` | Diagnostic-record retention in days; constrained to `1` through `3650`. |
+
+Diagnostics are stored in the plugin-owned `alynt_ag_diagnostics_logs` table. Context is redacted before storage and export. Administrators can view recent events, export CSV, clear entries, and rely on scheduled retention cleanup.
+
+## Operational Notes
+
+- The General tab includes a read-only Setup Readiness panel covering frontend output, URLs, emergency access, branding, registration, email testing, dashboard configuration, WooCommerce takeover, webhook signing, and retention windows.
+- Plugin settings exports intentionally omit secrets, email recipients, Media Library attachment IDs, and navigation menu IDs because those values do not transfer safely between sites.
+- Review [Operations](OPERATIONS.md), [Privacy and GDPR](PRIVACY_AND_GDPR.md), and [Production Rollout Playbook](PRODUCTION_ROLLOUT_PLAYBOOK.md) before enabling public registration or changing a production account surface.
