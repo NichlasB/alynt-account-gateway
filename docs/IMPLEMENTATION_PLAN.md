@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Custom operator integration compatibility implemented, locally verified for the MVS Video Store blueprint, and prepared as the v1.1.24 release candidate; publication remains pending approval.
+- Current phase: Custom operator integration compatibility released as v1.1.24, verified through the GitHub asset and Alynt Plugin Updater, and installed on the MVS Video Store LocalWP blueprint.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.23 is the current public baseline.
+- Plugin status: v1.1.24 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Publish v1.1.24 after the release checkpoint, verify its GitHub asset and Plugin Tester updater path, then install the released build on MVS Video Store. Keep staging and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Keep staging and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Custom Operator Integration Compatibility
 
@@ -21,7 +21,7 @@
 - [x] Add focused toolbar, wp-admin, and login-redirect regression tests.
 - [x] Pass PHPCS and the full PHPUnit suite with `550` tests and `4,000` assertions.
 - [x] Verify the real MVS Video Store role reaches only Video Sales and Profile, lands on Video Sales after login, and remains compatible with WooCommerce's separate admin guard through AVC's role-specific filter.
-- [ ] Complete patch-release metadata, package verification, publication, and updater acceptance after owner approval.
+- [x] Complete patch-release metadata, package verification, publication, and updater acceptance after owner approval. GitHub release v1.1.24 is published; its public asset installed successfully from 1.1.23 to active 1.1.24 through Alynt Plugin Updater on LocalWP Plugin Tester, and the released archive is active on MVS Video Store.
 
 ### Security Boundary
 
