@@ -53,4 +53,21 @@ Confirmed target: LocalWP Plugin Tester at `http://plugin-tester.local/` (`plugi
 
 ## Decision
 
-The v1.1.22 release candidate is ready for explicit publication approval. Publication, tagging, GitHub release creation, and public updater verification have not yet occurred.
+The v1.1.22 candidate received explicit publication approval and was released on 2026-07-21.
+
+## Publication Closeout
+
+- Release: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.22`
+- Release commit: `f4e69b2b2c379fa337d1e35e07049dad1c249273`
+- Build Release workflow: `https://github.com/NichlasB/alynt-account-gateway/actions/runs/29824642500`
+- Public asset: `alynt-account-gateway-v1.1.22.zip`
+- Public asset SHA-256: `529A22E112DFAEB625545637E34C124FD963F91345EDD73B06C4405015208CB0`
+- Public package inspection: 131 runtime files, 142 total entries including directory entries, one root folder, forward-slash paths, no development content, and consistent v1.1.22 metadata.
+- The public package's 131 runtime files match the approved candidate. The only byte-level difference was `readme.txt` line endings produced by Linux checkout versus the Windows candidate workspace; normalized content is identical.
+- Alynt Plugin Updater on LocalWP Plugin Tester detected the public `1.1.21 -> 1.1.22` update and used the release asset URL.
+- The updater installation preserved the plugin's active position and settings fingerprint.
+- A fresh request reported version 1.1.22 and database schema 0.1.8; all 131 installed files hash-match the public asset.
+- A final forced updater check reported current version 1.1.22, latest version 1.1.22, and no update offer.
+- The branded login route rendered after the public updater installation with no browser console errors.
+
+The v1.1.22 release cycle is complete. No staging or production site was changed during publication or updater verification.
