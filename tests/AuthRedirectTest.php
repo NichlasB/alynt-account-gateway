@@ -86,6 +86,33 @@ class AuthRedirectTest extends AuthServiceTestCase {
 		);
 	}
 
+	public function test_login_redirect_allows_a_safe_custom_operator_default() {
+		$service  = new ALYNT_AG_Auth_Service();
+		$user     = new WP_User( 'operator@example.test' );
+		$user->roles = array( 'video_store_manager' );
+		$settings = array(
+			'after_login_redirect' => '/my-account/',
+		);
+		$callback = static function ( $default, $active_settings, $authenticated_user ) {
+			unset( $active_settings );
+
+			return in_array( 'video_store_manager', $authenticated_user->roles, true )
+				? 'https://example.test/wp-admin/admin.php?page=video-sales'
+				: $default;
+		};
+
+		add_filter( 'alynt_ag_default_login_redirect_url', $callback, 10, 3 );
+
+		try {
+			$this->assertSame(
+				'https://example.test/wp-admin/admin.php?page=video-sales',
+				$service->get_login_redirect_url( '', $settings, $user )
+			);
+		} finally {
+			remove_filter( 'alynt_ag_default_login_redirect_url', $callback, 10 );
+		}
+	}
+
 	public function test_safe_submitted_redirect_wins_over_role_default() {
 		$service  = new ALYNT_AG_Auth_Service();
 		$user     = new WP_User( 'admin@example.test' );

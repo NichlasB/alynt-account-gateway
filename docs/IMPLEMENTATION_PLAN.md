@@ -2,12 +2,32 @@
 
 ## Status
 
-- Current phase: Manual-order payment compatibility slice released as v1.1.23 and updater-verified on LocalWP Plugin Tester; no staging or production update has been performed in this release cycle.
+- Current phase: Custom operator integration compatibility implemented, locally verified for the MVS Video Store blueprint, and prepared as the v1.1.24 release candidate; publication remains pending approval.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.23 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Keep staging and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Publish v1.1.24 after the release checkpoint, verify its GitHub asset and Plugin Tester updater path, then install the released build on MVS Video Store. Keep staging and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## Custom Operator Integration Compatibility
+
+### Purpose And Boundary
+
+- [x] Reproduce the MVS `avc_store_manager` collision with Account Gateway's default wp-admin restriction and customer post-login destination.
+- [x] Add `alynt_ag_user_can_access_wp_admin` so a trusted integration can authorize a narrowly scoped custom operator without granting `manage_options` or `manage_woocommerce`.
+- [x] Add `alynt_ag_default_login_redirect_url` so the same integration can provide a role-appropriate, same-site destination.
+- [x] Normalize the filtered login destination through the existing return-destination policy.
+- [x] Document both filters and their least-privilege expectations.
+- [x] Add focused toolbar, wp-admin, and login-redirect regression tests.
+- [x] Pass PHPCS and the full PHPUnit suite with `550` tests and `4,000` assertions.
+- [x] Verify the real MVS Video Store role reaches only Video Sales and Profile, lands on Video Sales after login, and remains compatible with WooCommerce's separate admin guard through AVC's role-specific filter.
+- [ ] Complete patch-release metadata, package verification, publication, and updater acceptance after owner approval.
+
+### Security Boundary
+
+- Account Gateway still denies wp-admin by default to every role except administrators and WooCommerce shop managers.
+- The new access filter grants no capability itself; consuming integrations must identify their role, verify its own capability, and restrict the admin menu and routes it exposes.
+- Filtered login destinations remain subject to Account Gateway's same-site return-destination normalization.
 
 ## Manual Order Payment Compatibility Slice
 

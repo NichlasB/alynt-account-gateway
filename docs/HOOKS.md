@@ -4,6 +4,27 @@ This document distinguishes Alynt Account Gateway extension points from WordPres
 
 ## Alynt Filters
 
+### `alynt_ag_user_can_access_wp_admin`
+
+Allows a trusted integration to extend the default administrator and WooCommerce shop-manager wp-admin policy for a narrowly scoped custom operator role.
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `$allowed` | `bool` | Whether the default Account Gateway policy allows access. |
+| `$user` | `WP_User` | Current authenticated user. |
+
+### `alynt_ag_default_login_redirect_url`
+
+Adjusts the safe same-site fallback URL used after login. The result is normalized through Account Gateway's return-destination policy before use.
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `$default` | `string` | Default same-site URL for the user's role. |
+| `$settings` | `array` | Active Account Gateway settings. |
+| `$user` | `WP_User|null` | Authenticated user, when available. |
+
+These filters are intended to be used together. An integration that grants a custom role wp-admin access should also provide a role-appropriate default destination and retain its own capability checks and admin-menu restrictions.
+
 ### `alynt_ag_is_trusted_proxy`
 
 Determines whether the immediate `REMOTE_ADDR` peer is a trusted reverse proxy. By default no peer is trusted, so forwarded headers are ignored.

@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.23
+Stable tag: 1.1.24
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,10 @@ Yes. Each email body uses WordPress's Visual/Text editor with safe HTML formatti
 == Changelog ==
 
 = Unreleased =
+
+= 1.1.24 =
+
+* Allow trusted integrations to authorize narrowly scoped custom operator roles for their own wp-admin screens and provide a safe role-specific post-login destination.
 
 = 1.1.23 =
 

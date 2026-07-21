@@ -43,6 +43,16 @@ class ALYNT_AG_Auth_Redirects extends ALYNT_AG_Service_Collaborator {
 	public function run_get_login_redirect_url( $redirect_to, $settings, $user = null ) {
 		$default = home_url( $this->get_default_login_redirect_path( $settings, $user ) );
 
+		/**
+		 * Filters the safe default URL used after a successful login.
+		 *
+		 * @param string       $default  Default same-site URL for the user's role.
+		 * @param array        $settings Active Account Gateway settings.
+		 * @param WP_User|null $user     Authenticated user, when available.
+		 */
+		$filtered_default = apply_filters( 'alynt_ag_default_login_redirect_url', $default, $settings, $user );
+		$default          = $this->destinations->absolute_url( $filtered_default, $settings, $default );
+
 		if ( '' === (string) $redirect_to ) {
 			return $default;
 		}

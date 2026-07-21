@@ -51,8 +51,7 @@ class ALYNT_AG_Frontend_Access_Controller {
 			return $show;
 		}
 
-		// phpcs:ignore WordPress.WP.Capabilities.Unknown -- WooCommerce registers this capability for shop managers.
-		return current_user_can( 'manage_options' ) || current_user_can( 'manage_woocommerce' );
+		return $this->user_can_access_wp_admin();
 	}
 
 	/**
@@ -71,8 +70,7 @@ class ALYNT_AG_Frontend_Access_Controller {
 			return;
 		}
 
-		// phpcs:ignore WordPress.WP.Capabilities.Unknown -- WooCommerce registers this capability for shop managers.
-		if ( current_user_can( 'manage_options' ) || current_user_can( 'manage_woocommerce' ) ) {
+		if ( $this->user_can_access_wp_admin() ) {
 			return;
 		}
 
@@ -107,6 +105,27 @@ class ALYNT_AG_Frontend_Access_Controller {
 		global $pagenow;
 
 		return 'admin-post.php' === $pagenow;
+	}
+
+	/**
+	 * Determine whether the current user may access wp-admin screens.
+	 *
+	 * @return bool
+	 */
+	private function user_can_access_wp_admin() {
+		// phpcs:ignore WordPress.WP.Capabilities.Unknown -- WooCommerce registers this capability for shop managers.
+		$allowed = current_user_can( 'manage_options' ) || current_user_can( 'manage_woocommerce' );
+
+		/**
+		 * Filters whether the current authenticated user may access wp-admin.
+		 *
+		 * Integrations should return true only for narrowly scoped operator roles
+		 * that provide their own admin-screen restrictions.
+		 *
+		 * @param bool    $allowed Whether access is allowed by the default policy.
+		 * @param WP_User $user    Current authenticated user.
+		 */
+		return (bool) apply_filters( 'alynt_ag_user_can_access_wp_admin', $allowed, wp_get_current_user() );
 	}
 
 	/**

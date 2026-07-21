@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.24 - 2026-07-21
+
+### Added
+
+- Add filter-first integration points for narrowly scoped custom operator roles to access their own wp-admin screens and receive a role-appropriate, same-site post-login destination.
+
 ## 1.1.23 - 2026-07-21
 
 ### Fixed

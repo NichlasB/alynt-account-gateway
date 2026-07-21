@@ -34,6 +34,24 @@ class FrontendAccessPolicyTest extends FrontendRoutingTestCase {
 		$this->assertFalse( $frontend->filter_admin_bar( false ) );
 	}
 
+	public function test_admin_access_filter_allows_a_trusted_custom_operator() {
+		$frontend = new ALYNT_AG_Frontend();
+		$GLOBALS['alynt_ag_test_user_logged_in'] = true;
+		$callback = static function ( $allowed, $user ) {
+			return $allowed || in_array( 'customer', $user->roles, true );
+		};
+
+		add_filter( 'alynt_ag_user_can_access_wp_admin', $callback, 10, 2 );
+
+		try {
+			$this->assertTrue( $frontend->filter_admin_bar( false ) );
+			$frontend->maybe_block_wp_admin();
+			$this->assertSame( array(), $GLOBALS['alynt_ag_test_redirects'] );
+		} finally {
+			remove_filter( 'alynt_ag_user_can_access_wp_admin', $callback, 10 );
+		}
+	}
+
 	public function test_wp_admin_block_redirects_non_privileged_users() {
 		$frontend = new ALYNT_AG_Frontend();
 		$GLOBALS['alynt_ag_test_user_logged_in'] = true;
