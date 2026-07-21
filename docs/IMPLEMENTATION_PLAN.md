@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `13` are complete.
+- Current phase: Phase 2 structural refactoring, post-refactor pre-release prompts `01` through `13`, and the consolidated LocalWP end-to-end acceptance matrix are complete.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Complete one consolidated end-to-end acceptance matrix for the v1.1.22 candidate. Prompts `03` through `13` produced corrective code, tests, and documentation that target v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Prepare the v1.1.22 release candidate metadata and changelog, rerun final source/package gates, and request release approval. After publication, verify the public release asset through Alynt Plugin Updater on LocalWP Plugin Tester. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
@@ -18,8 +18,8 @@
 - [x] Record the ordered pre-release and runtime-validation plan before execution.
 - [x] Receive explicit approval before beginning prompt `01`.
 - [x] Keep the prompt `01` review branch and evidence isolated from staging and production sites.
-- [ ] Do not publish another release unless review findings require changes and a later release is separately approved.
-- [ ] Put any code, test, documentation, or packaging fixes into v1.1.22 rather than altering the published v1.1.21 tag or asset.
+- [x] Do not publish another release unless review findings require changes and a later release is separately approved.
+- [x] Put all corrective code, test, and documentation changes on the v1.1.22 candidate branch rather than altering the published v1.1.21 tag or asset.
 
 ### Ordered Pre-Release Sequence
 
@@ -557,6 +557,27 @@ Implementation evidence:
 - [x] Confirmed there are no REST routes, public AJAX handlers, shortcodes, incoming webhooks, unsafe JavaScript HTML sinks, runtime dynamic-code/process functions, debug disclosures, hardcoded credentials, or known npm/Composer advisories.
 - [x] Reopened and passed Prompt `11` after the security fix: build, stable `1,166`-string POT generation, PHPCS, `236` PHP syntax checks, `17` JavaScript/MJS syntax checks, npm audit, Composer advisory audit, normal/reverse/fixed-random PHPUnit at `547` tests and `3,995` assertions, and `git diff --check`.
 - [x] Re-ran Prompt `13` against the post-fix tree and recorded a clean final security gate in `docs/SECURITY_AUDIT_1.1.21.md`.
+
+### Consolidated v1.1.22 Candidate Acceptance Evidence
+
+- [x] Used exact candidate commit `99ecfb9` from `prerelease/v1.1.21-revalidation`; no public version bump, tag, release, updater operation, staging operation, or production operation was performed.
+- [x] Built production assets and passed the full PHPUnit suite with `547` tests and `3,995` assertions before installation.
+- [x] Created and inspected an internal release-style ZIP with `131` runtime files, no development files, and SHA-256 `BC2C2FD92DC39E9DE6DD14B1D743217769C69FE3CC2BB00534C3F4EDC6226779`.
+- [x] Installed the exact candidate on `plugin-tester local-only`; all `131` installed files byte-match the inspected package and Account Gateway remained active in its original plugin position.
+- [x] Verified the real first-request schema migration from stored database version `0.1.6` to `0.1.8` while preserving settings, active-plugin state, and every pre-existing plugin-owned row.
+- [x] Checked all `12` admin settings tabs at the WordPress `782px` breakpoint: every tab returned HTTP `200`, rendered its controls, showed no fatal output, and had zero horizontal overflow.
+- [x] Checked login, lost password, disabled registration, logout confirmation, expired set-password, protected My Account, and native `wp-login.php` interception at `390x844`; every route stayed branded, returned the expected state, and had zero horizontal overflow.
+- [x] Checked the gateway states at `1440x1000` and the exact responsive boundary at `799px` and `801px`; the media panel remained hidden below the boundary and visible above it without overflow.
+- [x] Verified failed login recovery retains the email field, clears the password, renders the neutral accessible error, and never exposes the native WordPress login shell.
+- [x] Verified lost-password submission for an unknown disposable address returns the neutral branded `Check Your Email` state without exposing account existence.
+- [x] Verified administrator login reaches `wp-admin`; disposable customer login reaches the branded dashboard; customer `wp-admin` access redirects to My Account; and Orders, Downloads, Addresses, Payment Methods, and Account Details all render through the WooCommerce dashboard takeover without overflow.
+- [x] Temporarily enabled registration and completed the full lifecycle: client-side required-field gating, terms acceptance, pending and consent persistence, branded confirmation email, token confirmation, strong-password setup, delayed WordPress user creation, generated username, and email-only login to the mobile dashboard.
+- [x] Verified the registration-confirmation email preview, responsive body typography, test-send success notice, and SureMails delivery-log acceptance using disposable local recipients.
+- [x] Verified the WordPress privacy exporter returns the disposable account's plugin-owned data, the eraser removes it without retained items, and bounded retention cleanup removes an expired fixture while preserving a fresh control fixture.
+- [x] Restored registration to disabled and restored the exact pre-test settings fingerprint `6b1588760a275e2c5369dc37458b8012`; cleanup returned the site to `2` users, `8` audit rows, zero rows in every other plugin-owned table, zero QA mail rows, and zero QA rate-limit options.
+- [x] Confirmed no browser console errors. The only browser warning was WordPress's development React-refresh shim. One failed command-line bootstrap without LocalWP's PHP configuration produced a missing-`mysqli` fatal in the local PHP log; rerunning with LocalWP's generated `php.ini` succeeded, and no plugin runtime fatal was observed.
+- [x] Novamira MCP tools were registered but the LocalWP endpoint did not return within two bounded attempts, so the approved MariaDB, LocalWP PHP, and Playwright fallback was used. No staging or production site was touched.
+- [x] Recorded the complete matrix in `docs/END_TO_END_ACCEPTANCE_1.1.22.md`.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 
