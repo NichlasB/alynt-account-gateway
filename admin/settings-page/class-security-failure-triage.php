@@ -27,27 +27,7 @@ class ALYNT_AG_Settings_Page_Security_Failure_Triage extends ALYNT_AG_Settings_P
 			<h4><?php esc_html_e( 'Provider Failure Triage', 'alynt-account-gateway' ); ?></h4>
 			<p class="description"><?php esc_html_e( 'Use these focused checks when provider errors appear. They separate configuration gaps from connectivity problems and policy decisions.', 'alynt-account-gateway' ); ?></p>
 			<div class="alynt-ag-security-status__grid">
-				<?php foreach ( $items as $item ) : ?>
-					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
-						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
-						<h5><?php echo esc_html( $item['label'] ); ?></h5>
-						<p>
-							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
-							<?php echo esc_html( $item['message'] ); ?>
-						</p>
-						<?php if ( ! empty( $item['latest'] ) ) : ?>
-							<p class="description alynt-ag-security-card__meta">
-								<?php
-								printf(
-									/* translators: %s: latest provider failure timestamp. */
-									esc_html__( 'Latest seen: %s.', 'alynt-account-gateway' ),
-									esc_html( $item['latest'] )
-								);
-								?>
-							</p>
-						<?php endif; ?>
-					</section>
-				<?php endforeach; ?>
+				<?php $this->render_security_signal_cards( $items ); ?>
 			</div>
 		</div>
 		<?php

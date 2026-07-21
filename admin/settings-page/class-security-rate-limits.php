@@ -37,16 +37,7 @@ class ALYNT_AG_Settings_Page_Security_Rate_Limits extends ALYNT_AG_Settings_Page
 				<?php esc_html_e( 'Recent blocks come from verification logs. Active buckets show privacy-preserving lockout pressure that is still inside the configured rate-limit window.', 'alynt-account-gateway' ); ?>
 			</p>
 			<div class="alynt-ag-security-status__grid">
-				<?php foreach ( $items as $item ) : ?>
-					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
-						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
-						<h5><?php echo esc_html( $item['label'] ); ?></h5>
-						<p>
-							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
-							<?php echo esc_html( $item['message'] ); ?>
-						</p>
-					</section>
-				<?php endforeach; ?>
+				<?php $this->render_security_signal_cards( $items ); ?>
 			</div>
 			<h5><?php esc_html_e( 'Active Rate Limit Buckets', 'alynt-account-gateway' ); ?></h5>
 			<?php $this->render_admin_data_read_errors( array( $read_error ) ); ?>

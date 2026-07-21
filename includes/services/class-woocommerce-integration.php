@@ -269,21 +269,6 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<string,string>
 	 */
 	private function merge_standard_account_menu_items( $items, $standard_items ) {
-		$merged = array();
-
-		foreach ( $standard_items as $endpoint => $label ) {
-			if ( 'customer-logout' === $endpoint ) {
-				foreach ( $items as $item_endpoint => $item_label ) {
-					$item_endpoint = sanitize_key( $item_endpoint );
-					if ( $item_endpoint && ! isset( $standard_items[ $item_endpoint ] ) ) {
-						$merged[ $item_endpoint ] = sanitize_text_field( $item_label );
-					}
-				}
-			}
-
-			$merged[ $endpoint ] = isset( $items[ $endpoint ] ) ? sanitize_text_field( $items[ $endpoint ] ) : $label;
-		}
-
-		return $merged;
+		return $this->collaborator( 'navigation' )->merge_standard_account_menu_items( $items, $standard_items );
 	}
 }

@@ -123,7 +123,7 @@ class ALYNT_AG_Settings_Page_Gateway_Preview extends ALYNT_AG_Settings_Page_Comp
 		$frontend = new ALYNT_AG_Frontend();
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 
-		$this->enqueue_gateway_preview_assets( $screen, $settings );
+		$frontend->enqueue_preview_assets( $settings, $screen );
 		show_admin_bar( false );
 		add_filter( 'show_admin_bar', '__return_false', PHP_INT_MAX );
 		remove_action( 'wp_footer', 'wp_admin_bar_render', 1000 );
@@ -175,66 +175,5 @@ class ALYNT_AG_Settings_Page_Gateway_Preview extends ALYNT_AG_Settings_Page_Comp
 		}
 
 		wp_print_scripts( array( 'alynt-ag-frontend' ) );
-	}
-
-	/**
-	 * Enqueue frontend assets for a standalone admin preview.
-	 *
-	 * @param string              $screen   Screen key.
-	 * @param array<string,mixed> $settings Settings.
-	 * @return void
-	 */
-	public function enqueue_gateway_preview_assets( $screen, $settings ) {
-		$style_path = ALYNT_AG_PLUGIN_DIR . 'assets/dist/frontend/index.css';
-		if ( file_exists( $style_path ) ) {
-			wp_enqueue_style(
-				'alynt-ag-frontend',
-				ALYNT_AG_PLUGIN_URL . 'assets/dist/frontend/index.css',
-				array(),
-				filemtime( $style_path )
-			);
-		}
-
-		$script_path = ALYNT_AG_PLUGIN_DIR . 'assets/dist/frontend/index.js';
-		if ( file_exists( $script_path ) ) {
-			wp_enqueue_script(
-				'alynt-ag-frontend',
-				ALYNT_AG_PLUGIN_URL . 'assets/dist/frontend/index.js',
-				array(),
-				filemtime( $script_path ),
-				true
-			);
-
-			wp_localize_script(
-				'alynt-ag-frontend',
-				'alyntAgFrontend',
-				array(
-					'labels' => array(
-						'showPassword'           => __( 'Show password', 'alynt-account-gateway' ),
-						'hidePassword'           => __( 'Hide password', 'alynt-account-gateway' ),
-						'passwordVisible'        => __( 'Password is visible.', 'alynt-account-gateway' ),
-						'passwordHidden'         => __( 'Password is hidden.', 'alynt-account-gateway' ),
-						'show'                   => __( 'Show', 'alynt-account-gateway' ),
-						'hide'                   => __( 'Hide', 'alynt-account-gateway' ),
-						'requirementMet'         => __( 'Met', 'alynt-account-gateway' ),
-						'requirementNotMet'      => __( 'Not met', 'alynt-account-gateway' ),
-						/* translators: 1: number of password requirements met, 2: total password requirements. */
-						'requirementMetSummary'  => __( '%1$d of %2$d requirement met.', 'alynt-account-gateway' ),
-						/* translators: 1: number of password requirements met, 2: total password requirements. */
-						'requirementsMetSummary' => __( '%1$d of %2$d requirements met.', 'alynt-account-gateway' ),
-					),
-				)
-			);
-		}
-
-		if ( ! empty( $settings['turnstile_site_key'] ) && 'register' === $screen ) {
-			wp_enqueue_script(
-				'alynt-ag-turnstile',
-				'https://challenges.cloudflare.com/turnstile/v0/api.js',
-				array(),
-				null, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Cloudflare warns when its API URL receives a WordPress version query.
-				true
-			);
-		}
 	}
 }

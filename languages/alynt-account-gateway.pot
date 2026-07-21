@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 1.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-21 08:41+0000\n"
+"POT-Creation-Date: 2026-07-21 08:53+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,13 +12,11 @@ msgstr ""
 "X-Domain: alynt-account-gateway\n"
 
 #. translators: 1: number of password requirements met, 2: total password requirements.
-#: admin/settings-page/class-gateway-preview.php:222
 #: includes/services/class-frontend-assets.php:118
 msgid "%1$d of %2$d requirement met."
 msgstr ""
 
 #. translators: 1: number of password requirements met, 2: total password requirements.
-#: admin/settings-page/class-gateway-preview.php:224
 #: includes/services/class-frontend-assets.php:120
 msgid "%1$d of %2$d requirements met."
 msgstr ""
@@ -123,7 +121,7 @@ msgstr ""
 msgid "Access available digital purchases and download files connected to your account."
 msgstr ""
 
-#: admin/settings-page/class-security-signal-renderer-a.php:155
+#: admin/settings-page/class-security-signal-renderer-a.php:146
 msgid "Access Control Signals"
 msgstr ""
 
@@ -188,7 +186,7 @@ msgstr ""
 msgid "Account Dashboard"
 msgstr ""
 
-#: admin/settings-page/class-security-signal-renderer-b.php:109
+#: admin/settings-page/class-security-signal-renderer-b.php:82
 msgid "Account Delivery Signals"
 msgstr ""
 
@@ -261,42 +259,42 @@ msgid "Action tokens:"
 msgstr ""
 
 #. translators: %d: active bucket count.
-#: admin/settings-page/class-security-rate-limits.php:209
+#: admin/settings-page/class-security-rate-limits.php:200
 msgid "active lockouts from %d current login bucket."
 msgid_plural "active lockouts from %d current login buckets."
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: active bucket count.
-#: admin/settings-page/class-security-rate-limits.php:224
+#: admin/settings-page/class-security-rate-limits.php:215
 msgid "active lockouts from %d current password-reset bucket."
 msgid_plural "active lockouts from %d current password-reset buckets."
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: active bucket count.
-#: admin/settings-page/class-security-rate-limits.php:179
+#: admin/settings-page/class-security-rate-limits.php:170
 msgid "active lockouts from %d current registration bucket."
 msgid_plural "active lockouts from %d current registration buckets."
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: active bucket count.
-#: admin/settings-page/class-security-rate-limits.php:194
+#: admin/settings-page/class-security-rate-limits.php:185
 msgid "active lockouts from %d current resend bucket."
 msgid_plural "active lockouts from %d current resend buckets."
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/settings-page/class-security-rate-limits.php:51
+#: admin/settings-page/class-security-rate-limits.php:42
 msgid "Active Rate Limit Buckets"
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:257
+#: admin/settings-page/class-security-rate-limits.php:248
 msgid "Active rate-limit buckets could not be loaded. Refresh the page and check the database connection if the problem continues."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:264
+#: admin/settings-page/class-security-rate-limits.php:255
 msgid "Active rate-limit pressure is too high to summarize safely in one request. Wait for current rate-limit windows to expire, then refresh this screen."
 msgstr ""
 
@@ -408,19 +406,19 @@ msgstr ""
 msgid "Allow and log flagged statuses"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:96
+#: admin/settings-page/class-security-review-queue.php:87
 msgid "Allow and monitor until repeated abuse appears from the same domain."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:102
+#: admin/settings-page/class-security-review-queue.php:93
 msgid "Allow and retry support contact if the customer later needs help."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:90
+#: admin/settings-page/class-security-review-queue.php:81
 msgid "Allow and review when shared inboxes are acceptable for the site."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:129
+#: admin/settings-page/class-security-review-queue.php:120
 msgid "Allowed Flagged Results"
 msgstr ""
 
@@ -570,15 +568,15 @@ msgstr ""
 msgid "Block flagged statuses"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:97
+#: admin/settings-page/class-security-review-queue.php:88
 msgid "Block or manually review when one domain creates repeated low-quality registrations."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:103
+#: admin/settings-page/class-security-review-queue.php:94
 msgid "Block when failed delivery, fake-account pressure, or manual support burden rises."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:91
+#: admin/settings-page/class-security-review-queue.php:82
 msgid "Block when personal accountability, subscriptions, or fraud exposure matter more than shared access."
 msgstr ""
 
@@ -604,7 +602,7 @@ msgstr ""
 msgid "Blocked before account creation."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:147
+#: admin/settings-page/class-security-review-queue.php:138
 msgid "Blocked Flagged Results"
 msgstr ""
 
@@ -668,11 +666,11 @@ msgstr ""
 msgid "catch_all, role_account, unknown, inbox_full"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:141
+#: admin/settings-page/class-security-review-queue.php:132
 msgid "Catch-All And Unknown Reviews"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:95
+#: admin/settings-page/class-security-review-queue.php:86
 msgid "Catch-all domain"
 msgstr ""
 
@@ -712,7 +710,7 @@ msgstr ""
 msgid "Check Turnstile Connection"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:92
+#: admin/settings-page/class-security-review-queue.php:83
 msgid "Check whether customers commonly use support, info, billing, or team inboxes."
 msgstr ""
 
@@ -783,7 +781,7 @@ msgstr ""
 msgid "Collapse submenu for %s"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:98
+#: admin/settings-page/class-security-review-queue.php:89
 msgid "Compare masked activity rows with support tickets and order history before tightening."
 msgstr ""
 
@@ -803,7 +801,7 @@ msgstr ""
 msgid "Completed a branded password-reset request."
 msgstr ""
 
-#: admin/settings-page/class-security-pending.php:147
+#: admin/settings-page/class-security-pending.php:138
 msgid "Completed Pending Records"
 msgstr ""
 
@@ -835,7 +833,7 @@ msgstr ""
 msgid "Confirm Email Address"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:104
+#: admin/settings-page/class-security-review-queue.php:95
 msgid "Confirm email delivery health and whether the address belongs to a real customer record."
 msgstr ""
 
@@ -911,8 +909,8 @@ msgstr ""
 msgid "Confirmation resend was blocked by the rate limit. Ask the customer to wait for the configured resend window before trying again."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:100
-#: admin/settings-page/class-security-rate-limits.php:189
+#: admin/settings-page/class-security-rate-limits.php:180
+#: admin/settings-page/class-security-rate-limits.php:91
 msgid "Confirmation Resends"
 msgstr ""
 
@@ -924,7 +922,7 @@ msgstr ""
 msgid "Confirmed At"
 msgstr ""
 
-#: admin/settings-page/class-security-pending.php:135
+#: admin/settings-page/class-security-pending.php:126
 msgid "Confirmed, Not Completed"
 msgstr ""
 
@@ -1150,7 +1148,7 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:61
+#: admin/settings-page/class-security-review-queue.php:52
 msgid "Default Decision"
 msgstr ""
 
@@ -1261,7 +1259,7 @@ msgstr ""
 msgid "Disabled. Add a webhook signing secret to send verification headers."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:107
+#: admin/settings-page/class-security-review-queue.php:98
 msgid "Disposable, spamtrap, invalid, or disabled"
 msgstr ""
 
@@ -1528,7 +1526,7 @@ msgstr ""
 msgid "Expired"
 msgstr ""
 
-#: admin/settings-page/class-security-pending.php:141
+#: admin/settings-page/class-security-pending.php:132
 msgid "Expired Pending Records"
 msgstr ""
 
@@ -1627,7 +1625,7 @@ msgstr ""
 msgid "Frontend output is enabled. Keep the remaining checks ready before sending users to the gateway."
 msgstr ""
 
-#: admin/settings-page/class-security-signal-renderer-b.php:54
+#: admin/settings-page/class-security-signal-renderer-b.php:45
 msgid "Gateway Auth Signals"
 msgstr ""
 
@@ -1732,12 +1730,10 @@ msgid ""
 "Use the button below to visit your account."
 msgstr ""
 
-#: admin/settings-page/class-gateway-preview.php:218
 #: includes/services/class-frontend-assets.php:114
 msgid "Hide"
 msgstr ""
 
-#: admin/settings-page/class-gateway-preview.php:214
 #: includes/services/class-frontend-assets.php:110
 msgid "Hide password"
 msgstr ""
@@ -1831,7 +1827,7 @@ msgstr ""
 msgid "Keep billing and shipping information ready for checkout."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:108
+#: admin/settings-page/class-security-review-queue.php:99
 msgid "Keep blocked; these are always treated as high-risk or unusable."
 msgstr ""
 
@@ -1907,7 +1903,7 @@ msgid "Latest blocked path: %s."
 msgstr ""
 
 #. translators: %s: latest provider failure timestamp.
-#: admin/settings-page/class-security-failure-triage.php:43
+#: admin/settings-page/class-security-signal-renderer-a.php:175
 msgid "Latest seen: %s."
 msgstr ""
 
@@ -1997,8 +1993,8 @@ msgid "Logged At"
 msgstr ""
 
 #: admin/settings-page/class-gateway-preview.php:24
-#: admin/settings-page/class-security-rate-limits.php:106
-#: admin/settings-page/class-security-rate-limits.php:204
+#: admin/settings-page/class-security-rate-limits.php:195
+#: admin/settings-page/class-security-rate-limits.php:97
 msgid "Login"
 msgstr ""
 
@@ -2110,11 +2106,11 @@ msgstr ""
 msgid "Manage your orders, details, and account preferences."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:57
+#: admin/settings-page/class-security-review-queue.php:48
 msgid "Manual review decision playbook"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:55
+#: admin/settings-page/class-security-review-queue.php:46
 msgid "Manual Review Decision Playbook"
 msgstr ""
 
@@ -2162,7 +2158,6 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
-#: admin/settings-page/class-gateway-preview.php:219
 #: includes/services/class-frontend-assets.php:115
 msgid "Met"
 msgstr ""
@@ -2267,7 +2262,7 @@ msgstr ""
 msgid "No expiry"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:109
+#: admin/settings-page/class-security-review-queue.php:100
 msgid "No extra tightening is needed because these statuses are already blocked."
 msgstr ""
 
@@ -2316,7 +2311,6 @@ msgstr ""
 msgid "Not available"
 msgstr ""
 
-#: admin/settings-page/class-gateway-preview.php:220
 #: includes/services/class-frontend-assets.php:116
 msgid "Not met"
 msgstr ""
@@ -2491,7 +2485,6 @@ msgstr ""
 msgid "Password Changed Subject"
 msgstr ""
 
-#: admin/settings-page/class-gateway-preview.php:216
 #: includes/services/class-frontend-assets.php:112
 msgid "Password is hidden."
 msgstr ""
@@ -2500,7 +2493,6 @@ msgstr ""
 msgid "Password is ready."
 msgstr ""
 
-#: admin/settings-page/class-gateway-preview.php:215
 #: includes/services/class-frontend-assets.php:111
 msgid "Password is visible."
 msgstr ""
@@ -2515,8 +2507,8 @@ msgstr ""
 msgid "Password must include uppercase, lowercase, number, and symbol characters."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:112
-#: admin/settings-page/class-security-rate-limits.php:219
+#: admin/settings-page/class-security-rate-limits.php:103
+#: admin/settings-page/class-security-rate-limits.php:210
 #: includes/services/class-email-tokens.php:25
 msgid "Password Reset"
 msgstr ""
@@ -2740,7 +2732,7 @@ msgstr ""
 msgid "Provider Failure Triage"
 msgstr ""
 
-#: admin/settings-page/class-security-signal-renderer-b.php:136
+#: admin/settings-page/class-security-signal-renderer-b.php:100
 msgid "Provider Health Signals"
 msgstr ""
 
@@ -2827,11 +2819,11 @@ msgstr ""
 msgid "Receives account-created events after the user confirms email and sets a password."
 msgstr ""
 
-#: admin/settings-page/class-security-signal-renderer-a.php:154
+#: admin/settings-page/class-security-signal-renderer-a.php:145
 msgid "Recent access control signals"
 msgstr ""
 
-#: admin/settings-page/class-security-signal-renderer-b.php:108
+#: admin/settings-page/class-security-signal-renderer-b.php:81
 msgid "Recent account delivery signals"
 msgstr ""
 
@@ -2851,7 +2843,7 @@ msgstr ""
 msgid "Recent blocks come from verification logs. Active buckets show privacy-preserving lockout pressure that is still inside the configured rate-limit window."
 msgstr ""
 
-#: admin/settings-page/class-security-signal-renderer-b.php:53
+#: admin/settings-page/class-security-signal-renderer-b.php:44
 msgid "Recent branded authentication signals"
 msgstr ""
 
@@ -2867,7 +2859,7 @@ msgstr ""
 msgid "recent challenge rejections. Confirm the site key matches the secret key and watch for bot traffic if this rises."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:136
+#: admin/settings-page/class-security-failure-triage.php:116
 msgid "recent Cloudflare Siteverify connection failures. Check outbound HTTP, DNS, firewall rules, and the saved secret key."
 msgstr ""
 
@@ -2891,7 +2883,7 @@ msgstr ""
 msgid "recent consent-related blocks. Check Terms and Privacy copy if legitimate customers are stopping here."
 msgstr ""
 
-#: admin/settings-page/class-security-pending.php:240
+#: admin/settings-page/class-security-pending.php:231
 msgid "Recent delivery diagnostics could not be loaded. Refresh the page and check the database connection if the problem continues."
 msgstr ""
 
@@ -2919,7 +2911,7 @@ msgstr ""
 msgid "Recent gateway routing signals"
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:109
+#: admin/settings-page/class-security-rate-limits.php:100
 msgid "recent login blocks. Repeated login blocks can indicate credential stuffing or customers stuck at login."
 msgstr ""
 
@@ -2931,15 +2923,15 @@ msgstr ""
 msgid "recent login redirects preserved a destination. Review protected-page links if customers seem bounced through login often."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:164
+#: admin/settings-page/class-security-failure-triage.php:144
 msgid "recent malformed or unexpected Reoon responses. Test the key in Reoon and review provider availability before enabling stricter blocking."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:150
+#: admin/settings-page/class-security-failure-triage.php:130
 msgid "recent missing API-key failures. Confirm the Reoon key is saved before registration relies on email verification."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:129
+#: admin/settings-page/class-security-failure-triage.php:109
 msgid "recent missing-token or key configuration failures. Confirm both keys are saved and belong to the same Cloudflare Turnstile site."
 msgstr ""
 
@@ -2967,7 +2959,7 @@ msgstr ""
 msgid "recent password or email-availability blocks. Review password guidance if customers struggle to complete setup."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:115
+#: admin/settings-page/class-security-rate-limits.php:106
 msgid "recent password-reset blocks. Check for repeated reset requests against the same account."
 msgstr ""
 
@@ -2975,15 +2967,15 @@ msgstr ""
 msgid "recent password-reset rate-limit blocks. Watch for repeated reset requests against the same account."
 msgstr ""
 
-#: admin/settings-page/class-security-pending.php:144
+#: admin/settings-page/class-security-pending.php:135
 msgid "recent pending records past their confirmation window. High counts can indicate missed emails or confusing confirmation instructions."
 msgstr ""
 
-#: admin/settings-page/class-security-pending.php:132
+#: admin/settings-page/class-security-pending.php:123
 msgid "recent pending records still waiting for email confirmation. Watch resend activity and inbox-delivery support requests."
 msgstr ""
 
-#: admin/settings-page/class-security-pending.php:150
+#: admin/settings-page/class-security-pending.php:141
 msgid "recent pending records that reached account creation. This helps compare completed registrations against stalled ones."
 msgstr ""
 
@@ -3007,7 +2999,7 @@ msgstr ""
 msgid "recent pending-record or confirmation-email failures. Review database writes and email delivery before public launch."
 msgstr ""
 
-#: admin/settings-page/class-security-signal-renderer-b.php:135
+#: admin/settings-page/class-security-signal-renderer-b.php:99
 msgid "Recent provider health signals"
 msgstr ""
 
@@ -3015,7 +3007,7 @@ msgstr ""
 msgid "Recent rate limit pressure"
 msgstr ""
 
-#: admin/settings-page/class-security-pending.php:138
+#: admin/settings-page/class-security-pending.php:129
 msgid "recent records where email is confirmed but password setup is unfinished. Customers may need clearer next-step copy."
 msgstr ""
 
@@ -3031,11 +3023,11 @@ msgstr ""
 msgid "recent registration blocks or system failures. Review consent copy, pending-registration storage, and password setup guidance."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:97
+#: admin/settings-page/class-security-rate-limits.php:88
 msgid "recent registration blocks. Review the limit if legitimate customers are affected."
 msgstr ""
 
-#: admin/settings-page/class-security-signal-renderer-b.php:80
+#: admin/settings-page/class-security-signal-renderer-b.php:62
 msgid "Recent registration flow signals"
 msgstr ""
 
@@ -3047,15 +3039,15 @@ msgstr ""
 msgid "Recent Registration Verification Activity"
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:143
+#: admin/settings-page/class-security-failure-triage.php:123
 msgid "recent rejected challenges. Confirm the registration domain is allowed in Cloudflare and compare with bot traffic before changing policy."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:157
+#: admin/settings-page/class-security-failure-triage.php:137
 msgid "recent Reoon API connection failures. Check outbound HTTP, DNS, provider availability, and key permissions."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:150
+#: admin/settings-page/class-security-review-queue.php:141
 msgid "recent Reoon flagged results blocked by strict policy. Check support tickets for legitimate customers who may need help."
 msgstr ""
 
@@ -3063,7 +3055,7 @@ msgstr ""
 msgid "recent Reoon policy blocks for low-quality or flagged addresses. Review if legitimate business domains appear in support tickets."
 msgstr ""
 
-#: admin/settings-page/class-security-rate-limits.php:103
+#: admin/settings-page/class-security-rate-limits.php:94
 msgid "recent resend blocks. Repeated resends can indicate confused customers or automated retries."
 msgstr ""
 
@@ -3075,7 +3067,7 @@ msgstr ""
 msgid "recent reset-link redirects preserved password setup keys. Confirm branded set-password handling stays healthy."
 msgstr ""
 
-#: admin/settings-page/class-security-pending.php:210
+#: admin/settings-page/class-security-pending.php:201
 msgid "Recent security diagnostics could not be loaded. Refresh the page and check the database connection if the problem continues."
 msgstr ""
 
@@ -3095,7 +3087,7 @@ msgstr ""
 msgid "recent Turnstile or Reoon failures and blocks. Check provider configuration, outbound HTTP, and policy false positives."
 msgstr ""
 
-#: admin/settings-page/class-security-pending.php:180
+#: admin/settings-page/class-security-pending.php:171
 msgid "Recent verification activity could not be loaded. Refresh the page and check the database connection if the problem continues."
 msgstr ""
 
@@ -3144,8 +3136,8 @@ msgid "Redirects and Admin Blocks"
 msgstr ""
 
 #: admin/settings-page/class-gateway-preview.php:25
-#: admin/settings-page/class-security-rate-limits.php:174
-#: admin/settings-page/class-security-rate-limits.php:94
+#: admin/settings-page/class-security-rate-limits.php:165
+#: admin/settings-page/class-security-rate-limits.php:85
 #: includes/class-settings-definition.php:30
 msgid "Registration"
 msgstr ""
@@ -3214,7 +3206,7 @@ msgstr ""
 msgid "Registration flow recorded this account action."
 msgstr ""
 
-#: admin/settings-page/class-security-signal-renderer-b.php:81
+#: admin/settings-page/class-security-signal-renderer-b.php:63
 msgid "Registration Flow Signals"
 msgstr ""
 
@@ -3322,11 +3314,11 @@ msgstr ""
 msgid "Reoon blocked this registration."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:147
+#: admin/settings-page/class-security-failure-triage.php:127
 msgid "Reoon Configuration"
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:154
+#: admin/settings-page/class-security-failure-triage.php:134
 msgid "Reoon Connectivity"
 msgstr ""
 
@@ -3392,7 +3384,7 @@ msgstr ""
 msgid "Reoon returned an unexpected response. Review provider availability and test the saved API key."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:161
+#: admin/settings-page/class-security-failure-triage.php:141
 msgid "Reoon Unexpected Responses"
 msgstr ""
 
@@ -3457,7 +3449,7 @@ msgstr ""
 msgid "Result"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:60
+#: admin/settings-page/class-security-review-queue.php:51
 msgid "Result Family"
 msgstr ""
 
@@ -3513,7 +3505,7 @@ msgstr ""
 msgid "Review Decision"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:63
+#: admin/settings-page/class-security-review-queue.php:54
 msgid "Review First"
 msgstr ""
 
@@ -3525,7 +3517,7 @@ msgstr ""
 msgid "Review masked email and domain patterns before changing the flagged-status policy."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:110
+#: admin/settings-page/class-security-review-queue.php:101
 msgid "Review only when a known customer reports a false positive."
 msgstr ""
 
@@ -3602,11 +3594,11 @@ msgstr ""
 msgid "Reviewed At"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:89
+#: admin/settings-page/class-security-review-queue.php:80
 msgid "Role account"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:135
+#: admin/settings-page/class-security-review-queue.php:126
 msgid "Role Account Reviews"
 msgstr ""
 
@@ -3876,7 +3868,6 @@ msgstr ""
 msgid "Shop Manager After Login Redirect"
 msgstr ""
 
-#: admin/settings-page/class-gateway-preview.php:217
 #: includes/services/class-frontend-assets.php:113
 #: includes/services/class-frontend-login-screen.php:140
 #: includes/services/class-frontend-setpassword-screen.php:186
@@ -3889,7 +3880,6 @@ msgstr ""
 msgid "Show %s"
 msgstr ""
 
-#: admin/settings-page/class-gateway-preview.php:213
 #: includes/services/class-frontend-assets.php:109
 #: includes/services/class-frontend-login-screen.php:140
 #: includes/services/class-frontend-setpassword-screen.php:186
@@ -4302,7 +4292,7 @@ msgstr ""
 msgid "This settings tab was restored to its defaults."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:62
+#: admin/settings-page/class-security-review-queue.php:53
 msgid "Tighten When"
 msgstr ""
 
@@ -4357,7 +4347,7 @@ msgstr ""
 msgid "Turnstile challenge passed."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:140
+#: admin/settings-page/class-security-failure-triage.php:120
 msgid "Turnstile Challenge Rejections"
 msgstr ""
 
@@ -4365,11 +4355,11 @@ msgstr ""
 msgid "Turnstile Challenges"
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:126
+#: admin/settings-page/class-security-failure-triage.php:106
 msgid "Turnstile Configuration"
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:133
+#: admin/settings-page/class-security-failure-triage.php:113
 #: admin/settings-page/class-security-signal-data-b.php:230
 msgid "Turnstile Connectivity"
 msgstr ""
@@ -4451,7 +4441,7 @@ msgstr ""
 msgid "Unknown email template."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:101
+#: admin/settings-page/class-security-review-queue.php:92
 msgid "Unknown or inbox full"
 msgstr ""
 
@@ -4459,15 +4449,15 @@ msgstr ""
 msgid "Unlimited downloads"
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:144
+#: admin/settings-page/class-security-review-queue.php:135
 msgid "unreviewed catch-all, unknown, or inbox-full results allowed by policy. Watch for repeated domains before tightening policy."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:132
+#: admin/settings-page/class-security-review-queue.php:123
 msgid "unreviewed Reoon flagged results allowed by policy. Record a decision on the masked rows below before changing the site-wide policy."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:138
+#: admin/settings-page/class-security-review-queue.php:129
 msgid "unreviewed role-account emails allowed by policy. Confirm whether shared inboxes are acceptable for this site."
 msgstr ""
 
@@ -4587,7 +4577,7 @@ msgstr ""
 msgid "Use these notes when editing subjects, preheaders, and body copy above."
 msgstr ""
 
-#: admin/settings-page/class-security-review-queue.php:56
+#: admin/settings-page/class-security-review-queue.php:47
 msgid "Use this as a support-friendly rubric before changing the site-wide Reoon flagged-status policy."
 msgstr ""
 
@@ -4701,7 +4691,7 @@ msgid_plural "Wait %d minutes before requesting another confirmation email."
 msgstr[0] ""
 msgstr[1] ""
 
-#: admin/settings-page/class-security-pending.php:129
+#: admin/settings-page/class-security-pending.php:120
 msgid "Waiting For Confirmation"
 msgstr ""
 

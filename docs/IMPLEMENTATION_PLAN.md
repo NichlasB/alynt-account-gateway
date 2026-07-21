@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `10` are complete; prompt `11` is next.
+- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `11` are complete; prompt `12` is next.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Run `11-CODE_QUALITY_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompts `03` through `10` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Run `12-DOCUMENTATION_REVIEW_PROMPT.md`, then the final `13-SECURITY_AUDIT_PROMPT.md`, and complete one consolidated end-to-end acceptance matrix. Prompts `03` through `11` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
@@ -34,7 +34,7 @@
 - [x] `08-UNINSTALL_REVIEW_PROMPT.md`
 - [x] `09-I18N_REVIEW_PROMPT.md`
 - [x] `10-ACCESSIBILITY_REVIEW_PROMPT.md`
-- [ ] `11-CODE_QUALITY_REVIEW_PROMPT.md`
+- [x] `11-CODE_QUALITY_REVIEW_PROMPT.md`
 - [ ] `12-DOCUMENTATION_REVIEW_PROMPT.md`
 - [ ] `13-SECURITY_AUDIT_PROMPT.md`
 
@@ -193,6 +193,19 @@ Execution rules:
 - [x] Added `tests/AccessibilityReviewTest.php` plus focused renderer and JavaScript regressions; normal, reverse-order, and fixed-random PHPUnit runs each pass at 542 tests and 3,885 assertions.
 - [x] Passed production build, 1,166-string POT generation, PHPCS, PHP/JavaScript syntax, npm and Composer audits, Composer validation, source ceilings, and `git diff --check`.
 - [x] Recorded the complete issue, keyboard, contrast, validation, and residual manual assistive-technology boundary in `docs/ACCESSIBILITY_REVIEW_1.1.21.md`; real browser/screen-reader acceptance remains in the consolidated post-prompt-13 test matrix.
+
+### Prompt 11 - Code Quality Review Evidence
+
+- [x] Reviewed all 125 production PHP files and 15 source JavaScript files for duplicate code, long methods, parameter-heavy APIs, deep coupling, vague naming, magic values, and plugin-owned global state.
+- [x] Consolidated eleven repeated count-based security signal-card templates into one escaped renderer with optional latest-seen metadata.
+- [x] Removed duplicate standalone-preview asset and localization logic by delegating through the existing frontend facade to the frontend asset owner.
+- [x] Removed the duplicate WooCommerce standard/custom account-menu merge algorithm while retaining the established integration compatibility shim.
+- [x] Reviewed 45 methods over 50 lines and retained documented cohesive catalog, template, DDL, and transaction exceptions rather than fragmenting them mechanically.
+- [x] Reviewed 15 methods with more than four parameters and retained WordPress callbacks, constructor seams, and compatibility-sensitive transaction/logging contracts.
+- [x] Confirmed production globals remain limited to native WordPress database, request, hook, and version boundaries; no debug remnant or plugin-owned mutable global state was found.
+- [x] Added focused ownership and escaping regressions and recorded the complete audit in `docs/CODE_QUALITY_REVIEW_1.1.21.md`.
+- [x] Revalidated normal, reverse-order, and fixed-random PHPUnit execution at 543 tests and 3,883 assertions; PHPCS, build, 1,166-string POT generation, dependency audits, Composer validation, PHP/JavaScript syntax, source ceilings, and `git diff --check` also pass.
+- [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `11`; v1.1.21 remains immutable and corrective work targets a separately approved v1.1.22 candidate.
 
 ### Consolidated End-To-End Acceptance
 

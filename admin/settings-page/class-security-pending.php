@@ -86,16 +86,7 @@ class ALYNT_AG_Settings_Page_Security_Pending extends ALYNT_AG_Settings_Page_Com
 		<div class="alynt-ag-security-lifecycle" aria-label="<?php esc_attr_e( 'Recent pending registration lifecycle signals', 'alynt-account-gateway' ); ?>">
 			<h4><?php esc_html_e( 'Pending Registration Lifecycle Signals', 'alynt-account-gateway' ); ?></h4>
 			<div class="alynt-ag-security-status__grid">
-				<?php foreach ( $items as $item ) : ?>
-					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
-						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
-						<h5><?php echo esc_html( $item['label'] ); ?></h5>
-						<p>
-							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
-							<?php echo esc_html( $item['message'] ); ?>
-						</p>
-					</section>
-				<?php endforeach; ?>
+				<?php $this->render_security_signal_cards( $items ); ?>
 			</div>
 		</div>
 		<?php

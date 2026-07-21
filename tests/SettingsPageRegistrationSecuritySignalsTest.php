@@ -12,6 +12,34 @@ require_once __DIR__ . '/support/class-settings-page-security-status-test-case.p
  */
 class SettingsPageRegistrationSecuritySignalsTest extends SettingsPageSecurityStatusTestCase {
 
+	public function test_shared_security_signal_cards_escape_content_and_render_optional_metadata() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		ob_start();
+		$this->invoke_helper(
+			$settings_page,
+			'render_security_signal_cards',
+			array(
+				array(
+					array(
+						'label'   => '<b>Provider</b>',
+						'status'  => 'action" onclick="alert(1)',
+						'count'   => 2,
+						'message' => '<script>alert(1)</script>',
+						'latest'  => '<time>today</time>',
+					),
+				),
+			)
+		);
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( 'alynt-ag-security-card--action&quot; onclick=&quot;alert(1)', $output );
+		$this->assertStringContainsString( '&lt;b&gt;Provider&lt;/b&gt;', $output );
+		$this->assertStringContainsString( '&lt;script&gt;alert(1)&lt;/script&gt;', $output );
+		$this->assertStringContainsString( 'Latest seen: &lt;time&gt;today&lt;/time&gt;.', $output );
+		$this->assertStringNotContainsString( '<script>', $output );
+	}
+
 	public function test_security_provider_failure_triage_items_count_specific_failures() {
 		$GLOBALS['alynt_ag_test_options']['date_format'] = 'Y-m-d';
 		$GLOBALS['alynt_ag_test_options']['time_format'] = 'H:i:s';
