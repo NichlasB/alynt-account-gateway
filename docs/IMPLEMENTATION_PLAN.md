@@ -157,6 +157,17 @@ Execution rules:
 - [x] Final validation passed: normal, reverse, and fixed-random PHPUnit runs each reported 526 tests and 3,675 assertions; PHPCS, build, npm audit, Composer audit, and `git diff --check` passed.
 - [x] Kept real WordPress database, Cron, request, browser, provider, site, publication, packaging, and deployment claims outside prompt `07A`.
 
+### Prompt 08 - Uninstall Review Evidence
+
+- [x] Inventoried two fixed options, one dynamic operation-lock family, two transient families with timeout rows, six custom tables, and four scheduled hooks.
+- [x] Confirmed the plugin creates no owned post/user/term metadata, CPTs, taxonomies, roles, capabilities, upload directories, generated files, network options, or site transients.
+- [x] Added missing cleanup for queued webhook delivery and retry events.
+- [x] Added bounded multisite cleanup for site-by-site installations, processing site IDs in batches of 100 and restoring blog context after every site.
+- [x] Preserved WordPress users, WooCommerce records, media-library attachments, menus, profile fields, and third-party provider data because the plugin does not own them.
+- [x] Added executable single-site and multisite lifecycle regressions and recorded the full inventory in `docs/UNINSTALL_REVIEW_1.1.21.md`.
+- [x] Revalidated normal, reverse-order, and fixed-random PHPUnit execution at 527 tests and 3,687 assertions; PHPCS, build, dependency audits, Composer validation, PHP syntax, and diff hygiene also pass.
+- [x] Kept real isolated WordPress uninstall verification in the consolidated post-prompt-13 component-testing handoff.
+
 ### Consolidated End-To-End Acceptance
 
 - [ ] Run `wordpress-component-testing-troubleshooting-debugging-workflow.md` against the final reviewed codebase after prompt `13`.

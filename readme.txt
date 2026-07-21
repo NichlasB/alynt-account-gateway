@@ -45,7 +45,7 @@ Review `docs/OPERATIONS.md` for installation and support guidance. Use `docs/PRO
 
 == Uninstall ==
 
-Uninstalling the plugin removes plugin-owned settings, the stored database schema version, the retention cleanup schedule, rate-limit transients, and plugin-owned account gateway tables. WordPress users, WooCommerce orders, media-library files, and non-plugin data are not removed.
+Uninstalling the plugin removes plugin-owned settings, the stored database schema version, retention and queued-webhook schedules, rate-limit and operation-lock state, and plugin-owned account gateway tables. On multisite, separately activated site data is cleaned for every site. WordPress users, WooCommerce orders, media-library files, and non-plugin data are not removed.
 
 == Privacy And GDPR Review ==
 

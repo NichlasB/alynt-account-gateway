@@ -69,6 +69,14 @@ Recommended first pass:
 - The plugin provides WordPress personal-data exporter and eraser callbacks for plugin-owned records, but WordPress users, WooCommerce orders, media-library files, and third-party provider records remain under their owning systems.
 - Site owners remain responsible for privacy notice wording, lawful-basis decisions, processor contracts, retention policy, and qualified legal review where required.
 
+## Uninstall
+
+Deleting the plugin removes its settings, schema version, custom tables,
+rate-limit and operation-lock state, and scheduled retention and webhook
+events. Multisite cleanup covers every separately activated site. WordPress
+users, WooCommerce data, media-library attachments, menus, and third-party
+provider records are retained.
+
 ## Development
 
 ```powershell

@@ -15,6 +15,10 @@ class CleanupLifecycleTest extends TestCase {
 	protected function setUp(): void {
 		parent::setUp();
 
+		global $wpdb;
+		$wpdb->prefix  = 'wp_';
+		$wpdb->options = 'wp_options';
+
 		$GLOBALS['alynt_ag_test_db_queries'] = array();
 		$GLOBALS['alynt_ag_test_deleted_options'] = array();
 		$GLOBALS['alynt_ag_test_scheduled_hooks'] = array();
@@ -22,6 +26,11 @@ class CleanupLifecycleTest extends TestCase {
 		$GLOBALS['alynt_ag_test_unscheduled_events'] = array();
 		$GLOBALS['alynt_ag_test_cleared_hooks'] = array();
 		$GLOBALS['alynt_ag_test_rewrite_rules_flushed'] = false;
+		$GLOBALS['alynt_ag_test_is_multisite'] = false;
+		$GLOBALS['alynt_ag_test_site_ids'] = array();
+		$GLOBALS['alynt_ag_test_blog_stack'] = array();
+		$GLOBALS['alynt_ag_test_switched_blogs'] = array();
+		$GLOBALS['alynt_ag_test_restored_blogs'] = 0;
 		unset( $GLOBALS['alynt_ag_test_db_query_result'] );
 		$GLOBALS['alynt_ag_test_options'] = array(
 			'alynt_ag_settings' => array(
@@ -44,6 +53,12 @@ class CleanupLifecycleTest extends TestCase {
 			$GLOBALS['alynt_ag_test_unscheduled_events'],
 			$GLOBALS['alynt_ag_test_cleared_hooks'],
 			$GLOBALS['alynt_ag_test_rewrite_rules_flushed'],
+			$GLOBALS['alynt_ag_test_is_multisite'],
+			$GLOBALS['alynt_ag_test_site_ids'],
+			$GLOBALS['alynt_ag_test_blog_stack'],
+			$GLOBALS['alynt_ag_test_switched_blogs'],
+			$GLOBALS['alynt_ag_test_restored_blogs'],
+			$GLOBALS['alynt_ag_test_db_query_result'],
 			$GLOBALS['alynt_ag_test_options']
 		);
 
@@ -130,6 +145,8 @@ class CleanupLifecycleTest extends TestCase {
 		$this->assertContains( 'alynt_ag_db_version', $GLOBALS['alynt_ag_test_deleted_options'] );
 		$this->assertContains( 'alynt_ag_retention_cleanup', $GLOBALS['alynt_ag_test_cleared_hooks'] );
 		$this->assertContains( 'alynt_ag_retention_cleanup_continue', $GLOBALS['alynt_ag_test_cleared_hooks'] );
+		$this->assertContains( ALYNT_AG_Webhook_Dispatcher::DELIVERY_HOOK, $GLOBALS['alynt_ag_test_cleared_hooks'] );
+		$this->assertContains( ALYNT_AG_Webhook_Dispatcher::RETRY_HOOK, $GLOBALS['alynt_ag_test_cleared_hooks'] );
 		$this->assertStringContainsString( 'DROP TABLE IF EXISTS wp_alynt_ag_pending_registrations', $queries );
 		$this->assertStringContainsString( 'DROP TABLE IF EXISTS wp_alynt_ag_webhook_logs', $queries );
 		$this->assertStringContainsString( 'DROP TABLE IF EXISTS wp_alynt_ag_verification_logs', $queries );
@@ -142,6 +159,30 @@ class CleanupLifecycleTest extends TestCase {
 		$this->assertStringContainsString( '\\_transient\\_alynt\\_ag\\_rl\\_meta\\_', $queries );
 		$this->assertStringContainsString( '\\_transient\\_timeout\\_alynt\\_ag\\_rl\\_meta\\_', $queries );
 		$this->assertStringContainsString( 'alynt\\_ag\\_lock\\_', $queries );
+	}
+
+	public function test_multisite_uninstall_cleans_each_site_installation() {
+		if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+			define( 'WP_UNINSTALL_PLUGIN', true );
+		}
+
+		$GLOBALS['alynt_ag_test_is_multisite'] = true;
+		$GLOBALS['alynt_ag_test_site_ids'] = array( 2, 3 );
+
+		include ALYNT_AG_PLUGIN_DIR . 'uninstall.php';
+
+		$queries = implode( "\n", $GLOBALS['alynt_ag_test_db_queries'] );
+
+		$this->assertSame( array( 2, 3 ), $GLOBALS['alynt_ag_test_switched_blogs'] );
+		$this->assertSame( 2, $GLOBALS['alynt_ag_test_restored_blogs'] );
+		$this->assertStringContainsString( 'DROP TABLE IF EXISTS wp_2_alynt_ag_pending_registrations', $queries );
+		$this->assertStringContainsString( 'DROP TABLE IF EXISTS wp_3_alynt_ag_pending_registrations', $queries );
+		$this->assertStringContainsString( 'DELETE FROM wp_2_options WHERE option_name LIKE', $queries );
+		$this->assertStringContainsString( 'DELETE FROM wp_3_options WHERE option_name LIKE', $queries );
+		$this->assertSame( 2, count( array_keys( $GLOBALS['alynt_ag_test_deleted_options'], 'alynt_ag_settings', true ) ) );
+		$this->assertSame( 2, count( array_keys( $GLOBALS['alynt_ag_test_deleted_options'], 'alynt_ag_db_version', true ) ) );
+		$this->assertSame( 2, count( array_keys( $GLOBALS['alynt_ag_test_cleared_hooks'], ALYNT_AG_Webhook_Dispatcher::DELIVERY_HOOK, true ) ) );
+		$this->assertSame( 2, count( array_keys( $GLOBALS['alynt_ag_test_cleared_hooks'], ALYNT_AG_Webhook_Dispatcher::RETRY_HOOK, true ) ) );
 	}
 
 	public function test_uninstall_drops_the_database_registry_tables_only() {

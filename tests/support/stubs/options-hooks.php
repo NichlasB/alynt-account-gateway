@@ -136,7 +136,50 @@ if ( ! function_exists( 'get_site_option' ) ) {
 
 if ( ! function_exists( 'is_multisite' ) ) {
 	function is_multisite() {
-		return false;
+		return ! empty( $GLOBALS['alynt_ag_test_is_multisite'] );
+	}
+}
+
+if ( ! function_exists( 'get_sites' ) ) {
+	function get_sites( $args = array() ) {
+		$site_ids = $GLOBALS['alynt_ag_test_site_ids'] ?? array();
+		$offset   = isset( $args['offset'] ) ? absint( $args['offset'] ) : 0;
+		$number   = isset( $args['number'] ) ? absint( $args['number'] ) : count( $site_ids );
+
+		return array_slice( $site_ids, $offset, $number );
+	}
+}
+
+if ( ! function_exists( 'switch_to_blog' ) ) {
+	function switch_to_blog( $blog_id ) {
+		global $wpdb;
+
+		$GLOBALS['alynt_ag_test_blog_stack'][] = array(
+			'prefix'  => $wpdb->prefix,
+			'options' => $wpdb->options,
+		);
+		$GLOBALS['alynt_ag_test_switched_blogs'][] = absint( $blog_id );
+		$wpdb->prefix  = 'wp_' . absint( $blog_id ) . '_';
+		$wpdb->options = $wpdb->prefix . 'options';
+
+		return true;
+	}
+}
+
+if ( ! function_exists( 'restore_current_blog' ) ) {
+	function restore_current_blog() {
+		global $wpdb;
+
+		$previous = array_pop( $GLOBALS['alynt_ag_test_blog_stack'] );
+		if ( ! $previous ) {
+			return false;
+		}
+
+		$wpdb->prefix  = $previous['prefix'];
+		$wpdb->options = $previous['options'];
+		$GLOBALS['alynt_ag_test_restored_blogs']++;
+
+		return true;
 	}
 }
 
