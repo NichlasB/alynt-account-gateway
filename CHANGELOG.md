@@ -4,6 +4,8 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.23 - 2026-07-21
+
 ### Fixed
 
 - Allow authenticated `admin-post.php` action dispatchers to complete without exposing wp-admin screens to customer roles, preserving frontend plugin workflows such as manual-order customer payment handoffs.

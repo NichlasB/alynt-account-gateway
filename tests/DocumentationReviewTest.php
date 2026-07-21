@@ -61,9 +61,9 @@ class DocumentationReviewTest extends TestCase {
 		$this->assertStringContainsString( '## FAQ', $readme );
 		$this->assertStringContainsString( 'Gateway Screen Preview', $readme );
 		$this->assertStringContainsString( '== FAQ ==', $wp_readme );
-		$this->assertStringContainsString( 'Stable tag: 1.1.22', $wp_readme );
+		$this->assertStringContainsString( 'Stable tag: 1.1.23', $wp_readme );
 		$this->assertStringContainsString( '## Unreleased', $changelog );
-		$this->assertStringContainsString( 'Version:           1.1.22', $plugin_php );
+		$this->assertStringContainsString( 'Version:           1.1.23', $plugin_php );
 		$this->assertStringContainsString( 'Text Domain:       alynt-account-gateway', $plugin_php );
 	}
 }
