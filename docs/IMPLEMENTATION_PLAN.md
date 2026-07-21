@@ -241,8 +241,8 @@ Execution rules:
 - [x] Use clean pushed commit `36ec9eccc321a9af5326d64e78ea5545c412581d` as the Phase 2 restore checkpoint.
 - [x] Refresh the v1.1.12 inventory against v1.1.14.
 - [x] Keep Increment 1 limited to test infrastructure with no runtime, route, setting, asset, or frontend behavior changes.
-- [ ] Complete each increment on its own branch with the full quality, package, Plugin Tester, and release gates.
-- [ ] Leave production sites unchanged during structural maintenance unless a later site-specific update is separately approved.
+- [x] Complete each increment on its own branch with the full quality, package, Plugin Tester, and release gates.
+- [x] Leave production sites unchanged during structural maintenance unless a later site-specific update is separately approved.
 
 ### Refreshed v1.1.14 Inventory
 
@@ -913,14 +913,15 @@ Implementation evidence:
 
 ### Status
 
-- Current v1 product baseline: `v1.1.7`, released and updater-verified.
+- Current v1 product baseline: `v1.1.22`, released and updater-verified.
 - Original v1 implementation slices: Complete.
-- New approved post-v1 slices: Alynt Plugin Updater follow-up, deeper provider admin UX, dashboard UX expansion, dashboard action icons/off-canvas navigation, and delegated WooCommerce notice normalization.
-- New approved visual/admin-help tweak: widen gateway cards, reduce panel/card horizontal padding, remove trailing notice paragraph margin, and correct background-image guidance toward tall portrait imagery.
-- Production rollout playbook template: Complete; site-specific execution remains deferred until a production target is approved.
+- Approved post-v1 product and maintenance slices: Complete.
+- Gateway layout, admin guidance, WooCommerce notice normalization, dashboard navigation/actions, provider UX, dashboard expansion, checkout authentication, role redirects, and Phase 2 structural maintenance are released and verified.
+- Production rollout playbook template: Complete and exercised during the first separately approved production rollout; the reusable template remains available for future sites.
 - Exploratory/deferred: inactive-account integration until a real site or companion plugin defines the authoritative inactive/suspended-account signal.
+- No further ACG implementation slice is currently ready without a new product requirement or an authoritative inactive-account source.
 
-### Recommended Sequence
+### Completed Sequence
 
 1. Payment Methods dashboard module.
 2. Gateway layout and background-image guidance tweak.
@@ -929,7 +930,7 @@ Implementation evidence:
 5. Dashboard navigation visibility and optional footer menu. Released and updater-verified as v1.1.0.
 6. Deeper provider admin UX. Released and updater-verified as v1.1.1.
 7. Richer dashboard UX expansion. Completed across v1.1.2 through v1.1.6; aggregate regression closure verified without a runtime release.
-8. Complete the site-specific copy of `docs/PRODUCTION_ROLLOUT_PLAYBOOK.md` when the first production rollout is ready to be operationalized.
+8. Complete the site-specific copy of `docs/PRODUCTION_ROLLOUT_PLAYBOOK.md` when the first production rollout is ready to be operationalized. Completed for the approved first production rollout.
 9. Inactive-account integration only if a concrete inactive/suspended-user source is identified.
 
 #### Saved Addresses Increment Progress Notes
@@ -962,7 +963,7 @@ Implementation evidence:
 
 - [x] ACG can be updated from a prior public release through Alynt Plugin Updater without requiring manual active-plugin restoration.
 - [x] Settings, active-plugin order, runtime file count, and no-update state are verified after update.
-- [ ] The known stale release-cache behavior is either fixed, documented with a safe refresh path, or covered by an updater UI/operation affordance.
+- [x] The known stale release-cache behavior is either fixed, documented with a safe refresh path, or covered by an updater UI/operation affordance.
 - [x] The result is validated on LocalWP Plugin Tester and recorded in the relevant plan.
 
 #### Progress Notes
@@ -977,6 +978,8 @@ Implementation evidence:
 - The public `alynt-plugin-updater-v1.1.3.zip` was inspected cleanly: `43` runtime files, one plugin root, zero development-file hits, aligned `1.1.3` metadata, and all `34` packaged PHP files syntax-clean. Public SHA-256: `936EBDBCFF305E4421665814865A862D1D90EAA4BA034814B83B50897A52C61E`.
 - Plugin Tester completed the true public `1.1.2 -> 1.1.3` Alynt Plugin Updater cycle through the GitHub release URL. All `15` active plugins, updater position `4`, and active-plugin hash `e2b3b196dabc025f1d461e49d2ce0c6ecf70bc180dc341d00b7c39b4b8407fe9` remained exact; the next fresh check reported no update.
 - Plugin Tester then completed public Account Gateway `1.1.3 -> 1.1.4` through Alynt Plugin Updater. Account Gateway remained at position `1`; the exact active-plugin hash and settings hash `4c9c362f34b69a693030000a806bb55f172ce98601d4398b9b8fd75555e90a0f` remained unchanged. Home and `/login/` both returned HTTP `200`.
+- Alynt Plugin Updater `v1.1.4` fixed stale managed-plugin update status after completed upgrades and removed obsolete native update entries when cached release data is missing, incomplete, or no longer newer than the installed version. The fix remains present in `v1.1.5`.
+- Account Gateway's public `1.1.21 -> 1.1.22` updater verification independently confirmed fresh discovery, installation from the public release URL, exact activation/settings preservation, and a final no-update state.
 - All public downloads, extracts, rollback copies, and disposable local helpers were removed. `hbf-staging` and production HBF were not touched.
 
 ### Slice 2 - Gateway Layout And Background-Image Guidance Tweak
@@ -1372,16 +1375,16 @@ Implementation evidence:
 
 #### Scope
 
-- [ ] Create a concise operational launch checklist for installing and configuring ACG on a production site.
-- [ ] Cover backups, rollback, frontend-output staging, route handover, emergency bypass, email deliverability, provider keys, webhook receiver, legal URLs, and post-launch smoke tests.
-- [ ] Keep this deferred until there is an actual first production rollout or the user explicitly asks for the playbook.
+- [x] Create a concise operational launch checklist for installing and configuring ACG on a production site.
+- [x] Cover backups, rollback, frontend-output staging, route handover, emergency bypass, email deliverability, provider keys, webhook receiver, legal URLs, and post-launch smoke tests.
+- [x] Keep this deferred until there is an actual first production rollout or the user explicitly asks for the playbook.
 
 ### Exploratory Slice - Inactive Account Integration
 
 #### Current Decision
 
-- [ ] Defer by default because WordPress core does not provide a reliable inactive/suspended-user state.
-- [ ] Revisit only when a target site, membership plugin, CRM, LMS, subscription system, or custom user-meta convention defines the authoritative inactive-account signal.
+- [x] Defer by default because WordPress core does not provide a reliable inactive/suspended-user state.
+- [x] Revisit only when a target site, membership plugin, CRM, LMS, subscription system, or custom user-meta convention defines the authoritative inactive-account signal.
 
 #### Possible Future Scope
 
