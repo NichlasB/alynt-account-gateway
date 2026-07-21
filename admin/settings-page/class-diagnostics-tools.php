@@ -45,7 +45,7 @@ class ALYNT_AG_Settings_Page_Diagnostics_Tools extends ALYNT_AG_Settings_Page_Co
 		</p>
 		<?php $this->render_admin_data_read_errors( $read_errors ); ?>
 
-		<table class="widefat striped" role="presentation">
+		<table class="widefat striped" aria-label="<?php esc_attr_e( 'Diagnostics health summary', 'alynt-account-gateway' ); ?>">
 			<tbody>
 				<?php foreach ( $health as $label => $value ) : ?>
 					<tr>
@@ -87,14 +87,14 @@ class ALYNT_AG_Settings_Page_Diagnostics_Tools extends ALYNT_AG_Settings_Page_Co
 		<?php if ( empty( $recent_events ) ) : ?>
 			<p><?php esc_html_e( 'No diagnostics events have been recorded.', 'alynt-account-gateway' ); ?></p>
 		<?php else : ?>
-			<table class="widefat striped">
+			<table class="widefat striped" aria-label="<?php esc_attr_e( 'Recent diagnostics events', 'alynt-account-gateway' ); ?>">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Time', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Level', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Category', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Event', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Message', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Time', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Level', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Category', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Event', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Message', 'alynt-account-gateway' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>

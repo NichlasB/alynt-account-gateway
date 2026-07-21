@@ -58,7 +58,7 @@ class ALYNT_AG_Settings_Page_Security_Signal_Renderer_A extends ALYNT_AG_Setting
 					<?php esc_html_e( 'No verification activity has been logged yet.', 'alynt-account-gateway' ); ?>
 				</p>
 			<?php else : ?>
-				<table class="widefat striped alynt-ag-security-activity__table">
+				<table class="widefat striped alynt-ag-security-activity__table" aria-label="<?php esc_attr_e( 'Recent registration verification activity', 'alynt-account-gateway' ); ?>">
 					<thead>
 						<tr>
 							<th scope="col"><?php esc_html_e( 'Email', 'alynt-account-gateway' ); ?></th>

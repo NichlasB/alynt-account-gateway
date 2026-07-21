@@ -122,6 +122,18 @@ class AdminJsSourceTest extends TestCase {
 		$this->assertStringContainsString( "text: labels.useImage || ''", $js );
 		$this->assertStringNotContainsString( "labels.selectImage || 'Select Image'", $js );
 		$this->assertStringNotContainsString( "labels.useImage || 'Use Image'", $js );
+		$this->assertStringContainsString( "status.textContent = labels.imageSelected || ''", $js );
+		$this->assertStringContainsString( "status.textContent = labels.imageRemoved || ''", $js );
+	}
+
+	public function test_dashboard_link_editor_announces_changes_and_restores_focus() {
+		$js = $this->get_admin_js();
+
+		$this->assertStringContainsString( "editor.querySelector( '[data-alynt-ag-dashboard-link-status]' )", $js );
+		$this->assertStringContainsString( "status.textContent = labels.dashboardLinkAdded || ''", $js );
+		$this->assertStringContainsString( "status.textContent = labels.dashboardLinkRemoved || ''", $js );
+		$this->assertStringContainsString( 'labelInput.focus()', $js );
+		$this->assertStringContainsString( 'focusTarget.focus()', $js );
 	}
 
 	public function test_admin_forms_confirm_consequential_actions_and_report_submission_progress() {

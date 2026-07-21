@@ -38,7 +38,7 @@ class ALYNT_AG_Settings_Page_Security_Pending extends ALYNT_AG_Settings_Page_Com
 					<?php esc_html_e( 'No pending registration records have been created yet.', 'alynt-account-gateway' ); ?>
 				</p>
 			<?php else : ?>
-				<table class="widefat striped alynt-ag-security-activity__table">
+				<table class="widefat striped alynt-ag-security-activity__table" aria-label="<?php esc_attr_e( 'Recent pending registrations', 'alynt-account-gateway' ); ?>">
 					<thead>
 						<tr>
 							<th scope="col"><?php esc_html_e( 'Email', 'alynt-account-gateway' ); ?></th>

@@ -83,6 +83,39 @@ function alyntAgAddDashboardLinkRow( editor ) {
 	alyntAgRenumberDashboardLinkRow( row, index );
 	rows.appendChild( fragment );
 	alyntAgHandleVisualDashboardLinkChange( editor );
+	const labelInput = row.querySelector( '[data-alynt-ag-dashboard-link-label]' );
+	const status     = editor.querySelector( '[data-alynt-ag-dashboard-link-status]' );
+	const labels     = window.alyntAgAdmin || {};
+
+	if ( status ) {
+		status.textContent = labels.dashboardLinkAdded || '';
+	}
+	if ( labelInput ) {
+		labelInput.focus();
+	}
+}
+
+function alyntAgRemoveDashboardLinkRow( editor, removeButton ) {
+	const row       = removeButton.closest( '[data-alynt-ag-dashboard-link-row]' );
+	const rows      = alyntAgDashboardLinkRows( editor );
+	const rowIndex  = rows.indexOf( row );
+	const addButton = editor.querySelector( '[data-alynt-ag-dashboard-link-add]' );
+	const status    = editor.querySelector( '[data-alynt-ag-dashboard-link-status]' );
+	const labels    = window.alyntAgAdmin || {};
+
+	row.remove();
+	alyntAgSerializeDashboardLinks( editor );
+
+	const remainingRows = alyntAgDashboardLinkRows( editor );
+	const focusRow      = remainingRows[ Math.min( rowIndex, remainingRows.length - 1 ) ];
+	const focusTarget   = focusRow ? focusRow.querySelector( '[data-alynt-ag-dashboard-link-label]' ) : addButton;
+
+	if ( status ) {
+		status.textContent = labels.dashboardLinkRemoved || '';
+	}
+	if ( focusTarget ) {
+		focusTarget.focus();
+	}
 }
 
 function alyntAgHandleDashboardLinkInput( editor, event ) {
@@ -104,8 +137,7 @@ function alyntAgBindDashboardLinkEvents( editor ) {
 			const removeButton = event.target.closest( '[data-alynt-ag-dashboard-link-remove]' );
 
 			if ( removeButton ) {
-				removeButton.closest( '[data-alynt-ag-dashboard-link-row]' ).remove();
-				alyntAgSerializeDashboardLinks( editor );
+				alyntAgRemoveDashboardLinkRow( editor, removeButton );
 			}
 		}
 	);

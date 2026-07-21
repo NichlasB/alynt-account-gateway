@@ -42,7 +42,7 @@ class ALYNT_AG_Settings_Page_Security_Policy extends ALYNT_AG_Settings_Page_Comp
 					?>
 				</p>
 			</div>
-			<table class="widefat striped alynt-ag-reoon-policy-guide__table">
+			<table class="widefat striped alynt-ag-reoon-policy-guide__table" aria-label="<?php esc_attr_e( 'Reoon result policy guidance', 'alynt-account-gateway' ); ?>">
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Reoon Result Group', 'alynt-account-gateway' ); ?></th>

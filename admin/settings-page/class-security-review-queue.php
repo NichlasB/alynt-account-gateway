@@ -54,7 +54,7 @@ class ALYNT_AG_Settings_Page_Security_Review_Queue extends ALYNT_AG_Settings_Pag
 		<div class="alynt-ag-security-manual-review__playbook">
 			<h5><?php esc_html_e( 'Manual Review Decision Playbook', 'alynt-account-gateway' ); ?></h5>
 			<p class="description"><?php esc_html_e( 'Use this as a support-friendly rubric before changing the site-wide Reoon flagged-status policy.', 'alynt-account-gateway' ); ?></p>
-			<table class="widefat striped alynt-ag-security-manual-review__table">
+			<table class="widefat striped alynt-ag-security-manual-review__table" aria-label="<?php esc_attr_e( 'Manual review decision playbook', 'alynt-account-gateway' ); ?>">
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Result Family', 'alynt-account-gateway' ); ?></th>

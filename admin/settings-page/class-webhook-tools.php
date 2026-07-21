@@ -55,16 +55,16 @@ class ALYNT_AG_Settings_Page_Webhook_Tools extends ALYNT_AG_Settings_Page_Compon
 		<?php if ( empty( $logs ) ) : ?>
 			<p><?php esc_html_e( 'No webhook deliveries have been recorded.', 'alynt-account-gateway' ); ?></p>
 		<?php else : ?>
-			<table class="widefat striped">
+			<table class="widefat striped" aria-label="<?php esc_attr_e( 'Recent webhook deliveries', 'alynt-account-gateway' ); ?>">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Time', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Event', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Destination', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'HTTP', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Result', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Error', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Details', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Time', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Event', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Destination', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'HTTP', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Result', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Error', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Details', 'alynt-account-gateway' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>

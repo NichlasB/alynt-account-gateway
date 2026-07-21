@@ -112,4 +112,14 @@ class FrontendJsSourceTest extends TestCase {
 		$this->assertStringNotContainsString( "'Password is hidden.'", $js );
 		$this->assertStringContainsString( 'status.textContent = statusText;', $js );
 	}
+
+	public function test_offcanvas_dialog_isolates_background_and_restores_it_on_close() {
+		$js = $this->get_frontend_js();
+
+		$this->assertStringContainsString( 'alyntAgSetOffcanvasSiblingsInert( offcanvas, true )', $js );
+		$this->assertStringContainsString( 'alyntAgSetOffcanvasSiblingsInert( offcanvas, false )', $js );
+		$this->assertStringContainsString( "sibling.setAttribute( 'data-agw-offcanvas-inert', '' )", $js );
+		$this->assertStringContainsString( "sibling.hasAttribute( 'data-agw-offcanvas-inert' )", $js );
+		$this->assertStringContainsString( "sibling.removeAttribute( 'inert' )", $js );
+	}
 }

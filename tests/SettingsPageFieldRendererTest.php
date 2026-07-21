@@ -94,4 +94,20 @@ class SettingsPageFieldRendererTest extends TestCase {
 		$this->assertStringContainsString( 'value="secret-value"', $output );
 		$this->assertStringContainsString( 'dir="ltr"', $output );
 	}
+
+	public function test_media_field_names_repeated_controls_and_announces_changes() {
+		$output = $this->render_field(
+			'brand_logo_id',
+			array(
+				'type'  => 'attachment_id',
+				'label' => 'Brand Logo',
+			),
+			0
+		);
+
+		$this->assertStringContainsString( 'aria-label="Select Brand Logo"', $output );
+		$this->assertStringContainsString( 'aria-label="Remove Brand Logo"', $output );
+		$this->assertStringContainsString( 'aria-disabled="true"', $output );
+		$this->assertStringContainsString( 'role="status" aria-live="polite" aria-atomic="true"', $output );
+	}
 }

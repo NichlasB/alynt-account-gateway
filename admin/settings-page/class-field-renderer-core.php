@@ -34,7 +34,7 @@ class ALYNT_AG_Settings_Page_Field_Renderer_Core extends ALYNT_AG_Settings_Page_
 		}
 
 		if ( 'attachment_id' === $type ) {
-			$this->render_media_field( $id, $name, (int) $value );
+			$this->render_media_field( $id, $name, (int) $value, (string) $field['label'] );
 			return;
 		}
 

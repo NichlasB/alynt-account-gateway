@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 1.1.21\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-07-21 08:19+0000\n"
+"POT-Creation-Date: 2026-07-21 08:41+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -48,6 +48,12 @@ msgid "%d minute"
 msgid_plural "%d minutes"
 msgstr[0] ""
 msgstr[1] ""
+
+#. translators: %s: navigation link text.
+#: includes/services/class-dashboard-navigation-renderer.php:148
+#: includes/services/class-offcanvas-menu-walker.php:106
+msgid "%s (opens in a new tab)"
+msgstr ""
 
 #: admin/settings-page/class-readiness-summary.php:107
 msgid "A brand logo is configured for gateway screens and the dashboard."
@@ -322,7 +328,7 @@ msgstr ""
 msgid "Add custom links only when they are useful to the roles that can see them."
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:69
+#: admin/settings-page/class-complex-fields.php:83
 msgid "Add Dashboard Link"
 msgstr ""
 
@@ -330,7 +336,7 @@ msgstr ""
 msgid "Add only links that are useful to the selected roles. Ordering and icons help repeated account tasks stay scannable."
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:59
+#: admin/settings-page/class-complex-fields.php:72
 msgid "Add optional dashboard links. Leave role visibility empty to show a link to every logged-in user."
 msgstr ""
 
@@ -356,7 +362,7 @@ msgstr ""
 msgid "Add your first and last name so account notices and future orders use the right details."
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:159
+#: admin/settings-page/class-complex-fields.php:173
 msgid "Address"
 msgstr ""
 
@@ -369,7 +375,7 @@ msgstr ""
 msgid "Admin Action"
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:187
+#: admin/settings-page/class-complex-fields.php:201
 msgid "Administrator"
 msgstr ""
 
@@ -482,7 +488,7 @@ msgstr ""
 msgid "Are you sure you want to log out of your account?"
 msgstr ""
 
-#: admin/settings-page/class-settings-tools.php:122
+#: admin/settings-page/class-settings-tools.php:123
 msgid "Area"
 msgstr ""
 
@@ -773,7 +779,7 @@ msgid "Cloudflare Turnstile"
 msgstr ""
 
 #. translators: %s: menu item title.
-#: includes/services/class-offcanvas-menu-walker.php:148
+#: includes/services/class-offcanvas-menu-walker.php:159
 msgid "Collapse submenu for %s"
 msgstr ""
 
@@ -781,7 +787,7 @@ msgstr ""
 msgid "Compare masked activity rows with support tickets and order history before tightening."
 msgstr ""
 
-#: admin/settings-page/class-settings-tools.php:102
+#: admin/settings-page/class-settings-tools.php:103
 msgid "Compatibility Warnings"
 msgstr ""
 
@@ -1036,7 +1042,7 @@ msgstr ""
 msgid "Custom Login Page Customizer may overlap with branded login output"
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:189
+#: admin/settings-page/class-complex-fields.php:203
 msgid "Customer"
 msgstr ""
 
@@ -1092,12 +1098,20 @@ msgstr ""
 msgid "Dashboard Footer Menu"
 msgstr ""
 
-#: includes/services/class-dashboard-navigation-renderer.php:118
+#: includes/services/class-dashboard-navigation-renderer.php:121
 msgid "Dashboard footer navigation"
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:104
+#: admin/settings-page/class-complex-fields.php:118
 msgid "Dashboard Link"
+msgstr ""
+
+#: admin/class-admin.php:70
+msgid "Dashboard link added."
+msgstr ""
+
+#: admin/class-admin.php:71
+msgid "Dashboard link removed."
 msgstr ""
 
 #: includes/class-settings-definition-account-data.php:46
@@ -1170,7 +1184,7 @@ msgstr ""
 msgid "Destination:"
 msgstr ""
 
-#: admin/settings-page/class-settings-tools.php:124
+#: admin/settings-page/class-settings-tools.php:125
 #: admin/settings-page/class-webhook-tools.php:67
 msgid "Details"
 msgstr ""
@@ -1205,6 +1219,10 @@ msgstr ""
 
 #: admin/settings-page/class-admin-notices.php:129
 msgid "Diagnostics events could not be cleared. Please retry and check the site database if the problem continues."
+msgstr ""
+
+#: admin/settings-page/class-diagnostics-tools.php:48
+msgid "Diagnostics health summary"
 msgstr ""
 
 #: includes/class-settings-definition-account-data.php:112
@@ -1260,7 +1278,7 @@ msgstr ""
 msgid "Downloadable files appear here after an eligible digital purchase is connected to your account."
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:158
+#: admin/settings-page/class-complex-fields.php:172
 #: includes/services/class-dashboard-endpoint-metadata.php:50
 #: includes/services/class-woocommerce-navigation.php:27
 #: includes/services/class-woocommerce-navigation.php:82
@@ -1502,7 +1520,7 @@ msgid "Everything for your orders in one place"
 msgstr ""
 
 #. translators: %s: menu item title.
-#: includes/services/class-offcanvas-menu-walker.php:143
+#: includes/services/class-offcanvas-menu-walker.php:154
 msgid "Expand submenu for %s"
 msgstr ""
 
@@ -1661,7 +1679,7 @@ msgstr ""
 msgid "Heading Font Stack"
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:162
+#: admin/settings-page/class-complex-fields.php:176
 msgid "Help"
 msgstr ""
 
@@ -1744,7 +1762,7 @@ msgstr ""
 msgid "HTTP Status:"
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:119
+#: admin/settings-page/class-complex-fields.php:133
 msgid "Icon"
 msgstr ""
 
@@ -1763,6 +1781,18 @@ msgstr ""
 #: includes/services/class-frontend-messages.php:51
 #: includes/services/class-registration-pending-store.php:62
 msgid "If this email address can be used, a confirmation email will be sent."
+msgstr ""
+
+#: admin/settings-page/class-complex-fields.php:28
+msgid "Image"
+msgstr ""
+
+#: admin/class-admin.php:69
+msgid "Image removed."
+msgstr ""
+
+#: admin/class-admin.php:68
+msgid "Image selected."
 msgstr ""
 
 #: admin/settings-page/class-settings-tools.php:56
@@ -1853,7 +1883,7 @@ msgstr ""
 msgid "Keep your billing and shipping details current so future checkouts stay quick and accurate."
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:111
+#: admin/settings-page/class-complex-fields.php:125
 msgid "Label"
 msgstr ""
 
@@ -1931,7 +1961,7 @@ msgstr ""
 msgid "Limit: %1$s within %2$s."
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:155
+#: admin/settings-page/class-complex-fields.php:169
 msgid "Link"
 msgstr ""
 
@@ -2020,7 +2050,7 @@ msgstr ""
 msgid "Logo, color, layout, and font settings control the front-facing gateway shell and account dashboard."
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:163
+#: admin/settings-page/class-complex-fields.php:177
 msgid "Logout"
 msgstr ""
 
@@ -2078,6 +2108,10 @@ msgstr ""
 
 #: admin/settings-page/class-field-renderer-options.php:81
 msgid "Manage your orders, details, and account preferences."
+msgstr ""
+
+#: admin/settings-page/class-security-review-queue.php:57
+msgid "Manual review decision playbook"
 msgstr ""
 
 #: admin/settings-page/class-security-review-queue.php:55
@@ -2213,7 +2247,7 @@ msgstr ""
 msgid "No brand logo is configured yet. The gateway can still run, but branded output will feel less complete."
 msgstr ""
 
-#: admin/settings-page/class-settings-tools.php:109
+#: admin/settings-page/class-settings-tools.php:110
 msgid "No common account-gateway compatibility overlaps were detected for the current settings."
 msgstr ""
 
@@ -2339,7 +2373,7 @@ msgstr ""
 msgid "Open account menu"
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:133
+#: admin/settings-page/class-complex-fields.php:147
 msgid "Open in a new tab"
 msgstr ""
 
@@ -2347,6 +2381,7 @@ msgstr ""
 msgid "Open Setting"
 msgstr ""
 
+#: admin/settings-page/class-settings-tools.php:87
 #: includes/services/class-frontend-dashboard-screen.php:175
 msgid "opens in a new tab"
 msgstr ""
@@ -2371,7 +2406,7 @@ msgstr ""
 msgid "Optional. When enabled, the dashboard header can open a right-side menu panel using a selected WordPress navigation menu."
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:127
+#: admin/settings-page/class-complex-fields.php:141
 msgid "Order"
 msgstr ""
 
@@ -2389,7 +2424,7 @@ msgstr ""
 msgid "Order History"
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:157
+#: admin/settings-page/class-complex-fields.php:171
 #: includes/services/class-woocommerce-navigation.php:25
 #: includes/services/class-woocommerce-navigation.php:81
 msgid "Orders"
@@ -2550,7 +2585,7 @@ msgstr ""
 msgid "Paulo"
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:160
+#: admin/settings-page/class-complex-fields.php:174
 msgid "Payment"
 msgstr ""
 
@@ -2624,7 +2659,11 @@ msgstr ""
 msgid "Potential compatibility overlap detected"
 msgstr ""
 
-#: admin/settings-page/class-settings-tools.php:117
+#: admin/settings-page/class-settings-tools.php:120
+msgid "Potential compatibility overlaps"
+msgstr ""
+
+#: admin/settings-page/class-settings-tools.php:118
 msgid "Potential compatibility overlaps were detected. Review these before enabling or troubleshooting frontend output."
 msgstr ""
 
@@ -2774,7 +2813,7 @@ msgstr ""
 msgid "Rate Limit Pressure"
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:74
+#: admin/settings-page/class-complex-fields.php:88
 msgid "Raw JSON"
 msgstr ""
 
@@ -2854,6 +2893,10 @@ msgstr ""
 
 #: admin/settings-page/class-security-pending.php:240
 msgid "Recent delivery diagnostics could not be loaded. Refresh the page and check the database connection if the problem continues."
+msgstr ""
+
+#: admin/settings-page/class-diagnostics-tools.php:90
+msgid "Recent diagnostics events"
 msgstr ""
 
 #: includes/class-diagnostics-logger.php:140
@@ -2948,6 +2991,10 @@ msgstr ""
 msgid "Recent pending registration lifecycle signals"
 msgstr ""
 
+#: admin/settings-page/class-security-pending.php:41
+msgid "Recent pending registrations"
+msgstr ""
+
 #: admin/settings-page/class-security-pending.php:28
 msgid "Recent Pending Registrations"
 msgstr ""
@@ -2990,6 +3037,10 @@ msgstr ""
 
 #: admin/settings-page/class-security-signal-renderer-b.php:80
 msgid "Recent registration flow signals"
+msgstr ""
+
+#: admin/settings-page/class-security-signal-renderer-a.php:61
+msgid "Recent registration verification activity"
 msgstr ""
 
 #: admin/settings-page/class-security-signal-renderer-a.php:38
@@ -3046,6 +3097,10 @@ msgstr ""
 
 #: admin/settings-page/class-security-pending.php:180
 msgid "Recent verification activity could not be loaded. Refresh the page and check the database connection if the problem continues."
+msgstr ""
+
+#: admin/settings-page/class-webhook-tools.php:58
+msgid "Recent webhook deliveries"
 msgstr ""
 
 #: admin/settings-page/class-webhook-tools.php:54
@@ -3225,9 +3280,18 @@ msgstr ""
 msgid "Remember Me"
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:106
-#: admin/settings-page/class-complex-fields.php:37
+#: admin/settings-page/class-complex-fields.php:120
+#: admin/settings-page/class-complex-fields.php:49
 msgid "Remove"
+msgstr ""
+
+#. translators: %s: image field label.
+#: admin/settings-page/class-complex-fields.php:36
+msgid "Remove %s"
+msgstr ""
+
+#: admin/settings-page/class-complex-fields.php:119
+msgid "Remove dashboard link"
 msgstr ""
 
 #: admin/settings-page/class-security-verification-guidance.php:75
@@ -3314,6 +3378,10 @@ msgstr ""
 
 #: admin/settings-page/class-security-policy.php:48
 msgid "Reoon Result Group"
+msgstr ""
+
+#: admin/settings-page/class-security-policy.php:45
+msgid "Reoon result policy guidance"
 msgstr ""
 
 #: admin/settings-page/class-admin-notices.php:207
@@ -3542,7 +3610,7 @@ msgstr ""
 msgid "Role Account Reviews"
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:136
+#: admin/settings-page/class-complex-fields.php:150
 msgid "Role Visibility"
 msgstr ""
 
@@ -3567,7 +3635,7 @@ msgstr ""
 msgid "Save Password"
 msgstr ""
 
-#: admin/settings-page/class-page-shell.php:106
+#: admin/settings-page/class-page-shell.php:107
 msgid "Save Settings"
 msgstr ""
 
@@ -3634,6 +3702,11 @@ msgstr ""
 msgid "Security provider summary"
 msgstr ""
 
+#. translators: %s: image field label.
+#: admin/settings-page/class-complex-fields.php:31
+msgid "Select %s"
+msgstr ""
+
 #: admin/settings-page/class-field-renderer-options.php:161
 msgid "Select a menu"
 msgstr ""
@@ -3647,7 +3720,7 @@ msgid "Select a menu created under Appearance > Menus. This assignment is indepe
 msgstr ""
 
 #: admin/class-admin.php:66
-#: admin/settings-page/class-complex-fields.php:36
+#: admin/settings-page/class-complex-fields.php:48
 msgid "Select Image"
 msgstr ""
 
@@ -3795,7 +3868,7 @@ msgstr ""
 msgid "Shipping Address"
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:188
+#: admin/settings-page/class-complex-fields.php:202
 msgid "Shop Manager"
 msgstr ""
 
@@ -3856,7 +3929,7 @@ msgstr ""
 msgid "Some Alynt Account Gateway records could not be erased. Please retry the request and check the site database if the problem continues."
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:161
+#: admin/settings-page/class-complex-fields.php:175
 msgid "Star"
 msgstr ""
 
@@ -3882,7 +3955,7 @@ msgstr ""
 msgid "Store this privately. It lets administrators reach the native wp-login.php screen if custom routing causes a lockout."
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:190
+#: admin/settings-page/class-complex-fields.php:204
 msgid "Subscriber"
 msgstr ""
 
@@ -4147,7 +4220,7 @@ msgstr ""
 msgid "there"
 msgstr ""
 
-#: admin/settings-page/class-settings-tools.php:104
+#: admin/settings-page/class-settings-tools.php:105
 msgid "These checks flag active plugins and hooks that may also control login, registration, redirects, account pages, or WooCommerce account endpoints."
 msgstr ""
 
@@ -4410,7 +4483,7 @@ msgstr ""
 msgid "Upload a brand logo and set a max width that works on mobile and desktop."
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:115
+#: admin/settings-page/class-complex-fields.php:129
 msgid "URL"
 msgstr ""
 
@@ -4550,7 +4623,7 @@ msgstr ""
 msgid "Used when an administrator logs in without a safe requested destination. The default is /wp-admin/."
 msgstr ""
 
-#: admin/settings-page/class-complex-fields.php:156
+#: admin/settings-page/class-complex-fields.php:170
 msgid "User"
 msgstr ""
 
@@ -4636,7 +4709,7 @@ msgstr ""
 msgid "Waiting for email confirmation. Resend requests are throttled by the configured resend-confirmation limit."
 msgstr ""
 
-#: admin/settings-page/class-settings-tools.php:123
+#: admin/settings-page/class-settings-tools.php:124
 msgid "Warning"
 msgstr ""
 

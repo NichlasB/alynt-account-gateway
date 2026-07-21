@@ -6,6 +6,30 @@
 
 let alyntAgLastOffcanvasTrigger = null;
 
+function alyntAgSetOffcanvasSiblingsInert( offcanvas, isInert ) {
+	const container = offcanvas.parentElement;
+
+	if ( ! container ) {
+		return;
+	}
+
+	for ( const sibling of container.children ) {
+		if ( sibling === offcanvas ) {
+			continue;
+		}
+
+		if ( isInert ) {
+			if ( ! sibling.hasAttribute( 'inert' ) ) {
+				sibling.setAttribute( 'inert', '' );
+				sibling.setAttribute( 'data-agw-offcanvas-inert', '' );
+			}
+		} else if ( sibling.hasAttribute( 'data-agw-offcanvas-inert' ) ) {
+			sibling.removeAttribute( 'inert' );
+			sibling.removeAttribute( 'data-agw-offcanvas-inert' );
+		}
+	}
+}
+
 function alyntAgFocusableElements( container ) {
 	return Array.from(
 		container.querySelectorAll(
@@ -29,6 +53,7 @@ function alyntAgOpenOffcanvas( trigger ) {
 	trigger.setAttribute( 'aria-expanded', 'true' );
 	document.documentElement.classList.add( 'agw-offcanvas-open' );
 	document.documentElement.classList.toggle( 'agw-has-admin-bar', Boolean( document.getElementById( 'wpadminbar' ) ) );
+	alyntAgSetOffcanvasSiblingsInert( offcanvas, true );
 
 	const focusPanel    = () => {
 		const focusable = alyntAgFocusableElements( panel );
@@ -48,6 +73,7 @@ function alyntAgCloseOffcanvas( offcanvas ) {
 	offcanvas.classList.remove( 'is-open' );
 	offcanvas.setAttribute( 'aria-hidden', 'true' );
 	document.documentElement.classList.remove( 'agw-offcanvas-open' );
+	alyntAgSetOffcanvasSiblingsInert( offcanvas, false );
 
 	if ( alyntAgLastOffcanvasTrigger ) {
 		alyntAgLastOffcanvasTrigger.setAttribute( 'aria-expanded', 'false' );

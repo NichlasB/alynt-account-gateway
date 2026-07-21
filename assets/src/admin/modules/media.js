@@ -14,6 +14,7 @@ function alyntAgOpenMediaFrame( field ) {
 	const input        = field.querySelector( '[data-alynt-ag-media-input]' );
 	const preview      = field.querySelector( '[data-alynt-ag-media-preview]' );
 	const removeButton = field.querySelector( '[data-alynt-ag-media-remove]' );
+	const status       = field.querySelector( '[data-alynt-ag-media-status]' );
 	const labels       = window.alyntAgAdmin || {};
 	const frame        = window.wp.media(
 		{
@@ -39,6 +40,10 @@ function alyntAgOpenMediaFrame( field ) {
 			input.value = attachment.id;
 			preview.replaceChildren( image );
 			removeButton.disabled = false;
+			removeButton.setAttribute( 'aria-disabled', 'false' );
+			if ( status ) {
+				status.textContent = labels.imageSelected || '';
+			}
 		}
 	);
 
@@ -57,9 +62,15 @@ export function alyntAgHandleMediaClick( event ) {
 		const field   = removeButton.closest( '[data-alynt-ag-media-field]' );
 		const input   = field.querySelector( '[data-alynt-ag-media-input]' );
 		const preview = field.querySelector( '[data-alynt-ag-media-preview]' );
+		const status  = field.querySelector( '[data-alynt-ag-media-status]' );
+		const labels  = window.alyntAgAdmin || {};
 
 		input.value = '0';
 		preview.replaceChildren();
 		removeButton.disabled = true;
+		removeButton.setAttribute( 'aria-disabled', 'true' );
+		if ( status ) {
+			status.textContent = labels.imageRemoved || '';
+		}
 	}
 }

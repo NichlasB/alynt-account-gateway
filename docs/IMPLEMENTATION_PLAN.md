@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `09` are complete; prompt `10` is next.
+- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `10` are complete; prompt `11` is next.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Run `10-ACCESSIBILITY_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompts `03` through `09` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Run `11-CODE_QUALITY_REVIEW_PROMPT.md`, continue the remaining pre-release prompts in filename order, then complete one consolidated end-to-end acceptance matrix. Prompts `03` through `10` produced corrective code that targets v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
@@ -33,7 +33,7 @@
 - [x] `07A-ADVERSARIAL_TEST_SUITE_REVIEW_PROMPT.md`
 - [x] `08-UNINSTALL_REVIEW_PROMPT.md`
 - [x] `09-I18N_REVIEW_PROMPT.md`
-- [ ] `10-ACCESSIBILITY_REVIEW_PROMPT.md`
+- [x] `10-ACCESSIBILITY_REVIEW_PROMPT.md`
 - [ ] `11-CODE_QUALITY_REVIEW_PROMPT.md`
 - [ ] `12-DOCUMENTATION_REVIEW_PROMPT.md`
 - [ ] `13-SECURITY_AUDIT_PROMPT.md`
@@ -179,6 +179,20 @@ Execution rules:
 - [x] Added focused catalog, localized JavaScript, and singular/plural regression coverage in `tests/I18nCatalogTest.php` and the affected component suites.
 - [x] Preserved the existing localization-content boundary: the plugin ships a complete POT template but no bundled production-language translations.
 - [x] Revalidated normal, reverse-order, and fixed-random PHPUnit execution at 534 tests and 3,730 assertions; PHPCS, build, dependency audits, Composer validation, PHP/JavaScript syntax, and diff hygiene also pass.
+
+### Prompt 10 - Accessibility Review Evidence
+
+- [x] Reviewed 64 UI-facing source files: 35 PHP renderers, 15 JavaScript modules, and 14 CSS files across the branded gateway, account dashboard, WooCommerce endpoint wrapper, settings tabs, tools, status panels, and dynamic controls.
+- [x] Recorded seven verified findings: zero critical, three major, and four minor; all seven were fixed with no accepted or deferred code finding.
+- [x] Added accessible names and column scopes to every non-layout admin data table while retaining WordPress's presentation table only for settings form layout.
+- [x] Added `aria-current="page"` to the active settings tab and explicit new-tab announcements plus safe `rel` handling to previews, footer navigation, and off-canvas navigation.
+- [x] Made dashboard-link row creation/removal announce changes and move focus predictably; grouped repeated rows and clarified repeated remove controls.
+- [x] Added field-specific accessible names and polite live updates to media controls, including synchronized native and ARIA disabled states.
+- [x] Isolated background dashboard content with state-preserving `inert` while the off-canvas dialog is open and marked the visual backdrop decorative; existing focus trap, Escape close, trigger restoration, submenu state, and reduced-motion behavior remain intact.
+- [x] Confirmed default contrast ratios of 17.59:1 for text on surface, 13.88:1 for text on page background, 11.39:1 for text on accent, and 8.44:1 for button text on button background; configurable color help continues to warn administrators to preserve contrast.
+- [x] Added `tests/AccessibilityReviewTest.php` plus focused renderer and JavaScript regressions; normal, reverse-order, and fixed-random PHPUnit runs each pass at 542 tests and 3,885 assertions.
+- [x] Passed production build, 1,166-string POT generation, PHPCS, PHP/JavaScript syntax, npm and Composer audits, Composer validation, source ceilings, and `git diff --check`.
+- [x] Recorded the complete issue, keyboard, contrast, validation, and residual manual assistive-technology boundary in `docs/ACCESSIBILITY_REVIEW_1.1.21.md`; real browser/screen-reader acceptance remains in the consolidated post-prompt-13 test matrix.
 
 ### Consolidated End-To-End Acceptance
 

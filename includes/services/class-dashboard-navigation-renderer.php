@@ -61,7 +61,7 @@ class ALYNT_AG_Dashboard_Navigation_Renderer {
 		$menu_id = absint( $settings['dashboard_offcanvas_menu_id'] ?? 0 );
 		?>
 		<div class="agw-offcanvas" id="agw-dashboard-offcanvas" aria-hidden="true" data-agw-offcanvas>
-			<div class="agw-offcanvas__backdrop" data-agw-offcanvas-close></div>
+			<div class="agw-offcanvas__backdrop" aria-hidden="true" data-agw-offcanvas-close></div>
 			<aside class="agw-offcanvas__panel" role="dialog" aria-modal="true" aria-labelledby="agw-offcanvas-title" tabindex="-1" data-agw-offcanvas-panel>
 				<div class="agw-offcanvas__header">
 					<h2 id="agw-offcanvas-title"><?php esc_html_e( 'Menu', 'alynt-account-gateway' ); ?></h2>
@@ -99,16 +99,19 @@ class ALYNT_AG_Dashboard_Navigation_Renderer {
 			return;
 		}
 
+		add_filter( 'nav_menu_link_attributes', array( $this, 'accessible_new_tab_attributes' ), 10, 4 );
 		$menu_html = wp_nav_menu(
 			array(
-				'menu'        => absint( $settings['dashboard_footer_menu_id'] ),
-				'container'   => false,
-				'menu_class'  => 'agw-dashboard-footer__menu',
-				'fallback_cb' => false,
-				'depth'       => 1,
-				'echo'        => false,
+				'menu'                         => absint( $settings['dashboard_footer_menu_id'] ),
+				'container'                    => false,
+				'menu_class'                   => 'agw-dashboard-footer__menu',
+				'fallback_cb'                  => false,
+				'depth'                        => 1,
+				'echo'                         => false,
+				'alynt_ag_accessible_new_tabs' => true,
 			)
 		);
+		remove_filter( 'nav_menu_link_attributes', array( $this, 'accessible_new_tab_attributes' ), 10 );
 
 		if ( ! is_string( $menu_html ) || '' === trim( $menu_html ) ) {
 			return;
@@ -120,6 +123,33 @@ class ALYNT_AG_Dashboard_Navigation_Renderer {
 			</nav>
 		</footer>
 		<?php
+	}
+
+	/**
+	 * Add an accessible name and safe rel value to footer links opening a new tab.
+	 *
+	 * @param array<string,string> $atts  Link attributes.
+	 * @param WP_Post              $item  Menu item.
+	 * @param object               $args  Menu arguments.
+	 * @param int                  $depth Menu depth.
+	 * @return array<string,string>
+	 */
+	public function accessible_new_tab_attributes( $atts, $item, $args, $depth ) {
+		unset( $depth );
+
+		if ( empty( $args->alynt_ag_accessible_new_tabs ) || '_blank' !== ( $atts['target'] ?? '' ) ) {
+			return $atts;
+		}
+
+		$title              = wp_strip_all_tags( $item->title ?? '' );
+		$atts['rel']        = trim( ( $atts['rel'] ?? '' ) . ' noopener noreferrer' );
+		$atts['aria-label'] = sprintf(
+			/* translators: %s: navigation link text. */
+			__( '%s (opens in a new tab)', 'alynt-account-gateway' ),
+			$title
+		);
+
+		return $atts;
 	}
 
 	/**

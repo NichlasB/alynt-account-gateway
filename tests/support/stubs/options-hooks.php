@@ -228,6 +228,25 @@ if ( ! function_exists( 'add_filter' ) ) {
 	}
 }
 
+if ( ! function_exists( 'remove_filter' ) ) {
+	function remove_filter( $hook_name, $callback, $priority = 10 ) {
+		$GLOBALS['alynt_ag_test_filters'] = array_values(
+			array_filter(
+				$GLOBALS['alynt_ag_test_filters'],
+				static function ( $filter ) use ( $hook_name, $callback, $priority ) {
+					return ! (
+						$hook_name === $filter['hook']
+						&& $callback === $filter['callback']
+						&& $priority === $filter['priority']
+					);
+				}
+			)
+		);
+
+		return true;
+	}
+}
+
 if ( ! function_exists( 'apply_filters' ) ) {
 	function apply_filters( $hook_name, $value, ...$args ) {
 		$filters = array_filter(
