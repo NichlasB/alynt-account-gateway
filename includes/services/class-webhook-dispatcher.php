@@ -262,6 +262,10 @@ class ALYNT_AG_Webhook_Dispatcher {
 	 * @return bool
 	 */
 	private function is_local_development_url( $url ) {
+		if ( ! function_exists( 'wp_get_environment_type' ) || 'local' !== wp_get_environment_type() ) {
+			return false;
+		}
+
 		$scheme = (string) wp_parse_url( $url, PHP_URL_SCHEME );
 		$host   = strtolower( (string) wp_parse_url( $url, PHP_URL_HOST ) );
 

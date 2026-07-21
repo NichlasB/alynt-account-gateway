@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `12` are complete; prompt `13` is next.
+- Current phase: Phase 2 structural refactoring is complete at v1.1.21. Post-refactor pre-release prompts `01` through `13` are complete.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Run the final `13-SECURITY_AUDIT_PROMPT.md`, then complete one consolidated end-to-end acceptance matrix. Prompts `03` through `12` produced corrective code, tests, and documentation that target v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Complete one consolidated end-to-end acceptance matrix for the v1.1.22 candidate. Prompts `03` through `13` produced corrective code, tests, and documentation that target v1.1.22. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
@@ -36,7 +36,7 @@
 - [x] `10-ACCESSIBILITY_REVIEW_PROMPT.md`
 - [x] `11-CODE_QUALITY_REVIEW_PROMPT.md`
 - [x] `12-DOCUMENTATION_REVIEW_PROMPT.md`
-- [ ] `13-SECURITY_AUDIT_PROMPT.md`
+- [x] `13-SECURITY_AUDIT_PROMPT.md`
 
 Execution rules:
 
@@ -543,6 +543,20 @@ Implementation evidence:
 - [x] Recorded the deliberate `@since` decision: all production PHP files have `@package` headers, while historical per-symbol `@since` dates were never recorded and will not be fabricated for `536` public methods.
 - [x] Added `docs/DOCUMENTATION_REVIEW_1.1.21.md` with findings, corrections, PHPDoc disposition, and regression evidence.
 - [x] Run and record full source gates: build, stable 1,166-string POT generation, PHPCS, 236 PHP syntax checks, 17 JavaScript/MJS syntax checks, 546 PHPUnit tests with 3,989 assertions, npm audit, Composer validation/advisory audit, and `git diff --check`.
+
+### Prompt 13 - Security Audit Evidence
+
+- [x] Reviewed all `125` production PHP files and `17` first-party JavaScript/MJS files, plus the `111` first-party PHP test/support files that protect security-sensitive behavior.
+- [x] Inventoried every request input, privileged handler, nonce/capability boundary, SQL operation, upload path, outbound request, secret-bearing setting, rendered output, JavaScript DOM sink, scheduled task, privacy callback, and uninstall path.
+- [x] Found no Critical or High issue and one Medium SSRF-hardening issue: HTTP loopback and `.local` webhook destinations bypassed `wp_safe_remote_post()` without first requiring a local WordPress environment.
+- [x] Restricted the HTTP local-development exception to `wp_get_environment_type() === 'local'`; staging and production now reject those destinations and continue requiring HTTPS through WordPress safe HTTP validation.
+- [x] Added permanent regression coverage for LocalWP acceptance and development/staging/production rejection; focused webhook coverage passes with `19` tests and `104` assertions.
+- [x] Confirmed settings import requires `manage_options`, a specific nonce, a genuine PHP-uploaded temporary file, and a `1 MiB` maximum; it parses JSON without moving or serving the upload.
+- [x] Confirmed all admin state changes are capability- and nonce-protected, public authentication/registration mutations use specific nonces and rate limits, password and token values are neither logged nor displayed, and neutral reset/registration responses limit account enumeration.
+- [x] Confirmed dynamic SQL identifiers come only from the plugin table registry or hardcoded privacy targets, all dynamic values use prepared placeholders or typed `$wpdb` APIs, and every production PHP file has an appropriate direct-access guard.
+- [x] Confirmed there are no REST routes, public AJAX handlers, shortcodes, incoming webhooks, unsafe JavaScript HTML sinks, runtime dynamic-code/process functions, debug disclosures, hardcoded credentials, or known npm/Composer advisories.
+- [x] Reopened and passed Prompt `11` after the security fix: build, stable `1,166`-string POT generation, PHPCS, `236` PHP syntax checks, `17` JavaScript/MJS syntax checks, npm audit, Composer advisory audit, normal/reverse/fixed-random PHPUnit at `547` tests and `3,995` assertions, and `git diff --check`.
+- [x] Re-ran Prompt `13` against the post-fix tree and recorded a clean final security gate in `docs/SECURITY_AUDIT_1.1.21.md`.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 

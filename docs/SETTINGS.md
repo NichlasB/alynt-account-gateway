@@ -153,6 +153,8 @@ WordPress exposes only a plain-text body for its pending profile email-change re
 | `webhook_signing_secret` | `secret` | empty | Shared secret for the `sha256=` HMAC signature. |
 | `debug_payload_logging` | `boolean` | `false` | Stores full payload bodies for diagnostic use. Leave disabled in normal operation. |
 
+Public, staging, and production webhook destinations must use HTTPS and are sent through WordPress SSRF-safe URL validation. HTTP loopback and `.local` destinations are accepted only when `wp_get_environment_type()` reports `local`, preserving LocalWP testing without opening the exception on deployed sites.
+
 When a signing secret is configured, delivery includes `X-Alynt-AG-Event`, `X-Alynt-AG-Time`, `X-Alynt-AG-Version`, and `X-Alynt-AG-Signature`. The signature covers `{timestamp}.{event}.{json_body}`. Normal logs retain only metadata such as destination host, status, retry count, and error message.
 
 ## Privacy & Data

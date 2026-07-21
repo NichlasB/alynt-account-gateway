@@ -135,6 +135,14 @@ if ( ! function_exists( 'is_rtl' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_get_environment_type' ) ) {
+	function wp_get_environment_type() {
+		return isset( $GLOBALS['alynt_ag_test_environment_type'] )
+			? (string) $GLOBALS['alynt_ag_test_environment_type']
+			: 'production';
+	}
+}
+
 if ( ! function_exists( 'wp_salt' ) ) {
 	function wp_salt( $scheme = 'auth' ) {
 		return 'test-salt-' . $scheme;

@@ -18,6 +18,7 @@ class WebhookDispatcherTest extends TestCase {
 		$GLOBALS['alynt_ag_test_safe_remote_posts'] = array();
 		$GLOBALS['alynt_ag_test_db_inserts'] = array();
 		$GLOBALS['alynt_ag_test_single_events'] = array();
+		$GLOBALS['alynt_ag_test_environment_type'] = 'production';
 		unset( $GLOBALS['alynt_ag_test_remote_post_response'], $GLOBALS['alynt_ag_test_user_meta'] );
 	}
 
@@ -327,6 +328,7 @@ class WebhookDispatcherTest extends TestCase {
 	}
 
 	public function test_local_http_webhook_urls_are_allowed_for_development() {
+		$GLOBALS['alynt_ag_test_environment_type'] = 'local';
 		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
 
 		$this->assertTrue( $dispatcher->is_allowed_delivery_url( 'http://localhost:8080/account-created' ) );
@@ -336,7 +338,18 @@ class WebhookDispatcherTest extends TestCase {
 		$this->assertFalse( $dispatcher->is_allowed_delivery_url( 'http://hooks.example.test/account-created' ) );
 	}
 
+	public function test_local_http_webhook_urls_are_rejected_outside_local_environments() {
+		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
+
+		foreach ( array( 'development', 'staging', 'production' ) as $environment ) {
+			$GLOBALS['alynt_ag_test_environment_type'] = $environment;
+			$this->assertFalse( $dispatcher->is_allowed_delivery_url( 'http://localhost:8080/account-created' ) );
+			$this->assertFalse( $dispatcher->is_allowed_delivery_url( 'http://plugin-tester.local/account-created' ) );
+		}
+	}
+
 	public function test_local_http_webhook_bypasses_public_url_validation() {
+		$GLOBALS['alynt_ag_test_environment_type'] = 'local';
 		$dispatcher = new ALYNT_AG_Webhook_Dispatcher();
 		$result     = $dispatcher->dispatch_account_created(
 			321,

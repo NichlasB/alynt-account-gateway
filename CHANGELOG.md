@@ -10,6 +10,7 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ### Fixed
 
+- Restrict the unsafe-transport exception for HTTP loopback and `.local` webhook destinations to WordPress `local` environments so staging and production deliveries always use HTTPS and WordPress SSRF-safe validation.
 - Reclaim malformed operation-lock records instead of leaving an affected operation permanently blocked.
 - Reject corrupted queued webhook envelopes before transport when stable event identity or required snapshots are missing.
 - Remove order-dependent global state from authentication and webhook settings-page tests.
