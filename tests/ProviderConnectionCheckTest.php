@@ -80,6 +80,7 @@ class ProviderConnectionCheckTest extends TestCase {
 					'account_email'             => 'provider-owner@example.test',
 				)
 			),
+			'response' => array( 'code' => 200 ),
 		);
 
 		$result = ( new ALYNT_AG_Reoon_Client() )->check_account( 'saved key' );
@@ -101,7 +102,8 @@ class ProviderConnectionCheckTest extends TestCase {
 
 	public function test_reoon_check_rejects_inactive_account() {
 		$GLOBALS['alynt_ag_test_remote_get_response'] = array(
-			'body' => '{"status":"success","api_status":"inactive"}',
+			'body'     => '{"status":"success","api_status":"inactive"}',
+			'response' => array( 'code' => 200 ),
 		);
 
 		$result = ( new ALYNT_AG_Reoon_Client() )->check_account( 'saved-key' );
@@ -116,7 +118,10 @@ class ProviderConnectionCheckTest extends TestCase {
 
 		$this->assertSame( 'alynt_ag_reoon_request_failed', $request_result->get_error_code() );
 
-		$GLOBALS['alynt_ag_test_remote_get_response'] = array( 'body' => 'not-json' );
+		$GLOBALS['alynt_ag_test_remote_get_response'] = array(
+			'body'     => 'not-json',
+			'response' => array( 'code' => 200 ),
+		);
 		$response_result = ( new ALYNT_AG_Reoon_Client() )->check_account( 'saved-key' );
 
 		$this->assertSame( 'alynt_ag_reoon_invalid_response', $response_result->get_error_code() );

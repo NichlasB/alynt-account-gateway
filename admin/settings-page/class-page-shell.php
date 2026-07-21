@@ -46,6 +46,7 @@ class ALYNT_AG_Settings_Page_Page_Shell extends ALYNT_AG_Settings_Page_Component
 				<?php foreach ( $tabs as $tab_key => $tab_label ) : ?>
 					<a
 						class="nav-tab <?php echo $active_tab === $tab_key ? 'nav-tab-active' : ''; ?>"
+						<?php echo $active_tab === $tab_key ? 'aria-current="page"' : ''; ?>
 						href="
 						<?php
 						echo esc_url(
@@ -74,6 +75,8 @@ class ALYNT_AG_Settings_Page_Page_Shell extends ALYNT_AG_Settings_Page_Component
 			<form
 				method="post"
 				action="options.php"
+				data-alynt-ag-settings-form
+				data-alynt-ag-action-form
 				<?php if ( 'emails' === $active_tab ) : ?>
 					data-alynt-ag-email-settings
 				<?php endif; ?>

@@ -76,7 +76,7 @@ class ALYNT_AG_Registration_Confirmation extends ALYNT_AG_Service_Collaborator {
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		if ( false === $updated ) {
+		if ( 1 !== (int) $updated ) {
 			return new WP_Error( 'pending_registration_failed', __( 'The confirmation link could not be renewed. Please try again.', 'alynt-account-gateway' ) );
 		}
 
@@ -112,6 +112,11 @@ class ALYNT_AG_Registration_Confirmation extends ALYNT_AG_Service_Collaborator {
 		}
 
 		$pending = $this->find_resendable_pending_by_email( $email );
+		if ( is_wp_error( $pending ) ) {
+			$this->log_registration_flow_result( $email, $pending->get_error_code() );
+			return $pending;
+		}
+
 		if ( ! $pending ) {
 			return true;
 		}

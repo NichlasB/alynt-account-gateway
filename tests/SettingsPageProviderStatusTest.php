@@ -230,10 +230,26 @@ class SettingsPageProviderStatusTest extends SettingsPageSecurityStatusTestCase 
 		$items         = $this->invoke_helper( $settings_page, 'security_rate_limit_items', array( $settings ) );
 
 		$this->assertSame( 'Registration Attempts', $items[0]['label'] );
-		$this->assertSame( 'Limit: 3 attempts in a 15-minute window.', $items[0]['message'] );
-		$this->assertSame( 'Limit: 2 attempts in a 30-minute window.', $items[1]['message'] );
-		$this->assertSame( 'Limit: 7 attempts in a 20-minute window.', $items[2]['message'] );
+		$this->assertSame( 'Limit: 3 attempts within 15 minutes.', $items[0]['message'] );
+		$this->assertSame( 'Limit: 2 attempts within 30 minutes.', $items[1]['message'] );
+		$this->assertSame( 'Limit: 7 attempts within 20 minutes.', $items[2]['message'] );
 		$this->assertSame( 'Password Reset Attempts', $items[3]['label'] );
-		$this->assertSame( 'Limit: 4 attempts in a 45-minute window.', $items[3]['message'] );
+		$this->assertSame( 'Limit: 4 attempts within 45 minutes.', $items[3]['message'] );
+	}
+
+	public function test_security_rate_limit_message_pluralizes_attempts_and_minutes() {
+		$settings = array(
+			'test_count'  => 1,
+			'test_window' => 1,
+		);
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$message       = $this->invoke_helper(
+			$settings_page,
+			'security_rate_limit_message',
+			array( $settings, 'test_count', 'test_window' )
+		);
+
+		$this->assertSame( 'Limit: 1 attempt within 1 minute.', $message );
 	}
 }

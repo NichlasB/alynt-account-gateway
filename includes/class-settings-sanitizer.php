@@ -53,6 +53,11 @@ class ALYNT_AG_Settings_Sanitizer {
 				continue;
 			}
 
+			if ( 'dashboard_links' === ( $field['type'] ?? '' ) && ! self::is_dashboard_links_json_valid( $input[ $key ] ) ) {
+				self::add_dashboard_links_error();
+				continue;
+			}
+
 			$sanitized[ $key ] = self::sanitize_value( $input[ $key ], $field );
 		}
 
@@ -74,6 +79,10 @@ class ALYNT_AG_Settings_Sanitizer {
 			case 'boolean':
 				return (bool) $value;
 			case 'integer':
+				$integer = (int) $value;
+				$minimum = isset( $field['min'] ) ? (int) $field['min'] : 0;
+				$maximum = isset( $field['max'] ) ? (int) $field['max'] : PHP_INT_MAX;
+				return max( $minimum, min( $maximum, $integer ) );
 			case 'attachment_id':
 			case 'nav_menu':
 				return max( 0, absint( $value ) );
@@ -131,7 +140,7 @@ class ALYNT_AG_Settings_Sanitizer {
 
 			$links = array();
 
-		foreach ( $value as $link ) {
+		foreach ( array_slice( $value, 0, 100 ) as $link ) {
 			if ( ! is_array( $link ) ) {
 				continue;
 			}
@@ -144,7 +153,7 @@ class ALYNT_AG_Settings_Sanitizer {
 			}
 
 			$roles = isset( $link['roles'] ) && is_array( $link['roles'] ) ? $link['roles'] : array();
-			$roles = array_values( array_filter( array_map( 'sanitize_key', $roles ) ) );
+			$roles = array_slice( array_values( array_filter( array_map( 'sanitize_key', $roles ) ) ), 0, 20 );
 
 			$links[] = array(
 				'label'  => $label,
@@ -159,6 +168,36 @@ class ALYNT_AG_Settings_Sanitizer {
 			$json = wp_json_encode( $links, JSON_UNESCAPED_SLASHES );
 
 			return is_string( $json ) ? $json : '[]';
+	}
+
+		/**
+		 * Return whether a raw dashboard links value can be safely imported.
+		 *
+		 * @param mixed $value Raw dashboard links value.
+		 * @return bool
+		 */
+	private static function is_dashboard_links_json_valid( $value ) {
+		if ( ! is_string( $value ) ) {
+			return is_array( $value );
+		}
+
+		return is_array( json_decode( wp_unslash( $value ), true ) );
+	}
+
+		/**
+		 * Register an admin-facing error for invalid dashboard links JSON.
+		 *
+		 * @return void
+		 */
+	private static function add_dashboard_links_error() {
+		if ( function_exists( 'add_settings_error' ) ) {
+			add_settings_error(
+				'alynt_ag_settings',
+				'alynt_ag_invalid_dashboard_links',
+				__( 'Dashboard custom links were not saved because the raw JSON is invalid. The previously saved links were preserved.', 'alynt-account-gateway' ),
+				'error'
+			);
+		}
 	}
 
 		/**

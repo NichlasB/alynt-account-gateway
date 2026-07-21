@@ -14,17 +14,19 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class ALYNT_AG_Database {
 
-	const DB_VERSION = '0.1.6';
+	const DB_VERSION = '0.1.8';
 
 	/**
 	 * Install database tables.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	public static function install() {
 		global $wpdb;
 
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		if ( ! function_exists( 'dbDelta' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+		}
 
 		$charset_collate = $wpdb->get_charset_collate();
 		$tables          = self::tables();
@@ -47,7 +49,8 @@ class ALYNT_AG_Database {
 				KEY email (email),
 				KEY token_hash (token_hash),
 				KEY status (status),
-				KEY expires_at (expires_at)
+				KEY expires_at (expires_at),
+				KEY created_at_id (created_at, id)
 			) {$charset_collate};",
 			"CREATE TABLE {$tables['webhook_logs']} (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -64,7 +67,8 @@ class ALYNT_AG_Database {
 				KEY event_name (event_name),
 				KEY user_id (user_id),
 				KEY success (success),
-				KEY created_at (created_at)
+				KEY created_at (created_at),
+				KEY success_created_at (success, created_at)
 			) {$charset_collate};",
 			"CREATE TABLE {$tables['verification_logs']} (
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -123,7 +127,8 @@ class ALYNT_AG_Database {
 				KEY level (level),
 				KEY category (category),
 				KEY event_code (event_code),
-				KEY created_at (created_at)
+				KEY created_at (created_at),
+				KEY category_created_at (category, created_at, id)
 			) {$charset_collate};",
 		);
 
@@ -131,7 +136,17 @@ class ALYNT_AG_Database {
 			dbDelta( $statement );
 		}
 
-		update_option( 'alynt_ag_db_version', self::DB_VERSION );
+		foreach ( $tables as $table ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Installation must verify each plugin-owned table exists before stamping the schema version.
+			$installed_table = $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table ) ) );
+			if ( $table !== $installed_table ) {
+				return false;
+			}
+		}
+
+		$updated = update_option( 'alynt_ag_db_version', self::DB_VERSION );
+
+		return $updated || self::DB_VERSION === get_option( 'alynt_ag_db_version', '' );
 	}
 
 	/**
@@ -140,7 +155,7 @@ class ALYNT_AG_Database {
 	 * @return void
 	 */
 	public static function maybe_upgrade() {
-		if ( get_option( 'alynt_ag_db_version' ) === self::DB_VERSION ) {
+		if ( get_option( 'alynt_ag_db_version', '' ) === self::DB_VERSION ) {
 			return;
 		}
 

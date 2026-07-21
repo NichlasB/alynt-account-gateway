@@ -11,6 +11,14 @@ if ( ! function_exists( '__' ) ) {
 	}
 }
 
+if ( ! function_exists( '_n' ) ) {
+	function _n( $single, $plural, $number, $domain = 'default' ) {
+		unset( $domain );
+
+		return 1 === (int) $number ? $single : $plural;
+	}
+}
+
 if ( ! function_exists( 'esc_html' ) ) {
 	function esc_html( $value ) {
 		return htmlspecialchars( (string) $value, ENT_QUOTES, 'UTF-8' );
@@ -20,6 +28,24 @@ if ( ! function_exists( 'esc_html' ) ) {
 if ( ! function_exists( 'esc_attr' ) ) {
 	function esc_attr( $value ) {
 		return htmlspecialchars( (string) $value, ENT_QUOTES, 'UTF-8' );
+	}
+}
+
+if ( ! function_exists( 'esc_textarea' ) ) {
+	function esc_textarea( $value ) {
+		return htmlspecialchars( (string) $value, ENT_QUOTES, 'UTF-8' );
+	}
+}
+
+if ( ! function_exists( 'selected' ) ) {
+	function selected( $selected, $current = true, $display = true ) {
+		$result = (string) $selected === (string) $current ? ' selected="selected"' : '';
+
+		if ( $display ) {
+			echo $result; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static test stub output.
+		}
+
+		return $result;
 	}
 }
 
@@ -50,6 +76,13 @@ if ( ! function_exists( 'esc_attr__' ) ) {
 if ( ! function_exists( 'esc_url' ) ) {
 	function esc_url( $value ) {
 		return filter_var( $value, FILTER_SANITIZE_URL );
+	}
+}
+
+if ( ! function_exists( 'wp_die' ) ) {
+	function wp_die( $message = '' ) {
+		$GLOBALS['alynt_ag_test_wp_die_messages'][] = (string) $message;
+		throw new RuntimeException( 'wp_die:' . wp_strip_all_tags( (string) $message ) );
 	}
 }
 
@@ -102,6 +135,14 @@ if ( ! function_exists( 'is_rtl' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_get_environment_type' ) ) {
+	function wp_get_environment_type() {
+		return isset( $GLOBALS['alynt_ag_test_environment_type'] )
+			? (string) $GLOBALS['alynt_ag_test_environment_type']
+			: 'production';
+	}
+}
+
 if ( ! function_exists( 'wp_salt' ) ) {
 	function wp_salt( $scheme = 'auth' ) {
 		return 'test-salt-' . $scheme;
@@ -116,6 +157,14 @@ if ( ! function_exists( 'wp_generate_password' ) ) {
 
 if ( ! function_exists( 'current_time' ) ) {
 	function current_time( $type, $gmt = false ) {
+		if ( $gmt && isset( $GLOBALS['alynt_ag_test_current_time_utc'] ) ) {
+			return $GLOBALS['alynt_ag_test_current_time_utc'];
+		}
+
+		if ( ! $gmt && isset( $GLOBALS['alynt_ag_test_current_time_local'] ) ) {
+			return $GLOBALS['alynt_ag_test_current_time_local'];
+		}
+
 		return '2026-07-03 12:00:00';
 	}
 }

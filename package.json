@@ -1,6 +1,6 @@
 {
   "name": "alynt-account-gateway",
-  "version": "1.1.21",
+  "version": "1.1.22",
   "private": true,
   "description": "Alynt Account Gateway build tooling.",
   "type": "module",
@@ -10,10 +10,10 @@
     "lint": "php ./vendor/bin/phpcs --standard=.phpcs.xml .",
     "lint:fix": "php ./vendor/bin/phpcbf --standard=.phpcs.xml .",
     "make-pot": "node scripts/make-pot.mjs",
-    "test": "php ./vendor/bin/phpunit -c phpunit.xml.dist"
+    "test": "php ./vendor/bin/phpunit -c phpunit.xml.dist",
+    "test:adversarial": "php ./vendor/bin/phpunit -c phpunit.xml.dist --do-not-cache-result --order-by=reverse && php ./vendor/bin/phpunit -c phpunit.xml.dist --do-not-cache-result --order-by=random --random-order-seed=20260720"
   },
   "devDependencies": {
-    "concurrently": "^9.1.0",
     "esbuild": "^0.28.1",
     "nodemon": "^3.1.0"
   }

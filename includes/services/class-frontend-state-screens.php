@@ -97,12 +97,12 @@ class ALYNT_AG_Frontend_State_Screens {
 		<?php if ( $is_rate_limited ) : ?>
 			<?php $this->render_resend_throttle_guidance( $settings ); ?>
 		<?php endif; ?>
-		<form class="agw-form" method="post" action="<?php echo esc_url( $resend_action ); ?>" <?php echo $describedby ? 'aria-describedby="' . esc_attr( $describedby ) . '"' : ''; ?>>
+		<form class="agw-form" method="post" action="<?php echo esc_url( $resend_action ); ?>" data-agw-retain-fields <?php echo $describedby ? 'aria-describedby="' . esc_attr( $describedby ) . '"' : ''; ?>>
 			<input type="hidden" name="alynt_ag_action" value="resend_confirmation">
 			<?php wp_nonce_field( 'alynt_ag_resend_confirmation', 'alynt_ag_registration_nonce' ); ?>
 			<div class="agw-field">
 				<label for="agw-invalid-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-invalid-email" name="email" type="email" autocomplete="email" dir="ltr" required <?php echo $error_code ? 'aria-invalid="true" aria-describedby="' . esc_attr( $describedby ) . '"' : ''; ?>>
+				<input id="agw-invalid-email" name="email" type="email" autocomplete="email" dir="ltr" required data-agw-retain <?php echo $error_code ? 'aria-invalid="true" aria-describedby="' . esc_attr( $describedby ) . '"' : ''; ?>>
 			</div>
 			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Send New Link', 'alynt-account-gateway' ); ?></button>
 			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>
@@ -125,8 +125,15 @@ class ALYNT_AG_Frontend_State_Screens {
 				<li>
 					<?php
 					printf(
-						/* translators: %d: configured resend cooldown window in minutes. */
-						esc_html__( 'Wait %d minutes before requesting another confirmation email.', 'alynt-account-gateway' ),
+						esc_html(
+							/* translators: %d: configured resend cooldown window in minutes. */
+							_n(
+								'Wait %d minute before requesting another confirmation email.',
+								'Wait %d minutes before requesting another confirmation email.',
+								$window_mins,
+								'alynt-account-gateway'
+							)
+						),
 						(int) $window_mins
 					);
 					?>

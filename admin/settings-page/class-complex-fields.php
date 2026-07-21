@@ -20,10 +20,22 @@ class ALYNT_AG_Settings_Page_Complex_Fields extends ALYNT_AG_Settings_Page_Compo
 	 * @param string $id    Field ID.
 	 * @param string $name  Field name.
 	 * @param int    $value Attachment ID.
+	 * @param string $label Field label.
 	 * @return void
 	 */
-	public function render_media_field( $id, $name, $value ) {
+	public function render_media_field( $id, $name, $value, $label = '' ) {
 		$image_url = $value ? wp_get_attachment_image_url( $value, 'medium' ) : '';
+		$label     = $label ? $label : __( 'Image', 'alynt-account-gateway' );
+		$select    = sprintf(
+			/* translators: %s: image field label. */
+			__( 'Select %s', 'alynt-account-gateway' ),
+			$label
+		);
+		$remove = sprintf(
+			/* translators: %s: image field label. */
+			__( 'Remove %s', 'alynt-account-gateway' ),
+			$label
+		);
 		?>
 		<div class="alynt-ag-media-field" data-alynt-ag-media-field>
 			<input type="hidden" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( (string) $value ); ?>" data-alynt-ag-media-input>
@@ -33,9 +45,10 @@ class ALYNT_AG_Settings_Page_Complex_Fields extends ALYNT_AG_Settings_Page_Compo
 				<?php endif; ?>
 			</div>
 			<p>
-				<button type="button" class="button" data-alynt-ag-media-select><?php esc_html_e( 'Select Image', 'alynt-account-gateway' ); ?></button>
-				<button type="button" class="button" data-alynt-ag-media-remove <?php disabled( ! $value ); ?>><?php esc_html_e( 'Remove', 'alynt-account-gateway' ); ?></button>
+				<button type="button" class="button" aria-label="<?php echo esc_attr( $select ); ?>" data-alynt-ag-media-select><?php esc_html_e( 'Select Image', 'alynt-account-gateway' ); ?></button>
+				<button type="button" class="button" aria-label="<?php echo esc_attr( $remove ); ?>" aria-disabled="<?php echo $value ? 'false' : 'true'; ?>" data-alynt-ag-media-remove <?php disabled( ! $value ); ?>><?php esc_html_e( 'Remove', 'alynt-account-gateway' ); ?></button>
 			</p>
+			<p class="screen-reader-text" role="status" aria-live="polite" aria-atomic="true" data-alynt-ag-media-status></p>
 		</div>
 		<?php
 	}
@@ -63,6 +76,7 @@ class ALYNT_AG_Settings_Page_Complex_Fields extends ALYNT_AG_Settings_Page_Compo
 					<?php $this->render_dashboard_link_row( (string) $index, $link, $icons, $roles ); ?>
 				<?php endforeach; ?>
 			</div>
+			<p class="screen-reader-text" role="status" aria-live="polite" aria-atomic="true" data-alynt-ag-dashboard-link-status></p>
 
 			<p>
 				<button type="button" class="button button-secondary" data-alynt-ag-dashboard-link-add>
@@ -99,10 +113,10 @@ class ALYNT_AG_Settings_Page_Complex_Fields extends ALYNT_AG_Settings_Page_Compo
 		$target = isset( $link['target'] ) ? (string) $link['target'] : '_self';
 		$chosen = isset( $link['roles'] ) && is_array( $link['roles'] ) ? array_map( 'sanitize_key', $link['roles'] ) : array();
 		?>
-		<div class="alynt-ag-dashboard-link-row" data-alynt-ag-dashboard-link-row>
+		<div class="alynt-ag-dashboard-link-row" role="group" aria-labelledby="alynt-ag-dashboard-link-<?php echo esc_attr( $index ); ?>-title" data-alynt-ag-dashboard-link-row>
 			<div class="alynt-ag-dashboard-link-row__header">
-				<strong><?php esc_html_e( 'Dashboard Link', 'alynt-account-gateway' ); ?></strong>
-				<button type="button" class="button-link-delete" data-alynt-ag-dashboard-link-remove>
+				<strong id="alynt-ag-dashboard-link-<?php echo esc_attr( $index ); ?>-title"><?php esc_html_e( 'Dashboard Link', 'alynt-account-gateway' ); ?></strong>
+				<button type="button" class="button-link-delete" aria-label="<?php esc_attr_e( 'Remove dashboard link', 'alynt-account-gateway' ); ?>" data-alynt-ag-dashboard-link-remove>
 					<?php esc_html_e( 'Remove', 'alynt-account-gateway' ); ?>
 				</button>
 			</div>

@@ -67,7 +67,8 @@ class FrontendAssetsTest extends TestCase {
 		$this->assertSame( 'Password is hidden.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['passwordHidden'] );
 		$this->assertSame( 'Met', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementMet'] );
 		$this->assertSame( 'Not met', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementNotMet'] );
-		$this->assertSame( '%1$d of %2$d requirements met.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementsMet'] );
+		$this->assertSame( '%1$d of %2$d requirement met.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementMetSummary'] );
+		$this->assertSame( '%1$d of %2$d requirements met.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementsMetSummary'] );
 	}
 
 	public function test_preview_enqueue_loads_assets_while_frontend_output_is_disabled() {

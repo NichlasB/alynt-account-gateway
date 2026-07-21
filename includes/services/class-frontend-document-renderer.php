@@ -17,21 +17,21 @@ class ALYNT_AG_Frontend_Document_Renderer {
 	/**
 	 * Gateway shell renderer.
 	 *
-	 * @var ALYNT_AG_Frontend_Gateway_Shell
+	 * @var ALYNT_AG_Frontend_Gateway_Shell|null
 	 */
 	private $gateway_shell;
 
 	/**
 	 * Dashboard screen renderer.
 	 *
-	 * @var ALYNT_AG_Frontend_Dashboard_Screen
+	 * @var ALYNT_AG_Frontend_Dashboard_Screen|null
 	 */
 	private $dashboard_screen;
 
 	/**
 	 * Frontend messages.
 	 *
-	 * @var ALYNT_AG_Frontend_Messages
+	 * @var ALYNT_AG_Frontend_Messages|null
 	 */
 	private $messages;
 
@@ -43,9 +43,9 @@ class ALYNT_AG_Frontend_Document_Renderer {
 	 * @param ALYNT_AG_Frontend_Messages|null         $messages         Frontend messages.
 	 */
 	public function __construct( $gateway_shell = null, $dashboard_screen = null, $messages = null ) {
-		$this->gateway_shell    = $gateway_shell ? $gateway_shell : new ALYNT_AG_Frontend_Gateway_Shell();
-		$this->dashboard_screen = $dashboard_screen ? $dashboard_screen : new ALYNT_AG_Frontend_Dashboard_Screen();
-		$this->messages         = $messages ? $messages : new ALYNT_AG_Frontend_Messages();
+		$this->gateway_shell    = $gateway_shell;
+		$this->dashboard_screen = $dashboard_screen;
+		$this->messages         = $messages;
 	}
 
 	/**
@@ -88,7 +88,7 @@ class ALYNT_AG_Frontend_Document_Renderer {
 		$screen = $this->normalize_preview_screen( $screen );
 
 		if ( 'setpassword' === $screen ) {
-			$this->gateway_shell->render_gateway_shell_with_password_preview( $settings );
+			$this->gateway_shell()->render_gateway_shell_with_password_preview( $settings );
 			return;
 		}
 
@@ -102,7 +102,7 @@ class ALYNT_AG_Frontend_Document_Renderer {
 	 * @return string
 	 */
 	public function get_screen_title( $screen ) {
-		return $this->messages->screen_title( $screen );
+		return $this->messages()->screen_title( $screen );
 	}
 
 	/**
@@ -115,11 +115,11 @@ class ALYNT_AG_Frontend_Document_Renderer {
 	 */
 	private function render_gateway_body( $screen, $settings, $current_relative_path ) {
 		if ( 'dashboard' === $screen ) {
-			$this->dashboard_screen->render_dashboard_shell( $settings, $current_relative_path );
+			$this->dashboard_screen()->render_dashboard_shell( $settings, $current_relative_path );
 			return;
 		}
 
-		$this->gateway_shell->render_gateway_shell( $screen, $settings );
+		$this->gateway_shell()->render_gateway_shell( $screen, $settings );
 	}
 
 	/**
@@ -134,5 +134,44 @@ class ALYNT_AG_Frontend_Document_Renderer {
 			array( 'dashboard', 'login', 'register', 'lostpassword', 'setpassword', 'logout', 'registration_disabled', 'invalidlink' ),
 			true
 		) ? $screen : 'login';
+	}
+
+	/**
+	 * Return the authentication gateway shell on demand.
+	 *
+	 * @return ALYNT_AG_Frontend_Gateway_Shell
+	 */
+	private function gateway_shell() {
+		if ( null === $this->gateway_shell ) {
+			$this->gateway_shell = new ALYNT_AG_Frontend_Gateway_Shell();
+		}
+
+		return $this->gateway_shell;
+	}
+
+	/**
+	 * Return the dashboard renderer on demand.
+	 *
+	 * @return ALYNT_AG_Frontend_Dashboard_Screen
+	 */
+	private function dashboard_screen() {
+		if ( null === $this->dashboard_screen ) {
+			$this->dashboard_screen = new ALYNT_AG_Frontend_Dashboard_Screen();
+		}
+
+		return $this->dashboard_screen;
+	}
+
+	/**
+	 * Return frontend messages on demand.
+	 *
+	 * @return ALYNT_AG_Frontend_Messages
+	 */
+	private function messages() {
+		if ( null === $this->messages ) {
+			$this->messages = new ALYNT_AG_Frontend_Messages();
+		}
+
+		return $this->messages;
 	}
 }

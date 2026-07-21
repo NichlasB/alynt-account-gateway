@@ -135,6 +135,9 @@ class WooCommerceAccountRoutingTest extends WooCommerceIntegrationTestCase {
 	public function test_account_menu_items_restore_required_standard_items_when_wc_omits_them() {
 		$integration = new ALYNT_AG_WooCommerce_Integration();
 		$method      = new ReflectionMethod( $integration, 'merge_standard_account_menu_items' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$method->setAccessible( true );
+		}
 		$items = $method->invoke(
 			$integration,
 			array(

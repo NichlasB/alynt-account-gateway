@@ -1,0 +1,61 @@
+name: Quality
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['7.4', '8.3']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --prefer-dist
+          npm ci
+
+      - name: Build production assets
+        run: npm run build
+
+      - name: Validate dependencies
+        run: |
+          composer validate --strict
+          composer audit --no-interaction
+          npm audit --audit-level=high
+
+      - name: Run PHP standards and tests
+        run: |
+          npm run lint
+          npm test -- --do-not-cache-result
+          npm run test:adversarial
+
+      - name: Verify production assets
+        run: |
+          test -s assets/dist/admin/index.css
+          test -s assets/dist/admin/index.js
+          test -s assets/dist/frontend/index.css
+          test -s assets/dist/frontend/index.js

@@ -81,6 +81,8 @@ class RegistrationAuthCollaborationTest extends RegistrationServiceTestCase {
 			( new ReflectionClass( ALYNT_AG_Registration_Service::class ) )->getMethods( ReflectionMethod::IS_PUBLIC )
 		);
 
+		sort( $expected );
+		sort( $actual );
 		$this->assertSame( $expected, $actual );
 	}
 
@@ -255,6 +257,9 @@ class RegistrationAuthCollaborationTest extends RegistrationServiceTestCase {
 			'class-registration-completion.php',
 			'class-registration-delivery.php',
 			'class-registration-credentials.php',
+			'trait-registration-lifecycle-facade.php',
+			'trait-registration-protection-facade.php',
+			'trait-registration-credentials-facade.php',
 			'class-auth-request-handler.php',
 			'class-auth-activity.php',
 			'class-auth-messages.php',
@@ -266,7 +271,7 @@ class RegistrationAuthCollaborationTest extends RegistrationServiceTestCase {
 			$this->assertLessThanOrEqual( 300, count( file( ALYNT_AG_PLUGIN_DIR . 'includes/services/' . $file ) ), $file );
 		}
 
-		$this->assertLessThanOrEqual( 400, count( file( ALYNT_AG_PLUGIN_DIR . 'includes/services/class-registration-service.php' ) ) );
+		$this->assertLessThanOrEqual( 300, count( file( ALYNT_AG_PLUGIN_DIR . 'includes/services/class-registration-service.php' ) ) );
 		$this->assertLessThanOrEqual( 250, count( file( ALYNT_AG_PLUGIN_DIR . 'includes/services/class-auth-service.php' ) ) );
 	}
 
@@ -284,6 +289,9 @@ class RegistrationAuthCollaborationTest extends RegistrationServiceTestCase {
 
 			$this->assertIsString( $contents );
 			$this->assertLessThan( strpos( $contents, 'class-registration-service.php' ), strpos( $contents, 'class-registration-completion.php' ) );
+			$this->assertLessThan( strpos( $contents, 'class-registration-service.php' ), strpos( $contents, 'trait-registration-lifecycle-facade.php' ) );
+			$this->assertLessThan( strpos( $contents, 'class-registration-service.php' ), strpos( $contents, 'trait-registration-protection-facade.php' ) );
+			$this->assertLessThan( strpos( $contents, 'class-registration-service.php' ), strpos( $contents, 'trait-registration-credentials-facade.php' ) );
 			$this->assertLessThan( strpos( $contents, 'class-auth-service.php' ), strpos( $contents, 'class-auth-password-reset.php' ) );
 		}
 	}

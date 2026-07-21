@@ -1,5 +1,32 @@
 # Changelog
 
+All notable changes to Alynt Account Gateway are documented in this file.
+
+## Unreleased
+
+## 1.1.22 - 2026-07-21
+
+### Documentation
+
+- Reconciled the README, WordPress readme, settings reference, and hooks reference with the current settings schema and public integration contracts.
+
+### Fixed
+
+- Restrict the unsafe-transport exception for HTTP loopback and `.local` webhook destinations to WordPress `local` environments so staging and production deliveries always use HTTPS and WordPress SSRF-safe validation.
+- Reclaim malformed operation-lock records instead of leaving an affected operation permanently blocked.
+- Reject corrupted queued webhook envelopes before transport when stable event identity or required snapshots are missing.
+- Remove order-dependent global state from authentication and webhook settings-page tests.
+- Resolve development dependencies against the supported PHP 7.4 floor so clean CI installs do not select PHP 8.4-only packages.
+- Remove the unused `concurrently` development dependency and its vulnerable transitive `shell-quote` package.
+- Clear queued webhook events during uninstall and remove plugin-owned data from every separately activated multisite blog.
+- Preserve translator comments and plural/context entries in generated catalogs, remove English JavaScript fallbacks, and pluralize count-dependent account and admin messages.
+
+### Tests
+
+- Add operation-lock, webhook scheduling, password-boundary, executable activation, and admin capability/nonce regression coverage.
+- Add repeatable reverse and fixed-random test-order runs and GitHub quality enforcement for PHP 7.4 and 8.3.
+- Add catalog metadata, localized JavaScript, and singular/plural regression coverage.
+
 ## 1.1.21 - 2026-07-20
 
 ### Changed

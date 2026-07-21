@@ -18,6 +18,7 @@ abstract class AuthServiceTestCase extends TestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
+		$GLOBALS['alynt_ag_test_options'] = array();
 		$GLOBALS['alynt_ag_test_transients'] = array();
 		$GLOBALS['alynt_ag_test_reset_password'] = null;
 		$GLOBALS['alynt_ag_test_redirects'] = array();
@@ -29,7 +30,7 @@ abstract class AuthServiceTestCase extends TestCase {
 			$GLOBALS['alynt_ag_test_existing_emails'],
 			$GLOBALS['alynt_ag_test_retrieve_password_result'],
 			$GLOBALS['alynt_ag_test_signon_roles'],
-			$GLOBALS['alynt_ag_test_options']['alynt_ag_settings']
+			$GLOBALS['alynt_ag_test_nonce_valid']
 		);
 		$_SERVER['REMOTE_ADDR'] = '203.0.113.30';
 		$_SERVER['REQUEST_METHOD'] = 'GET';

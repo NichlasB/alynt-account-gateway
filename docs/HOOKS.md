@@ -1,38 +1,100 @@
 # Hooks Reference
 
-This document tracks public and integration-facing hooks used by Alynt Account Gateway.
+This document distinguishes Alynt Account Gateway extension points from WordPress and WooCommerce hooks that the plugin consumes. WordPress/WooCommerce callback signatures remain authoritative in their upstream documentation.
 
-## Actions
+## Alynt Filters
 
-- `alynt_ag_retention_cleanup`: Runs scheduled cleanup for expired plugin-owned records.
-- `woocommerce_account_{endpoint}_endpoint`: Fired by WooCommerce and delegated by the branded dashboard for standard and plugin-added My Account endpoints when WooCommerce takeover is enabled.
+### `alynt_ag_is_trusted_proxy`
 
-## WordPress Filters Used
+Determines whether the immediate `REMOTE_ADDR` peer is a trusted reverse proxy. By default no peer is trusted, so forwarded headers are ignored.
 
-- `login_url`: Points login links to the configured branded login path when frontend output is enabled.
-- `lostpassword_url`: Points password reset links to the configured account action base.
-- `register_url`: Points registration links to the configured account action base.
-- `logout_url`: Points logout links to the branded logout confirmation screen.
-- `authenticate`: Enforces email-only login behavior and login rate limiting.
-- `retrieve_password_message`: Replaces the password reset email body with the configured template.
-- `retrieve_password_title`: Replaces the password reset email subject with the configured template.
-- `password_change_email`: Replaces or disables the password changed email.
-- `wp_new_user_notification_email`: Replaces or disables the account-created welcome email.
-- `send_password_change_email`: Disables the password changed email when configured.
-- `send_email_change_email`: Disables the email change confirmation email when configured.
-- `new_user_email_content`: Applies the configured email-change confirmation body to WordPress pending email-change requests.
-- `pre_wp_mail`: Short-circuits WordPress pending profile email-change request emails when the email-change confirmation disable setting is enabled.
-- `woocommerce_account_menu_items`: Preserves WooCommerce account endpoints while allowing branded dashboard presentation.
-- `wp_privacy_personal_data_exporters`: Registers the account gateway personal data exporter.
-- `wp_privacy_personal_data_erasers`: Registers the account gateway personal data eraser.
+**Parameters**
 
-## Plugin-Owned Events
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `$is_trusted` | `bool` | Whether the peer is trusted; defaults to `false`. |
+| `$remote_addr` | `string` | Validated immediate-peer IP address. |
 
-The account-created webhook is configured through settings rather than a PHP action. It fires an `account.created` JSON payload after a confirmed registration creates the WordPress user.
+```php
+add_filter(
+	'alynt_ag_is_trusted_proxy',
+	static function ( $is_trusted, $remote_addr ) {
+		return '203.0.113.10' === $remote_addr;
+	},
+	10,
+	2
+);
+```
 
-When the optional webhook signing secret is configured, outgoing webhook requests include these verification headers:
+Only trust IP addresses that are controlled by the site's reverse-proxy provider. Trusting all peers would allow clients to spoof rate-limit identity through forwarded headers.
 
-- `X-Alynt-AG-Event`: event name, such as `account.created` or `account.created.test`
-- `X-Alynt-AG-Time`: Unix timestamp used in the signature base string
-- `X-Alynt-AG-Version`: signature scheme version, currently `1`
-- `X-Alynt-AG-Signature`: `sha256=` followed by the HMAC-SHA256 of `{timestamp}.{event}.{json_body}`
+### `alynt_ag_trusted_proxy_headers`
+
+Adjusts the ordered forwarded-header server variables considered after `alynt_ag_is_trusted_proxy` returns true. Alynt Account Gateway accepts only `HTTP_CF_CONNECTING_IP` and `HTTP_X_FORWARDED_FOR` from this filter.
+
+**Parameters**
+
+| Parameter | Type | Description |
+| --- | --- | --- |
+| `$headers` | `string[]` | Ordered supported server-variable names. |
+| `$remote_addr` | `string` | Validated immediate-peer IP address. |
+
+```php
+add_filter(
+	'alynt_ag_trusted_proxy_headers',
+	static function ( $headers ) {
+		return array( 'HTTP_CF_CONNECTING_IP' );
+	}
+);
+```
+
+## Scheduled Actions
+
+These are internal scheduled actions, not general integration events. Do not invoke them from a request or use them to replace the retention scheduler.
+
+### `alynt_ag_retention_cleanup`
+
+Runs daily after activation and removes expired plugin-owned pending registrations, logs, consent records, audit data, and diagnostics according to the active retention settings. It has no parameters.
+
+### `alynt_ag_retention_cleanup_continue`
+
+Runs a bounded continuation one minute later when a retention pass reaches its batch limit. It has no parameters.
+
+### `alynt_ag_deliver_account_created_webhook`
+
+Internal asynchronous delivery action for a queued `account.created` webhook. It receives the user ID and payload. This action is scheduled by the registration flow and must not be used as a replacement webhook API.
+
+### `alynt_ag_retry_account_created_webhook`
+
+Internal asynchronous retry action for a failed account-created delivery. It receives the user ID, payload, and retry count. The dispatcher allows at most two retries.
+
+## WooCommerce Delegation
+
+When WooCommerce takeover is enabled, the branded dashboard delegates the current endpoint to WooCommerce using the native dynamic action:
+
+```php
+do_action( 'woocommerce_account_' . sanitize_key( $endpoint ) . '_endpoint', $value );
+```
+
+The resulting action name is `woocommerce_account_{endpoint}_endpoint`; it receives the endpoint value as its single parameter. Extensions that already register native WooCommerce My Account endpoint renderers continue to run inside the branded dashboard. This is WooCommerce's extension point, not an Alynt-owned hook.
+
+## WordPress And WooCommerce Hooks Consumed
+
+The plugin registers callbacks on the following upstream hooks. They are listed to make integration review easier; they are not invitations to depend on Alynt callback order.
+
+| Hook | Alynt Account Gateway use |
+| --- | --- |
+| `login_url`, `lostpassword_url`, `register_url`, `logout_url` | Routes standard account links to configured branded routes when frontend output is enabled. |
+| `authenticate`, `lostpassword_post` | Enforces email-only login behavior and rate limits login/password-recovery attempts. |
+| `retrieve_password_notification_email`, `retrieve_password_title`, `retrieve_password_message` | Produces the configured password-reset email. |
+| `send_password_change_email`, `password_change_email` | Produces or suppresses password-changed email. |
+| `send_email_change_email`, `email_change_email`, `new_user_email_content`, `pre_wp_mail` | Produces or suppresses email-change messages and handles the core pending-change edge case. |
+| `wp_new_user_notification_email` | Produces or suppresses the account-created welcome email. |
+| `show_admin_bar`, `admin_init`, `login_init`, `template_redirect` | Applies frontend account routing, access policy, and dashboard presentation. |
+| `woocommerce_account_menu_items` | Builds the branded WooCommerce navigation from native account endpoints. |
+| `wp_privacy_personal_data_exporters`, `wp_privacy_personal_data_erasers` | Registers plugin-owned data exporter and eraser callbacks. |
+| `v_forcelogin_bypass` | Keeps configured staging-only Force Login scenarios compatible with public account routes. |
+
+## Webhook Contract
+
+The plugin does not publish a `do_action()` event for webhooks. When `account_created_webhook` is configured, it sends one signed-or-unsigned `account.created` HTTP JSON request after confirmed registration creates the user. See [Settings](SETTINGS.md#webhooks) and [Privacy and GDPR](PRIVACY_AND_GDPR.md) for payload logging and retention behavior.

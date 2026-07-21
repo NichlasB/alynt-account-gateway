@@ -13,11 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Coordinates WooCommerce account integration.
  */
 class ALYNT_AG_WooCommerce_Integration {
+	use ALYNT_AG_WooCommerce_Collaborators;
 
 	/**
 	 * Focused collaborators.
 	 *
-	 * @var array<string,object>
+	 * @var array<string,object|null>
 	 */
 	private $collaborators;
 
@@ -28,10 +29,10 @@ class ALYNT_AG_WooCommerce_Integration {
 	 */
 	public function __construct( $collaborators = array() ) {
 		$this->collaborators = array(
-			'navigation' => $collaborators['navigation'] ?? new ALYNT_AG_WooCommerce_Navigation( $this ),
-			'routing'    => $collaborators['routing'] ?? new ALYNT_AG_WooCommerce_Routing( $this ),
-			'renderer'   => $collaborators['renderer'] ?? new ALYNT_AG_WooCommerce_Endpoint_Renderer( $this ),
-			'data'       => $collaborators['data'] ?? new ALYNT_AG_WooCommerce_Customer_Data( $this ),
+			'navigation' => $collaborators['navigation'] ?? null,
+			'routing'    => $collaborators['routing'] ?? null,
+			'renderer'   => $collaborators['renderer'] ?? null,
+			'data'       => $collaborators['data'] ?? null,
 		);
 	}
 
@@ -41,7 +42,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<string,string>
 	 */
 	public function standard_endpoint_labels() {
-		return $this->collaborators['navigation']->standard_endpoint_labels();
+		return $this->collaborator( 'navigation' )->standard_endpoint_labels();
 	}
 
 	/**
@@ -50,7 +51,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<string,string>
 	 */
 	public function endpoint_labels() {
-		return $this->collaborators['navigation']->endpoint_labels();
+		return $this->collaborator( 'navigation' )->endpoint_labels();
 	}
 
 	/**
@@ -59,7 +60,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<string,string>
 	 */
 	public function account_menu_items() {
-		return $this->collaborators['navigation']->account_menu_items();
+		return $this->collaborator( 'navigation' )->account_menu_items();
 	}
 
 	/**
@@ -68,7 +69,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<string,string>
 	 */
 	public function standard_account_menu_items() {
-		return $this->collaborators['navigation']->standard_account_menu_items();
+		return $this->collaborator( 'navigation' )->standard_account_menu_items();
 	}
 
 	/**
@@ -78,7 +79,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<int,string>
 	 */
 	public function hidden_account_menu_items( $settings ) {
-		return $this->collaborators['navigation']->hidden_account_menu_items( $settings );
+		return $this->collaborator( 'navigation' )->hidden_account_menu_items( $settings );
 	}
 
 	/**
@@ -89,7 +90,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return bool
 	 */
 	public function is_account_menu_item_visible( $endpoint, $settings ) {
-		return $this->collaborators['navigation']->is_account_menu_item_visible( $endpoint, $settings );
+		return $this->collaborator( 'navigation' )->is_account_menu_item_visible( $endpoint, $settings );
 	}
 
 	/**
@@ -99,7 +100,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<string,string>
 	 */
 	public function visible_account_menu_items( $settings ) {
-		return $this->collaborators['navigation']->visible_account_menu_items( $settings );
+		return $this->collaborator( 'navigation' )->visible_account_menu_items( $settings );
 	}
 
 	/**
@@ -109,7 +110,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<int,array<string,mixed>>
 	 */
 	public function account_menu_links( $settings ) {
-		return $this->collaborators['navigation']->account_menu_links( $settings );
+		return $this->collaborator( 'navigation' )->account_menu_links( $settings );
 	}
 
 	/**
@@ -147,7 +148,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return void
 	 */
 	public function maybe_handle_account_form_post() {
-		$this->collaborators['routing']->maybe_handle_account_form_post();
+		$this->collaborator( 'routing' )->maybe_handle_account_form_post();
 	}
 
 	/**
@@ -158,7 +159,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<string,mixed>
 	 */
 	public function endpoint_from_path( $path, $settings ) {
-		return $this->collaborators['routing']->endpoint_from_path( $path, $settings );
+		return $this->collaborator( 'routing' )->endpoint_from_path( $path, $settings );
 	}
 
 	/**
@@ -169,7 +170,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return bool
 	 */
 	public function render_endpoint( $endpoint, $value = '' ) {
-		return $this->collaborators['renderer']->render_endpoint( $endpoint, $value );
+		return $this->collaborator( 'renderer' )->render_endpoint( $endpoint, $value );
 	}
 
 	/**
@@ -180,7 +181,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<int,array<string,mixed>>
 	 */
 	public function recent_orders( $user_id, $limit = 3 ) {
-		return $this->collaborators['data']->recent_orders( $user_id, $limit );
+		return $this->collaborator( 'data' )->recent_orders( $user_id, $limit );
 	}
 
 	/**
@@ -191,7 +192,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<int,array<string,mixed>>
 	 */
 	public function available_downloads( $user_id, $limit = 3 ) {
-		return $this->collaborators['data']->available_downloads( $user_id, $limit );
+		return $this->collaborator( 'data' )->available_downloads( $user_id, $limit );
 	}
 
 	/**
@@ -201,7 +202,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<string,mixed>
 	 */
 	public function account_details( $user_id ) {
-		return $this->collaborators['data']->account_details( $user_id );
+		return $this->collaborator( 'data' )->account_details( $user_id );
 	}
 
 	/**
@@ -212,7 +213,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<int,array<string,mixed>>
 	 */
 	public function saved_payment_methods( $user_id, $limit = 3 ) {
-		return $this->collaborators['data']->saved_payment_methods( $user_id, $limit );
+		return $this->collaborator( 'data' )->saved_payment_methods( $user_id, $limit );
 	}
 
 	/**
@@ -222,7 +223,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<string,array<int,string>>
 	 */
 	public function saved_addresses( $user_id ) {
-		return $this->collaborators['data']->saved_addresses( $user_id );
+		return $this->collaborator( 'data' )->saved_addresses( $user_id );
 	}
 
 	/**
@@ -233,7 +234,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return string
 	 */
 	public function order_url( $order_id, $settings ) {
-		return $this->collaborators['navigation']->order_url( $order_id, $settings );
+		return $this->collaborator( 'navigation' )->order_url( $order_id, $settings );
 	}
 
 	/**
@@ -244,7 +245,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return string
 	 */
 	public function address_url( $type, $settings ) {
-		return $this->collaborators['navigation']->address_url( $type, $settings );
+		return $this->collaborator( 'navigation' )->address_url( $type, $settings );
 	}
 
 	/**
@@ -255,7 +256,7 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return string
 	 */
 	public function endpoint_url( $endpoint, $settings ) {
-		return $this->collaborators['navigation']->endpoint_url( $endpoint, $settings );
+		return $this->collaborator( 'navigation' )->endpoint_url( $endpoint, $settings );
 	}
 
 	/**
@@ -268,21 +269,6 @@ class ALYNT_AG_WooCommerce_Integration {
 	 * @return array<string,string>
 	 */
 	private function merge_standard_account_menu_items( $items, $standard_items ) {
-		$merged = array();
-
-		foreach ( $standard_items as $endpoint => $label ) {
-			if ( 'customer-logout' === $endpoint ) {
-				foreach ( $items as $item_endpoint => $item_label ) {
-					$item_endpoint = sanitize_key( $item_endpoint );
-					if ( $item_endpoint && ! isset( $standard_items[ $item_endpoint ] ) ) {
-						$merged[ $item_endpoint ] = sanitize_text_field( $item_label );
-					}
-				}
-			}
-
-			$merged[ $endpoint ] = isset( $items[ $endpoint ] ) ? sanitize_text_field( $items[ $endpoint ] ) : $label;
-		}
-
-		return $merged;
+		return $this->collaborator( 'navigation' )->merge_standard_account_menu_items( $items, $standard_items );
 	}
 }

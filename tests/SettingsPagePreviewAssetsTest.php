@@ -35,21 +35,13 @@ class SettingsPagePreviewAssetsTest extends TestCase {
 		return alynt_ag_test_invoke_settings_page_method( $settings_page, $method, $args );
 	}
 
-	public function test_gateway_preview_localizes_password_visibility_status_labels() {
-		$settings_page = new ALYNT_AG_Settings_Page();
+	public function test_gateway_preview_delegates_asset_loading_to_frontend_facade() {
+		$source = file_get_contents( ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-gateway-preview.php' );
 
-		$this->invoke_helper( $settings_page, 'enqueue_gateway_preview_assets', array( 'setpassword', array() ) );
-
-		$this->assertCount( 1, $GLOBALS['alynt_ag_test_localized_scripts'] );
-		$this->assertSame( 'alynt-ag-frontend', $GLOBALS['alynt_ag_test_localized_scripts'][0]['handle'] );
-		$this->assertSame( 'alyntAgFrontend', $GLOBALS['alynt_ag_test_localized_scripts'][0]['object_name'] );
-		$this->assertSame( 'Show password', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['showPassword'] );
-		$this->assertSame( 'Hide password', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['hidePassword'] );
-		$this->assertSame( 'Password is visible.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['passwordVisible'] );
-		$this->assertSame( 'Met', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementMet'] );
-		$this->assertSame( 'Not met', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementNotMet'] );
-		$this->assertSame( '%1$d of %2$d requirements met.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementsMet'] );
-		$this->assertSame( 'Password is hidden.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['passwordHidden'] );
+		$this->assertIsString( $source );
+		$this->assertStringContainsString( '$frontend->enqueue_preview_assets( $settings, $screen );', $source );
+		$this->assertStringNotContainsString( 'function enqueue_gateway_preview_assets', $source );
+		$this->assertStringNotContainsString( 'wp_localize_script(', $source );
 	}
 
 	public function test_register_adds_ajax_preview_route_and_compatibility_routes() {
@@ -91,6 +83,24 @@ class SettingsPagePreviewAssetsTest extends TestCase {
 		$this->assertSame( 1, $admin_init_preview[0]['priority'] );
 		$this->assertCount( 1, $admin_post_preview );
 		$this->assertCount( 1, $ajax_preview );
+	}
+
+	public function test_unrelated_admin_request_does_not_build_component_registry() {
+		$original_get = $_GET;
+		$_GET        = array( 'page' => 'unrelated-settings-page' );
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$settings_page->maybe_handle_preview_gateway_request();
+
+		$reflection = new ReflectionClass( $settings_page );
+		$components = $reflection->getProperty( 'components' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$components->setAccessible( true );
+		}
+
+		$this->assertNull( $components->getValue( $settings_page ) );
+
+		$_GET = $original_get;
 	}
 
 	public function test_gateway_preview_links_use_frontend_preview_route() {

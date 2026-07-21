@@ -14,6 +14,15 @@ require_once ALYNT_AG_PLUGIN_DIR . 'admin/class-settings-page.php';
  */
 class SettingsPageWebhookUxTest extends TestCase {
 
+	protected function setUp(): void {
+		parent::setUp();
+		$GLOBALS['alynt_ag_test_options'] = array(
+			'date_format' => 'Y-m-d',
+			'time_format' => 'H:i',
+		);
+		$GLOBALS['alynt_ag_test_db_results'] = array();
+	}
+
 	/**
 	 * Invoke a private settings page helper.
 	 *
@@ -96,6 +105,18 @@ class SettingsPageWebhookUxTest extends TestCase {
 		$this->assertStringContainsString( '500', $output );
 		$this->assertStringContainsString( 'Failed', $output );
 		$this->assertStringContainsString( 'Server Error', $output );
+	}
+
+	public function test_recent_webhook_logs_returns_error_when_database_read_fails() {
+		$tables = ALYNT_AG_Database::tables();
+		$GLOBALS['alynt_ag_test_db_results'][ $tables['webhook_logs'] ] = false;
+		$settings_page = new ALYNT_AG_Settings_Page();
+
+		$result = $this->invoke_helper( $settings_page, 'recent_webhook_logs' );
+
+		$this->assertTrue( is_wp_error( $result ) );
+		$this->assertSame( 'alynt_ag_webhook_logs_read_failed', $result->get_error_code() );
+		unset( $GLOBALS['alynt_ag_test_db_results'][ $tables['webhook_logs'] ] );
 	}
 
 	public function test_webhook_time_formatter_returns_original_invalid_timestamp() {

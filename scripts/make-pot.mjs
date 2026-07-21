@@ -6,7 +6,7 @@ const root = process.cwd();
 const output = path.join(root, 'languages', `${domain}.pot`);
 const includeExtensions = new Set(['.php']);
 const excludedDirs = new Set(['.git', 'assets', 'build', 'node_modules', 'tests', 'vendor']);
-const functions = [
+const singularFunctions = [
 	'__',
 	'_e',
 	'esc_attr__',
@@ -71,21 +71,69 @@ async function listFiles(dir) {
 	return files;
 }
 
+function translatorComment(source, index) {
+	const before = source.slice(Math.max(0, index - 600), index);
+	const matches = [...before.matchAll(/\/\*\s*translators:\s*((?:(?!\*\/)[\s\S])*)\*\//gi)];
+	const match = matches.at(-1);
+	const trailing = match ? before.slice(match.index + match[0].length) : '';
+
+	return match && trailing.length <= 200 ? match[1].replace(/\s+/g, ' ').trim() : '';
+}
+
+function addEntry(catalog, source, relativePath, match, msgid, options = {}) {
+	const context = options.context || '';
+	const plural = options.plural || '';
+	const key = JSON.stringify([context, msgid, plural]);
+	const line = source.slice(0, match.index).split('\n').length;
+
+	if (!catalog.has(key)) {
+		catalog.set(key, {
+			context,
+			msgid,
+			plural,
+			references: new Set(),
+			comments: new Set(),
+		});
+	}
+
+	const entry = catalog.get(key);
+	const comment = translatorComment(source, match.index);
+	entry.references.add(`${relativePath}:${line}`);
+	if (comment) {
+		entry.comments.add(comment);
+	}
+}
+
 function collectStrings(source, relativePath, catalog) {
-	const functionPattern = functions.map((name) => name.replaceAll('_', '_')).join('|');
-	const pattern = new RegExp(`(?:${functionPattern})\\(\\s*(['"])((?:\\\\.|(?!\\1).)*)\\1\\s*,\\s*['"]${domain}['"]`, 'gs');
+	const escapedDomain = domain.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	const singularPattern = singularFunctions.join('|');
+	const singular = new RegExp(`(?:${singularPattern})\\(\\s*(['"])((?:\\\\.|(?!\\1).)*)\\1\\s*,\\s*['"]${escapedDomain}['"]`, 'gs');
+	const contextual = new RegExp(`(?:_x|_ex)\\(\\s*(['"])((?:\\\\.|(?!\\1).)*)\\1\\s*,\\s*(['"])((?:\\\\.|(?!\\3).)*)\\3\\s*,\\s*['"]${escapedDomain}['"]`, 'gs');
+	const plural = new RegExp(`_n\\(\\s*(['"])((?:\\\\.|(?!\\1).)*)\\1\\s*,\\s*(['"])((?:\\\\.|(?!\\3).)*)\\3[\\s\\S]{0,500}?,\\s*['"]${escapedDomain}['"]\\s*\\)`, 'gs');
+	const contextualPlural = new RegExp(`_nx\\(\\s*(['"])((?:\\\\.|(?!\\1).)*)\\1\\s*,\\s*(['"])((?:\\\\.|(?!\\3).)*)\\3[\\s\\S]{0,500}?,\\s*(['"])((?:\\\\.|(?!\\5).)*)\\5\\s*,\\s*['"]${escapedDomain}['"]\\s*\\)`, 'gs');
 	let match;
 
-	while ((match = pattern.exec(source)) !== null) {
-		const msgid = decodeString(match[2]);
-		const before = source.slice(0, match.index);
-		const line = before.split('\n').length;
+	while ((match = singular.exec(source)) !== null) {
+		addEntry(catalog, source, relativePath, match, decodeString(match[2]));
+	}
 
-		if (!catalog.has(msgid)) {
-			catalog.set(msgid, new Set());
-		}
+	while ((match = contextual.exec(source)) !== null) {
+		addEntry(catalog, source, relativePath, match, decodeString(match[2]), {
+			context: decodeString(match[4]),
+		});
+	}
 
-		catalog.get(msgid).add(`${relativePath}:${line}`);
+	while ((match = plural.exec(source)) !== null) {
+		addEntry(catalog, source, relativePath, match, decodeString(match[2]), {
+			plural: decodeString(match[4]),
+		});
+	}
+
+	while ((match = contextualPlural.exec(source)) !== null) {
+		addEntry(catalog, source, relativePath, match, decodeString(match[2]), {
+			plural: decodeString(match[4]),
+			context: decodeString(match[6]),
+		});
 	}
 }
 
@@ -118,13 +166,30 @@ const header = [
 	'',
 ];
 
-const entries = [...catalog.entries()].sort(([left], [right]) => left.localeCompare(right));
-const body = entries.flatMap(([msgid, refs]) => [
-	[...refs].sort().map((ref) => `#: ${ref}`).join('\n'),
-	formatPotString(msgid),
-	'msgstr ""',
-	'',
-]);
+const entries = [...catalog.values()].sort((left, right) => {
+	return `${left.context}\0${left.msgid}`.localeCompare(`${right.context}\0${right.msgid}`);
+});
+const body = entries.flatMap((entry) => {
+	const lines = [];
+
+	if (entry.comments.size) {
+		lines.push([...entry.comments].sort().map((comment) => `#. translators: ${comment}`).join('\n'));
+	}
+	lines.push([...entry.references].sort().map((ref) => `#: ${ref}`).join('\n'));
+	if (entry.context) {
+		lines.push(formatPotString(entry.context, 'msgctxt'));
+	}
+	lines.push(formatPotString(entry.msgid));
+	if (entry.plural) {
+		lines.push(formatPotString(entry.plural, 'msgid_plural'));
+		lines.push('msgstr[0] ""', 'msgstr[1] ""');
+	} else {
+		lines.push('msgstr ""');
+	}
+	lines.push('');
+
+	return lines;
+});
 
 const content = `${header.concat(body).join('\n')}\n`.replace(/\n+$/, '\n');
 

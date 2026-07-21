@@ -86,10 +86,33 @@ class FrontendDashboardShellTest extends FrontendDashboardScreenTestCase {
 		$this->assertStringContainsString( 'id="agw-dashboard-offcanvas"', $html );
 		$this->assertStringContainsString( 'aria-hidden="true"', $html );
 		$this->assertStringContainsString( 'role="dialog" aria-modal="true"', $html );
+		$this->assertStringContainsString( 'class="agw-offcanvas__backdrop" aria-hidden="true"', $html );
 		$this->assertStringContainsString( 'data-agw-offcanvas-close', $html );
 		$this->assertStringContainsString( 'class="agw-offcanvas__menu"', $html );
 		$this->assertStringContainsString( 'Shop', $html );
 		$this->assertStringContainsString( 'Contact', $html );
+	}
+
+	public function test_footer_menu_new_tab_attributes_explain_context_and_secure_target() {
+		$renderer = new ALYNT_AG_Dashboard_Navigation_Renderer();
+		$atts     = $renderer->accessible_new_tab_attributes(
+			array( 'target' => '_blank' ),
+			(object) array( 'title' => 'Privacy Policy' ),
+			(object) array( 'alynt_ag_accessible_new_tabs' => true ),
+			0
+		);
+
+		$this->assertSame( 'nofollow noopener noreferrer', $renderer->accessible_new_tab_attributes(
+			array(
+				'target' => '_blank',
+				'rel'    => 'nofollow',
+			),
+			(object) array( 'title' => 'Privacy Policy' ),
+			(object) array( 'alynt_ag_accessible_new_tabs' => true ),
+			0
+		)['rel'] );
+		$this->assertSame( 'noopener noreferrer', $atts['rel'] );
+		$this->assertSame( 'Privacy Policy (opens in a new tab)', $atts['aria-label'] );
 	}
 
 	public function test_render_dashboard_shell_outputs_independent_footer_menu_when_enabled() {

@@ -61,7 +61,10 @@ if ( ! function_exists( 'wp_remote_get' ) ) {
 			return $GLOBALS['alynt_ag_test_remote_get_response'];
 		}
 
-		return array( 'body' => '{"status":"safe"}' );
+		return array(
+			'body'     => '{"status":"safe"}',
+			'response' => array( 'code' => 200 ),
+		);
 	}
 }
 

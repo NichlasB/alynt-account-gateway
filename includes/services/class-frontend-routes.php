@@ -17,7 +17,7 @@ class ALYNT_AG_Frontend_Routes {
 	/**
 	 * WooCommerce integration.
 	 *
-	 * @var ALYNT_AG_WooCommerce_Integration
+	 * @var ALYNT_AG_WooCommerce_Integration|null
 	 */
 	private $woocommerce;
 
@@ -27,7 +27,7 @@ class ALYNT_AG_Frontend_Routes {
 	 * @param ALYNT_AG_WooCommerce_Integration|null $woocommerce WooCommerce integration.
 	 */
 	public function __construct( $woocommerce = null ) {
-		$this->woocommerce = $woocommerce ? $woocommerce : new ALYNT_AG_WooCommerce_Integration();
+		$this->woocommerce = $woocommerce;
 	}
 
 	/**
@@ -137,7 +137,12 @@ class ALYNT_AG_Frontend_Routes {
 			return 'dashboard';
 		}
 
-		if ( $this->woocommerce->takeover_enabled( $settings ) && $this->woocommerce->endpoint_from_path( $current_path, $settings )['endpoint'] ) {
+		if (
+			! empty( $settings['dashboard_enabled'] )
+			&& ! empty( $settings['woocommerce_takeover'] )
+			&& $this->woocommerce()->takeover_enabled( $settings )
+			&& $this->woocommerce()->endpoint_from_path( $current_path, $settings )['endpoint']
+		) {
 			return 'dashboard';
 		}
 
@@ -198,5 +203,18 @@ class ALYNT_AG_Frontend_Routes {
 	 */
 	public function paths_match( $left, $right ) {
 		return untrailingslashit( '/' . ltrim( $left, '/' ) ) === untrailingslashit( '/' . ltrim( $right, '/' ) );
+	}
+
+	/**
+	 * Return the WooCommerce integration only when takeover routing is enabled.
+	 *
+	 * @return ALYNT_AG_WooCommerce_Integration
+	 */
+	private function woocommerce() {
+		if ( null === $this->woocommerce ) {
+			$this->woocommerce = new ALYNT_AG_WooCommerce_Integration();
+		}
+
+		return $this->woocommerce;
 	}
 }

@@ -229,7 +229,7 @@ class ALYNT_AG_WooCommerce_Navigation extends ALYNT_AG_Service_Collaborator {
 	 * @param array<string,string> $standard_items Standard required menu items.
 	 * @return array<string,string>
 	 */
-	private function merge_standard_account_menu_items( $items, $standard_items ) {
+	public function merge_standard_account_menu_items( $items, $standard_items ) {
 		$merged = array();
 
 		foreach ( $standard_items as $endpoint => $label ) {

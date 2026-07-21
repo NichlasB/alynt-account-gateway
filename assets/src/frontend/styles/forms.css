@@ -168,6 +168,14 @@
 	opacity: 0.62;
 }
 
+.agw-form--submitting {
+	cursor: progress;
+}
+
+.agw-form--submitting .agw-button[type="submit"] {
+	cursor: progress;
+}
+
 .agw-links {
 	display: flex;
 	flex-wrap: wrap;

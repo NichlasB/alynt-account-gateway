@@ -15,61 +15,152 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ALYNT_AG_Privacy_Exporter {
 
 	/**
+	 * Maximum rows read from each table per export page.
+	 */
+	const PAGE_SIZE = 100;
+
+	/**
 	 * Export personal data stored by the plugin.
 	 *
 	 * @param string $email_address Email address.
 	 * @param int    $page          Page number.
-	 * @return array<string,mixed>
+	 * @return array<string,mixed>|WP_Error
 	 */
 	public function export_personal_data( $email_address, $page = 1 ) {
-		unset( $page );
-
-		global $wpdb;
-
 		$email   = sanitize_email( $email_address );
 		$user    = function_exists( 'get_user_by' ) ? get_user_by( 'email', $email ) : false;
 		$user_id = $user && isset( $user->ID ) ? absint( $user->ID ) : 0;
-		$tables  = ALYNT_AG_Database::tables();
-		$data    = array();
+		$page    = max( 1, absint( $page ) );
+		$records = $this->personal_data_records( $email, $user_id, $page );
+
+		if ( is_wp_error( $records ) ) {
+			return $records;
+		}
+
+		$data = array_merge(
+			$this->export_consents( $records['consents'] ),
+			$this->export_pending_registrations( $records['pending'] ),
+			$this->export_verification_logs( $records['verification'] ),
+			$this->export_webhook_logs( $records['webhooks'] )
+		);
+
+		return array(
+			'data' => $data,
+			'done' => ! $this->records_have_full_page( $records ),
+		);
+	}
+
+	/**
+	 * Read personal-data records from plugin-owned tables.
+	 *
+	 * @param string $email   Sanitized email address.
+	 * @param int    $user_id WordPress user ID.
+	 * @param int    $page    Export page.
+	 * @return array{consents:array<int,object>,pending:array<int,object>,verification:array<int,object>,webhooks:array<int,object>}|WP_Error
+	 */
+	private function personal_data_records( $email, $user_id, $page ) {
+		global $wpdb;
+
+		$tables = ALYNT_AG_Database::tables();
+		$limit  = self::PAGE_SIZE;
+		$offset = ( $page - 1 ) * $limit;
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Exporter reads plugin-owned tables.
 		if ( $user_id ) {
 			$consents = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT * FROM {$tables['consent_records']} WHERE email = %s OR user_id = %d ORDER BY created_at DESC",
+					"SELECT * FROM {$tables['consent_records']} WHERE email = %s OR user_id = %d ORDER BY created_at DESC, id DESC LIMIT %d OFFSET %d",
 					$email,
-					$user_id
+					$user_id,
+					$limit,
+					$offset
 				)
 			);
 		} else {
 			$consents = $wpdb->get_results(
 				$wpdb->prepare(
-					"SELECT * FROM {$tables['consent_records']} WHERE email = %s ORDER BY created_at DESC",
-					$email
+					"SELECT * FROM {$tables['consent_records']} WHERE email = %s ORDER BY created_at DESC, id DESC LIMIT %d OFFSET %d",
+					$email,
+					$limit,
+					$offset
 				)
 			);
 		}
 		$pending      = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM {$tables['pending_registrations']} WHERE email = %s ORDER BY created_at DESC",
-				$email
+				"SELECT * FROM {$tables['pending_registrations']} WHERE email = %s ORDER BY created_at DESC, id DESC LIMIT %d OFFSET %d",
+				$email,
+				$limit,
+				$offset
 			)
 		);
 		$verification = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM {$tables['verification_logs']} WHERE email = %s ORDER BY created_at DESC",
-				$email
+				"SELECT * FROM {$tables['verification_logs']} WHERE email = %s ORDER BY created_at DESC, id DESC LIMIT %d OFFSET %d",
+				$email,
+				$limit,
+				$offset
 			)
 		);
 		$webhooks     = $user_id ? $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT * FROM {$tables['webhook_logs']} WHERE user_id = %d ORDER BY created_at DESC",
-				$user_id
+				"SELECT * FROM {$tables['webhook_logs']} WHERE user_id = %d ORDER BY created_at DESC, id DESC LIMIT %d OFFSET %d",
+				$user_id,
+				$limit,
+				$offset
 			)
 		) : array();
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		foreach ( (array) $consents as $consent ) {
+		if ( false === $consents || false === $pending || false === $verification || false === $webhooks ) {
+			if ( class_exists( 'ALYNT_AG_Diagnostics_Logger' ) ) {
+				ALYNT_AG_Diagnostics_Logger::log_event(
+					'error',
+					'database',
+					'privacy_export_query_failed',
+					__( 'A privacy export database query failed.', 'alynt-account-gateway' )
+				);
+			}
+
+			return new WP_Error(
+				'alynt_ag_privacy_export_failed',
+				__( 'Alynt Account Gateway could not retrieve all personal data. Please retry the export and check the site database if the problem continues.', 'alynt-account-gateway' )
+			);
+		}
+
+		return array(
+			'consents'     => (array) $consents,
+			'pending'      => (array) $pending,
+			'verification' => (array) $verification,
+			'webhooks'     => (array) $webhooks,
+		);
+	}
+
+	/**
+	 * Return whether any table filled its current export page.
+	 *
+	 * @param array<string,array<int,object>> $records Personal data records.
+	 * @return bool
+	 */
+	private function records_have_full_page( $records ) {
+		foreach ( $records as $rows ) {
+			if ( self::PAGE_SIZE === count( $rows ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Format consent records for the WordPress exporter.
+	 *
+	 * @param array<int,object> $records Consent records.
+	 * @return array<int,array<string,mixed>>
+	 */
+	private function export_consents( $records ) {
+		$data = array();
+		foreach ( $records as $consent ) {
 			$data[] = $this->export_item(
 				'consent-' . $consent->id,
 				__( 'Account Gateway Consent', 'alynt-account-gateway' ),
@@ -84,7 +175,18 @@ class ALYNT_AG_Privacy_Exporter {
 			);
 		}
 
-		foreach ( (array) $pending as $registration ) {
+		return $data;
+	}
+
+	/**
+	 * Format pending registrations for the WordPress exporter.
+	 *
+	 * @param array<int,object> $records Pending registrations.
+	 * @return array<int,array<string,mixed>>
+	 */
+	private function export_pending_registrations( $records ) {
+		$data = array();
+		foreach ( $records as $registration ) {
 			$data[] = $this->export_item(
 				'pending-registration-' . $registration->id,
 				__( 'Pending Account Registration', 'alynt-account-gateway' ),
@@ -100,7 +202,18 @@ class ALYNT_AG_Privacy_Exporter {
 			);
 		}
 
-		foreach ( (array) $verification as $log ) {
+		return $data;
+	}
+
+	/**
+	 * Format verification records for the WordPress exporter.
+	 *
+	 * @param array<int,object> $records Verification records.
+	 * @return array<int,array<string,mixed>>
+	 */
+	private function export_verification_logs( $records ) {
+		$data = array();
+		foreach ( $records as $log ) {
 			$data[] = $this->export_item(
 				'verification-' . $log->id,
 				__( 'Email Verification Log', 'alynt-account-gateway' ),
@@ -116,7 +229,18 @@ class ALYNT_AG_Privacy_Exporter {
 			);
 		}
 
-		foreach ( (array) $webhooks as $log ) {
+		return $data;
+	}
+
+	/**
+	 * Format webhook records for the WordPress exporter.
+	 *
+	 * @param array<int,object> $records Webhook records.
+	 * @return array<int,array<string,mixed>>
+	 */
+	private function export_webhook_logs( $records ) {
+		$data = array();
+		foreach ( $records as $log ) {
 			$data[] = $this->export_item(
 				'webhook-' . $log->id,
 				__( 'Webhook Delivery Metadata', 'alynt-account-gateway' ),
@@ -130,10 +254,7 @@ class ALYNT_AG_Privacy_Exporter {
 			);
 		}
 
-		return array(
-			'data' => $data,
-			'done' => true,
-		);
+		return $data;
 	}
 
 	/**

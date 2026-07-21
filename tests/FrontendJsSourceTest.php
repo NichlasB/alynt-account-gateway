@@ -44,7 +44,7 @@ class FrontendJsSourceTest extends TestCase {
 
 		$this->assertIsString( $entry );
 		$this->assertIsArray( $modules );
-		$this->assertCount( 5, $modules );
+		$this->assertCount( 7, $modules );
 
 		foreach ( $modules as $module ) {
 			$relative_path = './modules/' . basename( $module );
@@ -57,12 +57,34 @@ class FrontendJsSourceTest extends TestCase {
 		}
 	}
 
+	public function test_redirected_errors_restore_non_secret_fields_and_focus_invalid_input() {
+		$js = $this->get_frontend_js();
+
+		$this->assertStringContainsString( "form.querySelectorAll( '[data-agw-retain][name]' )", $js );
+		$this->assertStringContainsString( 'window.sessionStorage.setItem', $js );
+		$this->assertStringContainsString( "document.querySelector( '.agw-form [aria-invalid=\"true\"]' )", $js );
+		$this->assertStringNotContainsString( "name=\"pwd\"", $js );
+		$this->assertStringNotContainsString( "name=\"password\"", $js );
+	}
+
 	public function test_password_submit_aria_disabled_tracks_validity() {
 		$js = $this->get_frontend_js();
 
+		$this->assertStringContainsString( 'Array.from( password ).length >= 12', $js );
 		$this->assertStringContainsString( 'submit.disabled = ! isValid;', $js );
 		$this->assertStringContainsString( "submit.setAttribute( 'aria-disabled', isValid ? 'false' : 'true' );", $js );
 	}
+
+	public function test_gateway_forms_prevent_duplicate_submissions_and_report_busy_state() {
+		$js = $this->get_frontend_js();
+
+		$this->assertStringContainsString( "document.querySelectorAll( '.agw-form' )", $js );
+		$this->assertStringContainsString( "form.dataset.agwSubmitting === '1'", $js );
+		$this->assertStringContainsString( "form.setAttribute( 'aria-busy', 'true' )", $js );
+		$this->assertStringContainsString( "submit.setAttribute( 'aria-disabled', 'true' )", $js );
+		$this->assertStringContainsString( 'event.defaultPrevented || ! form.checkValidity()', $js );
+	}
+
 	public function test_password_requirements_use_readable_accessibility_labels() {
 		$js = $this->get_frontend_js();
 
@@ -70,7 +92,9 @@ class FrontendJsSourceTest extends TestCase {
 		$this->assertStringContainsString( "item.setAttribute( 'aria-label', `\${ requirementState }: \${ requirementLabel }` );", $js );
 		$this->assertStringContainsString( "alyntAgLabels.requirementMet || ''", $js );
 		$this->assertStringContainsString( "alyntAgLabels.requirementNotMet || ''", $js );
-		$this->assertStringContainsString( "( alyntAgLabels.requirementsMet || '' )", $js );
+		$this->assertStringContainsString( "state.metRequirements === 1", $js );
+		$this->assertStringContainsString( "alyntAgLabels.requirementMetSummary || ''", $js );
+		$this->assertStringContainsString( "alyntAgLabels.requirementsMetSummary || ''", $js );
 		$this->assertStringNotContainsString( "'Met'", $js );
 		$this->assertStringNotContainsString( "'Not met'", $js );
 		$this->assertStringNotContainsString( 'requirements met.', $js );
@@ -87,5 +111,15 @@ class FrontendJsSourceTest extends TestCase {
 		$this->assertStringNotContainsString( "'Password is visible.'", $js );
 		$this->assertStringNotContainsString( "'Password is hidden.'", $js );
 		$this->assertStringContainsString( 'status.textContent = statusText;', $js );
+	}
+
+	public function test_offcanvas_dialog_isolates_background_and_restores_it_on_close() {
+		$js = $this->get_frontend_js();
+
+		$this->assertStringContainsString( 'alyntAgSetOffcanvasSiblingsInert( offcanvas, true )', $js );
+		$this->assertStringContainsString( 'alyntAgSetOffcanvasSiblingsInert( offcanvas, false )', $js );
+		$this->assertStringContainsString( "sibling.setAttribute( 'data-agw-offcanvas-inert', '' )", $js );
+		$this->assertStringContainsString( "sibling.hasAttribute( 'data-agw-offcanvas-inert' )", $js );
+		$this->assertStringContainsString( "sibling.removeAttribute( 'inert' )", $js );
 	}
 }

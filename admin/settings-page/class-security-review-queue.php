@@ -27,16 +27,7 @@ class ALYNT_AG_Settings_Page_Security_Review_Queue extends ALYNT_AG_Settings_Pag
 			<h4><?php esc_html_e( 'Manual Review Queue', 'alynt-account-gateway' ); ?></h4>
 			<p class="description"><?php esc_html_e( 'Highlights unresolved Reoon flagged results that were allowed by policy so support teams can record a review decision without changing the public registration flow.', 'alynt-account-gateway' ); ?></p>
 			<div class="alynt-ag-security-status__grid">
-				<?php foreach ( $items as $item ) : ?>
-					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
-						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
-						<h5><?php echo esc_html( $item['label'] ); ?></h5>
-						<p>
-							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
-							<?php echo esc_html( $item['message'] ); ?>
-						</p>
-					</section>
-				<?php endforeach; ?>
+				<?php $this->render_security_signal_cards( $items ); ?>
 			</div>
 			<?php $this->render_security_manual_review_decision_playbook(); ?>
 		</div>
@@ -54,7 +45,7 @@ class ALYNT_AG_Settings_Page_Security_Review_Queue extends ALYNT_AG_Settings_Pag
 		<div class="alynt-ag-security-manual-review__playbook">
 			<h5><?php esc_html_e( 'Manual Review Decision Playbook', 'alynt-account-gateway' ); ?></h5>
 			<p class="description"><?php esc_html_e( 'Use this as a support-friendly rubric before changing the site-wide Reoon flagged-status policy.', 'alynt-account-gateway' ); ?></p>
-			<table class="widefat striped alynt-ag-security-manual-review__table">
+			<table class="widefat striped alynt-ag-security-manual-review__table" aria-label="<?php esc_attr_e( 'Manual review decision playbook', 'alynt-account-gateway' ); ?>">
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Result Family', 'alynt-account-gateway' ); ?></th>

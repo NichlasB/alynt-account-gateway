@@ -32,6 +32,8 @@ class ALYNT_AG_Auth_Request_Handler extends ALYNT_AG_Service_Collaborator {
 		$this->destinations = $destinations;
 	}
 
+	// phpcs:disable WordPress.Security.NonceVerification.Missing -- Each handler verifies its branded frontend nonce explicitly before processing the request.
+
 	/**
 	 * Handle branded auth form submissions.
 	 *
@@ -67,14 +69,17 @@ class ALYNT_AG_Auth_Request_Handler extends ALYNT_AG_Service_Collaborator {
 	 * @return void
 	 */
 	private function handle_login_request() {
-		check_admin_referer( 'alynt_ag_login', 'alynt_ag_auth_nonce' );
-
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 		$base_url = home_url( $settings['login_path'] );
 		$email    = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Validated as a same-site destination below.
 		$submitted_redirect = isset( $_POST['redirect_to'] ) ? wp_unslash( $_POST['redirect_to'] ) : '';
 		$redirect_to        = $this->destinations->absolute_url( $submitted_redirect, $settings );
+
+		if ( ! $this->request_nonce_is_valid( 'alynt_ag_login', 'alynt_ag_auth_nonce' ) ) {
+			wp_safe_redirect( $this->login_error_url( 'session_expired', $base_url, $redirect_to ) );
+			exit;
+		}
 
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Password is passed to wp_signon() and must not be altered.
 		$password = isset( $_POST['pwd'] ) ? wp_unslash( $_POST['pwd'] ) : '';
@@ -172,11 +177,14 @@ class ALYNT_AG_Auth_Request_Handler extends ALYNT_AG_Service_Collaborator {
 	 * @return void
 	 */
 	private function handle_lostpassword_request() {
-		check_admin_referer( 'alynt_ag_lostpassword', 'alynt_ag_auth_nonce' );
-
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 		$base_url = add_query_arg( 'action', 'lostpassword', home_url( $settings['account_action_base'] ) );
 		$email    = isset( $_POST['user_login'] ) ? sanitize_email( wp_unslash( $_POST['user_login'] ) ) : '';
+
+		if ( ! $this->request_nonce_is_valid( 'alynt_ag_lostpassword', 'alynt_ag_auth_nonce' ) ) {
+			wp_safe_redirect( add_query_arg( 'reset_error', 'session_expired', $base_url ) );
+			exit;
+		}
 
 		$rate_limit = $this->validate_rate_limit( 'lostpassword', $email, $settings );
 		if ( is_wp_error( $rate_limit ) ) {
@@ -230,8 +238,6 @@ class ALYNT_AG_Auth_Request_Handler extends ALYNT_AG_Service_Collaborator {
 	 * @return void
 	 */
 	private function handle_reset_password_request() {
-		check_admin_referer( 'alynt_ag_reset_password', 'alynt_ag_auth_nonce' );
-
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
 		$key      = isset( $_POST['key'] ) ? sanitize_text_field( wp_unslash( $_POST['key'] ) ) : '';
 		$login    = isset( $_POST['login'] ) ? sanitize_user( wp_unslash( $_POST['login'] ) ) : '';
@@ -249,6 +255,11 @@ class ALYNT_AG_Auth_Request_Handler extends ALYNT_AG_Service_Collaborator {
 			),
 			home_url( $settings['account_action_base'] )
 		);
+
+		if ( ! $this->request_nonce_is_valid( 'alynt_ag_reset_password', 'alynt_ag_auth_nonce' ) ) {
+			wp_safe_redirect( add_query_arg( 'password_error', 'session_expired', $base_url ) );
+			exit;
+		}
 
 		$result = $this->complete_password_reset( $key, $login, $password, $password_confirm );
 		if ( is_wp_error( $result ) ) {
@@ -271,4 +282,6 @@ class ALYNT_AG_Auth_Request_Handler extends ALYNT_AG_Service_Collaborator {
 
 		return $path ? sanitize_text_field( $path ) : '';
 	}
+
+	// phpcs:enable WordPress.Security.NonceVerification.Missing
 }

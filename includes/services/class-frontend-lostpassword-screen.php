@@ -79,12 +79,12 @@ class ALYNT_AG_Frontend_Lostpassword_Screen {
 		<?php if ( $error_code ) : ?>
 			<div id="agw-lostpassword-error" class="agw-status agw-status--error" role="alert" aria-live="assertive" aria-atomic="true"><?php echo esc_html( $this->auth->get_lostpassword_error_message( $error_code ) ); ?></div>
 		<?php endif; ?>
-		<form class="agw-form" method="post" action="<?php echo esc_url( $this->routes->action_url( 'lostpassword', $settings ) ); ?>"<?php echo $this->components->describedby_attribute( $form_desc ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by describedby_attribute(). ?>>
+		<form class="agw-form" method="post" action="<?php echo esc_url( $this->routes->action_url( 'lostpassword', $settings ) ); ?>" data-agw-retain-fields<?php echo $this->components->describedby_attribute( $form_desc ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by describedby_attribute(). ?>>
 			<input type="hidden" name="alynt_ag_action" value="lostpassword">
 			<?php wp_nonce_field( 'alynt_ag_lostpassword', 'alynt_ag_auth_nonce' ); ?>
 			<div class="agw-field">
 				<label for="agw-lost-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-lost-email" name="user_login" type="email" autocomplete="email" dir="ltr" required <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-lostpassword-error"' : ''; ?>>
+				<input id="agw-lost-email" name="user_login" type="email" autocomplete="email" dir="ltr" required data-agw-retain <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-lostpassword-error"' : ''; ?>>
 			</div>
 			<button class="agw-button agw-button--primary" type="submit"><?php esc_html_e( 'Reset Password', 'alynt-account-gateway' ); ?></button>
 			<a class="agw-back-link" href="<?php echo esc_url( home_url( $settings['login_path'] ) ); ?>"><?php esc_html_e( 'Back to Login', 'alynt-account-gateway' ); ?></a>

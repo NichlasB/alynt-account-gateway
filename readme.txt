@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.21
+Stable tag: 1.1.22
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -45,13 +45,41 @@ Review `docs/OPERATIONS.md` for installation and support guidance. Use `docs/PRO
 
 == Uninstall ==
 
-Uninstalling the plugin removes plugin-owned settings, the stored database schema version, the retention cleanup schedule, rate-limit transients, and plugin-owned account gateway tables. WordPress users, WooCommerce orders, media-library files, and non-plugin data are not removed.
+Uninstalling the plugin removes plugin-owned settings, the stored database schema version, retention and queued-webhook schedules, rate-limit and operation-lock state, and plugin-owned account gateway tables. On multisite, separately activated site data is cleaned for every site. WordPress users, WooCommerce orders, media-library files, and non-plugin data are not removed.
 
 == Privacy And GDPR Review ==
 
 Review `docs/PRIVACY_AND_GDPR.md` before enabling public registration, Turnstile, Reoon, webhooks, diagnostics, or WooCommerce takeover on production sites. The plugin provides WordPress personal-data exporter and eraser callbacks for plugin-owned records, but site owners remain responsible for privacy notice wording, lawful-basis decisions, processor contracts, retention policy, and qualified legal review where required.
 
+== FAQ ==
+
+= Does the emergency bypass sign me in? =
+
+No. `wp-login.php?alynt_ag_bypass={key}` only bypasses the branded screen redirect. It does not authenticate the visitor or grant access to wp-admin.
+
+= Why is the Create Account link missing? =
+
+It is intentionally omitted whenever Enable Public Account Creation is disabled. Existing customers can still log in or reset a password.
+
+= Can I use the dashboard without WooCommerce? =
+
+Yes. The custom dashboard is optional and works without WooCommerce. WooCommerce takeover and its account endpoints require WooCommerce to be active.
+
+= Can I customize email formatting? =
+
+Yes. Each email body uses WordPress's Visual/Text editor with safe HTML formatting. The plugin owns the email wrapper and action-button presentation so account mail remains consistent and resilient in mailbox clients.
+
 == Changelog ==
+
+= Unreleased =
+
+= 1.1.22 =
+
+* Harden webhook transport, queue validation, operation locks, uninstall cleanup, and multisite data removal.
+* Improve localization catalogs, pluralized account/admin copy, and JavaScript translation coverage.
+* Resolve dependencies at the supported PHP 7.4 floor and remove an unused vulnerable development dependency.
+* Add operation-lock, webhook scheduling, password-boundary, activation, capability, nonce, catalog, and test-order regression coverage.
+* Reconcile the README, WordPress readme, settings reference, and hooks reference with current settings and integration contracts.
 
 = 1.1.21 =
 

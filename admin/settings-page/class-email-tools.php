@@ -40,7 +40,7 @@ class ALYNT_AG_Settings_Page_Email_Tools extends ALYNT_AG_Settings_Page_Componen
 			<?php $this->render_email_token_reference( $email_service ); ?>
 
 			<div class="alynt-ag-email-actions">
-				<form method="get" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" target="_blank" class="alynt-ag-inline-tool alynt-ag-email-action" data-alynt-ag-requires-saved-email-settings>
+				<form method="get" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" target="_blank" class="alynt-ag-inline-tool alynt-ag-email-action" data-alynt-ag-requires-saved-email-settings data-alynt-ag-action-form>
 					<input type="hidden" name="action" value="alynt_ag_preview_email">
 					<?php wp_nonce_field( 'alynt_ag_preview_email' ); ?>
 					<label for="alynt-ag-email-preview-template"><?php esc_html_e( 'Preview Template', 'alynt-account-gateway' ); ?></label>
@@ -55,7 +55,7 @@ class ALYNT_AG_Settings_Page_Email_Tools extends ALYNT_AG_Settings_Page_Componen
 					<?php submit_button( __( 'Preview Email', 'alynt-account-gateway' ), 'secondary', 'submit', false ); ?>
 				</form>
 
-				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-inline-tool alynt-ag-email-action" data-alynt-ag-requires-saved-email-settings>
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-inline-tool alynt-ag-email-action" data-alynt-ag-requires-saved-email-settings data-alynt-ag-action-form>
 					<input type="hidden" name="action" value="alynt_ag_test_email">
 					<?php wp_nonce_field( 'alynt_ag_test_email' ); ?>
 					<label for="alynt-ag-email-test-template"><?php esc_html_e( 'Test Template', 'alynt-account-gateway' ); ?></label>

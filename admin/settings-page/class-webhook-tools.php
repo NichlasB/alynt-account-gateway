@@ -20,15 +20,18 @@ class ALYNT_AG_Settings_Page_Webhook_Tools extends ALYNT_AG_Settings_Page_Compon
 	 * @return void
 	 */
 	public function render_webhook_tools() {
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-		$logs     = $this->recent_webhook_logs();
+		$settings   = ALYNT_AG_Settings_Schema::get_settings();
+		$logs       = $this->recent_webhook_logs();
+		$read_error = is_wp_error( $logs ) ? $logs : null;
+		$logs       = $read_error ? array() : $logs;
 		?>
 		<h2><?php esc_html_e( 'Webhook Tools', 'alynt-account-gateway' ); ?></h2>
 		<p class="description">
 			<?php esc_html_e( 'Send a sample account-created test event to the saved webhook URL and review recent delivery metadata.', 'alynt-account-gateway' ); ?>
 		</p>
+		<?php $this->render_admin_data_read_errors( array( $read_error ) ); ?>
 
-		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-inline-tool">
+		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-inline-tool" data-alynt-ag-action-form>
 			<input type="hidden" name="action" value="alynt_ag_test_webhook">
 			<?php wp_nonce_field( 'alynt_ag_test_webhook' ); ?>
 			<?php
@@ -52,16 +55,16 @@ class ALYNT_AG_Settings_Page_Webhook_Tools extends ALYNT_AG_Settings_Page_Compon
 		<?php if ( empty( $logs ) ) : ?>
 			<p><?php esc_html_e( 'No webhook deliveries have been recorded.', 'alynt-account-gateway' ); ?></p>
 		<?php else : ?>
-			<table class="widefat striped">
+			<table class="widefat striped" aria-label="<?php esc_attr_e( 'Recent webhook deliveries', 'alynt-account-gateway' ); ?>">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Time', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Event', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Destination', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'HTTP', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Result', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Error', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Details', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Time', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Event', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Destination', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'HTTP', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Result', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Error', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Details', 'alynt-account-gateway' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -188,7 +191,7 @@ class ALYNT_AG_Settings_Page_Webhook_Tools extends ALYNT_AG_Settings_Page_Compon
 	/**
 	 * Return recent webhook log rows.
 	 *
-	 * @return array<int,object>
+	 * @return array<int,object>|WP_Error
 	 */
 	public function recent_webhook_logs() {
 		global $wpdb;
@@ -196,12 +199,19 @@ class ALYNT_AG_Settings_Page_Webhook_Tools extends ALYNT_AG_Settings_Page_Compon
 		$tables = ALYNT_AG_Database::tables();
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Admin viewer reads plugin-owned webhook log table.
-		return (array) $wpdb->get_results(
+		$logs = $wpdb->get_results(
 			$wpdb->prepare(
 				"SELECT id, event_name, destination_host, http_status, success, error_message, created_at FROM {$tables['webhook_logs']} ORDER BY created_at DESC, id DESC LIMIT %d",
 				10
 			)
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return is_array( $logs )
+			? $logs
+			: new WP_Error(
+				'alynt_ag_webhook_logs_read_failed',
+				__( 'Recent webhook deliveries could not be loaded. Refresh the page and check the database connection if the problem continues.', 'alynt-account-gateway' )
+			);
 	}
 }

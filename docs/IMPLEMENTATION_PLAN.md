@@ -2,12 +2,236 @@
 
 ## Status
 
-- Current phase: Phase 2 Increment 8 settings-page decomposition, release, and updater verification are complete at v1.1.21.
+- Current phase: Phase 2 structural refactoring, post-refactor pre-release prompts `01` through `13`, and the consolidated LocalWP end-to-end acceptance matrix are complete.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Close Phase 2 structural refactoring and select the next separately approved product or rollout task. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Await explicit v1.1.22 publication approval. After publication, verify the public release asset through Alynt Plugin Updater on LocalWP Plugin Tester. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## v1.1.21 Post-Refactor Pre-Release Revalidation
+
+### Purpose And Boundary
+
+- [x] Use released v1.1.21 as the immutable review baseline.
+- [x] Skip optional `00-PLUGIN_MODEL_ASSESSMENT_PROMPT.md` by explicit owner decision.
+- [x] Record the ordered pre-release and runtime-validation plan before execution.
+- [x] Receive explicit approval before beginning prompt `01`.
+- [x] Keep the prompt `01` review branch and evidence isolated from staging and production sites.
+- [x] Do not publish another release unless review findings require changes and a later release is separately approved.
+- [x] Put all corrective code, test, and documentation changes on the v1.1.22 candidate branch rather than altering the published v1.1.21 tag or asset.
+
+### Ordered Pre-Release Sequence
+
+- [x] `01-CODE_CLEANUP_PROMPT.md`
+- [x] `02-FILE_STRUCTURE_REVIEW_PROMPT.md`
+- [x] `03-ERROR_HANDLING_REVIEW_PROMPT.md`
+- [x] `04-WP_BEST_PRACTICES_REVIEW_PROMPT.md`
+- [x] `05-DATABASE_REVIEW_PROMPT.md`
+- [x] `06-PERFORMANCE_REVIEW_PROMPT.md`
+- [x] `07-EDGE_CASES_REVIEW_PROMPT.md`
+- [x] `07A-ADVERSARIAL_TEST_SUITE_REVIEW_PROMPT.md`
+- [x] `08-UNINSTALL_REVIEW_PROMPT.md`
+- [x] `09-I18N_REVIEW_PROMPT.md`
+- [x] `10-ACCESSIBILITY_REVIEW_PROMPT.md`
+- [x] `11-CODE_QUALITY_REVIEW_PROMPT.md`
+- [x] `12-DOCUMENTATION_REVIEW_PROMPT.md`
+- [x] `13-SECURITY_AUDIT_PROMPT.md`
+
+Execution rules:
+
+- Follow the toolkit filename order exactly and keep security last.
+- Treat single-phase prompts as bounded review-and-fix passes.
+- For every two-phase prompt, complete Phase 1 read-only, present its findings and proposed changes, and obtain approval before Phase 2 unless the owner later authorizes uninterrupted execution.
+- Update the toolkit `PRE_RELEASE_CHECKLIST.md` only after each supported workflow completes successfully.
+- Keep unresolved or intentionally deferred findings visible with severity, rationale, owner decision, and recommended release target.
+- Run the full source gates after any modifying workflow and again after prompt `13`: build, stable POT generation, PHPCS, all PHP and JavaScript syntax checks, npm and Composer audits, PHPUnit, and `git diff --check`.
+
+### Prompt 01 - Code Cleanup Evidence
+
+- [x] Reviewed all `209` tracked PHP files and `14` tracked JavaScript/MJS files for unused code, dead code, unreachable branches, debug output, development remnants, and dormant imports or collaborators.
+- [x] Cross-checked `14` tracked CSS files for selectors that could make apparently dormant JavaScript state changes reachable.
+- [x] Found no runtime debug calls, TODO/FIXME markers, commented-out code blocks, empty inline functions, unused private/protected properties, dead private/protected methods, unreachable PHP statements, or unused production imports.
+- [x] Retained three intentional CLI status messages in the build and POT-generation scripts; they report command progress and are not shipped frontend or admin debug output.
+- [x] Confirmed the two `alert()` strings are intentional hostile-input fixtures in email-template security tests.
+- [x] Removed one obvious unused code path from `assets/src/admin/index.js`: a root query and `alynt-ag-admin--ready` class mutation with no CSS, PHP, JavaScript, test, or compiled-output consumer.
+- [x] Rebuilt the assets and confirmed the tracked distribution remained unchanged, demonstrating that the removed source path had no shipped behavior.
+- [x] Passed PHPCS, the focused `Squiz.PHP.NonExecutableCode` sniff, `209` PHP syntax checks, `14` JavaScript/MJS syntax checks, `425` PHPUnit tests with `3,130` assertions, npm high-severity audit, and Composer advisory audit.
+- [x] Recorded no manual-decision findings and no deferred prompt `01` cleanup items.
+
+### Prompt 02 - File Structure Review Evidence
+
+- [x] Completed read-only Phase 1 across the tracked PHP, JavaScript/MJS, and CSS source set, recorded a Complex assessment, and received explicit approval before Phase 2.
+- [x] Extracted compatibility registry and hook-inspection collaborators; registration lifecycle, protection, and credential facade traits; and frontend request-context, URL, access, and gateway-controller collaborators.
+- [x] Reduced the three initially oversized production files below their hard limits and finished with zero PHP files over 300 lines, zero source JavaScript files over 250 lines, and zero source CSS files over 500 lines.
+- [x] Decomposed priority JavaScript workflows for dashboard links, typography, rich-email dirty state, and password policy while retaining the existing module boundaries.
+- [x] Decomposed priority PHP hotspots for admin notices, core field rendering, registration request routing, privacy export, branded email HTML, and registration completion.
+- [x] Added focused settings notice/field coverage, frontend and compatibility collaboration coverage, email loader/renderer coverage, and missing WordPress test stubs.
+- [x] Reviewed the remaining mechanically long production methods and retained explicit exceptions for single-purpose schema/guidance catalogs, readable HTML templates, DDL, and compatibility-sensitive transactions rather than fragmenting cohesive code.
+- [x] Added `docs/FILE_STRUCTURE_REVIEW_1.1.21.md` with the Phase 1 inventory, Phase 2 item report, trade-offs, reviewed exceptions, commit checkpoints, and complete validation evidence.
+- [x] Final validation passed: `npm run build`, `npm run make-pot` with 1,104 strings, `npm run lint`, 222 tracked PHP syntax checks, 14 tracked JavaScript/MJS syntax checks, npm high-severity audit with zero vulnerabilities, Composer advisory audit with no advisories, full PHPUnit with 438 tests and 3,212 assertions, source ceilings, and `git diff --check`.
+- [x] Kept all site operations, publication, tagging, packaging, and deployment out of prompt `02`; the published v1.1.21 baseline remains immutable and any eventual corrective release will target v1.1.22.
+
+### Prompt 03 - Error Handling Review Evidence
+
+- [x] Completed read-only Phase 1 across 256 tracked PHP, JavaScript/MJS, and CSS source files, recorded 18 planned findings with a Complex assessment, and received explicit approval before Phase 2.
+- [x] Converted privacy export query failures into `WP_Error` results and partial erasure failures into accurate retained-data responses with bounded diagnostics.
+- [x] Added checked registration writes and compensating rollback for user-profile, pending-record, confirmation, and consent failures.
+- [x] Verified plugin table creation before stamping the schema version; made rate-limit persistence fail closed; and made retention, diagnostics clearing, settings import, and default restoration report verified outcomes.
+- [x] Added at most two asynchronous account-created webhook retries, retry metadata, scheduling diagnostics, JSON encoding validation, deactivation cleanup, and email-render fallback diagnostics.
+- [x] Kept expired frontend sessions inside the branded gateway, retained only non-secret recoverable fields, focused the first invalid control, and added accessible duplicate-submission prevention.
+- [x] Added admin busy states, confirmations for import/diagnostics clearing/manual review, unsaved-change protection for non-email settings, and preservation of previously saved dashboard links when raw JSON is invalid.
+- [x] Made diagnostics, verification, pending-registration, and webhook-log query failures visibly different from valid empty states and blocked diagnostics CSV export when its source read fails.
+- [x] Extracted webhook retry scheduling and delivery-log persistence after the closing structure gate identified a temporary 346-line dispatcher; the dispatcher now measures 298 lines and all production source ceilings pass.
+- [x] Added `docs/ERROR_HANDLING_REVIEW_1.1.21.md` with the approved inventory, implemented solutions, recovery behavior, logging decisions, edge-case decisions, commit evidence, and validation results.
+- [x] Final validation passed: production build, 1,137-string POT generation, PHPCS, 225 PHP syntax checks, 17 JavaScript/MJS syntax checks, 457 PHPUnit tests with 3,334 assertions, npm high-severity audit with zero vulnerabilities, Composer advisory audit with no advisories, source ceilings, and `git diff --check`.
+- [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `03`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
+
+### Prompt 04 - WordPress Best Practices Review Evidence
+
+- [x] Completed read-only Phase 1 across 225 tracked PHP files and received explicit approval before Phase 2.
+- [x] Found one unescaped `LIKE` table-name comparison, five `get_option()` calls without explicit defaults, and one legacy preview path that versioned Cloudflare's canonical Turnstile API URL.
+- [x] Escaped the schema table name with `$wpdb->esc_like()`, added type-appropriate option defaults, and aligned legacy Turnstile loading with the primary frontend loader.
+- [x] Confirmed there are no deprecated WordPress/PHP functions, hook issues, meta-key issues, AJAX authorization issues, REST routes, hardcoded plugin paths, plugin-header omissions, or WPCS violations.
+- [x] Preserved documented exceptions for the full-document authenticated AJAX preview fallback, WordPress-owned user-meta keys, frequently read autoloaded settings, and justified plugin-owned direct SQL.
+- [x] Added `docs/WP_BEST_PRACTICES_REVIEW_1.1.21.md` with the Phase 1 inventory, implemented fixes, reviewed exceptions, and validation evidence.
+- [x] Final validation passed: production build, 1,137-string POT generation, PHPCS, 225 PHP syntax checks, 17 JavaScript/MJS syntax checks, 457 PHPUnit tests with 3,334 assertions, npm high-severity audit with zero vulnerabilities, Composer advisory audit with no advisories, source ceilings, and `git diff --check`.
+- [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `04`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
+
+### Prompt 05 - Database Review Evidence
+
+- [x] Completed a read-only inventory of 6 plugin-owned tables, 51 query patterns, WordPress data storage, table relationships, lifecycle operations, retention policies, privacy callbacks, schema migration behavior, and uninstall cleanup.
+- [x] Captured pending-registration IDs before related consent inserts, checked replacement cleanup, compensated consent failures, and rejected zero-row state transitions while preserving concurrent confirmation idempotency.
+- [x] Aligned the administrator lifecycle classifier with the persisted `account_created` status, retained the legacy `completed` alias, and changed pending-expiry comparisons to UTC.
+- [x] Propagated active rate-limit bucket query failures as visible `WP_Error` notices instead of treating failed reads as empty healthy data.
+- [x] Added 100-row-per-table privacy export pages, bounded first-remaining-ID privacy erasure batches, and accurate `done`, removed, and retained responses.
+- [x] Limited each retention query to 500 rows, added a non-duplicated near-term continuation hook for larger backlogs, and cleared the continuation during deactivation and uninstall.
+- [x] Added the webhook `success_created_at (success, created_at)` retention index and bumped the idempotent database schema version from `0.1.6` to `0.1.7`.
+- [x] Added `docs/DATABASE_REVIEW_1.1.21.md` with the complete database inventory, implemented changes, design trade-offs, migration behavior, rollback implications, and validation evidence.
+- [x] Final validation passed: production build, 1,140-string POT generation, PHPCS, 225 PHP syntax checks, 19 JavaScript/MJS syntax checks, 473 PHPUnit tests with 3,385 assertions, npm high-severity audit with zero vulnerabilities, Composer advisory audit with no advisories, source ceilings, and `git diff --check`.
+- [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `05`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
+
+### Prompt 06 - Performance Review Evidence
+
+- [x] Completed a read-only inventory of 151 first-party runtime/source files and recorded 10 findings: 4 high, 5 medium, 1 low, and no critical issue.
+- [x] Restricted 34 admin PHP files measuring 261,960 bytes to admin requests, reducing the listed public request set to 87 files and 443,622 bytes, including two new lazy-resolution traits.
+- [x] Lazy-loaded the gateway controller, document branches, authentication screen helpers, dashboard integration, and focused WooCommerce collaborators while preserving test injection boundaries.
+- [x] Added a cheap preview-route gate before settings component-registry construction on unrelated admin requests.
+- [x] Cached the immutable 86-field settings schema and defaults once per request.
+- [x] Bounded settings imports at 1 MB and active rate-limit observability at 1,000 rows with explicit non-truncating error states.
+- [x] Moved initial account-created webhook delivery out of the registration response through a one-time WordPress Cron event while preserving direct admin tests, HMAC signing, logging, and two bounded retries.
+- [x] Added pending-registration `created_at_id (created_at, id)` and diagnostics `category_created_at (category, created_at, id)` indexes and advanced the idempotent schema version from `0.1.7` to `0.1.8`.
+- [x] Retained synchronous Turnstile/Reoon decisions and WooCommerce-owned complete download/token APIs as documented security and compatibility constraints.
+- [x] Added `docs/PERFORMANCE_REVIEW_1.1.21.md` with the inventory, strategies, before/after behavior, trade-offs, accepted constraints, migration notes, and validation evidence.
+- [x] Final validation passed: production build with no generated asset change, 1,142-string POT generation, PHPCS, 228 first-party PHP syntax checks, 17 JavaScript/MJS syntax checks, 480 PHPUnit tests with 3,407 assertions and no deprecations, npm high-severity audit with zero vulnerabilities, Composer advisory audit with no advisories, 122/15/14 production PHP/source JS/source CSS ceilings, and `git diff --check`.
+- [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `06`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
+
+### Prompt 07 - Edge Cases Review Evidence
+
+- [x] Completed a read-only Phase 1 inventory of 26 scenarios: 8 high, 14 medium, 4 low, and no critical finding; received explicit approval before Phase 2.
+- [x] Added atomic, privacy-preserving operation locks for rate-limit updates and same-email public pending-registration creation, including stale-lock recovery and uninstall cleanup.
+- [x] Made registration and set-password forms usable without JavaScript while retaining client-side progressive validation and server-side enforcement.
+- [x] Added schema min/max bounds, dashboard-link/role caps, suffix-aware WordPress username limits, and aligned UTF-8 password-length counting.
+- [x] Hardened Reoon handling so non-200 and undocumented statuses fail closed while documented valid, blocked, and flagged policy behavior remains explicit.
+- [x] Snapshotted queued webhook destination, full payload, signing/debug policy, timestamp, and stable event ID; retries now reuse that envelope and expose `X-Alynt-AG-Delivery`.
+- [x] Preserved receiver success when only local webhook logging fails, with the logging failure recorded through diagnostics.
+- [x] Rejected unsupported network-wide activation and made database-install failure abort activation clearly.
+- [x] Added `docs/EDGE_CASES_REVIEW_1.1.21.md` with all 26 dispositions, implemented prevention/handling/recovery controls, accepted constraints, and validation evidence.
+- [x] Final validation passed: production build, 1,146-string POT generation, PHPCS, 230 PHP syntax checks, 17 JavaScript/MJS syntax checks, 487 PHPUnit tests with 3,443 assertions, npm and Composer audits, source ceilings, and `git diff --check`.
+- [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `07`; v1.1.21 remains immutable and the corrective branch targets a separately approved v1.1.22 candidate.
+
+### Prompt 07A - Adversarial Test-Suite Review Evidence
+
+- [x] Completed read-only Phase 1 against the 487-test, 3,443-assertion baseline and received explicit approval before Phase 2.
+- [x] Found and fixed order-dependent test state: fixed-random initially failed once, and reverse order initially produced one failure plus one error.
+- [x] Added direct operation-lock coverage and fixed malformed lock state that could otherwise block an operation indefinitely.
+- [x] Added a hostile queued-webhook regression and rejected envelopes missing their event, stable delivery ID, user snapshot, or site snapshot before transport.
+- [x] Strengthened the Cron fake and covered scheduling failure, exact event-identity deduplication, retry limits, immutable retry envelopes, and failure diagnostics.
+- [x] Replaced activation source-string claims with executable network rejection, failed-database rollback, and successful initialization tests.
+- [x] Added exact password boundary coverage plus unauthorized and invalid-nonce cases for ten sensitive admin handlers.
+- [x] Added GitHub quality enforcement for PHP 7.4 and 8.3 with PHPCS, normal/adversarial PHPUnit, dependency audits, and production asset verification.
+- [x] Exercised the new workflow on the revalidation branch, caught a PHP 8.4-only transitive development lock, and constrained Composer resolution to the supported PHP 7.4 floor.
+- [x] Corrected fresh-checkout ordering and PHP 7.4 test-reflection compatibility; CI now builds before asset-dependent tests and verifies all four generated outputs directly.
+- [x] Removed unused `concurrently` tooling after the remote audit identified its vulnerable transitive `shell-quote` dependency.
+- [x] Added `docs/ADVERSARIAL_TEST_SUITE_REVIEW_1.1.21.md` with findings, red-to-green evidence, runtime handoffs, and validation results.
+- [x] Final validation passed: normal, reverse, and fixed-random PHPUnit runs each reported 526 tests and 3,675 assertions; PHPCS, build, npm audit, Composer audit, and `git diff --check` passed.
+- [x] Kept real WordPress database, Cron, request, browser, provider, site, publication, packaging, and deployment claims outside prompt `07A`.
+
+### Prompt 08 - Uninstall Review Evidence
+
+- [x] Inventoried two fixed options, one dynamic operation-lock family, two transient families with timeout rows, six custom tables, and four scheduled hooks.
+- [x] Confirmed the plugin creates no owned post/user/term metadata, CPTs, taxonomies, roles, capabilities, upload directories, generated files, network options, or site transients.
+- [x] Added missing cleanup for queued webhook delivery and retry events.
+- [x] Added bounded multisite cleanup for site-by-site installations, processing site IDs in batches of 100 and restoring blog context after every site.
+- [x] Preserved WordPress users, WooCommerce records, media-library attachments, menus, profile fields, and third-party provider data because the plugin does not own them.
+- [x] Added executable single-site and multisite lifecycle regressions and recorded the full inventory in `docs/UNINSTALL_REVIEW_1.1.21.md`.
+- [x] Revalidated normal, reverse-order, and fixed-random PHPUnit execution at 527 tests and 3,687 assertions; PHPCS, build, dependency audits, Composer validation, PHP syntax, and diff hygiene also pass.
+- [x] Kept real isolated WordPress uninstall verification in the consolidated post-prompt-13 component-testing handoff.
+
+### Prompt 09 - Internationalization Review Evidence
+
+- [x] Reviewed 125 runtime PHP files and 15 source JavaScript files for user-facing strings, text-domain consistency, escaping context, placeholders, pluralization, JavaScript localization, catalog generation, and RTL-sensitive output.
+- [x] Confirmed 1,149 unique catalog entries use the `alynt-account-gateway` domain; the plugin header, domain path, `plugins_loaded` hook, and language-directory path are consistent.
+- [x] Removed three English JavaScript fallback strings from media and typography controls while retaining their PHP-localized values.
+- [x] Added count-aware singular/plural behavior for import notices, resend guidance, rate-limit summaries, download allowances, and password-requirement status.
+- [x] Extended the repeatable POT generator to extract `_n()`, `_x()`, `_nx()`, plural forms, contexts, and translator comments.
+- [x] Regenerated `languages/alynt-account-gateway.pot` with 32 extracted translator-comment references and nine plural entries; no placeholder-bearing entry lacks translator guidance.
+- [x] Added focused catalog, localized JavaScript, and singular/plural regression coverage in `tests/I18nCatalogTest.php` and the affected component suites.
+- [x] Preserved the existing localization-content boundary: the plugin ships a complete POT template but no bundled production-language translations.
+- [x] Revalidated normal, reverse-order, and fixed-random PHPUnit execution at 534 tests and 3,730 assertions; PHPCS, build, dependency audits, Composer validation, PHP/JavaScript syntax, and diff hygiene also pass.
+
+### Prompt 10 - Accessibility Review Evidence
+
+- [x] Reviewed 64 UI-facing source files: 35 PHP renderers, 15 JavaScript modules, and 14 CSS files across the branded gateway, account dashboard, WooCommerce endpoint wrapper, settings tabs, tools, status panels, and dynamic controls.
+- [x] Recorded seven verified findings: zero critical, three major, and four minor; all seven were fixed with no accepted or deferred code finding.
+- [x] Added accessible names and column scopes to every non-layout admin data table while retaining WordPress's presentation table only for settings form layout.
+- [x] Added `aria-current="page"` to the active settings tab and explicit new-tab announcements plus safe `rel` handling to previews, footer navigation, and off-canvas navigation.
+- [x] Made dashboard-link row creation/removal announce changes and move focus predictably; grouped repeated rows and clarified repeated remove controls.
+- [x] Added field-specific accessible names and polite live updates to media controls, including synchronized native and ARIA disabled states.
+- [x] Isolated background dashboard content with state-preserving `inert` while the off-canvas dialog is open and marked the visual backdrop decorative; existing focus trap, Escape close, trigger restoration, submenu state, and reduced-motion behavior remain intact.
+- [x] Confirmed default contrast ratios of 17.59:1 for text on surface, 13.88:1 for text on page background, 11.39:1 for text on accent, and 8.44:1 for button text on button background; configurable color help continues to warn administrators to preserve contrast.
+- [x] Added `tests/AccessibilityReviewTest.php` plus focused renderer and JavaScript regressions; normal, reverse-order, and fixed-random PHPUnit runs each pass at 542 tests and 3,885 assertions.
+- [x] Passed production build, 1,166-string POT generation, PHPCS, PHP/JavaScript syntax, npm and Composer audits, Composer validation, source ceilings, and `git diff --check`.
+- [x] Recorded the complete issue, keyboard, contrast, validation, and residual manual assistive-technology boundary in `docs/ACCESSIBILITY_REVIEW_1.1.21.md`; real browser/screen-reader acceptance remains in the consolidated post-prompt-13 test matrix.
+
+### Prompt 11 - Code Quality Review Evidence
+
+- [x] Reviewed all 125 production PHP files and 15 source JavaScript files for duplicate code, long methods, parameter-heavy APIs, deep coupling, vague naming, magic values, and plugin-owned global state.
+- [x] Consolidated eleven repeated count-based security signal-card templates into one escaped renderer with optional latest-seen metadata.
+- [x] Removed duplicate standalone-preview asset and localization logic by delegating through the existing frontend facade to the frontend asset owner.
+- [x] Removed the duplicate WooCommerce standard/custom account-menu merge algorithm while retaining the established integration compatibility shim.
+- [x] Reviewed 45 methods over 50 lines and retained documented cohesive catalog, template, DDL, and transaction exceptions rather than fragmenting them mechanically.
+- [x] Reviewed 15 methods with more than four parameters and retained WordPress callbacks, constructor seams, and compatibility-sensitive transaction/logging contracts.
+- [x] Confirmed production globals remain limited to native WordPress database, request, hook, and version boundaries; no debug remnant or plugin-owned mutable global state was found.
+- [x] Added focused ownership and escaping regressions and recorded the complete audit in `docs/CODE_QUALITY_REVIEW_1.1.21.md`.
+- [x] Revalidated normal, reverse-order, and fixed-random PHPUnit execution at 543 tests and 3,883 assertions; PHPCS, build, 1,166-string POT generation, dependency audits, Composer validation, PHP/JavaScript syntax, source ceilings, and `git diff --check` also pass.
+- [x] Kept site operations, publication, tagging, packaging, and deployment out of prompt `11`; v1.1.21 remains immutable and corrective work targets a separately approved v1.1.22 candidate.
+
+### Consolidated End-To-End Acceptance
+
+- [x] Run `wordpress-component-testing-troubleshooting-debugging-workflow.md` against the final reviewed codebase after prompt `13`.
+- [x] Start on `plugin-tester local-only`; request separate site-specific approval before using any staging or production target.
+- [x] Install an exact inspected package through a WordPress replacement or updater path while preserving activation and settings fingerprints.
+- [x] Verify frontend-output disabled mode and Gateway Screen Preview without exposing public overrides.
+- [x] Verify login, logout confirmation, lost-password, reset-password, invalid/expired-link, native-login redirect, emergency-bypass, and safe return-destination behavior.
+- [x] Verify public registration disabled and enabled states, terms/privacy enforcement, protection-mode outcomes, pending-token expiry, confirmation, password policy, account creation, welcome delivery, and cleanup.
+- [x] Verify administrator, shop-manager when WooCommerce is active, and customer login redirects; wp-admin access rules; and toolbar visibility.
+- [x] Verify all 12 settings tabs and representative save, restore, preview, test-send, provider-check, webhook-test, import/export, diagnostics, and manual-review operations using disposable data.
+- [x] Verify dashboard disabled and enabled states, custom links, menu panel, footer menu, responsive behavior, keyboard operation, and role visibility.
+- [x] Verify WooCommerce takeover disabled and enabled states; dashboard, orders, downloads, addresses, payment methods, account details, logout, hidden navigation items, direct endpoints, checkout-login gating, and order-pay exclusions.
+- [x] Verify branded registration-confirmation, password-reset, password-changed, welcome, and email-change templates in HTML and plain text, including responsive typography and constrained logo output.
+- [x] Verify Turnstile and Reoon server-side failure handling locally; require separate approved staging credentials and hostname testing before claiming live-provider end-to-end coverage.
+- [x] Verify account-created webhook payload, signature, response handling, retry/log metadata, debug-payload policy, and retention cleanup with a disposable receiver.
+- [x] Verify WordPress personal-data export/erase behavior, retention jobs, diagnostics cleanup, deactivation behavior, and isolated uninstall cleanup without risking retained site data.
+- [x] Test desktop, tablet, mobile, keyboard-only, visible-focus, reduced-motion, forced-colors where practical, RTL, long-content, empty, error, rate-limited, and repeated-submission states.
+- [x] Confirm no plugin PHP errors, browser errors, failed plugin requests, leaked development files, unexpected database changes, leftover fixtures, sessions, users, jobs, transients, or upgrade artifacts.
+
+### Completion Decision
+
+- [x] Classify every finding as fixed, accepted, deferred, or release-blocking.
+- [x] Because corrective changes were required, prepare and inspect a v1.1.22 candidate and request separate release approval.
+- [x] Mark the no-code-change v1.1.21 revalidation path as not applicable because the review produced corrective changes.
+- [x] Update this plan, the structural review, public documentation where required, and the toolkit checklist with final evidence.
 
 ## Phase 2 Structural Refactoring
 
@@ -308,6 +532,52 @@ Implementation evidence:
 - Alynt Plugin Updater detected the public `1.1.20 -> 1.1.21` update on LocalWP Plugin Tester, and WordPress installed the GitHub release asset through the native Plugins screen.
 - All `116` updater-installed files byte-match the public ZIP. Account Gateway remains active at v1.1.21, the settings, activation, and database-version fingerprints remain unchanged, and a fresh updater check reports v1.1.21 up to date.
 - Post-update acceptance reconfirmed the Advanced compatibility table at `782px`: zero document overflow, fixed table layout, wrapped identifiers, and no tab overlap. The disposable release administrator, session metadata, generated auto-draft, and browser session were removed.
+
+### Prompt 12 - Documentation Review Evidence
+
+- [x] Reviewed the plugin header, Markdown README, WordPress readme, changelog, settings and hooks references, operational/privacy documentation, and PHPDoc conventions across `125` production PHP files.
+- [x] Replaced the partial defaults list with a schema-backed settings reference that documents all `80` persisted settings by tab, key, type, default, sanitization rule, and behavior.
+- [x] Replaced the ambiguous hooks list with filter parameters and examples, explicit internal scheduler contracts, native WooCommerce endpoint delegation, and a separate upstream-hook inventory.
+- [x] Added README/readme FAQ and safe Gateway Screen Preview guidance, refreshed documentation links, and added matching Unreleased changelog entries without changing the public `1.1.21` identity.
+- [x] Added `DocumentationReviewTest` to keep the settings document, hooks contract, stable tag, plugin header, FAQ, preview guidance, and changelog alignment from drifting.
+- [x] Recorded the deliberate `@since` decision: all production PHP files have `@package` headers, while historical per-symbol `@since` dates were never recorded and will not be fabricated for `536` public methods.
+- [x] Added `docs/DOCUMENTATION_REVIEW_1.1.21.md` with findings, corrections, PHPDoc disposition, and regression evidence.
+- [x] Run and record full source gates: build, stable 1,166-string POT generation, PHPCS, 236 PHP syntax checks, 17 JavaScript/MJS syntax checks, 546 PHPUnit tests with 3,989 assertions, npm audit, Composer validation/advisory audit, and `git diff --check`.
+
+### Prompt 13 - Security Audit Evidence
+
+- [x] Reviewed all `125` production PHP files and `17` first-party JavaScript/MJS files, plus the `111` first-party PHP test/support files that protect security-sensitive behavior.
+- [x] Inventoried every request input, privileged handler, nonce/capability boundary, SQL operation, upload path, outbound request, secret-bearing setting, rendered output, JavaScript DOM sink, scheduled task, privacy callback, and uninstall path.
+- [x] Found no Critical or High issue and one Medium SSRF-hardening issue: HTTP loopback and `.local` webhook destinations bypassed `wp_safe_remote_post()` without first requiring a local WordPress environment.
+- [x] Restricted the HTTP local-development exception to `wp_get_environment_type() === 'local'`; staging and production now reject those destinations and continue requiring HTTPS through WordPress safe HTTP validation.
+- [x] Added permanent regression coverage for LocalWP acceptance and development/staging/production rejection; focused webhook coverage passes with `19` tests and `104` assertions.
+- [x] Confirmed settings import requires `manage_options`, a specific nonce, a genuine PHP-uploaded temporary file, and a `1 MiB` maximum; it parses JSON without moving or serving the upload.
+- [x] Confirmed all admin state changes are capability- and nonce-protected, public authentication/registration mutations use specific nonces and rate limits, password and token values are neither logged nor displayed, and neutral reset/registration responses limit account enumeration.
+- [x] Confirmed dynamic SQL identifiers come only from the plugin table registry or hardcoded privacy targets, all dynamic values use prepared placeholders or typed `$wpdb` APIs, and every production PHP file has an appropriate direct-access guard.
+- [x] Confirmed there are no REST routes, public AJAX handlers, shortcodes, incoming webhooks, unsafe JavaScript HTML sinks, runtime dynamic-code/process functions, debug disclosures, hardcoded credentials, or known npm/Composer advisories.
+- [x] Reopened and passed Prompt `11` after the security fix: build, stable `1,166`-string POT generation, PHPCS, `236` PHP syntax checks, `17` JavaScript/MJS syntax checks, npm audit, Composer advisory audit, normal/reverse/fixed-random PHPUnit at `547` tests and `3,995` assertions, and `git diff --check`.
+- [x] Re-ran Prompt `13` against the post-fix tree and recorded a clean final security gate in `docs/SECURITY_AUDIT_1.1.21.md`.
+
+### Consolidated v1.1.22 Candidate Acceptance Evidence
+
+- [x] Used exact candidate commit `99ecfb9` from `prerelease/v1.1.21-revalidation`; no public version bump, tag, release, updater operation, staging operation, or production operation was performed.
+- [x] Built production assets and passed the full PHPUnit suite with `547` tests and `3,995` assertions before installation.
+- [x] Created and inspected an internal release-style ZIP with `131` runtime files, no development files, and SHA-256 `BC2C2FD92DC39E9DE6DD14B1D743217769C69FE3CC2BB00534C3F4EDC6226779`.
+- [x] Installed the exact candidate on `plugin-tester local-only`; all `131` installed files byte-match the inspected package and Account Gateway remained active in its original plugin position.
+- [x] Verified the real first-request schema migration from stored database version `0.1.6` to `0.1.8` while preserving settings, active-plugin state, and every pre-existing plugin-owned row.
+- [x] Checked all `12` admin settings tabs at the WordPress `782px` breakpoint: every tab returned HTTP `200`, rendered its controls, showed no fatal output, and had zero horizontal overflow.
+- [x] Checked login, lost password, disabled registration, logout confirmation, expired set-password, protected My Account, and native `wp-login.php` interception at `390x844`; every route stayed branded, returned the expected state, and had zero horizontal overflow.
+- [x] Checked the gateway states at `1440x1000` and the exact responsive boundary at `799px` and `801px`; the media panel remained hidden below the boundary and visible above it without overflow.
+- [x] Verified failed login recovery retains the email field, clears the password, renders the neutral accessible error, and never exposes the native WordPress login shell.
+- [x] Verified lost-password submission for an unknown disposable address returns the neutral branded `Check Your Email` state without exposing account existence.
+- [x] Verified administrator login reaches `wp-admin`; disposable customer login reaches the branded dashboard; customer `wp-admin` access redirects to My Account; and Orders, Downloads, Addresses, Payment Methods, and Account Details all render through the WooCommerce dashboard takeover without overflow.
+- [x] Temporarily enabled registration and completed the full lifecycle: client-side required-field gating, terms acceptance, pending and consent persistence, branded confirmation email, token confirmation, strong-password setup, delayed WordPress user creation, generated username, and email-only login to the mobile dashboard.
+- [x] Verified the registration-confirmation email preview, responsive body typography, test-send success notice, and SureMails delivery-log acceptance using disposable local recipients.
+- [x] Verified the WordPress privacy exporter returns the disposable account's plugin-owned data, the eraser removes it without retained items, and bounded retention cleanup removes an expired fixture while preserving a fresh control fixture.
+- [x] Restored registration to disabled and restored the exact pre-test settings fingerprint `6b1588760a275e2c5369dc37458b8012`; cleanup returned the site to `2` users, `8` audit rows, zero rows in every other plugin-owned table, zero QA mail rows, and zero QA rate-limit options.
+- [x] Confirmed no browser console errors. The only browser warning was WordPress's development React-refresh shim. One failed command-line bootstrap without LocalWP's PHP configuration produced a missing-`mysqli` fatal in the local PHP log; rerunning with LocalWP's generated `php.ini` succeeded, and no plugin runtime fatal was observed.
+- [x] Novamira MCP tools were registered but the LocalWP endpoint did not return within two bounded attempts, so the approved MariaDB, LocalWP PHP, and Playwright fallback was used. No staging or production site was touched.
+- [x] Recorded the complete matrix in `docs/END_TO_END_ACCEPTANCE_1.1.22.md`.
 
 ## v1.1.14 WooCommerce Checkout Authentication
 

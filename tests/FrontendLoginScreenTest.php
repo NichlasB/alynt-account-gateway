@@ -49,11 +49,12 @@ class FrontendLoginScreenTest extends TestCase {
 		$this->assertStringContainsString( '<div class="agw-notice" id="agw-login-instructions">', $html );
 		$this->assertStringContainsString( 'Welcome back to your account.', $html );
 		$this->assertStringContainsString( 'action="https://example.test/login"', $html );
-		$this->assertStringContainsString( '<form class="agw-form" method="post" action="https://example.test/login" aria-describedby="agw-login-instructions">', $html );
+		$this->assertStringContainsString( '<form class="agw-form" method="post" action="https://example.test/login" data-agw-retain-fields aria-describedby="agw-login-instructions">', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_action" value="login"', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_auth_nonce" value="test-nonce"', $html );
 		$this->assertStringContainsString( 'id="agw-login-email"', $html );
 		$this->assertStringContainsString( 'name="email"', $html );
+		$this->assertStringContainsString( 'required data-agw-retain', $html );
 		$this->assertStringContainsString( 'type="email" autocomplete="email" dir="ltr"', $html );
 		$this->assertStringContainsString( 'id="agw-login-password"', $html );
 		$this->assertStringContainsString( 'name="pwd"', $html );
@@ -112,7 +113,7 @@ class FrontendLoginScreenTest extends TestCase {
 		$this->assertStringContainsString( 'id="agw-login-error"', $html );
 		$this->assertStringContainsString( 'role="alert" aria-live="assertive" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'Too many attempts. Please wait a moment and try again.', $html );
-		$this->assertStringContainsString( '<form class="agw-form" method="post" action="https://example.test/login" aria-describedby="agw-login-instructions agw-login-error">', $html );
+		$this->assertStringContainsString( '<form class="agw-form" method="post" action="https://example.test/login" data-agw-retain-fields aria-describedby="agw-login-instructions agw-login-error">', $html );
 		$this->assertStringContainsString( 'aria-describedby="agw-login-error"', $html );
 		$this->assertStringContainsString( 'aria-invalid="true"', $html );
 	}

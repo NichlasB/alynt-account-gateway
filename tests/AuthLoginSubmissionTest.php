@@ -12,6 +12,28 @@ require_once __DIR__ . '/support/class-auth-service-test-case.php';
  */
 class AuthLoginSubmissionTest extends AuthServiceTestCase {
 
+	public function test_expired_login_nonce_returns_to_branded_login_screen() {
+		$service = new ALYNT_AG_Auth_Service();
+		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
+		$GLOBALS['alynt_ag_test_nonce_valid']       = false;
+		$_SERVER['REQUEST_METHOD']                  = 'POST';
+		$_POST = array(
+			'alynt_ag_action'    => 'login',
+			'alynt_ag_auth_nonce' => 'expired',
+			'email'              => 'damon@example.test',
+			'pwd'                => 'StrongPassword1!',
+		);
+
+		try {
+			$service->maybe_handle_auth_request();
+			$this->fail( 'Expected redirect exception.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame( 'redirect:https://example.test/login?login_error=session_expired', $exception->getMessage() );
+		}
+
+		$this->assertSame( array(), $GLOBALS['alynt_ag_test_signons'] );
+	}
+
 	public function test_login_submission_requires_email_identifier() {
 		$service = new ALYNT_AG_Auth_Service();
 		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;

@@ -51,7 +51,7 @@ class FrontendRegisterScreenTest extends TestCase {
 		$this->assertStringContainsString( '<div class="agw-notice" id="agw-register-instructions">', $html );
 		$this->assertStringContainsString( 'Create your customer account.', $html );
 		$this->assertStringContainsString( 'action="https://example.test/account"', $html );
-		$this->assertStringContainsString( 'data-agw-registration-form aria-describedby="agw-register-instructions"', $html );
+		$this->assertStringContainsString( 'data-agw-registration-form data-agw-retain-fields aria-describedby="agw-register-instructions"', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_action" value="start_registration"', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_registration_nonce" value="test-nonce"', $html );
 		$this->assertStringContainsString( 'id="agw-register-first"', $html );
@@ -66,7 +66,8 @@ class FrontendRegisterScreenTest extends TestCase {
 		$this->assertStringContainsString( 'href="https://example.test/legal/privacy/"', $html );
 		$this->assertStringContainsString( 'role="status" aria-live="polite" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'Verification will appear here when enabled.', $html );
-		$this->assertStringContainsString( 'data-agw-registration-submit disabled aria-disabled="true"', $html );
+		$this->assertStringContainsString( 'data-agw-registration-submit aria-disabled="false"', $html );
+		$this->assertStringNotContainsString( 'data-agw-registration-submit disabled', $html );
 		$this->assertStringContainsString( 'href="https://example.test/login"', $html );
 		$this->assertStringNotContainsString( 'agw-register-error', $html );
 	}
@@ -97,9 +98,9 @@ class FrontendRegisterScreenTest extends TestCase {
 		$this->assertStringContainsString( 'id="agw-register-error"', $html );
 		$this->assertStringContainsString( 'role="alert" aria-live="assertive" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'Please accept the terms and privacy policy to continue.', $html );
-		$this->assertStringContainsString( 'data-agw-registration-form aria-describedby="agw-register-instructions agw-register-error"', $html );
+		$this->assertStringContainsString( 'data-agw-registration-form data-agw-retain-fields aria-describedby="agw-register-instructions agw-register-error"', $html );
 		$this->assertStringContainsString( 'aria-describedby="agw-register-error"', $html );
-		$this->assertStringContainsString( 'id="agw-register-terms" name="terms" type="checkbox" required data-agw-registration-terms aria-invalid="true"', $html );
+		$this->assertStringContainsString( 'id="agw-register-terms" name="terms" type="checkbox" required data-agw-registration-terms data-agw-retain aria-invalid="true"', $html );
 	}
 
 	public function test_render_register_screen_outputs_turnstile_slot_when_configured() {

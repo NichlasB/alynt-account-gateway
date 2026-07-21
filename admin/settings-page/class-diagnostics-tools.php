@@ -22,9 +22,16 @@ class ALYNT_AG_Settings_Page_Diagnostics_Tools extends ALYNT_AG_Settings_Page_Co
 	public function render_diagnostics_tools() {
 		$health            = ALYNT_AG_Diagnostics_Logger::health_summary();
 		$events            = ALYNT_AG_Diagnostics_Logger::recent_events( 100 );
-		$recent_events     = array_slice( $events, 0, 20 );
 		$verification_logs = $this->security_recent_verification_logs( 100 );
 		$webhook_logs      = $this->recent_webhook_logs();
+		$read_errors       = array_filter(
+			array( $events, $verification_logs, $webhook_logs ),
+			'is_wp_error'
+		);
+		$events            = is_wp_error( $events ) ? array() : $events;
+		$verification_logs = is_wp_error( $verification_logs ) ? array() : $verification_logs;
+		$webhook_logs      = is_wp_error( $webhook_logs ) ? array() : $webhook_logs;
+		$recent_events     = array_slice( $events, 0, 20 );
 		?>
 		<?php $this->render_compatibility_warnings(); ?>
 
@@ -36,8 +43,9 @@ class ALYNT_AG_Settings_Page_Diagnostics_Tools extends ALYNT_AG_Settings_Page_Co
 		<p class="description">
 			<?php esc_html_e( 'Diagnostics are disabled by default. When enabled, structured events are stored in a plugin-owned table with sensitive fields redacted before persistence.', 'alynt-account-gateway' ); ?>
 		</p>
+		<?php $this->render_admin_data_read_errors( $read_errors ); ?>
 
-		<table class="widefat striped" role="presentation">
+		<table class="widefat striped" aria-label="<?php esc_attr_e( 'Diagnostics health summary', 'alynt-account-gateway' ); ?>">
 			<tbody>
 				<?php foreach ( $health as $label => $value ) : ?>
 					<tr>
@@ -64,7 +72,12 @@ class ALYNT_AG_Settings_Page_Diagnostics_Tools extends ALYNT_AG_Settings_Page_Co
 			</a>
 		</p>
 
-		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+		<form
+			method="post"
+			action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"
+			data-alynt-ag-action-form
+			data-alynt-ag-confirm="<?php esc_attr_e( 'Permanently clear all stored diagnostics events?', 'alynt-account-gateway' ); ?>"
+		>
 			<input type="hidden" name="action" value="alynt_ag_clear_diagnostics">
 			<?php wp_nonce_field( 'alynt_ag_clear_diagnostics' ); ?>
 			<?php submit_button( __( 'Clear Diagnostics Events', 'alynt-account-gateway' ), 'delete', 'submit', false ); ?>
@@ -74,14 +87,14 @@ class ALYNT_AG_Settings_Page_Diagnostics_Tools extends ALYNT_AG_Settings_Page_Co
 		<?php if ( empty( $recent_events ) ) : ?>
 			<p><?php esc_html_e( 'No diagnostics events have been recorded.', 'alynt-account-gateway' ); ?></p>
 		<?php else : ?>
-			<table class="widefat striped">
+			<table class="widefat striped" aria-label="<?php esc_attr_e( 'Recent diagnostics events', 'alynt-account-gateway' ); ?>">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Time', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Level', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Category', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Event', 'alynt-account-gateway' ); ?></th>
-						<th><?php esc_html_e( 'Message', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Time', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Level', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Category', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Event', 'alynt-account-gateway' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Message', 'alynt-account-gateway' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -241,11 +254,16 @@ class ALYNT_AG_Settings_Page_Diagnostics_Tools extends ALYNT_AG_Settings_Page_Co
 		}
 
 		check_admin_referer( 'alynt_ag_export_diagnostics' );
+		$events = ALYNT_AG_Diagnostics_Logger::recent_events( 100 );
+
+		if ( is_wp_error( $events ) ) {
+			wp_die( esc_html( $events->get_error_message() ) );
+		}
 
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename=alynt-account-gateway-diagnostics.csv' );
 
-		ALYNT_AG_Diagnostics_Logger::export_csv();
+		ALYNT_AG_Diagnostics_Logger::export_csv( $events );
 		exit;
 	}
 
@@ -260,13 +278,14 @@ class ALYNT_AG_Settings_Page_Diagnostics_Tools extends ALYNT_AG_Settings_Page_Co
 		}
 
 		check_admin_referer( 'alynt_ag_clear_diagnostics' );
-		ALYNT_AG_Diagnostics_Logger::clear_events();
+		$cleared = ALYNT_AG_Diagnostics_Logger::clear_events();
 
 		wp_safe_redirect(
 			add_query_arg(
 				array(
-					'page' => 'alynt-account-gateway',
-					'tab'  => 'advanced_tools',
+					'page'            => 'alynt-account-gateway',
+					'tab'             => 'advanced_tools',
+					'alynt_ag_notice' => $cleared ? 'diagnostics_cleared' : 'diagnostics_clear_failed',
 				),
 				admin_url( 'options-general.php' )
 			)

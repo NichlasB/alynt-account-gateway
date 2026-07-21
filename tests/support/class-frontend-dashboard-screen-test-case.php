@@ -257,6 +257,10 @@ abstract class FrontendDashboardScreenTestCase extends TestCase {
 		parent::setUp();
 
 		$GLOBALS['alynt_ag_test_is_rtl'] = false;
+		$GLOBALS['alynt_ag_test_user_meta'] = array(
+			'first_name' => 'Damon',
+			'last_name'  => 'Paulo',
+		);
 		$this->settings = array(
 			'after_login_redirect'  => '/my-account/',
 			'login_path'            => '/login',
@@ -271,7 +275,7 @@ abstract class FrontendDashboardScreenTestCase extends TestCase {
 	}
 
 	protected function tearDown(): void {
-		unset( $GLOBALS['alynt_ag_test_is_rtl'] );
+		unset( $GLOBALS['alynt_ag_test_is_rtl'], $GLOBALS['alynt_ag_test_user_meta'] );
 
 		parent::tearDown();
 	}

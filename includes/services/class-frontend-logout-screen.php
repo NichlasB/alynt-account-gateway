@@ -37,6 +37,8 @@ class ALYNT_AG_Frontend_Logout_Screen {
 	 * @return void
 	 */
 	public function render_logout_screen( $settings ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only branded error display.
+		$error_code = isset( $_GET['logout_error'] ) ? sanitize_key( wp_unslash( $_GET['logout_error'] ) ) : '';
 		$logout_url = wp_nonce_url(
 			add_query_arg(
 				array(
@@ -50,6 +52,9 @@ class ALYNT_AG_Frontend_Logout_Screen {
 		?>
 		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Confirm Logout', 'alynt-account-gateway' ); ?></h1>
 		<?php $this->components->render_notice( $settings['logout_intro_text'], 'agw-logout-instructions' ); ?>
+		<?php if ( 'session_expired' === $error_code ) : ?>
+			<div class="agw-status agw-status--error" role="alert" aria-live="assertive" aria-atomic="true"><?php esc_html_e( 'Your session expired. Please confirm that you still want to log out.', 'alynt-account-gateway' ); ?></div>
+		<?php endif; ?>
 		<div class="agw-actions">
 			<a class="agw-button agw-button--primary" href="<?php echo esc_url( $logout_url ); ?>"><?php esc_html_e( 'Log Out', 'alynt-account-gateway' ); ?></a>
 			<a class="agw-button agw-button--secondary" href="<?php echo esc_url( home_url( $settings['after_login_redirect'] ) ); ?>"><?php esc_html_e( 'Cancel', 'alynt-account-gateway' ); ?></a>

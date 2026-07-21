@@ -216,7 +216,7 @@ class ALYNT_AG_Settings_Page_Security_Overview extends ALYNT_AG_Settings_Page_Co
 				<p class="description"><?php esc_html_e( 'These checks use saved credentials and return only a fixed readiness result. Credentials, provider payloads, and customer data are not displayed or stored.', 'alynt-account-gateway' ); ?></p>
 			</div>
 			<div class="alynt-ag-provider-checks__grid">
-				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-provider-check">
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-provider-check" data-alynt-ag-action-form>
 					<input type="hidden" name="action" value="alynt_ag_test_security_provider">
 					<input type="hidden" name="provider" value="turnstile">
 					<?php wp_nonce_field( 'alynt_ag_test_security_provider_turnstile' ); ?>
@@ -226,7 +226,7 @@ class ALYNT_AG_Settings_Page_Security_Overview extends ALYNT_AG_Settings_Page_Co
 						<?php esc_html_e( 'Check Turnstile Connection', 'alynt-account-gateway' ); ?>
 					</button>
 				</form>
-				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-provider-check">
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-provider-check" data-alynt-ag-action-form>
 					<input type="hidden" name="action" value="alynt_ag_test_security_provider">
 					<input type="hidden" name="provider" value="reoon">
 					<?php wp_nonce_field( 'alynt_ag_test_security_provider_reoon' ); ?>

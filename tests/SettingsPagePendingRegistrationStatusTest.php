@@ -79,7 +79,7 @@ class SettingsPagePendingRegistrationStatusTest extends SettingsPageSecurityStat
 						'user_id'      => 0,
 					),
 					(object) array(
-						'status'       => 'completed',
+						'status'       => 'account_created',
 						'expires_at'   => '2000-07-04 12:00:00',
 						'confirmed_at' => '2026-07-04 12:05:00',
 						'user_id'      => 123,
@@ -124,7 +124,7 @@ class SettingsPagePendingRegistrationStatusTest extends SettingsPageSecurityStat
 			(object) array(
 				'email'        => 'finished@example.test',
 				'user_id'      => 123,
-				'status'       => 'completed',
+				'status'       => 'account_created',
 				'created_at'   => '2026-07-01 12:00:00',
 				'confirmed_at' => '2026-07-01 12:10:00',
 				'expires_at'   => '2026-07-02 12:00:00',
@@ -166,5 +166,40 @@ class SettingsPagePendingRegistrationStatusTest extends SettingsPageSecurityStat
 		$this->assertStringContainsString( 'The confirmation window has expired. The customer can request a fresh confirmation email from the invalid-link screen.', $output );
 		$this->assertStringContainsString( '>123<', $output );
 		$this->assertStringNotContainsString( 'pending@example.test', $output );
+	}
+
+	public function test_pending_registration_expiry_uses_utc_database_time() {
+		$GLOBALS['alynt_ag_test_current_time_utc']   = '2026-07-03 12:00:00';
+		$GLOBALS['alynt_ag_test_current_time_local'] = '2026-07-03 14:00:00';
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$status        = $this->invoke_helper(
+			$settings_page,
+			'security_pending_registration_status',
+			array(
+				(object) array(
+					'status'     => 'pending',
+					'expires_at' => '2026-07-03 13:00:00',
+				),
+			)
+		);
+
+		$this->assertSame( 'pending', $status['key'] );
+	}
+
+	public function test_legacy_completed_status_remains_supported() {
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$status        = $this->invoke_helper(
+			$settings_page,
+			'security_pending_registration_status',
+			array(
+				(object) array(
+					'status'     => 'completed',
+					'expires_at' => '2000-01-01 00:00:00',
+				),
+			)
+		);
+
+		$this->assertSame( 'completed', $status['key'] );
 	}
 }

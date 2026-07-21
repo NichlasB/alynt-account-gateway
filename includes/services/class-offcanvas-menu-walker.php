@@ -98,10 +98,21 @@ if ( class_exists( 'Walker_Nav_Menu' ) && ! class_exists( 'ALYNT_AG_Offcanvas_Me
 
 			if ( ! empty( $item->target ) ) {
 				$atts['target'] = $item->target;
+
+				if ( '_blank' === $item->target ) {
+					$atts['rel']        = 'noopener noreferrer';
+					$atts['aria-label'] = sprintf(
+						/* translators: %s: navigation link text. */
+						__( '%s (opens in a new tab)', 'alynt-account-gateway' ),
+						wp_strip_all_tags( $item->title )
+					);
+				}
 			}
 
 			if ( ! empty( $item->xfn ) ) {
-				$atts['rel'] = $item->xfn;
+				$atts['rel'] = '_blank' === $item->target
+					? trim( $item->xfn . ' noopener noreferrer' )
+					: $item->xfn;
 			}
 
 			if ( ! empty( $item->attr_title ) ) {

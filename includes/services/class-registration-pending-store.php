@@ -69,7 +69,7 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 		$tables     = ALYNT_AG_Database::tables();
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned pending registration table.
-		$wpdb->delete(
+		$deleted = $wpdb->delete(
 			$tables['pending_registrations'],
 			array(
 				'email'  => $email,
@@ -77,6 +77,11 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 			),
 			array( '%s', '%s' )
 		);
+
+		if ( false === $deleted ) {
+			$this->log_registration_flow_result( $email, 'pending_registration_cleanup_failed' );
+			return new WP_Error( 'pending_registration_failed', __( 'The registration could not be started. Please try again.', 'alynt-account-gateway' ) );
+		}
 
 		$inserted = $wpdb->insert(
 			$tables['pending_registrations'],
@@ -101,14 +106,32 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 			return new WP_Error( 'pending_registration_failed', __( 'The registration could not be started. Please try again.', 'alynt-account-gateway' ) );
 		}
 
-		$privacy = new ALYNT_AG_Privacy_Service();
+		$pending_id = (int) $wpdb->insert_id;
+		$privacy    = new ALYNT_AG_Privacy_Service();
 		if ( ! $privacy->record_registration_consent( $email, $settings ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Compensating delete removes the just-created plugin-owned row.
+			$rolled_back = $wpdb->delete(
+				$tables['pending_registrations'],
+				array( 'id' => $pending_id ),
+				array( '%d' )
+			);
+
+			if ( 1 !== (int) $rolled_back ) {
+				ALYNT_AG_Diagnostics_Logger::log_event(
+					'critical',
+					'database',
+					'pending_registration_rollback_failed',
+					__( 'A pending registration could not be removed after its consent record failed.', 'alynt-account-gateway' ),
+					array( 'pending_id' => $pending_id )
+				);
+			}
+
 			$this->log_registration_flow_result( $email, 'consent_record_failed' );
 			return new WP_Error( 'consent_record_failed', __( 'The registration consent record could not be stored. Please try again.', 'alynt-account-gateway' ) );
 		}
 
 		return array(
-			'id'               => (int) $wpdb->insert_id,
+			'id'               => $pending_id,
 			'email'            => $email,
 			'first_name'       => $first_name,
 			'last_name'        => $last_name,
@@ -124,7 +147,7 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 	 * Find a pending registration by raw token.
 	 *
 	 * @param string $token Raw token.
-	 * @return object|null
+	 * @return object|null|WP_Error
 	 */
 	public function run_find_pending_by_token( $token ) {
 		global $wpdb;
@@ -134,7 +157,7 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 		$now        = current_time( 'mysql', true );
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned pending registration table.
-		return $wpdb->get_row(
+		$pending = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$tables['pending_registrations']} WHERE token_hash = %s AND status IN ('pending', 'email_confirmed') AND expires_at >= %s LIMIT 1",
 				$token_hash,
@@ -142,13 +165,19 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 			)
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		if ( null === $pending && ! empty( $wpdb->last_error ) ) {
+			return new WP_Error( 'pending_registration_lookup_failed', __( 'The confirmation link could not be checked. Please try again.', 'alynt-account-gateway' ) );
+		}
+
+		return $pending;
 	}
 
 	/**
 	 * Find the latest registration that can receive a fresh confirmation token.
 	 *
 	 * @param string $email Email address.
-	 * @return object|null
+	 * @return object|null|WP_Error
 	 */
 	public function run_find_resendable_pending_by_email( $email ) {
 		global $wpdb;
@@ -161,13 +190,19 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 		}
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned pending registration table.
-		return $wpdb->get_row(
+		$pending = $wpdb->get_row(
 			$wpdb->prepare(
 				"SELECT * FROM {$tables['pending_registrations']} WHERE email = %s AND status IN ('pending', 'email_confirmed') ORDER BY id DESC LIMIT 1",
 				$email
 			)
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		if ( null === $pending && ! empty( $wpdb->last_error ) ) {
+			return new WP_Error( 'pending_registration_lookup_failed', __( 'The pending registration could not be checked. Please try again.', 'alynt-account-gateway' ) );
+		}
+
+		return $pending;
 	}
 
 	/**
@@ -180,6 +215,10 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 		global $wpdb;
 
 		$pending = $this->find_pending_by_token( $token );
+		if ( is_wp_error( $pending ) ) {
+			return $pending;
+		}
+
 		if ( ! $pending ) {
 			return new WP_Error( 'invalid_or_expired_token', __( 'This confirmation link is invalid or has expired.', 'alynt-account-gateway' ) );
 		}
@@ -192,17 +231,31 @@ class ALYNT_AG_Registration_Pending_Store extends ALYNT_AG_Service_Collaborator 
 		$now    = current_time( 'mysql', true );
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Plugin-owned pending registration table.
-		$wpdb->update(
+		$updated = $wpdb->update(
 			$tables['pending_registrations'],
 			array(
 				'status'       => 'email_confirmed',
 				'confirmed_at' => $now,
 			),
-			array( 'id' => (int) $pending->id ),
+			array(
+				'id'     => (int) $pending->id,
+				'status' => 'pending',
+			),
 			array( '%s', '%s' ),
-			array( '%d' )
+			array( '%d', '%s' )
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		if ( 1 !== (int) $updated ) {
+			if ( 0 === (int) $updated ) {
+				$current = $this->find_pending_by_token( $token );
+				if ( ! is_wp_error( $current ) && $current && 'email_confirmed' === $current->status ) {
+					return $current;
+				}
+			}
+
+			return new WP_Error( 'pending_confirmation_failed', __( 'The email confirmation could not be saved. Please try again.', 'alynt-account-gateway' ) );
+		}
 
 		$pending->status       = 'email_confirmed';
 		$pending->confirmed_at = $now;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Frontend gateway foundation.
+ * Frontend gateway facade.
  *
  * @package Alynt_Account_Gateway
  */
@@ -10,9 +10,69 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Registers frontend hooks.
+ * Registers public hooks and delegates frontend behavior.
  */
 class ALYNT_AG_Frontend {
+
+	/**
+	 * Frontend routes.
+	 *
+	 * @var ALYNT_AG_Frontend_Routes
+	 */
+	private $routes;
+
+	/**
+	 * Frontend assets.
+	 *
+	 * @var ALYNT_AG_Frontend_Assets
+	 */
+	private $assets;
+
+	/**
+	 * Access controller.
+	 *
+	 * @var ALYNT_AG_Frontend_Access_Controller
+	 */
+	private $access;
+
+	/**
+	 * URL adapter.
+	 *
+	 * @var ALYNT_AG_Frontend_Url_Adapter
+	 */
+	private $urls;
+
+	/**
+	 * Gateway controller.
+	 *
+	 * @var ALYNT_AG_Frontend_Gateway_Controller|null
+	 */
+	private $gateway;
+
+	/**
+	 * Document renderer, created only when a gateway document is rendered.
+	 *
+	 * @var ALYNT_AG_Frontend_Document_Renderer|null
+	 */
+	private $renderer;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param array<string,object> $collaborators Optional collaborator overrides.
+	 */
+	public function __construct( $collaborators = array() ) {
+		$collaborators = is_array( $collaborators ) ? $collaborators : array();
+		$routes        = $collaborators['routes'] ?? new ALYNT_AG_Frontend_Routes();
+		$context       = $collaborators['context'] ?? new ALYNT_AG_Frontend_Request_Context();
+
+		$this->routes   = $routes;
+		$this->assets   = $collaborators['assets'] ?? new ALYNT_AG_Frontend_Assets();
+		$this->access   = $collaborators['access'] ?? new ALYNT_AG_Frontend_Access_Controller( $routes, $context );
+		$this->urls     = $collaborators['urls'] ?? new ALYNT_AG_Frontend_Url_Adapter( $routes );
+		$this->renderer = $collaborators['renderer'] ?? null;
+		$this->gateway  = $collaborators['gateway'] ?? null;
+	}
 
 	/**
 	 * Register hooks.
@@ -34,15 +94,15 @@ class ALYNT_AG_Frontend {
 	}
 
 	/**
-	 * Enqueue frontend assets only when frontend output is enabled.
+	 * Enqueue frontend assets.
 	 *
 	 * @return void
 	 */
 	public function enqueue_assets() {
 		$settings = ALYNT_AG_Settings_Schema::get_settings();
-		$screen   = $this->get_gateway_screen( $settings );
+		$screen   = $this->routes->screen( $settings );
 
-		$this->assets()->enqueue( $settings, $screen );
+		$this->assets->enqueue( $settings, $screen );
 	}
 
 	/**
@@ -53,189 +113,53 @@ class ALYNT_AG_Frontend {
 	 * @return void
 	 */
 	public function enqueue_preview_assets( $settings, $screen ) {
-		$this->assets()->enqueue_preview( $settings, $screen );
+		$this->assets->enqueue_preview( $settings, $screen );
 	}
 
 	/**
-	 * Restrict admin toolbar to administrators and shop managers.
+	 * Restrict the admin toolbar.
 	 *
 	 * @param bool $show Whether to show toolbar.
 	 * @return bool
 	 */
 	public function filter_admin_bar( $show ) {
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-		if ( empty( $settings['frontend_enabled'] ) ) {
-			return $show;
-		}
-
-		if ( ! is_user_logged_in() ) {
-			return $show;
-		}
-
-		// phpcs:ignore WordPress.WP.Capabilities.Unknown -- WooCommerce registers this capability for shop managers.
-		return current_user_can( 'manage_options' ) || current_user_can( 'manage_woocommerce' );
+		return $this->access->filter_admin_bar( $show );
 	}
 
 	/**
-	 * Block wp-admin access for customers and other non-admin roles.
+	 * Block wp-admin access when required.
 	 *
 	 * @return void
 	 */
 	public function maybe_block_wp_admin() {
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-		if ( empty( $settings['frontend_enabled'] ) ) {
-			return;
-		}
-
-		if ( wp_doing_ajax() || ! is_user_logged_in() ) {
-			return;
-		}
-
-		// phpcs:ignore WordPress.WP.Capabilities.Unknown -- WooCommerce registers this capability for shop managers.
-		if ( current_user_can( 'manage_options' ) || current_user_can( 'manage_woocommerce' ) ) {
-			return;
-		}
-
-		$destination = home_url( $settings['after_login_redirect'] );
-
-		$this->log_routing_event(
-			'wp_admin_access_blocked',
-			__( 'Blocked wp-admin access for a non-privileged user.', 'alynt-account-gateway' ),
-			array(
-				'destination_path'   => $this->path_from_url( $destination ),
-				'user_id'            => function_exists( 'get_current_user_id' ) ? absint( get_current_user_id() ) : 0,
-				'request_path'       => $this->current_request_path(),
-				'request_method'     => $this->current_request_method(),
-				'request_query_keys' => $this->current_request_query_keys(),
-			)
-		);
-
-		wp_safe_redirect( $destination );
-		exit;
+		$this->access->maybe_block_wp_admin();
 	}
 
 	/**
-	 * Redirect native wp-login.php requests to branded routes unless the bypass key is present.
+	 * Redirect native login requests.
 	 *
 	 * @return void
 	 */
 	public function maybe_redirect_native_login() {
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-
-		if ( empty( $settings['frontend_enabled'] ) || $this->is_emergency_bypass( $settings ) ) {
-			return;
-		}
-
-		$request_method = isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '';
-		if ( 'POST' === strtoupper( $request_method ) ) {
-			return;
-		}
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only action routing.
-		$action = isset( $_GET['action'] ) ? sanitize_key( wp_unslash( $_GET['action'] ) ) : 'login';
-		$url    = $this->get_url_for_action( $action, $settings );
-
-		foreach ( array( 'key', 'login', 'redirect_to' ) as $param ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Preserving core login query arguments.
-			if ( isset( $_GET[ $param ] ) ) {
-				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Preserving core login query arguments.
-				$value = sanitize_text_field( wp_unslash( $_GET[ $param ] ) );
-				$url   = add_query_arg( $param, rawurlencode( $value ), $url );
-			}
-		}
-
-		$this->log_routing_event(
-			'native_login_redirected',
-			__( 'Redirected a native wp-login.php request to the branded account gateway.', 'alynt-account-gateway' ),
-			array(
-				'action'               => $action,
-				'destination_path'     => $this->path_from_url( $url ),
-				'preserved_query_keys' => $this->preserved_login_query_keys(),
-				'request_method'       => strtoupper( $request_method ),
-			)
-		);
-
-		wp_safe_redirect( $url );
-		exit;
+		$this->access->maybe_redirect_native_login();
 	}
 
 	/**
-	 * Render the branded gateway when the current request matches a configured route.
+	 * Render the branded gateway.
 	 *
 	 * @return void
 	 */
 	public function maybe_render_gateway() {
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-
-		if ( empty( $settings['frontend_enabled'] ) ) {
-			return;
-		}
-
-		$screen = $this->get_gateway_screen( $settings );
-		if ( ! $screen ) {
-			return;
-		}
-
-		if ( 'dashboard' === $screen && ! is_user_logged_in() ) {
-			wp_safe_redirect( add_query_arg( 'redirect_to', rawurlencode( home_url( $settings['after_login_redirect'] ) ), home_url( $settings['login_path'] ) ) );
-			exit;
-		}
-
-		if ( 'logout' === $screen && $this->maybe_handle_confirmed_logout( $settings ) ) {
-			return;
-		}
-
-		$this->document_renderer()->render_gateway_document( $screen, $settings, $this->get_current_relative_path() );
-		exit;
+		$this->gateway()->maybe_render_gateway();
 	}
 
 	/**
-	 * Render a nonce-protected gateway preview outside wp-admin.
+	 * Render an authenticated gateway preview.
 	 *
 	 * @return void
 	 */
 	public function maybe_render_gateway_preview() {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Verified after screen normalization.
-		$preview = isset( $_GET['alynt_ag_preview_gateway'] ) ? sanitize_key( wp_unslash( $_GET['alynt_ag_preview_gateway'] ) ) : '';
-		if ( '1' !== $preview ) {
-			return;
-		}
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Verified after screen normalization.
-		$screen_code = isset( $_GET['alynt_ag_preview_screen'] ) ? sanitize_key( wp_unslash( $_GET['alynt_ag_preview_screen'] ) ) : 'l';
-		$screens     = $this->preview_screen_codes();
-		$screen      = isset( $screens[ $screen_code ] ) ? $screens[ $screen_code ] : 'login';
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to preview gateway screens.', 'alynt-account-gateway' ) );
-		}
-
-		check_admin_referer( 'alynt_ag_preview_gateway_' . $screen, 'alynt_ag_preview_nonce' );
-
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-
-		$this->enqueue_preview_assets( $settings, $screen );
-		show_admin_bar( false );
-		add_filter( 'show_admin_bar', '__return_false', PHP_INT_MAX );
-
-		status_header( 200 );
-		nocache_headers();
-
-		echo '<!doctype html>';
-		echo '<html ';
-		language_attributes();
-		echo '>';
-		echo '<head>';
-		echo '<meta charset="' . esc_attr( get_bloginfo( 'charset' ) ) . '">';
-		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
-		echo '<title>' . esc_html( $this->get_screen_title( $screen ) ) . '</title>';
-		$this->print_gateway_preview_styles();
-		echo '</head>';
-		echo '<body class="alynt-ag-body alynt-ag-preview-body">';
-		$this->render_preview( $screen, $settings );
-		$this->print_gateway_preview_scripts();
-		echo '</body></html>';
-		exit;
+		$this->gateway()->maybe_render_gateway_preview();
 	}
 
 	/**
@@ -246,7 +170,7 @@ class ALYNT_AG_Frontend {
 	 * @return void
 	 */
 	public function render_preview( $screen, $settings ) {
-		$this->document_renderer()->render_preview( $screen, $settings, $this->get_current_relative_path() );
+		$this->gateway()->render_preview( $screen, $settings );
 	}
 
 	/**
@@ -258,30 +182,18 @@ class ALYNT_AG_Frontend {
 	 * @return string
 	 */
 	public function filter_login_url( $login_url, $redirect, $force_reauth ) {
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-
-		if ( empty( $settings['frontend_enabled'] ) ) {
-			return $login_url;
-		}
-
-		return $this->routes()->login_url( $settings, $redirect, $force_reauth );
+		return $this->urls->filter_login_url( $login_url, $redirect, $force_reauth );
 	}
 
 	/**
-	 * Filter the lost password URL.
+	 * Filter the lost-password URL.
 	 *
 	 * @param string $lostpassword_url Native URL.
 	 * @param string $redirect         Redirect URL.
 	 * @return string
 	 */
 	public function filter_lostpassword_url( $lostpassword_url, $redirect ) {
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-
-		if ( empty( $settings['frontend_enabled'] ) ) {
-			return $lostpassword_url;
-		}
-
-		return $this->routes()->lostpassword_url( $settings, $redirect );
+		return $this->urls->filter_lostpassword_url( $lostpassword_url, $redirect );
 	}
 
 	/**
@@ -291,9 +203,7 @@ class ALYNT_AG_Frontend {
 	 * @return string
 	 */
 	public function filter_register_url( $register_url ) {
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-
-		return empty( $settings['frontend_enabled'] ) ? $register_url : $this->routes()->register_url( $settings );
+		return $this->urls->filter_register_url( $register_url );
 	}
 
 	/**
@@ -304,296 +214,18 @@ class ALYNT_AG_Frontend {
 	 * @return string
 	 */
 	public function filter_logout_url( $logout_url, $redirect ) {
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-
-		if ( empty( $settings['frontend_enabled'] ) ) {
-			return $logout_url;
-		}
-
-		return $this->routes()->logout_url( $settings, $redirect );
+		return $this->urls->filter_logout_url( $logout_url, $redirect );
 	}
 
 	/**
-	 * Let Force Login pass through the public gateway routes when enabled.
+	 * Let Force Login pass through public gateway routes.
 	 *
 	 * @param bool   $bypass Whether Force Login already intends to bypass.
 	 * @param string $url    Visited URL.
 	 * @return bool
 	 */
 	public function filter_force_login_bypass( $bypass, $url ) {
-		if ( $bypass ) {
-			return true;
-		}
-
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-		if ( empty( $settings['frontend_enabled'] ) ) {
-			return false;
-		}
-
-		$path = $this->relative_path_from_url( $url );
-		if ( '' === $path ) {
-			return false;
-		}
-
-		return $this->routes()->paths_match( $path, $settings['login_path'] )
-			|| $this->routes()->paths_match( $path, $settings['account_action_base'] );
-	}
-
-	/**
-	 * Determine whether the current request is the emergency native-login bypass.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return bool
-	 */
-	private function is_emergency_bypass( $settings ) {
-		if ( empty( $settings['emergency_bypass_key'] ) ) {
-			return false;
-		}
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Emergency bypass is a read-only routing check.
-		$provided = isset( $_GET['alynt_ag_bypass'] ) ? sanitize_text_field( wp_unslash( $_GET['alynt_ag_bypass'] ) ) : '';
-
-		return $provided && hash_equals( (string) $settings['emergency_bypass_key'], $provided );
-	}
-
-	/**
-	 * Return the gateway screen for the current request.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return string
-	 */
-	private function get_gateway_screen( $settings ) {
-		return $this->routes()->screen( $settings );
-	}
-
-	/**
-	 * Build a branded gateway URL for a login action.
-	 *
-	 * @param string              $action   Login action.
-	 * @param array<string,mixed> $settings Settings.
-	 * @return string
-	 */
-	private function get_url_for_action( $action, $settings ) {
-		return $this->routes()->action_url( $action, $settings );
-	}
-
-	/**
-	 * Log a privacy-conscious frontend routing diagnostics event.
-	 *
-	 * @param string              $event_code Event code.
-	 * @param string              $message    Event message.
-	 * @param array<string,mixed> $context    Event context.
-	 * @return bool
-	 */
-	private function log_routing_event( $event_code, $message, $context ) {
-		return ALYNT_AG_Diagnostics_Logger::log_event(
-			'warning',
-			'security',
-			$event_code,
-			$message,
-			$context
-		);
-	}
-
-	/**
-	 * Return only the path portion of a URL for diagnostics.
-	 *
-	 * @param string $url URL.
-	 * @return string
-	 */
-	private function path_from_url( $url ) {
-		$path = wp_parse_url( $url, PHP_URL_PATH );
-
-		return $path ? sanitize_text_field( $path ) : '';
-	}
-
-	/**
-	 * Return a URL path relative to the site's home path.
-	 *
-	 * @param string $url URL.
-	 * @return string
-	 */
-	private function relative_path_from_url( $url ) {
-		$path = wp_parse_url( $url, PHP_URL_PATH );
-		if ( ! $path ) {
-			return '';
-		}
-
-		$home_path = wp_parse_url( home_url( '/' ), PHP_URL_PATH );
-		$home_path = $home_path ? rtrim( $home_path, '/' ) : '';
-
-		if ( $home_path && 0 === strpos( $path, $home_path ) ) {
-			$path = substr( $path, strlen( $home_path ) );
-		}
-
-		return '/' . ltrim( sanitize_text_field( $path ), '/' );
-	}
-
-	/**
-	 * Return the current request path for diagnostics without query values.
-	 *
-	 * @return string
-	 */
-	private function current_request_path() {
-		$uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
-		if ( '' === $uri ) {
-			return '';
-		}
-
-		$path = wp_parse_url( $uri, PHP_URL_PATH );
-
-		return $path ? sanitize_text_field( $path ) : '';
-	}
-
-	/**
-	 * Return the current request method for diagnostics.
-	 *
-	 * @return string
-	 */
-	private function current_request_method() {
-		$method = isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '';
-
-		return strtoupper( $method );
-	}
-
-	/**
-	 * Return current request query keys without their values.
-	 *
-	 * @return array<int,string>
-	 */
-	private function current_request_query_keys() {
-		$keys = array();
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Diagnostics records query keys only, not values.
-		foreach ( array_keys( $_GET ) as $key ) {
-			if ( is_scalar( $key ) ) {
-				$keys[] = sanitize_key( (string) $key );
-			}
-		}
-
-		return array_values( array_filter( array_unique( $keys ) ) );
-	}
-
-	/**
-	 * Return preserved native-login query argument names without their values.
-	 *
-	 * @return array<int,string>
-	 */
-	private function preserved_login_query_keys() {
-		$keys = array();
-
-		foreach ( array( 'key', 'login', 'redirect_to' ) as $param ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Diagnostics records keys only, not values.
-			if ( isset( $_GET[ $param ] ) ) {
-				$keys[] = $param;
-			}
-		}
-
-		return $keys;
-	}
-
-	/**
-	 * Get current request path relative to home URL.
-	 *
-	 * @return string
-	 */
-	private function get_current_relative_path() {
-		return $this->routes()->current_relative_path();
-	}
-
-	/**
-	 * Frontend route helpers.
-	 *
-	 * @return ALYNT_AG_Frontend_Routes
-	 */
-	private function routes() {
-		return new ALYNT_AG_Frontend_Routes();
-	}
-
-	/**
-	 * Frontend asset helpers.
-	 *
-	 * @return ALYNT_AG_Frontend_Assets
-	 */
-	private function assets() {
-		return new ALYNT_AG_Frontend_Assets();
-	}
-
-	/**
-	 * Return supported preview screens.
-	 *
-	 * @return array<string,bool>
-	 */
-	private function preview_screen_codes() {
-		return array(
-			'b' => 'dashboard',
-			'l' => 'login',
-			'r' => 'register',
-			'p' => 'lostpassword',
-			's' => 'setpassword',
-			'o' => 'logout',
-			'd' => 'registration_disabled',
-			'i' => 'invalidlink',
-		);
-	}
-
-	/**
-	 * Print only the assets needed by standalone gateway previews.
-	 *
-	 * @return void
-	 */
-	private function print_gateway_preview_styles() {
-		if ( function_exists( 'wp_styles' ) ) {
-			wp_styles()->do_items( array( 'alynt-ag-frontend' ) );
-			return;
-		}
-
-		wp_print_styles( array( 'alynt-ag-frontend' ) );
-	}
-
-	/**
-	 * Print only the scripts needed by standalone gateway previews.
-	 *
-	 * @return void
-	 */
-	private function print_gateway_preview_scripts() {
-		if ( function_exists( 'wp_scripts' ) ) {
-			wp_scripts()->do_items( array( 'alynt-ag-frontend' ) );
-			return;
-		}
-
-		wp_print_scripts( array( 'alynt-ag-frontend' ) );
-	}
-
-	/**
-	 * Frontend document renderer.
-	 *
-	 * @return ALYNT_AG_Frontend_Document_Renderer
-	 */
-	private function document_renderer() {
-		return new ALYNT_AG_Frontend_Document_Renderer();
-	}
-
-	/**
-	 * Handle confirmed logout requests from the branded logout screen.
-	 *
-	 * @param array<string,mixed> $settings Settings.
-	 * @return bool
-	 */
-	private function maybe_handle_confirmed_logout( $settings ) {
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Presence check before nonce verification.
-		if ( empty( $_GET['confirm'] ) ) {
-			return false;
-		}
-
-		check_admin_referer( 'log-out' );
-		wp_logout();
-
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Optional redirect target after verified logout.
-		$redirect_to = isset( $_GET['redirect_to'] ) ? esc_url_raw( wp_unslash( $_GET['redirect_to'] ) ) : home_url( $settings['login_path'] );
-
-		wp_safe_redirect( $redirect_to );
-		exit;
+		return $this->access->filter_force_login_bypass( $bypass, $url );
 	}
 
 	/**
@@ -603,6 +235,23 @@ class ALYNT_AG_Frontend {
 	 * @return string
 	 */
 	public function get_screen_title( $screen ) {
-		return $this->document_renderer()->get_screen_title( $screen );
+		return $this->gateway()->get_screen_title( $screen );
+	}
+
+	/**
+	 * Return the gateway controller when a gateway operation actually runs.
+	 *
+	 * @return ALYNT_AG_Frontend_Gateway_Controller
+	 */
+	private function gateway() {
+		if ( null === $this->gateway ) {
+			if ( null === $this->renderer ) {
+				$this->renderer = new ALYNT_AG_Frontend_Document_Renderer();
+			}
+
+			$this->gateway = new ALYNT_AG_Frontend_Gateway_Controller( $this->routes, $this->assets, $this->renderer );
+		}
+
+		return $this->gateway;
 	}
 }

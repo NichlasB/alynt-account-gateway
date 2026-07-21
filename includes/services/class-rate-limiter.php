@@ -92,21 +92,49 @@ class ALYNT_AG_Rate_Limiter {
 		$window_mins = max( 1, absint( $window_mins ) );
 		$key         = $this->get_bucket_key( $action, $identifier );
 		$meta_key    = $this->get_bucket_meta_key( $key );
-		$count       = (int) get_transient( $key );
+		$lock        = ALYNT_AG_Operation_Lock::acquire( 'rate_limit', $key, 5 );
 
-		if ( $count >= $limit ) {
-			$this->set_bucket_meta( $meta_key, $action, $count, $limit, $window_mins, true );
-
+		if ( is_wp_error( $lock ) ) {
 			return new WP_Error(
-				'alynt_ag_rate_limited',
-				__( 'Too many attempts. Please wait and try again.', 'alynt-account-gateway' )
+				'alynt_ag_rate_limit_unavailable',
+				__( 'This request could not be verified. Please wait and try again.', 'alynt-account-gateway' )
 			);
 		}
 
-		set_transient( $key, $count + 1, $window_mins * MINUTE_IN_SECONDS );
-		$this->set_bucket_meta( $meta_key, $action, $count + 1, $limit, $window_mins, false );
+		try {
+			$count = (int) get_transient( $key );
 
-		return true;
+			if ( $count >= $limit ) {
+				$this->set_bucket_meta( $meta_key, $action, $count, $limit, $window_mins, true );
+
+				return new WP_Error(
+					'alynt_ag_rate_limited',
+					__( 'Too many attempts. Please wait and try again.', 'alynt-account-gateway' )
+				);
+			}
+
+			$stored = set_transient( $key, $count + 1, $window_mins * MINUTE_IN_SECONDS );
+			if ( ! $stored ) {
+				ALYNT_AG_Diagnostics_Logger::log_event(
+					'critical',
+					'security',
+					'rate_limit_storage_failed',
+					__( 'A rate-limit counter could not be stored.', 'alynt-account-gateway' ),
+					array( 'action' => sanitize_key( $action ) )
+				);
+
+				return new WP_Error(
+					'alynt_ag_rate_limit_unavailable',
+					__( 'This request could not be verified. Please wait and try again.', 'alynt-account-gateway' )
+				);
+			}
+
+			$this->set_bucket_meta( $meta_key, $action, $count + 1, $limit, $window_mins, false );
+
+			return true;
+		} finally {
+			ALYNT_AG_Operation_Lock::release( 'rate_limit', $key, $lock );
+		}
 	}
 
 	/**

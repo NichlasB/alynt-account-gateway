@@ -116,7 +116,7 @@ class ALYNT_AG_Diagnostics_Logger {
 	 * Return recent diagnostics events.
 	 *
 	 * @param int $limit Number of records.
-	 * @return array<int,object>
+	 * @return array<int,object>|WP_Error
 	 */
 	public static function recent_events( $limit = 20 ) {
 		global $wpdb;
@@ -133,7 +133,12 @@ class ALYNT_AG_Diagnostics_Logger {
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		return is_array( $events ) ? $events : array();
+		return is_array( $events )
+			? $events
+			: new WP_Error(
+				'alynt_ag_diagnostics_read_failed',
+				__( 'Recent diagnostics events could not be loaded. Refresh the page and check the database connection if the problem continues.', 'alynt-account-gateway' )
+			);
 	}
 
 	/**
@@ -169,7 +174,7 @@ class ALYNT_AG_Diagnostics_Logger {
 	/**
 	 * Clear diagnostics events.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	public static function clear_events() {
 		global $wpdb;
@@ -177,17 +182,27 @@ class ALYNT_AG_Diagnostics_Logger {
 		$tables = ALYNT_AG_Database::tables();
 
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Admin purge clears plugin-owned diagnostics table.
-		$wpdb->query( "TRUNCATE TABLE {$tables['diagnostics_logs']}" );
+		$result = $wpdb->query( "TRUNCATE TABLE {$tables['diagnostics_logs']}" );
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		return false !== $result;
 	}
 
 	/**
 	 * Export recent diagnostics rows as CSV.
 	 *
-	 * @return void
+	 * @param array<int,object>|null $events Prepared events, or null to query.
+	 * @return true|WP_Error
 	 */
-	public static function export_csv() {
-		$events = self::recent_events( 100 );
+	public static function export_csv( $events = null ) {
+		if ( null === $events ) {
+			$events = self::recent_events( 100 );
+		}
+
+		if ( is_wp_error( $events ) ) {
+			return $events;
+		}
+
 		$output = fopen( 'php://output', 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Streaming admin CSV export.
 
 		fputcsv( $output, array( 'created_at', 'level', 'category', 'event_code', 'message', 'context', 'correlation_id' ) );
@@ -208,6 +223,8 @@ class ALYNT_AG_Diagnostics_Logger {
 		}
 
 		fclose( $output ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- Streaming admin CSV export.
+
+		return true;
 	}
 
 	/**

@@ -63,8 +63,12 @@ class ALYNT_AG_Admin {
 				'alynt-ag-admin',
 				'alyntAgAdmin',
 				array(
-					'selectImage' => __( 'Select Image', 'alynt-account-gateway' ),
-					'useImage'    => __( 'Use Image', 'alynt-account-gateway' ),
+					'selectImage'          => __( 'Select Image', 'alynt-account-gateway' ),
+					'useImage'             => __( 'Use Image', 'alynt-account-gateway' ),
+					'imageSelected'        => __( 'Image selected.', 'alynt-account-gateway' ),
+					'imageRemoved'         => __( 'Image removed.', 'alynt-account-gateway' ),
+					'dashboardLinkAdded'   => __( 'Dashboard link added.', 'alynt-account-gateway' ),
+					'dashboardLinkRemoved' => __( 'Dashboard link removed.', 'alynt-account-gateway' ),
 				)
 			);
 		}

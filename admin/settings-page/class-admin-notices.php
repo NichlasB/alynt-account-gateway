@@ -25,130 +25,138 @@ class ALYNT_AG_Settings_Page_Admin_Notices extends ALYNT_AG_Settings_Page_Compon
 		$provider_check_notices = $this->security_provider_check_notices();
 
 		if ( isset( $provider_check_notices[ $notice ] ) ) {
-			$provider_notice = $provider_check_notices[ $notice ];
-			?>
-			<div class="notice notice-<?php echo esc_attr( $provider_notice['type'] ); ?> is-dismissible">
-				<p><?php echo esc_html( $provider_notice['message'] ); ?></p>
-			</div>
-			<?php
-			return;
-		}
-
-		if ( 'settings_imported' === $notice ) {
-			?>
-			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Settings imported successfully.', 'alynt-account-gateway' ); ?></p></div>
-			<?php
+			$this->render_notice( $provider_check_notices[ $notice ] );
 			return;
 		}
 
 		if ( 'settings_imported_with_ignored_keys' === $notice ) {
-			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin notice flag.
-			$ignored_count = isset( $_GET['alynt_ag_import_ignored'] ) ? absint( wp_unslash( $_GET['alynt_ag_import_ignored'] ) ) : 0;
-			?>
-			<div class="notice notice-warning is-dismissible">
-				<p>
-					<?php
-					printf(
-						/* translators: %d: ignored settings key count. */
-						esc_html__( 'Settings imported successfully. Unrecognized setting keys ignored: %d.', 'alynt-account-gateway' ),
-						esc_html( (string) $ignored_count )
-					);
-					?>
-				</p>
-			</div>
-			<?php
+			$this->render_ignored_import_notice();
 			return;
 		}
 
-		if ( 'settings_import_failed' === $notice ) {
-			?>
-			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Settings could not be imported. Choose a valid Alynt Account Gateway JSON export.', 'alynt-account-gateway' ); ?></p></div>
-			<?php
-			return;
+		$notices = $this->admin_notices();
+		if ( isset( $notices[ $notice ] ) ) {
+			$this->render_notice( $notices[ $notice ] );
 		}
+	}
 
-		if ( 'settings_import_invalid_json' === $notice ) {
-			?>
-			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Settings could not be imported because the selected file is not valid JSON.', 'alynt-account-gateway' ); ?></p></div>
-			<?php
-			return;
-		}
+	/**
+	 * Render one standard admin notice.
+	 *
+	 * @param array{type:string,message:string} $notice Notice definition.
+	 * @return void
+	 */
+	private function render_notice( $notice ) {
+		?>
+		<div class="notice notice-<?php echo esc_attr( $notice['type'] ); ?> is-dismissible">
+			<p><?php echo esc_html( $notice['message'] ); ?></p>
+		</div>
+		<?php
+	}
 
-		if ( 'settings_import_empty' === $notice ) {
-			?>
-			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Settings could not be imported because the file does not contain recognized Alynt Account Gateway settings.', 'alynt-account-gateway' ); ?></p></div>
-			<?php
-			return;
-		}
+	/**
+	 * Render the import notice that includes an ignored-key count.
+	 *
+	 * @return void
+	 */
+	private function render_ignored_import_notice() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only admin notice flag.
+		$ignored_count = isset( $_GET['alynt_ag_import_ignored'] ) ? absint( wp_unslash( $_GET['alynt_ag_import_ignored'] ) ) : 0;
+		$message       = sprintf(
+			/* translators: %d: ignored settings key count. */
+			_n(
+				'Settings imported successfully. Unrecognized setting key ignored: %d.',
+				'Settings imported successfully. Unrecognized setting keys ignored: %d.',
+				$ignored_count,
+				'alynt-account-gateway'
+			),
+			$ignored_count
+		);
 
-		if ( 'settings_import_upload_failed' === $notice ) {
-			?>
-			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Settings could not be imported because the uploaded file could not be read.', 'alynt-account-gateway' ); ?></p></div>
-			<?php
-			return;
-		}
+		$this->render_notice(
+			array(
+				'type'    => 'warning',
+				'message' => $message,
+			)
+		);
+	}
 
-		if ( 'tab_defaults_restored' === $notice ) {
-			?>
-			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'This settings tab was restored to its defaults.', 'alynt-account-gateway' ); ?></p></div>
-			<?php
-			return;
-		}
-
-		if ( 'tab_defaults_failed' === $notice ) {
-			?>
-			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'This settings tab could not be restored.', 'alynt-account-gateway' ); ?></p></div>
-			<?php
-			return;
-		}
-
-		if ( 'email_test_sent' === $notice ) {
-			?>
-			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Test email sent.', 'alynt-account-gateway' ); ?></p></div>
-			<?php
-			return;
-		}
-
-		if ( 'email_test_failed' === $notice ) {
-			?>
-			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'The test email could not be sent. Check the recipient and mail configuration.', 'alynt-account-gateway' ); ?></p></div>
-			<?php
-			return;
-		}
-
-		if ( 'webhook_test_sent' === $notice ) {
-			?>
-			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Test webhook sent.', 'alynt-account-gateway' ); ?></p></div>
-			<?php
-			return;
-		}
-
-		if ( 'webhook_test_missing' === $notice ) {
-			?>
-			<div class="notice notice-warning is-dismissible"><p><?php esc_html_e( 'Add and save an account-created webhook URL before sending a test.', 'alynt-account-gateway' ); ?></p></div>
-			<?php
-			return;
-		}
-
-		if ( 'webhook_test_failed' === $notice ) {
-			?>
-			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'The test webhook could not be sent. Review the recent webhook deliveries table for details.', 'alynt-account-gateway' ); ?></p></div>
-			<?php
-			return;
-		}
-
-		if ( 'verification_review_recorded' === $notice ) {
-			?>
-			<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'The Reoon review decision was recorded.', 'alynt-account-gateway' ); ?></p></div>
-			<?php
-			return;
-		}
-
-		if ( 'verification_review_failed' === $notice ) {
-			?>
-			<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'The review decision could not be recorded. Refresh the Security tab and try again.', 'alynt-account-gateway' ); ?></p></div>
-			<?php
-		}
+	/**
+	 * Return safe notices for settings-page actions.
+	 *
+	 * @return array<string,array{type:string,message:string}>
+	 */
+	private function admin_notices() {
+		return array(
+			'settings_imported'              => array(
+				'type'    => 'success',
+				'message' => __( 'Settings imported successfully.', 'alynt-account-gateway' ),
+			),
+			'settings_import_failed'         => array(
+				'type'    => 'error',
+				'message' => __( 'Settings could not be imported. Choose a valid Alynt Account Gateway JSON export.', 'alynt-account-gateway' ),
+			),
+			'settings_import_invalid_json'   => array(
+				'type'    => 'error',
+				'message' => __( 'Settings could not be imported because the selected file is not valid JSON.', 'alynt-account-gateway' ),
+			),
+			'settings_import_empty'          => array(
+				'type'    => 'error',
+				'message' => __( 'Settings could not be imported because the file does not contain recognized Alynt Account Gateway settings.', 'alynt-account-gateway' ),
+			),
+			'settings_import_upload_failed'  => array(
+				'type'    => 'error',
+				'message' => __( 'Settings could not be imported because the uploaded file could not be read.', 'alynt-account-gateway' ),
+			),
+			'settings_import_file_too_large' => array(
+				'type'    => 'error',
+				'message' => __( 'Settings could not be imported because the selected file exceeds the 1 MB limit.', 'alynt-account-gateway' ),
+			),
+			'tab_defaults_restored'          => array(
+				'type'    => 'success',
+				'message' => __( 'This settings tab was restored to its defaults.', 'alynt-account-gateway' ),
+			),
+			'tab_defaults_failed'            => array(
+				'type'    => 'error',
+				'message' => __( 'This settings tab could not be restored.', 'alynt-account-gateway' ),
+			),
+			'diagnostics_cleared'            => array(
+				'type'    => 'success',
+				'message' => __( 'Diagnostics events cleared.', 'alynt-account-gateway' ),
+			),
+			'diagnostics_clear_failed'       => array(
+				'type'    => 'error',
+				'message' => __( 'Diagnostics events could not be cleared. Please retry and check the site database if the problem continues.', 'alynt-account-gateway' ),
+			),
+			'email_test_sent'                => array(
+				'type'    => 'success',
+				'message' => __( 'Test email sent.', 'alynt-account-gateway' ),
+			),
+			'email_test_failed'              => array(
+				'type'    => 'error',
+				'message' => __( 'The test email could not be sent. Check the recipient and mail configuration.', 'alynt-account-gateway' ),
+			),
+			'webhook_test_sent'              => array(
+				'type'    => 'success',
+				'message' => __( 'Test webhook sent.', 'alynt-account-gateway' ),
+			),
+			'webhook_test_missing'           => array(
+				'type'    => 'warning',
+				'message' => __( 'Add and save an account-created webhook URL before sending a test.', 'alynt-account-gateway' ),
+			),
+			'webhook_test_failed'            => array(
+				'type'    => 'error',
+				'message' => __( 'The test webhook could not be sent. Review the recent webhook deliveries table for details.', 'alynt-account-gateway' ),
+			),
+			'verification_review_recorded'   => array(
+				'type'    => 'success',
+				'message' => __( 'The Reoon review decision was recorded.', 'alynt-account-gateway' ),
+			),
+			'verification_review_failed'     => array(
+				'type'    => 'error',
+				'message' => __( 'The review decision could not be recorded. Refresh the Security tab and try again.', 'alynt-account-gateway' ),
+			),
+		);
 	}
 
 	/**

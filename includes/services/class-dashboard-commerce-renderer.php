@@ -206,11 +206,16 @@ class ALYNT_AG_Dashboard_Commerce_Renderer {
 									echo esc_html(
 										null === $download['remaining']
 											? __( 'Unlimited downloads', 'alynt-account-gateway' )
-											: sprintf(
-												/* translators: %s: number of downloads remaining. */
-												__( 'Downloads remaining: %s', 'alynt-account-gateway' ),
-												(string) $download['remaining']
-											)
+										: sprintf(
+											/* translators: %d: number of downloads remaining. */
+											_n(
+												'%d download remaining',
+												'%d downloads remaining',
+												absint( $download['remaining'] ),
+												'alynt-account-gateway'
+											),
+											absint( $download['remaining'] )
+										)
 									);
 									?>
 								</span>

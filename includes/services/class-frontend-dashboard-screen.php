@@ -85,8 +85,8 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 		$commerce_renderer = null,
 		$account_renderer = null
 	) {
-		$this->dashboard         = $dashboard ? $dashboard : new ALYNT_AG_Dashboard_Service();
 		$this->woocommerce       = $woocommerce ? $woocommerce : new ALYNT_AG_WooCommerce_Integration();
+		$this->dashboard         = $dashboard ? $dashboard : new ALYNT_AG_Dashboard_Service( $this->woocommerce );
 		$this->branding          = $branding ? $branding : new ALYNT_AG_Frontend_Branding();
 		$this->navigation        = $navigation ? $navigation : new ALYNT_AG_Dashboard_Navigation_Renderer();
 		$this->endpoint_renderer = $endpoint_renderer ? $endpoint_renderer : new ALYNT_AG_Dashboard_Endpoint_Renderer( $this->woocommerce );

@@ -15,6 +15,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ALYNT_AG_Settings_Schema {
 
 	/**
+	 * Request-local immutable schema cache.
+	 *
+	 * @var array<string,array<string,mixed>>|null
+	 */
+	private static $schema_cache;
+
+	/**
+	 * Request-local immutable defaults cache.
+	 *
+	 * @var array<string,mixed>|null
+	 */
+	private static $defaults_cache;
+
+	/**
 	 * Return settings tabs.
 	 *
 	 * @return array<string,string>
@@ -29,7 +43,11 @@ class ALYNT_AG_Settings_Schema {
 	 * @return array<string,array<string,mixed>>
 	 */
 	public static function schema() {
-		return ALYNT_AG_Settings_Definition::schema();
+		if ( null === self::$schema_cache ) {
+			self::$schema_cache = ALYNT_AG_Settings_Definition::schema();
+		}
+
+		return self::$schema_cache;
 	}
 
 	/**
@@ -38,7 +56,11 @@ class ALYNT_AG_Settings_Schema {
 	 * @return array<string,mixed>
 	 */
 	public static function defaults() {
-		return ALYNT_AG_Settings_Defaults::defaults( self::schema() );
+		if ( null === self::$defaults_cache ) {
+			self::$defaults_cache = ALYNT_AG_Settings_Defaults::defaults( self::schema() );
+		}
+
+		return self::$defaults_cache;
 	}
 
 	/**
@@ -83,7 +105,7 @@ class ALYNT_AG_Settings_Schema {
 	 */
 	public static function get_settings() {
 
-		return ALYNT_AG_Settings_Defaults::get_settings( self::schema() );
+		return ALYNT_AG_Settings_Defaults::get_settings( self::schema(), self::defaults() );
 	}
 
 	/**

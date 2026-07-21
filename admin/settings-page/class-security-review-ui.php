@@ -45,7 +45,13 @@ class ALYNT_AG_Settings_Page_Security_Review_Ui extends ALYNT_AG_Settings_Page_C
 			return;
 		}
 		?>
-		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="alynt-ag-security-review__form">
+		<form
+			method="post"
+			action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"
+			class="alynt-ag-security-review__form"
+			data-alynt-ag-action-form
+			data-alynt-ag-confirm="<?php esc_attr_e( 'Record this review decision for the verification event?', 'alynt-account-gateway' ); ?>"
+		>
 			<input type="hidden" name="action" value="alynt_ag_review_verification">
 			<input type="hidden" name="log_id" value="<?php echo esc_attr( (string) $log_id ); ?>">
 			<?php wp_nonce_field( 'alynt_ag_review_verification_' . $log_id ); ?>
@@ -105,7 +111,7 @@ class ALYNT_AG_Settings_Page_Security_Review_Ui extends ALYNT_AG_Settings_Page_C
 	 * Return recent pending registration records.
 	 *
 	 * @param int $limit Maximum records.
-	 * @return array<int,object>
+	 * @return array<int,object>|WP_Error
 	 */
 	public function security_recent_pending_registrations( $limit = 10 ) {
 		global $wpdb;
@@ -122,7 +128,12 @@ class ALYNT_AG_Settings_Page_Security_Review_Ui extends ALYNT_AG_Settings_Page_C
 		);
 		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
-		return is_array( $registrations ) ? $registrations : array();
+		return is_array( $registrations )
+			? $registrations
+			: new WP_Error(
+				'alynt_ag_pending_registrations_read_failed',
+				__( 'Recent pending registrations could not be loaded. Refresh the page and check the database connection if the problem continues.', 'alynt-account-gateway' )
+			);
 	}
 
 	/**
@@ -134,7 +145,7 @@ class ALYNT_AG_Settings_Page_Security_Review_Ui extends ALYNT_AG_Settings_Page_C
 	public function security_pending_registration_status( $registration ) {
 		$status     = isset( $registration->status ) ? sanitize_key( $registration->status ) : 'pending';
 		$expires_at = isset( $registration->expires_at ) ? strtotime( (string) $registration->expires_at ) : false;
-		$now        = strtotime( current_time( 'mysql' ) );
+		$now        = strtotime( current_time( 'mysql', true ) );
 
 		if ( in_array( $status, array( 'pending', 'email_confirmed' ), true ) && $expires_at && $now && $expires_at < $now ) {
 			return array(
@@ -150,7 +161,7 @@ class ALYNT_AG_Settings_Page_Security_Review_Ui extends ALYNT_AG_Settings_Page_C
 			);
 		}
 
-		if ( 'completed' === $status ) {
+		if ( in_array( $status, array( 'account_created', 'completed' ), true ) ) {
 			return array(
 				'key'   => 'completed',
 				'label' => __( 'Completed', 'alynt-account-gateway' ),

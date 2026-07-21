@@ -23,11 +23,68 @@ class ALYNT_AG_Settings_Page_Field_Renderer_Core extends ALYNT_AG_Settings_Page_
 	 * @return void
 	 */
 	public function render_field( $key, $field, $value ) {
-		$name = sprintf( 'alynt_ag_settings[%s]', $key );
-		$id   = sprintf( 'alynt-ag-%s', $key );
-		$aria = $this->field_describedby_attribute( $key );
+		$name    = sprintf( 'alynt_ag_settings[%s]', $key );
+		$id      = sprintf( 'alynt-ag-%s', $key );
+		$aria    = $this->field_describedby_attribute( $key );
+		$type    = $field['type'];
+		$context = compact( 'key', 'field', 'value', 'name', 'id', 'aria', 'type' );
 
-		if ( 'boolean' === $field['type'] ) {
+		if ( $this->render_simple_field( $context ) ) {
+			return;
+		}
+
+		if ( 'attachment_id' === $type ) {
+			$this->render_media_field( $id, $name, (int) $value, (string) $field['label'] );
+			return;
+		}
+
+		if ( 'color' === $type ) {
+			$this->render_color_field( $context );
+			return;
+		}
+
+		if ( 'rich_text' === $type ) {
+			$this->render_rich_text_field( $context );
+			return;
+		}
+
+		if ( 'dashboard_links' === $type ) {
+			$this->render_dashboard_links_field( $id, $name, $value );
+			return;
+		}
+
+		if ( 'woocommerce_menu_visibility' === $type ) {
+			$this->render_woocommerce_menu_visibility_field( $id, $name, $value, $aria );
+			return;
+		}
+
+		if ( 'nav_menu' === $type ) {
+			$this->render_nav_menu_field( $id, $name, (int) $value, $aria );
+			return;
+		}
+
+		if ( 'select' === $type ) {
+			$this->render_select_field( $context );
+			return;
+		}
+
+		$this->render_text_field( $context );
+	}
+
+	/**
+	 * Render a simple scalar field when the type is supported.
+	 *
+	 * @param array<string,mixed> $context Field render context.
+	 * @return bool Whether the field was rendered.
+	 */
+	private function render_simple_field( $context ) {
+		$type  = $context['type'];
+		$id    = $context['id'];
+		$name  = $context['name'];
+		$value = $context['value'];
+		$aria  = $context['aria'];
+
+		if ( 'boolean' === $type ) {
 			?>
 			<label>
 				<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="0">
@@ -35,139 +92,138 @@ class ALYNT_AG_Settings_Page_Field_Renderer_Core extends ALYNT_AG_Settings_Page_
 				<?php esc_html_e( 'Enabled', 'alynt-account-gateway' ); ?>
 			</label>
 			<?php
-			return;
+			return true;
 		}
 
-		if ( 'integer' === $field['type'] ) {
+		if ( 'integer' === $type ) {
+			$minimum = isset( $context['field']['min'] ) ? (int) $context['field']['min'] : 0;
+			$maximum = isset( $context['field']['max'] ) ? ' max="' . esc_attr( (string) (int) $context['field']['max'] ) . '"' : '';
 			printf(
-				'<input type="number" min="0" class="small-text" id="%1$s" name="%2$s" value="%3$s"%4$s>',
+				'<input type="number" min="%1$s"%2$s class="small-text" id="%3$s" name="%4$s" value="%5$s"%6$s>',
+				esc_attr( (string) $minimum ),
+				$maximum, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Attribute value escaped above.
 				esc_attr( $id ),
 				esc_attr( $name ),
 				esc_attr( $value ),
 				$aria // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute().
 			);
-			return;
+			return true;
 		}
 
-		if ( 'attachment_id' === $field['type'] ) {
-			$this->render_media_field( $id, $name, (int) $value );
-			return;
+		$formats = array(
+			'email'    => '<input type="email" class="regular-text" id="%1$s" name="%2$s" value="%3$s" autocomplete="email"%4$s>',
+			'textarea' => '<textarea class="large-text alynt-ag-textarea" rows="4" id="%1$s" name="%2$s"%4$s>%3$s</textarea>',
+		);
+		if ( ! isset( $formats[ $type ] ) ) {
+			return false;
 		}
 
-		if ( 'color' === $field['type'] ) {
-			$picker_value = sanitize_hex_color( (string) $value );
-			$picker_value = $picker_value ? $picker_value : sanitize_hex_color( (string) $field['default'] );
-			$picker_label = sprintf(
-				/* translators: %s: settings field label. */
-				__( 'Choose %s', 'alynt-account-gateway' ),
-				$field['label']
-			);
-			?>
-			<div class="alynt-ag-color-control" data-alynt-ag-color-control>
-				<input
-					type="color"
-					class="alynt-ag-color-control__picker"
-					value="<?php echo esc_attr( $picker_value ); ?>"
-					aria-label="<?php echo esc_attr( $picker_label ); ?>"
-					title="<?php echo esc_attr( $picker_label ); ?>"
-					data-alynt-ag-color-picker
-				>
-				<input
-					type="text"
-					class="regular-text alynt-ag-color-control__text"
-					id="<?php echo esc_attr( $id ); ?>"
-					name="<?php echo esc_attr( $name ); ?>"
-					value="<?php echo esc_attr( $value ); ?>"
-					pattern="^#[a-fA-F0-9]{6}$"
-					placeholder="#3B5249"
-					autocomplete="off"
-					spellcheck="false"
-					dir="ltr"
-					data-alynt-ag-color-text
-					<?php echo $aria; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute(). ?>
-				>
-			</div>
-			<?php
-			return;
-		}
+		printf(
+			$formats[ $type ], // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static formats defined above.
+			esc_attr( $id ),
+			esc_attr( $name ),
+			'textarea' === $type ? esc_textarea( $value ) : esc_attr( $value ),
+			$aria // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute().
+		);
+		return true;
+	}
 
-		if ( 'textarea' === $field['type'] ) {
+	/**
+	 * Render a synchronized color field.
+	 *
+	 * @param array<string,mixed> $context Field render context.
+	 * @return void
+	 */
+	private function render_color_field( $context ) {
+		$id           = $context['id'];
+		$name         = $context['name'];
+		$value        = $context['value'];
+		$field        = $context['field'];
+		$aria         = $context['aria'];
+		$picker_value = sanitize_hex_color( (string) $value );
+		$picker_value = $picker_value ? $picker_value : sanitize_hex_color( (string) $field['default'] );
+		$picker_label = sprintf(
+			/* translators: %s: settings field label. */
+			__( 'Choose %s', 'alynt-account-gateway' ),
+			$field['label']
+		);
+		?>
+		<div class="alynt-ag-color-control" data-alynt-ag-color-control>
+			<input type="color" class="alynt-ag-color-control__picker" value="<?php echo esc_attr( $picker_value ); ?>" aria-label="<?php echo esc_attr( $picker_label ); ?>" title="<?php echo esc_attr( $picker_label ); ?>" data-alynt-ag-color-picker>
+			<input type="text" class="regular-text alynt-ag-color-control__text" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" pattern="^#[a-fA-F0-9]{6}$" placeholder="#3B5249" autocomplete="off" spellcheck="false" dir="ltr" data-alynt-ag-color-text <?php echo $aria; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute(). ?>>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render a rich text editor.
+	 *
+	 * @param array<string,mixed> $context Field render context.
+	 * @return void
+	 */
+	private function render_rich_text_field( $context ) {
+		wp_editor(
+			(string) $context['value'],
+			$context['id'],
+			array(
+				'textarea_name'    => $context['name'],
+				'editor_class'     => 'alynt-ag-rich-text',
+				'editor_height'    => 280,
+				'media_buttons'    => false,
+				'teeny'            => false,
+				'drag_drop_upload' => false,
+				'tinymce'          => array(
+					'toolbar1' => 'formatselect,bold,italic,bullist,numlist,blockquote,alignleft,aligncenter,alignright,link,unlink,undo,redo',
+					'toolbar2' => '',
+				),
+				'quicktags'        => array(
+					'buttons' => 'strong,em,link,block,ul,ol,li,close',
+				),
+			)
+		);
+	}
+
+	/**
+	 * Render a select field.
+	 *
+	 * @param array<string,mixed> $context Field render context.
+	 * @return void
+	 */
+	private function render_select_field( $context ) {
+		$key     = $context['key'];
+		$field   = $context['field'];
+		$id      = $context['id'];
+		$name    = $context['name'];
+		$value   = $context['value'];
+		$aria    = $context['aria'];
+		$options = $this->field_select_options( $key, $field );
+
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $aria is escaped by field_describedby_attribute().
+		echo '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"' . $aria . '>';
+		foreach ( $options as $option => $label ) {
 			printf(
-				'<textarea class="large-text alynt-ag-textarea" rows="4" id="%1$s" name="%2$s"%4$s>%3$s</textarea>',
-				esc_attr( $id ),
-				esc_attr( $name ),
-				esc_textarea( $value ),
-				$aria // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute().
+				'<option value="%1$s" %2$s>%3$s</option>',
+				esc_attr( $option ),
+				selected( $value, $option, false ),
+				esc_html( $label )
 			);
-			return;
 		}
+		echo '</select>';
+	}
 
-		if ( 'rich_text' === $field['type'] ) {
-			wp_editor(
-				(string) $value,
-				$id,
-				array(
-					'textarea_name'    => $name,
-					'editor_class'     => 'alynt-ag-rich-text',
-					'editor_height'    => 280,
-					'media_buttons'    => false,
-					'teeny'            => false,
-					'drag_drop_upload' => false,
-					'tinymce'          => array(
-						'toolbar1' => 'formatselect,bold,italic,bullist,numlist,blockquote,alignleft,aligncenter,alignright,link,unlink,undo,redo',
-						'toolbar2' => '',
-					),
-					'quicktags'        => array(
-						'buttons' => 'strong,em,link,block,ul,ol,li,close',
-					),
-				)
-			);
-			return;
-		}
-
-		if ( 'dashboard_links' === $field['type'] ) {
-			$this->render_dashboard_links_field( $id, $name, $value );
-			return;
-		}
-
-		if ( 'woocommerce_menu_visibility' === $field['type'] ) {
-			$this->render_woocommerce_menu_visibility_field( $id, $name, $value, $aria );
-			return;
-		}
-
-		if ( 'nav_menu' === $field['type'] ) {
-			$this->render_nav_menu_field( $id, $name, (int) $value, $aria );
-			return;
-		}
-
-		if ( 'email' === $field['type'] ) {
-			printf(
-				'<input type="email" class="regular-text" id="%1$s" name="%2$s" value="%3$s" autocomplete="email"%4$s>',
-				esc_attr( $id ),
-				esc_attr( $name ),
-				esc_attr( $value ),
-				$aria // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute().
-			);
-			return;
-		}
-
-		if ( 'select' === $field['type'] ) {
-			$options = $this->field_select_options( $key, $field );
-
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $aria is escaped by field_describedby_attribute().
-			echo '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"' . $aria . '>';
-			foreach ( $options as $option => $label ) {
-				printf(
-					'<option value="%1$s" %2$s>%3$s</option>',
-					esc_attr( $option ),
-					selected( $value, $option, false ),
-					esc_html( $label )
-				);
-			}
-			echo '</select>';
-			return;
-		}
-
+	/**
+	 * Render a text or secret field.
+	 *
+	 * @param array<string,mixed> $context Field render context.
+	 * @return void
+	 */
+	private function render_text_field( $context ) {
+		$key       = $context['key'];
+		$field     = $context['field'];
+		$id        = $context['id'];
+		$name      = $context['name'];
+		$value     = $context['value'];
+		$aria      = $context['aria'];
 		$type      = 'secret' === $field['type'] ? 'password' : 'text';
 		$direction = $this->field_direction_attribute( $key, $field );
 		printf(

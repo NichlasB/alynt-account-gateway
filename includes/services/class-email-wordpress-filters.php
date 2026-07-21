@@ -20,7 +20,6 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 	 * @var ALYNT_AG_Email_Tokens
 	 */
 	private $tokens;
-
 	/**
 	 * Whether the current profile email-change request should be suppressed.
 	 *
@@ -59,9 +58,9 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 		$rendered = $this->service->render( 'password_reset', $tokens, $settings );
 
 		if ( is_wp_error( $rendered ) ) {
+			$this->log_render_failure( 'password_reset', $rendered );
 			return $email;
 		}
-
 		$email['subject'] = $rendered['subject'];
 		$email['message'] = $rendered['html'];
 		$email['headers'] = $this->service->html_headers();
@@ -81,7 +80,12 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 		unset( $user_login );
 		$rendered = $this->service->render( 'password_reset', $this->tokens->for_user( $user_data ), ALYNT_AG_Settings_Schema::get_settings() );
 
-		return is_wp_error( $rendered ) ? $title : $rendered['subject'];
+		if ( is_wp_error( $rendered ) ) {
+			$this->log_render_failure( 'password_reset', $rendered );
+			return $title;
+		}
+
+		return $rendered['subject'];
 	}
 
 	/**
@@ -103,7 +107,12 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 		);
 		$rendered = $this->service->render( 'password_reset', $tokens, $settings );
 
-		return is_wp_error( $rendered ) ? $message : $rendered['html'];
+		if ( is_wp_error( $rendered ) ) {
+			$this->log_render_failure( 'password_reset', $rendered );
+			return $message;
+		}
+
+		return $rendered['html'];
 	}
 
 	/**
@@ -135,9 +144,9 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 		$rendered = $this->service->render( 'password_changed', $this->tokens->for_user( $user ), $settings );
 
 		if ( is_wp_error( $rendered ) ) {
+			$this->log_render_failure( 'password_changed', $rendered );
 			return $email;
 		}
-
 		$email['subject'] = $rendered['subject'];
 		$email['message'] = $rendered['html'];
 		$email['headers'] = $this->service->html_headers();
@@ -174,9 +183,9 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 		$rendered = $this->service->render( 'email_change_confirmation', $this->tokens->for_user( $user ), $settings );
 
 		if ( is_wp_error( $rendered ) ) {
+			$this->log_render_failure( 'email_change_confirmation', $rendered );
 			return $email;
 		}
-
 		$email['subject'] = $rendered['subject'];
 		$email['message'] = $rendered['html'];
 		$email['headers'] = $this->service->html_headers();
@@ -198,7 +207,6 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 			$this->suppress_profile_email_change_request = true;
 			return $content;
 		}
-
 		$user   = function_exists( 'wp_get_current_user' ) ? wp_get_current_user() : null;
 		$tokens = is_object( $user ) ? $this->tokens->for_user( $user ) : array();
 
@@ -206,7 +214,12 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 		$tokens['change_email_url'] = '###ADMIN_URL###';
 		$rendered                   = $this->service->render( 'email_change_confirmation', $tokens, $settings );
 
-		return is_wp_error( $rendered ) ? $content : $rendered['plain'];
+		if ( is_wp_error( $rendered ) ) {
+			$this->log_render_failure( 'email_change_confirmation', $rendered );
+			return $content;
+		}
+
+		return $rendered['plain'];
 	}
 
 	/**
@@ -242,7 +255,6 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 		if ( ! function_exists( 'wp_get_current_user' ) || ! function_exists( 'delete_user_meta' ) ) {
 			return;
 		}
-
 		$current_user = wp_get_current_user();
 		if ( ! is_object( $current_user ) || empty( $current_user->ID ) ) {
 			return;
@@ -257,7 +269,32 @@ class ALYNT_AG_Email_WordPress_Filters extends ALYNT_AG_Service_Collaborator {
 		if ( (int) $current_user->ID !== $posted_user_id || '' === $posted_email || $posted_email !== $mail_to ) {
 			return;
 		}
-
-		delete_user_meta( (int) $current_user->ID, '_new_email' );
+		if ( ! delete_user_meta( (int) $current_user->ID, '_new_email' ) ) {
+			ALYNT_AG_Diagnostics_Logger::log_event(
+				'error',
+				'database',
+				'profile_email_change_marker_delete_failed',
+				__( 'A suppressed profile email-change marker could not be removed.', 'alynt-account-gateway' ),
+				array( 'user_id' => (int) $current_user->ID )
+			);
+		}
+	}
+	/**
+	 * Log a branded email rendering failure before using the core fallback.
+	 *
+	 * @param string   $template Template key.
+	 * @param WP_Error $error    Rendering error.
+	 */
+	private function log_render_failure( $template, $error ) {
+		ALYNT_AG_Diagnostics_Logger::log_event(
+			'error',
+			'filesystem',
+			'email_template_render_failed',
+			__( 'A branded email template could not be rendered; WordPress fallback content was used.', 'alynt-account-gateway' ),
+			array(
+				'template' => sanitize_key( $template ),
+				'error'    => $error->get_error_code(),
+			)
+		);
 	}
 }

@@ -44,4 +44,15 @@ class DiagnosticsLoggerTest extends TestCase {
 		$this->assertStringEndsWith( '... [truncated]', $redacted['message'] );
 		$this->assertLessThan( 530, strlen( $redacted['message'] ) );
 	}
+
+	public function test_recent_events_returns_error_when_database_read_fails() {
+		$tables = ALYNT_AG_Database::tables();
+		$GLOBALS['alynt_ag_test_db_results'][ $tables['diagnostics_logs'] ] = false;
+
+		$result = ALYNT_AG_Diagnostics_Logger::recent_events();
+
+		$this->assertTrue( is_wp_error( $result ) );
+		$this->assertSame( 'alynt_ag_diagnostics_read_failed', $result->get_error_code() );
+		unset( $GLOBALS['alynt_ag_test_db_results'][ $tables['diagnostics_logs'] ] );
+	}
 }

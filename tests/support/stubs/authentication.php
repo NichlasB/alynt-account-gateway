@@ -7,7 +7,28 @@
 
 if ( ! function_exists( 'check_admin_referer' ) ) {
 	function check_admin_referer( $action = -1, $query_arg = false ) {
+		$GLOBALS['alynt_ag_test_admin_referer_checks'][] = array(
+			'action'    => $action,
+			'query_arg' => $query_arg,
+		);
+
+		if ( isset( $GLOBALS['alynt_ag_test_admin_nonce_valid'] ) && ! $GLOBALS['alynt_ag_test_admin_nonce_valid'] ) {
+			wp_die( 'Invalid admin nonce.' );
+		}
+
 		return true;
+	}
+}
+
+if ( ! function_exists( 'wp_verify_nonce' ) ) {
+	function wp_verify_nonce( $nonce, $action = -1 ) {
+		unset( $action );
+
+		if ( isset( $GLOBALS['alynt_ag_test_nonce_valid'] ) ) {
+			return $GLOBALS['alynt_ag_test_nonce_valid'] ? 1 : false;
+		}
+
+		return 1;
 	}
 }
 
@@ -81,7 +102,19 @@ if ( ! function_exists( 'wp_update_user' ) ) {
 	function wp_update_user( $userdata ) {
 		$GLOBALS['alynt_ag_test_user_updates'][] = $userdata;
 
+		if ( isset( $GLOBALS['alynt_ag_test_user_update_result'] ) ) {
+			return $GLOBALS['alynt_ag_test_user_update_result'];
+		}
+
 		return isset( $userdata['ID'] ) ? (int) $userdata['ID'] : 0;
+	}
+}
+
+if ( ! function_exists( 'wp_delete_user' ) ) {
+	function wp_delete_user( $user_id ) {
+		$GLOBALS['alynt_ag_test_deleted_users'][] = (int) $user_id;
+
+		return isset( $GLOBALS['alynt_ag_test_user_delete_result'] ) ? $GLOBALS['alynt_ag_test_user_delete_result'] : true;
 	}
 }
 
@@ -107,6 +140,12 @@ if ( ! class_exists( 'WP_User' ) ) {
 
 if ( ! function_exists( 'get_user_meta' ) ) {
 	function get_user_meta( $user_id, $key = '', $single = false ) {
+		unset( $user_id, $single );
+
+		if ( isset( $GLOBALS['alynt_ag_test_user_meta'][ $key ] ) ) {
+			return $GLOBALS['alynt_ag_test_user_meta'][ $key ];
+		}
+
 		$values = array(
 			'first_name' => 'Damon',
 			'last_name'  => 'Paulo',

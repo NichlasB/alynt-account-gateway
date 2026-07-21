@@ -43,7 +43,7 @@ class AdminJsSourceTest extends TestCase {
 
 		$this->assertIsString( $entry );
 		$this->assertIsArray( $modules );
-		$this->assertCount( 5, $modules );
+		$this->assertCount( 6, $modules );
 
 		foreach ( $modules as $module ) {
 			$relative_path = './modules/' . basename( $module );
@@ -61,14 +61,14 @@ class AdminJsSourceTest extends TestCase {
 		$this->assertIsString( $js );
 		$this->assertStringContainsString( "document.querySelector( '[data-alynt-ag-email-settings]' )", $js );
 		$this->assertStringContainsString( "event.target.matches( '.wp-editor-area' ) && ! event.isTrusted", $js );
-		$this->assertStringContainsString( "settingsForm.addEventListener( 'input', handleSettingsChange )", $js );
-		$this->assertStringContainsString( "settingsForm.addEventListener( 'change', handleSettingsChange )", $js );
+		$this->assertStringContainsString( "state.settingsForm.addEventListener( 'input', handleSettingsChange )", $js );
+		$this->assertStringContainsString( "state.settingsForm.addEventListener( 'change', handleSettingsChange )", $js );
 		$this->assertStringContainsString( "editor.alyntAgEmailSaveStateTracked = 'pending'", $js );
-		$this->assertStringContainsString( 'new window.FormData( settingsForm ).entries()', $js );
-		$this->assertStringContainsString( 'settingsForm.elements.namedItem( entry[0] )', $js );
+		$this->assertStringContainsString( 'new window.FormData( state.settingsForm ).entries()', $js );
+		$this->assertStringContainsString( 'state.settingsForm.elements.namedItem( entry[0] )', $js );
 		$this->assertStringContainsString( "field.matches( '.wp-editor-area' )", $js );
 		$this->assertStringContainsString( 'window.tinymce.get( field.id )', $js );
-		$this->assertStringContainsString( 'normalizeEditorContent(', $js );
+		$this->assertStringContainsString( 'alyntAgNormalizeEditorContent(', $js );
 		$this->assertStringContainsString( "typeof window.switchEditors.wpautop !== 'function'", $js );
 		$this->assertStringContainsString( 'new window.tinymce.html.DomParser( {}, editor.schema )', $js );
 		$this->assertStringContainsString( 'new window.tinymce.html.Serializer( {}, editor.schema )', $js );
@@ -76,24 +76,24 @@ class AdminJsSourceTest extends TestCase {
 		$this->assertStringContainsString( 'serializer.serialize( parser.parse( html ) )', $js );
 		$this->assertStringContainsString( 'editor.isHidden()', $js );
 		$this->assertStringContainsString( 'editor.isHidden() ? field.value : editor.getContent()', $js );
-		$this->assertStringContainsString( 'let initialState = readSettings()', $js );
-		$this->assertStringContainsString( 'initialState = initialState.map(', $js );
-		$this->assertStringContainsString( 'return [ entry[0], readFieldValue( field ) ]', $js );
-		$this->assertStringContainsString( 'setDirtyState( serializeSettings() !== serializeSettings( initialState ) )', $js );
-		$this->assertStringContainsString( 'updateInitialField( textarea )', $js );
-		$this->assertMatchesRegularExpression( "/window\\.setTimeout\\(.*editor\\.save\\(\\).*updateInitialField\\( textarea \\).*updateDirtyState\\(\\);/s", $js );
+		$this->assertStringContainsString( 'state.initialState = alyntAgReadEmailSettings( state )', $js );
+		$this->assertStringContainsString( 'state.initialState = state.initialState.map(', $js );
+		$this->assertStringContainsString( 'return [ entry[0], alyntAgReadEmailFieldValue( field ) ]', $js );
+		$this->assertStringContainsString( 'alyntAgSetEmailDirtyState( state, current !== initial )', $js );
+		$this->assertStringContainsString( 'alyntAgUpdateInitialEmailField( state, textarea )', $js );
+		$this->assertMatchesRegularExpression( "/window\\.setTimeout\\(.*editor\\.save\\(\\).*alyntAgUpdateInitialEmailField\\( state, textarea \\).*alyntAgUpdateEmailDirtyState\\( state \\);/s", $js );
 		$this->assertStringContainsString( "'change input undo redo'", $js );
 		$this->assertStringContainsString( 'editor.save()', $js );
 		$this->assertStringContainsString( 'tinymce-editor-init.alyntAgEmailSaveState', $js );
-		$this->assertStringContainsString( 'submit.disabled = isDirty', $js );
+		$this->assertStringContainsString( 'submit.disabled = state.isDirty', $js );
 		$this->assertStringContainsString( "submit.setAttribute( 'aria-disabled', 'true' )", $js );
 		$this->assertStringContainsString( "submit.removeAttribute( 'aria-disabled' )", $js );
-		$this->assertStringContainsString( 'notice.hidden = ! isDirty', $js );
-		$this->assertStringContainsString( "settingsForm.classList.toggle( 'alynt-ag-email-settings--dirty', isDirty )", $js );
+		$this->assertStringContainsString( 'state.notice.hidden = ! state.isDirty', $js );
+		$this->assertStringContainsString( "state.settingsForm.classList.toggle( 'alynt-ag-email-settings--dirty', state.isDirty )", $js );
 		$this->assertStringContainsString( "window.addEventListener( 'beforeunload', handleBeforeUnload )", $js );
 		$this->assertStringContainsString( 'event.preventDefault()', $js );
 		$this->assertStringContainsString( "event.returnValue = ''", $js );
-		$this->assertMatchesRegularExpression( "/settingsForm\\.addEventListener\\(\\s*'submit'.*setDirtyState\\( false \\);/s", $js );
+		$this->assertMatchesRegularExpression( "/state\\.settingsForm\\.addEventListener\\(\\s*'submit'.*alyntAgSetEmailDirtyState\\( state, false \\);/s", $js );
 	}
 
 	public function test_typography_presets_update_existing_stack_fields_and_preserve_custom_edits() {
@@ -104,13 +104,57 @@ class AdminJsSourceTest extends TestCase {
 		$this->assertStringContainsString( "document.querySelector( '#alynt-ag-heading_font_family' )", $js );
 		$this->assertStringContainsString( "document.querySelector( '#alynt-ag-body_font_family' )", $js );
 		$this->assertStringContainsString( "if ( option.value !== 'custom' )", $js );
-		$this->assertStringContainsString( 'headingInput.value = option.dataset.heading', $js );
-		$this->assertStringContainsString( 'bodyInput.value    = option.dataset.body', $js );
-		$this->assertStringContainsString( "selector.value = 'custom'", $js );
-		$this->assertStringContainsString( "headingInput.addEventListener( 'input', markCustom )", $js );
-		$this->assertStringContainsString( "bodyInput.addEventListener( 'input', markCustom )", $js );
-		$this->assertStringContainsString( "previewHeading.style.fontFamily = headingInput.value || 'inherit'", $js );
-		$this->assertStringContainsString( "previewBody.style.fontFamily    = bodyInput.value || 'inherit'", $js );
+		$this->assertStringContainsString( 'state.headingInput.value = option.dataset.heading', $js );
+		$this->assertStringContainsString( 'state.bodyInput.value    = option.dataset.body', $js );
+		$this->assertStringContainsString( "state.selector.value = 'custom'", $js );
+		$this->assertStringContainsString( "state.headingInput.addEventListener( 'input', markCustom )", $js );
+		$this->assertStringContainsString( "state.bodyInput.addEventListener( 'input', markCustom )", $js );
+		$this->assertStringContainsString( "state.previewHeading.style.fontFamily = state.headingInput.value || 'inherit'", $js );
+		$this->assertStringContainsString( "state.previewBody.style.fontFamily    = state.bodyInput.value || 'inherit'", $js );
+		$this->assertStringContainsString( "state.control.dataset.statusPrefix || ''", $js );
+		$this->assertStringNotContainsString( "|| 'Current pairing:'", $js );
+	}
+
+	public function test_media_dialog_uses_php_localized_labels_without_english_fallbacks() {
+		$js = $this->get_admin_js();
+
+		$this->assertStringContainsString( "title: labels.selectImage || ''", $js );
+		$this->assertStringContainsString( "text: labels.useImage || ''", $js );
+		$this->assertStringNotContainsString( "labels.selectImage || 'Select Image'", $js );
+		$this->assertStringNotContainsString( "labels.useImage || 'Use Image'", $js );
+		$this->assertStringContainsString( "status.textContent = labels.imageSelected || ''", $js );
+		$this->assertStringContainsString( "status.textContent = labels.imageRemoved || ''", $js );
+	}
+
+	public function test_dashboard_link_editor_announces_changes_and_restores_focus() {
+		$js = $this->get_admin_js();
+
+		$this->assertStringContainsString( "editor.querySelector( '[data-alynt-ag-dashboard-link-status]' )", $js );
+		$this->assertStringContainsString( "status.textContent = labels.dashboardLinkAdded || ''", $js );
+		$this->assertStringContainsString( "status.textContent = labels.dashboardLinkRemoved || ''", $js );
+		$this->assertStringContainsString( 'labelInput.focus()', $js );
+		$this->assertStringContainsString( 'focusTarget.focus()', $js );
+	}
+
+	public function test_admin_forms_confirm_consequential_actions_and_report_submission_progress() {
+		$js = $this->get_admin_js();
+
+		$this->assertStringContainsString( "document.querySelectorAll( '[data-alynt-ag-action-form]' )", $js );
+		$this->assertStringContainsString( 'window.confirm( confirmation )', $js );
+		$this->assertStringContainsString( "form.setAttribute( 'aria-busy', 'true' )", $js );
+		$this->assertStringContainsString( "submit.setAttribute( 'aria-disabled', 'true' )", $js );
+		$this->assertStringContainsString( "form.getAttribute( 'aria-busy' ) === 'true'", $js );
+	}
+
+	public function test_non_email_settings_forms_warn_before_discarding_unsaved_changes() {
+		$js = $this->get_admin_js();
+
+		$this->assertStringContainsString(
+			"'[data-alynt-ag-settings-form]:not([data-alynt-ag-email-settings])'",
+			$js
+		);
+		$this->assertStringContainsString( 'alyntAgSerializeSettingsForm( form ) !== state.initial', $js );
+		$this->assertStringContainsString( "window.addEventListener( 'beforeunload', handleBeforeUnload )", $js );
 	}
 
 	public function test_color_controls_synchronize_picker_and_hex_text_in_both_directions() {

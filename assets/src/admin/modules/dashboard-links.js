@@ -83,75 +83,96 @@ function alyntAgAddDashboardLinkRow( editor ) {
 	alyntAgRenumberDashboardLinkRow( row, index );
 	rows.appendChild( fragment );
 	alyntAgHandleVisualDashboardLinkChange( editor );
+	const labelInput = row.querySelector( '[data-alynt-ag-dashboard-link-label]' );
+	const status     = editor.querySelector( '[data-alynt-ag-dashboard-link-status]' );
+	const labels     = window.alyntAgAdmin || {};
+
+	if ( status ) {
+		status.textContent = labels.dashboardLinkAdded || '';
+	}
+	if ( labelInput ) {
+		labelInput.focus();
+	}
 }
 
-export function alyntAgInitDashboardLinks() {
-	document.querySelectorAll( '[data-alynt-ag-dashboard-links]' ).forEach(
-		function ( editor ) {
-			const addButton = editor.querySelector( '[data-alynt-ag-dashboard-link-add]' );
+function alyntAgRemoveDashboardLinkRow( editor, removeButton ) {
+	const row       = removeButton.closest( '[data-alynt-ag-dashboard-link-row]' );
+	const rows      = alyntAgDashboardLinkRows( editor );
+	const rowIndex  = rows.indexOf( row );
+	const addButton = editor.querySelector( '[data-alynt-ag-dashboard-link-add]' );
+	const status    = editor.querySelector( '[data-alynt-ag-dashboard-link-status]' );
+	const labels    = window.alyntAgAdmin || {};
 
-			alyntAgDashboardLinkRows( editor ).forEach(
-				function ( row, index ) {
-					alyntAgRenumberDashboardLinkRow( row, String( index ) );
-				}
-			);
+	row.remove();
+	alyntAgSerializeDashboardLinks( editor );
 
-			addButton.addEventListener(
-				'click',
-				function () {
-					alyntAgAddDashboardLinkRow( editor );
-				}
-			);
+	const remainingRows = alyntAgDashboardLinkRows( editor );
+	const focusRow      = remainingRows[ Math.min( rowIndex, remainingRows.length - 1 ) ];
+	const focusTarget   = focusRow ? focusRow.querySelector( '[data-alynt-ag-dashboard-link-label]' ) : addButton;
 
-			editor.addEventListener(
-				'click',
-				function ( event ) {
-					const removeButton = event.target.closest( '[data-alynt-ag-dashboard-link-remove]' );
+	if ( status ) {
+		status.textContent = labels.dashboardLinkRemoved || '';
+	}
+	if ( focusTarget ) {
+		focusTarget.focus();
+	}
+}
 
-					if ( removeButton ) {
-						removeButton.closest( '[data-alynt-ag-dashboard-link-row]' ).remove();
-						alyntAgSerializeDashboardLinks( editor );
-					}
-				}
-			);
+function alyntAgHandleDashboardLinkInput( editor, event ) {
+	if ( event.target.matches( '[data-alynt-ag-dashboard-link-json]' ) ) {
+		event.target.dataset.alyntAgRawEdited = '1';
+		return;
+	}
 
-			editor.addEventListener(
-				'input',
-				function ( event ) {
-					if ( event.target.matches( '[data-alynt-ag-dashboard-link-json]' ) ) {
-						event.target.dataset.alyntAgRawEdited = '1';
-						return;
-					}
+	alyntAgHandleVisualDashboardLinkChange( editor );
+}
 
-					alyntAgHandleVisualDashboardLinkChange( editor );
-				}
-			);
+function alyntAgBindDashboardLinkEvents( editor ) {
+	const addButton = editor.querySelector( '[data-alynt-ag-dashboard-link-add]' );
 
-			editor.addEventListener(
-				'change',
-				function ( event ) {
-					if ( event.target.matches( '[data-alynt-ag-dashboard-link-json]' ) ) {
-						event.target.dataset.alyntAgRawEdited = '1';
-						return;
-					}
+	addButton.addEventListener( 'click', () => alyntAgAddDashboardLinkRow( editor ) );
+	editor.addEventListener(
+		'click',
+		function ( event ) {
+			const removeButton = event.target.closest( '[data-alynt-ag-dashboard-link-remove]' );
 
-					alyntAgHandleVisualDashboardLinkChange( editor );
-				}
-			);
-
-			const form = editor.closest( 'form' );
-			if ( form ) {
-				form.addEventListener(
-					'submit',
-					function () {
-						const textarea = editor.querySelector( '[data-alynt-ag-dashboard-link-json]' );
-
-						if ( textarea.dataset.alyntAgRawEdited !== '1' ) {
-							alyntAgSerializeDashboardLinks( editor );
-						}
-					}
-				);
+			if ( removeButton ) {
+				alyntAgRemoveDashboardLinkRow( editor, removeButton );
 			}
 		}
 	);
+	editor.addEventListener( 'input', ( event ) => alyntAgHandleDashboardLinkInput( editor, event ) );
+	editor.addEventListener( 'change', ( event ) => alyntAgHandleDashboardLinkInput( editor, event ) );
+}
+
+function alyntAgBindDashboardLinkSubmit( editor ) {
+	const form = editor.closest( 'form' );
+	if ( ! form ) {
+		return;
+	}
+
+	form.addEventListener(
+		'submit',
+		function () {
+			const textarea = editor.querySelector( '[data-alynt-ag-dashboard-link-json]' );
+
+			if ( textarea.dataset.alyntAgRawEdited !== '1' ) {
+				alyntAgSerializeDashboardLinks( editor );
+			}
+		}
+	);
+}
+
+function alyntAgInitDashboardLinkEditor( editor ) {
+	alyntAgDashboardLinkRows( editor ).forEach(
+		function ( row, index ) {
+			alyntAgRenumberDashboardLinkRow( row, String( index ) );
+		}
+	);
+	alyntAgBindDashboardLinkEvents( editor );
+	alyntAgBindDashboardLinkSubmit( editor );
+}
+
+export function alyntAgInitDashboardLinks() {
+	document.querySelectorAll( '[data-alynt-ag-dashboard-links]' ).forEach( alyntAgInitDashboardLinkEditor );
 }

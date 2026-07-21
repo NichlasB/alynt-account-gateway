@@ -26,16 +26,7 @@ class ALYNT_AG_Settings_Page_Security_Signal_Renderer_B extends ALYNT_AG_Setting
 		<div class="alynt-ag-security-routing" aria-label="<?php esc_attr_e( 'Recent gateway routing signals', 'alynt-account-gateway' ); ?>">
 			<h4><?php esc_html_e( 'Gateway Routing Signals', 'alynt-account-gateway' ); ?></h4>
 			<div class="alynt-ag-security-status__grid">
-				<?php foreach ( $items as $item ) : ?>
-					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
-						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
-						<h5><?php echo esc_html( $item['label'] ); ?></h5>
-						<p>
-							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
-							<?php echo esc_html( $item['message'] ); ?>
-						</p>
-					</section>
-				<?php endforeach; ?>
+				<?php $this->render_security_signal_cards( $items ); ?>
 			</div>
 		</div>
 		<?php
@@ -53,16 +44,7 @@ class ALYNT_AG_Settings_Page_Security_Signal_Renderer_B extends ALYNT_AG_Setting
 		<div class="alynt-ag-security-auth" aria-label="<?php esc_attr_e( 'Recent branded authentication signals', 'alynt-account-gateway' ); ?>">
 			<h4><?php esc_html_e( 'Gateway Auth Signals', 'alynt-account-gateway' ); ?></h4>
 			<div class="alynt-ag-security-status__grid">
-				<?php foreach ( $items as $item ) : ?>
-					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
-						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
-						<h5><?php echo esc_html( $item['label'] ); ?></h5>
-						<p>
-							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
-							<?php echo esc_html( $item['message'] ); ?>
-						</p>
-					</section>
-				<?php endforeach; ?>
+				<?php $this->render_security_signal_cards( $items ); ?>
 			</div>
 		</div>
 		<?php
@@ -80,16 +62,7 @@ class ALYNT_AG_Settings_Page_Security_Signal_Renderer_B extends ALYNT_AG_Setting
 		<div class="alynt-ag-security-flow" aria-label="<?php esc_attr_e( 'Recent registration flow signals', 'alynt-account-gateway' ); ?>">
 			<h4><?php esc_html_e( 'Registration Flow Signals', 'alynt-account-gateway' ); ?></h4>
 			<div class="alynt-ag-security-status__grid">
-				<?php foreach ( $items as $item ) : ?>
-					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
-						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
-						<h5><?php echo esc_html( $item['label'] ); ?></h5>
-						<p>
-							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
-							<?php echo esc_html( $item['message'] ); ?>
-						</p>
-					</section>
-				<?php endforeach; ?>
+				<?php $this->render_security_signal_cards( $items ); ?>
 			</div>
 		</div>
 		<?php
@@ -108,16 +81,7 @@ class ALYNT_AG_Settings_Page_Security_Signal_Renderer_B extends ALYNT_AG_Setting
 		<div class="alynt-ag-security-delivery" aria-label="<?php esc_attr_e( 'Recent account delivery signals', 'alynt-account-gateway' ); ?>">
 			<h4><?php esc_html_e( 'Account Delivery Signals', 'alynt-account-gateway' ); ?></h4>
 			<div class="alynt-ag-security-status__grid">
-				<?php foreach ( $items as $item ) : ?>
-					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
-						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
-						<h5><?php echo esc_html( $item['label'] ); ?></h5>
-						<p>
-							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
-							<?php echo esc_html( $item['message'] ); ?>
-						</p>
-					</section>
-				<?php endforeach; ?>
+				<?php $this->render_security_signal_cards( $items ); ?>
 			</div>
 		</div>
 		<?php
@@ -135,16 +99,7 @@ class ALYNT_AG_Settings_Page_Security_Signal_Renderer_B extends ALYNT_AG_Setting
 		<div class="alynt-ag-security-signal" aria-label="<?php esc_attr_e( 'Recent provider health signals', 'alynt-account-gateway' ); ?>">
 			<h4><?php esc_html_e( 'Provider Health Signals', 'alynt-account-gateway' ); ?></h4>
 			<div class="alynt-ag-security-status__grid">
-				<?php foreach ( $items as $item ) : ?>
-					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
-						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
-						<h5><?php echo esc_html( $item['label'] ); ?></h5>
-						<p>
-							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
-							<?php echo esc_html( $item['message'] ); ?>
-						</p>
-					</section>
-				<?php endforeach; ?>
+				<?php $this->render_security_signal_cards( $items ); ?>
 			</div>
 		</div>
 		<?php

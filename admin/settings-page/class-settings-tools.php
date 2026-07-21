@@ -41,7 +41,14 @@ class ALYNT_AG_Settings_Page_Settings_Tools extends ALYNT_AG_Settings_Page_Compo
 			</a>
 		</p>
 
-		<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data" class="alynt-ag-inline-tool">
+		<form
+			method="post"
+			action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>"
+			enctype="multipart/form-data"
+			class="alynt-ag-inline-tool"
+			data-alynt-ag-action-form
+			data-alynt-ag-confirm="<?php esc_attr_e( 'Importing will replace recognized plugin settings with values from this file. Continue?', 'alynt-account-gateway' ); ?>"
+		>
 			<input type="hidden" name="action" value="alynt_ag_import_settings">
 			<?php wp_nonce_field( 'alynt_ag_import_settings' ); ?>
 			<label for="alynt-ag-settings-import"><?php esc_html_e( 'Settings JSON file', 'alynt-account-gateway' ); ?></label>
@@ -77,6 +84,7 @@ class ALYNT_AG_Settings_Page_Settings_Tools extends ALYNT_AG_Settings_Page_Compo
 				?>
 				<a class="button" target="_blank" rel="noopener noreferrer" href="<?php echo esc_url( $preview_url ); ?>">
 					<?php echo esc_html( $label ); ?>
+					<span class="screen-reader-text"><?php esc_html_e( 'opens in a new tab', 'alynt-account-gateway' ); ?></span>
 				</a>
 			<?php endforeach; ?>
 		</div>
@@ -109,12 +117,12 @@ class ALYNT_AG_Settings_Page_Settings_Tools extends ALYNT_AG_Settings_Page_Compo
 		<div class="notice notice-warning inline">
 			<p><?php esc_html_e( 'Potential compatibility overlaps were detected. Review these before enabling or troubleshooting frontend output.', 'alynt-account-gateway' ); ?></p>
 		</div>
-		<table class="widefat striped">
+		<table class="widefat striped" aria-label="<?php esc_attr_e( 'Potential compatibility overlaps', 'alynt-account-gateway' ); ?>">
 			<thead>
 				<tr>
-					<th><?php esc_html_e( 'Area', 'alynt-account-gateway' ); ?></th>
-					<th><?php esc_html_e( 'Warning', 'alynt-account-gateway' ); ?></th>
-					<th><?php esc_html_e( 'Details', 'alynt-account-gateway' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Area', 'alynt-account-gateway' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Warning', 'alynt-account-gateway' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Details', 'alynt-account-gateway' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>

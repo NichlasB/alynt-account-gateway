@@ -157,7 +157,7 @@ class ALYNT_AG_Privacy_Service {
 		$tables = ALYNT_AG_Database::tables();
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Plugin-owned consent table.
-		return false !== $wpdb->update(
+		return 0 < (int) $wpdb->update(
 			$tables['consent_records'],
 			array( 'user_id' => absint( $user_id ) ),
 			array(

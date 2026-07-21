@@ -108,4 +108,16 @@ class FrontendStateScreensTest extends TestCase {
 		$this->assertStringNotContainsString( 'Before requesting another link', $html );
 		$this->assertStringNotContainsString( 'Wait 45 minutes before requesting another confirmation email.', $html );
 	}
+
+	public function test_render_invalid_link_screen_uses_singular_resend_minute() {
+		$screens = new ALYNT_AG_Frontend_State_Screens();
+		$_GET['resend_error'] = 'alynt_ag_rate_limited';
+		$this->settings['resend_confirmation_rate_limit_window'] = 1;
+
+		ob_start();
+		$screens->render_invalid_link_screen( $this->settings );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'Wait 1 minute before requesting another confirmation email.', $html );
+	}
 }

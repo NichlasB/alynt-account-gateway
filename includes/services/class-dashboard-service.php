@@ -15,15 +15,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ALYNT_AG_Dashboard_Service {
 
 	/**
+	 * WooCommerce integration.
+	 *
+	 * @var ALYNT_AG_WooCommerce_Integration|null
+	 */
+	private $woocommerce;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param ALYNT_AG_WooCommerce_Integration|null $woocommerce WooCommerce integration.
+	 */
+	public function __construct( $woocommerce = null ) {
+		$this->woocommerce = $woocommerce;
+	}
+
+	/**
 	 * Return default dashboard links.
 	 *
 	 * @param array<string,mixed> $settings Settings.
 	 * @return array<int,array<string,mixed>>
 	 */
 	public function default_links( $settings = array() ) {
-		$woocommerce = new ALYNT_AG_WooCommerce_Integration();
 		if ( $this->woocommerce_available() ) {
-			return $woocommerce->account_menu_links( $settings );
+			return $this->woocommerce()->account_menu_links( $settings );
 		}
 
 		$base  = ! empty( $settings['after_login_redirect'] ) ? $settings['after_login_redirect'] : '/my-account/';
@@ -172,5 +187,18 @@ class ALYNT_AG_Dashboard_Service {
 	 */
 	public function woocommerce_available() {
 		return class_exists( 'WooCommerce' ) || function_exists( 'wc_get_account_menu_items' );
+	}
+
+	/**
+	 * Return the WooCommerce integration on demand.
+	 *
+	 * @return ALYNT_AG_WooCommerce_Integration
+	 */
+	private function woocommerce() {
+		if ( null === $this->woocommerce ) {
+			$this->woocommerce = new ALYNT_AG_WooCommerce_Integration();
+		}
+
+		return $this->woocommerce;
 	}
 }

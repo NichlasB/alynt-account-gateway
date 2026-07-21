@@ -17,8 +17,24 @@ if ( ! function_exists( 'get_option' ) ) {
 
 if ( ! function_exists( 'update_option' ) ) {
 	function update_option( $name, $value, $autoload = null ) {
+		if ( isset( $GLOBALS['alynt_ag_test_update_option_result'] ) && false === $GLOBALS['alynt_ag_test_update_option_result'] ) {
+			return false;
+		}
+
 		$GLOBALS['alynt_ag_test_options'][ $name ] = $value;
 
+		return true;
+	}
+}
+
+if ( ! function_exists( 'add_option' ) ) {
+	function add_option( $name, $value, $deprecated = '', $autoload = 'yes' ) {
+		unset( $deprecated, $autoload );
+		if ( array_key_exists( $name, $GLOBALS['alynt_ag_test_options'] ) ) {
+			return false;
+		}
+
+		$GLOBALS['alynt_ag_test_options'][ $name ] = $value;
 		return true;
 	}
 }
@@ -33,8 +49,53 @@ if ( ! function_exists( 'delete_option' ) ) {
 }
 
 if ( ! function_exists( 'wp_next_scheduled' ) ) {
-	function wp_next_scheduled( $hook ) {
-		return $GLOBALS['alynt_ag_test_scheduled_hooks'][ $hook ] ?? false;
+	function wp_next_scheduled( $hook, $args = array() ) {
+		if ( isset( $GLOBALS['alynt_ag_test_scheduled_hooks'][ $hook ] ) ) {
+			return $GLOBALS['alynt_ag_test_scheduled_hooks'][ $hook ];
+		}
+
+		foreach ( $GLOBALS['alynt_ag_test_single_events'] ?? array() as $event ) {
+			if ( $hook === $event['hook'] && $args === $event['args'] ) {
+				return $event['timestamp'];
+			}
+		}
+
+		return false;
+	}
+}
+
+if ( ! function_exists( 'wp_schedule_single_event' ) ) {
+	function wp_schedule_single_event( $timestamp, $hook, $args = array(), $wp_error = false ) {
+		unset( $wp_error );
+		if ( array_key_exists( 'alynt_ag_test_schedule_single_event_result', $GLOBALS ) ) {
+			$result = $GLOBALS['alynt_ag_test_schedule_single_event_result'];
+			if ( is_wp_error( $result ) || ! $result ) {
+				return $result;
+			}
+		}
+
+		$GLOBALS['alynt_ag_test_single_events'][] = array(
+			'timestamp' => $timestamp,
+			'hook'      => $hook,
+			'args'      => $args,
+		);
+
+		return true;
+	}
+}
+
+if ( ! function_exists( 'wp_schedule_event' ) ) {
+	function wp_schedule_event( $timestamp, $recurrence, $hook, $args = array(), $wp_error = false ) {
+		unset( $wp_error );
+		$GLOBALS['alynt_ag_test_scheduled_hooks'][ $hook ] = $timestamp;
+		$GLOBALS['alynt_ag_test_recurring_events'][] = array(
+			'timestamp'  => $timestamp,
+			'recurrence' => $recurrence,
+			'hook'       => $hook,
+			'args'       => $args,
+		);
+
+		return true;
 	}
 }
 
@@ -75,7 +136,50 @@ if ( ! function_exists( 'get_site_option' ) ) {
 
 if ( ! function_exists( 'is_multisite' ) ) {
 	function is_multisite() {
-		return false;
+		return ! empty( $GLOBALS['alynt_ag_test_is_multisite'] );
+	}
+}
+
+if ( ! function_exists( 'get_sites' ) ) {
+	function get_sites( $args = array() ) {
+		$site_ids = $GLOBALS['alynt_ag_test_site_ids'] ?? array();
+		$offset   = isset( $args['offset'] ) ? absint( $args['offset'] ) : 0;
+		$number   = isset( $args['number'] ) ? absint( $args['number'] ) : count( $site_ids );
+
+		return array_slice( $site_ids, $offset, $number );
+	}
+}
+
+if ( ! function_exists( 'switch_to_blog' ) ) {
+	function switch_to_blog( $blog_id ) {
+		global $wpdb;
+
+		$GLOBALS['alynt_ag_test_blog_stack'][] = array(
+			'prefix'  => $wpdb->prefix,
+			'options' => $wpdb->options,
+		);
+		$GLOBALS['alynt_ag_test_switched_blogs'][] = absint( $blog_id );
+		$wpdb->prefix  = 'wp_' . absint( $blog_id ) . '_';
+		$wpdb->options = $wpdb->prefix . 'options';
+
+		return true;
+	}
+}
+
+if ( ! function_exists( 'restore_current_blog' ) ) {
+	function restore_current_blog() {
+		global $wpdb;
+
+		$previous = array_pop( $GLOBALS['alynt_ag_test_blog_stack'] );
+		if ( ! $previous ) {
+			return false;
+		}
+
+		$wpdb->prefix  = $previous['prefix'];
+		$wpdb->options = $previous['options'];
+		$GLOBALS['alynt_ag_test_restored_blogs']++;
+
+		return true;
 	}
 }
 
@@ -118,6 +222,25 @@ if ( ! function_exists( 'add_filter' ) ) {
 			'callback'      => $callback,
 			'priority'      => $priority,
 			'accepted_args' => $accepted_args,
+		);
+
+		return true;
+	}
+}
+
+if ( ! function_exists( 'remove_filter' ) ) {
+	function remove_filter( $hook_name, $callback, $priority = 10 ) {
+		$GLOBALS['alynt_ag_test_filters'] = array_values(
+			array_filter(
+				$GLOBALS['alynt_ag_test_filters'],
+				static function ( $filter ) use ( $hook_name, $callback, $priority ) {
+					return ! (
+						$hook_name === $filter['hook']
+						&& $callback === $filter['callback']
+						&& $priority === $filter['priority']
+					);
+				}
+			)
 		);
 
 		return true;
@@ -175,6 +298,10 @@ if ( ! function_exists( 'get_transient' ) ) {
 
 if ( ! function_exists( 'set_transient' ) ) {
 	function set_transient( $name, $value, $expiration = 0 ) {
+		if ( isset( $GLOBALS['alynt_ag_test_set_transient_result'] ) && false === $GLOBALS['alynt_ag_test_set_transient_result'] ) {
+			return false;
+		}
+
 		$GLOBALS['alynt_ag_test_transients'][ $name ] = array(
 			'value'      => $value,
 			'expiration' => $expiration,

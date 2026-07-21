@@ -96,6 +96,15 @@ class ALYNT_AG_Settings_Page {
 	 * @return void
 	 */
 	public function maybe_handle_preview_gateway_request() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This cheap route gate runs before the component verifies the nonce.
+		$page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This cheap route gate runs before the component verifies the nonce.
+		$preview = isset( $_GET['alynt_ag_preview'] ) ? sanitize_key( wp_unslash( $_GET['alynt_ag_preview'] ) ) : '';
+
+		if ( 'alynt-account-gateway' !== $page || '1' !== $preview ) {
+			return;
+		}
+
 		$this->call_component( 'maybe_handle_preview_gateway_request' );
 	}
 

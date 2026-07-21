@@ -25,12 +25,21 @@ class ALYNT_AG_Settings_Page_Security_Signal_Renderer_A extends ALYNT_AG_Setting
 		$external_events   = $this->security_recent_external_diagnostics_events( 25 );
 		$webhook_logs      = $this->recent_webhook_logs();
 		$settings          = ALYNT_AG_Settings_Schema::get_settings();
+		$read_errors       = array_filter(
+			array( $logs, $diagnostic_events, $external_events, $webhook_logs ),
+			'is_wp_error'
+		);
+		$logs              = is_wp_error( $logs ) ? array() : $logs;
+		$diagnostic_events = is_wp_error( $diagnostic_events ) ? array() : $diagnostic_events;
+		$external_events   = is_wp_error( $external_events ) ? array() : $external_events;
+		$webhook_logs      = is_wp_error( $webhook_logs ) ? array() : $webhook_logs;
 		?>
 		<div class="alynt-ag-security-activity">
 			<h3><?php esc_html_e( 'Recent Registration Verification Activity', 'alynt-account-gateway' ); ?></h3>
 			<p class="description">
 				<?php esc_html_e( 'Shows recent Turnstile and Reoon outcomes stored in the plugin verification log. Email addresses are masked in this admin view.', 'alynt-account-gateway' ); ?>
 			</p>
+			<?php $this->render_admin_data_read_errors( $read_errors ); ?>
 
 			<?php $this->render_security_provider_health_signals( $logs ); ?>
 			<?php $this->render_security_manual_review_queue( $logs ); ?>
@@ -49,7 +58,7 @@ class ALYNT_AG_Settings_Page_Security_Signal_Renderer_A extends ALYNT_AG_Setting
 					<?php esc_html_e( 'No verification activity has been logged yet.', 'alynt-account-gateway' ); ?>
 				</p>
 			<?php else : ?>
-				<table class="widefat striped alynt-ag-security-activity__table">
+				<table class="widefat striped alynt-ag-security-activity__table" aria-label="<?php esc_attr_e( 'Recent registration verification activity', 'alynt-account-gateway' ); ?>">
 					<thead>
 						<tr>
 							<th scope="col"><?php esc_html_e( 'Email', 'alynt-account-gateway' ); ?></th>
@@ -117,16 +126,7 @@ class ALYNT_AG_Settings_Page_Security_Signal_Renderer_A extends ALYNT_AG_Setting
 		<div class="alynt-ag-security-abuse" aria-label="<?php esc_attr_e( 'Recent registration abuse signals', 'alynt-account-gateway' ); ?>">
 			<h4><?php esc_html_e( 'Registration Abuse Signals', 'alynt-account-gateway' ); ?></h4>
 			<div class="alynt-ag-security-status__grid">
-				<?php foreach ( $items as $item ) : ?>
-					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
-						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
-						<h5><?php echo esc_html( $item['label'] ); ?></h5>
-						<p>
-							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
-							<?php echo esc_html( $item['message'] ); ?>
-						</p>
-					</section>
-				<?php endforeach; ?>
+				<?php $this->render_security_signal_cards( $items ); ?>
 			</div>
 		</div>
 		<?php
@@ -145,18 +145,41 @@ class ALYNT_AG_Settings_Page_Security_Signal_Renderer_A extends ALYNT_AG_Setting
 		<div class="alynt-ag-security-access" aria-label="<?php esc_attr_e( 'Recent access control signals', 'alynt-account-gateway' ); ?>">
 			<h4><?php esc_html_e( 'Access Control Signals', 'alynt-account-gateway' ); ?></h4>
 			<div class="alynt-ag-security-status__grid">
-				<?php foreach ( $items as $item ) : ?>
-					<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
-						<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
-						<h5><?php echo esc_html( $item['label'] ); ?></h5>
-						<p>
-							<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
-							<?php echo esc_html( $item['message'] ); ?>
-						</p>
-					</section>
-				<?php endforeach; ?>
+				<?php $this->render_security_signal_cards( $items ); ?>
 			</div>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Render the shared count-based security signal cards.
+	 *
+	 * @param array<int,array{label:string,status:string,count:int,message:string,latest?:string}> $items Signal items.
+	 * @return void
+	 */
+	public function render_security_signal_cards( $items ) {
+		foreach ( $items as $item ) {
+			?>
+			<section class="alynt-ag-security-card alynt-ag-security-card--<?php echo esc_attr( $item['status'] ); ?>">
+				<span class="alynt-ag-security-card__badge"><?php echo esc_html( $this->readiness_status_label( $item['status'] ) ); ?></span>
+				<h5><?php echo esc_html( $item['label'] ); ?></h5>
+				<p>
+					<strong><?php echo esc_html( (string) $item['count'] ); ?></strong>
+					<?php echo esc_html( $item['message'] ); ?>
+				</p>
+				<?php if ( ! empty( $item['latest'] ) ) : ?>
+					<p class="description alynt-ag-security-card__meta">
+						<?php
+						printf(
+							/* translators: %s: latest provider failure timestamp. */
+							esc_html__( 'Latest seen: %s.', 'alynt-account-gateway' ),
+							esc_html( $item['latest'] )
+						);
+						?>
+					</p>
+				<?php endif; ?>
+			</section>
+			<?php
+		}
 	}
 }
