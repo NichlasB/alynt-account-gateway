@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Manual-order payment compatibility slice released as v1.1.23; no site update has been performed in this release cycle.
+- Current phase: Manual-order payment compatibility slice released as v1.1.23 and updater-verified on LocalWP Plugin Tester; no staging or production update has been performed in this release cycle.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.23 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Keep updater installation, staging, and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Keep staging and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Manual Order Payment Compatibility Slice
 
@@ -35,6 +35,7 @@
 - While switched, a direct customer request for `wp-admin` still redirected to `/my-account/`; Switch back returned the administrator to the exact order editor. This confirms the exemption is limited to the action dispatcher and does not reopen ordinary wp-admin screens.
 - Cleanup permanently removed the disposable order and users, uninstalled the two temporary helper plugins, restored the released Account Gateway controller byte-for-byte, and confirmed the Account Gateway settings fingerprint remained unchanged.
 - The approved v1.1.23 GitHub release was published from commit `e85563f`; Build Release run `29852300272` passed. The public ZIP contains one `alynt-account-gateway` root and `131` runtime files with no development content, and its SHA-256 is `564E951B338F47816BF1AECD25A95B75EF6D839A3DCEF5B1D4B502FD53134647`.
+- Alynt Plugin Updater on LocalWP Plugin Tester discovered the exact public v1.1.23 ZIP and completed the `1.1.22 -> 1.1.23` update. The plugin remains active, settings fingerprint `EB43B0A30B0D721C3BE1EF445F989FD6E6BF991F0F819D6879816B7C7AFF3558` is unchanged, all `131` installed files hash-match the public asset, the updater reports no remaining offer, and the homepage returns HTTP `200`.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
