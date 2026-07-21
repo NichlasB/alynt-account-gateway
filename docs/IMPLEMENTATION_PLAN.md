@@ -7,7 +7,7 @@
 - Plugin status: v1.1.21 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Prepare the v1.1.22 release candidate metadata and changelog, rerun final source/package gates, and request release approval. After publication, verify the public release asset through Alynt Plugin Updater on LocalWP Plugin Tester. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Await explicit v1.1.22 publication approval. After publication, verify the public release asset through Alynt Plugin Updater on LocalWP Plugin Tester. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
@@ -209,29 +209,29 @@ Execution rules:
 
 ### Consolidated End-To-End Acceptance
 
-- [ ] Run `wordpress-component-testing-troubleshooting-debugging-workflow.md` against the final reviewed codebase after prompt `13`.
-- [ ] Start on `plugin-tester local-only`; request separate site-specific approval before using any staging or production target.
-- [ ] Install an exact inspected package through a WordPress replacement or updater path while preserving activation and settings fingerprints.
-- [ ] Verify frontend-output disabled mode and Gateway Screen Preview without exposing public overrides.
-- [ ] Verify login, logout confirmation, lost-password, reset-password, invalid/expired-link, native-login redirect, emergency-bypass, and safe return-destination behavior.
-- [ ] Verify public registration disabled and enabled states, terms/privacy enforcement, protection-mode outcomes, pending-token expiry, confirmation, password policy, account creation, welcome delivery, and cleanup.
-- [ ] Verify administrator, shop-manager when WooCommerce is active, and customer login redirects; wp-admin access rules; and toolbar visibility.
-- [ ] Verify all 12 settings tabs and representative save, restore, preview, test-send, provider-check, webhook-test, import/export, diagnostics, and manual-review operations using disposable data.
-- [ ] Verify dashboard disabled and enabled states, custom links, menu panel, footer menu, responsive behavior, keyboard operation, and role visibility.
-- [ ] Verify WooCommerce takeover disabled and enabled states; dashboard, orders, downloads, addresses, payment methods, account details, logout, hidden navigation items, direct endpoints, checkout-login gating, and order-pay exclusions.
-- [ ] Verify branded registration-confirmation, password-reset, password-changed, welcome, and email-change templates in HTML and plain text, including responsive typography and constrained logo output.
-- [ ] Verify Turnstile and Reoon server-side failure handling locally; require separate approved staging credentials and hostname testing before claiming live-provider end-to-end coverage.
-- [ ] Verify account-created webhook payload, signature, response handling, retry/log metadata, debug-payload policy, and retention cleanup with a disposable receiver.
-- [ ] Verify WordPress personal-data export/erase behavior, retention jobs, diagnostics cleanup, deactivation behavior, and isolated uninstall cleanup without risking retained site data.
-- [ ] Test desktop, tablet, mobile, keyboard-only, visible-focus, reduced-motion, forced-colors where practical, RTL, long-content, empty, error, rate-limited, and repeated-submission states.
-- [ ] Confirm no plugin PHP errors, browser errors, failed plugin requests, leaked development files, unexpected database changes, leftover fixtures, sessions, users, jobs, transients, or upgrade artifacts.
+- [x] Run `wordpress-component-testing-troubleshooting-debugging-workflow.md` against the final reviewed codebase after prompt `13`.
+- [x] Start on `plugin-tester local-only`; request separate site-specific approval before using any staging or production target.
+- [x] Install an exact inspected package through a WordPress replacement or updater path while preserving activation and settings fingerprints.
+- [x] Verify frontend-output disabled mode and Gateway Screen Preview without exposing public overrides.
+- [x] Verify login, logout confirmation, lost-password, reset-password, invalid/expired-link, native-login redirect, emergency-bypass, and safe return-destination behavior.
+- [x] Verify public registration disabled and enabled states, terms/privacy enforcement, protection-mode outcomes, pending-token expiry, confirmation, password policy, account creation, welcome delivery, and cleanup.
+- [x] Verify administrator, shop-manager when WooCommerce is active, and customer login redirects; wp-admin access rules; and toolbar visibility.
+- [x] Verify all 12 settings tabs and representative save, restore, preview, test-send, provider-check, webhook-test, import/export, diagnostics, and manual-review operations using disposable data.
+- [x] Verify dashboard disabled and enabled states, custom links, menu panel, footer menu, responsive behavior, keyboard operation, and role visibility.
+- [x] Verify WooCommerce takeover disabled and enabled states; dashboard, orders, downloads, addresses, payment methods, account details, logout, hidden navigation items, direct endpoints, checkout-login gating, and order-pay exclusions.
+- [x] Verify branded registration-confirmation, password-reset, password-changed, welcome, and email-change templates in HTML and plain text, including responsive typography and constrained logo output.
+- [x] Verify Turnstile and Reoon server-side failure handling locally; require separate approved staging credentials and hostname testing before claiming live-provider end-to-end coverage.
+- [x] Verify account-created webhook payload, signature, response handling, retry/log metadata, debug-payload policy, and retention cleanup with a disposable receiver.
+- [x] Verify WordPress personal-data export/erase behavior, retention jobs, diagnostics cleanup, deactivation behavior, and isolated uninstall cleanup without risking retained site data.
+- [x] Test desktop, tablet, mobile, keyboard-only, visible-focus, reduced-motion, forced-colors where practical, RTL, long-content, empty, error, rate-limited, and repeated-submission states.
+- [x] Confirm no plugin PHP errors, browser errors, failed plugin requests, leaked development files, unexpected database changes, leftover fixtures, sessions, users, jobs, transients, or upgrade artifacts.
 
 ### Completion Decision
 
-- [ ] Classify every finding as fixed, accepted, deferred, or release-blocking.
-- [ ] If code changes were required, prepare and inspect a v1.1.22 candidate and request separate release approval.
-- [ ] If no code changes were required, record v1.1.21 as post-refactor revalidated without creating an unnecessary release.
-- [ ] Update this plan, the structural review, public documentation where required, and the toolkit checklist with final evidence.
+- [x] Classify every finding as fixed, accepted, deferred, or release-blocking.
+- [x] Because corrective changes were required, prepare and inspect a v1.1.22 candidate and request separate release approval.
+- [x] Mark the no-code-change v1.1.21 revalidation path as not applicable because the review produced corrective changes.
+- [x] Update this plan, the structural review, public documentation where required, and the toolkit checklist with final evidence.
 
 ## Phase 2 Structural Refactoring
 

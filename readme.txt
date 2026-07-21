@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.21
+Stable tag: 1.1.22
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -73,7 +73,13 @@ Yes. Each email body uses WordPress's Visual/Text editor with safe HTML formatti
 
 = Unreleased =
 
-* Reconciled the README, Settings reference, and Hooks reference with the current settings schema and integration contracts.
+= 1.1.22 =
+
+* Harden webhook transport, queue validation, operation locks, uninstall cleanup, and multisite data removal.
+* Improve localization catalogs, pluralized account/admin copy, and JavaScript translation coverage.
+* Resolve dependencies at the supported PHP 7.4 floor and remove an unused vulnerable development dependency.
+* Add operation-lock, webhook scheduling, password-boundary, activation, capability, nonce, catalog, and test-order regression coverage.
+* Reconcile the README, WordPress readme, settings reference, and hooks reference with current settings and integration contracts.
 
 = 1.1.21 =
 
