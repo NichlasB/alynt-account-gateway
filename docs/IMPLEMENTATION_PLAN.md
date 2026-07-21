@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: Manual-order payment compatibility slice complete and awaiting a separately approved release cycle from the released v1.1.22 baseline.
+- Current phase: Manual-order payment compatibility slice released as v1.1.23; no site update has been performed in this release cycle.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.22 is the current public baseline.
+- Plugin status: v1.1.23 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Review and commit the completed manual-order payment compatibility slice, then request separate approval before packaging, publication, updater installation, staging, or production rollout. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Keep updater installation, staging, and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Manual Order Payment Compatibility Slice
 
@@ -34,6 +34,7 @@
 - A disposable pending order exposed both payment actions. Copy Payment Link reported success, and Switch to Customer & Pay completed the authenticated `admin-post.php` handoff to the keyed WooCommerce `/checkout/order-pay/` URL. WooCommerce Coming Soon mode masked the payment fields, so no gateway charge was attempted.
 - While switched, a direct customer request for `wp-admin` still redirected to `/my-account/`; Switch back returned the administrator to the exact order editor. This confirms the exemption is limited to the action dispatcher and does not reopen ordinary wp-admin screens.
 - Cleanup permanently removed the disposable order and users, uninstalled the two temporary helper plugins, restored the released Account Gateway controller byte-for-byte, and confirmed the Account Gateway settings fingerprint remained unchanged.
+- The approved v1.1.23 GitHub release was published from commit `e85563f`; Build Release run `29852300272` passed. The public ZIP contains one `alynt-account-gateway` root and `131` runtime files with no development content, and its SHA-256 is `564E951B338F47816BF1AECD25A95B75EF6D839A3DCEF5B1D4B502FD53134647`.
 
 ## v1.1.21 Post-Refactor Pre-Release Revalidation
 
