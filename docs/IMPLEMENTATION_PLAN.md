@@ -2,12 +2,20 @@
 
 ## Status
 
-- Current phase: Polish translation assets validated locally and prepared for the v1.1.25 patch release.
+- Current phase: Polish translation assets released as v1.1.25, verified through the public GitHub asset and Alynt Plugin Updater, and installed on MVS Video Store.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.24 is the current public baseline; v1.1.25 is the approved Polish-translation patch candidate.
+- Plugin status: v1.1.25 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Publish and updater-verify v1.1.25, then keep staging and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Keep staging and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## Polish Translation Pack
+
+- [x] Validate the native-reviewed `pl_PL` catalogue against all 1,166 AAG source strings, preserving placeholders, markup, and Polish plural forms.
+- [x] Compile the Polish MO file and confirm the local MVS `/pl/login/` gateway renders translated headings, labels, password controls, and actions.
+- [x] Release v1.1.25 with the PO/MO assets and verify the public GitHub archive contains both files.
+- [x] Verify Alynt Plugin Updater upgrades LocalWP Plugin Tester from active 1.1.24 to active 1.1.25 with no remaining update offer.
+- [x] Install the exact released build on MVS Video Store and confirm the public homepage and Polish login route return HTTP 200.
 
 ## Deferred Gateway Metadata Fix
 
