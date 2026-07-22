@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v1.1.26 gateway-metadata correction candidate validated locally; v1.1.25 remains the current public baseline.
+- Current phase: v1.1.26 gateway-metadata correction released, updater-verified, and installed on MVS Video Store.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.25 is public; v1.1.26 is a local candidate awaiting owner-approved publication.
+- Plugin status: v1.1.26 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 - Next roadmap: Keep staging and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
@@ -23,7 +23,9 @@
 - [x] Route the branded title through `pre_get_document_title`, clear only the false 404 state before `wp_head()`, and remove the temporary filter after the document head renders.
 - [x] Add regression coverage for exactly one title, correct title-filter output, cleared false-404 state, and no residual title filter; PHPUnit passes with 550 tests and 4,003 assertions.
 - [x] Verify MVS LocalWP `/pl/login/` returns HTTP 200, one `Zaloguj się` title, and no 404 metadata, while a deliberately missing route remains HTTP 404 with its normal 404 document.
-- [ ] Publish v1.1.26 only after separate owner approval, then verify the released asset and updater path.
+- [x] Publish v1.1.26 after owner approval, verify Build Release plus PHP 7.4/8.3 quality checks, and inspect the public ZIP (`EBAF6B2765D5E1FA04D8487874CAD32B0312D2EAB4C35E5BFB94C346CE2A70F2`): one plugin root, 133 runtime files, version `1.1.26`, and no development content.
+- [x] Verify Alynt Plugin Updater discovers and natively installs the exact public ZIP on LocalWP Plugin Tester (`1.1.25 -> 1.1.26`), retains activation and Polish PO/MO assets, and reports no remaining update.
+- [x] Install the exact public ZIP on MVS Video Store, confirm active version `1.1.26`, and verify `/pl/login/` returns HTTP 200 with one `Zaloguj się` title and no 404 metadata.
 
 This is a presentation and SEO-quality correction. The v1.1.25 translation asset release remains valid; v1.1.26 is a narrowly scoped follow-up fix.
 
