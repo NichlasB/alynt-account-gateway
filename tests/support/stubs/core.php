@@ -268,7 +268,7 @@ if ( ! function_exists( 'language_attributes' ) ) {
 
 if ( ! function_exists( 'wp_head' ) ) {
 	function wp_head() {
-		echo '<!-- wp_head -->';
+		echo '<title>' . esc_html( apply_filters( 'pre_get_document_title', 'Default test title' ) ) . '</title><!-- wp_head -->';
 	}
 }
 

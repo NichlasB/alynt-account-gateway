@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.26 - 2026-07-22
+
+### Fixed
+
+- Route standalone branded gateway documents through WordPress's title pipeline and clear their false 404 query state before rendering the document head, preventing duplicate titles and not-found metadata.
+
 ## 1.1.25 - 2026-07-22
 
 ### Added

@@ -15,6 +15,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ALYNT_AG_Frontend_Document_Renderer {
 
 	/**
+	 * Gateway title supplied to WordPress while its document head renders.
+	 *
+	 * @var string
+	 */
+	private $gateway_document_title = '';
+
+	/**
 	 * Gateway shell renderer.
 	 *
 	 * @var ALYNT_AG_Frontend_Gateway_Shell|null
@@ -57,6 +64,8 @@ class ALYNT_AG_Frontend_Document_Renderer {
 	 * @return void
 	 */
 	public function render_gateway_document( $screen, $settings, $current_relative_path ) {
+		$this->prepare_gateway_document_title( $screen );
+
 		status_header( 200 );
 		nocache_headers();
 
@@ -67,8 +76,8 @@ class ALYNT_AG_Frontend_Document_Renderer {
 		echo '<head>';
 		echo '<meta charset="' . esc_attr( get_bloginfo( 'charset' ) ) . '">';
 		echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
-		echo '<title>' . esc_html( $this->get_screen_title( $screen ) ) . '</title>';
 		wp_head();
+		$this->release_gateway_document_title();
 		echo '</head>';
 		echo '<body class="alynt-ag-body">';
 		$this->render_gateway_body( $screen, $settings, $current_relative_path );
@@ -106,6 +115,16 @@ class ALYNT_AG_Frontend_Document_Renderer {
 	}
 
 	/**
+	 * Supply the branded gateway title through WordPress's title pipeline.
+	 *
+	 * @param string $title Existing document title.
+	 * @return string
+	 */
+	public function filter_gateway_document_title( $title ) {
+		return '' !== $this->gateway_document_title ? $this->gateway_document_title : $title;
+	}
+
+	/**
 	 * Render the dashboard or auth gateway body.
 	 *
 	 * @param string              $screen                Screen key.
@@ -120,6 +139,38 @@ class ALYNT_AG_Frontend_Document_Renderer {
 		}
 
 		$this->gateway_shell()->render_gateway_shell( $screen, $settings );
+	}
+
+	/**
+	 * Set gateway document metadata before WordPress renders its head.
+	 *
+	 * Branded routes are intentionally handled before a matching WordPress page
+	 * exists. Clear that false 404 state so WordPress and SEO integrations do not
+	 * emit not-found metadata alongside the gateway document.
+	 *
+	 * @param string $screen Screen key.
+	 * @return void
+	 */
+	private function prepare_gateway_document_title( $screen ) {
+		global $wp_query;
+
+		$this->gateway_document_title = $this->get_screen_title( $screen );
+
+		if ( isset( $wp_query ) && is_object( $wp_query ) && isset( $wp_query->is_404 ) ) {
+			$wp_query->is_404 = false;
+		}
+
+		add_filter( 'pre_get_document_title', array( $this, 'filter_gateway_document_title' ), PHP_INT_MAX );
+	}
+
+	/**
+	 * Remove the temporary title filter after the document head has rendered.
+	 *
+	 * @return void
+	 */
+	private function release_gateway_document_title() {
+		remove_filter( 'pre_get_document_title', array( $this, 'filter_gateway_document_title' ), PHP_INT_MAX );
+		$this->gateway_document_title = '';
 	}
 
 	/**

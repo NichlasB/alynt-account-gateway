@@ -48,7 +48,16 @@ class FrontendDocumentRendererTest extends TestCase {
 			'account_action_base' => '/account',
 		);
 
+		$GLOBALS['alynt_ag_test_filters'] = array();
+		$GLOBALS['wp_query']             = (object) array( 'is_404' => true );
+
 		unset( $GLOBALS['alynt_ag_test_status_header'], $GLOBALS['alynt_ag_test_nocache_headers'] );
+	}
+
+	protected function tearDown(): void {
+		unset( $GLOBALS['wp_query'] );
+
+		parent::tearDown();
 	}
 
 	public function test_render_gateway_document_outputs_full_document_and_auth_shell() {
@@ -62,7 +71,10 @@ class FrontendDocumentRendererTest extends TestCase {
 		$this->assertTrue( $GLOBALS['alynt_ag_test_nocache_headers'] );
 		$this->assertStringContainsString( '<!doctype html><html lang="en-US">', $html );
 		$this->assertStringContainsString( '<meta charset="UTF-8">', $html );
+		$this->assertSame( 1, substr_count( $html, '<title>' ) );
 		$this->assertStringContainsString( '<title>Title: login</title>', $html );
+		$this->assertFalse( $GLOBALS['wp_query']->is_404 );
+		$this->assertSame( array(), $GLOBALS['alynt_ag_test_filters'] );
 		$this->assertStringContainsString( '<body class="alynt-ag-body">', $html );
 		$this->assertStringContainsString( '<!-- wp_head -->', $html );
 		$this->assertStringContainsString( '<main class="test-gateway-shell" data-screen="login"></main>', $html );

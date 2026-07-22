@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: Polish translation assets released as v1.1.25, verified through the public GitHub asset and Alynt Plugin Updater, and installed on MVS Video Store.
+- Current phase: v1.1.26 gateway-metadata correction candidate validated locally; v1.1.25 remains the current public baseline.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.25 is the current public baseline.
+- Plugin status: v1.1.25 is public; v1.1.26 is a local candidate awaiting owner-approved publication.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 - Next roadmap: Keep staging and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
@@ -17,13 +17,15 @@
 - [x] Verify Alynt Plugin Updater upgrades LocalWP Plugin Tester from active 1.1.24 to active 1.1.25 with no remaining update offer.
 - [x] Install the exact released build on MVS Video Store and confirm the public homepage and Polish login route return HTTP 200.
 
-## Deferred Gateway Metadata Fix
+## Gateway Metadata Fix (v1.1.26 Candidate)
 
-- [ ] Resolve the duplicate document-title output observed on the MVS Polish login route, where the correct Account Gateway title is accompanied by an unrelated WordPress 404 title fragment.
-- [ ] Trace the owning theme/template and Account Gateway route-title interactions before changing title generation; retain one accurate title on login, registration, password, logout, dashboard, and WooCommerce account routes.
-- [ ] Add regression coverage for the title contract and verify both English and Polish gateway routes after the fix.
+- [x] Trace the duplicate title to the standalone gateway renderer: it emitted a manual title before `wp_head()`, while WordPress still held a false 404 query state and emitted a second 404 title plus not-found metadata.
+- [x] Route the branded title through `pre_get_document_title`, clear only the false 404 state before `wp_head()`, and remove the temporary filter after the document head renders.
+- [x] Add regression coverage for exactly one title, correct title-filter output, cleared false-404 state, and no residual title filter; PHPUnit passes with 550 tests and 4,003 assertions.
+- [x] Verify MVS LocalWP `/pl/login/` returns HTTP 200, one `Zaloguj się` title, and no 404 metadata, while a deliberately missing route remains HTTP 404 with its normal 404 document.
+- [ ] Publish v1.1.26 only after separate owner approval, then verify the released asset and updater path.
 
-This is a presentation and SEO-quality issue. The affected gateway route returns HTTP 200 and renders the correct screen; it does not block the v1.1.25 translation asset release.
+This is a presentation and SEO-quality correction. The v1.1.25 translation asset release remains valid; v1.1.26 is a narrowly scoped follow-up fix.
 
 ## Custom Operator Integration Compatibility
 
