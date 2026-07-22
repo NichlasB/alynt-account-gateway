@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.25 - 2026-07-22
+
+### Added
+
+- Add native-reviewed Polish (`pl_PL`) translations for account, authentication, dashboard, email, and operator-interface strings.
+
 ## 1.1.24 - 2026-07-21
 
 ### Added

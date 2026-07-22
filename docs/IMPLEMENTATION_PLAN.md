@@ -2,12 +2,20 @@
 
 ## Status
 
-- Current phase: Custom operator integration compatibility released as v1.1.24, verified through the GitHub asset and Alynt Plugin Updater, and installed on the MVS Video Store LocalWP blueprint.
+- Current phase: Polish translation assets validated locally and prepared for the v1.1.25 patch release.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.24 is the current public baseline.
+- Plugin status: v1.1.24 is the current public baseline; v1.1.25 is the approved Polish-translation patch candidate.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Keep staging and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Publish and updater-verify v1.1.25, then keep staging and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## Deferred Gateway Metadata Fix
+
+- [ ] Resolve the duplicate document-title output observed on the MVS Polish login route, where the correct Account Gateway title is accompanied by an unrelated WordPress 404 title fragment.
+- [ ] Trace the owning theme/template and Account Gateway route-title interactions before changing title generation; retain one accurate title on login, registration, password, logout, dashboard, and WooCommerce account routes.
+- [ ] Add regression coverage for the title contract and verify both English and Polish gateway routes after the fix.
+
+This is a presentation and SEO-quality issue. The affected gateway route returns HTTP 200 and renders the correct screen; it does not block the v1.1.25 translation asset release.
 
 ## Custom Operator Integration Compatibility
 
