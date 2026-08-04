@@ -10,6 +10,10 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 - Use a neutral default login instruction for new installations: "Welcome back. Log in to access your account." Existing saved screen copy is unchanged.
 
+### Security
+
+- Update the development-only WordPress Coding Standards dependency to resolve its published high-severity advisory.
+
 ## 1.1.26 - 2026-07-22
 
 ### Fixed
