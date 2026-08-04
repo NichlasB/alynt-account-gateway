@@ -53,7 +53,7 @@ class SettingsSchemaDefaultsTest extends SettingsSchemaTestCase {
 
 		$this->assertSame( '/legal/terms/', $defaults['terms_path'] );
 		$this->assertSame(
-			'Welcome back. Log in to manage your orders and account details.',
+			'Welcome back. Log in to access your account.',
 			$defaults['login_intro_text']
 		);
 	}

@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.27 - 2026-08-04
+
+### Changed
+
+- Use a neutral default login instruction for new installations: "Welcome back. Log in to access your account." Existing saved screen copy is unchanged.
+
 ## 1.1.26 - 2026-07-22
 
 ### Fixed

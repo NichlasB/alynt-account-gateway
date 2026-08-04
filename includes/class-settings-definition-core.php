@@ -98,7 +98,7 @@ class ALYNT_AG_Settings_Definition_Core {
 			'login_intro_text'                   => array(
 				'tab'     => 'copy',
 				'type'    => 'textarea',
-				'default' => __( 'Welcome back. Log in to manage your orders and account details.', 'alynt-account-gateway' ),
+				'default' => __( 'Welcome back. Log in to access your account.', 'alynt-account-gateway' ),
 				'label'   => __( 'Login Instruction Text', 'alynt-account-gateway' ),
 			),
 			'register_intro_text'                => array(
