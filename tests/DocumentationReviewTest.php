@@ -58,12 +58,13 @@ class DocumentationReviewTest extends TestCase {
 		$this->assertIsString( $wp_readme );
 		$this->assertIsString( $changelog );
 		$this->assertIsString( $plugin_php );
+		$this->assertSame( 1, preg_match( '/Version:\s+([^\r\n]+)/', $plugin_php, $matches ) );
 		$this->assertStringContainsString( '## FAQ', $readme );
 		$this->assertStringContainsString( 'Gateway Screen Preview', $readme );
 		$this->assertStringContainsString( '== FAQ ==', $wp_readme );
-		$this->assertStringContainsString( 'Stable tag: 1.1.27', $wp_readme );
+		$this->assertStringContainsString( 'Stable tag: ' . $matches[1], $wp_readme );
 		$this->assertStringContainsString( '## Unreleased', $changelog );
-		$this->assertStringContainsString( 'Version:           1.1.27', $plugin_php );
+		$this->assertStringContainsString( 'Version:           ' . $matches[1], $plugin_php );
 		$this->assertStringContainsString( 'Text Domain:       alynt-account-gateway', $plugin_php );
 	}
 }

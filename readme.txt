@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.27
+Stable tag: 1.1.28
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,10 @@ Yes. Each email body uses WordPress's Visual/Text editor with safe HTML formatti
 == Changelog ==
 
 = Unreleased =
+
+= 1.1.28 =
+
+* Hide the general login instruction notice on checkout-required login requests so shoppers see only the checkout-specific guidance.
 
 = 1.1.27 =
 

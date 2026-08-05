@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.28 - 2026-08-05
+
+### Fixed
+
+- Hide the general login instruction notice on checkout-required login requests so shoppers see only the checkout-specific guidance.
+
 ## 1.1.27 - 2026-08-04
 
 ### Changed

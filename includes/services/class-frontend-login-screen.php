@@ -83,7 +83,8 @@ class ALYNT_AG_Frontend_Login_Screen {
 		$submitted_redirect = isset( $_GET['redirect_to'] ) ? wp_unslash( $_GET['redirect_to'] ) : '';
 		$redirect_to        = $this->destinations->absolute_url( $submitted_redirect, $settings );
 		$is_checkout        = $this->checkout_gate->is_checkout_destination( $redirect_to, $settings );
-		$notice_id          = $this->components->has_notice( $settings['login_intro_text'] ) ? 'agw-login-instructions' : '';
+		$show_login_intro   = ! $is_checkout && $this->components->has_notice( $settings['login_intro_text'] );
+		$notice_id          = $show_login_intro ? 'agw-login-instructions' : '';
 		$form_desc          = array_filter(
 			array(
 				$notice_id,
@@ -95,7 +96,9 @@ class ALYNT_AG_Frontend_Login_Screen {
 		);
 		?>
 		<h1 id="agw-screen-title" class="agw-title"><?php esc_html_e( 'Log In', 'alynt-account-gateway' ); ?></h1>
-		<?php $this->components->render_notice( $settings['login_intro_text'], $notice_id ); ?>
+		<?php if ( $show_login_intro ) : ?>
+			<?php $this->components->render_notice( $settings['login_intro_text'], $notice_id ); ?>
+		<?php endif; ?>
 		<?php if ( $is_checkout ) : ?>
 			<div id="agw-checkout-login" class="agw-status agw-status--checkout" role="status">
 				<strong class="agw-status__title"><?php esc_html_e( 'Log in to complete your order', 'alynt-account-gateway' ); ?></strong>

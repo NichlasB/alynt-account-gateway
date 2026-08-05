@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Alynt Account Gateway 1.1.27\n"
+"Project-Id-Version: Alynt Account Gateway 1.1.28\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-04 20:10+0000\n"
+"POT-Creation-Date: 2026-08-05 20:27+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -978,14 +978,14 @@ msgstr ""
 msgid "Create a WordPress navigation menu first, then return here to attach it to the dashboard."
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:151
+#: includes/services/class-frontend-login-screen.php:154
 #: includes/services/class-frontend-messages.php:27
 #: includes/services/class-frontend-register-screen.php:123
 #: includes/services/class-frontend-register-screen.php:88
 msgid "Create Account"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:105
+#: includes/services/class-frontend-login-screen.php:108
 msgid "create an account"
 msgstr ""
 
@@ -1320,7 +1320,7 @@ msgstr ""
 msgid "Email address"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:133
+#: includes/services/class-frontend-login-screen.php:136
 #: includes/services/class-frontend-lostpassword-screen.php:86
 #: includes/services/class-frontend-register-screen.php:110
 #: includes/services/class-frontend-state-screens.php:104
@@ -1593,7 +1593,7 @@ msgstr ""
 msgid "First Name"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:106
+#: includes/services/class-frontend-login-screen.php:109
 msgid "first."
 msgstr ""
 
@@ -1609,7 +1609,7 @@ msgstr ""
 msgid "For most stores, allow and log flagged statuses first. Catch-all domains, role accounts, unknown results, and full inboxes can include legitimate customers, so reviewing activity before blocking reduces false positives."
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:153
+#: includes/services/class-frontend-login-screen.php:156
 msgid "Forgot Password?"
 msgstr ""
 
@@ -1966,13 +1966,13 @@ msgstr ""
 msgid "Link Expired"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:148
-#: includes/services/class-frontend-login-screen.php:97
+#: includes/services/class-frontend-login-screen.php:151
+#: includes/services/class-frontend-login-screen.php:98
 #: includes/services/class-frontend-messages.php:26
 msgid "Log In"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:101
+#: includes/services/class-frontend-login-screen.php:104
 msgid "Log in to complete your order"
 msgstr ""
 
@@ -2465,7 +2465,7 @@ msgstr ""
 msgid "Passed"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:137
+#: includes/services/class-frontend-login-screen.php:140
 msgid "Password"
 msgstr ""
 
@@ -3268,7 +3268,7 @@ msgstr ""
 msgid "Rejected a branded password-reset completion attempt."
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:146
+#: includes/services/class-frontend-login-screen.php:149
 msgid "Remember Me"
 msgstr ""
 
@@ -3869,7 +3869,7 @@ msgid "Shop Manager After Login Redirect"
 msgstr ""
 
 #: includes/services/class-frontend-assets.php:113
-#: includes/services/class-frontend-login-screen.php:140
+#: includes/services/class-frontend-login-screen.php:143
 #: includes/services/class-frontend-setpassword-screen.php:186
 #: includes/services/class-frontend-setpassword-screen.php:194
 msgid "Show"
@@ -3881,7 +3881,7 @@ msgid "Show %s"
 msgstr ""
 
 #: includes/services/class-frontend-assets.php:109
-#: includes/services/class-frontend-login-screen.php:140
+#: includes/services/class-frontend-login-screen.php:143
 #: includes/services/class-frontend-setpassword-screen.php:186
 #: includes/services/class-frontend-setpassword-screen.php:194
 msgid "Show password"
@@ -4301,11 +4301,11 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:104
+#: includes/services/class-frontend-login-screen.php:107
 msgid "To continue to checkout, log in below or"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:108
+#: includes/services/class-frontend-login-screen.php:111
 msgid "To continue to checkout, log in below. New account registration is currently unavailable."
 msgstr ""
 
@@ -4897,7 +4897,7 @@ msgstr ""
 msgid "Your account could not be created. Please try again."
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:115
+#: includes/services/class-frontend-login-screen.php:118
 msgid "Your account has been created. You can log in now."
 msgstr ""
 
@@ -4917,7 +4917,7 @@ msgstr ""
 msgid "Your name and email are ready for account notices and future order updates."
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:120
+#: includes/services/class-frontend-login-screen.php:123
 msgid "Your password has been updated. You can log in now."
 msgstr ""
 

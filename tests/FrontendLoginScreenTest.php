@@ -129,9 +129,11 @@ class FrontendLoginScreenTest extends TestCase {
 
 		$this->assertStringContainsString( 'id="agw-checkout-login"', $html );
 		$this->assertStringContainsString( 'Log in to complete your order', $html );
+		$this->assertStringNotContainsString( 'id="agw-login-instructions"', $html );
+		$this->assertStringNotContainsString( 'Welcome back to your account.', $html );
 		$this->assertStringContainsString( 'create an account', $html );
 		$this->assertStringContainsString( 'action=register&redirect_to=https%253A%252F%252Fexample.test%252Fcheckout%252F', $html );
-		$this->assertStringContainsString( 'aria-describedby="agw-login-instructions agw-checkout-login"', $html );
+		$this->assertStringContainsString( 'aria-describedby="agw-checkout-login"', $html );
 		$this->assertStringContainsString( 'name="redirect_to" value="https://example.test/checkout/"', $html );
 	}
 
@@ -146,6 +148,7 @@ class FrontendLoginScreenTest extends TestCase {
 		$html = ob_get_clean();
 
 		$this->assertStringContainsString( 'New account registration is currently unavailable.', $html );
+		$this->assertStringNotContainsString( 'id="agw-login-instructions"', $html );
 		$this->assertStringNotContainsString( 'action=register', $html );
 	}
 }

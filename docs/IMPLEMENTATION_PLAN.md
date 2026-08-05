@@ -2,12 +2,20 @@
 
 ## Status
 
-- Current phase: v1.1.26 gateway-metadata correction released, updater-verified, and installed on MVS Video Store.
+- Current phase: v1.1.27 neutral-login-default released; checkout-context login notice polish is the active candidate slice.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.26 is the current public baseline.
+- Plugin status: v1.1.27 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 - Next roadmap: Keep staging and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## Checkout Login Notice Context UX (v1.1.28 Candidate)
+
+- [x] Hide the general login intro notice when the login request is explicitly associated with a protected WooCommerce checkout destination.
+- [x] Keep the checkout-specific status notice as the only contextual text box in that state.
+- [x] Preserve normal login intro behavior for ordinary login requests.
+- [x] Preserve checkout registration-link behavior based on the public-registration setting.
+- [x] Update focused renderer tests for notice output and `aria-describedby`.
 
 ## Polish Translation Pack
 
