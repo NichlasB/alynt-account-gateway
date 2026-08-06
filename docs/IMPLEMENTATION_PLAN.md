@@ -2,12 +2,30 @@
 
 ## Status
 
-- Current phase: v1.1.27 neutral-login-default released; checkout-context login notice polish is the active candidate slice.
+- Current phase: v1.1.28 checkout-context login notice polish released; post-rollout stabilization and file-structure review are active.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.27 is the current public baseline.
+- Plugin status: v1.1.28 is the current public baseline and all known tracked installs have been updated or verified on v1.1.28.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Keep staging and production rollout behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Complete a post-rollout smoke audit across tracked installs, then run a bounded file-structure/de-bloat review before adding the next feature slice. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## v1.1.28 Post-Rollout Stabilization
+
+- [x] Publish v1.1.28 and verify the public GitHub release asset.
+- [x] Verify Alynt Plugin Updater installs the release on LocalWP Plugin Tester.
+- [x] Update all known tracked Account Gateway installs to v1.1.28 through Alynt Plugin Updater, repairing the MVS local updater first where required.
+- [x] Run a post-rollout smoke audit for core gateway routes on tracked installs.
+- [x] Inventory large source files and identify no-behavior-change refactor candidates before the next product slice.
+- [x] Decide whether to run the full `02-FILE_STRUCTURE_REVIEW_PROMPT.md` workflow for the next maintenance release.
+
+### Stabilization Evidence
+
+- Plugin Tester returned HTTP 200 for `/login/` and `/account?action=lostpassword`; empty-cart `/checkout/` redirected to `/cart/`.
+- MVS Video Store returned HTTP 200 for `/login/`, `/account?action=lostpassword`, and `/checkout/`.
+- HBF staging returned HTTP 200 for `/login/` and `/account?action=lostpassword`; unauthenticated `/checkout/` redirected to the Account Gateway login with `redirect_to` preserved.
+- ISHA Classes returned HTTP 200 for `/login/` and `/account?action=lostpassword`; empty-cart `/checkout/` redirected to `/cart/`.
+- Source inventory found zero production PHP files over 300 lines, zero source JavaScript files over 250 lines, and zero source CSS files over 500 lines after excluding generated/build archives. The only PHP files over 300 lines are tests or test stubs.
+- Recommendation: defer a full no-behavior-change file-structure release until a specific hotspot emerges. The next maintenance work should delete or ignore stale build archive artifacts if they are not intentionally retained, then continue with the next product slice.
 
 ## Checkout Login Notice Context UX (v1.1.28 Candidate)
 
