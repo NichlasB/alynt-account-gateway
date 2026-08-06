@@ -81,7 +81,7 @@ class ALYNT_AG_Dashboard_Commerce_Renderer {
 			<div class="agw-dashboard-overview__copy">
 				<p class="agw-dashboard-overview__eyebrow"><?php esc_html_e( 'Customer Account', 'alynt-account-gateway' ); ?></p>
 				<h2 id="agw-dashboard-overview-title"><?php esc_html_e( 'Everything for your orders in one place', 'alynt-account-gateway' ); ?></h2>
-				<p><?php esc_html_e( 'Review purchases, manage checkout details, and keep your account information current without leaving the branded account area.', 'alynt-account-gateway' ); ?></p>
+				<p><?php esc_html_e( 'Review purchases, manage checkout details, and keep your account information current.', 'alynt-account-gateway' ); ?></p>
 			</div>
 			<?php if ( ! empty( $actions ) ) : ?>
 				<div class="agw-dashboard-overview__actions" aria-label="<?php esc_attr_e( 'Customer account shortcuts', 'alynt-account-gateway' ); ?>">

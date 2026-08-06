@@ -76,17 +76,35 @@ class ALYNT_AG_Frontend_Branding {
 	 * Render logo or store name.
 	 *
 	 * @param array<string,mixed> $settings Settings.
+	 * @param string              $link_url Optional brand block URL.
 	 * @return void
 	 */
-	public function render_brand_block( $settings ) {
+	public function render_brand_block( $settings, $link_url = '' ) {
 		$logo_url  = $settings['brand_logo_id'] ? wp_get_attachment_image_url( (int) $settings['brand_logo_id'], 'full' ) : '';
 		$max_width = max( 80, min( 520, (int) $settings['brand_logo_max_width'] ) );
+		$content   = '';
+
+		if ( $logo_url ) {
+			$content = sprintf(
+				'<img class="agw-brand__logo" src="%s" alt="%s" style="max-width:%spx;">',
+				esc_url( $logo_url ),
+				esc_attr( get_bloginfo( 'name' ) ),
+				esc_attr( (string) $max_width )
+			);
+		} else {
+			$content = sprintf(
+				'<div class="agw-brand__name">%s</div>',
+				esc_html( get_bloginfo( 'name' ) )
+			);
+		}
 		?>
 		<div class="agw-brand">
-			<?php if ( $logo_url ) : ?>
-				<img class="agw-brand__logo" src="<?php echo esc_url( $logo_url ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>" style="max-width:<?php echo esc_attr( (string) $max_width ); ?>px;">
+			<?php if ( $link_url ) : ?>
+				<a class="agw-brand__link" href="<?php echo esc_url( $link_url ); ?>" aria-label="<?php esc_attr_e( 'Go to homepage', 'alynt-account-gateway' ); ?>">
+					<?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Content is assembled from escaped values above. ?>
+				</a>
 			<?php else : ?>
-				<div class="agw-brand__name"><?php echo esc_html( get_bloginfo( 'name' ) ); ?></div>
+				<?php echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Content is assembled from escaped values above. ?>
 			<?php endif; ?>
 		</div>
 		<?php

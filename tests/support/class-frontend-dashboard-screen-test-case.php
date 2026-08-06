@@ -230,9 +230,15 @@ class ALYNT_AG_Test_Frontend_Dashboard_Branding extends ALYNT_AG_Frontend_Brandi
 	 * Render stable brand output.
 	 *
 	 * @param array<string,mixed> $settings Settings.
+	 * @param string              $link_url Optional brand block URL.
 	 * @return void
 	 */
-	public function render_brand_block( $settings ) {
+	public function render_brand_block( $settings, $link_url = '' ) {
+		if ( $link_url ) {
+			echo '<div class="agw-brand"><a class="agw-brand__link" href="' . esc_url( $link_url ) . '" aria-label="Go to homepage"><div class="agw-brand__name">Test Store</div></a></div>';
+			return;
+		}
+
 		echo '<div class="agw-brand"><div class="agw-brand__name">Test Store</div></div>';
 	}
 }

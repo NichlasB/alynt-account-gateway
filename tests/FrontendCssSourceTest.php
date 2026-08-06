@@ -104,6 +104,13 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertStringContainsString( 'outline-offset: 3px;', $css );
 	}
 
+	public function test_account_details_labels_have_focus_outline_breathing_room() {
+		$css = $this->get_frontend_css();
+
+		$this->assertStringContainsString( '.agw-dashboard-content form.woocommerce-EditAccountForm.edit-account label', $css );
+		$this->assertStringContainsString( 'margin-bottom: 5px;', $css );
+	}
+
 	public function test_frontend_css_includes_forced_colors_support() {
 		$css = $this->get_frontend_css();
 

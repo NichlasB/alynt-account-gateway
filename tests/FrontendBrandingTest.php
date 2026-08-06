@@ -107,4 +107,17 @@ class FrontendBrandingTest extends TestCase {
 		$this->assertStringContainsString( 'alt="Example Store"', $html );
 		$this->assertStringContainsString( 'style="max-width:520px;"', $html );
 	}
+
+	public function test_render_brand_block_can_link_to_homepage() {
+		$branding = new ALYNT_AG_Frontend_Branding();
+		$this->settings['brand_logo_id'] = 15;
+		$GLOBALS['alynt_ag_test_attachment_urls']['15:full'] = 'https://example.test/logo.png';
+
+		ob_start();
+		$branding->render_brand_block( $this->settings, 'https://example.test/' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'class="agw-brand__link" href="https://example.test/" aria-label="Go to homepage"', $html );
+		$this->assertStringContainsString( 'class="agw-brand__logo"', $html );
+	}
 }

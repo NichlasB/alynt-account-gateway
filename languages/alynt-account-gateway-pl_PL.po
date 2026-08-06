@@ -3561,8 +3561,8 @@ msgid "Review password guidance if account setup blocks repeat."
 msgstr "Sprawdź wskazówki dotyczące haseł, jeśli blokady przy zakładaniu konta się powtarzają."
 
 #: includes/services/class-dashboard-commerce-renderer.php:84
-msgid "Review purchases, manage checkout details, and keep your account information current without leaving the branded account area."
-msgstr "Przeglądaj zakupy, zarządzaj danymi do zamówień i aktualizuj informacje o koncie bez opuszczania obszaru konta."
+msgid "Review purchases, manage checkout details, and keep your account information current."
+msgstr "Przeglądaj zakupy, zarządzaj danymi do zamówień i aktualizuj informacje o koncie."
 
 #: admin/settings-page/class-guidance.php:119
 #: admin/settings-page/class-guidance.php:130

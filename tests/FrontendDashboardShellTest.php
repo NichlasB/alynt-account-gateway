@@ -43,6 +43,7 @@ class FrontendDashboardShellTest extends FrontendDashboardScreenTestCase {
 		$this->assertStringContainsString( 'dir="ltr"', $html );
 		$this->assertStringContainsString( 'style="--test-color:#123;"', $html );
 		$this->assertStringContainsString( 'Test Store', $html );
+		$this->assertStringContainsString( 'class="agw-brand__link" href="https://example.test/" aria-label="Go to homepage"', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard-actions"', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard-action agw-dashboard-action--home"', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard__logout agw-dashboard-action agw-dashboard-action--logout"', $html );

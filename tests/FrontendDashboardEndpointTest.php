@@ -236,6 +236,8 @@ class FrontendDashboardEndpointTest extends FrontendDashboardScreenTestCase {
 		$this->assertStringContainsString( 'class="agw-dashboard-overview"', $html );
 		$this->assertStringContainsString( 'Customer Account', $html );
 		$this->assertStringContainsString( 'Everything for your orders in one place', $html );
+		$this->assertStringContainsString( 'Review purchases, manage checkout details, and keep your account information current.', $html );
+		$this->assertStringNotContainsString( 'without leaving the branded account area', $html );
 		$this->assertStringContainsString( 'href="/my-account/orders/"', $html );
 		$this->assertStringContainsString( 'href="/my-account/edit-address/"', $html );
 		$this->assertStringContainsString( 'href="/my-account/edit-account/"', $html );

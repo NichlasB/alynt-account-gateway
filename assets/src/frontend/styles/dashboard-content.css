@@ -320,6 +320,10 @@
 	margin: 0 0 16px;
 }
 
+.agw-dashboard-content form.woocommerce-EditAccountForm.edit-account label {
+	margin-bottom: 5px;
+}
+
 .agw-dashboard-content .form-row-first,
 .agw-dashboard-content .form-row-last {
 	float: none;

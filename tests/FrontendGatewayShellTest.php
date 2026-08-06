@@ -16,7 +16,9 @@ class ALYNT_AG_Test_Gateway_Shell_Branding extends ALYNT_AG_Frontend_Branding {
 		echo '<div class="test-media"></div>';
 	}
 
-	public function render_brand_block( $settings ) {
+	public function render_brand_block( $settings, $link_url = '' ) {
+		unset( $link_url );
+
 		echo '<div class="test-brand">Brand</div>';
 	}
 }

@@ -27,6 +27,19 @@
 - Source inventory found zero production PHP files over 300 lines, zero source JavaScript files over 250 lines, and zero source CSS files over 500 lines after excluding generated/build archives. The only PHP files over 300 lines are tests or test stubs.
 - Recommendation: defer a full no-behavior-change file-structure release until a specific hotspot emerges. Stale ignored `v0.1.1` build archive artifacts were removed after confirming they were not tracked source or current release assets.
 
+## Dashboard Polish Follow-Up
+
+- [x] Shorten the default WooCommerce dashboard overview text by removing the branded-area phrase.
+- [x] Add 5px bottom margin to WooCommerce account-details labels so focus outlines do not touch label text.
+- [x] Link the dashboard logo/brand block to the site homepage without changing gateway auth-screen branding behavior.
+- [x] Add focused renderer and CSS-source coverage, then rebuild assets and run the focused test set.
+
+### Validation Evidence
+
+- Focused frontend PHPUnit passed: 141 tests and 1,209 assertions.
+- Full PHPUnit passed: 552 tests and 4,022 assertions.
+- PHPCS, asset build, POT generation, Polish PO/MO refresh, and `git diff --check` passed; Git reported only existing translation line-ending normalization warnings.
+
 ## Checkout Login Notice Context UX (v1.1.28 Candidate)
 
 - [x] Hide the general login intro notice when the login request is explicitly associated with a protected WooCommerce checkout destination.
