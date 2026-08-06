@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.29 - 2026-08-06
+
+### Changed
+
+- Shorten the WooCommerce dashboard overview copy, add breathing room below account-details labels, and link the dashboard logo to the site homepage.
+
 ## 1.1.28 - 2026-08-05
 
 ### Fixed

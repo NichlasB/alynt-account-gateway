@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v1.1.28 checkout-context login notice polish released; post-rollout stabilization and file-structure review are active.
+- Current phase: v1.1.29 dashboard polish approved for release.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.28 is the current public baseline and all known tracked installs have been updated or verified on v1.1.28.
+- Plugin status: v1.1.29 is the active release candidate; v1.1.28 remains the current public baseline until publication completes.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 - Next roadmap: Complete a post-rollout smoke audit across tracked installs, then run a bounded file-structure/de-bloat review before adding the next feature slice. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
@@ -38,7 +38,7 @@
 
 - Focused frontend PHPUnit passed: 141 tests and 1,209 assertions.
 - Full PHPUnit passed: 552 tests and 4,022 assertions.
-- PHPCS, asset build, POT generation, Polish PO/MO refresh, and `git diff --check` passed; Git reported only existing translation line-ending normalization warnings.
+- PHPCS, asset build, POT generation, Polish PO/MO refresh, npm high-severity audit, Composer strict validation/audit, and `git diff --check` passed; Git reported only existing translation line-ending normalization warnings. The release gate also updated development-only `squizlabs/php_codesniffer` from `3.13.5` to `3.13.6` to clear advisory `PKSA-rdkp-vv9z-mjkg`.
 
 ## Checkout Login Notice Context UX (v1.1.28 Candidate)
 
