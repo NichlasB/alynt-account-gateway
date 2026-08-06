@@ -25,7 +25,7 @@
 - HBF staging returned HTTP 200 for `/login/` and `/account?action=lostpassword`; unauthenticated `/checkout/` redirected to the Account Gateway login with `redirect_to` preserved.
 - ISHA Classes returned HTTP 200 for `/login/` and `/account?action=lostpassword`; empty-cart `/checkout/` redirected to `/cart/`.
 - Source inventory found zero production PHP files over 300 lines, zero source JavaScript files over 250 lines, and zero source CSS files over 500 lines after excluding generated/build archives. The only PHP files over 300 lines are tests or test stubs.
-- Recommendation: defer a full no-behavior-change file-structure release until a specific hotspot emerges. The next maintenance work should delete or ignore stale build archive artifacts if they are not intentionally retained, then continue with the next product slice.
+- Recommendation: defer a full no-behavior-change file-structure release until a specific hotspot emerges. Stale ignored `v0.1.1` build archive artifacts were removed after confirming they were not tracked source or current release assets.
 
 ## Checkout Login Notice Context UX (v1.1.28 Candidate)
 
