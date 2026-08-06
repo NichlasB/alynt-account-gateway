@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v1.1.29 dashboard polish approved for release.
+- Current phase: v1.1.29 dashboard polish released.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.29 is the active release candidate; v1.1.28 remains the current public baseline until publication completes.
+- Plugin status: v1.1.29 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 - Next roadmap: Complete a post-rollout smoke audit across tracked installs, then run a bounded file-structure/de-bloat review before adding the next feature slice. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
@@ -39,6 +39,9 @@
 - Focused frontend PHPUnit passed: 141 tests and 1,209 assertions.
 - Full PHPUnit passed: 552 tests and 4,022 assertions.
 - PHPCS, asset build, POT generation, Polish PO/MO refresh, npm high-severity audit, Composer strict validation/audit, and `git diff --check` passed; Git reported only existing translation line-ending normalization warnings. The release gate also updated development-only `squizlabs/php_codesniffer` from `3.13.5` to `3.13.6` to clear advisory `PKSA-rdkp-vv9z-mjkg`.
+- GitHub release `v1.1.29` was published from commit `c908c29`. The official Build Release workflow remained queued without receiving a runner and was canceled to avoid a later duplicate asset collision.
+- The release ZIP was built from the pushed source using the same runtime exclusion policy, uploaded to GitHub, and downloaded/inspected publicly: 133 runtime files, one `alynt-account-gateway/` root, no development/source entries, no backslash entries, aligned `1.1.29` metadata, and SHA-256 `364072C4A548E7874115A1546929CE0CB6A0D5B917E4985F482FC2C1E0AF7E10`.
+- Automatic GitHub Quality runs for the release commit were still queued at final release verification time; local release gates above passed on the same source.
 
 ## Checkout Login Notice Context UX (v1.1.28 Candidate)
 
