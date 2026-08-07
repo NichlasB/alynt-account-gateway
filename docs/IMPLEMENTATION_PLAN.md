@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v1.1.30 authenticated login-surface redirect patch released and updater-verified on LocalWP Plugin Tester.
+- Current phase: v1.1.30 authenticated login-surface redirect patch released and updater-verified across tracked installs.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.30 is the current public baseline.
 - Frontend output default: Disabled
@@ -45,6 +45,7 @@
 - Build Release workflow run `31211073420` passed and attached `alynt-account-gateway-v1.1.30.zip`.
 - Public release ZIP inspection passed: `133` runtime files, one `alynt-account-gateway/` root, no development/test/build artifacts, aligned `1.1.30` plugin metadata, and SHA-256 `5B017ACCB31A1473AEDA30B2BB7D21A9B3982BFA9B2AA6A968176428A2ECE27E`.
 - Alynt Plugin Updater on LocalWP Plugin Tester found the `1.1.29 -> 1.1.30` update via the GitHub release ZIP, installed it through WordPress's native plugin upgrader, preserved the settings hash `4c9c362f34b69a693030000a806bb55f172ce98601d4398b9b8fd75555e90a0f`, kept Account Gateway active, reported no remaining update offer, and returned HTTP `200` for the homepage.
+- Alynt Plugin Updater also updated or confirmed v1.1.30 on `mvs-video-store.local`, `hbf-staging`, `hbf`, and `isha-classes`. Each tracked install preserved its Account Gateway settings hash, kept the plugin active, reported no remaining Account Gateway update offer, and returned HTTP `200` for the homepage. The MVS LocalWP verification required a temporary PHP CLI ini with the needed LocalWP extensions loaded; that helper was removed after the rollout.
 
 ## v1.1.29 Tracked Install Updater Verification
 
