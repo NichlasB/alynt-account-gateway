@@ -36,16 +36,25 @@ class ALYNT_AG_Frontend_Gateway_Controller {
 	private $renderer;
 
 	/**
+	 * Auth service.
+	 *
+	 * @var ALYNT_AG_Auth_Service
+	 */
+	private $auth;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param ALYNT_AG_Frontend_Routes            $routes   Route helper.
 	 * @param ALYNT_AG_Frontend_Assets            $assets   Asset helper.
 	 * @param ALYNT_AG_Frontend_Document_Renderer $renderer Document renderer.
+	 * @param ALYNT_AG_Auth_Service|null          $auth     Auth service.
 	 */
-	public function __construct( $routes, $assets, $renderer ) {
+	public function __construct( $routes, $assets, $renderer, $auth = null ) {
 		$this->routes   = $routes;
 		$this->assets   = $assets;
 		$this->renderer = $renderer;
+		$this->auth     = $auth ? $auth : new ALYNT_AG_Auth_Service();
 	}
 
 	/**
@@ -65,6 +74,10 @@ class ALYNT_AG_Frontend_Gateway_Controller {
 			return;
 		}
 
+		if ( 'login' === $screen && $this->maybe_redirect_login_screen_request( $settings ) ) {
+			return;
+		}
+
 		if ( 'dashboard' === $screen && ! is_user_logged_in() ) {
 			wp_safe_redirect( add_query_arg( 'redirect_to', rawurlencode( home_url( $settings['after_login_redirect'] ) ), home_url( $settings['login_path'] ) ) );
 			exit;
@@ -76,6 +89,40 @@ class ALYNT_AG_Frontend_Gateway_Controller {
 
 		$this->renderer->render_gateway_document( $screen, $settings, $this->routes->current_relative_path() );
 		exit;
+	}
+
+	/**
+	 * Redirect login-equivalent requests when the current auth state makes the form inappropriate.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return bool
+	 */
+	private function maybe_redirect_login_screen_request( $settings ) {
+		$current_path = $this->routes->current_relative_path();
+
+		if ( is_user_logged_in() && ! $this->is_reauthentication_request() ) {
+			wp_safe_redirect( $this->auth->get_login_redirect_url( '', $settings, wp_get_current_user() ) );
+			exit;
+		}
+
+		if ( ! is_user_logged_in() && $this->routes->paths_match( $current_path, $settings['account_action_base'] ) ) {
+			wp_safe_redirect( home_url( $settings['login_path'] ) );
+			exit;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Whether the current request deliberately asks to show the login form again.
+	 *
+	 * @return bool
+	 */
+	private function is_reauthentication_request() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only route decision.
+		$reauth = isset( $_GET['reauth'] ) ? sanitize_text_field( wp_unslash( $_GET['reauth'] ) ) : '';
+
+		return '1' === $reauth;
 	}
 
 	/**

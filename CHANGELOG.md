@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.30 - 2026-08-07
+
+### Fixed
+
+- Redirect already-authenticated visits to the configured login URL or bare account action base through the role-aware after-login destination, while sending logged-out bare account-base requests to the configured login URL.
+
 ## 1.1.29 - 2026-08-06
 
 ### Changed

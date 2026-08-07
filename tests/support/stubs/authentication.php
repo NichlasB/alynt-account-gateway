@@ -168,7 +168,13 @@ if ( ! function_exists( 'delete_user_meta' ) ) {
 
 if ( ! function_exists( 'wp_get_current_user' ) ) {
 	function wp_get_current_user() {
-		return new WP_User( 'damon@example.test' );
+		$user = new WP_User( 'damon@example.test' );
+
+		if ( isset( $GLOBALS['alynt_ag_test_current_user_roles'] ) && is_array( $GLOBALS['alynt_ag_test_current_user_roles'] ) ) {
+			$user->roles = $GLOBALS['alynt_ag_test_current_user_roles'];
+		}
+
+		return $user;
 	}
 }
 

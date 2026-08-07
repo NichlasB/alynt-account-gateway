@@ -2,12 +2,58 @@
 
 ## Status
 
-- Current phase: v1.1.29 dashboard polish released.
+- Current phase: v1.1.29 dashboard polish released and updater-verified across tracked installs.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.29 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Complete a post-rollout smoke audit across tracked installs, then run a bounded file-structure/de-bloat review before adding the next feature slice. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Ready for the next approved new-site rollout or the next approved product slice. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## Authenticated Login Surface Redirects (v1.1.30 Candidate)
+
+- [x] Confirm configured `login_path` and `account_action_base` can show the login screen to already-authenticated users.
+- [x] Redirect authenticated visits to the configured login path through the existing role-aware post-login redirect policy.
+- [x] Redirect authenticated visits to the bare configured account action base through the existing role-aware post-login redirect policy.
+- [x] Redirect logged-out visits to the bare configured account action base to the configured login path.
+- [x] Preserve explicit gateway action screens and deliberate `reauth=1` login requests.
+- [x] Run focused and full validation before release approval.
+- [x] Run the applicable `ds2-feature` reviews: Feature Light Review, Feature Bloat and Structure Review, and Feature Security Review.
+- [ ] Publish and updater-verify a patch release after owner approval.
+
+### Validation Evidence
+
+- Focused authenticated-gateway redirect coverage passed: 6 tests and 16 assertions.
+- Related route and auth redirect coverage passed: 17 tests and 39 assertions across `FrontendRoutesTest` and `AuthRedirectTest`.
+- Full PHPUnit passed: 558 tests and 4,038 assertions.
+- PHPCS passed for the changed controller, current-user test stub, and new authenticated redirect test.
+- PHP syntax checks passed for the changed controller and new authenticated redirect test.
+- `git diff --check` passed.
+
+### Feature Review Evidence
+
+- Feature Light Review scope: frontend gateway routing and role-aware redirect handling only; no admin UI, AJAX, REST, database, cron, file operations, third-party API, or visual output changes.
+- Feature Light Review found no significant non-security issues and no escalation need for full pre-release, UI/UX, or bloat/structure prompts.
+- Feature Bloat and Structure Review used the `origin/master` merge base (`371b4ef2c684f658a1001df0d1b7b2ecce5cda5c`). It reported three changed PHP files, zero oversized files, and no cleanup or split requirement: the frontend gateway controller measures `279` total / `142` code lines, the authenticated redirect test measures `148` total / `80` code lines, and the current-user auth stub measures `211` total / `164` code lines.
+- Feature Security Review found one hardening improvement: normalize the read-only `reauth` query flag with `sanitize_text_field( wp_unslash() )` and accept only `reauth=1`; this was fixed before final validation.
+- Regression coverage now confirms configured login path redirects, bare account action-base redirects, logged-out account-base handling, role-specific admin/shop/customer destinations, deliberate `reauth=1`, and explicit action screens such as lost password.
+- Regression handoff: no confirmed security defect remains and no 07A adversarial-test-suite follow-up is required for this slice.
+
+## v1.1.29 Tracked Install Updater Verification
+
+- [x] Verify Alynt Plugin Updater installs or confirms v1.1.29 on LocalWP Plugin Tester.
+- [x] Verify Alynt Plugin Updater installs or confirms v1.1.29 on LocalWP MVS Video Store.
+- [x] Verify Alynt Plugin Updater installs or confirms v1.1.29 on `hbf-staging`.
+- [x] Verify Alynt Plugin Updater installs or confirms v1.1.29 on `isha-classes`.
+- [x] Confirm Account Gateway remains active, settings remain unchanged, no NULL active-plugin placeholder appears, and no remaining Account Gateway update offer is present on each tracked install.
+- [x] Run representative home, login, and lost-password HTTP smoke checks on each tracked install.
+- [x] Remove temporary updater-verification helpers and update the private local rollout tracker.
+
+### Verification Evidence
+
+- `plugin-tester.local`, `mvs-video-store.local`, `hbf-staging`, and `isha-classes` all report Alynt Account Gateway v1.1.29 active after Alynt Plugin Updater verification.
+- All tracked installs preserved Account Gateway settings, retained the active plugin state, avoided the historical NULL active-plugin placeholder edge case, and reported no remaining Account Gateway update offer.
+- Representative public-route smoke checks passed for each tracked install. Checkout-specific behavior remains site-dependent and was not changed during this verification pass.
+- Temporary local and remote helper files were removed after verification. The local rollout tracker records the current v1.1.29 active state for the tracked installs.
 
 ## v1.1.28 Post-Rollout Stabilization
 

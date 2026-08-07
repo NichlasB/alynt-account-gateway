@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.29
+Stable tag: 1.1.30
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,10 @@ Yes. Each email body uses WordPress's Visual/Text editor with safe HTML formatti
 == Changelog ==
 
 = Unreleased =
+
+= 1.1.30 =
+
+* Redirect already-authenticated visits to the configured login URL or bare account action base through the role-aware after-login destination, while sending logged-out bare account-base requests to the configured login URL.
 
 = 1.1.29 =
 
