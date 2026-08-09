@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.35 release candidate prepared for custom CSS and primary-color notice styling.
+- Current phase: v1.1.35 released and rolled out to tracked LocalWP, staging, and live Account Gateway installs.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.34 is the current public baseline; v1.1.35 is prepared locally pending release approval.
+- Plugin status: v1.1.35 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Custom CSS editor and primary-color notice styling are implemented, validated, and versioned as the v1.1.35 release candidate. Next decision is whether to approve publication and tracked-site rollout through the Alynt Plugin Updater. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Custom CSS editor and primary-color notice styling are released and rolled out. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Custom CSS And Primary-Color Notice Styling (Next Slice)
 
@@ -21,8 +21,8 @@
 - [x] Run focused validation, full PHPUnit, PHPCS, build, POT regeneration, and `git diff --check` before release consideration.
 - [x] Run targeted `ds2-feature` reviews: Feature Light Review, Feature UI/UX Implementation Review, and Feature Security Review. No release-blocking issues found.
 - [x] Prepare the `v1.1.35` release candidate metadata and docs.
-- [ ] Publish the next maintenance release only after explicit approval.
-- [ ] Roll out the approved release to tracked installs only after release approval and site-operation approval.
+- [x] Publish `v1.1.35` after explicit approval.
+- [x] Roll out `v1.1.35` to tracked installs after release approval and site-operation approval.
 
 ## Setup Clarity And Handoff Pack (v1.1.31 Candidate)
 
