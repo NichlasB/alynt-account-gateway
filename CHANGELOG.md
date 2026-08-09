@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.34 - 2026-08-09
+
+### Fixed
+
+- Reset WooCommerce account-data test user-meta fixtures between tests so randomized Quality workflow runs remain deterministic.
+
 ## 1.1.33 - 2026-08-09
 
 ### Fixed

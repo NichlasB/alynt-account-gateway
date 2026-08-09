@@ -30,10 +30,12 @@ abstract class WooCommerceIntegrationTestCase extends TestCase {
 		$GLOBALS['alynt_ag_test_wc_payment_token_calls'] = array();
 		$GLOBALS['alynt_ag_test_wc_formatted_addresses'] = array();
 		$GLOBALS['alynt_ag_test_wc_formatted_address_calls'] = array();
+		$GLOBALS['alynt_ag_test_user_meta'] = array();
 	}
 
 	protected function tearDown(): void {
 		unset(
+			$GLOBALS['alynt_ag_test_user_meta'],
 			$GLOBALS['alynt_ag_test_wc_get_orders_args'],
 			$GLOBALS['alynt_ag_test_wc_orders'],
 			$GLOBALS['alynt_ag_test_wc_order_statuses'],
