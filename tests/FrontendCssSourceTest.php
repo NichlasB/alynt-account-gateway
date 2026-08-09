@@ -111,6 +111,14 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertStringContainsString( 'margin-bottom: 5px;', $css );
 	}
 
+	public function test_woocommerce_notice_buttons_preserve_configured_button_text_color() {
+		$css = $this->get_frontend_css();
+
+		$this->assertStringContainsString( '.agw-dashboard-content .woocommerce-info a.button', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-dashboard-content \.woocommerce-message a\.button,[\s\S]*\.agw-dashboard-content \.woocommerce-error a\.wc-forward\s*\{[^}]*background:\s*var\(--agw-button-background\);[^}]*color:\s*var\(--agw-button-text\);[^}]*-webkit-text-fill-color:\s*var\(--agw-button-text\);/s', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-dashboard-content \.woocommerce-message a,[\s\S]*\.agw-dashboard-content \.woocommerce-error a\s*\{[^}]*color:\s*var\(--agw-color-primary\);/s', $css );
+	}
+
 	public function test_frontend_css_includes_forced_colors_support() {
 		$css = $this->get_frontend_css();
 

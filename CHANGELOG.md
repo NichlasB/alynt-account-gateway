@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.33 - 2026-08-09
+
+### Fixed
+
+- Preserve configured button text contrast for WooCommerce notice buttons inside the branded dashboard.
+
 ## 1.1.32 - 2026-08-09
 
 ### Added
