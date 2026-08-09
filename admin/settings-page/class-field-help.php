@@ -24,7 +24,7 @@ class ALYNT_AG_Settings_Page_Field_Help extends ALYNT_AG_Settings_Page_Component
 	public function field_direction_attribute( $key, $field ) {
 		$type = isset( $field['type'] ) ? (string) $field['type'] : '';
 
-		if ( in_array( $type, array( 'relative_path', 'url', 'secret', 'css_font_family' ), true ) ) {
+		if ( in_array( $type, array( 'relative_path', 'url', 'secret', 'css_font_family', 'css' ), true ) ) {
 			return ' dir="ltr"';
 		}
 
@@ -127,6 +127,7 @@ class ALYNT_AG_Settings_Page_Field_Help extends ALYNT_AG_Settings_Page_Component
 			'administrator_after_login_redirect'  => __( 'Used when an administrator logs in without a safe requested destination. The default is /wp-admin/.', 'alynt-account-gateway' ),
 			'shop_manager_after_login_redirect'   => __( 'Used when a WooCommerce shop manager logs in without a safe requested destination. The default is /wp-admin/.', 'alynt-account-gateway' ),
 			'emergency_bypass_key'                => __( 'Store this privately. It lets administrators reach the native wp-login.php screen if custom routing causes a lockout.', 'alynt-account-gateway' ),
+			'custom_css'                          => __( 'Optional. Adds site-specific CSS after the plugin stylesheet on Account Gateway screens, dashboard screens, and previews. Do not paste secrets or tracking scripts here.', 'alynt-account-gateway' ),
 			'registration_enabled'                => __( 'Public account creation is disabled by default. Enable it only after terms, privacy, email confirmation, and anti-spam settings are ready.', 'alynt-account-gateway' ),
 			'registration_token_hours'            => __( 'Pending registrations expire after this many hours. The default 24-hour window gives customers time to find the email without leaving stale invitations open too long.', 'alynt-account-gateway' ),
 			'username_format'                     => __( 'Use tokens such as {first_name} and {last_name}. Customers log in by email, but WordPress still needs a generated username.', 'alynt-account-gateway' ),

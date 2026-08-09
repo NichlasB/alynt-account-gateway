@@ -49,9 +49,19 @@ class FrontendBrandingTest extends TestCase {
 
 		$this->assertStringContainsString( '--agw-color-text:#1A1A1A;', $style );
 		$this->assertStringContainsString( '--agw-color-primary:#335C4A;', $style );
+		$this->assertStringContainsString( '--agw-color-primary-rgb:51 92 74;', $style );
 		$this->assertStringContainsString( '--agw-button-background:#335C4A;', $style );
 		$this->assertStringContainsString( '--agw-font-heading:Georgia, serif;', $style );
 		$this->assertStringNotContainsString( '--agw-color-notice:', $style );
+	}
+
+	public function test_style_attribute_expands_short_primary_hex_for_rgb_channels() {
+		$branding = new ALYNT_AG_Frontend_Branding();
+		$this->settings['primary_color'] = '#abc';
+
+		$style = $branding->style_attribute( $this->settings );
+
+		$this->assertStringContainsString( '--agw-color-primary-rgb:170 187 204;', $style );
 	}
 
 	public function test_render_media_panel_outputs_pattern_when_no_background_image_exists() {

@@ -38,6 +38,14 @@ class ALYNT_AG_Admin {
 		}
 
 		wp_enqueue_media();
+		$code_editor_settings = false;
+		if ( function_exists( 'wp_enqueue_code_editor' ) ) {
+			$code_editor_settings = wp_enqueue_code_editor(
+				array(
+					'type' => 'text/css',
+				)
+			);
+		}
 
 		$asset_path = ALYNT_AG_PLUGIN_DIR . 'assets/dist/admin/index.css';
 		if ( file_exists( $asset_path ) ) {
@@ -69,6 +77,7 @@ class ALYNT_AG_Admin {
 					'imageRemoved'         => __( 'Image removed.', 'alynt-account-gateway' ),
 					'dashboardLinkAdded'   => __( 'Dashboard link added.', 'alynt-account-gateway' ),
 					'dashboardLinkRemoved' => __( 'Dashboard link removed.', 'alynt-account-gateway' ),
+					'codeEditor'           => $code_editor_settings ? $code_editor_settings : null,
 				)
 			);
 		}

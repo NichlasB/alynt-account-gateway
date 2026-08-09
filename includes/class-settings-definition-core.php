@@ -63,6 +63,12 @@ class ALYNT_AG_Settings_Definition_Core {
 				'default' => '',
 				'label'   => __( 'Emergency Bypass Key', 'alynt-account-gateway' ),
 			),
+			'custom_css'                         => array(
+				'tab'     => 'advanced_tools',
+				'type'    => 'css',
+				'default' => '',
+				'label'   => __( 'Custom CSS', 'alynt-account-gateway' ),
+			),
 			'registration_enabled'               => array(
 				'tab'     => 'registration',
 				'type'    => 'boolean',

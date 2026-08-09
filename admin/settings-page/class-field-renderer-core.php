@@ -113,6 +113,7 @@ class ALYNT_AG_Settings_Page_Field_Renderer_Core extends ALYNT_AG_Settings_Page_
 		$formats = array(
 			'email'    => '<input type="email" class="regular-text" id="%1$s" name="%2$s" value="%3$s" autocomplete="email"%4$s>',
 			'textarea' => '<textarea class="large-text alynt-ag-textarea" rows="4" id="%1$s" name="%2$s"%4$s>%3$s</textarea>',
+			'css'      => '<textarea class="large-text code alynt-ag-textarea alynt-ag-css-editor" rows="14" id="%1$s" name="%2$s" spellcheck="false" data-alynt-ag-css-editor%4$s>%3$s</textarea>',
 		);
 		if ( ! isset( $formats[ $type ] ) ) {
 			return false;
@@ -122,7 +123,7 @@ class ALYNT_AG_Settings_Page_Field_Renderer_Core extends ALYNT_AG_Settings_Page_
 			$formats[ $type ], // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Static formats defined above.
 			esc_attr( $id ),
 			esc_attr( $name ),
-			'textarea' === $type ? esc_textarea( $value ) : esc_attr( $value ),
+			in_array( $type, array( 'textarea', 'css' ), true ) ? esc_textarea( $value ) : esc_attr( $value ),
 			$aria // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by field_describedby_attribute().
 		);
 		return true;

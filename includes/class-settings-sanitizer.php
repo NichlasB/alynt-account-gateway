@@ -100,6 +100,8 @@ class ALYNT_AG_Settings_Sanitizer {
 				$font_stack = sanitize_text_field( wp_unslash( $value ) );
 				$font_stack = preg_replace( '/[^a-zA-Z0-9\\s,_"\'\\-]/', '', $font_stack );
 				return $font_stack ? $font_stack : '';
+			case 'css':
+				return self::sanitize_css( $value );
 			case 'dashboard_links':
 				return self::sanitize_dashboard_links( $value );
 			case 'woocommerce_menu_visibility':
@@ -120,6 +122,33 @@ class ALYNT_AG_Settings_Sanitizer {
 			default:
 				return sanitize_text_field( wp_unslash( $value ) );
 		}
+	}
+
+	/**
+	 * Sanitize administrator-supplied custom CSS.
+	 *
+	 * This setting is intended for trusted site administrators, but it still
+	 * strips HTML/script escape hatches and high-risk legacy CSS execution
+	 * vectors before frontend output.
+	 *
+	 * @param mixed $value Raw CSS.
+	 * @return string
+	 */
+	private static function sanitize_css( $value ) {
+		$css = wp_unslash( (string) $value );
+		$css = wp_strip_all_tags( $css );
+		$css = str_replace( "\0", '', $css );
+		$css = preg_replace( '/[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F\\x7F]/', '', $css );
+		$css = preg_replace( '#</?style[^>]*>#i', '', $css );
+		$css = preg_replace( '/@import\\b[^;]*;?/i', '', $css );
+		$css = preg_replace( '/@charset\\b[^;]*;?/i', '', $css );
+		$css = preg_replace( '/expression\\s*\\([^)]*\\)/i', '', $css );
+		$css = preg_replace( '/javascript\\s*:/i', '', $css );
+		$css = preg_replace( '/data\\s*:\\s*text\\/html/i', '', $css );
+		$css = preg_replace( '/-moz-binding\\s*:[^;}]*/i', '', $css );
+		$css = preg_replace( '/behavior\\s*:[^;}]*/i', '', $css );
+
+		return trim( (string) $css );
 	}
 
 		/**

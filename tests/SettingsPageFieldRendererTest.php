@@ -59,6 +59,16 @@ class SettingsPageFieldRendererTest extends TestCase {
 		$this->assertStringContainsString( '&lt;strong&gt;Safe&lt;/strong&gt;', $text );
 	}
 
+	public function test_css_field_uses_codemirror_targeted_textarea() {
+		$output = $this->render_field( 'custom_css', array( 'type' => 'css' ), '.agw-card > p { color: red; }' );
+
+		$this->assertStringContainsString( '<textarea', $output );
+		$this->assertStringContainsString( 'class="large-text code alynt-ag-textarea alynt-ag-css-editor"', $output );
+		$this->assertStringContainsString( 'data-alynt-ag-css-editor', $output );
+		$this->assertStringContainsString( 'spellcheck="false"', $output );
+		$this->assertStringContainsString( '.agw-card &gt; p { color: red; }', $output );
+	}
+
 	public function test_rich_text_field_uses_wordpress_editor_configuration() {
 		$output = $this->render_field( 'email_body', array( 'type' => 'rich_text' ), '<p>Hello</p>' );
 

@@ -1,6 +1,7 @@
 .alynt-ag-gateway {
 	--agw-color-text: #281408;
 	--agw-color-primary: #3b5249;
+	--agw-color-primary-rgb: 59 82 73;
 	--agw-color-background: #eae4d6;
 	--agw-color-notice: #e1cdb5;
 	--agw-color-error: #b3492e;
@@ -168,8 +169,8 @@ html.agw-offcanvas-open {
 .agw-notice {
 	margin-bottom: 22px;
 	padding: 16px 18px;
-	border-radius: 8px;
-	background: var(--agw-color-notice);
+	border-left: 2px solid var(--agw-color-primary);
+	background: rgb(var(--agw-color-primary-rgb) / 10%);
 	color: var(--agw-color-text);
 	font-size: 18px;
 	line-height: 1.5;

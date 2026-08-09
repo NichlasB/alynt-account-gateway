@@ -2,12 +2,24 @@
 
 ## Status
 
-- Current phase: v1.1.31 setup clarity and handoff pack released and updater-verified on Plugin Tester.
+- Current phase: v1.1.34 released and rolled out to tracked LocalWP, staging, and live Account Gateway installs.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.31 is the current public baseline.
+- Plugin status: v1.1.34 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Ready for the next approved tracked-site update, new-site rollout, or product slice. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Custom CSS editor and primary-color notice styling are implemented and validated. Next decision is whether to publish this as the next maintenance release, then roll it out through the Alynt Plugin Updater. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## Custom CSS And Primary-Color Notice Styling (Next Slice)
+
+- [x] Released `v1.1.34` as the clean rollout build for the WooCommerce notice/action button contrast fix after stabilizing randomized WooCommerce account-data test isolation.
+- [x] Rolled `v1.1.34` to tracked LocalWP, staging, and live Account Gateway installs and recorded non-secret rollout status in the local Site Operations tracker.
+- [x] Add an Advanced / Tools Custom CSS settings area with WordPress CodeMirror syntax highlighting.
+- [x] Sanitize Custom CSS conservatively and output it after the plugin frontend stylesheet on gateway screens, dashboard screens, and authenticated previews.
+- [x] Add a Primary Color RGB custom property so CSS can use a fixed 10% alpha tint of the configured Primary Color.
+- [x] Change `.agw-notice` to use `background: rgb(var(--agw-color-primary-rgb) / 10%)`, `border-left: 2px solid var(--agw-color-primary)`, and no border radius while preserving the existing spacing, type, and text color values.
+- [x] Add focused tests for Custom CSS defaults/sanitization/rendering/output and Primary Color RGB notice styling.
+- [x] Run focused validation, full PHPUnit, PHPCS, build, POT regeneration, and `git diff --check` before release consideration.
+- [x] Run targeted `ds2-feature` reviews: Feature Light Review, Feature UI/UX Implementation Review, and Feature Security Review. No release-blocking issues found.
 
 ## Setup Clarity And Handoff Pack (v1.1.31 Candidate)
 

@@ -29,6 +29,7 @@ class FrontendAssetsTest extends TestCase {
 
 		$GLOBALS['alynt_ag_test_enqueued_styles']    = array();
 		$GLOBALS['alynt_ag_test_enqueued_scripts']   = array();
+		$GLOBALS['alynt_ag_test_inline_styles']      = array();
 		$GLOBALS['alynt_ag_test_localized_scripts']  = array();
 	}
 
@@ -71,6 +72,23 @@ class FrontendAssetsTest extends TestCase {
 		$this->assertSame( '%1$d of %2$d requirements met.', $GLOBALS['alynt_ag_test_localized_scripts'][0]['l10n']['labels']['requirementsMetSummary'] );
 	}
 
+	public function test_enqueue_outputs_custom_css_after_frontend_stylesheet() {
+		$assets = new ALYNT_AG_Frontend_Assets();
+		$this->settings['custom_css'] = '.agw-card { outline: 1px solid red; }';
+
+		$assets->enqueue( $this->settings, 'login' );
+
+		$this->assertSame(
+			array(
+				array(
+					'handle' => 'alynt-ag-frontend',
+					'data'   => '.agw-card { outline: 1px solid red; }',
+				),
+			),
+			$GLOBALS['alynt_ag_test_inline_styles']
+		);
+	}
+
 	public function test_preview_enqueue_loads_assets_while_frontend_output_is_disabled() {
 		$assets = new ALYNT_AG_Frontend_Assets();
 
@@ -88,6 +106,7 @@ class FrontendAssetsTest extends TestCase {
 
 		$GLOBALS['alynt_ag_test_enqueued_styles']    = array();
 		$GLOBALS['alynt_ag_test_enqueued_scripts']   = array();
+		$GLOBALS['alynt_ag_test_inline_styles']      = array();
 		$GLOBALS['alynt_ag_test_localized_scripts']  = array();
 
 		$assets->enqueue_preview( $this->settings, '' );

@@ -55,7 +55,7 @@ class ALYNT_AG_Frontend_Assets {
 	 * @return void
 	 */
 	private function enqueue_assets( $settings, $screen ) {
-		$this->enqueue_frontend_style();
+		$this->enqueue_frontend_style( $settings );
 		$this->enqueue_frontend_script();
 
 		if ( ! empty( $settings['turnstile_site_key'] ) && 'register' === $screen ) {
@@ -66,9 +66,10 @@ class ALYNT_AG_Frontend_Assets {
 	/**
 	 * Enqueue the frontend stylesheet when built.
 	 *
+	 * @param array<string,mixed> $settings Settings.
 	 * @return void
 	 */
-	private function enqueue_frontend_style() {
+	private function enqueue_frontend_style( $settings ) {
 		$asset_path = ALYNT_AG_PLUGIN_DIR . 'assets/dist/frontend/index.css';
 		if ( ! file_exists( $asset_path ) ) {
 			return;
@@ -80,6 +81,10 @@ class ALYNT_AG_Frontend_Assets {
 			array(),
 			filemtime( $asset_path )
 		);
+
+		if ( ! empty( $settings['custom_css'] ) ) {
+			wp_add_inline_style( 'alynt-ag-frontend', (string) $settings['custom_css'] );
+		}
 	}
 
 	/**

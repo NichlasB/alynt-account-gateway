@@ -214,6 +214,17 @@ if ( ! function_exists( 'wp_enqueue_style' ) ) {
 	}
 }
 
+if ( ! function_exists( 'wp_add_inline_style' ) ) {
+	function wp_add_inline_style( $handle, $data ) {
+		$GLOBALS['alynt_ag_test_inline_styles'][] = array(
+			'handle' => $handle,
+			'data'   => $data,
+		);
+
+		return true;
+	}
+}
+
 if ( ! function_exists( 'wp_enqueue_script' ) ) {
 	function wp_enqueue_script( $handle, $src = '', $deps = array(), $ver = false, $in_footer = false ) {
 		$GLOBALS['alynt_ag_test_enqueued_scripts'][] = array(

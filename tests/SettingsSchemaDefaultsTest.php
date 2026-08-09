@@ -101,6 +101,26 @@ class SettingsSchemaDefaultsTest extends SettingsSchemaTestCase {
 		$this->assertSame( 'shared-secret', $sanitized['webhook_signing_secret'] );
 	}
 
+	public function test_custom_css_defaults_to_empty_and_removes_unsafe_css_payloads() {
+		$defaults = ALYNT_AG_Settings_Schema::defaults();
+
+		$this->assertArrayHasKey( 'custom_css', $defaults );
+		$this->assertSame( '', $defaults['custom_css'] );
+
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array(
+				'custom_css' => '<style>.agw-card { color: red; }</style>@import url("https://example.test/style.css"); .agw-button { background: javascript:alert(1); width: expression(alert(1)); behavior: url(test.htc); }',
+			)
+		);
+
+		$this->assertStringContainsString( '.agw-card { color: red; }', $sanitized['custom_css'] );
+		$this->assertStringNotContainsString( '<style>', $sanitized['custom_css'] );
+		$this->assertStringNotContainsString( '@import', $sanitized['custom_css'] );
+		$this->assertStringNotContainsString( 'javascript:', $sanitized['custom_css'] );
+		$this->assertStringNotContainsString( 'expression(', $sanitized['custom_css'] );
+		$this->assertStringNotContainsString( 'behavior:', $sanitized['custom_css'] );
+	}
+
 	public function test_branding_defaults_are_brand_agnostic_design_tokens() {
 		$defaults = ALYNT_AG_Settings_Schema::defaults();
 

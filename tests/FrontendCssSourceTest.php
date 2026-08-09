@@ -201,6 +201,14 @@ class FrontendCssSourceTest extends TestCase {
 		$this->assertMatchesRegularExpression( '/\.agw-dashboard-content input,[^}]*font-size:\s*18px;/s', $css );
 	}
 
+	public function test_gateway_notice_uses_primary_color_tint_without_radius() {
+		$css = $this->get_frontend_css();
+
+		$this->assertStringContainsString( '--agw-color-primary-rgb: 59 82 73;', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-notice\s*\{[^}]*border-left:\s*2px solid var\(--agw-color-primary\);[^}]*background:\s*rgb\(var\(--agw-color-primary-rgb\) \/ 10%\);/s', $css );
+		$this->assertDoesNotMatchRegularExpression( '/\.agw-notice\s*\{[^}]*border-radius:/s', $css );
+	}
+
 	public function test_primary_button_interactive_states_preserve_configured_colors() {
 		$css = $this->get_frontend_css();
 

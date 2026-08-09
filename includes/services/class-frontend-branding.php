@@ -24,6 +24,7 @@ class ALYNT_AG_Frontend_Branding {
 		$properties = array(
 			'--agw-color-text'        => $settings['text_color'],
 			'--agw-color-primary'     => $settings['primary_color'],
+			'--agw-color-primary-rgb' => $this->hex_to_rgb_channels( $settings['primary_color'] ),
 			'--agw-color-background'  => $settings['page_background_color'],
 			'--agw-color-notice'      => $settings['accent_color'],
 			'--agw-color-error'       => $settings['error_color'],
@@ -43,6 +44,38 @@ class ALYNT_AG_Frontend_Branding {
 		}
 
 		return $style;
+	}
+
+	/**
+	 * Convert a hex color to space-separated RGB channels for alpha-ready CSS.
+	 *
+	 * @param string $color Hex color.
+	 * @return string
+	 */
+	private function hex_to_rgb_channels( $color ) {
+		$color = ltrim( trim( (string) $color ), '#' );
+		if ( 3 === strlen( $color ) ) {
+			$color = $color[0] . $color[0] . $color[1] . $color[1] . $color[2] . $color[2];
+		}
+
+		$color = sanitize_hex_color( '#' . $color );
+
+		if ( ! $color ) {
+			$color = '#3B5249';
+		}
+
+		$color = ltrim( $color, '#' );
+
+		if ( 6 !== strlen( $color ) || ! ctype_xdigit( $color ) ) {
+			return '59 82 73';
+		}
+
+		return sprintf(
+			'%d %d %d',
+			hexdec( substr( $color, 0, 2 ) ),
+			hexdec( substr( $color, 2, 2 ) ),
+			hexdec( substr( $color, 4, 2 ) )
+		);
 	}
 
 	/**

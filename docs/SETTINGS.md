@@ -12,6 +12,7 @@ Settings are stored in the `alynt_ag_settings` option. This reference is derived
 | `string` / `secret` | `sanitize_text_field()`; secret values must not be copied into exports or documentation. |
 | `textarea` / `rich_text` | `wp_kses_post()`; the Visual/Text email editor retains safe post formatting only. |
 | `color` | `sanitize_hex_color()`, otherwise stored empty. |
+| `css` | Plain CSS text with tags, imports, charsets, JavaScript URLs, legacy CSS expressions, and legacy binding/behavior declarations removed. |
 | `attachment_id` / `nav_menu` | Positive integer via `absint()`. |
 | `css_font_family` | Text sanitization followed by a restricted font-stack character allowlist. |
 | `email` | `sanitize_email()`. |
@@ -44,8 +45,8 @@ Safe internal `redirect_to` destinations take precedence over role-aware default
 | --- | --- | --- | --- |
 | `brand_logo_id` | `attachment_id` | `0` | Media Library attachment used as the gateway, dashboard, and email logo. |
 | `brand_logo_max_width` | `integer` | `220` | Logo maximum width in pixels; constrained to `80` through `520`. |
-| `primary_color` | `color` | `#3B5249` | Main brand color. |
-| `accent_color` | `color` | `#E1CDB5` | Accent and highlighted-notice color. |
+| `primary_color` | `color` | `#3B5249` | Main brand color. Also controls gateway notice left borders and the 10% notice tint. |
+| `accent_color` | `color` | `#E1CDB5` | Accent and supporting panel color. |
 | `text_color` | `color` | `#281408` | Primary text color. |
 | `page_background_color` | `color` | `#EAE4D6` | Gateway and dashboard page background color. |
 | `surface_color` | `color` | `#FFFFFF` | Card and panel surface color. |
@@ -175,6 +176,7 @@ Consent records omit IP addresses by default. They include email, user ID when a
 | Key | Type | Default | Description |
 | --- | --- | --- | --- |
 | `emergency_bypass_key` | `secret` | generated on activation/default creation | Allows `wp-login.php?alynt_ag_bypass={key}` to bypass the branded screen redirect. It never authenticates a visitor or grants admin access. |
+| `custom_css` | `css` | empty | Optional site-specific CSS loaded after the plugin frontend stylesheet on gateway screens, dashboard screens, and authenticated previews. |
 | `diagnostics_enabled` | `boolean` | `false` | Enables plugin diagnostics collection. |
 | `diagnostics_min_level` | `select` | `warning` | Lowest retained diagnostic level. |
 | `diagnostics_retention` | `integer` | `30` | Diagnostic-record retention in days; constrained to `1` through `3650`. |

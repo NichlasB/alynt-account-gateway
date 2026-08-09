@@ -43,7 +43,7 @@ class AdminJsSourceTest extends TestCase {
 
 		$this->assertIsString( $entry );
 		$this->assertIsArray( $modules );
-		$this->assertCount( 6, $modules );
+		$this->assertCount( 7, $modules );
 
 		foreach ( $modules as $module ) {
 			$relative_path = './modules/' . basename( $module );
@@ -53,6 +53,15 @@ class AdminJsSourceTest extends TestCase {
 			$this->assertIsArray( $lines );
 			$this->assertLessThanOrEqual( 250, count( $lines ), $relative_path );
 		}
+	}
+
+	public function test_custom_css_editor_initializes_wordpress_code_editor_once() {
+		$js = $this->get_admin_js();
+
+		$this->assertStringContainsString( "document.querySelectorAll( '[data-alynt-ag-css-editor]' )", $js );
+		$this->assertStringContainsString( 'window.wp.codeEditor.initialize( field, editorSettings )', $js );
+		$this->assertStringContainsString( "field.dataset.alyntAgCssEditorReady === '1'", $js );
+		$this->assertStringContainsString( "field.dataset.alyntAgCssEditorReady = '1'", $js );
 	}
 
 	public function test_email_save_state_tracks_fields_and_tinymce_before_disabling_actions() {
