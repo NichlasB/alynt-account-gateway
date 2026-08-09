@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.31 setup clarity and handoff pack implemented locally; release not yet requested.
+- Current phase: v1.1.31 setup clarity and handoff pack released and updater-verified on Plugin Tester.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.30 is the current public baseline.
+- Plugin status: v1.1.31 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Complete local review for the v1.1.31 setup clarity and handoff pack, then prepare a release only after owner approval. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Ready for the next approved tracked-site update, new-site rollout, or product slice. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Setup Clarity And Handoff Pack (v1.1.31 Candidate)
 
@@ -40,6 +40,14 @@
 - Feature Bloat and Structure Review used the `origin/master` merge base (`a754ad1f6e3767f1e5cbbb77f6589acb0ed7907c`) and reported 12 changed PHP source/test files, zero oversized files, and no cleanup or split requirement. The largest changed runtime file is `admin/class-settings-page.php` at 257 total lines; the new summary and handoff components are 133 and 181 total lines.
 - Feature Security Review found no issues. The handoff export is limited to `manage_options`, protected with `check_admin_referer()`, emits only a fixed text filename, and summary/export tests confirm API keys, bypass keys, webhook signing secrets, test-recipient addresses, credentials, cookies, and raw setting payloads are excluded.
 - Regression handoff: no confirmed security defect remains and no 07A adversarial-test-suite follow-up is required for this slice.
+
+### Release Evidence
+
+- GitHub release `v1.1.31` was published from commit `4dec28d4d6d01df6576af7a21d0c50c8804f5d00`: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.31`.
+- GitHub Quality workflows passed for `master` run `31328327338` and tag run `31328375550` across PHP 7.4 and PHP 8.3.
+- Build Release workflow run `31328375538` passed and attached `alynt-account-gateway-v1.1.31.zip`.
+- Public release ZIP inspection passed: `135` runtime files, one `alynt-account-gateway/` root, no development/test/build artifacts, aligned `1.1.31` plugin metadata, and SHA-256 `A3437CEBB141A6FBC6B55495ED80994E7EEF4774D5AAF96007920822598E8FC7`.
+- Alynt Plugin Updater on LocalWP Plugin Tester found the `1.1.30 -> 1.1.31` update after a force-fresh GitHub release check cleared the updater release cache, installed it through WordPress's native `Plugin_Upgrader`, preserved the settings hash `4c9c362f34b69a693030000a806bb55f172ce98601d4398b9b8fd75555e90a0f`, kept Account Gateway active, reported no remaining update offer, and returned HTTP `200` for the homepage.
 
 ## Authenticated Login Surface Redirects (v1.1.30 Released)
 
