@@ -4,6 +4,16 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.35 - 2026-08-10
+
+### Added
+
+- Add an Advanced / Tools Custom CSS setting with WordPress code-editor support and conservative CSS sanitization.
+
+### Changed
+
+- Style gateway notice backgrounds and left borders from the configured primary color, using a 10% background tint and a 2px border without rounded corners.
+
 ## 1.1.34 - 2026-08-09
 
 ### Fixed

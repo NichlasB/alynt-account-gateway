@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.34
+Stable tag: 1.1.35
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,11 @@ Yes. Each email body uses WordPress's Visual/Text editor with safe HTML formatti
 == Changelog ==
 
 = Unreleased =
+
+= 1.1.35 =
+
+* Add an Advanced / Tools Custom CSS setting with WordPress code-editor support and conservative CSS sanitization.
+* Style gateway notice backgrounds and left borders from the configured primary color, using a 10% background tint and a 2px border without rounded corners.
 
 = 1.1.34 =
 
