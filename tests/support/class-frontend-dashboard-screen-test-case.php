@@ -276,6 +276,7 @@ abstract class FrontendDashboardScreenTestCase extends TestCase {
 			'dashboard_offcanvas_menu_id' => 0,
 			'dashboard_footer_menu_enabled' => false,
 			'dashboard_footer_menu_id' => 0,
+			'woocommerce_saved_methods_enabled' => false,
 			'woocommerce_hidden_menu_items' => array(),
 		);
 	}

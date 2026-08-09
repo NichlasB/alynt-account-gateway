@@ -56,15 +56,15 @@ class ALYNT_AG_Dashboard_Endpoint_Metadata {
 			),
 			'edit-account'               => array(
 				'label'       => __( 'Account Details', 'alynt-account-gateway' ),
-				'description' => __( 'Update your name, email address, and password using WooCommerce account controls.', 'alynt-account-gateway' ),
+				'description' => __( 'Update your name, email address, and password.', 'alynt-account-gateway' ),
 			),
 			'payment-methods'            => array(
 				'label'       => __( 'Saved Payment Methods', 'alynt-account-gateway' ),
-				'description' => __( 'Manage saved payment methods when your store supports secure payment method storage.', 'alynt-account-gateway' ),
+				'description' => __( 'Review and manage the payment methods saved to your account.', 'alynt-account-gateway' ),
 			),
 			'add-payment-method'         => array(
 				'label'       => __( 'Add Payment Method', 'alynt-account-gateway' ),
-				'description' => __( 'Add a new saved payment method through WooCommerce and the connected payment provider.', 'alynt-account-gateway' ),
+				'description' => __( 'Add a new payment method to your account.', 'alynt-account-gateway' ),
 			),
 			'delete-payment-method'      => array(
 				'label'       => __( 'Delete Payment Method', 'alynt-account-gateway' ),
@@ -72,7 +72,7 @@ class ALYNT_AG_Dashboard_Endpoint_Metadata {
 			),
 			'set-default-payment-method' => array(
 				'label'       => __( 'Default Payment Method', 'alynt-account-gateway' ),
-				'description' => __( 'Choose which saved payment method should be used first when the store supports defaults.', 'alynt-account-gateway' ),
+				'description' => __( 'Choose the saved payment method you would like to use by default.', 'alynt-account-gateway' ),
 			),
 		);
 
@@ -124,6 +124,10 @@ class ALYNT_AG_Dashboard_Endpoint_Metadata {
 				$this->action( __( 'Saved payment methods', 'alynt-account-gateway' ), 'payment-methods', $settings ),
 			),
 		);
+
+		if ( empty( $settings['woocommerce_saved_methods_enabled'] ) ) {
+			$actions['edit-account'] = array_slice( $actions['edit-account'], 0, 1 );
+		}
 
 		return isset( $actions[ $endpoint ] ) ? $actions[ $endpoint ] : array();
 	}
@@ -177,7 +181,7 @@ class ALYNT_AG_Dashboard_Endpoint_Metadata {
 			'payment-methods' => array(
 				$this->affordance(
 					__( 'No saved payment methods?', 'alynt-account-gateway' ),
-					__( 'Saved methods appear here only when the store and payment provider support secure customer payment storage.', 'alynt-account-gateway' ),
+					__( 'No payment methods are currently saved to your account.', 'alynt-account-gateway' ),
 					__( 'Add payment method', 'alynt-account-gateway' ),
 					'add-payment-method',
 					$settings

@@ -162,7 +162,10 @@ class FrontendDashboardOverviewTest extends FrontendDashboardScreenTestCase {
 		);
 		$settings = array_merge(
 			$this->settings,
-			array( 'woocommerce_takeover' => true )
+			array(
+				'woocommerce_takeover'                       => true,
+				'woocommerce_saved_methods_enabled' => true,
+			)
 		);
 
 		ob_start();
@@ -212,8 +215,8 @@ class FrontendDashboardOverviewTest extends FrontendDashboardScreenTestCase {
 		$this->assertStringContainsString( 'damon@example.test', $html );
 		$this->assertStringContainsString( '<dt>Customer since</dt>', $html );
 		$this->assertStringContainsString( 'July 3, 2026', $html );
-		$this->assertStringContainsString( 'Details ready', $html );
-		$this->assertStringContainsString( 'Your name and email are ready', $html );
+		$this->assertStringNotContainsString( 'Details ready', $html );
+		$this->assertStringContainsString( 'Your account information is saved.', $html );
 		$this->assertStringNotContainsString( 'damon-account-username', $html );
 	}
 

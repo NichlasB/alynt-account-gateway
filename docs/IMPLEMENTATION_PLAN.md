@@ -1332,7 +1332,7 @@ Implementation evidence:
 - [x] Add a read-only Account Details module to the base WooCommerce dashboard.
 - [x] Normalize only the authenticated customer's first name, last name, email address, and registration date.
 - [x] Never expose usernames, display names used as username fallbacks, user IDs, roles, password data, or other account internals.
-- [x] Show a neutral Details ready or Needs review state without presenting a security score.
+- [x] Show a neutral Needs review state only when account details are incomplete, without presenting a security score.
 - [x] Keep all profile mutations delegated to WooCommerce's native Account Details endpoint.
 - [x] Omit the entire module when the administrator hides the Account Details dashboard navigation item.
 - [x] Add responsive, visible-focus, RTL-safe, long-value, and forced-colors styling.
@@ -1350,12 +1350,12 @@ Implementation evidence:
 
 - Selected as the next bounded dashboard increment after Saved Payment Methods.
 - The module is intentionally informational: it provides useful account context while leaving all updates, nonce handling, email-change confirmation, and password changes to WooCommerce.
-- Added a three-field Account Details summary for name, email address, and customer-since date, plus neutral Details ready and Needs review states and a native Edit account details action.
+- Added a three-field Account Details summary for name, email address, and customer-since date, plus a neutral Needs review state for incomplete details and a native Edit account details action.
 - The integration boundary accepts only the authenticated user ID and returns four normalized scalars. It intentionally omits username, display name, user ID, roles, password data, and other account internals.
 - Local validation passed: focused suites (`59 tests`, `493 assertions`), full PHPUnit (`354 tests`, `2,315 assertions`), full PHPCS, production build, POT regeneration (`1,085 strings`), npm audit (zero vulnerabilities), Composer audit (no advisories), PHP syntax checks, and `git diff --check`.
 - Exact QA package `alynt-account-gateway-v1.1.6-account-details-qa.zip` inspected cleanly: `47` runtime files, one expected plugin root, zero development-file or backslash-path hits, all `41` packaged PHP files syntax-clean, aligned `1.1.6` metadata, Account Details source/compiled-CSS markers present, and SHA-256 `8F03B9C3EB55F31B52DA4FCF5DA0C1D4E12B6FBD023B92B481715271E4B87C5C`.
 - Plugin Tester exact-package acceptance passed through WordPress's native upload-and-overwrite flow over active `1.1.5`. The installed plugin reports `1.1.6`, remains active at position `1`, all `47` installed runtime files byte-match the inspected package, active-plugin SHA-256 remained `b31f12564dfa5c1a1d714c0f442f1e9e8befb6a514ae785712417f5a6603562e`, and settings SHA-256 returned exactly to `c801f9a23642ea7677725fd382864533f94b961dddaccf5076134b831f2c922e`.
-- Browser acceptance verified the complete state with customer name, email, customer-since date, Details ready status, and WooCommerce-owned edit endpoint; the incomplete state with Needs review, Not added yet, calm guidance, and no username fallback; and the hidden state with zero Account Details modules or navigation links while direct `/my-account/edit-account/` continued to render WooCommerce's delegated form.
+- Browser acceptance verified the complete state with customer name, email, customer-since date, neutral saved guidance, and WooCommerce-owned edit endpoint; the incomplete state with Needs review, Not added yet, calm guidance, and no username fallback; and the hidden state with zero Account Details modules or navigation links while direct `/my-account/edit-account/` continued to render WooCommerce's delegated form.
 - Responsive acceptance passed at `1440px`, `390px`, and `320px`: desktop used three columns, mobile used one column, the long fixture email wrapped, document-level horizontal overflow remained absent, action and module text computed to at least `16px`, the action retained a `44px` target, and keyboard focus rendered a visible solid outline.
 - Cleanup and reconciliation passed: the disposable administrator and customer, session/user metadata, WooCommerce customer lookup row, authenticated browser, and upload artifacts were removed. Plugin Tester retained the exact settings and active-plugin baselines, the installed tree still byte-matches the inspected package, and the home route returned HTTP `200` while native `wp-login.php` continued redirecting to the branded `/login` route.
 - Released as [`v1.1.6`](https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.6) from commit `de11711`; Build Release workflow run `29655930438` passed.

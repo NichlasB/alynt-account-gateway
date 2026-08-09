@@ -119,21 +119,18 @@ class ALYNT_AG_Dashboard_Account_Renderer {
 			return;
 		}
 
-		$is_complete  = ! empty( $details['is_complete'] );
-		$status       = $is_complete ? __( 'Details ready', 'alynt-account-gateway' ) : __( 'Needs review', 'alynt-account-gateway' );
-		$guidance     = $is_complete
-			? __( 'Your name and email are ready for account notices and future order updates.', 'alynt-account-gateway' )
+		$is_complete = ! empty( $details['is_complete'] );
+		$guidance    = $is_complete
+			? __( 'Your account information is saved.', 'alynt-account-gateway' )
 			: __( 'Add your first and last name so account notices and future orders use the right details.', 'alynt-account-gateway' );
-		$status_class = 'agw-dashboard-account-details__status';
-		if ( $is_complete ) {
-			$status_class .= ' agw-dashboard-account-details__status--ready';
-		}
 		?>
 		<section class="agw-dashboard-section agw-dashboard-account-details" aria-labelledby="agw-dashboard-account-details-title">
 			<div class="agw-dashboard-account-details__header">
 				<h2 id="agw-dashboard-account-details-title"><?php esc_html_e( 'Account Details', 'alynt-account-gateway' ); ?></h2>
 				<div class="agw-dashboard-account-details__actions">
-					<span class="<?php echo esc_attr( $status_class ); ?>"><?php echo esc_html( $status ); ?></span>
+					<?php if ( ! $is_complete ) : ?>
+						<span class="agw-dashboard-account-details__status"><?php esc_html_e( 'Needs review', 'alynt-account-gateway' ); ?></span>
+					<?php endif; ?>
 					<a href="<?php echo esc_url( $this->woocommerce->endpoint_url( 'edit-account', $settings ) ); ?>">
 						<?php esc_html_e( 'Edit account details', 'alynt-account-gateway' ); ?>
 					</a>
@@ -166,7 +163,8 @@ class ALYNT_AG_Dashboard_Account_Renderer {
 	 * @return void
 	 */
 	private function render_saved_payment_methods( $user_id, $settings ) {
-		if ( ! $this->woocommerce->is_account_menu_item_visible( 'payment-methods', $settings ) ) {
+		if ( empty( $settings['woocommerce_saved_methods_enabled'] )
+			|| ! $this->woocommerce->is_account_menu_item_visible( 'payment-methods', $settings ) ) {
 			return;
 		}
 
@@ -181,7 +179,7 @@ class ALYNT_AG_Dashboard_Account_Renderer {
 			</div>
 			<?php if ( empty( $methods ) ) : ?>
 				<p class="agw-dashboard-payment-methods__empty">
-					<?php esc_html_e( 'Saved payment methods will appear here when your payment provider supports secure account storage.', 'alynt-account-gateway' ); ?>
+					<?php esc_html_e( 'Saved payment methods will appear here when this feature is available for your account.', 'alynt-account-gateway' ); ?>
 				</p>
 			<?php else : ?>
 				<ul class="agw-dashboard-payment-methods__list" role="list">

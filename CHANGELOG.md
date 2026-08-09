@@ -4,6 +4,22 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.32 - 2026-08-09
+
+### Added
+
+- Add a default-off Saved Payment Methods setting that controls the branded dashboard navigation, summary module, and related shortcuts without changing WooCommerce token storage or direct endpoint handling.
+
+### Changed
+
+- Replace frontend WooCommerce/provider/configuration diagnostics with neutral customer-facing account guidance.
+
+## 1.1.31 - 2026-08-09
+
+### Added
+
+- Add non-secret configuration summaries, stronger setup readiness checks, and a downloadable handoff summary for safer site setup and rollouts.
+
 ## 1.1.30 - 2026-08-07
 
 ### Fixed

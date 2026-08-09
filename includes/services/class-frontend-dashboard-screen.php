@@ -152,12 +152,6 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 			<p class="agw-dashboard-hero__meta"><?php echo esc_html( $user->user_email ); ?></p>
 		</section>
 
-		<?php if ( ! empty( $settings['woocommerce_takeover'] ) && ! $this->dashboard->woocommerce_available() ) : ?>
-			<div class="agw-status agw-status--error" role="alert" aria-live="assertive" aria-atomic="true">
-				<?php esc_html_e( 'WooCommerce account takeover is enabled, but WooCommerce is not active.', 'alynt-account-gateway' ); ?>
-			</div>
-		<?php endif; ?>
-
 		<?php if ( $is_woocommerce_dashboard ) : ?>
 			<?php $this->commerce_renderer->render( $user->ID, $settings ); ?>
 			<?php $this->account_renderer->render( $user->ID, $settings ); ?>

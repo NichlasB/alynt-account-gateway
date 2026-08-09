@@ -12,7 +12,7 @@ require_once __DIR__ . '/support/class-frontend-dashboard-screen-test-case.php';
  */
 class FrontendDashboardEndpointTest extends FrontendDashboardScreenTestCase {
 
-	public function test_render_dashboard_screen_outputs_woocommerce_unavailable_warning() {
+	public function test_render_dashboard_screen_does_not_expose_woocommerce_configuration_warning() {
 		$dashboard = new ALYNT_AG_Test_Frontend_Dashboard_Service();
 		$screen    = new ALYNT_AG_Frontend_Dashboard_Screen(
 			$dashboard,
@@ -30,8 +30,8 @@ class FrontendDashboardEndpointTest extends FrontendDashboardScreenTestCase {
 		$screen->render_dashboard_screen( $settings, '/my-account/' );
 		$html = ob_get_clean();
 
-		$this->assertStringContainsString( 'WooCommerce account takeover is enabled, but WooCommerce is not active.', $html );
-		$this->assertStringContainsString( 'role="alert" aria-live="assertive" aria-atomic="true"', $html );
+		$this->assertStringNotContainsString( 'WooCommerce account takeover is enabled', $html );
+		$this->assertStringNotContainsString( 'role="alert" aria-live="assertive" aria-atomic="true"', $html );
 	}
 
 	public function test_render_dashboard_screen_outputs_woocommerce_endpoint_content() {
@@ -49,9 +49,7 @@ class FrontendDashboardEndpointTest extends FrontendDashboardScreenTestCase {
 		);
 		$settings = array_merge(
 			$this->settings,
-			array(
-				'woocommerce_takeover' => true,
-			)
+			array( 'woocommerce_takeover' => true )
 		);
 
 		ob_start();
@@ -91,7 +89,8 @@ class FrontendDashboardEndpointTest extends FrontendDashboardScreenTestCase {
 		$settings = array_merge(
 			$this->settings,
 			array(
-				'woocommerce_takeover' => true,
+				'woocommerce_takeover'                       => true,
+				'woocommerce_saved_methods_enabled' => true,
 			)
 		);
 
@@ -102,7 +101,7 @@ class FrontendDashboardEndpointTest extends FrontendDashboardScreenTestCase {
 		$this->assertStringContainsString( 'Payment Methods', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard-section-actions"', $html );
 		$this->assertStringContainsString( 'Saved Payment Methods', $html );
-		$this->assertStringContainsString( 'Manage saved payment methods', $html );
+		$this->assertStringContainsString( 'Review and manage the payment methods saved to your account.', $html );
 		$this->assertStringContainsString( 'No saved payment methods?', $html );
 		$this->assertStringContainsString( 'Add payment method', $html );
 		$this->assertStringContainsString( 'href="/my-account/add-payment-method/"', $html );
@@ -250,10 +249,10 @@ class FrontendDashboardEndpointTest extends FrontendDashboardScreenTestCase {
 		$this->assertStringContainsString( 'No billing address is saved yet.', $html );
 		$this->assertStringContainsString( 'No shipping address is saved yet.', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-account-details"', $html );
-		$this->assertStringContainsString( 'Details ready', $html );
+		$this->assertStringNotContainsString( 'Details ready', $html );
+		$this->assertStringContainsString( 'Your account information is saved.', $html );
 		$this->assertStringContainsString( 'Customer since', $html );
-		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-payment-methods"', $html );
-		$this->assertStringContainsString( 'Saved payment methods will appear here when your payment provider supports secure account storage.', $html );
+		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-payment-methods"', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard-grid"', $html );
 		$this->assertStringContainsString( 'href="https://support.example.test/" target="_blank" rel="noopener noreferrer"', $html );
 		$this->assertStringContainsString( 'agw-dashboard-link__icon--help', $html );
@@ -290,7 +289,8 @@ class FrontendDashboardEndpointTest extends FrontendDashboardScreenTestCase {
 		$this->assertStringContainsString( 'role="status" aria-live="polite" aria-atomic="true"', $html );
 		$this->assertStringContainsString( 'Account section unavailable', $html );
 		$this->assertStringContainsString( 'This area is not ready yet', $html );
-		$this->assertStringContainsString( 'WooCommerce did not return content for Orders.', $html );
+		$this->assertStringContainsString( 'Orders is currently unavailable.', $html );
+		$this->assertStringNotContainsString( 'WooCommerce', $html );
 		$this->assertStringContainsString( 'Back to dashboard', $html );
 		$this->assertStringContainsString( 'href="/my-account/"', $html );
 		$this->assertStringContainsString( 'Manage account details', $html );

@@ -135,6 +135,7 @@ class SettingsSchemaDefaultsTest extends SettingsSchemaTestCase {
 		$this->assertArrayHasKey( 'dashboard_offcanvas_menu_id', $defaults );
 		$this->assertArrayHasKey( 'dashboard_footer_menu_enabled', $defaults );
 		$this->assertArrayHasKey( 'dashboard_footer_menu_id', $defaults );
+		$this->assertArrayHasKey( 'woocommerce_saved_methods_enabled', $defaults );
 		$this->assertArrayHasKey( 'woocommerce_hidden_menu_items', $defaults );
 		$this->assertFalse( $defaults['dashboard_enabled'] );
 		$this->assertSame( '[]', $defaults['dashboard_custom_links'] );
@@ -142,6 +143,7 @@ class SettingsSchemaDefaultsTest extends SettingsSchemaTestCase {
 		$this->assertSame( 0, $defaults['dashboard_offcanvas_menu_id'] );
 		$this->assertFalse( $defaults['dashboard_footer_menu_enabled'] );
 		$this->assertSame( 0, $defaults['dashboard_footer_menu_id'] );
+		$this->assertFalse( $defaults['woocommerce_saved_methods_enabled'] );
 		$this->assertSame( array(), $defaults['woocommerce_hidden_menu_items'] );
 	}
 

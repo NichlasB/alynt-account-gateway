@@ -73,6 +73,10 @@ class SettingsPageFieldHelpTest extends TestCase {
 			'Requires the custom dashboard',
 			$this->invoke_helper( $settings_page, 'settings_field_help_text', array( 'woocommerce_takeover' ) )
 		);
+		$this->assertStringContainsString(
+			'disabled by default',
+			$this->invoke_helper( $settings_page, 'settings_field_help_text', array( 'woocommerce_saved_methods_enabled' ) )
+		);
 		$this->assertSame(
 			'',
 			$this->invoke_helper( $settings_page, 'settings_field_help_text', array( 'missing_setting' ) )

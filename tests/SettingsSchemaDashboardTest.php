@@ -19,6 +19,7 @@ class SettingsSchemaDashboardTest extends SettingsSchemaTestCase {
 				'dashboard_offcanvas_menu_id' => '-42',
 				'dashboard_footer_menu_enabled' => '1',
 				'dashboard_footer_menu_id' => '-84',
+				'woocommerce_saved_methods_enabled' => '1',
 			)
 		);
 
@@ -26,6 +27,7 @@ class SettingsSchemaDashboardTest extends SettingsSchemaTestCase {
 		$this->assertSame( 42, $sanitized['dashboard_offcanvas_menu_id'] );
 		$this->assertTrue( $sanitized['dashboard_footer_menu_enabled'] );
 		$this->assertSame( 84, $sanitized['dashboard_footer_menu_id'] );
+		$this->assertTrue( $sanitized['woocommerce_saved_methods_enabled'] );
 	}
 
 	public function test_woocommerce_dashboard_visibility_is_sanitized_to_hidden_endpoint_keys() {

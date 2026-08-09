@@ -143,6 +143,7 @@ WordPress exposes only a plain-text body for its pending profile email-change re
 | `woocommerce_takeover` | `boolean` | `false` | Renders eligible WooCommerce My Account routes inside the branded dashboard. Requires active WooCommerce and the custom dashboard. |
 | `woocommerce_require_login_checkout` | `boolean` | `false` | Redirects logged-out checkout visitors to the branded login page and returns them after authentication. |
 | `woocommerce_require_login_order_pay` | `boolean` | `false` | Applies the checkout authentication gate to order-payment links separately. |
+| `woocommerce_saved_methods_enabled` | `boolean` | `false` | Shows Payment Methods dashboard navigation, the saved-method summary, and related shortcuts. Direct WooCommerce endpoint behavior remains delegated to WooCommerce. |
 | `woocommerce_hidden_menu_items` | `woocommerce_menu_visibility` | `[]` | WooCommerce account endpoint keys hidden from branded dashboard navigation. |
 
 ## Webhooks

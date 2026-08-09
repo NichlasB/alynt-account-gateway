@@ -110,8 +110,8 @@ class ALYNT_AG_Dashboard_Endpoint_Renderer {
 				<?php
 				echo esc_html(
 					sprintf(
-						/* translators: %s: WooCommerce account endpoint label. */
-						__( 'WooCommerce did not return content for %s. Try another account area or come back after the store has finished configuring this section.', 'alynt-account-gateway' ),
+						/* translators: %s: customer-facing account section label. */
+						__( '%s is currently unavailable. Try another account area or contact us if you need help.', 'alynt-account-gateway' ),
 						$title
 					)
 				);

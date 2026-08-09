@@ -132,6 +132,24 @@ class WooCommerceAccountRoutingTest extends WooCommerceIntegrationTestCase {
 		$this->assertSame( 'edit-account', $account_endpoint['endpoint'] );
 	}
 
+	public function test_saved_payment_methods_navigation_is_opt_in_without_disabling_direct_routing() {
+		$integration = new ALYNT_AG_WooCommerce_Integration();
+		$disabled    = array(
+			'after_login_redirect' => '/my-account/',
+		);
+		$enabled     = array(
+			'after_login_redirect'                       => '/my-account/',
+			'woocommerce_saved_methods_enabled' => true,
+		);
+
+		$this->assertFalse( $integration->is_account_menu_item_visible( 'payment-methods', $disabled ) );
+		$this->assertTrue( $integration->is_account_menu_item_visible( 'payment-methods', $enabled ) );
+		$this->assertSame(
+			'payment-methods',
+			$integration->endpoint_from_path( '/my-account/payment-methods/', $disabled )['endpoint']
+		);
+	}
+
 	public function test_account_menu_items_restore_required_standard_items_when_wc_omits_them() {
 		$integration = new ALYNT_AG_WooCommerce_Integration();
 		$method      = new ReflectionMethod( $integration, 'merge_standard_account_menu_items' );

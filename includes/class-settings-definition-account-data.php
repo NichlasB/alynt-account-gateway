@@ -75,6 +75,12 @@ class ALYNT_AG_Settings_Definition_Account_Data {
 				'default' => false,
 				'label'   => __( 'Require Login For Order Payment Links', 'alynt-account-gateway' ),
 			),
+			'woocommerce_saved_methods_enabled'   => array(
+				'tab'     => 'woocommerce',
+				'type'    => 'boolean',
+				'default' => false,
+				'label'   => __( 'Enable Saved Payment Methods', 'alynt-account-gateway' ),
+			),
 			'woocommerce_hidden_menu_items'       => array(
 				'tab'     => 'woocommerce',
 				'type'    => 'woocommerce_menu_visibility',

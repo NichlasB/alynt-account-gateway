@@ -110,6 +110,9 @@ class ALYNT_AG_WooCommerce_Navigation extends ALYNT_AG_Service_Collaborator {
 	 */
 	public function is_account_menu_item_visible( $endpoint, $settings ) {
 		$endpoint = sanitize_key( $endpoint );
+		if ( 'payment-methods' === $endpoint && empty( $settings['woocommerce_saved_methods_enabled'] ) ) {
+			return false;
+		}
 
 		return $endpoint && ! in_array( $endpoint, $this->service->hidden_account_menu_items( $settings ), true );
 	}

@@ -1197,9 +1197,9 @@ msgstr "Cel:"
 msgid "Details"
 msgstr "Szczegóły"
 
-#: includes/services/class-dashboard-account-renderer.php:123
-msgid "Details ready"
-msgstr "Dane gotowe"
+#: includes/services/class-dashboard-account-renderer.php:124
+msgid "Your account information is saved."
+msgstr "Informacje o koncie są zapisane."
 
 #: admin/settings-page/class-diagnostics-tools.php:42
 msgid "Diagnostics"
@@ -3694,8 +3694,8 @@ msgid "Saved Payment Methods"
 msgstr "Zapisane metody płatności"
 
 #: includes/services/class-dashboard-account-renderer.php:184
-msgid "Saved payment methods will appear here when your payment provider supports secure account storage."
-msgstr "Zapisane metody płatności pojawią się tutaj, gdy dostawca płatności obsłuży bezpieczne przechowywanie danych na koncie."
+msgid "Saved payment methods will appear here when this feature is available for your account."
+msgstr "Zapisane metody płatności pojawią się tutaj, gdy ta funkcja będzie dostępna dla Twojego konta."
 
 #: includes/class-settings-definition.php:29
 msgid "Screen Copy"
@@ -4949,10 +4949,6 @@ msgstr "Dostępne pliki pojawią się tutaj po zakupie produktu do pobrania."
 #: includes/services/class-frontend-messages.php:53
 msgid "Your consent record could not be saved. Please try again."
 msgstr "Nie udało się zapisać zgody. Spróbuj ponownie."
-
-#: includes/services/class-dashboard-account-renderer.php:125
-msgid "Your name and email are ready for account notices and future order updates."
-msgstr "Imię, nazwisko i adres e-mail są gotowe do powiadomień konta i informacji o zamówieniach."
 
 #: includes/services/class-frontend-login-screen.php:120
 msgid "Your password has been updated. You can log in now."
