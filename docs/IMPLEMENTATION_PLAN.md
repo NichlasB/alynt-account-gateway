@@ -2,12 +2,44 @@
 
 ## Status
 
-- Current phase: v1.1.30 authenticated login-surface redirect patch released and updater-verified across tracked installs.
+- Current phase: v1.1.31 setup clarity and handoff pack implemented locally; release not yet requested.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.30 is the current public baseline.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Ready for the next approved new-site rollout or the next approved product slice. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Complete local review for the v1.1.31 setup clarity and handoff pack, then prepare a release only after owner approval. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## Setup Clarity And Handoff Pack (v1.1.31 Candidate)
+
+- [x] Add a non-secret Current Configuration Summary panel for fresh-site setup and handoff review.
+- [x] Strengthen Setup Readiness checks for rollout-critical states: overlapping login/action paths, missing emergency access while frontend output is enabled, provider-free public registration, WooCommerce-only gates without WooCommerce, WooCommerce takeover without dashboard, untested emails, unsigned webhooks, and missing privacy retention.
+- [x] Add an Advanced / Tools handoff panel with a recommended setup order, final acceptance checklist, and a downloadable non-secret Handoff Summary.
+- [x] Keep secrets, API keys, bypass keys, webhook signing secrets, raw setting payloads, cookies, and credentials out of all rendered summaries and downloads.
+- [x] Add focused settings-page tests for summary output, readiness classification, handoff guidance, export content, component registration, and loader order.
+- [x] Run focused validation and the applicable `ds2-feature` reviews: Feature Light Review, Feature UI/UX Implementation Review, Feature Bloat and Structure Review, and Feature Security Review.
+- [x] Prepare release validation only after implementation and review pass.
+
+### Validation Evidence
+
+- PHP syntax checks passed for the new summary and handoff components, changed readiness components, settings page facade, and new handoff tests.
+- Focused settings-page regression passed: 17 tests and 300 assertions across `SettingsPageReadinessTest`, `SettingsPageHandoffToolsTest`, `SettingsPageCollaborationTest`, and `SettingsPageSettingsToolsTest`.
+- Full PHPUnit passed: 565 tests and 4,104 assertions.
+- Focused PHPCS passed for the new and changed feature files after one spacing alignment cleanup.
+- Full PHPCS passed for the plugin.
+- Build tooling passed: `npm.cmd run build`.
+- POT generation passed: `npm.cmd run make-pot`.
+- Dependency checks passed: `npm.cmd audit --audit-level=high`, `composer validate --strict`, and `composer audit`.
+- `git diff --check` passed with only the existing Windows line-ending warning for `languages/alynt-account-gateway.pot`.
+- Release metadata has been bumped to `1.1.31` in the plugin header, version constant, package metadata, WordPress readme stable tag, changelog, and version smoke test.
+
+### Feature Review Evidence
+
+- Feature Light Review scope: admin settings UI, non-secret plain-text handoff export, settings-page component registration, readiness classification, and tests. No frontend templates, AJAX, REST, database schema, cron, file writes, or third-party API calls were changed.
+- Feature Light Review found no significant non-security issues. The slice fits the existing settings-page component architecture and uses established `ALYNT_AG_Settings_Page_*` naming and delegation patterns.
+- Feature UI/UX Implementation Review found no design-system issues. The new UI uses WordPress-native tables, headings, inline notice styling, descriptive labels, settings-tab review links, and clear button copy. No modal, async, or dynamic focus behavior was added.
+- Feature Bloat and Structure Review used the `origin/master` merge base (`a754ad1f6e3767f1e5cbbb77f6589acb0ed7907c`) and reported 12 changed PHP source/test files, zero oversized files, and no cleanup or split requirement. The largest changed runtime file is `admin/class-settings-page.php` at 257 total lines; the new summary and handoff components are 133 and 181 total lines.
+- Feature Security Review found no issues. The handoff export is limited to `manage_options`, protected with `check_admin_referer()`, emits only a fixed text filename, and summary/export tests confirm API keys, bypass keys, webhook signing secrets, test-recipient addresses, credentials, cookies, and raw setting payloads are excluded.
+- Regression handoff: no confirmed security defect remains and no 07A adversarial-test-suite follow-up is required for this slice.
 
 ## Authenticated Login Surface Redirects (v1.1.30 Released)
 

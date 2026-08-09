@@ -70,6 +70,7 @@ class ALYNT_AG_Settings_Page_Readiness_Summary extends ALYNT_AG_Settings_Page_Co
 		$dashboard_enabled    = ! empty( $settings['dashboard_enabled'] );
 		$woocommerce_takeover = ! empty( $settings['woocommerce_takeover'] );
 		$webhook_enabled      = ! empty( $settings['account_created_webhook'] );
+		$woocommerce_active   = class_exists( 'WooCommerce' ) || function_exists( 'WC' );
 
 		$checks = array();
 
@@ -91,9 +92,11 @@ class ALYNT_AG_Settings_Page_Readiness_Summary extends ALYNT_AG_Settings_Page_Co
 			'tab'     => 'urls',
 		);
 
+		$checks[] = $this->login_action_path_readiness_check( $settings );
+
 		$checks[] = array(
 			'label'   => __( 'Emergency Access', 'alynt-account-gateway' ),
-			'status'  => ! empty( $settings['emergency_bypass_key'] ) ? 'ready' : 'action',
+			'status'  => ! empty( $settings['emergency_bypass_key'] ) ? 'ready' : ( ! empty( $settings['frontend_enabled'] ) ? 'action' : 'warning' ),
 			'message' => ! empty( $settings['emergency_bypass_key'] )
 				? __( 'An emergency bypass key exists for restoring access to the native login screen.', 'alynt-account-gateway' )
 				: __( 'Generate and save an emergency bypass key before replacing public login screens.', 'alynt-account-gateway' ),
@@ -130,6 +133,8 @@ class ALYNT_AG_Settings_Page_Readiness_Summary extends ALYNT_AG_Settings_Page_Co
 		);
 
 		$checks[] = $this->woocommerce_readiness_check( $dashboard_enabled, $woocommerce_takeover );
+
+		$checks[] = $this->woocommerce_checkout_gate_readiness_check( $settings, $woocommerce_active );
 
 		$checks[] = array(
 			'label'   => __( 'Webhook Signing', 'alynt-account-gateway' ),

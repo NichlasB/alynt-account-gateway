@@ -32,6 +32,7 @@ class SettingsPageCollaborationTest extends TestCase {
 				'add_menu_page',
 				'handle_clear_diagnostics',
 				'handle_export_diagnostics',
+				'handle_export_handoff_summary',
 				'handle_export_settings',
 				'handle_import_settings',
 				'handle_preview_email',
@@ -100,8 +101,8 @@ class SettingsPageCollaborationTest extends TestCase {
 			}
 		}
 
-		$this->assertCount( 133, array_unique( $methods ) );
-		$this->assertCount( 133, $methods );
+		$this->assertCount( 142, array_unique( $methods ) );
+		$this->assertCount( 142, $methods );
 	}
 
 	/**

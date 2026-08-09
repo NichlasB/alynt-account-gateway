@@ -15,6 +15,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 class ALYNT_AG_Settings_Page_Readiness_Rules extends ALYNT_AG_Settings_Page_Component {
 
 	/**
+	 * Return login/action path readiness.
+	 *
+	 * @param array<string,mixed> $settings Current settings.
+	 * @return array{label:string,status:string,message:string,tab:string}
+	 */
+	public function login_action_path_readiness_check( $settings ) {
+		$login_path    = $this->normalized_relative_path( $settings['login_path'] ?? '' );
+		$account_base  = $this->normalized_relative_path( $settings['account_action_base'] ?? '' );
+		$paths_overlap = '' !== $login_path && '' !== $account_base && $login_path === $account_base;
+
+		return array(
+			'label'   => __( 'Login And Account Paths', 'alynt-account-gateway' ),
+			'status'  => $paths_overlap ? 'action' : 'ready',
+			'message' => $paths_overlap
+				? __( 'The login path and account action base are the same. Keep them separate so login and action screens route predictably.', 'alynt-account-gateway' )
+				: __( 'The login path and account action base are separate.', 'alynt-account-gateway' ),
+			'tab'     => 'urls',
+		);
+	}
+
+	/**
 	 * Return registration readiness.
 	 *
 	 * @param bool                $registration_enabled Whether public registration is enabled.
@@ -103,6 +124,43 @@ class ALYNT_AG_Settings_Page_Readiness_Rules extends ALYNT_AG_Settings_Page_Comp
 	}
 
 	/**
+	 * Return WooCommerce checkout gate readiness.
+	 *
+	 * @param array<string,mixed> $settings            Current settings.
+	 * @param bool                $woocommerce_active  Whether WooCommerce is active.
+	 * @return array{label:string,status:string,message:string,tab:string}
+	 */
+	public function woocommerce_checkout_gate_readiness_check( $settings, $woocommerce_active ) {
+		$checkout_gate  = ! empty( $settings['woocommerce_require_login_checkout'] );
+		$order_pay_gate = ! empty( $settings['woocommerce_require_login_order_pay'] );
+
+		if ( ! $checkout_gate && ! $order_pay_gate ) {
+			return array(
+				'label'   => __( 'WooCommerce Login Gates', 'alynt-account-gateway' ),
+				'status'  => 'ready',
+				'message' => __( 'Checkout and order-pay login gates are disabled.', 'alynt-account-gateway' ),
+				'tab'     => 'woocommerce',
+			);
+		}
+
+		if ( ! $woocommerce_active ) {
+			return array(
+				'label'   => __( 'WooCommerce Login Gates', 'alynt-account-gateway' ),
+				'status'  => 'warning',
+				'message' => __( 'A WooCommerce login gate is enabled, but WooCommerce does not appear to be active.', 'alynt-account-gateway' ),
+				'tab'     => 'woocommerce',
+			);
+		}
+
+		return array(
+			'label'   => __( 'WooCommerce Login Gates', 'alynt-account-gateway' ),
+			'status'  => 'ready',
+			'message' => __( 'Configured WooCommerce login gates can be tested on checkout and order-pay paths.', 'alynt-account-gateway' ),
+			'tab'     => 'woocommerce',
+		);
+	}
+
+	/**
 	 * Return webhook signing readiness message.
 	 *
 	 * @param bool $webhook_enabled Whether a webhook URL is configured.
@@ -135,5 +193,18 @@ class ALYNT_AG_Settings_Page_Readiness_Rules extends ALYNT_AG_Settings_Page_Comp
 		}
 
 		return true;
+	}
+
+	/**
+	 * Normalize relative paths for comparison.
+	 *
+	 * @param mixed $path Candidate path.
+	 * @return string
+	 */
+	private function normalized_relative_path( $path ) {
+		$path = is_scalar( $path ) ? trim( (string) $path ) : '';
+		$path = '/' . trim( $path, '/' );
+
+		return '/' === $path ? '' : $path;
 	}
 }

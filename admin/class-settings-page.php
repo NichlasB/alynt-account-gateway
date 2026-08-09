@@ -31,6 +31,7 @@ class ALYNT_AG_Settings_Page {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_init', array( $this, 'maybe_handle_preview_gateway_request' ), 1 );
 		add_action( 'admin_post_alynt_ag_export_settings', array( $this, 'handle_export_settings' ) );
+		add_action( 'admin_post_alynt_ag_export_handoff_summary', array( $this, 'handle_export_handoff_summary' ) );
 		add_action( 'admin_post_alynt_ag_import_settings', array( $this, 'handle_import_settings' ) );
 		add_action( 'admin_post_alynt_ag_restore_tab_defaults', array( $this, 'handle_restore_tab_defaults' ) );
 		add_action( 'admin_post_alynt_ag_preview_gateway', array( $this, 'handle_preview_gateway' ) );
@@ -115,6 +116,15 @@ class ALYNT_AG_Settings_Page {
 	 */
 	public function handle_export_settings() {
 		$this->call_component( 'handle_export_settings' );
+	}
+
+	/**
+	 * Export a non-secret handoff summary.
+	 *
+	 * @return void
+	 */
+	public function handle_export_handoff_summary() {
+		$this->call_component( 'handle_export_handoff_summary' );
 	}
 
 	/**

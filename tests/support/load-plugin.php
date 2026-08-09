@@ -96,6 +96,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-field-renderer-opt
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-field-help.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-admin-notices.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-guidance.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-configuration-summary.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-readiness-summary.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-readiness-rules.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-security-overview.php';
@@ -117,6 +118,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-complex-fields.php
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-settings-tools.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-gateway-preview.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-diagnostics-tools.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-handoff-tools.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-settings-transfer.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-security-actions.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-messaging-actions.php';

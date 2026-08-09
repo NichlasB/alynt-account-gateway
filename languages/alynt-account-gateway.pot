@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Alynt Account Gateway 1.1.30\n"
+"Project-Id-Version: Alynt Account Gateway 1.1.31\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-07 19:18+0000\n"
+"POT-Creation-Date: 2026-08-09 18:07+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -53,7 +53,7 @@ msgstr[1] ""
 msgid "%s (opens in a new tab)"
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:107
+#: admin/settings-page/class-readiness-summary.php:110
 msgid "A brand logo is configured for gateway screens and the dashboard."
 msgstr ""
 
@@ -105,12 +105,16 @@ msgstr ""
 msgid "A suppressed profile email-change marker could not be removed."
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:118
+#: admin/settings-page/class-readiness-summary.php:121
 msgid "A test recipient is configured for email preview and test-send checks."
 msgstr ""
 
-#: admin/settings-page/class-readiness-rules.php:121
+#: admin/settings-page/class-readiness-rules.php:179
 msgid "A webhook URL is configured without a signing secret. Add signing before connecting sensitive automations."
+msgstr ""
+
+#: admin/settings-page/class-readiness-rules.php:150
+msgid "A WooCommerce login gate is enabled, but WooCommerce does not appear to be active."
 msgstr ""
 
 #: includes/class-settings-definition-core.php:164
@@ -133,6 +137,7 @@ msgstr ""
 msgid "Account"
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:65
 #: includes/class-settings-definition-core.php:40
 msgid "Account Action Base"
 msgstr ""
@@ -211,12 +216,16 @@ msgstr ""
 msgid "Account Email Failures"
 msgstr ""
 
-#: admin/class-settings-page.php:56
+#: admin/class-settings-page.php:57
 msgid "Account Gateway"
 msgstr ""
 
 #: includes/services/class-privacy-exporter.php:166
 msgid "Account Gateway Consent"
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:37
+msgid "Account Gateway handoff checklist"
 msgstr ""
 
 #: includes/services/class-dashboard-navigation-renderer.php:72
@@ -243,11 +252,15 @@ msgstr ""
 msgid "Account Webhook Failures"
 msgstr ""
 
-#: admin/settings-page/class-readiness-rules.php:118
+#: admin/settings-page/class-configuration-summary.php:77
+msgid "Account-Created Webhook"
+msgstr ""
+
+#: admin/settings-page/class-readiness-rules.php:176
 msgid "Account-created webhooks include HMAC signing headers."
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:183
+#: admin/settings-page/class-readiness-summary.php:188
 #: admin/settings-page/class-readiness-summary.php:34
 #: admin/settings-page/class-security-overview.php:36
 msgid "Action Needed"
@@ -306,7 +319,7 @@ msgstr ""
 msgid "Add a signing secret when the receiver can verify HMAC headers."
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:119
+#: admin/settings-page/class-readiness-summary.php:122
 msgid "Add a test recipient and send representative account emails before inviting users."
 msgstr ""
 
@@ -373,12 +386,20 @@ msgstr ""
 msgid "Admin Action"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:144
+msgid "Admin redirects tested"
+msgstr ""
+
 #: admin/settings-page/class-complex-fields.php:201
 msgid "Administrator"
 msgstr ""
 
 #: includes/class-settings-definition-core.php:52
 msgid "Administrator After Login Redirect"
+msgstr ""
+
+#: admin/settings-page/class-configuration-summary.php:67
+msgid "Administrator Redirect"
 msgstr ""
 
 #: includes/class-settings-definition.php:37
@@ -389,6 +410,7 @@ msgstr ""
 msgid "Advanced tools include emergency access, import/export, diagnostics, and cleanup controls for setup and support."
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:66
 #: includes/class-settings-definition-core.php:46
 msgid "After Login Redirect"
 msgstr ""
@@ -442,7 +464,7 @@ msgstr ""
 msgid "Always blocks invalid, disabled, disposable, and spamtrap statuses."
 msgstr ""
 
-#: admin/class-settings-page.php:55
+#: admin/class-settings-page.php:56
 #: admin/settings-page/class-page-shell.php:41
 #: includes/services/class-privacy-service.php:64
 #: includes/services/class-privacy-service.php:79
@@ -470,7 +492,7 @@ msgstr ""
 msgid "Alynt Account Gateway will require login before the main checkout, but WooCommerce still permits guest checkout. Review both settings and test every checkout entry point before launch."
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:98
+#: admin/settings-page/class-readiness-summary.php:101
 msgid "An emergency bypass key exists for restoring access to the native login screen."
 msgstr ""
 
@@ -486,6 +508,7 @@ msgstr ""
 msgid "Are you sure you want to log out of your account?"
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:36
 #: admin/settings-page/class-settings-tools.php:123
 msgid "Area"
 msgstr ""
@@ -626,6 +649,7 @@ msgstr ""
 msgid "Both plugins can own public registration. Confirm which registration flow should create users."
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:80
 #: includes/class-settings-definition-core.php:144
 msgid "Brand Logo"
 msgstr ""
@@ -634,7 +658,7 @@ msgstr ""
 msgid "Branded Auth Outcomes"
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:104
+#: admin/settings-page/class-readiness-summary.php:107
 msgid "Branding"
 msgstr ""
 
@@ -719,6 +743,14 @@ msgstr ""
 msgid "Check Your Email"
 msgstr ""
 
+#: admin/settings-page/class-readiness-rules.php:141
+msgid "Checkout and order-pay login gates are disabled."
+msgstr ""
+
+#: admin/settings-page/class-configuration-summary.php:73
+msgid "Checkout Login Gate"
+msgstr ""
+
 #: admin/settings-page/class-security-overview.php:224
 msgid "Checks outbound Siteverify connectivity and whether Cloudflare accepts the saved secret far enough to reject a fixed invalid token. A real registration challenge is still required to prove the complete widget and hostname flow."
 msgstr ""
@@ -789,6 +821,10 @@ msgstr ""
 msgid "Compatibility Warnings"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:150
+msgid "Complete pending registration, confirmation email, set-password, and first login with a disposable user."
+msgstr ""
+
 #: admin/settings-page/class-security-review-ui.php:167
 msgid "Completed"
 msgstr ""
@@ -813,6 +849,10 @@ msgstr ""
 msgid "Configuration portability notes"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:127
+msgid "Configure and test emails."
+msgstr ""
+
 #: admin/settings-page/class-guidance.php:114
 msgid "Configure at least one provider before enabling public registration."
 msgstr ""
@@ -821,8 +861,36 @@ msgstr ""
 msgid "Configure both Terms and Privacy relative URL paths before public registration."
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:125
+msgid "Configure branding, screen copy, and previews."
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:128
+msgid "Configure dashboard, WooCommerce, webhooks, and privacy retention."
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:126
+msgid "Configure registration, security providers, and rate limits."
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:124
+msgid "Configure URLs and redirects."
+msgstr ""
+
+#: admin/settings-page/class-configuration-summary.php:119
+msgid "Configured"
+msgstr ""
+
+#: admin/settings-page/class-readiness-rules.php:158
+msgid "Configured WooCommerce login gates can be tested on checkout and order-pay paths."
+msgstr ""
+
 #: includes/services/class-email-tokens.php:192
 msgid "Confirm Account"
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:144
+msgid "Confirm administrator and shop manager accounts land on their configured redirects."
 msgstr ""
 
 #: admin/settings-page/class-security-verification-guidance.php:190
@@ -1009,6 +1077,14 @@ msgstr ""
 msgid "Cron"
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:29
+msgid "Current Configuration Summary"
+msgstr ""
+
+#: admin/settings-page/class-configuration-summary.php:33
+msgid "Current non-secret Account Gateway configuration"
+msgstr ""
+
 #: admin/settings-page/class-field-renderer-options.php:41
 msgid "Current pairing:"
 msgstr ""
@@ -1023,6 +1099,10 @@ msgstr ""
 msgid "Current policy: %s."
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:37
+msgid "Current State"
+msgstr ""
+
 #: includes/services/class-email-tokens.php:72
 msgid "Current WordPress site name."
 msgstr ""
@@ -1030,6 +1110,10 @@ msgstr ""
 #: admin/settings-page/class-field-renderer-options.php:29
 #: admin/settings-page/class-field-renderer-options.php:59
 msgid "Custom"
+msgstr ""
+
+#: admin/settings-page/class-configuration-summary.php:71
+msgid "Custom Dashboard"
 msgstr ""
 
 #: includes/class-settings-definition-account-data.php:34
@@ -1077,7 +1161,7 @@ msgid "Damon"
 msgstr ""
 
 #: admin/settings-page/class-gateway-preview.php:31
-#: admin/settings-page/class-readiness-summary.php:124
+#: admin/settings-page/class-readiness-summary.php:127
 #: includes/class-settings-definition.php:33
 #: includes/services/class-woocommerce-navigation.php:24
 #: includes/services/class-woocommerce-navigation.php:80
@@ -1122,6 +1206,10 @@ msgstr ""
 
 #: admin/settings-page/class-guidance.php:134
 msgid "Dashboard settings control the branded account dashboard and custom links users can access after login."
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:154
+msgid "Dashboard tested"
 msgstr ""
 
 #: includes/services/class-email-tokens.php:87
@@ -1255,6 +1343,10 @@ msgstr ""
 msgid "Disable Password Changed Email"
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:109
+msgid "Disabled"
+msgstr ""
+
 #: admin/settings-page/class-webhook-tools.php:125
 msgid "Disabled. Add a webhook signing secret to send verification headers."
 msgstr ""
@@ -1270,6 +1362,14 @@ msgstr ""
 #. translators: %s: downloadable file name.
 #: includes/services/class-dashboard-commerce-renderer.php:192
 msgid "Download %s"
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:146
+msgid "Download a settings JSON after approval so the final configuration can be restored or compared later."
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:55
+msgid "Download Handoff Summary"
 msgstr ""
 
 #: includes/services/class-dashboard-endpoint-metadata.php:153
@@ -1363,7 +1463,11 @@ msgstr ""
 msgid "Email settings control confirmation, password reset, password changed, welcome, and email-change confirmation messages."
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:115
+#: admin/settings-page/class-configuration-summary.php:79
+msgid "Email Test Recipient"
+msgstr ""
+
+#: admin/settings-page/class-readiness-summary.php:118
 msgid "Email Testing"
 msgstr ""
 
@@ -1402,10 +1506,15 @@ msgstr ""
 msgid "Emails"
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:95
+#: admin/settings-page/class-readiness-summary.php:98
 msgid "Emergency Access"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:145
+msgid "Emergency access stored privately"
+msgstr ""
+
+#: admin/settings-page/class-configuration-summary.php:82
 #: includes/class-settings-definition-core.php:64
 msgid "Emergency Bypass Key"
 msgstr ""
@@ -1458,6 +1567,7 @@ msgstr ""
 msgid "Enable this when logged-in users should see the branded full-page account dashboard."
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:109
 #: admin/settings-page/class-field-renderer-core.php:92
 msgid "Enabled"
 msgstr ""
@@ -1584,6 +1694,10 @@ msgstr ""
 msgid "Filesystem"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:40
+msgid "Final Check"
+msgstr ""
+
 #: includes/services/class-email-tokens.php:59
 msgid "First name"
 msgstr ""
@@ -1613,15 +1727,16 @@ msgstr ""
 msgid "Forgot Password?"
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:77
+#: admin/settings-page/class-configuration-summary.php:63
+#: admin/settings-page/class-readiness-summary.php:78
 msgid "Frontend Output"
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:81
+#: admin/settings-page/class-readiness-summary.php:82
 msgid "Frontend output is disabled, which is safest while setup is in progress."
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:80
+#: admin/settings-page/class-readiness-summary.php:81
 msgid "Frontend output is enabled. Keep the remaining checks ready before sending users to the gateway."
 msgstr ""
 
@@ -1629,6 +1744,7 @@ msgstr ""
 msgid "Gateway Auth Signals"
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:81
 #: includes/class-settings-definition-core.php:206
 msgid "Gateway Background Image"
 msgstr ""
@@ -1641,6 +1757,10 @@ msgstr ""
 msgid "Gateway Login Successes"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:141
+msgid "Gateway previews reviewed"
+msgstr ""
+
 #: admin/settings-page/class-security-signal-renderer-b.php:27
 msgid "Gateway Routing Signals"
 msgstr ""
@@ -1649,7 +1769,7 @@ msgstr ""
 msgid "Gateway Screen Preview"
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:86
+#: admin/settings-page/class-readiness-summary.php:87
 msgid "Gateway URLs"
 msgstr ""
 
@@ -1657,7 +1777,7 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:99
+#: admin/settings-page/class-readiness-summary.php:102
 msgid "Generate and save an emergency bypass key before replacing public login screens."
 msgstr ""
 
@@ -1973,6 +2093,10 @@ msgstr ""
 msgid "Log In"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:154
+msgid "Log in as a disposable customer and confirm dashboard navigation, custom links, and logout behavior."
+msgstr ""
+
 #: includes/services/class-frontend-login-screen.php:104
 msgid "Log in to complete your order"
 msgstr ""
@@ -1999,6 +2123,10 @@ msgstr ""
 msgid "Login"
 msgstr ""
 
+#: admin/settings-page/class-readiness-rules.php:29
+msgid "Login And Account Paths"
+msgstr ""
+
 #: admin/settings-page/class-security-verification-guidance.php:38
 msgid "Login attempt was blocked by the rate limit."
 msgstr ""
@@ -2023,11 +2151,12 @@ msgstr ""
 msgid "Login Rate Limit Window Minutes"
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:64
 #: includes/class-settings-definition-core.php:34
 msgid "Login URL Path"
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:89
+#: admin/settings-page/class-readiness-summary.php:90
 msgid "Login, account action, and after-login paths are configured."
 msgstr ""
 
@@ -2207,7 +2336,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: admin/settings-page/class-readiness-rules.php:114
+#: admin/settings-page/class-readiness-rules.php:172
 msgid "No account-created webhook URL is configured."
 msgstr ""
 
@@ -2239,7 +2368,7 @@ msgstr ""
 msgid "No billing address is saved yet. Add one to keep checkout details ready."
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:108
+#: admin/settings-page/class-readiness-summary.php:111
 msgid "No brand logo is configured yet. The gateway can still run, but branded output will feel less complete."
 msgstr ""
 
@@ -2312,6 +2441,11 @@ msgstr ""
 msgid "Not available"
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:119
+#: admin/settings-page/class-configuration-summary.php:131
+msgid "Not configured"
+msgstr ""
+
 #: includes/services/class-frontend-assets.php:116
 msgid "Not met"
 msgstr ""
@@ -2368,10 +2502,15 @@ msgstr ""
 msgid "Open account menu"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:141
+msgid "Open each preview screen from Advanced / Tools and confirm layout, logo, copy, and colors."
+msgstr ""
+
 #: admin/settings-page/class-complex-fields.php:147
 msgid "Open in a new tab"
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:46
 #: admin/settings-page/class-readiness-summary.php:47
 msgid "Open Setting"
 msgstr ""
@@ -2417,6 +2556,10 @@ msgstr ""
 
 #: includes/services/class-dashboard-endpoint-metadata.php:42
 msgid "Order History"
+msgstr ""
+
+#: admin/settings-page/class-configuration-summary.php:74
+msgid "Order-Pay Login Gate"
 msgstr ""
 
 #: admin/settings-page/class-complex-fields.php:171
@@ -2562,6 +2705,10 @@ msgstr ""
 msgid "Password Reset Subject"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:143
+msgid "Password reset tested"
+msgstr ""
+
 #: includes/services/class-email-tokens.php:79
 msgid "Password reset URL"
 msgstr ""
@@ -2644,7 +2791,7 @@ msgstr ""
 msgid "Plugin-added WooCommerce account endpoints are preserved when possible, but should be checked after dashboard takeover."
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:145
+#: admin/settings-page/class-readiness-summary.php:150
 msgid "Plugin-owned privacy, verification, webhook, consent, and audit retention windows are configured."
 msgstr ""
 
@@ -2696,7 +2843,7 @@ msgstr ""
 msgid "Privacy Policy"
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:142
+#: admin/settings-page/class-readiness-summary.php:147
 msgid "Privacy Retention"
 msgstr ""
 
@@ -2757,27 +2904,28 @@ msgstr ""
 msgid "Public account creation is enabled. Confirm the remaining checks before sending customers to registration."
 msgstr ""
 
-#: admin/settings-page/class-readiness-rules.php:29
-#: admin/settings-page/class-readiness-rules.php:38
-#: admin/settings-page/class-readiness-rules.php:47
-#: admin/settings-page/class-readiness-rules.php:55
+#: admin/settings-page/class-configuration-summary.php:69
+#: admin/settings-page/class-readiness-rules.php:50
+#: admin/settings-page/class-readiness-rules.php:59
+#: admin/settings-page/class-readiness-rules.php:68
+#: admin/settings-page/class-readiness-rules.php:76
 #: admin/settings-page/class-security-overview.php:110
 msgid "Public Registration"
 msgstr ""
 
-#: admin/settings-page/class-readiness-rules.php:57
+#: admin/settings-page/class-readiness-rules.php:78
 msgid "Public registration has Terms, Privacy, and at least one protection provider configured."
 msgstr ""
 
-#: admin/settings-page/class-readiness-rules.php:31
+#: admin/settings-page/class-readiness-rules.php:52
 msgid "Public registration is disabled by default. Enable it only after terms, privacy, and protection settings are reviewed."
 msgstr ""
 
-#: admin/settings-page/class-readiness-rules.php:49
+#: admin/settings-page/class-readiness-rules.php:70
 msgid "Public registration is enabled without Turnstile or Reoon. Add at least one protection provider before public launch."
 msgstr ""
 
-#: admin/settings-page/class-readiness-rules.php:40
+#: admin/settings-page/class-readiness-rules.php:61
 msgid "Public registration is enabled, but Terms and Privacy paths must both be configured."
 msgstr ""
 
@@ -2810,7 +2958,7 @@ msgstr ""
 msgid "Raw JSON"
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:190
+#: admin/settings-page/class-readiness-summary.php:195
 #: admin/settings-page/class-readiness-summary.php:36
 #: admin/settings-page/class-security-overview.php:38
 msgid "Ready"
@@ -3116,6 +3264,14 @@ msgstr ""
 msgid "Recommended default"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:41
+msgid "Recommended Evidence"
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:30
+msgid "Recommended setup order"
+msgstr ""
+
 #: admin/settings-page/class-security-review-ui.php:65
 msgid "Record review"
 msgstr ""
@@ -3211,6 +3367,10 @@ msgstr ""
 msgid "Registration Flow Signals"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:150
+msgid "Registration flow tested"
+msgstr ""
+
 #: includes/class-settings-definition-core.php:108
 msgid "Registration Instruction Text"
 msgstr ""
@@ -3285,6 +3445,10 @@ msgstr ""
 
 #: admin/settings-page/class-complex-fields.php:119
 msgid "Remove dashboard link"
+msgstr ""
+
+#: admin/settings-page/class-configuration-summary.php:76
+msgid "Reoon"
 msgstr ""
 
 #: admin/settings-page/class-security-verification-guidance.php:75
@@ -3402,6 +3566,10 @@ msgstr ""
 msgid "Reoon was not configured when verification ran. Confirm the API key before enabling public registration."
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:143
+msgid "Request a reset, follow the link, set a new password, and confirm branded login works."
+msgstr ""
+
 #: includes/class-settings-definition-account-data.php:70
 msgid "Require Login Before Checkout"
 msgstr ""
@@ -3466,7 +3634,8 @@ msgstr ""
 msgid "Return Path"
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:187
+#: admin/settings-page/class-configuration-summary.php:38
+#: admin/settings-page/class-readiness-summary.php:192
 #: admin/settings-page/class-readiness-summary.php:35
 #: admin/settings-page/class-security-overview.php:37
 #: admin/settings-page/class-security-signal-renderer-a.php:70
@@ -3551,12 +3720,20 @@ msgstr ""
 msgid "Review Security"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:129
+msgid "Review setup readiness, export settings, store emergency access privately, then enable frontend output."
+msgstr ""
+
 #: admin/settings-page/class-security-verification-guidance.php:184
 msgid "Review support reports before manually recovering a blocked registrant."
 msgstr ""
 
 #: admin/settings-page/class-security-verification-guidance.php:204
 msgid "Review Terms and Privacy copy if consent blocks repeat."
+msgstr ""
+
+#: admin/settings-page/class-configuration-summary.php:30
+msgid "Review the non-secret setup state before launch, support, or site handoff."
 msgstr ""
 
 #: admin/settings-page/class-security-verification-guidance.php:224
@@ -3628,7 +3805,7 @@ msgstr ""
 msgid "Save Password"
 msgstr ""
 
-#: admin/settings-page/class-page-shell.php:107
+#: admin/settings-page/class-page-shell.php:108
 msgid "Save Settings"
 msgstr ""
 
@@ -3729,6 +3906,10 @@ msgstr ""
 msgid "Send New Link"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:142
+msgid "Send representative email previews to the configured test recipient and confirm logo sizing, copy, and links."
+msgstr ""
+
 #: admin/settings-page/class-email-tools.php:72
 msgid "Send Test Email"
 msgstr ""
@@ -3786,11 +3967,11 @@ msgstr ""
 msgid "Set retention before collecting account evidence."
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:146
+#: admin/settings-page/class-readiness-summary.php:151
 msgid "Set retention windows above zero so plugin-owned logs and records can be cleaned up predictably."
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:90
+#: admin/settings-page/class-readiness-summary.php:91
 msgid "Set the login path, account action base, and after-login redirect before enabling frontend output."
 msgstr ""
 
@@ -3820,6 +4001,10 @@ msgstr ""
 
 #: admin/settings-page/class-admin-notices.php:97
 msgid "Settings could not be imported. Choose a valid Alynt Account Gateway JSON export."
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:146
+msgid "Settings export saved"
 msgstr ""
 
 #: admin/settings-page/class-settings-tools.php:24
@@ -3869,6 +4054,10 @@ msgstr ""
 msgid "Shop Manager After Login Redirect"
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:68
+msgid "Shop Manager Redirect"
+msgstr ""
+
 #: includes/services/class-frontend-assets.php:113
 #: includes/services/class-frontend-login-screen.php:143
 #: includes/services/class-frontend-setpassword-screen.php:186
@@ -3908,8 +4097,16 @@ msgstr ""
 msgid "Signing:"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:25
+msgid "Site Handoff"
+msgstr ""
+
 #: includes/services/class-email-tokens.php:71
 msgid "Site name"
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:158
+msgid "Smoke orders, account details, addresses, payment methods, checkout login, and order-pay login behavior."
 msgstr ""
 
 #: admin/settings-page/class-guidance.php:148
@@ -3940,6 +4137,10 @@ msgstr ""
 
 #: admin/settings-page/class-guidance.php:180
 msgid "Store the emergency bypass key securely before replacing public login routes."
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:145
+msgid "Store the native-login bypass key outside WordPress before enabling frontend output."
 msgstr ""
 
 #: admin/settings-page/class-field-help.php:129
@@ -3999,12 +4200,20 @@ msgstr ""
 msgid "Terms and privacy links are configured for the registration consent checkbox."
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:70
+msgid "Terms And Privacy Paths"
+msgstr ""
+
 #: includes/services/class-privacy-exporter.php:170
 msgid "Terms Path"
 msgstr ""
 
 #: includes/class-settings-definition-core.php:90
 msgid "Terms URL Path"
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:142
+msgid "Test email received"
 msgstr ""
 
 #: includes/class-settings-definition-security-email.php:248
@@ -4052,11 +4261,11 @@ msgstr ""
 msgid "The account-created welcome email could not be sent."
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:128
+#: admin/settings-page/class-readiness-summary.php:131
 msgid "The branded account dashboard is disabled. Users may be redirected to the configured account destination without the custom dashboard."
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:127
+#: admin/settings-page/class-readiness-summary.php:130
 msgid "The branded account dashboard is enabled."
 msgstr ""
 
@@ -4094,6 +4303,14 @@ msgstr ""
 
 #: includes/services/class-email-sender.php:29
 msgid "The email recipient is invalid."
+msgstr ""
+
+#: admin/settings-page/class-readiness-rules.php:33
+msgid "The login path and account action base are separate."
+msgstr ""
+
+#: admin/settings-page/class-readiness-rules.php:32
+msgid "The login path and account action base are the same. Keep them separate so login and action screens route predictably."
 msgstr ""
 
 #: includes/services/class-frontend-messages.php:96
@@ -4335,6 +4552,7 @@ msgstr ""
 msgid "Tune the words users see at sensitive account moments."
 msgstr ""
 
+#: admin/settings-page/class-configuration-summary.php:75
 #: admin/settings-page/class-security-overview.php:179
 #: admin/settings-page/class-security-review-ui.php:230
 msgid "Turnstile"
@@ -4562,6 +4780,10 @@ msgstr ""
 msgid "Use the saved template settings with sample account tokens before sending real account emails."
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:162
+msgid "Use the test webhook tool and confirm the receiver validates any configured signing headers."
+msgstr ""
+
 #: admin/settings-page/class-guidance.php:159
 msgid "Use the test webhook tool before relying on automation downstream."
 msgstr ""
@@ -4580,6 +4802,10 @@ msgstr ""
 
 #: admin/settings-page/class-security-review-queue.php:47
 msgid "Use this as a support-friendly rubric before changing the site-wide Reoon flagged-status policy."
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:27
+msgid "Use this non-secret checklist and summary when finishing setup or handing the gateway to a site owner."
 msgstr ""
 
 #: admin/settings-page/class-security-overview.php:50
@@ -4716,11 +4942,16 @@ msgstr ""
 msgid "Webhook Delivery Metadata"
 msgstr ""
 
+#: admin/settings-page/class-handoff-tools.php:162
+msgid "Webhook receiver tested"
+msgstr ""
+
 #: admin/settings-page/class-guidance.php:156
 msgid "Webhook settings dispatch account-created events to external tools and can include signing headers for receiver verification."
 msgstr ""
 
-#: admin/settings-page/class-readiness-summary.php:135
+#: admin/settings-page/class-configuration-summary.php:78
+#: admin/settings-page/class-readiness-summary.php:140
 msgid "Webhook Signing"
 msgstr ""
 
@@ -4771,7 +5002,11 @@ msgstr ""
 msgid "WooCommerce"
 msgstr ""
 
-#: admin/settings-page/class-readiness-rules.php:74
+#: admin/settings-page/class-handoff-tools.php:158
+msgid "WooCommerce account and checkout paths tested"
+msgstr ""
+
+#: admin/settings-page/class-readiness-rules.php:95
 msgid "WooCommerce account takeover is disabled."
 msgstr ""
 
@@ -4792,6 +5027,12 @@ msgstr ""
 msgid "WooCommerce guest checkout is still enabled"
 msgstr ""
 
+#: admin/settings-page/class-readiness-rules.php:139
+#: admin/settings-page/class-readiness-rules.php:148
+#: admin/settings-page/class-readiness-rules.php:156
+msgid "WooCommerce Login Gates"
+msgstr ""
+
 #: includes/services/class-compatibility-registry.php:75
 msgid "WooCommerce Memberships may add account endpoints"
 msgstr ""
@@ -4800,22 +5041,23 @@ msgstr ""
 msgid "WooCommerce Subscriptions may add account endpoints"
 msgstr ""
 
-#: admin/settings-page/class-readiness-rules.php:72
-#: admin/settings-page/class-readiness-rules.php:81
-#: admin/settings-page/class-readiness-rules.php:90
-#: admin/settings-page/class-readiness-rules.php:98
+#: admin/settings-page/class-configuration-summary.php:72
+#: admin/settings-page/class-readiness-rules.php:102
+#: admin/settings-page/class-readiness-rules.php:111
+#: admin/settings-page/class-readiness-rules.php:119
+#: admin/settings-page/class-readiness-rules.php:93
 msgid "WooCommerce Takeover"
 msgstr ""
 
-#: admin/settings-page/class-readiness-rules.php:100
+#: admin/settings-page/class-readiness-rules.php:121
 msgid "WooCommerce takeover is enabled and WooCommerce appears to be active."
 msgstr ""
 
-#: admin/settings-page/class-readiness-rules.php:92
+#: admin/settings-page/class-readiness-rules.php:113
 msgid "WooCommerce takeover is enabled, but WooCommerce does not appear to be active."
 msgstr ""
 
-#: admin/settings-page/class-readiness-rules.php:83
+#: admin/settings-page/class-readiness-rules.php:104
 msgid "WooCommerce takeover requires the custom dashboard to be enabled."
 msgstr ""
 
@@ -4851,6 +5093,10 @@ msgstr ""
 
 #: admin/settings-page/class-settings-transfer.php:29
 msgid "You do not have permission to export settings."
+msgstr ""
+
+#: admin/settings-page/class-handoff-tools.php:68
+msgid "You do not have permission to export the handoff summary."
 msgstr ""
 
 #: admin/settings-page/class-settings-transfer.php:55

@@ -63,6 +63,48 @@ class SettingsPageReadinessTest extends TestCase {
 		$this->assertSame( 'security', $registration[0]['tab'] );
 	}
 
+	public function test_readiness_checks_flag_overlapping_login_and_action_paths() {
+		$settings = ALYNT_AG_Settings_Schema::defaults();
+		$settings['login_path']          = '/account/';
+		$settings['account_action_base'] = 'account';
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$checks        = $this->invoke_helper( $settings_page, 'setup_readiness_checks', array( $settings ) );
+		$path_check    = array_values(
+			array_filter(
+				$checks,
+				static function ( $check ) {
+					return 'Login And Account Paths' === $check['label'];
+				}
+			)
+		);
+
+		$this->assertSame( 'action', $path_check[0]['status'] );
+		$this->assertStringContainsString( 'same', $path_check[0]['message'] );
+		$this->assertSame( 'urls', $path_check[0]['tab'] );
+	}
+
+	public function test_readiness_checks_require_emergency_access_when_frontend_is_enabled() {
+		$settings = ALYNT_AG_Settings_Schema::defaults();
+		$settings['frontend_enabled']      = true;
+		$settings['emergency_bypass_key']  = '';
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$checks        = $this->invoke_helper( $settings_page, 'setup_readiness_checks', array( $settings ) );
+		$emergency     = array_values(
+			array_filter(
+				$checks,
+				static function ( $check ) {
+					return 'Emergency Access' === $check['label'];
+				}
+			)
+		);
+
+		$this->assertSame( 'action', $emergency[0]['status'] );
+		$this->assertStringContainsString( 'emergency bypass key', $emergency[0]['message'] );
+		$this->assertSame( 'advanced_tools', $emergency[0]['tab'] );
+	}
+
 	public function test_readiness_checks_require_dashboard_for_woocommerce_takeover() {
 		$settings = ALYNT_AG_Settings_Schema::defaults();
 		$settings['dashboard_enabled']    = false;
@@ -82,6 +124,26 @@ class SettingsPageReadinessTest extends TestCase {
 		$this->assertSame( 'action', $woocommerce[0]['status'] );
 		$this->assertStringContainsString( 'requires the custom dashboard', $woocommerce[0]['message'] );
 		$this->assertSame( 'dashboard', $woocommerce[0]['tab'] );
+	}
+
+	public function test_readiness_checks_warn_for_woocommerce_login_gate_without_woocommerce() {
+		$settings = ALYNT_AG_Settings_Schema::defaults();
+		$settings['woocommerce_require_login_checkout'] = true;
+
+		$settings_page = new ALYNT_AG_Settings_Page();
+		$checks        = $this->invoke_helper( $settings_page, 'setup_readiness_checks', array( $settings ) );
+		$gate_check    = array_values(
+			array_filter(
+				$checks,
+				static function ( $check ) {
+					return 'WooCommerce Login Gates' === $check['label'];
+				}
+			)
+		);
+
+		$this->assertSame( 'warning', $gate_check[0]['status'] );
+		$this->assertStringContainsString( 'WooCommerce does not appear to be active', $gate_check[0]['message'] );
+		$this->assertSame( 'woocommerce', $gate_check[0]['tab'] );
 	}
 
 	public function test_readiness_panel_renders_summary_and_tab_links() {

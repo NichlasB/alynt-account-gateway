@@ -69,6 +69,7 @@ class ALYNT_AG_Settings_Page_Page_Shell extends ALYNT_AG_Settings_Page_Component
 			<?php $this->render_tab_guidance( $active_tab ); ?>
 
 			<?php if ( 'general' === $active_tab ) : ?>
+				<?php $this->render_configuration_summary_panel( $settings ); ?>
 				<?php $this->render_setup_readiness_panel( $settings ); ?>
 			<?php endif; ?>
 
@@ -114,6 +115,7 @@ class ALYNT_AG_Settings_Page_Page_Shell extends ALYNT_AG_Settings_Page_Component
 			<?php endif; ?>
 
 			<?php if ( 'advanced_tools' === $active_tab ) : ?>
+				<?php $this->render_handoff_tools( $settings ); ?>
 				<?php $this->render_diagnostics_tools(); ?>
 			<?php endif; ?>
 
