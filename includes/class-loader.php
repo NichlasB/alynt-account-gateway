@@ -95,6 +95,7 @@ $alynt_ag_files = array(
 	'includes/services/class-privacy-exporter.php',
 	'includes/services/class-privacy-eraser.php',
 	'includes/services/class-privacy-service.php',
+	'includes/services/class-public-author-privacy.php',
 	'includes/services/class-frontend-messages.php',
 );
 

@@ -89,6 +89,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-compatibility-warnin
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-exporter.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-eraser.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-privacy-service.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-public-author-privacy.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-component.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-page-shell.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'admin/settings-page/class-field-renderer-core.php';

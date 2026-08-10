@@ -100,17 +100,18 @@ class ALYNT_AG_Frontend_Gateway_Shell {
 	 * @return void
 	 */
 	public function render_gateway_shell( $screen, $settings ) {
-		$style = $this->branding()->style_attribute( $settings );
-		$dir   = is_rtl() ? 'rtl' : 'ltr';
+		$style         = $this->branding()->style_attribute( $settings );
+		$shell_classes = $this->branding()->shell_class_attribute( $settings );
+		$dir           = is_rtl() ? 'rtl' : 'ltr';
 		?>
 		<main class="alynt-ag-gateway" data-agw-screen="<?php echo esc_attr( $screen ); ?>" dir="<?php echo esc_attr( $dir ); ?>" style="<?php echo esc_attr( $style ); ?>">
-			<section class="agw-shell" aria-labelledby="agw-screen-title">
+			<section class="<?php echo esc_attr( $shell_classes ); ?>" aria-labelledby="agw-screen-title">
 				<div class="agw-media" aria-hidden="true">
 					<?php $this->branding()->render_media_panel( $settings ); ?>
 				</div>
 				<div class="agw-panel">
 					<div class="agw-card">
-						<?php $this->branding()->render_brand_block( $settings ); ?>
+						<?php $this->branding()->render_brand_block( $settings, home_url( '/' ) ); ?>
 						<?php $this->render_screen( $screen, $settings ); ?>
 					</div>
 				</div>
@@ -126,17 +127,18 @@ class ALYNT_AG_Frontend_Gateway_Shell {
 	 * @return void
 	 */
 	public function render_gateway_shell_with_password_preview( $settings ) {
-		$style = $this->branding()->style_attribute( $settings );
-		$dir   = is_rtl() ? 'rtl' : 'ltr';
+		$style         = $this->branding()->style_attribute( $settings );
+		$shell_classes = $this->branding()->shell_class_attribute( $settings );
+		$dir           = is_rtl() ? 'rtl' : 'ltr';
 		?>
 		<main class="alynt-ag-gateway" data-agw-screen="setpassword" dir="<?php echo esc_attr( $dir ); ?>" style="<?php echo esc_attr( $style ); ?>">
-			<section class="agw-shell" aria-labelledby="agw-screen-title">
+			<section class="<?php echo esc_attr( $shell_classes ); ?>" aria-labelledby="agw-screen-title">
 				<div class="agw-media" aria-hidden="true">
 					<?php $this->branding()->render_media_panel( $settings ); ?>
 				</div>
 				<div class="agw-panel">
 					<div class="agw-card">
-						<?php $this->branding()->render_brand_block( $settings ); ?>
+						<?php $this->branding()->render_brand_block( $settings, home_url( '/' ) ); ?>
 						<?php
 						$this->setpassword_screen()->render_password_form(
 							$settings,

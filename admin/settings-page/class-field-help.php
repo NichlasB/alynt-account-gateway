@@ -180,6 +180,7 @@ class ALYNT_AG_Settings_Page_Field_Help extends ALYNT_AG_Settings_Page_Component
 			'verification_log_retention'          => __( 'Controls how long anti-spam and email verification records are kept.', 'alynt-account-gateway' ),
 			'consent_record_retention'            => __( 'Controls how long registration consent evidence is retained.', 'alynt-account-gateway' ),
 			'audit_log_retention'                 => __( 'Controls how long plugin audit events are retained for operational review.', 'alynt-account-gateway' ),
+			'public_author_name_format'           => __( 'Controls logged-in public comment and product-review author names. WordPress user profiles keep their normal name data.', 'alynt-account-gateway' ),
 		);
 
 		return isset( $help[ $key ] ) ? $help[ $key ] : '';

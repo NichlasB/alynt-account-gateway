@@ -17,9 +17,7 @@ class ALYNT_AG_Test_Gateway_Shell_Branding extends ALYNT_AG_Frontend_Branding {
 	}
 
 	public function render_brand_block( $settings, $link_url = '' ) {
-		unset( $link_url );
-
-		echo '<div class="test-brand">Brand</div>';
+		echo '<div class="test-brand" data-link="' . esc_attr( $link_url ) . '">Brand</div>';
 	}
 }
 
@@ -85,6 +83,7 @@ class FrontendGatewayShellTest extends TestCase {
 		$GLOBALS['alynt_ag_test_is_rtl'] = false;
 		$this->settings = array(
 			'account_action_base' => '/account',
+			'page_background_color' => '#F6F2EA',
 		);
 	}
 
@@ -106,9 +105,21 @@ class FrontendGatewayShellTest extends TestCase {
 		$this->assertStringContainsString( 'dir="ltr"', $html );
 		$this->assertStringContainsString( 'style="--agw-color-primary:#123456;"', $html );
 		$this->assertStringContainsString( '<div class="test-media"></div>', $html );
-		$this->assertStringContainsString( '<div class="test-brand">Brand</div>', $html );
+		$this->assertStringContainsString( 'class="agw-shell"', $html );
+		$this->assertStringContainsString( '<div class="test-brand" data-link="https://example.test/">Brand</div>', $html );
 		$this->assertStringContainsString( '<div class="test-screen">register</div>', $html );
 		$this->assertStringNotContainsString( '<div class="test-screen">login</div>', $html );
+	}
+
+	public function test_render_gateway_shell_marks_white_page_background() {
+		$shell                                  = $this->make_shell();
+		$this->settings['page_background_color'] = '#ffffff';
+
+		ob_start();
+		$shell->render_gateway_shell( 'login', $this->settings );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'class="agw-shell agw-shell--white-page-bg"', $html );
 	}
 
 	/**
@@ -137,7 +148,7 @@ class FrontendGatewayShellTest extends TestCase {
 
 		$this->assertStringContainsString( 'data-agw-screen="setpassword"', $html );
 		$this->assertStringContainsString( 'dir="ltr"', $html );
-		$this->assertStringContainsString( '<div class="test-brand">Brand</div>', $html );
+		$this->assertStringContainsString( '<div class="test-brand" data-link="https://example.test/">Brand</div>', $html );
 		$this->assertStringContainsString( 'class="test-password-preview"', $html );
 		$this->assertStringContainsString( 'data-action="https://example.test/account"', $html );
 	}

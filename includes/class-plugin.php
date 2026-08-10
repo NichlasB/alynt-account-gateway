@@ -28,6 +28,9 @@ class ALYNT_AG_Plugin {
 		$privacy = new ALYNT_AG_Privacy_Service();
 		$privacy->register();
 
+		$public_author_privacy = new ALYNT_AG_Public_Author_Privacy();
+		$public_author_privacy->register();
+
 		$cleanup = new ALYNT_AG_Retention_Cleanup();
 		$cleanup->register();
 

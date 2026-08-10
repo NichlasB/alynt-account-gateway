@@ -288,6 +288,7 @@ class FrontendCssSourceTest extends TestCase {
 
 		$this->assertMatchesRegularExpression( '/\.agw-panel\s*\{[^}]*padding:\s*24px;/s', $css );
 		$this->assertMatchesRegularExpression( '/\.agw-card\s*\{[^}]*max-width:\s*540px;[^}]*padding:\s*40px 24px;/s', $css );
+		$this->assertMatchesRegularExpression( '/\.agw-shell--white-page-bg \.agw-card\s*\{[^}]*border:\s*2px solid rgb\(var\(--agw-color-primary-rgb\) \/ 16%\);[^}]*box-shadow:\s*0 1px 2px rgb\(40 20 8 \/ 5%\), 0 18px 40px -22px rgb\(var\(--agw-color-primary-rgb\) \/ 18%\);/s', $css );
 		$this->assertMatchesRegularExpression( '/\.agw-notice p:last-child\s*\{[^}]*margin:\s*0;/s', $css );
 	}
 }

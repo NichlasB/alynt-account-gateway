@@ -250,7 +250,7 @@ class FrontendDashboardEndpointTest extends FrontendDashboardScreenTestCase {
 		$this->assertStringContainsString( 'No shipping address is saved yet.', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard-section agw-dashboard-account-details"', $html );
 		$this->assertStringNotContainsString( 'Details ready', $html );
-		$this->assertStringContainsString( 'Your account information is saved.', $html );
+		$this->assertStringNotContainsString( 'Your account information is saved.', $html );
 		$this->assertStringContainsString( 'Customer since', $html );
 		$this->assertStringNotContainsString( 'class="agw-dashboard-section agw-dashboard-payment-methods"', $html );
 		$this->assertStringContainsString( 'class="agw-dashboard-grid"', $html );

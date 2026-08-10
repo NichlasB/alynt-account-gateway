@@ -2,12 +2,39 @@
 
 ## Status
 
-- Current phase: v1.1.35 released and rolled out to tracked LocalWP, staging, and live Account Gateway installs.
+- Current phase: v1.1.36 release candidate is being prepared from the bundled public-author privacy, account-details simplification, gateway logo-link, and white-background card-framing changes.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.35 is the current public baseline.
+- Plugin status: v1.1.35 is the current public baseline; v1.1.36 is the next release candidate.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Custom CSS editor and primary-color notice styling are released and rolled out. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Public comment/review name privacy, account-details simplification, gateway logo homepage links, and white-background card framing are bundled as the v1.1.36 release candidate. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## Public Author Privacy And Account Details Simplification
+
+- [x] Add a Privacy & Data setting for public comment/review author name format.
+- [x] Default public author names to first name plus last initial, e.g. `Anna M.`, while keeping a WordPress-default escape hatch.
+- [x] Apply the privacy-safe name to frontend comment/review display filters and new logged-in comment/review inserts.
+- [x] Preserve normal names in wp-admin contexts so administrators retain operational clarity.
+- [x] Remove the redundant complete-state `Your account information is saved.` dashboard guidance while preserving incomplete-account guidance.
+- [x] Remove the public WooCommerce Display Name row from the branded Account Details form and prime the hidden save value server-side from first name plus last name.
+- [x] Tighten Privacy & Data help text so it accurately describes public author formatting without implying stored comment/review author rows preserve full names.
+- [x] Run targeted `ds2-feature` reviews: Feature Light Review, Feature Bloat and Structure Review, Feature UI/UX Implementation Review, and Feature Security Review.
+- [x] Run focused PHPUnit, full PHPUnit, PHPCS, frontend build, and whitespace validation.
+- [x] Bundle with the gateway brand-link and white-background card-framing slice for the next release candidate.
+- [x] Build a local review ZIP at `C:\Users\Captain\Documents\AI Workflows\work\alynt-account-gateway-bundles\alynt-account-gateway-v1.1.35-local-bundle-20260810-092733.zip`; inspected archive contains 136 runtime files and zero development files. SHA-256: `CE6D208366937855CA5CB732FFBD09A474576E0A7A12F2E5FE5CEF99113D2936`.
+- [x] Prepare the `v1.1.36` release candidate metadata and docs.
+- [ ] Publish only after explicit release approval.
+
+## Gateway Brand Link And White Background Card Framing
+
+- [x] Link gateway-screen brand/logo blocks to the site homepage, matching the dashboard logo behavior.
+- [x] Add a white-page-background shell modifier for configured `#ffffff`, `#fff`, and equivalent uppercase/no-hash values.
+- [x] Apply the stronger `2px` primary-tinted card border and primary-tinted shadow only when the configured Page Background Color is white.
+- [x] Run targeted `ds2-feature` reviews as part of the combined local release bundle.
+- [x] Run focused PHP tests, full PHPUnit, PHPCS, frontend build, and whitespace validation.
+- [x] Bundle with the public author privacy and account-details simplification slice for the next release candidate.
+- [x] Prepare the `v1.1.36` release candidate metadata and docs.
+- [ ] Publish only after explicit release approval.
 
 ## Custom CSS And Primary-Color Notice Styling (Next Slice)
 

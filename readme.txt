@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.35
+Stable tag: 1.1.36
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -72,6 +72,13 @@ Yes. Each email body uses WordPress's Visual/Text editor with safe HTML formatti
 == Changelog ==
 
 = Unreleased =
+
+= 1.1.36 =
+
+* Add default privacy-safe public comment and product-review author names for logged-in users, with configurable Privacy & Data options.
+* Simplify branded Account Details by removing the redundant saved-state note and hiding WooCommerce's public Display Name field while deriving it from first and last name during saves.
+* Link gateway-screen logos to the site homepage.
+* Improve card framing when the configured gateway page background is white.
 
 = 1.1.35 =
 

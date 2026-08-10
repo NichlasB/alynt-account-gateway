@@ -168,6 +168,7 @@ When a signing secret is configured, delivery includes `X-Alynt-AG-Event`, `X-Al
 | `verification_log_retention` | `integer` | `30` | Verification-log retention in days; constrained to `1` through `3650`. |
 | `consent_record_retention` | `integer` | `365` | Registration-consent record retention in days; constrained to `1` through `3650`. |
 | `audit_log_retention` | `integer` | `180` | Audit-log retention in days; constrained to `1` through `3650`. |
+| `public_author_name_format` | `select` | `first_last_initial` | Public comment and product-review author name format for logged-in users. Defaults to first name plus last initial, e.g. `Anna M.`; WordPress user profiles keep their normal name data. |
 
 Consent records omit IP addresses by default. They include email, user ID when available, terms and privacy paths, consent context, plugin version, settings hash, and timestamp. The plugin registers WordPress personal-data exporter and eraser callbacks for plugin-owned pending registrations, consent records, verification logs, webhook metadata, and audit entries.
 

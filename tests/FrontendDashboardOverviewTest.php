@@ -216,7 +216,7 @@ class FrontendDashboardOverviewTest extends FrontendDashboardScreenTestCase {
 		$this->assertStringContainsString( '<dt>Customer since</dt>', $html );
 		$this->assertStringContainsString( 'July 3, 2026', $html );
 		$this->assertStringNotContainsString( 'Details ready', $html );
-		$this->assertStringContainsString( 'Your account information is saved.', $html );
+		$this->assertStringNotContainsString( 'Your account information is saved.', $html );
 		$this->assertStringNotContainsString( 'damon-account-username', $html );
 	}
 

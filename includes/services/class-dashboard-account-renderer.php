@@ -121,7 +121,7 @@ class ALYNT_AG_Dashboard_Account_Renderer {
 
 		$is_complete = ! empty( $details['is_complete'] );
 		$guidance    = $is_complete
-			? __( 'Your account information is saved.', 'alynt-account-gateway' )
+			? ''
 			: __( 'Add your first and last name so account notices and future orders use the right details.', 'alynt-account-gateway' );
 		?>
 		<section class="agw-dashboard-section agw-dashboard-account-details" aria-labelledby="agw-dashboard-account-details-title">
@@ -150,7 +150,9 @@ class ALYNT_AG_Dashboard_Account_Renderer {
 					<dd><?php echo esc_html( ! empty( $details['member_since'] ) ? $details['member_since'] : __( 'Not available', 'alynt-account-gateway' ) ); ?></dd>
 				</div>
 			</dl>
-			<p class="agw-dashboard-account-details__guidance"><?php echo esc_html( $guidance ); ?></p>
+			<?php if ( '' !== $guidance ) : ?>
+				<p class="agw-dashboard-account-details__guidance"><?php echo esc_html( $guidance ); ?></p>
+			<?php endif; ?>
 		</section>
 		<?php
 	}

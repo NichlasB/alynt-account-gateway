@@ -47,6 +47,22 @@ class ALYNT_AG_Frontend_Branding {
 	}
 
 	/**
+	 * Return gateway shell classes for configured page-level states.
+	 *
+	 * @param array<string,mixed> $settings Settings.
+	 * @return string
+	 */
+	public function shell_class_attribute( $settings ) {
+		$classes = array( 'agw-shell' );
+
+		if ( $this->is_white_color( $settings['page_background_color'] ?? '' ) ) {
+			$classes[] = 'agw-shell--white-page-bg';
+		}
+
+		return implode( ' ', $classes );
+	}
+
+	/**
 	 * Convert a hex color to space-separated RGB channels for alpha-ready CSS.
 	 *
 	 * @param string $color Hex color.
@@ -75,6 +91,22 @@ class ALYNT_AG_Frontend_Branding {
 			hexdec( substr( $color, 0, 2 ) ),
 			hexdec( substr( $color, 2, 2 ) ),
 			hexdec( substr( $color, 4, 2 ) )
+		);
+	}
+
+	/**
+	 * Determine whether a configured color is white.
+	 *
+	 * @param string $color Color value.
+	 * @return bool
+	 */
+	private function is_white_color( $color ) {
+		$color = strtolower( trim( (string) $color ) );
+
+		return in_array(
+			$color,
+			array( '#fff', 'fff', '#ffffff', 'ffffff' ),
+			true
 		);
 	}
 

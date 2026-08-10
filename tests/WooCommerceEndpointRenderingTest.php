@@ -60,6 +60,52 @@ class WooCommerceEndpointRenderingTest extends WooCommerceIntegrationTestCase {
 		$this->assertSame( array( '2' ), $GLOBALS['alynt_ag_test_actions'][0]['args'] );
 	}
 
+	public function test_edit_account_endpoint_removes_public_display_name_field() {
+		$integration = new class() extends ALYNT_AG_WooCommerce_Integration {
+			public function detect() {
+				return true;
+			}
+		};
+
+		$GLOBALS['alynt_ag_test_action_output']['woocommerce_account_edit-account_endpoint'] = '<form><p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide"><label for="account_display_name">Display name</label><input id="account_display_name" name="account_display_name"><span><em>This will be shown publicly.</em></span></p><p class="form-row"><label for="account_email">Email address</label><input id="account_email" name="account_email"></p></form>';
+
+		ob_start();
+		$result = $integration->render_endpoint( 'edit-account', '' );
+		$html   = ob_get_clean();
+
+		$this->assertTrue( $result );
+		$this->assertStringNotContainsString( 'account_display_name', $html );
+		$this->assertStringContainsString( 'account_email', $html );
+	}
+
+	public function test_edit_account_post_primes_display_name_from_first_and_last_name() {
+		$integration = new class() extends ALYNT_AG_WooCommerce_Integration {
+			public function detect() {
+				return true;
+			}
+		};
+
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'dashboard_enabled'    => true,
+			'woocommerce_takeover' => true,
+			'after_login_redirect' => '/my-account/',
+		);
+		$GLOBALS['alynt_ag_test_current_user_id'] = 123;
+		$GLOBALS['alynt_ag_test_user_logged_in']  = true;
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_SERVER['REQUEST_URI']    = '/my-account/edit-account/';
+		$_POST                     = array(
+			'save_account_details' => '1',
+			'account_first_name'   => 'Anna',
+			'account_last_name'    => 'Miller',
+		);
+
+		$integration->maybe_handle_account_form_post();
+
+		$this->assertSame( 'Anna Miller', $_POST['account_display_name'] );
+		$this->assertSame( 'Anna Miller', $GLOBALS['alynt_ag_test_wc_save_account_details_calls'][0]['account_display_name'] );
+	}
+
 	public function test_account_form_post_handler_registers_before_gateway_render() {
 		$integration = new ALYNT_AG_WooCommerce_Integration();
 		$integration->register();

@@ -64,6 +64,29 @@ class FrontendBrandingTest extends TestCase {
 		$this->assertStringContainsString( '--agw-color-primary-rgb:170 187 204;', $style );
 	}
 
+	/**
+	 * @dataProvider white_background_provider
+	 *
+	 * @param string $color Color value.
+	 * @return void
+	 */
+	public function test_shell_class_attribute_marks_white_page_backgrounds( $color ) {
+		$branding                                = new ALYNT_AG_Frontend_Branding();
+		$this->settings['page_background_color'] = $color;
+
+		$classes = $branding->shell_class_attribute( $this->settings );
+
+		$this->assertSame( 'agw-shell agw-shell--white-page-bg', $classes );
+	}
+
+	public function test_shell_class_attribute_omits_white_modifier_for_non_white_background() {
+		$branding = new ALYNT_AG_Frontend_Branding();
+
+		$classes = $branding->shell_class_attribute( $this->settings );
+
+		$this->assertSame( 'agw-shell', $classes );
+	}
+
 	public function test_render_media_panel_outputs_pattern_when_no_background_image_exists() {
 		$branding = new ALYNT_AG_Frontend_Branding();
 
@@ -129,5 +152,15 @@ class FrontendBrandingTest extends TestCase {
 
 		$this->assertStringContainsString( 'class="agw-brand__link" href="https://example.test/" aria-label="Go to homepage"', $html );
 		$this->assertStringContainsString( 'class="agw-brand__logo"', $html );
+	}
+
+	public function white_background_provider() {
+		return array(
+			'long hex'        => array( '#ffffff' ),
+			'long hex upper'  => array( '#FFFFFF' ),
+			'short hex'       => array( '#fff' ),
+			'short hex upper' => array( '#FFF' ),
+			'without hash'    => array( 'ffffff' ),
+		);
 	}
 }

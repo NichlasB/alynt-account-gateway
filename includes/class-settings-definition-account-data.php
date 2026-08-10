@@ -165,6 +165,18 @@ class ALYNT_AG_Settings_Definition_Account_Data {
 				'max'     => 3650,
 				'label'   => __( 'Audit Log Retention Days', 'alynt-account-gateway' ),
 			),
+			'public_author_name_format'           => array(
+				'tab'     => 'privacy',
+				'type'    => 'select',
+				'default' => 'first_last_initial',
+				'label'   => __( 'Public Comment/Review Name Format', 'alynt-account-gateway' ),
+				'options' => array(
+					'wordpress_default'  => __( 'WordPress default', 'alynt-account-gateway' ),
+					'first_last_initial' => __( 'First name + last initial, e.g. Anna M.', 'alynt-account-gateway' ),
+					'first_name'         => __( 'First name only', 'alynt-account-gateway' ),
+					'customer'           => __( 'Generic customer label', 'alynt-account-gateway' ),
+				),
+			),
 		);
 	}
 }

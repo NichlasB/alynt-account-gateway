@@ -44,6 +44,29 @@ if ( ! class_exists( 'WC_Payment_Tokens' ) ) {
 	}
 }
 
+if ( ! class_exists( 'WC_Form_Handler' ) ) {
+	class WC_Form_Handler {
+
+		/**
+		 * Record account-save fixture calls.
+		 *
+		 * @return void
+		 */
+		public static function save_account_details() {
+			$GLOBALS['alynt_ag_test_wc_save_account_details_calls'][] = $_POST;
+		}
+
+		/**
+		 * Record address-save fixture calls.
+		 *
+		 * @return void
+		 */
+		public static function save_address() {
+			$GLOBALS['alynt_ag_test_wc_save_address_calls'][] = $_POST;
+		}
+	}
+}
+
 if ( ! function_exists( 'wc_get_account_formatted_address' ) ) {
 	function wc_get_account_formatted_address( $type = 'billing', $user_id = 0 ) {
 		$key = sanitize_key( $type ) . ':' . absint( $user_id );

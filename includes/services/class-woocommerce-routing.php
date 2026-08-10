@@ -42,6 +42,7 @@ class ALYNT_AG_WooCommerce_Routing extends ALYNT_AG_Service_Collaborator {
 		}
 
 		if ( 'edit-account' === $endpoint['endpoint'] && $this->is_account_details_post() && method_exists( 'WC_Form_Handler', 'save_account_details' ) ) {
+			$this->prime_account_display_name_post();
 			WC_Form_Handler::save_account_details();
 		}
 	}
@@ -107,6 +108,28 @@ class ALYNT_AG_WooCommerce_Routing extends ALYNT_AG_Service_Collaborator {
 	private function is_account_details_post() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Delegated to WC_Form_Handler::save_account_details().
 		return isset( $_POST['save_account_details'] );
+	}
+
+	/**
+	 * Keep WooCommerce account saves valid while hiding the display-name field.
+	 *
+	 * @return void
+	 */
+	private function prime_account_display_name_post() {
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Delegated to WC_Form_Handler::save_account_details().
+		$first_name = isset( $_POST['account_first_name'] ) ? sanitize_text_field( wp_unslash( $_POST['account_first_name'] ) ) : '';
+		$last_name  = isset( $_POST['account_last_name'] ) ? sanitize_text_field( wp_unslash( $_POST['account_last_name'] ) ) : '';
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
+		$full_name = trim( $first_name . ' ' . $last_name );
+
+		if ( '' === $full_name ) {
+			$user      = function_exists( 'wp_get_current_user' ) ? wp_get_current_user() : null;
+			$full_name = $user instanceof WP_User && ! empty( $user->display_name ) ? sanitize_text_field( $user->display_name ) : '';
+		}
+
+		if ( '' !== $full_name ) {
+			$_POST['account_display_name'] = $full_name;
+		}
 	}
 
 	/**

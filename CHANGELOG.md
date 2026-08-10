@@ -4,6 +4,18 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.36 - 2026-08-10
+
+### Added
+
+- Add default privacy-safe public comment and product-review author names for logged-in users, with configurable Privacy & Data options.
+- Link gateway-screen logos to the site homepage.
+
+### Changed
+
+- Simplify branded Account Details by removing the redundant saved-state note and hiding WooCommerce's public Display Name field while deriving it from first and last name during saves.
+- Improve card framing when the configured gateway page background is white.
+
 ## 1.1.35 - 2026-08-10
 
 ### Added
