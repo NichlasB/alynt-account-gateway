@@ -48,7 +48,7 @@ Status: Complete locally; unreleased.
 - [x] Re-run release-candidate validation after the metadata bump: PHP syntax checks, full PHPUnit (`592 tests`, `4,210 assertions`), PHPCS, `npm run build`, `npm run make-pot`, `npm audit --audit-level=moderate`, `DocumentationReviewTest` (`3 tests`, `111 assertions`), and `git diff --check` passed; diff check reported only existing line-ending normalization warnings for generated/package metadata files.
 - [x] Publish `v1.1.38` after explicit approval: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.38`.
 - [x] Verify the official release asset: `alynt-account-gateway-v1.1.38.zip`, 138 runtime files, one plugin root, zero development/test/docs/package files, plugin header/constant `1.1.38`, SHA-256 `02AFF61A31DB83BCB869C1A56DBABB81977B21BC8C96D4D6DD56DFBB901CBFA5`.
-- [ ] Verify the Alynt Plugin Updater install path on an approved target site.
+- [x] Verify the Alynt Plugin Updater install path on LocalWP Plugin Tester: update offer resolved `1.1.37 -> 1.1.38`, WordPress downloaded `https://github.com/NichlasB/alynt-account-gateway/releases/download/v1.1.38/alynt-account-gateway-v1.1.38.zip`, `Plugin_Upgrader` completed successfully, Account Gateway remained active at the same active-plugin position, settings hash was preserved, and the homepage returned HTTP `200`.
 
 ## Early Translation Loading Notice Maintenance
 
