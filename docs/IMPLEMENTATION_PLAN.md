@@ -2,7 +2,7 @@
 
 ## Status
 
-- Current phase: v1.1.38 is released; updater/site rollout verification remains pending explicit site-operation approval.
+- Current phase: v1.1.38 is released and rolled out to tracked installs after explicit site-operation approval.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.38 is the current public release.
 - Frontend output default: Disabled
@@ -49,6 +49,7 @@ Status: Complete locally; unreleased.
 - [x] Publish `v1.1.38` after explicit approval: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.38`.
 - [x] Verify the official release asset: `alynt-account-gateway-v1.1.38.zip`, 138 runtime files, one plugin root, zero development/test/docs/package files, plugin header/constant `1.1.38`, SHA-256 `02AFF61A31DB83BCB869C1A56DBABB81977B21BC8C96D4D6DD56DFBB901CBFA5`.
 - [x] Verify the Alynt Plugin Updater install path on LocalWP Plugin Tester: update offer resolved `1.1.37 -> 1.1.38`, WordPress downloaded `https://github.com/NichlasB/alynt-account-gateway/releases/download/v1.1.38/alynt-account-gateway-v1.1.38.zip`, `Plugin_Upgrader` completed successfully, Account Gateway remained active at the same active-plugin position, settings hash was preserved, and the homepage returned HTTP `200`.
+- [x] Roll out `v1.1.38` to remaining tracked installs after explicit site-operation approval: MVS Video Store local blueprint, HBF staging, HBF live, ISHA Classes, ISHA Courses, and MHC. Remote installs report `1.1.38` active, settings hashes preserved, site-owner directory ownership preserved, the new login identifier policy file present, and public HTTP smoke checks returned `200`; MVS was updated by verified local package replacement while the LocalWP site was offline, so only file-level verification was possible.
 
 ## Early Translation Loading Notice Maintenance
 
