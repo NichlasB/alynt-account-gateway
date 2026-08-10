@@ -33,6 +33,7 @@ abstract class FrontendRoutingTestCase extends TestCase {
 		$GLOBALS['alynt_ag_test_throw_on_redirect'] = false;
 		$GLOBALS['alynt_ag_test_user_caps'] = array();
 		$GLOBALS['alynt_ag_test_user_logged_in'] = false;
+		unset( $GLOBALS['alynt_ag_test_current_user_id'], $GLOBALS['alynt_ag_test_current_user_roles'] );
 		$_GET = array();
 		$_SERVER['REQUEST_METHOD'] = 'GET';
 		$_SERVER['REQUEST_URI'] = '/wp-admin/';
@@ -45,7 +46,9 @@ abstract class FrontendRoutingTestCase extends TestCase {
 			$GLOBALS['alynt_ag_test_db_inserts'],
 			$GLOBALS['alynt_ag_test_throw_on_redirect'],
 			$GLOBALS['alynt_ag_test_user_caps'],
-			$GLOBALS['alynt_ag_test_user_logged_in']
+			$GLOBALS['alynt_ag_test_user_logged_in'],
+			$GLOBALS['alynt_ag_test_current_user_id'],
+			$GLOBALS['alynt_ag_test_current_user_roles']
 		);
 		$_GET = array();
 		unset( $_SERVER['REQUEST_URI'] );
