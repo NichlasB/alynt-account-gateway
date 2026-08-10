@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.37 maintenance candidate is validated and awaiting explicit release approval for the WordPress 6.7+ early translation-loading notice fix.
+- Current phase: v1.1.37 is released; tracked-site rollout remains pending explicit site-operation approval.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.36 is the current public release; v1.1.37 is the next tiny maintenance candidate.
+- Plugin status: v1.1.37 is the current public release.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: release v1.1.37 after explicit approval, then roll it out to tracked installs only after explicit site-operation approval. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: roll out v1.1.37 to tracked installs only after explicit site-operation approval. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Early Translation Loading Notice Maintenance
 
@@ -16,7 +16,8 @@
 - [x] Keep post-`init` settings labels/defaults translatable for admin screens and generated POT extraction.
 - [x] Add regression coverage proving settings defaults can be read before `init` without calling the translation stub.
 - [x] Run focused and full validation for the v1.1.37 maintenance candidate.
-- [ ] Publish `v1.1.37` after explicit approval.
+- [x] Publish `v1.1.37` after explicit approval: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.37`.
+- [x] Verify the official release asset: `alynt-account-gateway-v1.1.37.zip`, 137 runtime files, zero development files, plugin header/constant `1.1.37`, SHA-256 `573AC773F8959F4D48FF5015B886B57B3A279B464A83AD4067E1EE4125C25A23`.
 - [ ] Roll out `v1.1.37` to tracked installs only after explicit site-operation approval.
 
 ## Public Author Privacy And Account Details Simplification
