@@ -152,6 +152,7 @@ class ALYNT_AG_Settings_Page_Field_Help extends ALYNT_AG_Settings_Page_Component
 			'registration_rate_limit_window'      => __( 'Length of the registration rate-limit window in minutes.', 'alynt-account-gateway' ),
 			'login_rate_limit_count'              => __( 'Maximum login attempts allowed from the same source during the rate-limit window.', 'alynt-account-gateway' ),
 			'login_rate_limit_window'             => __( 'Length of the login rate-limit window in minutes.', 'alynt-account-gateway' ),
+			'login_identifier_mode'               => __( 'Email-only login is recommended for privacy and consistency. Enable username login only for sites where existing users expect it.', 'alynt-account-gateway' ),
 			'lostpassword_rate_limit_count'       => __( 'Maximum password reset requests allowed from the same source during the rate-limit window.', 'alynt-account-gateway' ),
 			'lostpassword_rate_limit_window'      => __( 'Length of the password reset rate-limit window in minutes.', 'alynt-account-gateway' ),
 			'email_test_recipient'                => __( 'Use an address you control, then preview and send representative account emails before launch.', 'alynt-account-gateway' ),

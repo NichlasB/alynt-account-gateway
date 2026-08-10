@@ -50,11 +50,11 @@ class SettingsSchemaCollaborationTest extends SettingsSchemaTestCase {
 			hash( 'sha256', serialize( ALYNT_AG_Settings_Schema::tabs() ) )
 		);
 		$this->assertSame(
-			'ce3b488067ed93ef6931095259b36d1c1f11bb6c9abc9d4363a0fce80356d190',
+			'a6c8f163184020bafe76e8ea91c772137fc9b074194751dc7f19d61942eb223f',
 			hash( 'sha256', serialize( ALYNT_AG_Settings_Schema::schema() ) )
 		);
 		$this->assertSame(
-			'0dc6193c2055d4f1aa66d0fe1d852824333836f0e96bba3d8c7c26e346b4eb92',
+			'cafeb5eb33b2b5c6a8bf161e024e8a2acf70f9aaab34ef116e61dbe60d6980a5',
 			hash( 'sha256', serialize( ALYNT_AG_Settings_Schema::defaults() ) )
 		);
 	}

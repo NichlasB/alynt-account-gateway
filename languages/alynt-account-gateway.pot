@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Alynt Account Gateway 1.1.37\n"
+"Project-Id-Version: Alynt Account Gateway 1.1.38\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-10 13:09+0000\n"
+"POT-Creation-Date: 2026-08-10 15:16+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -66,7 +66,7 @@ msgstr ""
 msgid "A branded email template could not be rendered; WordPress fallback content was used."
 msgstr ""
 
-#: includes/services/class-auth-request-handler.php:214
+#: includes/services/class-auth-request-handler.php:218
 msgid "A branded password-reset email could not be sent."
 msgstr ""
 
@@ -163,15 +163,15 @@ msgstr ""
 msgid "Account Created Welcome"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:218
+#: includes/class-settings-definition-security-email.php:228
 msgid "Account Created Welcome Body"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:212
+#: includes/class-settings-definition-security-email.php:222
 msgid "Account Created Welcome Preheader"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:206
+#: includes/class-settings-definition-security-email.php:216
 msgid "Account Created Welcome Subject"
 msgstr ""
 
@@ -348,7 +348,7 @@ msgstr ""
 msgid "Add Dashboard Link"
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:162
+#: admin/settings-page/class-field-help.php:163
 msgid "Add only links that are useful to the selected roles. Ordering and icons help repeated account tasks stay scannable."
 msgstr ""
 
@@ -370,7 +370,7 @@ msgstr ""
 msgid "Add shipping address"
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:173
+#: admin/settings-page/class-field-help.php:174
 msgid "Add this when the receiving system can verify timestamped HMAC headers."
 msgstr ""
 
@@ -424,7 +424,7 @@ msgstr ""
 msgid "AJAX"
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:171
+#: admin/settings-page/class-field-help.php:172
 msgid "All detected items are shown by default. Clear an item to remove its dashboard card and overview shortcut without disabling the WooCommerce endpoint or direct URL."
 msgstr ""
 
@@ -447,6 +447,10 @@ msgstr ""
 
 #: admin/settings-page/class-security-review-queue.php:120
 msgid "Allowed Flagged Results"
+msgstr ""
+
+#: includes/class-settings-definition-security-email.php:124
+msgid "Allowed Login Identifiers"
 msgstr ""
 
 #: admin/settings-page/class-security-policy.php:90
@@ -613,11 +617,11 @@ msgstr ""
 msgid "Blocked"
 msgstr ""
 
-#: includes/services/class-auth-request-handler.php:92
+#: includes/services/class-auth-request-handler.php:96
 msgid "Blocked a branded login attempt by rate limit."
 msgstr ""
 
-#: includes/services/class-auth-request-handler.php:194
+#: includes/services/class-auth-request-handler.php:198
 msgid "Blocked a branded password-reset request by rate limit."
 msgstr ""
 
@@ -834,7 +838,7 @@ msgstr ""
 msgid "Completed"
 msgstr ""
 
-#: includes/services/class-auth-request-handler.php:144
+#: includes/services/class-auth-request-handler.php:148
 msgid "Completed a branded login request."
 msgstr ""
 
@@ -934,7 +938,7 @@ msgstr ""
 msgid "Confirm the Terms and Privacy paths point to real public pages."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:235
+#: includes/class-settings-definition-security-email.php:245
 msgid "Confirm this email address to finish updating your account."
 msgstr ""
 
@@ -946,15 +950,15 @@ msgstr ""
 msgid "Confirm URLs, branding, registration, email, dashboard, and privacy settings before enabling public output."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:139
+#: includes/class-settings-definition-security-email.php:149
 msgid "Confirm your account for {{site_name}}"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:145
+#: includes/class-settings-definition-security-email.php:155
 msgid "Confirm your email address and choose a password."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:229
+#: includes/class-settings-definition-security-email.php:239
 msgid "Confirm your email address for {{site_name}}"
 msgstr ""
 
@@ -1023,19 +1027,19 @@ msgstr ""
 msgid "Controls how configured anti-spam providers are evaluated during registration."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:180
+#: admin/settings-page/class-field-help.php:181
 msgid "Controls how long anti-spam and email verification records are kept."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:182
+#: admin/settings-page/class-field-help.php:183
 msgid "Controls how long plugin audit events are retained for operational review."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:181
+#: admin/settings-page/class-field-help.php:182
 msgid "Controls how long registration consent evidence is retained."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:183
+#: admin/settings-page/class-field-help.php:184
 msgid "Controls logged-in public comment and product-review author names. WordPress user profiles keep their normal name data."
 msgstr ""
 
@@ -1043,7 +1047,7 @@ msgstr ""
 msgid "Controls the displayed logo width in pixels. Keep this modest so forms remain visible on small screens."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:176
+#: admin/settings-page/class-field-help.php:177
 msgid "Controls the lowest event severity stored when diagnostics are enabled."
 msgstr ""
 
@@ -1055,14 +1059,14 @@ msgstr ""
 msgid "Create a WordPress navigation menu first, then return here to attach it to the dashboard."
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:154
+#: includes/services/class-frontend-login-screen.php:155
 #: includes/services/class-frontend-messages.php:27
 #: includes/services/class-frontend-register-screen.php:123
 #: includes/services/class-frontend-register-screen.php:88
 msgid "Create Account"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:108
+#: includes/services/class-frontend-login-screen.php:109
 msgid "create an account"
 msgstr ""
 
@@ -1330,27 +1334,27 @@ msgstr ""
 msgid "Diagnostics Retention Days"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:200
+#: includes/class-settings-definition-security-email.php:210
 msgid "Disable Account Created Welcome Email"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:224
+#: includes/class-settings-definition-security-email.php:234
 msgid "Disable Email Change Confirmation Email"
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:159
+#: admin/settings-page/class-field-help.php:160
 msgid "Disable only when another onboarding or CRM system sends an equivalent welcome message."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:160
+#: admin/settings-page/class-field-help.php:161
 msgid "Disable only when another trusted system handles email-change confirmation."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:158
+#: admin/settings-page/class-field-help.php:159
 msgid "Disable only when another trusted system sends an equivalent password-change notification."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:176
+#: includes/class-settings-definition-security-email.php:186
 msgid "Disable Password Changed Email"
 msgstr ""
 
@@ -1431,26 +1435,38 @@ msgstr ""
 msgid "Email address"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:136
+#: includes/services/class-frontend-login-screen.php:137
 #: includes/services/class-frontend-lostpassword-screen.php:86
 #: includes/services/class-frontend-register-screen.php:110
 #: includes/services/class-frontend-state-screens.php:104
 msgid "Email Address"
 msgstr ""
 
+#: includes/class-settings-definition-security-email.php:126
+msgid "Email address only"
+msgstr ""
+
+#: includes/class-settings-definition-security-email.php:127
+msgid "Email address or username"
+msgstr ""
+
+#: includes/services/class-frontend-login-screen.php:137
+msgid "Email Address or Username"
+msgstr ""
+
 #: includes/services/class-email-tokens.php:28
 msgid "Email Change Confirmation"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:242
+#: includes/class-settings-definition-security-email.php:252
 msgid "Email Change Confirmation Body"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:236
+#: includes/class-settings-definition-security-email.php:246
 msgid "Email Change Confirmation Preheader"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:230
+#: includes/class-settings-definition-security-email.php:240
 msgid "Email Change Confirmation Subject"
 msgstr ""
 
@@ -1513,6 +1529,10 @@ msgstr ""
 msgid "Email-confirmation link used before the customer sets a password."
 msgstr ""
 
+#: admin/settings-page/class-field-help.php:155
+msgid "Email-only login is recommended for privacy and consistency. Enable username login only for sites where existing users expect it."
+msgstr ""
+
 #: includes/class-settings-definition.php:34
 msgid "Emails"
 msgstr ""
@@ -1558,7 +1578,7 @@ msgstr ""
 msgid "Enable Frontend Output"
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:174
+#: admin/settings-page/class-field-help.php:175
 msgid "Enable only while debugging. Payload logging may store personal account data in webhook logs."
 msgstr ""
 
@@ -1570,7 +1590,7 @@ msgstr ""
 msgid "Enable Saved Payment Methods"
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:175
+#: admin/settings-page/class-field-help.php:176
 msgid "Enable temporarily when setup or support needs additional event evidence."
 msgstr ""
 
@@ -1578,7 +1598,7 @@ msgstr ""
 msgid "Enable the custom dashboard before enabling WooCommerce takeover."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:161
+#: admin/settings-page/class-field-help.php:162
 msgid "Enable this when logged-in users should see the branded full-page account dashboard."
 msgstr ""
 
@@ -1701,7 +1721,7 @@ msgstr ""
 msgid "Failed Webhook Log Retention Days"
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:179
+#: admin/settings-page/class-field-help.php:180
 msgid "Failed webhook logs can be retained longer to support troubleshooting and resend decisions."
 msgstr ""
 
@@ -1730,7 +1750,7 @@ msgstr ""
 msgid "First name only"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:109
+#: includes/services/class-frontend-login-screen.php:110
 msgid "first."
 msgstr ""
 
@@ -1746,7 +1766,7 @@ msgstr ""
 msgid "For most stores, allow and log flagged statuses first. Catch-all domains, role accounts, unknown results, and full inboxes can include legitimate customers, so reviewing activity before blocking reduces false positives."
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:156
+#: includes/services/class-frontend-login-screen.php:157
 msgid "Forgot Password?"
 msgstr ""
 
@@ -1833,7 +1853,7 @@ msgstr ""
 msgid "Helpful account next steps"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:241
+#: includes/class-settings-definition-security-email.php:251
 msgid ""
 "Hi {{first_name}},\n"
 "\n"
@@ -1842,7 +1862,7 @@ msgid ""
 "If you did not request this change, you can ignore this email."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:193
+#: includes/class-settings-definition-security-email.php:203
 msgid ""
 "Hi {{first_name}},\n"
 "\n"
@@ -1851,7 +1871,7 @@ msgid ""
 "If you did not make this change, please contact the site owner right away."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:169
+#: includes/class-settings-definition-security-email.php:179
 msgid ""
 "Hi {{first_name}},\n"
 "\n"
@@ -1860,7 +1880,7 @@ msgid ""
 "If you did not request this, you can ignore this email."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:151
+#: includes/class-settings-definition-security-email.php:161
 msgid ""
 "Hi {{first_name}},\n"
 "\n"
@@ -1869,7 +1889,7 @@ msgid ""
 "This link expires in {{expiry_hours}} hours."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:217
+#: includes/class-settings-definition-security-email.php:227
 msgid ""
 "Hi {{first_name}},\n"
 "\n"
@@ -2067,7 +2087,7 @@ msgstr ""
 msgid "Layer protection before opening registration."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:169
+#: admin/settings-page/class-field-help.php:170
 msgid "Leave disabled unless customers must authenticate before using order-payment links. Guest payment links remain available by default."
 msgstr ""
 
@@ -2088,7 +2108,7 @@ msgstr ""
 msgid "Length of the login rate-limit window in minutes."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:156
+#: admin/settings-page/class-field-help.php:157
 msgid "Length of the password reset rate-limit window in minutes."
 msgstr ""
 
@@ -2114,8 +2134,8 @@ msgstr ""
 msgid "Link Expired"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:151
-#: includes/services/class-frontend-login-screen.php:98
+#: includes/services/class-frontend-login-screen.php:152
+#: includes/services/class-frontend-login-screen.php:99
 #: includes/services/class-frontend-messages.php:26
 msgid "Log In"
 msgstr ""
@@ -2124,7 +2144,7 @@ msgstr ""
 msgid "Log in as a disposable customer and confirm dashboard navigation, custom links, and logout behavior."
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:104
+#: includes/services/class-frontend-login-screen.php:105
 msgid "Log in to complete your order"
 msgstr ""
 
@@ -2279,7 +2299,7 @@ msgstr ""
 msgid "Maximum login attempts allowed from the same source during the rate-limit window."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:155
+#: admin/settings-page/class-field-help.php:156
 msgid "Maximum password reset requests allowed from the same source during the rate-limit window."
 msgstr ""
 
@@ -2505,7 +2525,7 @@ msgstr ""
 msgid "Not required"
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:177
+#: admin/settings-page/class-field-help.php:178
 msgid "Number of days diagnostics events are retained before cleanup."
 msgstr ""
 
@@ -2555,7 +2575,7 @@ msgstr ""
 msgid "Operational Snapshot"
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:170
+#: admin/settings-page/class-field-help.php:171
 msgid "Optional and disabled by default. Show the Payment Methods dashboard navigation, saved-method summary, and related shortcuts. WooCommerce continues to handle secure payment data and direct endpoint behavior."
 msgstr ""
 
@@ -2563,15 +2583,15 @@ msgstr ""
 msgid "Optional. Adds site-specific CSS after the plugin stylesheet on Account Gateway screens, dashboard screens, and previews. Do not paste secrets or tracking scripts here."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:165
+#: admin/settings-page/class-field-help.php:166
 msgid "Optional. Display a compact navigation menu below the dashboard for legal, privacy, cookie, and policy links."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:168
+#: admin/settings-page/class-field-help.php:169
 msgid "Optional. Redirect logged-out visitors from the main WooCommerce checkout to the branded login screen, then return them to checkout after login. This does not change WooCommerce guest-checkout settings."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:163
+#: admin/settings-page/class-field-help.php:164
 msgid "Optional. When enabled, the dashboard header can open a right-side menu panel using a selected WordPress navigation menu."
 msgstr ""
 
@@ -2644,7 +2664,7 @@ msgstr ""
 msgid "Passed"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:140
+#: includes/services/class-frontend-login-screen.php:141
 msgid "Password"
 msgstr ""
 
@@ -2652,15 +2672,15 @@ msgstr ""
 msgid "Password Changed"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:194
+#: includes/class-settings-definition-security-email.php:204
 msgid "Password Changed Body"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:188
+#: includes/class-settings-definition-security-email.php:198
 msgid "Password Changed Preheader"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:182
+#: includes/class-settings-definition-security-email.php:192
 msgid "Password Changed Subject"
 msgstr ""
 
@@ -2696,11 +2716,11 @@ msgstr ""
 msgid "Password Reset Attempts"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:126
+#: includes/class-settings-definition-security-email.php:136
 msgid "Password Reset Attempts Per Window"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:170
+#: includes/class-settings-definition-security-email.php:180
 msgid "Password Reset Body"
 msgstr ""
 
@@ -2720,11 +2740,11 @@ msgstr ""
 msgid "Password Reset Lockouts"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:164
+#: includes/class-settings-definition-security-email.php:174
 msgid "Password Reset Preheader"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:134
+#: includes/class-settings-definition-security-email.php:144
 msgid "Password Reset Rate Limit Window Minutes"
 msgstr ""
 
@@ -2736,7 +2756,7 @@ msgstr ""
 msgid "Password Reset Requests"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:158
+#: includes/class-settings-definition-security-email.php:168
 msgid "Password Reset Subject"
 msgstr ""
 
@@ -2890,7 +2910,7 @@ msgstr ""
 msgid "Privacy URL Path"
 msgstr ""
 
-#: includes/services/class-auth-request-handler.php:224
+#: includes/services/class-auth-request-handler.php:228
 msgid "Processed a branded password-reset request with a neutral public response."
 msgstr ""
 
@@ -3003,7 +3023,7 @@ msgstr ""
 msgid "Ready"
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:172
+#: admin/settings-page/class-field-help.php:173
 msgid "Receives account-created events after the user confirms email and sets a password."
 msgstr ""
 
@@ -3358,15 +3378,15 @@ msgstr ""
 msgid "Registration Confirmation"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:152
+#: includes/class-settings-definition-security-email.php:162
 msgid "Registration Confirmation Body"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:146
+#: includes/class-settings-definition-security-email.php:156
 msgid "Registration Confirmation Preheader"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:140
+#: includes/class-settings-definition-security-email.php:150
 msgid "Registration Confirmation Subject"
 msgstr ""
 
@@ -3459,7 +3479,7 @@ msgstr ""
 msgid "Reject requests with an unexpected event name, an old timestamp, or a signature that does not match."
 msgstr ""
 
-#: includes/services/class-auth-request-handler.php:105
+#: includes/services/class-auth-request-handler.php:109
 msgid "Rejected a branded login attempt before WordPress authentication."
 msgstr ""
 
@@ -3468,7 +3488,7 @@ msgstr ""
 msgid "Rejected a branded password-reset completion attempt."
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:149
+#: includes/services/class-frontend-login-screen.php:150
 msgid "Remember Me"
 msgstr ""
 
@@ -3617,7 +3637,7 @@ msgstr ""
 msgid "Require Login For Order Payment Links"
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:167
+#: admin/settings-page/class-field-help.php:168
 msgid "Requires the custom dashboard. WooCommerce still handles account forms and endpoint actions inside the branded shell."
 msgstr ""
 
@@ -3636,7 +3656,7 @@ msgstr ""
 msgid "Reset Password"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:157
+#: includes/class-settings-definition-security-email.php:167
 msgid "Reset your password for {{site_name}}"
 msgstr ""
 
@@ -3920,11 +3940,11 @@ msgstr ""
 msgid "Select a menu"
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:164
+#: admin/settings-page/class-field-help.php:165
 msgid "Select a menu created under Appearance > Menus. The hamburger icon appears only when the menu panel is enabled and a menu is selected."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:166
+#: admin/settings-page/class-field-help.php:167
 msgid "Select a menu created under Appearance > Menus. This assignment is independent from the dashboard menu panel, but both may use the same menu."
 msgstr ""
 
@@ -4098,7 +4118,7 @@ msgid "Shop Manager Redirect"
 msgstr ""
 
 #: includes/services/class-frontend-assets.php:118
-#: includes/services/class-frontend-login-screen.php:143
+#: includes/services/class-frontend-login-screen.php:144
 #: includes/services/class-frontend-setpassword-screen.php:186
 #: includes/services/class-frontend-setpassword-screen.php:194
 msgid "Show"
@@ -4110,7 +4130,7 @@ msgid "Show %s"
 msgstr ""
 
 #: includes/services/class-frontend-assets.php:114
-#: includes/services/class-frontend-login-screen.php:143
+#: includes/services/class-frontend-login-screen.php:144
 #: includes/services/class-frontend-setpassword-screen.php:186
 #: includes/services/class-frontend-setpassword-screen.php:194
 msgid "Show password"
@@ -4203,7 +4223,7 @@ msgstr ""
 msgid "Successful Webhook Log Retention Days"
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:178
+#: admin/settings-page/class-field-help.php:179
 msgid "Successful webhook logs usually need shorter retention than failed delivery evidence."
 msgstr ""
 
@@ -4255,7 +4275,7 @@ msgstr ""
 msgid "Test email received"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:248
+#: includes/class-settings-definition-security-email.php:258
 msgid "Test Email Recipient"
 msgstr ""
 
@@ -4491,7 +4511,7 @@ msgstr ""
 msgid "This confirmation link is invalid or has expired. Request a new one below."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:187
+#: includes/class-settings-definition-security-email.php:197
 msgid "This confirms that your account password was updated."
 msgstr ""
 
@@ -4558,11 +4578,11 @@ msgstr ""
 msgid "Time"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:107
+#: includes/services/class-frontend-login-screen.php:108
 msgid "To continue to checkout, log in below or"
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:111
+#: includes/services/class-frontend-login-screen.php:112
 msgid "To continue to checkout, log in below. New account registration is currently unavailable."
 msgstr ""
 
@@ -4763,7 +4783,7 @@ msgstr ""
 msgid "Use advanced tools for recovery and diagnostics."
 msgstr ""
 
-#: admin/settings-page/class-field-help.php:157
+#: admin/settings-page/class-field-help.php:158
 msgid "Use an address you control, then preview and send representative account emails before launch."
 msgstr ""
 
@@ -4851,7 +4871,7 @@ msgstr ""
 msgid "Use this quick checklist before making public registration available. It summarizes configuration choices that affect spam resistance, customer support, and launch evidence."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:163
+#: includes/class-settings-definition-security-email.php:173
 msgid "Use this secure link to choose a new password."
 msgstr ""
 
@@ -5020,7 +5040,7 @@ msgstr ""
 msgid "Welcome Email Failures"
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:205
+#: includes/class-settings-definition-security-email.php:215
 msgid "Welcome to {{site_name}}"
 msgstr ""
 
@@ -5103,7 +5123,7 @@ msgstr ""
 msgid "WordPress default"
 msgstr ""
 
-#: includes/services/class-auth-request-handler.php:129
+#: includes/services/class-auth-request-handler.php:133
 msgid "WordPress rejected a branded login attempt."
 msgstr ""
 
@@ -5170,7 +5190,7 @@ msgstr ""
 msgid "You have unsaved email changes."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:181
+#: includes/class-settings-definition-security-email.php:191
 msgid "Your {{site_name}} password was changed"
 msgstr ""
 
@@ -5178,11 +5198,11 @@ msgstr ""
 msgid "Your account could not be created. Please try again."
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:118
+#: includes/services/class-frontend-login-screen.php:119
 msgid "Your account has been created. You can log in now."
 msgstr ""
 
-#: includes/class-settings-definition-security-email.php:211
+#: includes/class-settings-definition-security-email.php:221
 msgid "Your account is ready."
 msgstr ""
 
@@ -5194,7 +5214,7 @@ msgstr ""
 msgid "Your consent record could not be saved. Please try again."
 msgstr ""
 
-#: includes/services/class-frontend-login-screen.php:123
+#: includes/services/class-frontend-login-screen.php:124
 msgid "Your password has been updated. You can log in now."
 msgstr ""
 

@@ -82,7 +82,7 @@ class ALYNT_AG_Rate_Limiter {
 	 * Check and increment a bucket.
 	 *
 	 * @param string $action      Action name.
-	 * @param string $identifier  Submitted identifier, such as email.
+	 * @param string $identifier  Submitted login identifier.
 	 * @param int    $limit       Maximum attempts.
 	 * @param int    $window_mins Window in minutes.
 	 * @return true|WP_Error

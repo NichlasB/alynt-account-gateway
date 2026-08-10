@@ -106,7 +106,7 @@ The plugin registers callbacks on the following upstream hooks. They are listed 
 | Hook | Alynt Account Gateway use |
 | --- | --- |
 | `login_url`, `lostpassword_url`, `register_url`, `logout_url` | Routes standard account links to configured branded routes when frontend output is enabled. |
-| `authenticate`, `lostpassword_post` | Enforces email-only login behavior and rate limits login/password-recovery attempts. |
+| `authenticate`, `lostpassword_post` | Applies login/password-recovery rate limits; branded login remains email-only by default and can optionally allow usernames. |
 | `retrieve_password_notification_email`, `retrieve_password_title`, `retrieve_password_message` | Produces the configured password-reset email. |
 | `send_password_change_email`, `password_change_email` | Produces or suppresses password-changed email. |
 | `send_email_change_email`, `email_change_email`, `new_user_email_content`, `pre_wp_mail` | Produces or suppresses email-change messages and handles the core pending-change edge case. |

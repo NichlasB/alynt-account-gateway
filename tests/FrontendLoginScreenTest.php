@@ -52,6 +52,7 @@ class FrontendLoginScreenTest extends TestCase {
 		$this->assertStringContainsString( '<form class="agw-form" method="post" action="https://example.test/login" data-agw-retain-fields aria-describedby="agw-login-instructions">', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_action" value="login"', $html );
 		$this->assertStringContainsString( 'name="alynt_ag_auth_nonce" value="test-nonce"', $html );
+		$this->assertStringContainsString( '<label for="agw-login-email">Email Address</label>', $html );
 		$this->assertStringContainsString( 'id="agw-login-email"', $html );
 		$this->assertStringContainsString( 'name="email"', $html );
 		$this->assertStringContainsString( 'required data-agw-retain', $html );
@@ -68,6 +69,19 @@ class FrontendLoginScreenTest extends TestCase {
 		$this->assertStringContainsString( 'href="https://example.test/account?action=lostpassword"', $html );
 		$this->assertStringNotContainsString( 'agw-login-error', $html );
 		$this->assertStringNotContainsString( 'name="redirect_to"', $html );
+	}
+
+	public function test_render_login_screen_outputs_username_identifier_mode() {
+		$screen                                  = new ALYNT_AG_Frontend_Login_Screen();
+		$this->settings['login_identifier_mode'] = 'email_or_username';
+
+		ob_start();
+		$screen->render_login_screen( $this->settings );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( '<label for="agw-login-email">Email Address or Username</label>', $html );
+		$this->assertStringContainsString( 'type="text" autocomplete="username" dir="ltr"', $html );
+		$this->assertStringNotContainsString( 'type="email" autocomplete="email" dir="ltr"', $html );
 	}
 
 	public function test_render_login_screen_hides_registration_link_when_registration_is_disabled() {

@@ -69,9 +69,13 @@ class ALYNT_AG_Auth_Request_Handler extends ALYNT_AG_Service_Collaborator {
 	 * @return void
 	 */
 	private function handle_login_request() {
-		$settings = ALYNT_AG_Settings_Schema::get_settings();
-		$base_url = home_url( $settings['login_path'] );
-		$email    = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+		$settings   = ALYNT_AG_Settings_Schema::get_settings();
+		$base_url   = home_url( $settings['login_path'] );
+		$identifier = ALYNT_AG_Login_Identifier_Policy::normalize(
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Normalized according to the configured login mode.
+			isset( $_POST['email'] ) ? wp_unslash( $_POST['email'] ) : '',
+			$settings
+		);
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Validated as a same-site destination below.
 		$submitted_redirect = isset( $_POST['redirect_to'] ) ? wp_unslash( $_POST['redirect_to'] ) : '';
 		$redirect_to        = $this->destinations->absolute_url( $submitted_redirect, $settings );
@@ -84,29 +88,29 @@ class ALYNT_AG_Auth_Request_Handler extends ALYNT_AG_Service_Collaborator {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Password is passed to wp_signon() and must not be altered.
 		$password = isset( $_POST['pwd'] ) ? wp_unslash( $_POST['pwd'] ) : '';
 
-		$rate_limit = $this->validate_rate_limit( 'login', $email, $settings );
+		$rate_limit = $this->validate_rate_limit( 'login', $identifier, $settings );
 		if ( is_wp_error( $rate_limit ) ) {
 			$this->log_auth_event(
 				'warning',
 				'branded_login_rate_limited',
 				__( 'Blocked a branded login attempt by rate limit.', 'alynt-account-gateway' ),
 				array(
-					'has_email' => '' !== $email,
+					'has_identifier' => '' !== $identifier,
 				)
 			);
 			wp_safe_redirect( $this->login_error_url( $rate_limit->get_error_code(), $base_url, $redirect_to ) );
 			exit;
 		}
 
-		if ( ! is_email( $email ) || '' === (string) $password ) {
+		if ( ! ALYNT_AG_Login_Identifier_Policy::is_allowed( $identifier, $settings ) || '' === (string) $password ) {
 			$this->log_auth_event(
 				'warning',
 				'branded_login_failed',
 				__( 'Rejected a branded login attempt before WordPress authentication.', 'alynt-account-gateway' ),
 				array(
-					'reason'       => 'invalid_request',
-					'has_email'    => '' !== $email,
-					'has_password' => '' !== (string) $password,
+					'reason'         => 'invalid_request',
+					'has_identifier' => '' !== $identifier,
+					'has_password'   => '' !== (string) $password,
 				)
 			);
 			wp_safe_redirect( $this->login_error_url( 'failed', $base_url, $redirect_to ) );
@@ -115,7 +119,7 @@ class ALYNT_AG_Auth_Request_Handler extends ALYNT_AG_Service_Collaborator {
 
 		$user = wp_signon(
 			array(
-				'user_login'    => $email,
+				'user_login'    => $identifier,
 				'user_password' => $password,
 				'remember'      => ! empty( $_POST['rememberme'] ),
 			),

@@ -190,7 +190,7 @@ Record URL, role, browser/device, expected result, actual result, timestamp, and
 
 ### Customer
 
-- [ ] Email-only login.
+- [ ] Login identifier mode reviewed; default email-only login preserved unless the site intentionally allows usernames.
 - [ ] After-login redirect.
 - [ ] Dashboard overview.
 - [ ] Orders and order details.

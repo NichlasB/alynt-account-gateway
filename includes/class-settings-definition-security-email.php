@@ -117,6 +117,16 @@ class ALYNT_AG_Settings_Definition_Security_Email {
 				'max'     => 10080,
 				'label'   => alynt_ag_schema_text( 'Login Rate Limit Window Minutes', 'alynt-account-gateway' ),
 			),
+			'login_identifier_mode'                     => array(
+				'tab'     => 'security',
+				'type'    => 'select',
+				'default' => 'email_only',
+				'label'   => alynt_ag_schema_text( 'Allowed Login Identifiers', 'alynt-account-gateway' ),
+				'options' => array(
+					'email_only'        => alynt_ag_schema_text( 'Email address only', 'alynt-account-gateway' ),
+					'email_or_username' => alynt_ag_schema_text( 'Email address or username', 'alynt-account-gateway' ),
+				),
+			),
 			'lostpassword_rate_limit_count'             => array(
 				'tab'     => 'security',
 				'type'    => 'integer',

@@ -142,7 +142,7 @@ The prototype includes state variations for default, submitting, error, success,
 
 - Heading: "Log In"
 - Instruction copy should be configurable.
-- Email field only for username/login.
+- Login identifier field is email-only by default and can switch to email-or-username when the site enables legacy username login.
 - Password field with show/hide toggle.
 - Remember me checkbox.
 - Full-width primary "Log In" button.

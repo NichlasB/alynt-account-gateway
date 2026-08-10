@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.38 - 2026-08-10
+
+### Added
+
+- Add a Security setting that allows sites to keep email-only login by default or permit email-or-username login for legacy user workflows.
+
 ## 1.1.37 - 2026-08-10
 
 ### Fixed

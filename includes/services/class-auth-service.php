@@ -83,7 +83,7 @@ class ALYNT_AG_Auth_Service {
 	/**
 	 * Log an auth-side rate-limit block to the shared verification activity table.
 	 *
-	 * @param string $identifier Submitted email identifier.
+	 * @param string $identifier Submitted login identifier.
 	 * @param string $status     Compact status key.
 	 * @return bool
 	 */

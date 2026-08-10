@@ -54,6 +54,52 @@ class AuthLoginSubmissionTest extends AuthServiceTestCase {
 		$this->assertSame( array(), $GLOBALS['alynt_ag_test_signons'] );
 	}
 
+	public function test_login_submission_accepts_username_when_identifier_mode_allows_it() {
+		$service = new ALYNT_AG_Auth_Service();
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'login_identifier_mode' => 'email_or_username',
+		);
+		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_POST = array(
+			'alynt_ag_action' => 'login',
+			'email'           => 'LegacyUser',
+			'pwd'             => 'StrongPassword1!',
+		);
+
+		try {
+			$service->maybe_handle_auth_request();
+			$this->fail( 'Expected redirect exception.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame( 'redirect:https://example.test/my-account/', $exception->getMessage() );
+		}
+
+		$this->assertSame( 'LegacyUser', $GLOBALS['alynt_ag_test_signons'][0]['credentials']['user_login'] );
+	}
+
+	public function test_login_submission_still_normalizes_email_when_identifier_mode_allows_username() {
+		$service = new ALYNT_AG_Auth_Service();
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'login_identifier_mode' => 'email_or_username',
+		);
+		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_POST = array(
+			'alynt_ag_action' => 'login',
+			'email'           => 'Damon@Example.test',
+			'pwd'             => 'StrongPassword1!',
+		);
+
+		try {
+			$service->maybe_handle_auth_request();
+			$this->fail( 'Expected redirect exception.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame( 'redirect:https://example.test/my-account/', $exception->getMessage() );
+		}
+
+		$this->assertSame( 'damon@example.test', $GLOBALS['alynt_ag_test_signons'][0]['credentials']['user_login'] );
+	}
+
 	public function test_failed_login_preserves_valid_same_site_return_destination() {
 		$service = new ALYNT_AG_Auth_Service();
 		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
@@ -226,7 +272,7 @@ class AuthLoginSubmissionTest extends AuthServiceTestCase {
 		$this->assertSame( 'warning', $row['level'] );
 		$this->assertSame( 'branded_login_failed', $row['event_code'] );
 		$this->assertSame( 'invalid_request', $context['reason'] );
-		$this->assertTrue( $context['has_email'] );
+		$this->assertTrue( $context['has_identifier'] );
 		$this->assertFalse( $context['has_password'] );
 		$this->assertStringNotContainsString( 'not-an-email', $row['context'] );
 	}

@@ -95,6 +95,7 @@ Safe internal `redirect_to` destinations take precedence over role-aware default
 | `resend_confirmation_rate_limit_window` | `integer` | `60` | Confirmation resend rate-limit window in minutes; constrained to `1` through `10080`. |
 | `login_rate_limit_count` | `integer` | `10` | Login attempts permitted per login window; constrained to `1` through `1000`. |
 | `login_rate_limit_window` | `integer` | `15` | Login rate-limit window in minutes; constrained to `1` through `10080`. |
+| `login_identifier_mode` | `select` | `email_only` | Branded login identifier mode. Email-only remains the recommended default; `email_or_username` allows legacy username login. |
 | `lostpassword_rate_limit_count` | `integer` | `5` | Password-reset attempts per reset window; constrained to `1` through `1000`. |
 | `lostpassword_rate_limit_window` | `integer` | `60` | Password-reset rate-limit window in minutes; constrained to `1` through `10080`. |
 

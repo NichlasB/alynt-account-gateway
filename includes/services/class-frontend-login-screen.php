@@ -85,6 +85,7 @@ class ALYNT_AG_Frontend_Login_Screen {
 		$is_checkout        = $this->checkout_gate->is_checkout_destination( $redirect_to, $settings );
 		$show_login_intro   = ! $is_checkout && $this->components->has_notice( $settings['login_intro_text'] );
 		$notice_id          = $show_login_intro ? 'agw-login-instructions' : '';
+		$allow_username     = ! empty( $settings['login_identifier_mode'] ) && 'email_or_username' === $settings['login_identifier_mode'];
 		$form_desc          = array_filter(
 			array(
 				$notice_id,
@@ -133,8 +134,8 @@ class ALYNT_AG_Frontend_Login_Screen {
 				<input type="hidden" name="redirect_to" value="<?php echo esc_attr( $redirect_to ); ?>">
 			<?php endif; ?>
 			<div class="agw-field">
-				<label for="agw-login-email"><?php esc_html_e( 'Email Address', 'alynt-account-gateway' ); ?></label>
-				<input id="agw-login-email" name="email" type="email" autocomplete="email" dir="ltr" required data-agw-retain <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-login-error"' : ''; ?>>
+				<label for="agw-login-email"><?php echo esc_html( $allow_username ? __( 'Email Address or Username', 'alynt-account-gateway' ) : __( 'Email Address', 'alynt-account-gateway' ) ); ?></label>
+				<input id="agw-login-email" name="email" type="<?php echo esc_attr( $allow_username ? 'text' : 'email' ); ?>" autocomplete="<?php echo esc_attr( $allow_username ? 'username' : 'email' ); ?>" dir="ltr" required data-agw-retain <?php echo $error_code ? 'aria-invalid="true" aria-describedby="agw-login-error"' : ''; ?>>
 			</div>
 			<div class="agw-field agw-field--password">
 				<label for="agw-login-password"><?php esc_html_e( 'Password', 'alynt-account-gateway' ); ?></label>

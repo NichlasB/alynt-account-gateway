@@ -2,12 +2,52 @@
 
 ## Status
 
-- Current phase: v1.1.37 is released and rolled out to tracked installs.
+- Current phase: v1.1.38 release candidate is in validation; v1.1.37 remains the current public release.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.37 is the current public release.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 - Next roadmap: A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## Configurable Login Identifier Mode
+
+Status: Complete locally; unreleased.
+
+### Scope
+
+- [x] Add a security setting that preserves email-only login by default while allowing selected sites to accept either email address or account username on the branded login screen.
+- [x] Keep existing installs behaviorally unchanged unless an administrator explicitly opts into username login.
+- [x] Update the branded login label, input type, autocomplete hint, and authentication request validation according to the selected mode.
+- [x] Preserve neutral login failures, existing login rate limits, password handling, generated-username registration behavior, emergency bypass behavior, and same-site redirect validation.
+- [x] Add focused tests for the default email-only mode, the opt-in email-or-username mode, settings sanitization, and frontend login form rendering.
+
+### Acceptance Criteria
+
+- [x] Default settings report `login_identifier_mode = email_only`.
+- [x] Invalid setting values sanitize back to `email_only`.
+- [x] In email-only mode, a username-style login identifier is rejected before `wp_signon()`.
+- [x] In email-or-username mode, a username-style login identifier reaches `wp_signon()` unchanged and an email identifier still normalizes before authentication.
+- [x] The login field displays `Email Address` with `type="email"` in email-only mode and `Email Address or Username` with `type="text"` in email-or-username mode.
+- [x] Documentation and generated translation strings reflect the new configurable login identifier behavior.
+
+### Validation
+
+- [x] PHP syntax checks passed for edited runtime files, including the extracted login identifier policy.
+- [x] Focused PHPUnit passed: `AuthLoginSubmissionTest` (`10 tests`, `35 assertions`), `FrontendLoginScreenTest` (`7 tests`, `54 assertions`), and `SettingsSchemaDefaultsTest` (`14 tests`, `77 assertions`).
+- [x] Full PHPUnit passed: `592 tests`, `4,210 assertions`.
+- [x] PHPCS passed.
+- [x] `npm run build` passed.
+- [x] `npm run make-pot` regenerated `languages/alynt-account-gateway.pot` with `1,235` strings.
+- [x] `npm audit --audit-level=moderate` found `0` vulnerabilities.
+- [x] `git diff --check` passed with line-ending normalization warnings only.
+- [x] Ran targeted `ds2-feature` reviews: Feature Light Review, Feature Bloat and Structure Review, Feature UI/UX Implementation Review, and Feature Security Review.
+- [x] Feature bloat measurement used `origin/master` merge-base `bcf83dbe227f49d7a454bcebbdc8a451d77230bc`; `13` changed PHP files were measured, `0` oversized files were reported, and `class-auth-request-handler.php` remained under threshold at `291` total lines.
+- [x] Security review found no confirmed security defects; no additional `07A` regression handoff was required.
+- [x] UI/UX review found no design-system issues in the admin select/help text or frontend login identifier label/input behavior.
+- [x] Prepare the `v1.1.38` release candidate metadata and notes.
+- [x] Re-run release-candidate validation after the metadata bump: PHP syntax checks, full PHPUnit (`592 tests`, `4,210 assertions`), PHPCS, `npm run build`, `npm run make-pot`, `npm audit --audit-level=moderate`, `DocumentationReviewTest` (`3 tests`, `111 assertions`), and `git diff --check` passed; diff check reported only existing line-ending normalization warnings for generated/package metadata files.
+- [ ] Publish `v1.1.38` only after explicit owner approval.
+- [ ] Verify the official release asset and Alynt Plugin Updater install path after publication.
 
 ## Early Translation Loading Notice Maintenance
 

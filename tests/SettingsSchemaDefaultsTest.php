@@ -29,6 +29,25 @@ class SettingsSchemaDefaultsTest extends SettingsSchemaTestCase {
 		$this->assertSame( 10, $defaults['login_rate_limit_count'] );
 		$this->assertSame( 5, $defaults['lostpassword_rate_limit_count'] );
 		$this->assertSame( 'allow', $defaults['reoon_flagged_policy'] );
+		$this->assertSame( 'email_only', $defaults['login_identifier_mode'] );
+	}
+
+	public function test_login_identifier_mode_sanitizes_to_known_options() {
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array(
+				'login_identifier_mode' => 'email_or_username',
+			)
+		);
+
+		$this->assertSame( 'email_or_username', $sanitized['login_identifier_mode'] );
+
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array(
+				'login_identifier_mode' => 'username_only',
+			)
+		);
+
+		$this->assertSame( 'email_only', $sanitized['login_identifier_mode'] );
 	}
 
 	public function test_checkout_authentication_is_opt_in_and_order_pay_is_separate() {
