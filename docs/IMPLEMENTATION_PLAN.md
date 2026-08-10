@@ -2,9 +2,9 @@
 
 ## Status
 
-- Current phase: v1.1.38 release candidate is in validation; v1.1.37 remains the current public release.
+- Current phase: v1.1.38 is released; updater/site rollout verification remains pending explicit site-operation approval.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.37 is the current public release.
+- Plugin status: v1.1.38 is the current public release.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
 - Next roadmap: A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
@@ -46,8 +46,9 @@ Status: Complete locally; unreleased.
 - [x] UI/UX review found no design-system issues in the admin select/help text or frontend login identifier label/input behavior.
 - [x] Prepare the `v1.1.38` release candidate metadata and notes.
 - [x] Re-run release-candidate validation after the metadata bump: PHP syntax checks, full PHPUnit (`592 tests`, `4,210 assertions`), PHPCS, `npm run build`, `npm run make-pot`, `npm audit --audit-level=moderate`, `DocumentationReviewTest` (`3 tests`, `111 assertions`), and `git diff --check` passed; diff check reported only existing line-ending normalization warnings for generated/package metadata files.
-- [ ] Publish `v1.1.38` only after explicit owner approval.
-- [ ] Verify the official release asset and Alynt Plugin Updater install path after publication.
+- [x] Publish `v1.1.38` after explicit approval: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.38`.
+- [x] Verify the official release asset: `alynt-account-gateway-v1.1.38.zip`, 138 runtime files, one plugin root, zero development/test/docs/package files, plugin header/constant `1.1.38`, SHA-256 `02AFF61A31DB83BCB869C1A56DBABB81977B21BC8C96D4D6DD56DFBB901CBFA5`.
+- [ ] Verify the Alynt Plugin Updater install path on an approved target site.
 
 ## Early Translation Loading Notice Maintenance
 
