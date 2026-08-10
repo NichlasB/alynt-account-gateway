@@ -2,12 +2,12 @@
 
 ## Status
 
-- Current phase: v1.1.37 is released; tracked-site rollout remains pending explicit site-operation approval.
+- Current phase: v1.1.37 is released and rolled out to tracked installs.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.37 is the current public release.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: roll out v1.1.37 to tracked installs only after explicit site-operation approval. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## Early Translation Loading Notice Maintenance
 
@@ -18,7 +18,7 @@
 - [x] Run focused and full validation for the v1.1.37 maintenance candidate.
 - [x] Publish `v1.1.37` after explicit approval: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.37`.
 - [x] Verify the official release asset: `alynt-account-gateway-v1.1.37.zip`, 137 runtime files, zero development files, plugin header/constant `1.1.37`, SHA-256 `573AC773F8959F4D48FF5015B886B57B3A279B464A83AD4067E1EE4125C25A23`.
-- [ ] Roll out `v1.1.37` to tracked installs only after explicit site-operation approval.
+- [x] Roll out `v1.1.37` to tracked installs after explicit site-operation approval: Plugin Tester, MVS Video Store, HBF staging, HBF live, ISHA Classes, ISHA Courses, and MHC.
 
 ## Public Author Privacy And Account Details Simplification
 
