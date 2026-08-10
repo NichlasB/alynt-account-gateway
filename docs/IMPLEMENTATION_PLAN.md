@@ -2,16 +2,16 @@
 
 ## Status
 
-- Current phase: FunnelKit contact-name sync compatibility fix is complete locally and awaiting release validation.
+- Current phase: FunnelKit contact-name sync compatibility fix was released as v1.1.39 and is awaiting site rollout/backfill verification where needed.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.38 is the current public release.
+- Plugin status: v1.1.39 is the current public release.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Release the FunnelKit contact-name sync fix after validation and approval. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Roll out v1.1.39 through Alynt Plugin Updater where needed, then run the optional FunnelKit backfill/smoke check on sites with existing blank-name FunnelKit contacts. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
 
 ## FunnelKit Contact Name Sync Compatibility Fix
 
-Status: Complete locally; unreleased.
+Status: Released in v1.1.39.
 
 ### Scope
 
@@ -36,9 +36,14 @@ Status: Complete locally; unreleased.
 - [x] PHP syntax passed for edited runtime and test files.
 - [x] Focused PHPUnit passed: `FunnelKitContactSyncTest` (`7 tests`, `21 assertions`) and `RegistrationCompletionTest` (`8 tests`, `48 assertions`).
 - [x] Full PHPUnit passed: `600 tests`, `4,238 assertions`.
+- [x] Adversarial reverse/random PHPUnit passed with seed `20260720`.
 - [x] PHPCS passed.
 - [x] `npm run build` passed.
 - [x] `npm run make-pot` regenerated `languages/alynt-account-gateway.pot` with `1,238` strings.
+- [x] GitHub Quality workflow passed for release-prep commit `9adce00` on PHP 7.4 and 8.3.
+- [x] GitHub Build Release workflow passed for tag `v1.1.39`.
+- [x] Public release ZIP inspected: `139` runtime files, no development-file matches, header/constant/stable tag all report `1.1.39`.
+- [x] Public release ZIP SHA-256: `C3EE9777FE562EA65916BFBFD07C0CD9845FEFEBF91C50298D35D6FBF7B9CEDD`.
 
 ## Configurable Login Identifier Mode
 
