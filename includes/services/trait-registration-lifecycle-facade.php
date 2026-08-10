@@ -144,6 +144,29 @@ trait ALYNT_AG_Registration_Lifecycle_Facade {
 	}
 
 	/**
+	 * Deliver non-blocking account-created integrations.
+	 *
+	 * @param object              $pending  Pending registration row.
+	 * @param int                 $user_id  Created WordPress user ID.
+	 * @param array<string,mixed> $settings Settings.
+	 * @return void
+	 */
+	public function deliver_registration_integrations( $pending, $user_id, $settings ) {
+		$this->collaborators['delivery']->run_deliver_registration_integrations( $pending, $user_id, $settings );
+	}
+
+	/**
+	 * Sync an account-created registration to a matching FunnelKit contact.
+	 *
+	 * @param object $pending Pending registration row.
+	 * @param int    $user_id Created WordPress user ID.
+	 * @return true|WP_Error
+	 */
+	public function sync_funnelkit_registration_contact( $pending, $user_id ) {
+		return $this->collaborators['funnelkit']->sync_registration_contact( $pending, $user_id );
+	}
+
+	/**
 	 * Build the login URL used after a registration is completed.
 	 *
 	 * @param array<string,mixed> $settings Settings.

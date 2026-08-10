@@ -25,6 +25,7 @@ $alynt_ag_files = array(
 	'includes/class-deactivator.php',
 	'includes/services/class-client-ip.php',
 	'includes/services/class-login-identifier-policy.php',
+	'includes/services/class-funnelkit-contact-sync.php',
 	'includes/services/class-operation-lock.php',
 	'includes/services/class-rate-limiter.php',
 	'includes/services/class-return-destination.php',

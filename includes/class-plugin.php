@@ -37,6 +37,9 @@ class ALYNT_AG_Plugin {
 		$rate_limiter = new ALYNT_AG_Rate_Limiter();
 		$rate_limiter->register();
 
+		$funnelkit_contact_sync = new ALYNT_AG_FunnelKit_Contact_Sync();
+		$funnelkit_contact_sync->register();
+
 		$email_templates = new ALYNT_AG_Email_Template_Service();
 		$email_templates->register();
 

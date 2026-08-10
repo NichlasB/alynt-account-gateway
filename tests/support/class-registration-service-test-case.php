@@ -28,8 +28,10 @@ abstract class RegistrationServiceTestCase extends TestCase {
 		$GLOBALS['alynt_ag_test_deleted_users'] = array();
 		$GLOBALS['alynt_ag_test_db_updates'] = array();
 		$GLOBALS['alynt_ag_test_db_rows'] = array();
+		$GLOBALS['alynt_ag_test_db_results'] = array();
 		$GLOBALS['alynt_ag_test_db_queries'] = array();
 		unset( $GLOBALS['alynt_ag_test_user_update_result'], $GLOBALS['alynt_ag_test_user_delete_result'], $GLOBALS['alynt_ag_test_nonce_valid'] );
+		unset( $GLOBALS['alynt_ag_test_db_var'], $GLOBALS['alynt_ag_test_db_query_result'] );
 		unset( $GLOBALS['alynt_ag_test_remote_get_response'] );
 	}
 }

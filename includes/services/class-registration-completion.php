@@ -225,60 +225,6 @@ class ALYNT_AG_Registration_Completion extends ALYNT_AG_Service_Collaborator {
 	}
 
 	/**
-	 * Deliver non-blocking account-created integrations.
-	 *
-	 * @param object              $pending  Pending registration.
-	 * @param int                 $user_id  WordPress user ID.
-	 * @param array<string,mixed> $settings Plugin settings.
-	 * @return void
-	 */
-	private function deliver_registration_integrations( $pending, $user_id, $settings ) {
-		$welcome_sent = $this->send_account_created_welcome_email( $pending, $user_id, $settings );
-		if ( is_wp_error( $welcome_sent ) ) {
-			$this->log_integration_failure(
-				'account_created_welcome_failed',
-				__( 'The account-created welcome email could not be sent.', 'alynt-account-gateway' ),
-				array(
-					'user_id' => $user_id,
-					'email'   => $pending->email,
-					'error'   => $welcome_sent->get_error_code(),
-				)
-			);
-		}
-
-		$webhook_sent = $this->dispatch_account_created_webhook( $user_id, $settings );
-		if ( is_wp_error( $webhook_sent ) ) {
-			$this->log_integration_failure(
-				'account_created_webhook_failed',
-				__( 'The account-created webhook could not be queued.', 'alynt-account-gateway' ),
-				array(
-					'user_id' => $user_id,
-					'email'   => $pending->email,
-					'error'   => $webhook_sent->get_error_code(),
-				)
-			);
-		}
-	}
-
-	/**
-	 * Record a non-blocking account-created integration failure.
-	 *
-	 * @param string              $event   Diagnostics event.
-	 * @param string              $message Safe diagnostics message.
-	 * @param array<string,mixed> $context Failure context.
-	 * @return void
-	 */
-	private function log_integration_failure( $event, $message, $context ) {
-		ALYNT_AG_Diagnostics_Logger::log_event(
-			'warning',
-			'external_api',
-			$event,
-			$message,
-			$context
-		);
-	}
-
-	/**
 	 * Build the login URL used after a registration is completed.
 	 *
 	 * @param array<string,mixed> $settings                   Settings.

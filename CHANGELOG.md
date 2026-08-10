@@ -4,6 +4,10 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+### Fixed
+
+- Sync first and last names into matching FunnelKit/Autonami contacts after Account Gateway creates a confirmed registration user, with no-op behavior on sites without FunnelKit and a WP-CLI backfill command for existing linked contacts.
+
 ## 1.1.38 - 2026-08-10
 
 ### Added

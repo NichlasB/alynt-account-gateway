@@ -2,12 +2,43 @@
 
 ## Status
 
-- Current phase: v1.1.38 is released and rolled out to tracked installs after explicit site-operation approval.
+- Current phase: FunnelKit contact-name sync compatibility fix is complete locally and awaiting release validation.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
 - Plugin status: v1.1.38 is the current public release.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Release the FunnelKit contact-name sync fix after validation and approval. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## FunnelKit Contact Name Sync Compatibility Fix
+
+Status: Complete locally; unreleased.
+
+### Scope
+
+- [x] Add a safe optional FunnelKit/Autonami contact sync after successful Account Gateway account creation.
+- [x] Detect the FunnelKit contact table as `$wpdb->prefix . 'bwf_contact'` and no-op when it is absent.
+- [x] Update matching contacts by `email` or `wpid`, setting `wpid` and only non-empty Account Gateway first/last names.
+- [x] Preserve all other FunnelKit contact fields, including tags, lists, source, status, and other provider-owned metadata.
+- [x] Keep sync failures non-blocking so valid WordPress account creation is not rolled back.
+- [x] Add a WP-CLI backfill path: `wp alynt-ag funnelkit-backfill`, copying blank `f_name` / `l_name` values from linked WordPress user meta when the FunnelKit table exists.
+
+### Acceptance Criteria
+
+- [x] Sites without FunnelKit installed do not fatal, warn, or fail registration.
+- [x] Matching FunnelKit contacts by email receive `f_name`, `l_name`, and `wpid`.
+- [x] Matching FunnelKit contacts by `wpid` receive available names.
+- [x] Empty Account Gateway pending names do not clobber existing FunnelKit names.
+- [x] Optional FunnelKit sync failures are logged as non-blocking diagnostics when diagnostics are enabled and do not prevent account creation.
+- [x] Existing linked contacts with blank names can be backfilled from WordPress user meta through the CLI command.
+
+### Validation
+
+- [x] PHP syntax passed for edited runtime and test files.
+- [x] Focused PHPUnit passed: `FunnelKitContactSyncTest` (`7 tests`, `21 assertions`) and `RegistrationCompletionTest` (`8 tests`, `48 assertions`).
+- [x] Full PHPUnit passed: `600 tests`, `4,238 assertions`.
+- [x] PHPCS passed.
+- [x] `npm run build` passed.
+- [x] `npm run make-pot` regenerated `languages/alynt-account-gateway.pot` with `1,238` strings.
 
 ## Configurable Login Identifier Mode
 

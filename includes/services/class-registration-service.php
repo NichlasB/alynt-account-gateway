@@ -58,6 +58,7 @@ class ALYNT_AG_Registration_Service {
 			'pending'      => new ALYNT_AG_Registration_Pending_Store( $this, $this->destinations ),
 			'confirmation' => new ALYNT_AG_Registration_Confirmation( $this ),
 			'completion'   => new ALYNT_AG_Registration_Completion( $this, $this->destinations ),
+			'funnelkit'    => new ALYNT_AG_FunnelKit_Contact_Sync(),
 			'delivery'     => new ALYNT_AG_Registration_Delivery( $this ),
 			'credentials'  => new ALYNT_AG_Registration_Credentials( $this ),
 		);

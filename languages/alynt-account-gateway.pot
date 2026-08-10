@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Alynt Account Gateway 1.1.38\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-10 15:16+0000\n"
+"POT-Creation-Date: 2026-08-10 21:26+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1781,6 +1781,14 @@ msgstr ""
 
 #: admin/settings-page/class-readiness-summary.php:81
 msgid "Frontend output is enabled. Keep the remaining checks ready before sending users to the gateway."
+msgstr ""
+
+#: includes/services/class-funnelkit-contact-sync.php:49
+msgid "FunnelKit contact sync could not identify the created user."
+msgstr ""
+
+#: includes/services/class-funnelkit-contact-sync.php:81
+msgid "FunnelKit contact sync failed."
 msgstr ""
 
 #: admin/settings-page/class-security-signal-renderer-b.php:45
@@ -4311,12 +4319,12 @@ msgstr ""
 msgid "The account profile could not be saved. Please try again."
 msgstr ""
 
-#: includes/services/class-registration-completion.php:253
+#: includes/services/class-registration-delivery.php:45
 #: includes/services/class-webhook-retry-scheduler.php:34
 msgid "The account-created webhook could not be queued."
 msgstr ""
 
-#: includes/services/class-registration-completion.php:240
+#: includes/services/class-registration-delivery.php:37
 msgid "The account-created welcome email could not be sent."
 msgstr ""
 
@@ -4362,6 +4370,10 @@ msgstr ""
 
 #: includes/services/class-email-sender.php:29
 msgid "The email recipient is invalid."
+msgstr ""
+
+#: includes/services/class-registration-delivery.php:29
+msgid "The FunnelKit contact could not be synchronized after account creation."
 msgstr ""
 
 #: admin/settings-page/class-readiness-rules.php:33
@@ -4470,7 +4482,7 @@ msgstr ""
 msgid "The webhook user could not be found."
 msgstr ""
 
-#: includes/services/class-registration-delivery.php:45
+#: includes/services/class-registration-delivery.php:79
 msgid "The welcome email could not be sent."
 msgstr ""
 
