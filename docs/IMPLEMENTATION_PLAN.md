@@ -2,12 +2,22 @@
 
 ## Status
 
-- Current phase: v1.1.36 is released; tracked-site rollout remains pending explicit site-operation approval.
+- Current phase: v1.1.37 maintenance candidate is validated and awaiting explicit release approval for the WordPress 6.7+ early translation-loading notice fix.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.36 is the current public release.
+- Plugin status: v1.1.36 is the current public release; v1.1.37 is the next tiny maintenance candidate.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: v1.1.36 is ready for Alynt Plugin Updater rollout to tracked installs after explicit site-operation approval. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: release v1.1.37 after explicit approval, then roll it out to tracked installs only after explicit site-operation approval. A bounded file-structure/de-bloat review remains optional maintenance if a concrete hotspot emerges. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+
+## Early Translation Loading Notice Maintenance
+
+- [x] Identify settings-schema `__()` calls as the early i18n trigger when defaults are read before WordPress `init`.
+- [x] Add a delayed schema-text helper so early auth, routing, and CLI paths can read default settings without triggering just-in-time translation loading.
+- [x] Keep post-`init` settings labels/defaults translatable for admin screens and generated POT extraction.
+- [x] Add regression coverage proving settings defaults can be read before `init` without calling the translation stub.
+- [x] Run focused and full validation for the v1.1.37 maintenance candidate.
+- [ ] Publish `v1.1.37` after explicit approval.
+- [ ] Roll out `v1.1.37` to tracked installs only after explicit site-operation approval.
 
 ## Public Author Privacy And Account Details Simplification
 

@@ -58,6 +58,19 @@ class SettingsSchemaDefaultsTest extends SettingsSchemaTestCase {
 		);
 	}
 
+	public function test_settings_defaults_can_be_read_before_init_without_loading_translations() {
+		$this->reset_settings_schema_caches();
+
+		$GLOBALS['alynt_ag_test_actions_done']['init'] = 0;
+		$GLOBALS['alynt_ag_test_record_early_i18n']   = true;
+		$GLOBALS['alynt_ag_test_early_i18n_strings']  = array();
+
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+
+		$this->assertSame( 'Welcome back. Log in to access your account.', $settings['login_intro_text'] );
+		$this->assertSame( array(), $GLOBALS['alynt_ag_test_early_i18n_strings'] );
+	}
+
 	public function test_reoon_flagged_policy_sanitizes_to_known_options() {
 		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
 			array(
@@ -178,5 +191,20 @@ class SettingsSchemaDefaultsTest extends SettingsSchemaTestCase {
 		$this->assertFalse( $defaults['email_password_changed_disabled'] );
 		$this->assertFalse( $defaults['email_new_user_welcome_disabled'] );
 		$this->assertFalse( $defaults['email_change_confirmation_disabled'] );
+	}
+
+	/**
+	 * Reset static schema caches for timing-sensitive tests.
+	 *
+	 * @return void
+	 */
+	private function reset_settings_schema_caches() {
+		foreach ( array( 'schema_cache', 'defaults_cache' ) as $property_name ) {
+			$property = new ReflectionProperty( 'ALYNT_AG_Settings_Schema', $property_name );
+			if ( PHP_VERSION_ID < 80100 ) {
+				$property->setAccessible( true );
+			}
+			$property->setValue( null, null );
+		}
 	}
 }

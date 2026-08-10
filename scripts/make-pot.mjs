@@ -13,6 +13,7 @@ const singularFunctions = [
 	'esc_attr_e',
 	'esc_html__',
 	'esc_html_e',
+	'alynt_ag_schema_text',
 ];
 
 function normalizePath(file) {

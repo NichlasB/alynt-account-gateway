@@ -9,6 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+require_once __DIR__ . '/functions-settings-definition.php';
+
 /**
  * Aggregates ordered settings definition providers.
  */

@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.37 - 2026-08-10
+
+### Fixed
+
+- Avoid WordPress 6.7+ early translation-loading notices when settings defaults are read during early routing, authentication, or CLI bootstrap paths.
+
 ## 1.1.36 - 2026-08-10
 
 ### Added

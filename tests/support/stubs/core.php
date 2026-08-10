@@ -7,7 +7,25 @@
 
 if ( ! function_exists( '__' ) ) {
 	function __( $text, $domain = 'default' ) {
+		if (
+			! empty( $GLOBALS['alynt_ag_test_record_early_i18n'] )
+			&& function_exists( 'did_action' )
+			&& ! did_action( 'init' )
+		) {
+			$GLOBALS['alynt_ag_test_early_i18n_strings'][] = (string) $text;
+		}
+
 		return $text;
+	}
+}
+
+if ( ! function_exists( 'did_action' ) ) {
+	function did_action( $hook_name ) {
+		$actions = isset( $GLOBALS['alynt_ag_test_actions_done'] ) && is_array( $GLOBALS['alynt_ag_test_actions_done'] )
+			? $GLOBALS['alynt_ag_test_actions_done']
+			: array();
+
+		return isset( $actions[ $hook_name ] ) ? (int) $actions[ $hook_name ] : 0;
 	}
 }
 
