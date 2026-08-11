@@ -109,7 +109,7 @@ class ALYNT_AG_FunnelKit_Contact_Sync {
 		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- One-time optional third-party contact-table backfill.
 		$rows = $wpdb->get_results(
 			$wpdb->prepare(
-				"SELECT id, wpid, f_name, l_name FROM {$table} WHERE wpid <> 0 AND (f_name = '' OR l_name = '') LIMIT %d",
+				"SELECT id, wpid, f_name, l_name FROM {$table} WHERE wpid <> 0 AND (f_name IS NULL OR f_name = '' OR l_name IS NULL OR l_name = '') LIMIT %d",
 				$limit
 			)
 		);
@@ -195,15 +195,25 @@ class ALYNT_AG_FunnelKit_Contact_Sync {
 		$last_name  = $user_id ? sanitize_text_field( get_user_meta( $user_id, 'last_name', true ) ) : '';
 		$data       = array();
 
-		if ( '' === (string) $row->f_name && '' !== $first_name ) {
+		if ( $this->is_blank_contact_name( $row->f_name ?? null ) && '' !== $first_name ) {
 			$data['f_name'] = $first_name;
 		}
 
-		if ( '' === (string) $row->l_name && '' !== $last_name ) {
+		if ( $this->is_blank_contact_name( $row->l_name ?? null ) && '' !== $last_name ) {
 			$data['l_name'] = $last_name;
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Check whether a FunnelKit contact name value is blank.
+	 *
+	 * @param mixed $value Contact name value.
+	 * @return bool
+	 */
+	private function is_blank_contact_name( $value ) {
+		return null === $value || '' === (string) $value;
 	}
 
 	/**
@@ -228,7 +238,7 @@ class ALYNT_AG_FunnelKit_Contact_Sync {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Cheap optional third-party table existence check.
 		return $table === $wpdb->get_var(
-			$wpdb->prepare( 'SHOW TABLES LIKE %s', $table )
+			$wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table ) )
 		);
 	}
 }

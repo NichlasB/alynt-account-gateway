@@ -30,6 +30,22 @@ class FunnelKitContactSyncTest extends RegistrationServiceTestCase {
 		$this->assertStringContainsString( 'SHOW TABLES LIKE', $GLOBALS['alynt_ag_test_db_queries'][0] );
 	}
 
+	public function test_table_existence_check_escapes_like_pattern() {
+		$sync = new ALYNT_AG_FunnelKit_Contact_Sync();
+
+		$result = $sync->sync_registration_contact(
+			(object) array(
+				'email'      => 'customer@example.test',
+				'first_name' => 'Damon',
+				'last_name'  => 'Paulo',
+			),
+			456
+		);
+
+		$this->assertTrue( $result );
+		$this->assertStringContainsString( "SHOW TABLES LIKE 'wp\\_bwf\\_contact'", $GLOBALS['alynt_ag_test_db_queries'][0] );
+	}
+
 	public function test_matching_email_contact_receives_names_and_user_id() {
 		$sync = new ALYNT_AG_FunnelKit_Contact_Sync();
 
@@ -141,6 +157,45 @@ class FunnelKitContactSyncTest extends RegistrationServiceTestCase {
 		$this->assertSame( 'wp_bwf_contact', $GLOBALS['alynt_ag_test_db_updates'][0]['table'] );
 		$this->assertSame( array( 'f_name' => 'Damon', 'l_name' => 'Paulo' ), $GLOBALS['alynt_ag_test_db_updates'][0]['data'] );
 		$this->assertSame( array( 'id' => 12 ), $GLOBALS['alynt_ag_test_db_updates'][0]['where'] );
+	}
+
+	public function test_backfill_includes_null_name_rows() {
+		global $wpdb;
+
+		$original_wpdb = $wpdb;
+		$wpdb          = new class() extends ALYNT_AG_Test_WPDB {
+			public function get_results( $query ) {
+				$GLOBALS['alynt_ag_test_db_queries'][] = $query;
+
+				return array();
+			}
+		};
+
+		try {
+			$stats = ( new ALYNT_AG_FunnelKit_Contact_Sync() )->backfill_linked_contacts();
+
+			$this->assertSame( 0, $stats['inspected'] );
+			$select = end( $GLOBALS['alynt_ag_test_db_queries'] );
+			$this->assertStringContainsString( "f_name IS NULL OR f_name = '' OR l_name IS NULL OR l_name = ''", $select );
+		} finally {
+			$wpdb = $original_wpdb;
+		}
+	}
+
+	public function test_backfill_copies_null_names_from_linked_wordpress_user_meta() {
+		$GLOBALS['alynt_ag_test_db_results']['wp_bwf_contact'] = array(
+			(object) array(
+				'id'     => 12,
+				'wpid'   => 456,
+				'f_name' => null,
+				'l_name' => null,
+			),
+		);
+
+		$stats = ( new ALYNT_AG_FunnelKit_Contact_Sync() )->backfill_linked_contacts();
+
+		$this->assertSame( 1, $stats['updated'] );
+		$this->assertSame( array( 'f_name' => 'Damon', 'l_name' => 'Paulo' ), $GLOBALS['alynt_ag_test_db_updates'][0]['data'] );
 	}
 
 	public function test_backfill_does_not_clobber_existing_non_empty_names() {

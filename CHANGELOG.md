@@ -4,6 +4,10 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+### Fixed
+
+- Harden optional FunnelKit contact sync table detection and backfill handling for escaped LIKE patterns and NULL contact-name fields.
+
 ## 1.1.39 - 2026-08-11
 
 ### Fixed
