@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.41 - 2026-08-11
+
+### Added
+
+- Always show a centered dashboard footer copyright line with the current year and site name.
+
 ## 1.1.40 - 2026-08-11
 
 ### Fixed

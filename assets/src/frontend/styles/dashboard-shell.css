@@ -45,6 +45,19 @@
 	color: var(--agw-color-text);
 }
 
+.agw-dashboard-footer__copyright {
+	margin: 12px 0 0;
+	color: color-mix(in srgb, var(--agw-color-text) 76%, transparent);
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 1.5;
+	text-align: center;
+}
+
+.agw-dashboard-footer__nav + .agw-dashboard-footer__copyright {
+	margin-top: 16px;
+}
+
 .agw-dashboard__header {
 	display: flex;
 	gap: 24px;

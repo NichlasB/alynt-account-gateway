@@ -51,7 +51,11 @@ class FrontendDashboardShellTest extends FrontendDashboardScreenTestCase {
 		$this->assertStringContainsString( 'aria-label="Log out"', $html );
 		$this->assertStringNotContainsString( 'data-agw-offcanvas-open', $html );
 		$this->assertStringNotContainsString( 'id="agw-dashboard-offcanvas"', $html );
-		$this->assertStringNotContainsString( 'class="agw-dashboard-footer"', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-footer"', $html );
+		$this->assertStringContainsString( 'class="agw-dashboard-footer__copyright"', $html );
+		$this->assertStringContainsString( 'Copyright &copy; ', $html );
+		$this->assertStringContainsString( 'Example Store', $html );
+		$this->assertStringNotContainsString( 'aria-label="Dashboard footer navigation"', $html );
 		$this->assertStringContainsString( 'redirect_to=https%3A%2F%2Fexample.test%2Flogin', $html );
 		$this->assertStringContainsString( 'Account Dashboard', $html );
 		$this->assertStringContainsString( 'Welcome, Damon', $html );

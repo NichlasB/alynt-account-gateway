@@ -113,7 +113,7 @@ class ALYNT_AG_Frontend_Dashboard_Screen {
 				</header>
 				<?php $this->navigation->render_offcanvas_menu( $settings ); ?>
 				<?php $this->render_dashboard_screen( $settings, $current_path ); ?>
-				<?php $this->navigation->render_footer_menu( $settings ); ?>
+				<?php $this->navigation->render_footer( $settings ); ?>
 			</div>
 		</main>
 		<?php

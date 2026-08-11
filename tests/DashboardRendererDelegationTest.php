@@ -29,7 +29,7 @@ class ALYNT_AG_Test_Dashboard_Navigation_Renderer {
 		$this->calls[] = 'offcanvas';
 	}
 
-	public function render_footer_menu( $settings ) {
+	public function render_footer( $settings ) {
 		unset( $settings );
 		$this->calls[] = 'footer';
 	}
