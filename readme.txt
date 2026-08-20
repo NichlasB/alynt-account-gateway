@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.41
+Stable tag: 1.1.42
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -22,6 +22,7 @@ Core features include:
 * Configurable login path, account action base, customer, administrator, and shop-manager after-login redirects, and emergency bypass key.
 * Setup readiness checks before public frontend output is enabled.
 * Confirmation-first registration that creates the WordPress user only after email confirmation and password setup.
+* Configurable safe role assignment for confirmed registrations, defaulting to Customer with Subscriber fallback when WooCommerce is unavailable.
 * Optional Cloudflare Turnstile and Reoon Email Verifier support.
 * Rate limiting for account gateway actions.
 * Branded account emails with preview and test-send tools.
@@ -71,7 +72,9 @@ Yes. Each email body uses WordPress's Visual/Text editor with safe HTML formatti
 
 == Changelog ==
 
-= Unreleased =
+= 1.1.42 =
+
+* Add a Registration setting for choosing the safe role assigned after confirmed account creation, with Customer as the default and Subscriber fallback when Customer is unavailable.
 
 = 1.1.38 =
 

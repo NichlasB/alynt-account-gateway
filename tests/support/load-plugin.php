@@ -19,6 +19,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-retention-cleanup.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/class-i18n.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-client-ip.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-login-identifier-policy.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-registration-role-resolver.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-funnelkit-contact-sync.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-operation-lock.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-rate-limiter.php';

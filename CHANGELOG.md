@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.42 - 2026-08-20
+
+### Added
+
+- Add a Registration setting for choosing the safe role assigned after confirmed account creation, with Customer as the default and Subscriber fallback when Customer is unavailable.
+
 ## 1.1.41 - 2026-08-11
 
 ### Added

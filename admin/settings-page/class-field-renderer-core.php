@@ -63,7 +63,7 @@ class ALYNT_AG_Settings_Page_Field_Renderer_Core extends ALYNT_AG_Settings_Page_
 			return;
 		}
 
-		if ( 'select' === $type ) {
+		if ( in_array( $type, array( 'select', 'registration_role' ), true ) ) {
 			$this->render_select_field( $context );
 			return;
 		}

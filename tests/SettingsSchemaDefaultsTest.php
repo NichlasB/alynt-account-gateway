@@ -30,6 +30,25 @@ class SettingsSchemaDefaultsTest extends SettingsSchemaTestCase {
 		$this->assertSame( 5, $defaults['lostpassword_rate_limit_count'] );
 		$this->assertSame( 'allow', $defaults['reoon_flagged_policy'] );
 		$this->assertSame( 'email_only', $defaults['login_identifier_mode'] );
+		$this->assertSame( 'customer', $defaults['registration_user_role'] );
+	}
+
+	public function test_registration_user_role_sanitizes_to_safe_options() {
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array(
+				'registration_user_role' => 'subscriber',
+			)
+		);
+
+		$this->assertSame( 'subscriber', $sanitized['registration_user_role'] );
+
+		$sanitized = ALYNT_AG_Settings_Schema::sanitize(
+			array(
+				'registration_user_role' => 'administrator',
+			)
+		);
+
+		$this->assertSame( 'customer', $sanitized['registration_user_role'] );
 	}
 
 	public function test_login_identifier_mode_sanitizes_to_known_options() {

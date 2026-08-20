@@ -106,6 +106,8 @@ class ALYNT_AG_Settings_Sanitizer {
 				return self::sanitize_dashboard_links( $value );
 			case 'woocommerce_menu_visibility':
 				return self::sanitize_woocommerce_hidden_menu_items( $value );
+			case 'registration_role':
+				return ALYNT_AG_Registration_Role_Resolver::sanitize_setting_value( $value );
 			case 'rich_text':
 			case 'textarea':
 				return wp_kses_post( wp_unslash( $value ) );

@@ -53,6 +53,10 @@ class ALYNT_AG_Settings_Page_Field_Help extends ALYNT_AG_Settings_Page_Component
 			return $options;
 		}
 
+		if ( 'registration_user_role' === $key ) {
+			return ALYNT_AG_Registration_Role_Resolver::role_options();
+		}
+
 		return ! empty( $field['options'] ) && is_array( $field['options'] ) ? $field['options'] : array();
 	}
 
@@ -131,6 +135,7 @@ class ALYNT_AG_Settings_Page_Field_Help extends ALYNT_AG_Settings_Page_Component
 			'registration_enabled'                => __( 'Public account creation is disabled by default. Enable it only after terms, privacy, email confirmation, and anti-spam settings are ready.', 'alynt-account-gateway' ),
 			'registration_token_hours'            => __( 'Pending registrations expire after this many hours. The default 24-hour window gives customers time to find the email without leaving stale invitations open too long.', 'alynt-account-gateway' ),
 			'username_format'                     => __( 'Use tokens such as {first_name} and {last_name}. Customers log in by email, but WordPress still needs a generated username.', 'alynt-account-gateway' ),
+			'registration_user_role'              => __( 'Role assigned after email confirmation and password setup. Customer is preferred for WooCommerce sites; Subscriber is used if the Customer role is unavailable.', 'alynt-account-gateway' ),
 			'terms_path'                          => __( 'Use a relative URL path to the Terms page. Registration should not launch until this page exists.', 'alynt-account-gateway' ),
 			'privacy_path'                        => __( 'Use a relative URL path to the Privacy Policy page. Registration should not launch until this page exists.', 'alynt-account-gateway' ),
 			'brand_logo_id'                       => __( 'Shown on account gateway screens and the custom dashboard. Use a clear logo that remains readable at smaller sizes.', 'alynt-account-gateway' ),

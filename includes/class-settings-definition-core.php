@@ -89,6 +89,12 @@ class ALYNT_AG_Settings_Definition_Core {
 				'default' => '@User_{first_name}_{last_name}',
 				'label'   => alynt_ag_schema_text( 'Generated Username Format', 'alynt-account-gateway' ),
 			),
+			'registration_user_role'             => array(
+				'tab'     => 'registration',
+				'type'    => 'registration_role',
+				'default' => 'customer',
+				'label'   => alynt_ag_schema_text( 'New Registration User Role', 'alynt-account-gateway' ),
+			),
 			'terms_path'                         => array(
 				'tab'     => 'registration',
 				'type'    => 'relative_path',

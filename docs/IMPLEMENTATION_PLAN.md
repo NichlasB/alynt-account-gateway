@@ -2,12 +2,49 @@
 
 ## Status
 
-- Current phase: FunnelKit contact-name sync compatibility fix was released as v1.1.39 and is awaiting site rollout/backfill verification where needed.
+- Current phase: Configurable registration role setting is implemented and locally validated; no site rollout or release has been approved.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.39 is the current public release.
+- Plugin status: v1.1.41 is the current public release; v1.1.42 is prepared locally as the registration-role release candidate pending approval.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Roll out v1.1.39 through Alynt Plugin Updater where needed, then run the optional FunnelKit backfill/smoke check on sites with existing blank-name FunnelKit contacts. Keep future staging and production rollouts behind their own site-operation approvals. Inactive-account integration remains deferred until an authoritative status source exists.
+- Next roadmap: Prepare a release candidate only after explicit approval. Any release, updater verification, or site rollout must be separately approved. Keep future staging and production rollouts behind their own site-operation approvals.
+
+## Configurable Registration Role Setting
+
+Status: Local implementation and validation complete; prepared for v1.1.42 release approval.
+
+### Scope
+
+- [x] Add a Registration tab setting for the role assigned to newly created users after email confirmation and password setup.
+- [x] Restrict public registration assignment to safe allow-listed roles: Customer and Subscriber.
+- [x] Store Customer as the default so WooCommerce sites continue to create customer accounts by default.
+- [x] Fall back to Subscriber at account-creation time when the Customer role is unavailable, such as on non-WooCommerce sites.
+- [x] Reject unsafe elevated roles and modified allow-listed roles with admin/editor/shop-manager style capabilities.
+- [x] Use the resolved safe role in confirmed registration user creation without changing existing users.
+
+### Acceptance Criteria
+
+- [x] New installations default the setting to Customer.
+- [x] Admin settings sanitize unsafe role values back to a safe default.
+- [x] Confirmed registrations receive the configured safe role when it exists.
+- [x] Confirmed registrations fall back to Subscriber when Customer is unavailable.
+- [x] Registration rolls back with a clear error if no safe assignable role exists.
+- [x] Full validation and feature review are complete.
+
+### Validation
+
+- [x] Focused PHPUnit passed for settings defaults and registration completion: `26 tests`, `133 assertions`.
+- [x] PHP syntax, full PHPUnit, PHPCS, frontend build, POT generation, whitespace validation, and applicable `ds2-feature` reviews are complete.
+- [x] Release candidate: `v1.1.42` metadata prepared locally; commit, tag, publication, updater verification, and site rollout remain approval-gated.
+
+### Feature Review Notes
+
+- Feature Light Review scope: registration role setting schema, sanitizer, admin select rendering/help text, confirmed-registration role assignment, loader/test loader wiring, documentation, and focused tests. No AJAX, REST, database schema, cron, file operations, third-party APIs, frontend templates, or production-site operations were changed.
+- Feature Light Review found no significant non-security issues. The implementation follows existing schema/sanitizer/field-renderer patterns and isolates role policy in `ALYNT_AG_Registration_Role_Resolver`.
+- Feature Bloat and Structure Review used the upstream merge base `fb914f84afb9b33d8da637b363c91d35eb25c188`. Phase 1 found one oversized changed test file after adding role coverage; approved Phase 2 split role-specific completion tests into `RegistrationCompletionRoleTest`. Post-cleanup measurement reports `14` changed PHP/JS/CSS files and `0` oversized files.
+- Feature UI/UX Review found no design-system issues. The added admin control uses the existing settings table/select renderer, translatable option labels, and associated sentence-case help text.
+- Feature Security Review found no issue. Input is sanitized through the settings schema, role values are allow-listed to Customer/Subscriber, existing elevated capabilities are rejected, and confirmed registration rolls back if no safe assignable role exists.
+- Regression handoff: no confirmed security defect requires `07A`; focused and full PHPUnit coverage protect default role, configured Subscriber role, Customer-missing fallback, unsafe-role rejection, no-safe-role rollback, settings sanitization, and schema fingerprint changes.
 
 ## FunnelKit Contact Name Sync Compatibility Fix
 

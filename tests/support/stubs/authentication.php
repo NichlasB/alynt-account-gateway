@@ -118,6 +118,23 @@ if ( ! function_exists( 'wp_delete_user' ) ) {
 	}
 }
 
+if ( ! function_exists( 'get_role' ) ) {
+	function get_role( $role ) {
+		$roles = isset( $GLOBALS['alynt_ag_test_roles'] ) && is_array( $GLOBALS['alynt_ag_test_roles'] )
+			? $GLOBALS['alynt_ag_test_roles']
+			: array(
+				'customer'   => array( 'read' => true ),
+				'subscriber' => array( 'read' => true ),
+			);
+
+		if ( ! array_key_exists( $role, $roles ) ) {
+			return null;
+		}
+
+		return (object) array( 'capabilities' => $roles[ $role ] );
+	}
+}
+
 if ( ! class_exists( 'WP_User' ) ) {
 	class WP_User {
 		public $ID;

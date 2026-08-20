@@ -13,6 +13,7 @@ This is private Alynt-distributed software. The plugin header includes `GitHub P
 - Brand controls for logo, logo max width, background image, accessible live color pickers and hex values, custom font stacks with concrete Blocksy-loaded font examples, and four local/system typography presets with an accessible live preview.
 - Screen-specific instruction copy for account gateway forms and states.
 - Confirmation-first registration flow that creates a WordPress user only after the visitor confirms email and sets a valid password.
+- Configurable safe role assignment for confirmed registrations, defaulting to Customer with Subscriber fallback when WooCommerce is unavailable.
 - Email-only login by default, with optional email-or-username login for legacy sites that need it.
 - Password validation requiring at least 12 characters with uppercase, lowercase, number, and symbol characters.
 - Optional Cloudflare Turnstile and Reoon Email Verifier registration protection, plus transient-backed rate limiting.
@@ -49,11 +50,12 @@ Recommended first pass:
 3. Upload the brand logo and optional gateway background image.
 4. Review colors and button colors, then choose a typography preset or customize the font stacks.
 5. Configure Terms and Privacy relative paths.
-6. Decide whether public registration should be enabled.
-7. Configure Turnstile or Reoon before enabling registration on public sites.
-8. Preview/test account emails.
-9. Enable the dashboard and WooCommerce takeover only after confirming account pages locally.
-10. Enable Frontend Output when the configuration is ready.
+6. Confirm the safe role assigned to newly confirmed registrations.
+7. Decide whether public registration should be enabled.
+8. Configure Turnstile or Reoon before enabling registration on public sites.
+9. Preview/test account emails.
+10. Enable the dashboard and WooCommerce takeover only after confirming account pages locally.
+11. Enable Frontend Output when the configuration is ready.
 
 ## Gateway Screens And Preview
 

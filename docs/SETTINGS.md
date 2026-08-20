@@ -76,6 +76,7 @@ Safe internal `redirect_to` destinations take precedence over role-aware default
 | `registration_enabled` | `boolean` | `false` | Allows public account creation. When disabled, registration links are omitted from the login screen. |
 | `registration_token_hours` | `integer` | `24` | Pending-registration confirmation expiry in hours; constrained to `1` through `168`. |
 | `username_format` | `string` | `@User_{first_name}_{last_name}` | Generated username pattern for confirmed registrations. |
+| `registration_user_role` | `registration_role` | `customer` | Role assigned after confirmed registration. `customer` is preferred for WooCommerce sites; `subscriber` is used when the Customer role is unavailable. Unsafe elevated roles are rejected. |
 | `terms_path` | `relative_path` | `/legal/terms/` | Terms link used in the registration consent text. |
 | `privacy_path` | `relative_path` | `/legal/privacy/` | Privacy Policy link used in the registration consent text. |
 

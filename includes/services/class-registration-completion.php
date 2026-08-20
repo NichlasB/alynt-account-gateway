@@ -105,12 +105,20 @@ class ALYNT_AG_Registration_Completion extends ALYNT_AG_Service_Collaborator {
 			return $user_id;
 		}
 
+		$role = ALYNT_AG_Registration_Role_Resolver::resolve( $settings );
+		if ( '' === $role ) {
+			$this->rollback_registration_user( $user_id );
+
+			return new WP_Error( 'registration_role_unavailable', __( 'The account role could not be assigned. Please contact the site owner.', 'alynt-account-gateway' ) );
+		}
+
 		$updated = wp_update_user(
 			array(
 				'ID'           => (int) $user_id,
 				'first_name'   => $pending->first_name,
 				'last_name'    => $pending->last_name,
 				'display_name' => trim( $pending->first_name . ' ' . $pending->last_name ),
+				'role'         => $role,
 			)
 		);
 

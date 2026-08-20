@@ -107,6 +107,7 @@ class RegistrationCompletionTest extends RegistrationServiceTestCase {
 				'first_name'   => 'Damon',
 				'last_name'    => 'Paulo',
 				'display_name' => 'Damon Paulo',
+				'role'         => 'customer',
 			),
 			$GLOBALS['alynt_ag_test_user_updates'][0]
 		);
