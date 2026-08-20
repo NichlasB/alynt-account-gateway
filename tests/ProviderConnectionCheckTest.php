@@ -69,6 +69,20 @@ class ProviderConnectionCheckTest extends TestCase {
 		$this->assertSame( 'alynt_ag_turnstile_invalid_response', $response_result->get_error_code() );
 	}
 
+	public function test_turnstile_verify_separates_missing_token_from_missing_configuration() {
+		$client = new ALYNT_AG_Turnstile_Client();
+
+		$token_result = $client->verify( '', 'saved-secret' );
+		$this->assertInstanceOf( WP_Error::class, $token_result );
+		$this->assertSame( 'alynt_ag_turnstile_token_missing', $token_result->get_error_code() );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_remote_posts'] );
+
+		$secret_result = $client->verify( 'submitted-token', '' );
+		$this->assertInstanceOf( WP_Error::class, $secret_result );
+		$this->assertSame( 'alynt_ag_turnstile_missing', $secret_result->get_error_code() );
+		$this->assertCount( 0, $GLOBALS['alynt_ag_test_remote_posts'] );
+	}
+
 	public function test_reoon_check_returns_only_sanitized_account_status() {
 		$GLOBALS['alynt_ag_test_remote_get_response'] = array(
 			'body' => wp_json_encode(

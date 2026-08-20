@@ -166,6 +166,10 @@ class SettingsPageRateLimitHealthTest extends SettingsPageSecurityStatusTestCase
 						'status'   => 'alynt_ag_turnstile_request_failed',
 					),
 					(object) array(
+						'provider' => 'turnstile',
+						'status'   => 'alynt_ag_turnstile_token_missing',
+					),
+					(object) array(
 						'provider' => 'reoon',
 						'status'   => 'alynt_ag_reoon_blocked',
 					),
@@ -191,11 +195,14 @@ class SettingsPageRateLimitHealthTest extends SettingsPageSecurityStatusTestCase
 		$this->assertSame( 'Turnstile Connectivity', $items[1]['label'] );
 		$this->assertSame( 2, $items[1]['count'] );
 		$this->assertSame( 'action', $items[1]['status'] );
-		$this->assertSame( 'Reoon Email Blocks', $items[2]['label'] );
-		$this->assertSame( 2, $items[2]['count'] );
+		$this->assertSame( 'Turnstile Token Submission', $items[2]['label'] );
+		$this->assertSame( 1, $items[2]['count'] );
 		$this->assertSame( 'warning', $items[2]['status'] );
-		$this->assertSame( 'Reoon Provider Failures', $items[3]['label'] );
-		$this->assertSame( 1, $items[3]['count'] );
-		$this->assertSame( 'action', $items[3]['status'] );
+		$this->assertSame( 'Reoon Email Blocks', $items[3]['label'] );
+		$this->assertSame( 2, $items[3]['count'] );
+		$this->assertSame( 'warning', $items[3]['status'] );
+		$this->assertSame( 'Reoon Provider Failures', $items[4]['label'] );
+		$this->assertSame( 1, $items[4]['count'] );
+		$this->assertSame( 'action', $items[4]['status'] );
 	}
 }

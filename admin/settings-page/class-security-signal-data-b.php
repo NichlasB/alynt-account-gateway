@@ -207,6 +207,11 @@ class ALYNT_AG_Settings_Page_Security_Signal_Data_B extends ALYNT_AG_Settings_Pa
 			'turnstile',
 			array( 'alynt_ag_turnstile_missing', 'alynt_ag_turnstile_request_failed' )
 		);
+		$turnstile_tokens     = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'turnstile',
+			array( 'alynt_ag_turnstile_token_missing' )
+		);
 		$reoon_blocks         = $this->count_security_logs_by_provider_statuses(
 			$logs,
 			'reoon',
@@ -231,6 +236,12 @@ class ALYNT_AG_Settings_Page_Security_Signal_Data_B extends ALYNT_AG_Settings_Pa
 				'status'  => $turnstile_failures > 0 ? 'action' : 'ready',
 				'count'   => $turnstile_failures,
 				'message' => __( 'recent configuration or network failures. Check both Turnstile keys and outbound HTTP connectivity.', 'alynt-account-gateway' ),
+			),
+			array(
+				'label'   => __( 'Turnstile Token Submission', 'alynt-account-gateway' ),
+				'status'  => $turnstile_tokens > 0 ? 'warning' : 'ready',
+				'count'   => $turnstile_tokens,
+				'message' => __( 'recent missing browser challenge responses. Review widget rendering and customer browser reports if this rises.', 'alynt-account-gateway' ),
 			),
 			array(
 				'label'   => __( 'Reoon Email Blocks', 'alynt-account-gateway' ),

@@ -100,6 +100,13 @@ class SettingsPageVerificationActivityRenderingTest extends SettingsPageSecurity
 				'created_at' => '2026-07-05 12:24:30',
 			),
 			(object) array(
+				'email'      => 'turnstile-token@example.test',
+				'provider'   => 'turnstile',
+				'status'     => 'alynt_ag_turnstile_token_missing',
+				'blocked'    => 1,
+				'created_at' => '2026-07-05 12:24:45',
+			),
+			(object) array(
 				'email'      => 'login@example.test',
 				'provider'   => 'rate_limit',
 				'status'     => 'login_rate_limited',

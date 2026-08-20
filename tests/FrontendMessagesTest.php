@@ -35,6 +35,7 @@ class FrontendMessagesTest extends TestCase {
 		$this->assertSame( 'Email verification is temporarily unavailable. Please try again later.', $messages->registration_error( 'alynt_ag_reoon_request_failed' ) );
 		$this->assertSame( 'Email verification is temporarily unavailable. Please try again later.', $messages->registration_error( 'alynt_ag_reoon_invalid_response' ) );
 		$this->assertSame( 'Please complete the verification challenge and try again.', $messages->registration_error( 'alynt_ag_turnstile_failed' ) );
+		$this->assertSame( 'Please complete the verification challenge and try again.', $messages->registration_error( 'alynt_ag_turnstile_token_missing' ) );
 		$this->assertSame( 'Verification is not available right now. Please try again later.', $messages->registration_error( 'alynt_ag_turnstile_missing' ) );
 		$this->assertSame( 'Verification is temporarily unavailable. Please try again later.', $messages->registration_error( 'alynt_ag_turnstile_request_failed' ) );
 	}

@@ -2,9 +2,9 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Alynt Account Gateway 1.1.42\n"
+"Project-Id-Version: Alynt Account Gateway 1.1.43\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-20 19:44+0000\n"
+"POT-Creation-Date: 2026-08-20 21:21+0000\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -74,7 +74,7 @@ msgstr ""
 msgid "A failed webhook retry could not be scheduled."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:114
+#: admin/settings-page/class-security-verification-guidance.php:118
 msgid "A fresh confirmation email was sent for an existing pending registration."
 msgstr ""
 
@@ -179,15 +179,15 @@ msgstr ""
 msgid "Account creation is complete. No resend action is needed."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:126
+#: admin/settings-page/class-security-verification-guidance.php:130
 msgid "Account creation was blocked because the email address became unavailable."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:118
+#: admin/settings-page/class-security-verification-guidance.php:122
 msgid "Account creation was blocked because the password confirmation did not match."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:122
+#: admin/settings-page/class-security-verification-guidance.php:126
 msgid "Account creation was blocked because the password did not meet the strength rules."
 msgstr ""
 
@@ -522,7 +522,7 @@ msgstr ""
 msgid "Area"
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:156
+#: admin/settings-page/class-security-verification-guidance.php:160
 msgid "Ask the customer to wait for the resend window; check email delivery if resend blocks repeat."
 msgstr ""
 
@@ -715,7 +715,7 @@ msgstr ""
 msgid "Check button background and text colors together for readable contrast."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:208
+#: admin/settings-page/class-security-verification-guidance.php:216
 msgid "Check database writes and email delivery before public launch."
 msgstr ""
 
@@ -731,7 +731,7 @@ msgstr ""
 msgid "Check spam, promotions, and filtered inbox folders if the email is not in your inbox."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:172
+#: admin/settings-page/class-security-verification-guidance.php:176
 msgid "Check support tickets for false positives before keeping strict flagged-status blocking."
 msgstr ""
 
@@ -902,7 +902,7 @@ msgstr ""
 msgid "Confirm administrator and shop manager accounts land on their configured redirects."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:190
+#: admin/settings-page/class-security-verification-guidance.php:194
 msgid "Confirm domain and key pairing, then watch for bot traffic if challenge failures rise."
 msgstr ""
 
@@ -942,7 +942,7 @@ msgstr ""
 msgid "Confirm this email address to finish updating your account."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:194
+#: admin/settings-page/class-security-verification-guidance.php:202
 msgid "Confirm Turnstile keys and outbound HTTP connectivity before public launch."
 msgstr ""
 
@@ -2400,23 +2400,23 @@ msgstr ""
 msgid "No account-created webhook URL is configured."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:199
+#: admin/settings-page/class-security-verification-guidance.php:207
 msgid "No action needed unless challenge failures rise."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:220
+#: admin/settings-page/class-security-verification-guidance.php:228
 msgid "No action needed unless email-unavailable blocks repeat."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:225
+#: admin/settings-page/class-security-verification-guidance.php:233
 msgid "No action needed unless this registration-flow pattern rises."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:185
+#: admin/settings-page/class-security-verification-guidance.php:189
 msgid "No action needed unless this status pattern changes."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:230
+#: admin/settings-page/class-security-verification-guidance.php:238
 msgid "No action needed unless this verification pattern changes."
 msgstr ""
 
@@ -2713,12 +2713,12 @@ msgstr ""
 msgid "Password is visible."
 msgstr ""
 
-#: includes/services/class-frontend-messages.php:97
+#: includes/services/class-frontend-messages.php:98
 #: includes/services/class-registration-credentials.php:125
 msgid "Password must be at least 12 characters."
 msgstr ""
 
-#: includes/services/class-frontend-messages.php:98
+#: includes/services/class-frontend-messages.php:99
 #: includes/services/class-registration-credentials.php:129
 msgid "Password must include uppercase, lowercase, number, and symbol characters."
 msgstr ""
@@ -2849,11 +2849,12 @@ msgid "Please complete all required fields."
 msgstr ""
 
 #: includes/services/class-frontend-messages.php:60
+#: includes/services/class-frontend-messages.php:61
 msgid "Please complete the verification challenge and try again."
 msgstr ""
 
 #: includes/services/class-frontend-messages.php:49
-#: includes/services/class-frontend-messages.php:77
+#: includes/services/class-frontend-messages.php:78
 #: includes/services/class-registration-confirmation.php:107
 #: includes/services/class-registration-pending-store.php:58
 msgid "Please enter a valid email address."
@@ -3080,19 +3081,19 @@ msgstr ""
 msgid "recent branded login failures or rate-limit blocks. Review if customers report login trouble or if the count rises suddenly."
 msgstr ""
 
-#: admin/settings-page/class-security-signal-data-b.php:227
+#: admin/settings-page/class-security-signal-data-b.php:232
 msgid "recent challenge rejections. Confirm the site key matches the secret key and watch for bot traffic if this rises."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:116
+#: admin/settings-page/class-security-failure-triage.php:126
 msgid "recent Cloudflare Siteverify connection failures. Check outbound HTTP, DNS, firewall rules, and the saved secret key."
 msgstr ""
 
-#: admin/settings-page/class-security-signal-data-b.php:233
+#: admin/settings-page/class-security-signal-data-b.php:238
 msgid "recent configuration or network failures. Check both Turnstile keys and outbound HTTP connectivity."
 msgstr ""
 
-#: admin/settings-page/class-security-signal-data-b.php:245
+#: admin/settings-page/class-security-signal-data-b.php:256
 msgid "recent configuration, connectivity, or response failures. Test the API key and outbound HTTP connectivity."
 msgstr ""
 
@@ -3120,7 +3121,7 @@ msgstr ""
 msgid "Recent diagnostics events could not be loaded. Refresh the page and check the database connection if the problem continues."
 msgstr ""
 
-#: admin/settings-page/class-security-signal-data-b.php:239
+#: admin/settings-page/class-security-signal-data-b.php:250
 msgid "recent email-quality blocks. Review the policy if legitimate customers are affected."
 msgstr ""
 
@@ -3148,16 +3149,24 @@ msgstr ""
 msgid "recent login redirects preserved a destination. Review protected-page links if customers seem bounced through login often."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:144
+#: admin/settings-page/class-security-failure-triage.php:161
 msgid "recent malformed or unexpected Reoon responses. Test the key in Reoon and review provider availability before enabling stricter blocking."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:130
+#: admin/settings-page/class-security-failure-triage.php:147
 msgid "recent missing API-key failures. Confirm the Reoon key is saved before registration relies on email verification."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:109
-msgid "recent missing-token or key configuration failures. Confirm both keys are saved and belong to the same Cloudflare Turnstile site."
+#: admin/settings-page/class-security-signal-data-b.php:244
+msgid "recent missing browser challenge responses. Review widget rendering and customer browser reports if this rises."
+msgstr ""
+
+#: admin/settings-page/class-security-failure-triage.php:140
+msgid "recent missing browser challenge responses. Review widget rendering, cache/minification, and customer browser reports if this rises."
+msgstr ""
+
+#: admin/settings-page/class-security-failure-triage.php:119
+msgid "recent missing-key configuration failures. Confirm both keys are saved and belong to the same Cloudflare Turnstile site."
 msgstr ""
 
 #: admin/settings-page/class-diagnostics-tools.php:211
@@ -3264,11 +3273,11 @@ msgstr ""
 msgid "Recent Registration Verification Activity"
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:123
+#: admin/settings-page/class-security-failure-triage.php:133
 msgid "recent rejected challenges. Confirm the registration domain is allowed in Cloudflare and compare with bot traffic before changing policy."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:137
+#: admin/settings-page/class-security-failure-triage.php:154
 msgid "recent Reoon API connection failures. Check outbound HTTP, DNS, provider availability, and key permissions."
 msgstr ""
 
@@ -3411,7 +3420,7 @@ msgstr ""
 msgid "Registration confirmation URL"
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:106
+#: admin/settings-page/class-security-verification-guidance.php:110
 msgid "Registration consent evidence could not be stored."
 msgstr ""
 
@@ -3427,7 +3436,7 @@ msgstr ""
 msgid "Registration Flow"
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:130
+#: admin/settings-page/class-security-verification-guidance.php:134
 msgid "Registration flow blocked this account action."
 msgstr ""
 
@@ -3435,7 +3444,7 @@ msgstr ""
 msgid "Registration Flow Failures"
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:131
+#: admin/settings-page/class-security-verification-guidance.php:135
 msgid "Registration flow recorded this account action."
 msgstr ""
 
@@ -3488,7 +3497,7 @@ msgstr ""
 msgid "Registration verification failed. Please try again."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:98
+#: admin/settings-page/class-security-verification-guidance.php:102
 msgid "Registration was blocked because terms and privacy consent was not accepted."
 msgstr ""
 
@@ -3555,11 +3564,11 @@ msgstr ""
 msgid "Reoon blocked this registration."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:127
+#: admin/settings-page/class-security-failure-triage.php:144
 msgid "Reoon Configuration"
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:134
+#: admin/settings-page/class-security-failure-triage.php:151
 msgid "Reoon Connectivity"
 msgstr ""
 
@@ -3567,7 +3576,7 @@ msgstr ""
 msgid "Reoon could not be reached. Check outbound HTTP connectivity, API availability, and the saved API key."
 msgstr ""
 
-#: admin/settings-page/class-security-signal-data-b.php:236
+#: admin/settings-page/class-security-signal-data-b.php:247
 msgid "Reoon Email Blocks"
 msgstr ""
 
@@ -3597,7 +3606,7 @@ msgstr ""
 msgid "Reoon is not configured. Add an API key or use Turnstile before enabling public registration."
 msgstr ""
 
-#: admin/settings-page/class-security-signal-data-b.php:242
+#: admin/settings-page/class-security-signal-data-b.php:253
 msgid "Reoon Provider Failures"
 msgstr ""
 
@@ -3625,7 +3634,7 @@ msgstr ""
 msgid "Reoon returned an unexpected response. Review provider availability and test the saved API key."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:141
+#: admin/settings-page/class-security-failure-triage.php:158
 msgid "Reoon Unexpected Responses"
 msgstr ""
 
@@ -3718,7 +3727,7 @@ msgstr ""
 msgid "Review"
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:167
+#: admin/settings-page/class-security-verification-guidance.php:171
 msgid "Review active rate-limit buckets and support reports before loosening limits."
 msgstr ""
 
@@ -3734,7 +3743,7 @@ msgstr ""
 msgid "Review Branding"
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:198
+#: admin/settings-page/class-security-verification-guidance.php:206
 msgid "Review challenge failures before changing Turnstile settings."
 msgstr ""
 
@@ -3759,11 +3768,11 @@ msgstr ""
 msgid "Review First"
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:160
+#: admin/settings-page/class-security-verification-guidance.php:164
 msgid "Review login lockout pressure before changing limits or support guidance."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:176
+#: admin/settings-page/class-security-verification-guidance.php:180
 msgid "Review masked email and domain patterns before changing the flagged-status policy."
 msgstr ""
 
@@ -3771,7 +3780,7 @@ msgstr ""
 msgid "Review only when a known customer reports a false positive."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:216
+#: admin/settings-page/class-security-verification-guidance.php:224
 msgid "Review password guidance if account setup blocks repeat."
 msgstr ""
 
@@ -3784,7 +3793,7 @@ msgstr ""
 msgid "Review Registration"
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:164
+#: admin/settings-page/class-security-verification-guidance.php:168
 msgid "Review reset-request pressure and delivery reports before changing limits."
 msgstr ""
 
@@ -3804,11 +3813,11 @@ msgstr ""
 msgid "Review setup readiness, export settings, store emergency access privately, then enable frontend output."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:184
+#: admin/settings-page/class-security-verification-guidance.php:188
 msgid "Review support reports before manually recovering a blocked registrant."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:204
+#: admin/settings-page/class-security-verification-guidance.php:212
 msgid "Review Terms and Privacy copy if consent blocks repeat."
 msgstr ""
 
@@ -3816,7 +3825,11 @@ msgstr ""
 msgid "Review the non-secret setup state before launch, support, or site handoff."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:224
+#: admin/settings-page/class-security-verification-guidance.php:198
+msgid "Review the registration form widget and customer browser reports if token-submission failures repeat."
+msgstr ""
+
+#: admin/settings-page/class-security-verification-guidance.php:232
 msgid "Review the related registration setting or support reports."
 msgstr ""
 
@@ -3828,7 +3841,7 @@ msgstr ""
 msgid "Review these checks before enabling public account gateway output."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:229
+#: admin/settings-page/class-security-verification-guidance.php:237
 msgid "Review this blocked verification before changing policy."
 msgstr ""
 
@@ -4309,7 +4322,7 @@ msgstr ""
 msgid "Test Template"
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:180
+#: admin/settings-page/class-security-verification-guidance.php:184
 msgid "Test the Reoon API key and outbound HTTP path before relying on email verification."
 msgstr ""
 
@@ -4354,9 +4367,13 @@ msgstr ""
 msgid "The branded account dashboard is enabled."
 msgstr ""
 
+#: admin/settings-page/class-security-verification-guidance.php:84
+msgid "The browser did not submit a Turnstile challenge response. Ask the customer to refresh the registration screen, complete the challenge, and try again."
+msgstr ""
+
 #: includes/services/class-frontend-messages.php:54
-#: includes/services/class-frontend-messages.php:80
-#: includes/services/class-frontend-messages.php:83
+#: includes/services/class-frontend-messages.php:81
+#: includes/services/class-frontend-messages.php:84
 #: includes/services/class-registration-confirmation.php:41
 msgid "The confirmation email could not be sent. Please try again."
 msgstr ""
@@ -4365,7 +4382,7 @@ msgstr ""
 msgid "The confirmation link could not be checked. Please try again."
 msgstr ""
 
-#: includes/services/class-frontend-messages.php:79
+#: includes/services/class-frontend-messages.php:80
 #: includes/services/class-registration-confirmation.php:80
 msgid "The confirmation link could not be renewed. Please try again."
 msgstr ""
@@ -4402,7 +4419,7 @@ msgstr ""
 msgid "The login path and account action base are the same. Keep them separate so login and action screens route predictably."
 msgstr ""
 
-#: includes/services/class-frontend-messages.php:96
+#: includes/services/class-frontend-messages.php:97
 #: includes/services/class-registration-credentials.php:26
 msgid "The passwords do not match."
 msgstr ""
@@ -4411,7 +4428,7 @@ msgstr ""
 msgid "The pending registration could not be checked. Please try again."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:102
+#: admin/settings-page/class-security-verification-guidance.php:106
 msgid "The pending registration record could not be stored."
 msgstr ""
 
@@ -4419,7 +4436,7 @@ msgstr ""
 msgid "The queued webhook data is invalid."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:110
+#: admin/settings-page/class-security-verification-guidance.php:114
 msgid "The registration confirmation email could not be sent."
 msgstr ""
 
@@ -4428,7 +4445,7 @@ msgid "The registration consent record could not be stored. Please try again."
 msgstr ""
 
 #: includes/services/class-frontend-messages.php:52
-#: includes/services/class-frontend-messages.php:65
+#: includes/services/class-frontend-messages.php:66
 #: includes/services/class-registration-pending-store.php:106
 #: includes/services/class-registration-pending-store.php:83
 msgid "The registration could not be started. Please try again."
@@ -4545,7 +4562,7 @@ msgstr ""
 msgid "This confirms that your account password was updated."
 msgstr ""
 
-#: includes/services/class-frontend-messages.php:99
+#: includes/services/class-frontend-messages.php:100
 #: includes/services/class-registration-completion.php:63
 msgid "This email address can no longer be used."
 msgstr ""
@@ -4565,7 +4582,7 @@ msgstr ""
 msgid "This email was sent by %s."
 msgstr ""
 
-#: includes/services/class-frontend-messages.php:95
+#: includes/services/class-frontend-messages.php:96
 msgid "This link is invalid or has expired."
 msgstr ""
 
@@ -4629,7 +4646,7 @@ msgstr ""
 msgid "Too many attempts. Please wait and try again."
 msgstr ""
 
-#: includes/services/class-frontend-messages.php:78
+#: includes/services/class-frontend-messages.php:79
 msgid "Too many confirmation email requests. Please wait for the resend window before trying again."
 msgstr ""
 
@@ -4647,28 +4664,32 @@ msgstr ""
 msgid "Turnstile"
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:92
+#: admin/settings-page/class-security-verification-guidance.php:96
 msgid "Turnstile blocked this registration."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:93
+#: admin/settings-page/class-security-verification-guidance.php:97
 msgid "Turnstile challenge passed."
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:120
+#: admin/settings-page/class-security-failure-triage.php:130
 msgid "Turnstile Challenge Rejections"
 msgstr ""
 
-#: admin/settings-page/class-security-signal-data-b.php:224
+#: includes/services/class-turnstile-client.php:80
+msgid "Turnstile challenge response was not submitted."
+msgstr ""
+
+#: admin/settings-page/class-security-signal-data-b.php:229
 msgid "Turnstile Challenges"
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:106
+#: admin/settings-page/class-security-failure-triage.php:116
 msgid "Turnstile Configuration"
 msgstr ""
 
-#: admin/settings-page/class-security-failure-triage.php:113
-#: admin/settings-page/class-security-signal-data-b.php:230
+#: admin/settings-page/class-security-failure-triage.php:123
+#: admin/settings-page/class-security-signal-data-b.php:235
 msgid "Turnstile Connectivity"
 msgstr ""
 
@@ -4705,13 +4726,18 @@ msgstr ""
 msgid "Turnstile Site Key"
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:88
+#: admin/settings-page/class-security-failure-triage.php:137
+#: admin/settings-page/class-security-signal-data-b.php:241
+msgid "Turnstile Token Submission"
+msgstr ""
+
+#: admin/settings-page/class-security-verification-guidance.php:92
 msgid "Turnstile verification could not reach Cloudflare. Check outbound HTTP connectivity and the saved secret key."
 msgstr ""
 
-#: includes/services/class-turnstile-client.php:115
+#: includes/services/class-turnstile-client.php:119
 #: includes/services/class-turnstile-client.php:47
-#: includes/services/class-turnstile-client.php:94
+#: includes/services/class-turnstile-client.php:98
 msgid "Turnstile verification failed. Please try again."
 msgstr ""
 
@@ -4721,7 +4747,7 @@ msgstr ""
 msgid "Turnstile verification is not configured."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:84
+#: admin/settings-page/class-security-verification-guidance.php:88
 msgid "Turnstile was not configured when verification ran. Confirm both the site key and secret key before launch."
 msgstr ""
 
@@ -4941,15 +4967,15 @@ msgstr ""
 msgid "User Registration may overlap with account creation"
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:139
+#: admin/settings-page/class-security-verification-guidance.php:143
 msgid "Verification blocked this registration."
 msgstr ""
 
-#: includes/services/class-frontend-messages.php:61
+#: includes/services/class-frontend-messages.php:62
 msgid "Verification is not available right now. Please try again later."
 msgstr ""
 
-#: includes/services/class-frontend-messages.php:62
+#: includes/services/class-frontend-messages.php:63
 msgid "Verification is temporarily unavailable. Please try again later."
 msgstr ""
 
@@ -4957,11 +4983,11 @@ msgstr ""
 msgid "Verification Log Retention Days"
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:135
+#: admin/settings-page/class-security-verification-guidance.php:139
 msgid "Verification passed, but the status should be reviewed."
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:140
+#: admin/settings-page/class-security-verification-guidance.php:144
 msgid "Verification passed."
 msgstr ""
 
@@ -5019,7 +5045,7 @@ msgstr ""
 msgid "Warning"
 msgstr ""
 
-#: admin/settings-page/class-security-verification-guidance.php:212
+#: admin/settings-page/class-security-verification-guidance.php:220
 msgid "Watch resend volume and confirmation-email instructions for customer confusion."
 msgstr ""
 
@@ -5224,7 +5250,7 @@ msgstr ""
 msgid "Your {{site_name}} password was changed"
 msgstr ""
 
-#: includes/services/class-frontend-messages.php:102
+#: includes/services/class-frontend-messages.php:103
 msgid "Your account could not be created. Please try again."
 msgstr ""
 
@@ -5259,7 +5285,7 @@ msgstr ""
 #: includes/services/class-auth-messages.php:25
 #: includes/services/class-auth-messages.php:43
 #: includes/services/class-frontend-messages.php:46
-#: includes/services/class-frontend-messages.php:76
-#: includes/services/class-frontend-messages.php:94
+#: includes/services/class-frontend-messages.php:77
+#: includes/services/class-frontend-messages.php:95
 msgid "Your session expired. Please review the form and try again."
 msgstr ""

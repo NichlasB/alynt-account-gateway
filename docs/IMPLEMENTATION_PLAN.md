@@ -2,16 +2,55 @@
 
 ## Status
 
-- Current phase: Configurable registration role setting is implemented and locally validated; no site rollout or release has been approved.
+- Current phase: Turnstile missing-token reporting maintenance is implemented and locally validated; release candidate v1.1.43 is prepared for approval.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.41 is the current public release; v1.1.42 is prepared locally as the registration-role release candidate pending approval.
+- Plugin status: v1.1.42 is the current public release.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Prepare a release candidate only after explicit approval. Any release, updater verification, or site rollout must be separately approved. Keep future staging and production rollouts behind their own site-operation approvals.
+- Next roadmap: Commit, tag, publish, and updater-verify the v1.1.43 maintenance release only after explicit approval. Any site rollout must be separately approved. Keep future staging and production rollouts behind their own site-operation approvals.
+
+## Turnstile Missing-Token Reporting Fix
+
+Status: Local implementation and validation complete; prepared for v1.1.43 release approval.
+
+### Scope
+
+- [x] Split missing submitted Turnstile browser tokens from missing saved Turnstile configuration.
+- [x] Keep missing saved secret key mapped to `alynt_ag_turnstile_missing`.
+- [x] Add `alynt_ag_turnstile_token_missing` for an empty submitted `cf-turnstile-response` when Turnstile is configured.
+- [x] Keep missing-token registration attempts blocked.
+- [x] Map the new frontend error to the existing safe customer message: "Please complete the verification challenge and try again."
+- [x] Update Security tab row guidance so token-submission failures point to widget/browser retry checks, not key or network repair.
+- [x] Update provider health grouping so token-missing rows do not inflate Turnstile connectivity/configuration action items.
+
+### Acceptance Criteria
+
+- [x] Empty token with configured secret returns `alynt_ag_turnstile_token_missing`.
+- [x] Empty secret returns the existing `alynt_ag_turnstile_missing`.
+- [x] Admin guidance distinguishes missing configuration, request failure, rejected challenge, and missing submitted browser token.
+- [x] Token-missing rows appear under token-submission health, not Turnstile connectivity.
+- [x] Frontend registration copy remains neutral and non-technical.
+- [x] No production sites, production databases, Turnstile keys, or external-service configuration were touched.
+
+### Validation
+
+- [x] Focused release-candidate PHPUnit passed: `36 tests`, `332 assertions`.
+- [x] Full PHPUnit passed: `609 tests`, `4,282 assertions`.
+- [x] PHPCS passed.
+- [x] Build passed.
+- [x] POT generation passed with `1,248` strings.
+- [x] Feature Light Review passed with no significant non-security issues.
+
+### Feature Review Notes
+
+- Feature Light Review scope: Turnstile client status splitting, frontend registration error mapping, Security tab verification-row guidance, provider health cards, provider failure triage cards, tests, fixture expectations, and implementation-plan documentation.
+- Risk areas touched: admin UI, frontend messaging, and third-party Turnstile verification status interpretation. No AJAX, REST API, database schema, cron, file operations, saved settings, external keys, or production-site operations were changed.
+- The change fits existing plugin architecture by using current `WP_Error` status-code flow, existing frontend message catalog mapping, existing Security tab card helpers, and existing verification activity guidance helpers.
+- No follow-up `FEATURE_BLOAT_AND_STRUCTURE_REVIEW_PROMPT.md`, `FEATURE_UI_UX_IMPLEMENTATION_PROMPT.md`, `FEATURE_SECURITY_REVIEW_PROMPT.md`, or full `ds3-pre-release` sequence is required before release prep, because the slice is narrow, tests cover the new behavior, and no new interaction pattern or security decision was introduced.
 
 ## Configurable Registration Role Setting
 
-Status: Local implementation and validation complete; prepared for v1.1.42 release approval.
+Status: Released in v1.1.42.
 
 ### Scope
 

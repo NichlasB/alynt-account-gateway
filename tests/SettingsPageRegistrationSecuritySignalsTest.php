@@ -71,6 +71,11 @@ class SettingsPageRegistrationSecuritySignalsTest extends SettingsPageSecuritySt
 						'created_at' => '2026-07-05 12:06:00',
 					),
 					(object) array(
+						'provider' => 'turnstile',
+						'status'   => 'alynt_ag_turnstile_token_missing',
+						'created_at' => '2026-07-05 12:07:00',
+					),
+					(object) array(
 						'provider' => 'reoon',
 						'status'   => 'alynt_ag_reoon_missing',
 						'created_at' => '2026-07-05 12:10:00',
@@ -106,18 +111,22 @@ class SettingsPageRegistrationSecuritySignalsTest extends SettingsPageSecuritySt
 		$this->assertSame( 1, $items[2]['count'] );
 		$this->assertSame( 'warning', $items[2]['status'] );
 		$this->assertSame( '2026-07-05 12:06:00', $items[2]['latest'] );
-		$this->assertSame( 'Reoon Configuration', $items[3]['label'] );
+		$this->assertSame( 'Turnstile Token Submission', $items[3]['label'] );
 		$this->assertSame( 1, $items[3]['count'] );
-		$this->assertSame( 'action', $items[3]['status'] );
-		$this->assertSame( '2026-07-05 12:10:00', $items[3]['latest'] );
-		$this->assertSame( 'Reoon Connectivity', $items[4]['label'] );
+		$this->assertSame( 'warning', $items[3]['status'] );
+		$this->assertSame( '2026-07-05 12:07:00', $items[3]['latest'] );
+		$this->assertSame( 'Reoon Configuration', $items[4]['label'] );
 		$this->assertSame( 1, $items[4]['count'] );
 		$this->assertSame( 'action', $items[4]['status'] );
-		$this->assertSame( '2026-07-05 12:20:00', $items[4]['latest'] );
-		$this->assertSame( 'Reoon Unexpected Responses', $items[5]['label'] );
+		$this->assertSame( '2026-07-05 12:10:00', $items[4]['latest'] );
+		$this->assertSame( 'Reoon Connectivity', $items[5]['label'] );
 		$this->assertSame( 1, $items[5]['count'] );
 		$this->assertSame( 'action', $items[5]['status'] );
-		$this->assertSame( '2026-07-05 12:30:00', $items[5]['latest'] );
+		$this->assertSame( '2026-07-05 12:20:00', $items[5]['latest'] );
+		$this->assertSame( 'Reoon Unexpected Responses', $items[6]['label'] );
+		$this->assertSame( 1, $items[6]['count'] );
+		$this->assertSame( 'action', $items[6]['status'] );
+		$this->assertSame( '2026-07-05 12:30:00', $items[6]['latest'] );
 	}
 
 	public function test_security_provider_failure_triage_renders_latest_seen_metadata() {

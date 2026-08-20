@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.43 - 2026-08-20
+
+### Fixed
+
+- Distinguish missing submitted Turnstile challenge tokens from missing Turnstile configuration so Security tab guidance no longer reports customer/browser token-submission issues as key or connectivity failures.
+
 ## 1.1.42 - 2026-08-20
 
 ### Added

@@ -55,6 +55,11 @@ class ALYNT_AG_Settings_Page_Security_Failure_Triage extends ALYNT_AG_Settings_P
 			'turnstile',
 			array( 'alynt_ag_turnstile_failed' )
 		);
+		$turnstile_token_missing   = $this->count_security_logs_by_provider_statuses(
+			$logs,
+			'turnstile',
+			array( 'alynt_ag_turnstile_token_missing' )
+		);
 		$turnstile_missing_latest  = $this->latest_security_log_time_by_provider_statuses(
 			$logs,
 			'turnstile',
@@ -69,6 +74,11 @@ class ALYNT_AG_Settings_Page_Security_Failure_Triage extends ALYNT_AG_Settings_P
 			$logs,
 			'turnstile',
 			array( 'alynt_ag_turnstile_failed' )
+		);
+		$turnstile_token_latest    = $this->latest_security_log_time_by_provider_statuses(
+			$logs,
+			'turnstile',
+			array( 'alynt_ag_turnstile_token_missing' )
 		);
 		$reoon_missing             = $this->count_security_logs_by_provider_statuses(
 			$logs,
@@ -106,7 +116,7 @@ class ALYNT_AG_Settings_Page_Security_Failure_Triage extends ALYNT_AG_Settings_P
 				'label'   => __( 'Turnstile Configuration', 'alynt-account-gateway' ),
 				'status'  => $turnstile_missing > 0 ? 'action' : 'ready',
 				'count'   => $turnstile_missing,
-				'message' => __( 'recent missing-token or key configuration failures. Confirm both keys are saved and belong to the same Cloudflare Turnstile site.', 'alynt-account-gateway' ),
+				'message' => __( 'recent missing-key configuration failures. Confirm both keys are saved and belong to the same Cloudflare Turnstile site.', 'alynt-account-gateway' ),
 				'latest'  => $turnstile_missing_latest,
 			),
 			array(
@@ -122,6 +132,13 @@ class ALYNT_AG_Settings_Page_Security_Failure_Triage extends ALYNT_AG_Settings_P
 				'count'   => $turnstile_rejected,
 				'message' => __( 'recent rejected challenges. Confirm the registration domain is allowed in Cloudflare and compare with bot traffic before changing policy.', 'alynt-account-gateway' ),
 				'latest'  => $turnstile_rejected_latest,
+			),
+			array(
+				'label'   => __( 'Turnstile Token Submission', 'alynt-account-gateway' ),
+				'status'  => $turnstile_token_missing > 0 ? 'warning' : 'ready',
+				'count'   => $turnstile_token_missing,
+				'message' => __( 'recent missing browser challenge responses. Review widget rendering, cache/minification, and customer browser reports if this rises.', 'alynt-account-gateway' ),
+				'latest'  => $turnstile_token_latest,
 			),
 			array(
 				'label'   => __( 'Reoon Configuration', 'alynt-account-gateway' ),

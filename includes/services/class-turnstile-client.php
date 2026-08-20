@@ -72,8 +72,12 @@ class ALYNT_AG_Turnstile_Client {
 	 * @return true|WP_Error
 	 */
 	public function verify( $token, $secret_key ) {
-		if ( empty( $token ) || empty( $secret_key ) ) {
+		if ( empty( $secret_key ) ) {
 			return new WP_Error( 'alynt_ag_turnstile_missing', __( 'Turnstile verification is not configured.', 'alynt-account-gateway' ) );
+		}
+
+		if ( empty( $token ) ) {
+			return new WP_Error( 'alynt_ag_turnstile_token_missing', __( 'Turnstile challenge response was not submitted.', 'alynt-account-gateway' ) );
 		}
 
 		$response = wp_remote_post(

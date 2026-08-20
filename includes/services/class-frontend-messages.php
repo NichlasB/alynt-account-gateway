@@ -58,6 +58,7 @@ class ALYNT_AG_Frontend_Messages {
 			'alynt_ag_reoon_request_failed'     => __( 'Email verification is temporarily unavailable. Please try again later.', 'alynt-account-gateway' ),
 			'alynt_ag_reoon_invalid_response'   => __( 'Email verification is temporarily unavailable. Please try again later.', 'alynt-account-gateway' ),
 			'alynt_ag_turnstile_failed'         => __( 'Please complete the verification challenge and try again.', 'alynt-account-gateway' ),
+			'alynt_ag_turnstile_token_missing'  => __( 'Please complete the verification challenge and try again.', 'alynt-account-gateway' ),
 			'alynt_ag_turnstile_missing'        => __( 'Verification is not available right now. Please try again later.', 'alynt-account-gateway' ),
 			'alynt_ag_turnstile_request_failed' => __( 'Verification is temporarily unavailable. Please try again later.', 'alynt-account-gateway' ),
 		);

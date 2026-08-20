@@ -80,6 +80,10 @@ class ALYNT_AG_Settings_Page_Security_Verification_Guidance extends ALYNT_AG_Set
 				return __( 'Turnstile rejected the challenge response. Ask the customer to retry and confirm the site key matches the secret key.', 'alynt-account-gateway' );
 			}
 
+			if ( 'alynt_ag_turnstile_token_missing' === $status ) {
+				return __( 'The browser did not submit a Turnstile challenge response. Ask the customer to refresh the registration screen, complete the challenge, and try again.', 'alynt-account-gateway' );
+			}
+
 			if ( 'alynt_ag_turnstile_missing' === $status ) {
 				return __( 'Turnstile was not configured when verification ran. Confirm both the site key and secret key before launch.', 'alynt-account-gateway' );
 			}
@@ -188,6 +192,10 @@ class ALYNT_AG_Settings_Page_Security_Verification_Guidance extends ALYNT_AG_Set
 		if ( 'turnstile' === $provider ) {
 			if ( 'alynt_ag_turnstile_failed' === $status ) {
 				return __( 'Confirm domain and key pairing, then watch for bot traffic if challenge failures rise.', 'alynt-account-gateway' );
+			}
+
+			if ( 'alynt_ag_turnstile_token_missing' === $status ) {
+				return __( 'Review the registration form widget and customer browser reports if token-submission failures repeat.', 'alynt-account-gateway' );
 			}
 
 			if ( 'alynt_ag_turnstile_missing' === $status || 'alynt_ag_turnstile_request_failed' === $status ) {

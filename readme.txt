@@ -3,7 +3,7 @@ Contributors: alynt
 Tags: login, registration, account, woocommerce, dashboard
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 1.1.42
+Stable tag: 1.1.43
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -71,6 +71,10 @@ Yes. The custom dashboard is optional and works without WooCommerce. WooCommerce
 Yes. Each email body uses WordPress's Visual/Text editor with safe HTML formatting. The plugin owns the email wrapper and action-button presentation so account mail remains consistent and resilient in mailbox clients.
 
 == Changelog ==
+
+= 1.1.43 =
+
+* Distinguish missing submitted Turnstile challenge tokens from missing Turnstile configuration so Security tab guidance no longer reports customer/browser token-submission issues as key or connectivity failures.
 
 = 1.1.42 =
 
