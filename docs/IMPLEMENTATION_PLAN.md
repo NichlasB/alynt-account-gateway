@@ -2,16 +2,16 @@
 
 ## Status
 
-- Current phase: Gateway cache-control and expired-form hardening is implemented, locally validated, and staging-verified on `hbf-staging`; release candidate v1.1.44 is prepared for publication.
+- Current phase: Gateway cache-control and expired-form hardening was released in v1.1.44.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.43 is the current public release.
+- Plugin status: v1.1.44 is the current public release.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Commit, tag, publish, and updater-verify the v1.1.44 maintenance release. Any site rollout must be separately approved. Keep future staging and production rollouts behind their own site-operation approvals.
+- Next roadmap: Run an updater/install verification for v1.1.44 on an approved non-production target, then roll out to tracked sites only after separate site-operation approval.
 
 ## Gateway Cache-Control And Expired-Form Hardening
 
-Status: Local implementation and validation complete; staging QA candidate installed and verified on `hbf-staging`; prepared for v1.1.44 publication.
+Status: Released in v1.1.44.
 
 ### Scope
 
@@ -45,6 +45,13 @@ Status: Local implementation and validation complete; staging QA candidate insta
 - [x] Targeted `ds2-feature` Feature Light Review passed for the cache-control/expired-form slice. Scope touched frontend route headers, branded auth/registration POST handling, and user-facing expired-form copy; no AJAX, REST, database schema, cron, file operations, or third-party APIs were introduced.
 - [x] Targeted `ds2-feature` Feature Security Review passed. No confirmed security defect or `07A` regression handoff was identified; nonce validation remains blocking, redirect destinations continue through the existing return-destination helper, and the new diagnostic context stores booleans only.
 - [x] Re-ran focused cache/auth/route tests after review: `34 tests`, `127 assertions`.
+- [x] Release metadata corrected from the already-published `v1.1.43` tag to `v1.1.44`.
+- [x] Release-prep validation passed: full PHPUnit `615 tests`, `4,305 assertions`; PHPCS; production build; POT generation with `1,249` strings; npm high-severity audit; Composer strict validation; Composer advisory audit; and `git diff --check` with line-ending normalization warnings only.
+- [x] Published GitHub release `v1.1.44`: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.44`.
+- [x] GitHub Build Release workflow passed for tag `v1.1.44`.
+- [x] GitHub Quality workflow passed for tag `v1.1.44` on PHP 7.4 and 8.3.
+- [x] Public release ZIP inspected: `152` runtime entries, no development-file matches, plugin header/constant/stable tag all report `1.1.44`, cache-control helper present.
+- [x] Public release ZIP SHA-256: `E2EB0E2898328CEC131DF4F50D52213BBC6DFB0E795A6EC71E160BE077431A1D`.
 
 ## Turnstile Missing-Token Reporting Fix
 
