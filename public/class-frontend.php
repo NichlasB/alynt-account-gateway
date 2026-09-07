@@ -84,6 +84,7 @@ class ALYNT_AG_Frontend {
 		add_filter( 'show_admin_bar', array( $this, 'filter_admin_bar' ) );
 		add_action( 'admin_init', array( $this, 'maybe_block_wp_admin' ) );
 		add_action( 'login_init', array( $this, 'maybe_redirect_native_login' ) );
+		add_action( 'send_headers', array( $this, 'maybe_prevent_gateway_cache' ), 0 );
 		add_action( 'template_redirect', array( $this, 'maybe_render_gateway_preview' ), 0 );
 		add_action( 'template_redirect', array( $this, 'maybe_render_gateway' ), 1 );
 		add_filter( 'login_url', array( $this, 'filter_login_url' ), 10, 3 );
@@ -142,6 +143,21 @@ class ALYNT_AG_Frontend {
 	 */
 	public function maybe_redirect_native_login() {
 		$this->access->maybe_redirect_native_login();
+	}
+
+	/**
+	 * Send explicit no-cache headers for configured gateway routes.
+	 *
+	 * @return void
+	 */
+	public function maybe_prevent_gateway_cache() {
+		$settings = ALYNT_AG_Settings_Schema::get_settings();
+
+		if ( empty( $settings['frontend_enabled'] ) || ! $this->routes->screen( $settings ) ) {
+			return;
+		}
+
+		ALYNT_AG_Gateway_Cache_Control::prevent_caching();
 	}
 
 	/**

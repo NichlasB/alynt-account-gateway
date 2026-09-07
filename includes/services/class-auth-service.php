@@ -110,6 +110,25 @@ class ALYNT_AG_Auth_Service {
 	}
 
 	/**
+	 * Log a privacy-safe expired-login-form diagnostic.
+	 *
+	 * @param string $identifier Submitted login identifier.
+	 * @param string $redirect_to Validated return destination.
+	 * @return bool
+	 */
+	public function log_login_nonce_failure( $identifier, $redirect_to ) {
+		return $this->log_auth_event(
+			'warning',
+			'branded_login_nonce_failed',
+			__( 'Rejected a branded login request because the form token was missing or expired.', 'alynt-account-gateway' ),
+			array(
+				'has_identifier'      => '' !== (string) $identifier,
+				'redirect_to_present' => '' !== (string) $redirect_to,
+			)
+		);
+	}
+
+	/**
 	 * Get a public login error message.
 	 *
 	 * @param string $error_code Error code.

@@ -30,6 +30,7 @@ $alynt_ag_files = array(
 	'includes/services/class-operation-lock.php',
 	'includes/services/class-rate-limiter.php',
 	'includes/services/class-return-destination.php',
+	'includes/services/class-gateway-cache-control.php',
 	'includes/services/class-service-collaborator.php',
 	'includes/services/class-registration-request-handler.php',
 	'includes/services/class-registration-protection.php',

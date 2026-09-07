@@ -48,6 +48,12 @@ class ALYNT_AG_Auth_Request_Handler extends ALYNT_AG_Service_Collaborator {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Action check only; nonce is verified by each handler.
 		$action = isset( $_POST['alynt_ag_action'] ) ? sanitize_key( wp_unslash( $_POST['alynt_ag_action'] ) ) : '';
 
+		if ( ! in_array( $action, array( 'login', 'lostpassword', 'reset_password' ), true ) ) {
+			return;
+		}
+
+		ALYNT_AG_Gateway_Cache_Control::prevent_caching();
+
 		if ( 'login' === $action ) {
 			$this->handle_login_request();
 			return;
@@ -58,9 +64,7 @@ class ALYNT_AG_Auth_Request_Handler extends ALYNT_AG_Service_Collaborator {
 			return;
 		}
 
-		if ( 'reset_password' === $action ) {
-			$this->handle_reset_password_request();
-		}
+		$this->handle_reset_password_request();
 	}
 
 	/**
@@ -81,6 +85,7 @@ class ALYNT_AG_Auth_Request_Handler extends ALYNT_AG_Service_Collaborator {
 		$redirect_to        = $this->destinations->absolute_url( $submitted_redirect, $settings );
 
 		if ( ! $this->request_nonce_is_valid( 'alynt_ag_login', 'alynt_ag_auth_nonce' ) ) {
+			$this->log_login_nonce_failure( $identifier, $redirect_to );
 			wp_safe_redirect( $this->login_error_url( 'session_expired', $base_url, $redirect_to ) );
 			exit;
 		}

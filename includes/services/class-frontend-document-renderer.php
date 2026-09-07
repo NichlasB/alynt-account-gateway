@@ -67,7 +67,7 @@ class ALYNT_AG_Frontend_Document_Renderer {
 		$this->prepare_gateway_document_title( $screen );
 
 		status_header( 200 );
-		nocache_headers();
+		ALYNT_AG_Gateway_Cache_Control::prevent_caching();
 
 		echo '<!doctype html>';
 		echo '<html ';

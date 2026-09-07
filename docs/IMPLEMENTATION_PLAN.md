@@ -2,16 +2,53 @@
 
 ## Status
 
-- Current phase: Turnstile missing-token reporting maintenance is implemented and locally validated; release candidate v1.1.43 is prepared for approval.
+- Current phase: Gateway cache-control and expired-form hardening is implemented, locally validated, and staging-verified on `hbf-staging`; release candidate v1.1.44 is prepared for publication.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.42 is the current public release.
+- Plugin status: v1.1.43 is the current public release.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Commit, tag, publish, and updater-verify the v1.1.43 maintenance release only after explicit approval. Any site rollout must be separately approved. Keep future staging and production rollouts behind their own site-operation approvals.
+- Next roadmap: Commit, tag, publish, and updater-verify the v1.1.44 maintenance release. Any site rollout must be separately approved. Keep future staging and production rollouts behind their own site-operation approvals.
+
+## Gateway Cache-Control And Expired-Form Hardening
+
+Status: Local implementation and validation complete; staging QA candidate installed and verified on `hbf-staging`; prepared for v1.1.44 publication.
+
+### Scope
+
+- [x] Add explicit no-store/private cache headers for Account Gateway frontend routes, including the GridPane `do-not-cache: true` response header.
+- [x] Set common WordPress cache-bypass constants during Account Gateway frontend requests so page-cache plugins have a request-local signal to skip storage.
+- [x] Apply the cache-control guard early enough for gateway route responses and branded auth POST redirects.
+- [x] Keep route detection based on the configured Login URL Path and Account Action Base rather than hard-coded `/login/` or `/account/`.
+- [x] Add privacy-safe diagnostics when a branded login nonce is missing or expired.
+- [x] Change the public expired-login copy from session-specific wording to form-expired wording.
+
+### Acceptance Criteria
+
+- [x] Login, account-action, and dashboard gateway documents emit no-store/private cache headers and `do-not-cache: true`.
+- [x] Branded auth POST routes receive the same cache-bypass protections before nonce validation redirects.
+- [x] Existing redirect behavior, successful login redirects, registration flows, password reset flows, and dashboard routing remain unchanged.
+- [x] The customer-facing expired-form message remains neutral and does not imply the user’s authenticated session expired.
+- [x] No live sites, production databases, GridPane settings, external services, or release state are touched during local implementation.
+
+### Validation
+
+- [x] Focused PHPUnit passed for gateway cache control, frontend routing hooks, auth login submission, frontend document rendering, registration nonce recovery, and auth password recovery.
+- [x] Full PHPUnit passed: `615 tests`, `4,305 assertions`.
+- [x] PHPCS passed.
+- [x] Build passed.
+- [x] POT generation passed with `1,249` strings.
+- [x] Whitespace validation passed with only the existing Git line-ending normalization warning for `languages/alynt-account-gateway.pot`.
+- [x] Staging QA candidate package inspected: `143` runtime entries, no development-file matches, cache-control helper present, SHA-256 `7E24D45BAFEF8A6353FCE4360F91249D028F655CAAF314BEC1FF527B8E20C5A5`.
+- [x] Installed the staging QA candidate on `hbf-staging` after explicit approval, with remote restore copy retained at `/var/www/staging.handcraftedbotanicalformulas.com/aag-cache-qa-restore-20260907-193500`.
+- [x] Verified `hbf-staging` `/login/`, `/account?action=lostpassword`, and homepage-to-login redirect responses include `do-not-cache: true` and GridPane cache bypass/store bypass headers where the Account Gateway route renders.
+- [x] Verified an intentionally expired branded-login POST redirects to `login_error=session_expired`, bypasses GridPane POST caching, and renders the neutral public message: "This form expired. Please review it and try again."
+- [x] Targeted `ds2-feature` Feature Light Review passed for the cache-control/expired-form slice. Scope touched frontend route headers, branded auth/registration POST handling, and user-facing expired-form copy; no AJAX, REST, database schema, cron, file operations, or third-party APIs were introduced.
+- [x] Targeted `ds2-feature` Feature Security Review passed. No confirmed security defect or `07A` regression handoff was identified; nonce validation remains blocking, redirect destinations continue through the existing return-destination helper, and the new diagnostic context stores booleans only.
+- [x] Re-ran focused cache/auth/route tests after review: `34 tests`, `127 assertions`.
 
 ## Turnstile Missing-Token Reporting Fix
 
-Status: Local implementation and validation complete; prepared for v1.1.43 release approval.
+Status: Local implementation and validation complete; previously prepared for v1.1.43 release approval before the cache-control hardening slice was opened.
 
 ### Scope
 

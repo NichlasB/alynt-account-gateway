@@ -33,6 +33,45 @@ class FrontendRoutingHooksTest extends FrontendRoutingTestCase {
 		$this->assertSame( 1, $gateway_hooks[0]['priority'] );
 	}
 
+	public function test_gateway_cache_hook_runs_on_send_headers() {
+		$GLOBALS['alynt_ag_test_actions'] = array();
+
+		$frontend = new ALYNT_AG_Frontend();
+		$frontend->register();
+
+		$cache_hooks = array_values(
+			array_filter(
+				$GLOBALS['alynt_ag_test_actions'],
+				static function ( $hook ) {
+					return 'send_headers' === $hook['hook']
+						&& is_array( $hook['callback'] )
+						&& 'maybe_prevent_gateway_cache' === $hook['callback'][1];
+				}
+			)
+		);
+
+		$this->assertCount( 1, $cache_hooks );
+		$this->assertSame( 0, $cache_hooks[0]['priority'] );
+	}
+
+	public function test_gateway_cache_headers_apply_on_configured_route_only() {
+		$frontend = new ALYNT_AG_Frontend();
+
+		unset( $GLOBALS['alynt_ag_test_nocache_headers'] );
+		$_SERVER['REQUEST_URI'] = '/login/';
+
+		$frontend->maybe_prevent_gateway_cache();
+
+		$this->assertTrue( $GLOBALS['alynt_ag_test_nocache_headers'] );
+
+		unset( $GLOBALS['alynt_ag_test_nocache_headers'] );
+		$_SERVER['REQUEST_URI'] = '/ordinary-page/';
+
+		$frontend->maybe_prevent_gateway_cache();
+
+		$this->assertArrayNotHasKey( 'alynt_ag_test_nocache_headers', $GLOBALS );
+	}
+
 	public function test_auth_and_registration_post_handlers_run_before_gateway_render() {
 		$GLOBALS['alynt_ag_test_actions'] = array();
 

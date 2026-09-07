@@ -4,6 +4,13 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.44 - 2026-09-07
+
+### Fixed
+
+- Add explicit no-cache and GridPane bypass headers to branded gateway routes and auth/registration POST redirects so cached login forms are less likely to produce expired-form retries.
+- Change expired-form public copy from session-specific wording to neutral form-expired wording.
+
 ## 1.1.43 - 2026-08-20
 
 ### Fixed

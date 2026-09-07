@@ -32,6 +32,50 @@ class AuthLoginSubmissionTest extends AuthServiceTestCase {
 		}
 
 		$this->assertSame( array(), $GLOBALS['alynt_ag_test_signons'] );
+		$this->assertTrue( $GLOBALS['alynt_ag_test_nocache_headers'] );
+	}
+
+	public function test_expired_login_nonce_logs_privacy_safe_diagnostics_when_enabled() {
+		$service = new ALYNT_AG_Auth_Service();
+		$GLOBALS['alynt_ag_test_options']['alynt_ag_settings'] = array(
+			'diagnostics_enabled'   => true,
+			'diagnostics_min_level' => 'debug',
+			'frontend_enabled'      => true,
+			'login_path'            => '/login',
+			'after_login_redirect'  => '/my-account/',
+		);
+		$GLOBALS['alynt_ag_test_throw_on_redirect'] = true;
+		$GLOBALS['alynt_ag_test_nonce_valid']       = false;
+		$_SERVER['REQUEST_METHOD']                  = 'POST';
+		$_POST = array(
+			'alynt_ag_action'    => 'login',
+			'alynt_ag_auth_nonce' => 'expired',
+			'email'              => 'Damon@Example.test',
+			'pwd'                => 'StrongPassword1!',
+			'redirect_to'        => 'https://example.test/checkout/',
+		);
+
+		try {
+			$service->maybe_handle_auth_request();
+			$this->fail( 'Expected redirect exception.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame(
+				'redirect:https://example.test/login?login_error=session_expired&redirect_to=https%253A%252F%252Fexample.test%252Fcheckout%252F',
+				$exception->getMessage()
+			);
+		}
+
+		$row     = $GLOBALS['alynt_ag_test_db_inserts'][0]['data'];
+		$context = json_decode( $row['context'], true );
+
+		$this->assertSame( 'warning', $row['level'] );
+		$this->assertSame( 'security', $row['category'] );
+		$this->assertSame( 'branded_login_nonce_failed', $row['event_code'] );
+		$this->assertTrue( $context['has_identifier'] );
+		$this->assertTrue( $context['redirect_to_present'] );
+		$this->assertStringNotContainsString( 'Damon@Example.test', $row['context'] );
+		$this->assertStringNotContainsString( 'damon@example.test', $row['context'] );
+		$this->assertStringNotContainsString( 'StrongPassword1!', $row['context'] );
 	}
 
 	public function test_login_submission_requires_email_identifier() {

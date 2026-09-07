@@ -24,6 +24,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-funnelkit-contact-sy
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-operation-lock.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-rate-limiter.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-return-destination.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-gateway-cache-control.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-service-collaborator.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-registration-request-handler.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-registration-protection.php';

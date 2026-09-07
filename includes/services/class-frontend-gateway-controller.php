@@ -74,6 +74,8 @@ class ALYNT_AG_Frontend_Gateway_Controller {
 			return;
 		}
 
+		ALYNT_AG_Gateway_Cache_Control::prevent_caching();
+
 		if ( 'login' === $screen && $this->maybe_redirect_login_screen_request( $settings ) ) {
 			return;
 		}
@@ -155,7 +157,7 @@ class ALYNT_AG_Frontend_Gateway_Controller {
 		add_filter( 'show_admin_bar', '__return_false', PHP_INT_MAX );
 
 		status_header( 200 );
-		nocache_headers();
+		ALYNT_AG_Gateway_Cache_Control::prevent_caching();
 
 		echo '<!doctype html>';
 		echo '<html ';

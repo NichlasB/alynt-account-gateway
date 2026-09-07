@@ -48,11 +48,13 @@ class ALYNT_AG_Registration_Request_Handler extends ALYNT_AG_Service_Collaborato
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Action check only; nonce is verified below before processing.
 		$action = isset( $_POST['alynt_ag_action'] ) ? sanitize_key( wp_unslash( $_POST['alynt_ag_action'] ) ) : '';
 		if ( 'complete_registration' === $action ) {
+			ALYNT_AG_Gateway_Cache_Control::prevent_caching();
 			$this->handle_complete_registration_request();
 			return;
 		}
 
 		if ( 'resend_confirmation' === $action ) {
+			ALYNT_AG_Gateway_Cache_Control::prevent_caching();
 			$this->handle_resend_confirmation_request();
 			return;
 		}
@@ -61,6 +63,7 @@ class ALYNT_AG_Registration_Request_Handler extends ALYNT_AG_Service_Collaborato
 			return;
 		}
 
+		ALYNT_AG_Gateway_Cache_Control::prevent_caching();
 		$this->handle_start_registration_request();
 	}
 

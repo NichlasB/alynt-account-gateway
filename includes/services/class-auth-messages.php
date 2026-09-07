@@ -22,7 +22,7 @@ class ALYNT_AG_Auth_Messages extends ALYNT_AG_Service_Collaborator {
 	 */
 	public function run_get_login_error_message( $error_code ) {
 		if ( 'session_expired' === $error_code ) {
-			return __( 'Your session expired. Please review the form and try again.', 'alynt-account-gateway' );
+			return __( 'This form expired. Please review it and try again.', 'alynt-account-gateway' );
 		}
 
 		if ( 'alynt_ag_rate_limited' === $error_code ) {
@@ -40,7 +40,7 @@ class ALYNT_AG_Auth_Messages extends ALYNT_AG_Service_Collaborator {
 	 */
 	public function run_get_lostpassword_error_message( $error_code ) {
 		if ( 'session_expired' === $error_code ) {
-			return __( 'Your session expired. Please review the form and try again.', 'alynt-account-gateway' );
+			return __( 'This form expired. Please review it and try again.', 'alynt-account-gateway' );
 		}
 
 		if ( 'alynt_ag_rate_limited' === $error_code ) {

@@ -99,6 +99,7 @@ class RegistrationAuthCollaborationTest extends RegistrationServiceTestCase {
 			'validate_rate_limit',
 			'log_rate_limit_result',
 			'log_auth_event',
+			'log_login_nonce_failure',
 			'get_login_error_message',
 			'get_lostpassword_error_message',
 			'get_lostpassword_sent_message',
