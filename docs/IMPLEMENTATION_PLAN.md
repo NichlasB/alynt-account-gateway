@@ -2,16 +2,16 @@
 
 ## Status
 
-- Current phase: Password-changed email suppression fix is prepared for v1.1.45.
+- Current phase: Password-changed email suppression fix was released in v1.1.45.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.44 is the current public release; v1.1.45 is the prepared patch release.
+- Plugin status: v1.1.45 is the current public release.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Publish v1.1.45 after approval, verify via Alynt Plugin Updater on Plugin Tester, then roll out to tracked sites only after separate site-operation approval.
+- Next roadmap: Verify v1.1.45 via Alynt Plugin Updater on Plugin Tester, then roll out to tracked sites only after separate site-operation approval.
 
 ## Password Changed Email Suppression
 
-Status: Prepared for v1.1.45 and accepted on Plugin Tester.
+Status: Released in v1.1.45.
 
 ### Scope
 
@@ -28,6 +28,11 @@ Status: Prepared for v1.1.45 and accepted on Plugin Tester.
 - [x] The safety net does not suppress unrelated mail.
 - [x] Focused and full automated tests pass.
 - [x] Plugin Tester confirms no password-changed email is generated when the option is enabled.
+- [x] Published GitHub release `v1.1.45`: `https://github.com/NichlasB/alynt-account-gateway/releases/tag/v1.1.45`.
+- [x] GitHub Quality workflow passed for commit `6253799bac5896572fbfd59682db07a78a18d24c` before tagging, and the tag-side Quality workflow also passed.
+- [x] GitHub Build Release workflow passed for tag `v1.1.45`.
+- [x] Public release ZIP inspected: `142` runtime files, no development-file matches, plugin header/constant/stable tag all report `1.1.45`, password-change suppression service present.
+- [x] Release asset SHA-256: `F0F44371163E016C7AE86303E3C173D592225A11851B63513910789A733B6B68`.
 
 ## Gateway Cache-Control And Expired-Form Hardening
 
