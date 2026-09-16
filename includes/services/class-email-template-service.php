@@ -30,10 +30,11 @@ class ALYNT_AG_Email_Template_Service {
 		$tokens = $collaborators['tokens'] ?? new ALYNT_AG_Email_Tokens( $this );
 
 		$this->collaborators = array(
-			'tokens'   => $tokens,
-			'renderer' => $collaborators['renderer'] ?? new ALYNT_AG_Email_Renderer( $this, $tokens ),
-			'sender'   => $collaborators['sender'] ?? new ALYNT_AG_Email_Sender( $this ),
-			'filters'  => $collaborators['filters'] ?? new ALYNT_AG_Email_WordPress_Filters( $this, $tokens ),
+			'tokens'                 => $tokens,
+			'renderer'               => $collaborators['renderer'] ?? new ALYNT_AG_Email_Renderer( $this, $tokens ),
+			'sender'                 => $collaborators['sender'] ?? new ALYNT_AG_Email_Sender( $this ),
+			'filters'                => $collaborators['filters'] ?? new ALYNT_AG_Email_WordPress_Filters( $this, $tokens ),
+			'password_notifications' => $collaborators['password_notifications'] ?? new ALYNT_AG_Email_Password_Change_Notifications(),
 		);
 	}
 
@@ -52,6 +53,7 @@ class ALYNT_AG_Email_Template_Service {
 		add_filter( 'email_change_email', array( $this, 'filter_email_change_email' ), 10, 3 );
 		add_filter( 'new_user_email_content', array( $this, 'filter_new_user_email_content' ), 10, 2 );
 		add_filter( 'pre_wp_mail', array( $this, 'filter_pre_wp_mail_for_profile_email_change' ), 10, 2 );
+		$this->collaborators['password_notifications']->register();
 	}
 
 	/**

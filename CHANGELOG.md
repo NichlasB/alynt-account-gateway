@@ -4,6 +4,12 @@ All notable changes to Alynt Account Gateway are documented in this file.
 
 ## Unreleased
 
+## 1.1.45 - 2026-09-16
+
+### Fixed
+
+- Fix the Disable Password Changed Email setting so it also suppresses WordPress's native admin password-change notification.
+
 ## 1.1.44 - 2026-09-07
 
 ### Fixed

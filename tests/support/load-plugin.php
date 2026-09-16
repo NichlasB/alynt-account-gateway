@@ -43,6 +43,7 @@ require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-tokens.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-html-renderer.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-renderer.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-sender.php';
+require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-password-change-notifications.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-wordpress-filters.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-email-template-service.php';
 require_once ALYNT_AG_PLUGIN_DIR . 'includes/services/class-auth-service.php';

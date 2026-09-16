@@ -215,6 +215,18 @@ if ( ! function_exists( 'add_action' ) ) {
 	}
 }
 
+if ( ! function_exists( 'remove_action' ) ) {
+	function remove_action( $hook_name, $callback, $priority = 10 ) {
+		$GLOBALS['alynt_ag_test_removed_actions'][] = array(
+			'hook'     => $hook_name,
+			'callback' => $callback,
+			'priority' => $priority,
+		);
+
+		return true;
+	}
+}
+
 if ( ! function_exists( 'add_filter' ) ) {
 	function add_filter( $hook_name, $callback, $priority = 10, $accepted_args = 1 ) {
 		$GLOBALS['alynt_ag_test_filters'][] = array(

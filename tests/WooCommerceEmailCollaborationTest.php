@@ -221,6 +221,7 @@ class WooCommerceEmailCollaborationTest extends PHPUnit\Framework\TestCase {
 			'class-email-html-renderer.php',
 			'class-email-renderer.php',
 			'class-email-sender.php',
+			'class-email-password-change-notifications.php',
 			'class-email-wordpress-filters.php',
 			'class-email-template-service.php',
 		);
@@ -240,6 +241,7 @@ class WooCommerceEmailCollaborationTest extends PHPUnit\Framework\TestCase {
 			$this->assertIsString( $contents );
 			$this->assertLessThan( strpos( $contents, 'class-woocommerce-integration.php' ), strpos( $contents, 'class-woocommerce-navigation.php' ) );
 			$this->assertLessThan( strpos( $contents, 'class-email-template-service.php' ), strpos( $contents, 'class-email-tokens.php' ) );
+			$this->assertLessThan( strpos( $contents, 'class-email-template-service.php' ), strpos( $contents, 'class-email-password-change-notifications.php' ) );
 			$this->assertLessThan( strpos( $contents, 'class-email-renderer.php' ), strpos( $contents, 'class-email-html-renderer.php' ) );
 		}
 	}

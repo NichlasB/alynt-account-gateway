@@ -2,12 +2,32 @@
 
 ## Status
 
-- Current phase: Gateway cache-control and expired-form hardening was released in v1.1.44.
+- Current phase: Password-changed email suppression fix is prepared for v1.1.45.
 - Target path: `C:\Development\WordPress\Plugins\alynt-account-gateway`
-- Plugin status: v1.1.44 is the current public release.
+- Plugin status: v1.1.44 is the current public release; v1.1.45 is the prepared patch release.
 - Frontend output default: Disabled
 - Distribution: Alynt-distributed plugin with GitHub updater compatibility
-- Next roadmap: Run an updater/install verification for v1.1.44 on an approved non-production target, then roll out to tracked sites only after separate site-operation approval.
+- Next roadmap: Publish v1.1.45 after approval, verify via Alynt Plugin Updater on Plugin Tester, then roll out to tracked sites only after separate site-operation approval.
+
+## Password Changed Email Suppression
+
+Status: Prepared for v1.1.45 and accepted on Plugin Tester.
+
+### Scope
+
+- [x] Identify the still-sent email as WordPress's separate native admin notification (`[Site] Password Changed` / `Password changed for user:`), not the already-filtered user-facing password-change email.
+- [x] Extend the existing `Disable Password Changed Email` setting so it removes WordPress's native `after_password_reset` admin-notification callback when enabled.
+- [x] Add a `pre_wp_mail` safety net for the same native admin-notification email shape so the setting remains effective if the native mail path is invoked directly.
+- [x] Keep unrelated mail and disabled-setting-off behavior unchanged.
+- [x] Document the broader behavior in settings and hook docs.
+
+### Acceptance Criteria
+
+- [x] The existing disable setting suppresses WordPress user-facing password-changed emails.
+- [x] The same setting suppresses the native WordPress admin `[Site] Password Changed` email.
+- [x] The safety net does not suppress unrelated mail.
+- [x] Focused and full automated tests pass.
+- [x] Plugin Tester confirms no password-changed email is generated when the option is enabled.
 
 ## Gateway Cache-Control And Expired-Form Hardening
 

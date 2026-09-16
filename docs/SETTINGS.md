@@ -112,7 +112,7 @@ Every email template has a plain-text subject and preheader plus a `rich_text` b
 | `email_password_reset_subject` | `string` | Password reset subject | Subject for password reset messages. |
 | `email_password_reset_preheader` | `string` | Password reset preheader | Preheader for password reset messages. |
 | `email_password_reset_body` | `rich_text` | Password reset body | Body for password reset messages. |
-| `email_password_changed_disabled` | `boolean` | `false` | Suppresses password-changed notifications when enabled. |
+| `email_password_changed_disabled` | `boolean` | `false` | Suppresses WordPress user-facing password-changed notifications and the native admin `[Site] Password Changed` notification when enabled. |
 | `email_password_changed_subject` | `string` | Password changed subject | Subject for password-changed notifications. |
 | `email_password_changed_preheader` | `string` | Password changed preheader | Preheader for password-changed notifications. |
 | `email_password_changed_body` | `rich_text` | Password changed body | Body for password-changed notifications. |
